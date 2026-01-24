@@ -35,6 +35,8 @@ export interface Project {
   year: string
   heroImage?: string
   tags: string[]
+  featured?: boolean // Show in hero with special treatment
+  showGitHubActivity?: boolean // Show GitHub activity visualization in card
   content: ContentBlock[]
   chatContext: {
     description: string
@@ -44,6 +46,290 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+  {
+    id: 'conflict-and-experiments',
+    title: 'How I Handle Conflict',
+    description: 'Disagreements aren\'t problems to avoid—they\'re opportunities to learn. Here\'s how I turn product debates into experiments.',
+    category: 'Article',
+    year: '2025',
+    featured: true,
+    tags: ['Process', 'Collaboration', 'Experimentation', 'Leadership'],
+    content: [
+      {
+        type: 'heading',
+        level: 2,
+        content: 'The Wrong Kind of Right'
+      },
+      {
+        type: 'text',
+        content: 'There\'s a famous Steve Jobs clip where he talks about focus. But the part people miss is what he says about being wrong. He describes how the best ideas often came from people he initially disagreed with—and how being "right" individually matters far less than getting to the right answer collectively.'
+      },
+      {
+        type: 'embed',
+        src: 'https://www.youtube.com/embed/H8eP99neOVs',
+        caption: 'Steve Jobs on focus, saying no, and the humility to be wrong',
+        aspectRatio: '16/9'
+      },
+      {
+        type: 'text',
+        content: 'This reframed how I think about conflict. A disagreement isn\'t a battle to win—it\'s a signal that we have different mental models. And different mental models mean we have an opportunity to learn something.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'From Debate to Experiment'
+      },
+      {
+        type: 'text',
+        content: 'When two people have strong, opposing product intuitions, the worst thing you can do is argue until someone gives up. The second worst thing is to compromise into something neither person believes in.'
+      },
+      {
+        type: 'text',
+        content: 'Instead, I ask: "How can we test this?" Turn the disagreement into a hypothesis. Run with one direction, measure the outcome, and see if reality matches what we expected.'
+      },
+      {
+        type: 'list',
+        items: [
+          'State each position as a hypothesis with a predicted outcome',
+          'Agree on what "success" looks like before running the test',
+          'Pick the cheapest way to get signal (not the most thorough)',
+          'Commit to following the data, even if it proves you wrong'
+        ]
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'Cheap Ways to Experiment'
+      },
+      {
+        type: 'text',
+        content: 'Teresa Torres has written extensively about continuous discovery and lightweight experimentation. Here are the methods I use most often:'
+      },
+      {
+        type: 'heading',
+        level: 3,
+        content: 'Fake Door Tests'
+      },
+      {
+        type: 'text',
+        content: 'Add a button or link for a feature that doesn\'t exist yet. Measure how many people click it. If nobody clicks, you\'ve saved weeks of development. If lots of people click, you\'ve validated demand before writing a line of code.'
+      },
+      {
+        type: 'heading',
+        level: 3,
+        content: 'Wizard of Oz'
+      },
+      {
+        type: 'text',
+        content: 'Make it look automated, but do it manually behind the scenes. This lets you test the experience without building the infrastructure. I\'ve run entire "AI features" that were actually just me responding quickly in a queue.'
+      },
+      {
+        type: 'heading',
+        level: 3,
+        content: 'Concierge Tests'
+      },
+      {
+        type: 'text',
+        content: 'Deliver the service manually to a small group. Don\'t scale it—learn from it. Watch how people actually use what you\'re offering. The patterns you see will inform what to build.'
+      },
+      {
+        type: 'heading',
+        level: 3,
+        content: '5-Second Tests'
+      },
+      {
+        type: 'text',
+        content: 'Show someone a design for 5 seconds, then ask what they remember. If they can\'t identify the main action or value prop, your design isn\'t clear. Takes 10 minutes, costs nothing, saves weeks of building the wrong thing.'
+      },
+      {
+        type: 'heading',
+        level: 3,
+        content: 'Prototype Testing'
+      },
+      {
+        type: 'text',
+        content: 'This is where my "code prototyping" approach shines. Build a working version in a day, put it in front of real users, and watch what happens. Not a Figma mockup—something they can actually interact with.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'The Meta-Lesson'
+      },
+      {
+        type: 'text',
+        content: 'The goal isn\'t to avoid conflict. The goal is to make conflict productive. When someone disagrees with me, I\'ve learned to get curious instead of defensive. What do they see that I don\'t? What assumption am I making that might be wrong?'
+      },
+      {
+        type: 'text',
+        content: 'And when we can\'t resolve it through discussion, we run an experiment. The data doesn\'t care about seniority or who argued more convincingly. It just tells us what\'s true.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'Further Reading'
+      },
+      {
+        type: 'list',
+        items: [
+          'Teresa Torres - Continuous Discovery Habits',
+          'Marty Cagan - Inspired & Empowered',
+          'Eric Ries - The Lean Startup',
+          'Rob Fitzpatrick - The Mom Test'
+        ]
+      },
+    ],
+    chatContext: {
+      description: 'Article about handling disagreements through experimentation, referencing Teresa Torres methods and Steve Jobs on focus',
+      suggestedQuestions: [
+        'How do you handle strong disagreements?',
+        'What\'s your favorite cheap experiment?',
+        'How do you know when to run an experiment vs. just decide?',
+      ],
+      followUpQuestions: [
+        'Tell me about a time an experiment proved you wrong',
+        'How do you get buy-in for running experiments?',
+        'What if the data is inconclusive?',
+        'How do you balance speed vs. rigor?',
+      ]
+    }
+  },
+  {
+    id: 'the-future-is-now',
+    title: 'The Future is Now',
+    description: 'AI has fundamentally changed how designers produce their work. This is my journey from Figma to shipping real code.',
+    category: 'Article',
+    year: '2025',
+    featured: true,
+    showGitHubActivity: true,
+    tags: ['AI', 'Design', 'Transformation', 'Essay'],
+    content: [
+      {
+        type: 'heading',
+        level: 2,
+        content: 'The Shift'
+      },
+      {
+        type: 'text',
+        content: 'In early 2024, I was a traditional product designer. My tools were Figma, FigJam, and endless Slack messages to developers about pixel-perfect implementations. By 2025, I had become something else entirely—a one-person product team capable of designing, building, and shipping real software.'
+      },
+      {
+        type: 'text',
+        content: 'The GitHub activity chart above tells this story. Watch the progression from sparse contributions to daily commits. This isn\'t about working more hours—it\'s about AI multiplying what\'s possible in each hour.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'What Changed'
+      },
+      {
+        type: 'text',
+        content: 'Three things shifted fundamentally:'
+      },
+      {
+        type: 'list',
+        items: [
+          'Prototypes became real software. No more "imagine this works" demos.',
+          'Ideas could be tested within hours, not weeks.',
+          'The gap between design and development collapsed.'
+        ]
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'The New Stack'
+      },
+      {
+        type: 'text',
+        content: 'My daily toolkit looks nothing like it did 18 months ago:'
+      },
+      {
+        type: 'list',
+        items: [
+          'Claude for strategic thinking and code generation',
+          'Cursor for rapid development with AI assistance',
+          'Next.js + Tailwind for production-ready output',
+          'Vercel for instant deployment'
+        ]
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'What I\'ve Built'
+      },
+      {
+        type: 'text',
+        content: 'Here are examples of what this transformation has enabled:'
+      },
+      {
+        type: 'heading',
+        level: 3,
+        content: 'Enterprise RFP Response'
+      },
+      {
+        type: 'text',
+        content: 'Delivered a complete enterprise proposal—technical writing, interactive prototypes, and demos—as a one-person team. What typically requires a squad of specialists became a solo mission with AI augmentation.'
+      },
+      {
+        type: 'heading',
+        level: 3,
+        content: 'ProductLite Prototyping'
+      },
+      {
+        type: 'text',
+        content: 'Built a methodology for creating "lite" versions of products. Real code, real data, real interactions—just without the complexity of production infrastructure. These prototypes win deals and validate ideas before full investment.'
+      },
+      {
+        type: 'heading',
+        level: 3,
+        content: 'No-Code LLM Configurator'
+      },
+      {
+        type: 'text',
+        content: 'Designed and built a visual tool for business users to create AI workflows without writing code. The kind of feature that would have been a static mockup is now a working prototype.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'The Philosophy'
+      },
+      {
+        type: 'text',
+        content: 'This isn\'t about AI replacing designers. It\'s about designers who embrace AI becoming exponentially more capable. The role evolves from "person who makes mockups" to "person who ships solutions."'
+      },
+      {
+        type: 'list',
+        items: [
+          'Shape Up over Scrum—bet on outcomes, not tickets',
+          'Collaboration over handoff—work with engineers, not ahead of them',
+          'Real over imagined—build the thing, don\'t just describe it',
+          'Fast over perfect—ship and iterate'
+        ]
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'Explore Further'
+      },
+      {
+        type: 'text',
+        content: 'Dive deeper into specific projects to see this transformation in action:'
+      },
+    ],
+    chatContext: {
+      description: 'Article about how AI has transformed the design profession and my personal journey from Figma to shipping real code',
+      suggestedQuestions: [
+        'How did you start learning to code with AI?',
+        'What was the hardest part of this transition?',
+        'Is this the future for all designers?',
+      ],
+      followUpQuestions: [
+        'Show me an example project',
+        'What tools do you recommend starting with?',
+        'How long did this transformation take?',
+        'What skills are still essential?',
+      ]
+    }
+  },
   {
     id: 'rfp',
     title: 'Respond to RFP',
