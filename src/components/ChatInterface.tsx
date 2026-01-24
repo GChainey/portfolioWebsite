@@ -3,7 +3,47 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
 import { ContentDialog } from './ContentDialog'
+import { ShimmeringText } from './ui/shimmering-text'
+import { projects } from '@/content/projects'
+
+// Project card component for inline chat responses
+function ProjectCard({ projectId }: { projectId: string }) {
+  const project = projects.find(p => p.id === projectId)
+  if (!project) return null
+
+  return (
+    <Link href={`/projects/${project.id}`} className="group block">
+      <div className="my-2 p-3 border border-border rounded-lg hover:border-foreground/30 transition-colors bg-background">
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-xs text-muted uppercase tracking-wide">{project.category}</span>
+          <ArrowRight className="w-3 h-3 text-muted group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
+        </div>
+        <h4 className="font-medium text-foreground group-hover:text-accent text-sm transition-colors">{project.title}</h4>
+        <p className="text-xs text-muted mt-1 line-clamp-2">{project.description}</p>
+      </div>
+    </Link>
+  )
+}
+
+// Parse message content and render project cards
+function MessageContent({ content }: { content: string }) {
+  // Match [[project:id]] pattern
+  const parts = content.split(/(\[\[project:[^\]]+\]\])/g)
+
+  return (
+    <>
+      {parts.map((part, i) => {
+        const match = part.match(/\[\[project:([^\]]+)\]\]/)
+        if (match) {
+          return <ProjectCard key={i} projectId={match[1]} />
+        }
+        return part ? <span key={i}>{part}</span> : null
+      })}
+    </>
+  )
+}
 
 interface Message {
   role: 'user' | 'assistant'
@@ -55,15 +95,26 @@ PHILOSOPHY:
 - Collaboration over handoff
 - Early team buy-in, not late approval
 
+AVAILABLE PROJECTS (you can link to these):
+- the-future-is-now: Article about AI transformation journey
+- conflict-and-experiments: How to handle disagreements with experiments
+- rfp: Enterprise RFP response system
+- productlite: Real code prototyping tool
+- configurator: No-code LLM workflow builder
+- llm-features: Features built with LLMs
+
+TO LINK A PROJECT: Use [[project:id]] syntax. Example: "Check out my article on this transformation. [[project:the-future-is-now]]"
+When someone asks about projects or examples, include a relevant project card!
+
 EXAMPLE ANSWERS:
 Q: How has your role evolved?
-A: "I went from Figma to shipping real code. AI lets me be a one-person product team—PM, designer, QA, and engineer."
+A: "I went from Figma to shipping real code. AI lets me be a one-person product team—PM, designer, QA, and engineer. [[project:the-future-is-now]]"
 
 Q: What tools do you use?
 A: "Claude for thinking, Cursor for coding. The stack changes weekly—I use whatever ships fastest."
 
-Q: What's your philosophy?
-A: "Shape Up and JTBD, simplified. No bureaucracy, just build. Get buy-in early, collaborate instead of handing off."
+Q: Show me an example project
+A: "Here's ProductLite—a prototyping tool I built with AI: [[project:productlite]]"
 
 Keep it SHORT. Answer like you're texting a colleague.`
 
@@ -133,7 +184,7 @@ Focus answers on this context when relevant, but can reference other experience 
   return (
     <div className="h-full flex flex-col overflow-hidden">
       <div className="p-4 border-b border-border flex-shrink-0">
-        <h3 className="font-medium text-foreground">Ask me anything</h3>
+        <h3 className="font-medium text-foreground">GarethLLM<sup className="text-xs text-muted ml-0.5">™</sup></h3>
       </div>
 
       {/* Messages */}
@@ -170,7 +221,7 @@ Focus answers on this context when relevant, but can reference other experience 
                     : 'bg-border text-foreground rounded-tl-lg rounded-tr-lg rounded-br-lg'
                 }`}
               >
-                {msg.content}
+                {msg.role === 'assistant' ? <MessageContent content={msg.content} /> : msg.content}
               </div>
             </motion.div>
           ))}
@@ -180,16 +231,15 @@ Focus answers on this context when relevant, but can reference other experience 
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex gap-1 p-3"
+            className="p-3"
           >
-            {[0, 1, 2].map(i => (
-              <motion.div
-                key={i}
-                className="w-2 h-2 bg-muted rounded-full"
-                animate={{ y: [0, -5, 0] }}
-                transition={{ repeat: Infinity, duration: 0.6, delay: i * 0.1 }}
+            <div className="max-w-[85%] p-3 text-sm bg-border text-foreground rounded-tl-lg rounded-tr-lg rounded-br-lg">
+              <ShimmeringText
+                text="Thinking..."
+                duration={1.5}
+                spread={1.5}
               />
-            ))}
+            </div>
           </motion.div>
         )}
 

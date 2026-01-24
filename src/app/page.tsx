@@ -329,7 +329,7 @@ export default function Home() {
                               <span className="text-xs text-muted">{project.category}</span>
                               <span className="text-xs text-muted">{project.year}</span>
                             </div>
-                            <h3 className="font-medium text-foreground mb-1">{project.title}</h3>
+                            <h3 className="font-medium text-foreground group-hover:text-accent mb-1 transition-colors">{project.title}</h3>
                             <p className="text-sm text-muted line-clamp-2">{project.description}</p>
                           </div>
                         </motion.div>
@@ -341,8 +341,14 @@ export default function Home() {
             </section>
 
             {/* Footer */}
-            <footer className="p-8 border-t border-border mt-auto">
+            <footer className="p-8 mt-auto flex items-center justify-between">
               <p className="text-xs text-muted">© 2025 Gareth Chainey</p>
+              <button
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="text-xs text-muted hover:text-foreground transition-colors"
+              >
+                ↑ Back to top
+              </button>
             </footer>
           </main>
 

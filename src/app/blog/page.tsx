@@ -2,9 +2,99 @@
 
 import { motion } from 'framer-motion'
 import { Header } from '@/components/Header'
+import { ReactNode } from 'react'
+
+// Helper to render inline markdown (bold, italic, code)
+function renderMarkdown(text: string): ReactNode {
+  const parts: ReactNode[] = []
+  let remaining = text
+  let key = 0
+
+  while (remaining.length > 0) {
+    // Match **bold**
+    const boldMatch = remaining.match(/\*\*(.+?)\*\*/)
+    // Match `code`
+    const codeMatch = remaining.match(/`(.+?)`/)
+
+    // Find which comes first
+    const boldIndex = boldMatch ? remaining.indexOf(boldMatch[0]) : Infinity
+    const codeIndex = codeMatch ? remaining.indexOf(codeMatch[0]) : Infinity
+
+    if (boldIndex === Infinity && codeIndex === Infinity) {
+      // No more matches
+      parts.push(remaining)
+      break
+    }
+
+    if (boldIndex < codeIndex) {
+      // Bold comes first
+      if (boldIndex > 0) {
+        parts.push(remaining.slice(0, boldIndex))
+      }
+      parts.push(<strong key={key++} className="font-semibold text-foreground">{boldMatch![1]}</strong>)
+      remaining = remaining.slice(boldIndex + boldMatch![0].length)
+    } else {
+      // Code comes first
+      if (codeIndex > 0) {
+        parts.push(remaining.slice(0, codeIndex))
+      }
+      parts.push(<code key={key++} className="px-1.5 py-0.5 bg-border rounded text-sm font-mono">{codeMatch![1]}</code>)
+      remaining = remaining.slice(codeIndex + codeMatch![0].length)
+    }
+  }
+
+  return parts.length === 1 && typeof parts[0] === 'string' ? parts[0] : <>{parts}</>
+}
 
 // Changelog entries - newest first
 const CHANGELOG = [
+  {
+    version: '0.6.0',
+    date: '2026-01-24',
+    title: 'Theme System Overhaul & System Mode',
+    description: 'Complete redesign of theming with accent colors and system preference support.',
+    changes: [
+      'Added theme dropdown with System/Day/Night mode options',
+      'System mode automatically follows OS light/dark preference',
+      'Added 16 Tailwind accent colors (amber, orange, red, rose, etc.)',
+      'Accent color persists to localStorage',
+      'Real-time system preference change detection',
+      'Default to System mode with Amber accent',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'feature/articles-and-improvements',
+  },
+  {
+    version: '0.5.0',
+    date: '2026-01-24',
+    title: 'ElevenLabs UI & Shimmering Effects',
+    description: 'Integrated ElevenLabs UI components for enhanced loading states.',
+    changes: [
+      'Added ShimmeringText component for loading states',
+      'TLDR generation button shows shimmering "Generating summary..." text',
+      'Chat interface uses shimmering "Thinking..." for AI responses',
+      'Smooth shimmer animation with customizable colors',
+    ],
+    aiTools: ['Claude Code', 'ElevenLabs'],
+    branch: 'feature/articles-and-improvements',
+  },
+  {
+    version: '0.4.0',
+    date: '2026-01-24',
+    title: 'Chat Enhancements & Shared Components',
+    description: 'Added project cards in chat and extracted shared components.',
+    changes: [
+      'Chat can now include project cards using [[project:id]] syntax',
+      'Created shared Header component for consistent navigation',
+      'Added hover accent colors on project card titles and arrows',
+      'Fixed scroll-to-top behavior on article pages',
+      'Added "Back to top" button in footers',
+      'Fixed double border issues between sections',
+      'Fixed dropdown transparency with proper bg-background',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'feature/articles-and-improvements',
+  },
   {
     version: '0.3.0',
     date: '2026-01-24',
@@ -106,7 +196,7 @@ export default function BlogPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="max-w-4xl mx-auto px-8 pt-14 pb-12">
+      <div className="max-w-4xl mx-auto px-8 pt-24 pb-12">
 
         {/* Blog Post */}
         <article className="mb-16">
@@ -153,14 +243,14 @@ export default function BlogPage() {
                 return (
                   <ul key={i} className="list-disc list-inside text-muted mb-4 space-y-1">
                     {paragraph.split('\n').map((item, j) => (
-                      <li key={j}>{item.replace('- ', '')}</li>
+                      <li key={j}>{renderMarkdown(item.replace('- ', ''))}</li>
                     ))}
                   </ul>
                 )
               }
               return (
                 <p key={i} className="text-muted leading-relaxed mb-4">
-                  {paragraph}
+                  {renderMarkdown(paragraph)}
                 </p>
               )
             })}

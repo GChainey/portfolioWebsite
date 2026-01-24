@@ -8,6 +8,7 @@ import { MessageCircle, X, Clock, ArrowRight, RotateCcw } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
 import { CaseStudyContent } from '@/components/CaseStudyContent'
+import { ShimmeringText } from '@/components/ui/shimmering-text'
 import { getProjectById, projects, type Project } from '@/content/projects'
 
 // Calculate read time from content blocks
@@ -72,8 +73,23 @@ export default function ProjectPage() {
       const p = getProjectById(params.id as string)
       setProject(p || null)
     }
-    // Scroll to top on page load
+  }, [params.id])
+
+  // Scroll to top on mount - disable scroll restoration and force scroll
+  useEffect(() => {
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual'
+    }
     window.scrollTo(0, 0)
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
+
+    // Also run after a short delay for any async content
+    const timer = setTimeout(() => {
+      window.scrollTo(0, 0)
+    }, 100)
+
+    return () => clearTimeout(timer)
   }, [params.id])
 
   const generateTldr = async () => {
@@ -313,12 +329,12 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
                           <div className="flex items-start justify-between">
                             <div>
                               <span className="text-xs text-muted uppercase tracking-widest">{p.category}</span>
-                              <h3 className="font-medium text-foreground mt-1">
+                              <h3 className="font-medium text-foreground group-hover:text-accent mt-1 transition-colors">
                                 {p.title}
                               </h3>
                               <p className="text-sm text-muted mt-1 line-clamp-2">{p.description}</p>
                             </div>
-                            <ArrowRight className="w-4 h-4 text-muted group-hover:translate-x-1 transition-transform flex-shrink-0 mt-1" />
+                            <ArrowRight className="w-4 h-4 text-muted group-hover:text-accent group-hover:translate-x-1 transition-all flex-shrink-0 mt-1" />
                           </div>
                         </div>
                       </Link>
@@ -328,14 +344,20 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
             )}
 
             {/* Footer */}
-            <footer className="p-8 border-t border-border">
+            <footer className="p-8 flex items-center justify-between">
               <p className="text-xs text-muted">© 2025 Gareth Chainey</p>
+              <button
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="text-xs text-muted hover:text-foreground transition-colors"
+              >
+                ↑ Back to top
+              </button>
             </footer>
           </main>
 
           {/* Chat sidebar */}
           {chatOpen ? (
-            <aside className="flex-shrink-0 w-[380px] h-[calc(100vh-56px)] sticky top-14 border-l border-border">
+            <aside className="flex-shrink-0 w-[380px] h-[calc(100vh-56px)] sticky top-14 border-r border-border">
               <div className="relative h-full flex flex-col">
                 <button
                   onClick={() => setChatOpen(false)}
@@ -437,7 +459,16 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
                       disabled={tldrLoading}
                       className="w-full py-3 bg-accent text-white font-medium rounded-lg hover:brightness-110 transition-all disabled:opacity-50"
                     >
-                      {tldrLoading ? 'Generating...' : 'Generate TLDR'}
+                      {tldrLoading ? (
+                        <ShimmeringText
+                          text="Generating summary..."
+                          className="text-white"
+                          shimmerColor="rgba(255,255,255,0.8)"
+                          color="rgba(255,255,255,0.6)"
+                          duration={1.5}
+                          spread={1.5}
+                        />
+                      ) : 'Generate TLDR'}
                     </button>
                   </>
                 ) : (

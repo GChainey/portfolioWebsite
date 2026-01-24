@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
-import { ThemeToggle } from './ThemeToggle'
+import { ThemeSelector } from './ThemeSelector'
 
 interface HeaderProps {
   showBack?: boolean
@@ -27,9 +27,9 @@ export function Header({ showBack }: HeaderProps) {
           )}
         </div>
         <nav className="flex items-center gap-6">
-          <Link href="/cv" className="text-sm text-muted hover:text-foreground transition-colors">
+          <a href="/GarethChaineyCV.pdf" target="_blank" rel="noopener noreferrer" className="text-sm text-muted hover:text-foreground transition-colors">
             CV
-          </Link>
+          </a>
           <Link href="/projects" className="text-sm text-muted hover:text-foreground transition-colors">
             Projects
           </Link>
@@ -39,7 +39,7 @@ export function Header({ showBack }: HeaderProps) {
           <Link href="/contact" className="text-sm text-muted hover:text-foreground transition-colors">
             Contact
           </Link>
-          <ThemeToggle />
+          <ThemeSelector />
         </nav>
       </div>
     </header>
