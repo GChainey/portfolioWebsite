@@ -118,7 +118,7 @@ export function ChatInterface() {
               <div
                 className={`max-w-[85%] p-3 text-sm ${
                   msg.role === 'user'
-                    ? 'bg-accent text-white rounded-tl-lg rounded-tr-lg rounded-bl-lg'
+                    ? 'bg-foreground text-background rounded-tl-lg rounded-tr-lg rounded-bl-lg'
                     : 'bg-border text-foreground rounded-tl-lg rounded-tr-lg rounded-br-lg'
                 }`}
               >

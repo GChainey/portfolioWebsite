@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import { ThemeProvider } from '@/context/ThemeContext'
+import { AgentationProvider } from '@/components/AgentationProvider'
 import './globals.css'
 
 const inter = Inter({
@@ -29,6 +30,7 @@ export default function RootLayout({
         <ThemeProvider>
           {children}
         </ThemeProvider>
+        <AgentationProvider />
       </body>
     </html>
   )

@@ -26,6 +26,22 @@ interface GitHubProfile {
   following: number
 }
 
+// Deterministic contribution data to avoid hydration mismatch
+const CONTRIBUTIONS = [
+  [0, 2, 1, 3, 0, 1, 2],
+  [1, 0, 2, 4, 1, 0, 3],
+  [2, 3, 1, 0, 2, 1, 0],
+  [0, 1, 4, 2, 3, 0, 1],
+  [3, 2, 0, 1, 4, 2, 0],
+  [1, 0, 3, 0, 2, 1, 3],
+  [0, 4, 1, 2, 0, 3, 2],
+  [2, 1, 0, 3, 1, 0, 4],
+  [1, 3, 2, 0, 4, 2, 1],
+  [0, 2, 4, 1, 0, 3, 0],
+  [3, 0, 1, 2, 3, 1, 2],
+  [1, 2, 0, 4, 1, 0, 1],
+]
+
 export function GitHubActivity() {
   const [profile, setProfile] = useState<GitHubProfile | null>(null)
   const [events, setEvents] = useState<GitHubEvent[]>([])
@@ -82,21 +98,13 @@ export function GitHubActivity() {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   }
 
-  // Generate mock contribution data for visualization
-  const generateContributions = () => {
-    const weeks = 12
-    const contributions = []
-    for (let w = 0; w < weeks; w++) {
-      const week = []
-      for (let d = 0; d < 7; d++) {
-        week.push(Math.floor(Math.random() * 5))
-      }
-      contributions.push(week)
+  // Black/white contribution level styles
+  const getContributionStyle = (level: number) => {
+    const opacity = level === 0 ? 0.1 : level * 0.25
+    return {
+      backgroundColor: `rgba(var(--foreground-rgb, 0, 0, 0), ${opacity})`,
     }
-    return contributions
   }
-
-  const contributions = generateContributions()
 
   if (loading) {
     return (
@@ -124,7 +132,7 @@ export function GitHubActivity() {
               href={profile?.html_url || 'https://github.com/GChainey'}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-muted hover:text-accent transition-colors"
+              className="text-sm text-muted hover:text-foreground transition-colors"
             >
               @{profile?.login || 'GChainey'}
             </a>
@@ -132,18 +140,19 @@ export function GitHubActivity() {
         </div>
       </div>
 
-      {/* Contribution Graph */}
+      {/* Contribution Graph - Black/White */}
       <div className="p-4 border-b border-border">
         <p className="text-xs text-muted mb-3">Contributions</p>
         <div className="flex gap-[2px]">
-          {contributions.map((week, wi) => (
+          {CONTRIBUTIONS.map((week, wi) => (
             <div key={wi} className="flex flex-col gap-[2px]">
               {week.map((level, di) => (
                 <motion.div
                   key={`${wi}-${di}`}
-                  className={`contribution-cell contribution-${level}`}
+                  className="w-3 h-3 rounded-sm bg-foreground"
+                  style={{ opacity: level === 0 ? 0.1 : level * 0.25 }}
                   initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  animate={{ opacity: level === 0 ? 0.1 : level * 0.25, scale: 1 }}
                   transition={{ delay: (wi * 7 + di) * 0.005 }}
                 />
               ))}

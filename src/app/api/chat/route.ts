@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     const { messages, context } = await request.json()
 
     const response = await anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-3-5-haiku-20241022',
       max_tokens: 1024,
       system: context,
       messages: messages.map((msg: { role: string; content: string }) => ({
@@ -23,8 +23,18 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ content: 'Unable to generate response' })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Chat API error:', error)
+
+    // Check for billing error
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    if (errorMessage.includes('credit balance') || errorMessage.includes('billing')) {
+      return NextResponse.json(
+        { error: 'API credits needed. Please add credits at console.anthropic.com' },
+        { status: 402 }
+      )
+    }
+
     return NextResponse.json(
       { error: 'Failed to process chat request' },
       { status: 500 }
