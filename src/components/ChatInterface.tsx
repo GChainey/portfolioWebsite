@@ -134,14 +134,12 @@ Focus answers on this context when relevant, but can reference other experience 
     <div className="h-full flex flex-col overflow-hidden">
       <div className="p-4 border-b border-border flex-shrink-0">
         <h3 className="font-medium text-foreground">Ask me anything</h3>
-        <p className="text-xs text-muted mt-1">Chat with AI to learn about my work</p>
       </div>
 
       {/* Messages */}
       <div className="flex-1 min-h-0 overflow-y-auto chat-scroll p-4 space-y-4">
         {messages.length === 0 && (
           <div className="space-y-2">
-            <p className="text-sm text-muted">Try asking:</p>
             {pageContext.suggestedQuestions.map((q, i) => (
               <motion.button
                 key={i}

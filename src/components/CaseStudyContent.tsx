@@ -7,6 +7,7 @@ interface CaseStudyContentProps {
   blocks: ContentBlock[]
 }
 
+
 function MediaBlock({ block }: { block: ContentBlock & { type: 'image' | 'gif' | 'video' | 'embed' } }) {
   const aspectRatio = block.aspectRatio || '16/9'
 
