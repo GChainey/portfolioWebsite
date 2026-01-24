@@ -1,36 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server'
-import Anthropic from '@anthropic-ai/sdk'
+import OpenAI from 'openai'
 
-const anthropic = new Anthropic()
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+})
 
 export async function POST(request: NextRequest) {
   try {
     const { messages, context } = await request.json()
 
-    const response = await anthropic.messages.create({
-      model: 'claude-3-5-haiku-20241022',
-      max_tokens: 1024,
-      system: context,
-      messages: messages.map((msg: { role: string; content: string }) => ({
-        role: msg.role,
-        content: msg.content
-      }))
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      max_tokens: 256,
+      temperature: 0.7,
+      messages: [
+        { role: 'system', content: context },
+        ...messages.map((msg: { role: string; content: string }) => ({
+          role: msg.role as 'user' | 'assistant',
+          content: msg.content
+        }))
+      ]
     })
 
-    const content = response.content[0]
-    if (content.type === 'text') {
-      return NextResponse.json({ content: content.text })
+    const content = response.choices[0]?.message?.content
+    if (content) {
+      return NextResponse.json({ content })
     }
 
     return NextResponse.json({ content: 'Unable to generate response' })
   } catch (error: unknown) {
     console.error('Chat API error:', error)
 
-    // Check for billing error
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-    if (errorMessage.includes('credit balance') || errorMessage.includes('billing')) {
+    if (errorMessage.includes('quota') || errorMessage.includes('billing')) {
       return NextResponse.json(
-        { error: 'API credits needed. Please add credits at console.anthropic.com' },
+        { error: 'API credits needed. Please check your OpenAI billing.' },
         { status: 402 }
       )
     }
