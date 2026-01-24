@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { MessageCircle, X } from 'lucide-react'
-import { ThemeToggle } from '@/components/ThemeToggle'
+import { MessageCircle, X, ArrowRight } from 'lucide-react'
+import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
 
 // Roles that animate
@@ -29,6 +29,21 @@ const HOME_PAGE_CONTEXT = {
 
 // Projects data - Case Studies
 const PROJECTS = [
+  {
+    id: 'the-future-is-now',
+    title: 'The Future is Now',
+    description: 'AI has fundamentally changed how designers produce their work. This is my journey from Figma to shipping real code.',
+    category: 'Article',
+    year: '2025',
+    showGitHubActivity: true,
+  },
+  {
+    id: 'conflict-and-experiments',
+    title: 'How I Handle Conflict',
+    description: 'Disagreements aren\'t problems—they\'re opportunities. Turn product debates into experiments.',
+    category: 'Article',
+    year: '2025',
+  },
   {
     id: 'rfp',
     title: 'Respond to RFP',
@@ -125,29 +140,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background transition-colors duration-700">
-      {/* Fixed Top Header */}
-      <header className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-sm border-b border-border">
-        <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="text-lg font-medium text-foreground">
-            Gareth Chainey
-          </Link>
-          <nav className="flex items-center gap-6">
-            <Link href="/cv" className="text-sm text-muted hover:text-foreground transition-colors">
-              CV
-            </Link>
-            <Link href="/projects" className="text-sm text-muted hover:text-foreground transition-colors">
-              Projects
-            </Link>
-            <Link href="/blog" className="text-sm text-muted hover:text-foreground transition-colors">
-              Blog
-            </Link>
-            <Link href="/contact" className="text-sm text-muted hover:text-foreground transition-colors">
-              Contact
-            </Link>
-            <ThemeToggle />
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       {/* Main content with chat sidebar */}
       <div className="max-w-7xl mx-auto pt-14">
@@ -233,6 +226,15 @@ export default function Home() {
                     </div>
                     <span>More</span>
                   </div>
+
+                  {/* CTA */}
+                  <Link
+                    href="/projects/the-future-is-now"
+                    className="mt-8 inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-white text-sm font-medium rounded-full hover:brightness-110 transition-all group"
+                  >
+                    Read how
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </Link>
                 </motion.div>
               </div>
             </section>
@@ -293,9 +295,24 @@ export default function Home() {
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: 0.7 + index * 0.1 }}
                         >
-                          {/* Placeholder visual */}
+                          {/* Card visual - GitHub activity or ASCII placeholder */}
                           <div className="h-40 bg-border/50 flex items-center justify-center overflow-hidden">
-                            <div className="font-mono text-[8px] leading-none text-foreground/20 group-hover:text-foreground/40 transition-colors whitespace-pre select-none">
+                            {project.showGitHubActivity ? (
+                              <div className="flex gap-[2px] p-4">
+                                {CONTRIBUTION_MONTHS.slice(0, 12).map((month, mi) => (
+                                  <div key={mi} className="flex flex-col gap-[2px]">
+                                    {month.data.map((level, di) => (
+                                      <div
+                                        key={`${mi}-${di}`}
+                                        className="w-2.5 h-2.5 rounded-sm bg-accent"
+                                        style={{ opacity: level === 0 ? 0.1 : 0.3 + level * 0.175 }}
+                                      />
+                                    ))}
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <div className="font-mono text-[8px] leading-none text-foreground/20 group-hover:text-foreground/40 transition-colors whitespace-pre select-none">
 {`    ╔══════════════════╗
     ║  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ║
     ║  ▓            ▓  ║
@@ -303,7 +320,8 @@ export default function Home() {
     ║  ▓            ▓  ║
     ║  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ║
     ╚══════════════════╝`}
-                            </div>
+                              </div>
+                            )}
                           </div>
 
                           <div className="p-4">
