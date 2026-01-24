@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import { ThemeProvider } from '@/context/ThemeContext'
+import { FeatureFlagProvider } from '@/context/FeatureFlagContext'
+import { FeatureFlagDrawer } from '@/components/FeatureFlagDrawer'
 import { AgentationProvider } from '@/components/AgentationProvider'
 import './globals.css'
 
@@ -28,7 +30,10 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${mono.variable} antialiased`}>
         <ThemeProvider>
-          {children}
+          <FeatureFlagProvider>
+            {children}
+            <FeatureFlagDrawer />
+          </FeatureFlagProvider>
         </ThemeProvider>
         <AgentationProvider />
       </body>

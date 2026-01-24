@@ -272,7 +272,7 @@ Focus answers on this context when relevant, but can reference other experience 
       </div>
 
       {/* Input */}
-      <form onSubmit={handleSubmit} className="p-4 border-t border-border flex-shrink-0">
+      <form onSubmit={handleSubmit} className="p-4 flex-shrink-0">
         <div className="flex gap-2">
           <input
             type="text"

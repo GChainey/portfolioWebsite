@@ -6,6 +6,8 @@ import Link from 'next/link'
 import { MessageCircle, X, ArrowRight } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
+import { GitHubContributions } from '@/components/GitHubContributions'
+import { useFeatureFlags } from '@/context/FeatureFlagContext'
 
 // Roles that animate
 const ROLES = ['Product Designer', 'Design Engineer', 'Product Manager', 'Engineer']
@@ -74,27 +76,62 @@ const PROJECTS = [
   },
 ]
 
-// Contribution data showing transformation
-const CONTRIBUTION_MONTHS = [
-  { label: 'Jan 2024', data: [0, 0, 0, 0, 0, 0, 0] },
-  { label: 'Feb', data: [0, 0, 1, 0, 0, 0, 0] },
-  { label: 'Mar', data: [0, 1, 0, 0, 1, 0, 0] },
-  { label: 'Apr', data: [0, 0, 1, 0, 0, 1, 0] },
-  { label: 'May', data: [1, 0, 0, 1, 0, 0, 1] },
-  { label: 'Jun', data: [0, 1, 1, 0, 1, 0, 1] },
-  { label: 'Jul', data: [1, 0, 1, 1, 0, 2, 1] },
-  { label: 'Aug', data: [1, 2, 1, 0, 2, 1, 1] },
-  { label: 'Sep', data: [2, 1, 2, 1, 1, 2, 0] },
-  { label: 'Oct', data: [1, 2, 3, 2, 1, 2, 2] },
-  { label: 'Nov', data: [2, 3, 2, 3, 2, 1, 3] },
-  { label: 'Dec', data: [3, 2, 4, 2, 3, 2, 2] },
-  { label: 'Jan 2025', data: [2, 3, 3, 4, 2, 3, 3] },
-  { label: 'Feb', data: [3, 4, 3, 2, 4, 3, 4] },
-  { label: 'Mar', data: [4, 3, 4, 3, 4, 4, 3] },
-  { label: 'Apr', data: [3, 4, 4, 4, 3, 4, 4] },
-  { label: 'May', data: [4, 4, 3, 4, 4, 4, 4] },
-  { label: 'Jun', data: [4, 4, 4, 4, 4, 3, 4] },
+// Experience data
+const EXPERIENCE = [
+  {
+    company: 'Enterprise AI Group',
+    role: 'Product Designer',
+    period: '2024 – Present',
+    description: 'Building AI-powered enterprise solutions. One-person product team delivering prototypes that win deals.',
+  },
+  {
+    company: 'SEEK',
+    role: 'Senior Product Designer',
+    period: '2021 – 2024',
+    description: 'Led discovery and design for candidate-facing products. Built AI resume tools and skills-based course finders.',
+  },
+  {
+    company: 'Best Practice Software',
+    role: 'UX Designer',
+    period: '2018 – 2021',
+    description: 'Designed cloud-based practice management SaaS. Prototyping, validation, workshops, and component libraries.',
+  },
 ]
+
+// Testimonials data
+const TESTIMONIALS = [
+  {
+    name: 'Winnie Bamra',
+    role: 'Senior Product Manager',
+    company: 'Ex-SpaceX · SEEK',
+    content: 'Gareth is a pleasure to work with and an asset to any team. He is diligent in discovery, passionate about the end user, empathetic, and collaborative in his approach. He is excellent at leading user interviews, enabling the team to collect and extract actionable insights.',
+  },
+  {
+    name: 'Richard Simms',
+    role: 'Principal Product Designer',
+    company: 'SEEK',
+    content: 'A talented senior UX designer who can independently drive projects forward. His designs reflected a deep understanding of our users, combined with a mastery of UX principles. Meticulous attention to detail and craft are evident in everything he produces.',
+  },
+  {
+    name: 'Ahmed Hakeem',
+    role: 'Staff Engineer',
+    company: 'SEEK',
+    content: "A developer's best friend. I have many fond memories bouncing ideas around and jamming out features end to end from fake door tests to deployment. At every step Gareth was inquisitive, collaborative and open to thinking on their feet.",
+  },
+  {
+    name: 'David Deville',
+    role: 'Senior Content Designer',
+    company: 'SEEK',
+    content: "Gareth goes above and beyond designing for customer needs. Fast experimentation, elegant designs and constant iteration resulted in products like an AI-powered resume generator that genuinely helped candidates. A positive, creative and likeable teammate.",
+  },
+  {
+    name: 'Henry Vesander',
+    role: 'Chief Product Officer',
+    company: 'Best Practice Software',
+    content: 'An outstanding UX/product designer. I hired him to build a cloud-based practice management SaaS. He is a driven individual that can be trusted in getting the job done once given guidance and a brief. I definitely recommend Gareth!',
+  },
+]
+
 
 export default function Home() {
   const [roleIndex, setRoleIndex] = useState(0)
@@ -102,6 +139,7 @@ export default function Home() {
   const [chatMounted, setChatMounted] = useState(false)
   const [carouselIndex, setCarouselIndex] = useState(0)
   const carouselRef = useRef<HTMLDivElement>(null)
+  const { flags } = useFeatureFlags()
 
   // Cycle through roles
   useEffect(() => {
@@ -189,43 +227,7 @@ export default function Home() {
                   transition={{ delay: 0.4 }}
                   className="flex flex-col items-center"
                 >
-                  {/* Year markers */}
-                  <div className="flex justify-between mb-1 px-1" style={{ width: `${CONTRIBUTION_MONTHS.length * 19}px` }}>
-                    <span className="text-xs text-muted">2024</span>
-                    <span className="text-xs text-muted">2025</span>
-                  </div>
-
-                  {/* Grid */}
-                  <div className="flex gap-[3px]">
-                    {CONTRIBUTION_MONTHS.map((month, mi) => (
-                      <div key={mi} className="flex flex-col gap-[3px]">
-                        {month.data.map((level, di) => (
-                          <motion.div
-                            key={`${mi}-${di}`}
-                            className="w-4 h-4 rounded-sm bg-accent"
-                            initial={{ opacity: 0.1 }}
-                            animate={{ opacity: level === 0 ? 0.1 : 0.3 + level * 0.175 }}
-                            transition={{ delay: 0.8 + (mi * 7 + di) * 0.015, duration: 0.3 }}
-                          />
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Legend */}
-                  <div className="flex items-center gap-4 mt-4 text-xs text-muted">
-                    <span>Less</span>
-                    <div className="flex gap-1">
-                      {[0, 1, 2, 3, 4].map((level) => (
-                        <div
-                          key={level}
-                          className="w-3 h-3 rounded-sm bg-accent"
-                          style={{ opacity: level === 0 ? 0.1 : 0.3 + level * 0.175 }}
-                        />
-                      ))}
-                    </div>
-                    <span>More</span>
-                  </div>
+                  <GitHubContributions variant="full" animate />
 
                   {/* CTA */}
                   <Link
@@ -256,13 +258,13 @@ export default function Home() {
             </section>
 
             {/* Projects Carousel */}
-            <section className="py-8 border-b border-border overflow-hidden">
+            <section className="border-b border-border overflow-hidden">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.65 }}
               >
-                <div className="flex items-center justify-between px-8 mb-6">
+                <div className={`flex items-center justify-between px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
                   <p className="text-xs text-muted uppercase tracking-widest">Projects</p>
                   <div className="flex gap-1">
                     {PROJECTS.map((_, i) => (
@@ -282,35 +284,24 @@ export default function Home() {
                   className="overflow-x-auto scrollbar-hide scroll-smooth"
                   style={{ scrollSnapType: 'x mandatory' }}
                 >
-                  <div className="flex gap-4 px-8 pb-4">
+                  <div className="flex" style={{ width: 'fit-content' }}>
                     {PROJECTS.map((project, index) => (
                       <Link
                         key={project.id}
                         href={`/projects/${project.id}`}
+                        className="group"
                       >
                         <motion.div
-                          className="flex-shrink-0 w-72 border border-border rounded-lg overflow-hidden hover:border-foreground/30 transition-colors cursor-pointer group"
+                          className={`flex-shrink-0 w-96 overflow-hidden cursor-pointer ${index < PROJECTS.length - 1 ? 'border-r border-border' : ''}`}
                           style={{ scrollSnapAlign: 'start' }}
                           initial={{ opacity: 0, x: 20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: 0.7 + index * 0.1 }}
                         >
                           {/* Card visual - GitHub activity or ASCII placeholder */}
-                          <div className="h-40 bg-border/50 flex items-center justify-center overflow-hidden">
+                          <div className="h-44 bg-border/50 flex items-center justify-center overflow-hidden">
                             {project.showGitHubActivity ? (
-                              <div className="flex gap-[2px] p-4">
-                                {CONTRIBUTION_MONTHS.slice(0, 12).map((month, mi) => (
-                                  <div key={mi} className="flex flex-col gap-[2px]">
-                                    {month.data.map((level, di) => (
-                                      <div
-                                        key={`${mi}-${di}`}
-                                        className="w-2.5 h-2.5 rounded-sm bg-accent"
-                                        style={{ opacity: level === 0 ? 0.1 : 0.3 + level * 0.175 }}
-                                      />
-                                    ))}
-                                  </div>
-                                ))}
-                              </div>
+                              <GitHubContributions variant="card" monthsToShow={12} />
                             ) : (
                               <div className="font-mono text-[8px] leading-none text-foreground/20 group-hover:text-foreground/40 transition-colors whitespace-pre select-none">
 {`    ╔══════════════════╗
@@ -326,14 +317,97 @@ export default function Home() {
 
                           <div className="p-4">
                             <div className="flex items-center justify-between mb-2">
-                              <span className="text-xs text-muted">{project.category}</span>
-                              <span className="text-xs text-muted">{project.year}</span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs text-muted">{project.category}</span>
+                                <span className="text-xs text-muted">•</span>
+                                <span className="text-xs text-muted">{project.year}</span>
+                              </div>
+                              <ArrowRight className="w-4 h-4 text-muted group-hover:text-accent group-hover:translate-x-1 transition-all" />
                             </div>
                             <h3 className="font-medium text-foreground group-hover:text-accent mb-1 transition-colors">{project.title}</h3>
                             <p className="text-sm text-muted line-clamp-2">{project.description}</p>
                           </div>
                         </motion.div>
                       </Link>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </section>
+
+            {/* Experience section */}
+            <section className="p-8 border-b border-border">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.75 }}
+              >
+                <p className="text-xs text-muted uppercase tracking-widest mb-6">Experience</p>
+                <div className="relative">
+                  {/* Timeline line */}
+                  <div className="absolute left-[7px] top-2 bottom-2 w-[2px] bg-border" />
+
+                  <div className="space-y-8">
+                    {EXPERIENCE.map((exp, index) => (
+                      <motion.div
+                        key={exp.company}
+                        className="flex gap-6 relative"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.8 + index * 0.1 }}
+                      >
+                        {/* Timeline dot */}
+                        <div className="flex-shrink-0 w-4 h-4 rounded-full bg-foreground border-4 border-background z-10 mt-1" />
+
+                        <div className="flex-1 pb-2">
+                          <div className="flex items-baseline gap-3 mb-1">
+                            <h3 className="font-medium text-foreground">{exp.company}</h3>
+                            <span className="text-xs text-muted">{exp.period}</span>
+                          </div>
+                          <p className="text-sm text-muted mb-2">{exp.role}</p>
+                          <p className="text-sm text-muted">{exp.description}</p>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </section>
+
+            {/* Testimonials section */}
+            <section className="border-b border-border overflow-hidden">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.85 }}
+              >
+                <div className={`px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
+                  <p className="text-xs text-muted uppercase tracking-widest">Kind words from colleagues</p>
+                </div>
+
+                {/* Horizontal carousel - 2 visible at a time */}
+                <div className="overflow-x-auto scrollbar-hide scroll-smooth" style={{ scrollSnapType: 'x mandatory' }}>
+                  <div className="flex" style={{ width: `${TESTIMONIALS.length * 50}%` }}>
+                    {TESTIMONIALS.map((testimonial, index) => (
+                      <motion.div
+                        key={testimonial.name}
+                        className={`flex-shrink-0 p-5 ${index === 0 ? 'pl-8' : ''} ${index < TESTIMONIALS.length - 1 ? 'border-r border-border' : ''}`}
+                        style={{ width: `${100 / TESTIMONIALS.length}%`, scrollSnapAlign: 'start' }}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.9 + index * 0.1 }}
+                      >
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center text-foreground font-medium text-sm flex-shrink-0">
+                            {testimonial.name.split(' ').map(n => n[0]).join('')}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="font-medium text-foreground text-sm">{testimonial.name}</p>
+                            <p className="text-xs text-muted">{testimonial.role} · {testimonial.company}</p>
+                          </div>
+                        </div>
+                        <p className="text-sm text-muted leading-relaxed">{testimonial.content}</p>
+                      </motion.div>
                     ))}
                   </div>
                 </div>
