@@ -14,7 +14,10 @@ const config: Config = {
         foreground: 'var(--foreground)',
         border: 'var(--border)',
         muted: 'var(--muted)',
-        accent: 'var(--accent)',
+        accent: {
+          DEFAULT: 'var(--accent)',
+          light: 'var(--accent-light)',
+        },
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
