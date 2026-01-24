@@ -26,6 +26,17 @@ body {
   font-family: var(--font-inter), system-ui, sans-serif;
 }
 
+/* Text selection highlight with accent color */
+::selection {
+  background-color: var(--accent);
+  color: white;
+}
+
+::-moz-selection {
+  background-color: var(--accent);
+  color: white;
+}
+
 /* Edge-to-edge grid styling */
 .grid-cell {
   @apply border border-border;
@@ -66,3 +77,4 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
