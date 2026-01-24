@@ -1,8 +1,10 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 import { Header } from '@/components/Header'
-import { ReactNode } from 'react'
+import { ReactNode, useState, useEffect, useCallback } from 'react'
+import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react'
 
 // Helper to render inline markdown (bold, italic, code)
 function renderMarkdown(text: string): ReactNode {
@@ -48,6 +50,31 @@ function renderMarkdown(text: string): ReactNode {
 
 // Changelog entries - newest first
 const CHANGELOG = [
+  {
+    version: '0.7.0',
+    date: '2026-01-24',
+    title: 'Edge-Touching Cards & Feature Flags',
+    description: 'Major visual refinement with cleaner card layouts and developer tools for design iteration.',
+    changes: [
+      'Implemented edge-touching card style (no gaps, shared borders)',
+      'Added feature flag system with Cmd+K drawer for toggling design options',
+      'Created shared GitHubContributions component for reuse across pages',
+      'Testimonials now show as horizontal carousel (2 visible at a time)',
+      'Projects page matches homepage shell styling with border-x',
+      'Section title borders toggleable via feature flag',
+      'Removed chat input border for cleaner alignment',
+      'Added Experience section with timeline visualization',
+      'Added Testimonials section with colleague quotes',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'main',
+    images: [
+      '/blog/v7-homepage-light.png',
+      '/blog/v7-homepage-dark.png',
+      '/blog/v7-projects-light.png',
+      '/blog/v7-projects-dark.png',
+    ],
+  },
   {
     version: '0.6.0',
     date: '2026-01-24',
@@ -141,6 +168,7 @@ const CHANGELOG = [
     ],
     aiTools: ['Claude Code'],
     branch: 'main',
+    image: '/blog/v1-grid-layout.png',
   },
 ]
 
@@ -193,8 +221,166 @@ What would normally take days of back-and-forth happened in a single session. Th
 }
 
 export default function BlogPage() {
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null)
+  const [lightboxImages, setLightboxImages] = useState<string[]>([])
+  const [lightboxIndex, setLightboxIndex] = useState(0)
+  const [zoom, setZoom] = useState(100) // 100 = 100% (actual size)
+
+  const openLightbox = (images: string[], index: number) => {
+    setLightboxImages(images)
+    setLightboxIndex(index)
+    setLightboxImage(images[index])
+    setZoom(100) // Start at 100% zoom
+  }
+
+  const closeLightbox = () => {
+    setLightboxImage(null)
+    setLightboxImages([])
+    setLightboxIndex(0)
+    setZoom(100)
+  }
+
+  const goToPrev = useCallback(() => {
+    const newIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length
+    setLightboxIndex(newIndex)
+    setLightboxImage(lightboxImages[newIndex])
+  }, [lightboxIndex, lightboxImages])
+
+  const goToNext = useCallback(() => {
+    const newIndex = (lightboxIndex + 1) % lightboxImages.length
+    setLightboxIndex(newIndex)
+    setLightboxImage(lightboxImages[newIndex])
+  }, [lightboxIndex, lightboxImages])
+
+  const zoomIn = () => setZoom(z => Math.min(z + 25, 200))
+  const zoomOut = () => setZoom(z => Math.max(z - 25, 25))
+  const fitToScreen = () => setZoom(50) // Fit to viewport
+
+  // Keyboard navigation for lightbox
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!lightboxImage) return
+      if (e.key === 'Escape') closeLightbox()
+      if (e.key === 'ArrowLeft') goToPrev()
+      if (e.key === 'ArrowRight') goToNext()
+      if (e.key === '+' || e.key === '=') zoomIn()
+      if (e.key === '-') zoomOut()
+      if (e.key === '0') setZoom(100)
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [lightboxImage, goToPrev, goToNext])
+
   return (
     <div className="min-h-screen bg-background">
+      {/* Lightbox */}
+      <AnimatePresence>
+        {lightboxImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/95 z-50 flex flex-col"
+          >
+            {/* Top bar */}
+            <div className="flex items-center justify-between p-4 bg-black/50">
+              {/* Zoom controls */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={zoomOut}
+                  className="p-2 text-white/70 hover:text-white transition-colors rounded hover:bg-white/10"
+                  title="Zoom out (-)"
+                >
+                  <ZoomOut className="w-5 h-5" />
+                </button>
+                <span className="text-white/70 text-sm w-16 text-center">{zoom}%</span>
+                <button
+                  onClick={zoomIn}
+                  className="p-2 text-white/70 hover:text-white transition-colors rounded hover:bg-white/10"
+                  title="Zoom in (+)"
+                >
+                  <ZoomIn className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={fitToScreen}
+                  className="p-2 text-white/70 hover:text-white transition-colors rounded hover:bg-white/10 ml-2"
+                  title="Fit to screen"
+                >
+                  <Maximize2 className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => setZoom(100)}
+                  className="px-2 py-1 text-white/70 hover:text-white transition-colors rounded hover:bg-white/10 text-sm"
+                  title="Actual size (0)"
+                >
+                  100%
+                </button>
+              </div>
+
+              {/* Image counter */}
+              {lightboxImages.length > 1 && (
+                <div className="text-white/70 text-sm">
+                  {lightboxIndex + 1} / {lightboxImages.length}
+                </div>
+              )}
+
+              {/* Close button */}
+              <button
+                onClick={closeLightbox}
+                className="p-2 text-white/70 hover:text-white transition-colors rounded hover:bg-white/10"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Scrollable image area */}
+            <div
+              className="flex-1 overflow-auto flex items-start justify-center p-4"
+              onClick={closeLightbox}
+            >
+              {/* Navigation arrows */}
+              {lightboxImages.length > 1 && (
+                <>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); goToPrev() }}
+                    className="fixed left-4 top-1/2 -translate-y-1/2 p-2 text-white/70 hover:text-white transition-colors rounded-full bg-black/50 hover:bg-black/70 z-10"
+                  >
+                    <ChevronLeft className="w-8 h-8" />
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); goToNext() }}
+                    className="fixed right-4 top-1/2 -translate-y-1/2 p-2 text-white/70 hover:text-white transition-colors rounded-full bg-black/50 hover:bg-black/70 z-10"
+                  >
+                    <ChevronRight className="w-8 h-8" />
+                  </button>
+                </>
+              )}
+
+              {/* Image */}
+              <motion.div
+                key={lightboxImage}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  width: `${zoom}%`,
+                  minWidth: zoom > 100 ? `${zoom}%` : 'auto',
+                }}
+                className="flex-shrink-0"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={lightboxImage}
+                  alt="Lightbox image"
+                  className="w-full h-auto rounded-lg shadow-2xl"
+                />
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <Header />
       <div className="max-w-4xl mx-auto px-8 pt-24 pb-12">
 
@@ -327,6 +513,41 @@ export default function BlogPage() {
                       </span>
                     ))}
                   </div>
+
+                  {entry.image && (
+                    <button
+                      onClick={() => openLightbox([entry.image!], 0)}
+                      className="mt-4 rounded-lg overflow-hidden border border-border block w-full hover:border-accent transition-colors cursor-zoom-in h-48"
+                    >
+                      <Image
+                        src={entry.image}
+                        alt={`Screenshot of v${entry.version}`}
+                        width={800}
+                        height={500}
+                        className="w-full h-full object-cover object-top"
+                      />
+                    </button>
+                  )}
+
+                  {entry.images && entry.images.length > 0 && (
+                    <div className="mt-4 grid grid-cols-2 gap-3">
+                      {entry.images.map((img, i) => (
+                        <button
+                          key={i}
+                          onClick={() => openLightbox(entry.images!, i)}
+                          className="rounded-lg overflow-hidden border border-border hover:border-accent transition-colors cursor-zoom-in h-32"
+                        >
+                          <Image
+                            src={img}
+                            alt={`Screenshot ${i + 1} of v${entry.version}`}
+                            width={400}
+                            height={250}
+                            className="w-full h-full object-cover object-top"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </motion.div>
               ))}
             </div>
