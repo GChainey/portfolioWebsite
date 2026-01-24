@@ -2,35 +2,13 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { ThemeToggle } from '@/components/ThemeToggle'
+import { Header } from '@/components/Header'
 import { projects } from '@/content/projects'
 
 export default function ProjectsPage() {
   return (
     <div className="min-h-screen bg-background transition-colors duration-700">
-      {/* Fixed Top Header */}
-      <header className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-sm border-b border-border">
-        <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="text-lg font-medium text-foreground">
-            Gareth Chainey
-          </Link>
-          <nav className="flex items-center gap-6">
-            <Link href="/cv" className="text-sm text-muted hover:text-foreground transition-colors">
-              CV
-            </Link>
-            <Link href="/projects" className="text-sm text-foreground">
-              Projects
-            </Link>
-            <Link href="/blog" className="text-sm text-muted hover:text-foreground transition-colors">
-              Blog
-            </Link>
-            <Link href="/contact" className="text-sm text-muted hover:text-foreground transition-colors">
-              Contact
-            </Link>
-            <ThemeToggle />
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       <div className="max-w-7xl mx-auto pt-14 px-6">
         <div className="py-16">

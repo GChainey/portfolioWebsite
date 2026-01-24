@@ -1,9 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
-import { ThemeToggle } from '@/components/ThemeToggle'
+import { Header } from '@/components/Header'
 
 // Changelog entries - newest first
 const CHANGELOG = [
@@ -107,18 +105,8 @@ What would normally take days of back-and-forth happened in a single session. Th
 export default function BlogPage() {
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-4xl mx-auto px-8 py-12">
-        {/* Header */}
-        <header className="flex items-center justify-between mb-12">
-          <Link
-            href="/"
-            className="flex items-center gap-2 text-muted hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm">Back to Portfolio</span>
-          </Link>
-          <ThemeToggle />
-        </header>
+      <Header />
+      <div className="max-w-4xl mx-auto px-8 pt-14 pb-12">
 
         {/* Blog Post */}
         <article className="mb-16">
