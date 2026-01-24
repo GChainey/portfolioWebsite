@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Link from 'next/link'
+import { FileText } from 'lucide-react'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { ChatInterface } from '@/components/ChatInterface'
 
@@ -134,7 +136,16 @@ export default function Home() {
                 </motion.div>
               </div>
 
-              <ThemeToggle />
+              <div className="flex items-center gap-4">
+                <Link
+                  href="/blog"
+                  className="flex items-center gap-2 text-sm text-muted hover:text-foreground transition-colors"
+                >
+                  <FileText className="w-4 h-4" />
+                  <span>Dev Blog</span>
+                </Link>
+                <ThemeToggle />
+              </div>
             </div>
           </header>
 
