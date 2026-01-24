@@ -7,7 +7,8 @@
   --foreground: #0a0a0a;
   --border: #e5e5e5;
   --muted: #737373;
-  --accent: #2563eb;
+  --accent: #d97706; /* amber-600 */
+  --accent-light: #fef3c7; /* amber-100 */
 }
 
 .dark {
@@ -15,7 +16,8 @@
   --foreground: #fafafa;
   --border: #262626;
   --muted: #a3a3a3;
-  --accent: #3b82f6;
+  --accent: #fbbf24; /* amber-400 */
+  --accent-light: #451a03; /* amber-950 */
 }
 
 body {
@@ -36,10 +38,10 @@ body {
 }
 
 .contribution-0 { @apply bg-border; }
-.contribution-1 { @apply bg-green-200 dark:bg-green-900; }
-.contribution-2 { @apply bg-green-400 dark:bg-green-700; }
-.contribution-3 { @apply bg-green-600 dark:bg-green-500; }
-.contribution-4 { @apply bg-green-800 dark:bg-green-400; }
+.contribution-1 { @apply bg-amber-200 dark:bg-amber-900; }
+.contribution-2 { @apply bg-amber-400 dark:bg-amber-700; }
+.contribution-3 { @apply bg-amber-500 dark:bg-amber-500; }
+.contribution-4 { @apply bg-amber-600 dark:bg-amber-400; }
 
 /* Chat scrollbar */
 .chat-scroll::-webkit-scrollbar {
@@ -53,4 +55,14 @@ body {
 .chat-scroll::-webkit-scrollbar-thumb {
   background: var(--muted);
   border-radius: 2px;
+}
+
+/* Hide scrollbar for carousel */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
