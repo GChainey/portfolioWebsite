@@ -51,6 +51,21 @@ function renderMarkdown(text: string): ReactNode {
 // Changelog entries - newest first
 const CHANGELOG = [
   {
+    version: '0.8.0',
+    date: '2026-02-05',
+    title: 'RFP Case Study',
+    description: 'Built out the "Responding to an RFP" case study page with full narrative content and video placeholders for key feature demonstrations.',
+    changes: [
+      'Rewrote RFP case study with full narrative: situation, problem, approach, impact, and outcome',
+      'Added TLDR section summarizing the one-person-army story',
+      'Added 5 video placeholder sections for key feature demos (seed data, LLM chat, scale adaptation, rapid iteration, interactive workflows)',
+      'Structured before/after impact comparison (without AI vs with AI)',
+      'Updated project tags, description, and chat context for richer AI sidebar conversations',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/rfp-case-study',
+  },
+  {
     version: '0.7.0',
     date: '2026-01-24',
     title: 'Edge-Touching Cards & Feature Flags',
