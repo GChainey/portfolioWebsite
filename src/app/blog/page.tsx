@@ -51,6 +51,19 @@ function renderMarkdown(text: string): ReactNode {
 // Changelog entries - newest first
 const CHANGELOG = [
   {
+    version: '1.0.0',
+    date: '2026-02-05',
+    title: 'New Essay: The GUI Has to Earn Its Place',
+    description: 'Added a new article exploring how chat interfaces are changing expectations for GUIs. Chat API now supports Anthropic for production.',
+    changes: [
+      'Published essay on changing expectations for GUIs in the age of chat',
+      'New project entry accessible from the projects page',
+      'Chat API supports Anthropic Haiku 4.5 in production, Groq in dev',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/Gui-essay',
+  },
+  {
     version: '0.9.0',
     date: '2026-02-05',
     title: 'Product Thinkers',

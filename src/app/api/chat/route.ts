@@ -1,20 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server'
+import Anthropic from '@anthropic-ai/sdk'
 import OpenAI from 'openai'
 
 // Lazy-init to avoid build-time errors when env vars aren't available
-let groq: OpenAI | null = null
+const isProduction = process.env.NODE_ENV === 'production'
+
+let anthropicClient: Anthropic | null = null
+let groqClient: OpenAI | null = null
+
+function getAnthropicClient(): Anthropic {
+  if (!anthropicClient) {
+    if (!process.env.ANTHROPIC_API_KEY) {
+      throw new Error('ANTHROPIC_API_KEY environment variable is not set')
+    }
+    anthropicClient = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+  }
+  return anthropicClient
+}
 
 function getGroqClient(): OpenAI {
-  if (!groq) {
+  if (!groqClient) {
     if (!process.env.GROQ_API_KEY) {
       throw new Error('GROQ_API_KEY environment variable is not set')
     }
-    groq = new OpenAI({
+    groqClient = new OpenAI({
       apiKey: process.env.GROQ_API_KEY,
       baseURL: 'https://api.groq.com/openai/v1',
     })
   }
-  return groq
+  return groqClient
 }
 
 export async function POST(request: NextRequest) {
@@ -23,20 +37,39 @@ export async function POST(request: NextRequest) {
 
     let content: string | undefined
 
-    const client = getGroqClient()
-    const response = await client.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
-      max_tokens: 256,
-      temperature: 0.7,
-      messages: [
-        { role: 'system', content: context },
-        ...messages.map((msg: { role: string; content: string }) => ({
+    if (isProduction && process.env.ANTHROPIC_API_KEY) {
+      // Production: Anthropic Haiku 4.5
+      const client = getAnthropicClient()
+      const response = await client.messages.create({
+        model: 'claude-haiku-4-5-20241022',
+        max_tokens: 256,
+        system: context,
+        messages: messages.map((msg: { role: string; content: string }) => ({
           role: msg.role as 'user' | 'assistant',
           content: msg.content,
         })),
-      ],
-    })
-    content = response.choices[0]?.message?.content ?? undefined
+      })
+      const textBlock = response.content.find(block => block.type === 'text')
+      if (textBlock && textBlock.type === 'text') {
+        content = textBlock.text
+      }
+    } else {
+      // Dev: Groq free tier (Llama)
+      const client = getGroqClient()
+      const response = await client.chat.completions.create({
+        model: 'llama-3.3-70b-versatile',
+        max_tokens: 256,
+        temperature: 0.7,
+        messages: [
+          { role: 'system', content: context },
+          ...messages.map((msg: { role: string; content: string }) => ({
+            role: msg.role as 'user' | 'assistant',
+            content: msg.content,
+          })),
+        ],
+      })
+      content = response.choices[0]?.message?.content ?? undefined
+    }
 
     if (content) {
       return NextResponse.json({ content })
