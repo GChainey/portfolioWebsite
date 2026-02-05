@@ -51,7 +51,7 @@ function renderMarkdown(text: string): ReactNode {
 // Changelog entries - newest first
 const CHANGELOG = [
   {
-    version: '0.9.1',
+    version: '1.1.1',
     date: '2026-02-05',
     title: 'Fix Chat Sidebar Animation',
     description: 'Removed the delayed entrance animation on the Gareth LLM chat sidebar on the Product Thinkers page so it appears immediately on load.',
@@ -61,6 +61,32 @@ const CHANGELOG = [
     ],
     aiTools: ['Claude Code'],
     branch: 'GChainey/fix-gareth-llm-animation',
+  },
+  {
+    version: '1.1.0',
+    date: '2026-02-05',
+    title: 'New Essay: You Can Conjure Your Own Tools Now',
+    description: 'Added a new article about how AI coding tools change creative practice — building custom tools on demand and preserving design iterations as living artifacts.',
+    changes: [
+      'Published essay on creative tooling and the shift from waiting for features to conjuring them',
+      'Explores using feature branches and flags as a design canvas for iteration history',
+      'New project entry accessible from the projects page',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/creative-tooling-post',
+  },
+  {
+    version: '1.0.0',
+    date: '2026-02-05',
+    title: 'New Essay: The GUI Has to Earn Its Place',
+    description: 'Added a new article exploring how chat interfaces are changing expectations for GUIs. Chat API now supports Anthropic for production.',
+    changes: [
+      'Published essay on changing expectations for GUIs in the age of chat',
+      'New project entry accessible from the projects page',
+      'Chat API supports Anthropic Haiku 4.5 in production, Groq in dev',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/Gui-essay',
   },
   {
     version: '0.9.0',
