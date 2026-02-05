@@ -2,19 +2,34 @@ import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import OpenAI from 'openai'
 
-// Groq for dev (free tier), Anthropic for production
+// Lazy-init to avoid build-time errors when env vars aren't available
 const isProduction = process.env.NODE_ENV === 'production'
 
-const anthropic = isProduction && process.env.ANTHROPIC_API_KEY
-  ? new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
-  : null
+let anthropicClient: Anthropic | null = null
+let groqClient: OpenAI | null = null
 
-const groq = !isProduction && process.env.GROQ_API_KEY
-  ? new OpenAI({
+function getAnthropicClient(): Anthropic {
+  if (!anthropicClient) {
+    if (!process.env.ANTHROPIC_API_KEY) {
+      throw new Error('ANTHROPIC_API_KEY environment variable is not set')
+    }
+    anthropicClient = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+  }
+  return anthropicClient
+}
+
+function getGroqClient(): OpenAI {
+  if (!groqClient) {
+    if (!process.env.GROQ_API_KEY) {
+      throw new Error('GROQ_API_KEY environment variable is not set')
+    }
+    groqClient = new OpenAI({
       apiKey: process.env.GROQ_API_KEY,
       baseURL: 'https://api.groq.com/openai/v1',
     })
-  : null
+  }
+  return groqClient
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,9 +37,10 @@ export async function POST(request: NextRequest) {
 
     let content: string | undefined
 
-    if (anthropic) {
+    if (isProduction && process.env.ANTHROPIC_API_KEY) {
       // Production: Anthropic Haiku 4.5
-      const response = await anthropic.messages.create({
+      const client = getAnthropicClient()
+      const response = await client.messages.create({
         model: 'claude-haiku-4-5-20241022',
         max_tokens: 256,
         system: context,
@@ -37,9 +53,10 @@ export async function POST(request: NextRequest) {
       if (textBlock && textBlock.type === 'text') {
         content = textBlock.text
       }
-    } else if (groq) {
+    } else {
       // Dev: Groq free tier (Llama)
-      const response = await groq.chat.completions.create({
+      const client = getGroqClient()
+      const response = await client.chat.completions.create({
         model: 'llama-3.3-70b-versatile',
         max_tokens: 256,
         temperature: 0.7,
@@ -52,11 +69,6 @@ export async function POST(request: NextRequest) {
         ],
       })
       content = response.choices[0]?.message?.content ?? undefined
-    } else {
-      return NextResponse.json(
-        { error: 'No API key configured. Set GROQ_API_KEY for dev or ANTHROPIC_API_KEY for production.' },
-        { status: 500 }
-      )
     }
 
     if (content) {

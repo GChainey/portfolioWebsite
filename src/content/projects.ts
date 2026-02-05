@@ -486,63 +486,274 @@ export const projects: Project[] = [
   },
   {
     id: 'rfp',
-    title: 'Respond to RFP',
-    description: 'One man army to win a deal. Demonstrating how AI augmentation enables a single designer to deliver enterprise-quality proposals.',
+    title: 'Responding to an RFP',
+    description: 'A small startup competing against large organizations for a major government tender. One designer with AI tools delivered what would normally require a multi-team effort.',
     category: 'Enterprise AI',
     year: '2025',
-    tags: ['AI', 'Enterprise', 'Sales', 'Prototyping'],
+    tags: ['AI', 'Enterprise', 'Prototyping', 'Claude Code', 'RFP'],
     content: [
+      // --- TLDR ---
       {
         type: 'heading',
         level: 2,
-        content: 'The Challenge'
+        content: 'TLDR'
       },
       {
         type: 'text',
-        content: 'Enterprise RFPs typically require a team of specialists—solution architects, designers, copywriters, and project managers. I wanted to prove that AI augmentation could compress this into a one-person operation.'
+        content: 'I was the sole designer at a small startup competing for a large government tender against well-resourced organizations. Figma couldn\'t handle the scope—so I switched to building a working code prototype with Claude Code. What would normally require a squad of designers, engineers, and solution architects became a one-person operation. The result: a fully interactive prototype with real data, live LLM features, and rapid iteration that\'s still being referenced and iterated on today.'
       },
+
+      // --- Context ---
       {
         type: 'heading',
         level: 2,
-        content: 'The Approach'
+        content: 'The Situation'
       },
       {
         type: 'text',
-        content: 'Using Claude for strategic thinking and content generation, combined with rapid prototyping in code, I was able to deliver a comprehensive proposal in a fraction of the typical time.'
+        content: 'I was working for a small startup that had built a product for small local councils. A major opportunity came in—a large government tender at the state level. The RFP was extensive, with complex requirements that went far beyond what our existing product handled. We were competing against established enterprise vendors with large teams.'
       },
       {
+        type: 'text',
+        content: 'The team responding to this RFP was lean: me as the designer, a product manager I collaborated with closely, and the founder who provided in-depth knowledge of the RFP requirements. That was it.'
+      },
+
+      // --- The Problem ---
+      {
         type: 'heading',
-        level: 3,
-        content: 'Key Features'
+        level: 2,
+        content: 'Why Figma Wasn\'t Enough'
+      },
+      {
+        type: 'text',
+        content: 'I started in Figma, which was our standard design tool. But the scope and complexity of the RFP quickly exposed Figma\'s limitations for this kind of work:'
       },
       {
         type: 'list',
         items: [
-          'AI-assisted content generation for technical writing',
-          'Rapid prototyping of proposed solutions',
-          'Interactive demos built in real code',
-          'Automated document formatting and styling'
+          'Requirements changed frequently—updating static mockups across dozens of screens was slow and error-prone',
+          'The RFP required demonstrating realistic data scenarios that were consistent throughout the product',
+          'Key features like LLM-powered document analysis needed to feel real, not just be static wireframes',
+          'The scale shift from small councils to an entire state meant rethinking data architecture, not just reskinning screens',
+          'Stakeholders needed to interact with the prototype, not just view screenshots'
         ]
       },
-      // Add your media here:
-      // {
-      //   type: 'gif',
-      //   src: '/projects/rfp/demo.gif',
-      //   alt: 'RFP workflow demo',
-      //   caption: 'AI-assisted proposal generation workflow'
-      // },
+      {
+        type: 'text',
+        content: 'Figma prototypes are inherently linear—click through a predefined path. For this RFP, we needed something people could explore, something that felt like a real product.'
+      },
+
+      // --- The Approach ---
+      {
+        type: 'heading',
+        level: 2,
+        content: 'The Approach: Code as Design'
+      },
+      {
+        type: 'text',
+        content: 'I had already built a lightweight version of the product—a "ProductLite" prototype in code. Using Claude Code, I created a new branch and began adapting it for the state-level tender. Instead of Figma being the source of truth, the working prototype became the reference that engineers and stakeholders could access directly.'
+      },
+      {
+        type: 'text',
+        content: 'This changed the dynamic entirely. I could design faster than the engineering team was able to build, unconstrained by their existing technical limitations. And rather than handing off static files, I was delivering something people could use.'
+      },
+
+      // --- Key Features Section ---
+      {
+        type: 'heading',
+        level: 2,
+        content: 'Key Features: What Code Made Possible'
+      },
+      {
+        type: 'text',
+        content: 'These are the features that made the difference—things that simply couldn\'t be done in Figma. Each one demonstrates why a working prototype was essential for winning this tender.'
+      },
+
+      // Feature 1: Seed Data
+      {
+        type: 'heading',
+        level: 3,
+        content: 'Consistent Seed Data'
+      },
+      {
+        type: 'text',
+        content: 'The RFP required demonstrating how the product would handle real-world government data at scale. We needed consistent data throughout—names, case numbers, dates, statuses—that told a coherent story across every screen. In Figma, changing a single data point means manually updating every screen it appears on. In code, changing the seed data updates everywhere instantly.'
+      },
+      // VIDEO PLACEHOLDER: Seed data demo
+      {
+        type: 'video',
+        src: '/projects/rfp/seed-data-demo.mp4',
+        alt: 'Seed data consistency across the prototype',
+        caption: 'Consistent seed data flowing through every screen—change it once, it updates everywhere',
+        aspectRatio: '16/9'
+      },
+
+      // Feature 2: LLM Chat
+      {
+        type: 'heading',
+        level: 3,
+        content: 'Live LLM Document Analysis'
+      },
+      {
+        type: 'text',
+        content: 'A core requirement was showing how AI could help government workers analyze and respond to documents. In Figma, this would be a linear click-through with predetermined responses. In the code prototype, we connected an actual LLM—users could ask real questions about documents and get contextual, dynamic answers. This was a fundamentally better proof of concept.'
+      },
+      // VIDEO PLACEHOLDER: LLM chat demo
+      {
+        type: 'video',
+        src: '/projects/rfp/llm-chat-demo.mp4',
+        alt: 'Live LLM chat interface responding to document queries',
+        caption: 'A working LLM chat interface that responds to real queries—impossible to replicate in Figma',
+        aspectRatio: '16/9'
+      },
+
+      // Feature 3: Scale Adaptation
+      {
+        type: 'heading',
+        level: 3,
+        content: 'Small Council to State-Level Scale'
+      },
+      {
+        type: 'text',
+        content: 'The existing product was designed for small local councils. The RFP required demonstrating it at state scale—different data hierarchies, different user roles, different reporting structures. In code, I could restructure the data model and UI to reflect this new scale without starting from scratch.'
+      },
+      // VIDEO PLACEHOLDER: Scale comparison
+      {
+        type: 'video',
+        src: '/projects/rfp/scale-demo.mp4',
+        alt: 'Product adapted from council-level to state-level operations',
+        caption: 'Adapting the product from small council to state-level scope—restructured data and UI in days, not months',
+        aspectRatio: '16/9'
+      },
+
+      // Feature 4: Rapid Iteration
+      {
+        type: 'heading',
+        level: 3,
+        content: 'Rapid Requirement Changes'
+      },
+      {
+        type: 'text',
+        content: 'RFP requirements evolved constantly as we dug deeper into the tender documents. New fields, new workflows, new compliance requirements would surface weekly. In Figma, each change cascades across screens. With Claude Code, I could describe the change and have it implemented across the prototype in minutes.'
+      },
+      // VIDEO PLACEHOLDER: Rapid iteration demo
+      {
+        type: 'video',
+        src: '/projects/rfp/iteration-demo.mp4',
+        alt: 'Rapidly iterating on prototype requirements',
+        caption: 'Implementing a requirement change across the entire prototype—what would take days in Figma done in minutes',
+        aspectRatio: '16/9'
+      },
+
+      // Feature 5: Interactive Workflows
+      {
+        type: 'heading',
+        level: 3,
+        content: 'Interactive Workflows'
+      },
+      {
+        type: 'text',
+        content: 'The RFP required demonstrating complex multi-step workflows—case management, approvals, escalations. Static mockups can show the screens, but they can\'t show how data flows between steps, how state changes, or how edge cases are handled. The code prototype let evaluators walk through real workflows with real state management.'
+      },
+      // VIDEO PLACEHOLDER: Workflow demo
+      {
+        type: 'video',
+        src: '/projects/rfp/workflow-demo.mp4',
+        alt: 'Interactive workflow demonstration with state management',
+        caption: 'Multi-step workflows with real state management—evaluators could explore freely, not follow a script',
+        aspectRatio: '16/9'
+      },
+
+      // --- Impact ---
+      {
+        type: 'heading',
+        level: 2,
+        content: 'The Impact'
+      },
+      {
+        type: 'text',
+        content: 'This project is the clearest demonstration of what AI-augmented design makes possible. Here\'s the contrast:'
+      },
+
+      {
+        type: 'heading',
+        level: 3,
+        content: 'Without AI Tools'
+      },
+      {
+        type: 'list',
+        items: [
+          'A team of 3-5 designers for Figma mockups across all required screens',
+          'Solution architects to document technical feasibility',
+          'Engineers to build any interactive demos',
+          'Weeks of coordination between design, engineering, and proposal writing',
+          'Static deliverables that can\'t be explored freely',
+          'Every requirement change triggers a cascade of manual updates',
+        ]
+      },
+
+      {
+        type: 'heading',
+        level: 3,
+        content: 'With AI Tools'
+      },
+      {
+        type: 'list',
+        items: [
+          'One designer with Claude Code delivering the full prototype',
+          'A product manager for collaboration and direction',
+          'The founder for RFP domain expertise',
+          'Days instead of weeks for major feature additions',
+          'A living prototype that stakeholders could interact with',
+          'Requirement changes implemented same-day',
+        ]
+      },
+
+      // --- Outcome ---
+      {
+        type: 'heading',
+        level: 2,
+        content: 'The Outcome'
+      },
+      {
+        type: 'text',
+        content: 'The prototype delivered for the RFP wasn\'t just a proposal artifact—it became a product asset. It\'s still being referenced and iterated on today, which is the opposite of what happens with Figma files after a tender. The designs didn\'t get handed off and forgotten; they became the foundation that engineering continued building on.'
+      },
+      {
+        type: 'text',
+        content: 'This project proved that the shift from static design tools to AI-augmented code prototyping isn\'t just about speed—it\'s about producing fundamentally better work. A working prototype with real data, real LLM integration, and real interactivity tells a story that no amount of polished mockups can match.'
+      },
+
+      // --- Tools & Process ---
+      {
+        type: 'heading',
+        level: 2,
+        content: 'Tools & Process'
+      },
+      {
+        type: 'list',
+        items: [
+          'Claude Code for rapid prototyping and code generation',
+          'Next.js + React for the prototype framework',
+          'Tailwind CSS for consistent, rapid styling',
+          'LLM API integration for live chat features',
+          'Git branching to manage prototype variants',
+          'Vercel for instant deployment and stakeholder access',
+        ]
+      },
     ],
     chatContext: {
-      description: 'Case study about using AI to respond to enterprise RFPs as a one-person team',
+      description: 'Case study about a designer using AI tools to single-handedly deliver an enterprise RFP response with a working code prototype, competing against large organizations for a government tender',
       suggestedQuestions: [
-        'How did you approach this RFP?',
-        'What AI tools did you use?',
-        'How long did it take?',
+        'How did you approach this RFP differently?',
+        'What couldn\'t you do in Figma that code solved?',
+        'How long did the prototype take to build?',
       ],
       followUpQuestions: [
-        'What was the outcome?',
-        'Would this work for any RFP?',
-        'How do you handle technical requirements?',
+        'What was the outcome of the tender?',
+        'Is the prototype still being used?',
+        'How did the engineers react to your code prototype?',
+        'What would you do differently next time?',
       ]
     }
   },
