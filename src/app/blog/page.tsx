@@ -51,6 +51,18 @@ function renderMarkdown(text: string): ReactNode {
 // Changelog entries - newest first
 const CHANGELOG = [
   {
+    version: '1.1.1',
+    date: '2026-02-05',
+    title: 'Fix Chat Sidebar Animation',
+    description: 'Removed the delayed entrance animation on the Gareth LLM chat sidebar on the Product Thinkers page so it appears immediately on load.',
+    changes: [
+      'Removed 1.5s delayed mount of chat sidebar on thinkers page',
+      'Set `initial={false}` on sidebar motion component to skip entrance animation',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/fix-gareth-llm-animation',
+  },
+  {
     version: '1.1.0',
     date: '2026-02-05',
     title: 'New Essay: You Can Conjure Your Own Tools Now',
