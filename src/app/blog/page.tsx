@@ -51,6 +51,18 @@ function renderMarkdown(text: string): ReactNode {
 // Changelog entries - newest first
 const CHANGELOG = [
   {
+    version: '0.8.0',
+    date: '2026-02-05',
+    title: 'New Essay: The GUI Has to Earn Its Place',
+    description: 'Added a new article exploring how chat interfaces are changing expectations for GUIs.',
+    changes: [
+      'Published essay on changing expectations for GUIs in the age of chat',
+      'New project entry accessible from the projects page',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/run-server-3010',
+  },
+  {
     version: '0.7.0',
     date: '2026-01-24',
     title: 'Edge-Touching Cards & Feature Flags',
