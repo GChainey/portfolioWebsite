@@ -7,7 +7,9 @@ import { MessageCircle, X, ArrowRight } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
 import { GitHubContributions } from '@/components/GitHubContributions'
+import { ThinkerCard } from '@/components/ThinkerCard'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
+import { thinkers } from '@/content/thinkers'
 
 // Roles that animate
 const ROLES = ['Product Designer', 'Design Engineer', 'Product Manager', 'Engineer']
@@ -370,6 +372,33 @@ export default function Home() {
                       </motion.div>
                     ))}
                   </div>
+                </div>
+              </motion.div>
+            </section>
+
+            {/* Product Thinkers section */}
+            <section className="border-b border-border">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.78 }}
+              >
+                <div className={`flex items-center justify-between px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
+                  <p className="text-xs text-muted uppercase tracking-widest">Product Thinkers</p>
+                  <Link href="/thinkers" className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1">
+                    View all <ArrowRight className="w-3 h-3" />
+                  </Link>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2">
+                  {thinkers.map((thinker, index) => (
+                    <div
+                      key={thinker.id}
+                      className={`p-5 ${index % 2 === 0 ? 'md:border-r border-border' : ''} ${index < thinkers.length - (thinkers.length % 2 === 0 ? 2 : 1) ? 'border-b border-border' : ''}`}
+                    >
+                      <ThinkerCard thinker={thinker} index={index} />
+                    </div>
+                  ))}
                 </div>
               </motion.div>
             </section>
