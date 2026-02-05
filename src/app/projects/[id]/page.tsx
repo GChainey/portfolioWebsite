@@ -60,8 +60,8 @@ const TLDR_OPTIONS = [
 export default function ProjectPage() {
   const params = useParams()
   const [project, setProject] = useState<Project | null>(null)
-  const [chatOpen, setChatOpen] = useState(true)
-  const [chatMounted, setChatMounted] = useState(true)
+  const [chatOpen, setChatOpen] = useState(false)
+  const [chatMounted, setChatMounted] = useState(false)
   const [tldrOpen, setTldrOpen] = useState(false)
   const [tldrLength, setTldrLength] = useState('recruiter')
   const [tldrFocus, setTldrFocus] = useState('')
@@ -91,6 +91,15 @@ export default function ProjectPage() {
 
     return () => clearTimeout(timer)
   }, [params.id])
+
+  // Open chat on desktop only, keep closed on mobile
+  useEffect(() => {
+    const isDesktop = window.innerWidth >= 768
+    setChatMounted(true)
+    if (isDesktop) {
+      setChatOpen(true)
+    }
+  }, [])
 
   const generateTldr = async () => {
     if (!project) return

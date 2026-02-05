@@ -33,13 +33,18 @@ function getInitials(name: string, initials?: string): string {
 }
 
 export default function ThinkersPage() {
-  const [chatOpen, setChatOpen] = useState(true)
+  const [chatOpen, setChatOpen] = useState(false)
   const [chatMounted, setChatMounted] = useState(false)
   const { flags } = useFeatureFlags()
 
+  // Mount chat after delay, open on desktop only
   useEffect(() => {
+    const isDesktop = window.innerWidth >= 768
     const timer = setTimeout(() => {
       setChatMounted(true)
+      if (isDesktop) {
+        setChatOpen(true)
+      }
     }, 1500)
     return () => clearTimeout(timer)
   }, [])
