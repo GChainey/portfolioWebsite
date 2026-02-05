@@ -51,6 +51,20 @@ function renderMarkdown(text: string): ReactNode {
 // Changelog entries - newest first
 const CHANGELOG = [
   {
+    version: '1.2.0',
+    date: '2026-02-05',
+    title: 'Contact Page',
+    description: 'New contact page with email form and GarethLLM availability FAQ chatbot. Resolves the broken /contact link in navigation.',
+    changes: [
+      'Created /contact page with email contact form (mailto: integration)',
+      'Added availability info section: Singapore, moving to USA, open to remote/US work',
+      'Chat sidebar pre-loaded with location and availability FAQ context',
+      'Resolved 404 for existing /contact header navigation link',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/add-contact-page',
+  },
+  {
     version: '1.1.1',
     date: '2026-02-05',
     title: 'Fix Chat Sidebar Animation',
