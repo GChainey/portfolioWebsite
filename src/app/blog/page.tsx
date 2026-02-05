@@ -51,6 +51,21 @@ function renderMarkdown(text: string): ReactNode {
 // Changelog entries - newest first
 const CHANGELOG = [
   {
+    version: '0.9.0',
+    date: '2026-02-05',
+    title: 'Product Thinkers',
+    description: 'Added a new section showcasing product thinkers who have shaped my approach to design and product work.',
+    changes: [
+      'Created `/thinkers` page with edge-touching card grid',
+      'Added homepage preview section between Experience and Testimonials',
+      'Features Teresa Torres, Spiek & Moesta, Ryan Singer, and Christopher Alexander',
+      'Created thinkers content data model in `/src/content/thinkers.ts`',
+      'Created reusable `ThinkerCard` component for homepage use',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/product-thinkers-page',
+  },
+  {
     version: '0.8.0',
     date: '2026-02-05',
     title: 'RFP Case Study',
