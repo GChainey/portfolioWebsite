@@ -47,6 +47,160 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: 'gui-vs-chat',
+    title: 'The GUI Has to Earn Its Place',
+    description: 'I used to accept GUIs as the default. Now, if a chat interface could do it faster, the GUI feels like friction.',
+    category: 'Article',
+    year: '2026',
+    featured: true,
+    tags: ['AI', 'Design', 'UX', 'Essay'],
+    content: [
+      {
+        type: 'heading',
+        level: 2,
+        content: 'Something Shifted'
+      },
+      {
+        type: 'text',
+        content: 'I used to accept graphical user interfaces as the default way to work with tools. Click here, drag there, navigate through menus, find the right panel. That was just how software worked.'
+      },
+      {
+        type: 'text',
+        content: 'That changed. Now, when I\'m using a tool that has a GUI but it would be faster to simply describe what I want and have it done for me, I feel frustrated. The interface isn\'t helping me—it\'s slowing me down.'
+      },
+      {
+        type: 'text',
+        content: 'This isn\'t about chat being universally better. It\'s about a new mental filter I can\'t turn off: does this GUI actually need to exist?'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'Execution vs. Exploration'
+      },
+      {
+        type: 'text',
+        content: 'The distinction I keep coming back to is between execution and exploration. When I\'m exploring—browsing, discovering, playing with possibilities—a visual interface is often the right tool. I want to see options, manipulate things spatially, get a feel for what\'s possible.'
+      },
+      {
+        type: 'text',
+        content: 'But when I\'m executing a known task, especially across multiple items, a GUI starts to feel like overhead. I already know what I want. I don\'t need to navigate to the right screen, find the right button, and click through a confirmation dialog. I just need it done.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'Where I Feel It Most'
+      },
+      {
+        type: 'text',
+        content: 'Take Framer. I use it for web projects, and it\'s a capable tool. But the interface is slightly different from my mental model of how Figma works—different panel locations, different interaction patterns. The GUI is already competing with the mental model I built somewhere else. When I hit that friction, my instinct now is: why can\'t I just tell it what I want?'
+      },
+      {
+        type: 'text',
+        content: 'Or spreadsheets. If I have to log anything—expenses, project tracking, content calendars—I no longer want to do manual cell-by-cell entry. My expectation is that I can describe the data and have it structured for me. The spreadsheet GUI is fine for reviewing and adjusting, but for input? Chat wins.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'The New Bar'
+      },
+      {
+        type: 'text',
+        content: 'The expectation has fundamentally changed. A GUI can\'t just exist because "that\'s how software works." It has to fight for its place. It needs to justify itself by being clearly better than describing the task in natural language.'
+      },
+      {
+        type: 'text',
+        content: 'That means the GUI now needs to do at least one of these things:'
+      },
+      {
+        type: 'list',
+        items: [
+          'Enable spatial reasoning that words can\'t express—layout, composition, visual relationships',
+          'Provide real-time feedback loops that make exploration faster than describing iterations',
+          'Surface information density that would take paragraphs to describe in text',
+          'Support muscle memory and shortcuts that become faster than typing instructions'
+        ]
+      },
+      {
+        type: 'text',
+        content: 'If a GUI doesn\'t do any of these things, it\'s just a middleman between me and the outcome. And chat removes the middleman.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'What This Means for Designers'
+      },
+      {
+        type: 'text',
+        content: 'This is uncomfortable if you\'re a product designer, because a lot of what we build is GUI. Forms, dashboards, settings screens, CRUD interfaces—these are the bread and butter of product design. And many of them are exactly the kind of thing that chat could replace.'
+      },
+      {
+        type: 'text',
+        content: 'But I don\'t think this makes design less important. If anything, it raises the bar. The interfaces that survive need to be genuinely better than the alternative. That means designers need to focus on the things that visual interfaces do uniquely well: spatial relationships, direct manipulation, information density, and real-time feedback.'
+      },
+      {
+        type: 'text',
+        content: 'The settings page that\'s just a list of toggles? Chat could handle that. The data visualization dashboard where you\'re spotting patterns across dimensions? That\'s where GUI earns its keep.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'When It Works: Magic Path'
+      },
+      {
+        type: 'text',
+        content: 'There are products getting this right. Magic Path is a good example—it gives you a canvas for spatial thinking that then feeds into chat. You sketch out a rough structure or flow visually, and that spatial context becomes the input for what the AI builds. The GUI isn\'t decoration; it\'s doing something chat alone can\'t do. It\'s helping you think.'
+      },
+      {
+        type: 'text',
+        content: 'That\'s the template: the canvas helps you figure out what you want, and the chat executes it. Each part doing what it\'s best at.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'The Product Paradox'
+      },
+      {
+        type: 'text',
+        content: 'But there\'s a tension hiding in this model. As you move into a product—even a good one—you\'re also accepting its constraints. The product makes certain things easier and other things impossible. Right now, the raw power of something like Claude Code is hard to beat precisely because it\'s unconstrained. No product wrapper, no predetermined workflows. Just describe what you want and watch it happen.'
+      },
+      {
+        type: 'text',
+        content: 'This creates an interesting question about who these products are for. There might be a meaningful difference between three categories: the products you\'re building for end users, the tools you use to build those products, and the products you use to do your day-to-day work.'
+      },
+      {
+        type: 'text',
+        content: 'End users might always want a polished GUI that hides complexity. But designers and builders? We might prefer the full creative power of an unconstrained tool over the convenience of a productized one. When a product wraps AI into a specific workflow, it trades capability for usability. That trade-off makes sense for some users, but for power users who know what they want, it can feel like a cage.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'An Ongoing Trade-Off'
+      },
+      {
+        type: 'text',
+        content: 'This tension isn\'t going to resolve neatly. Products will keep building GUI layers on top of AI to make it accessible. And at the same time, the raw chat-first tools will keep getting more powerful and more appealing to people who don\'t want guardrails.'
+      },
+      {
+        type: 'text',
+        content: 'The point isn\'t that GUIs are dead. The point is that they\'re no longer the default. They\'re one option among others, and they need to earn their place by being genuinely better than the alternative—not just familiar. Whether that bar keeps rising as raw AI tools improve is the question we\'re all living through right now.'
+      },
+    ],
+    chatContext: {
+      description: 'Essay about how chat interfaces are changing expectations for GUIs, arguing that graphical interfaces now need to justify their existence over conversational alternatives',
+      suggestedQuestions: [
+        'What types of GUIs do you think will survive?',
+        'How does this affect product design?',
+        'When is a GUI still better than chat?',
+      ],
+      followUpQuestions: [
+        'What tools have you switched to chat-first workflows for?',
+        'How should designers adapt to this shift?',
+        'Where does voice fit into this picture?',
+        'Do you think most SaaS settings pages will become chat?',
+      ]
+    }
+  },
+  {
     id: 'conflict-and-experiments',
     title: 'How I Handle Conflict',
     description: 'Disagreements aren\'t problems to avoid—they\'re opportunities to learn. Here\'s how I turn product debates into experiments.',
