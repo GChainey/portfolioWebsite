@@ -47,6 +47,121 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: 'creative-tooling',
+    title: 'You Can Conjure Your Own Tools Now',
+    description: 'In Figma, you waited for someone to ship the feature. With AI code tools, you build the creative tool you need in the moment you need it.',
+    category: 'Article',
+    year: '2026',
+    featured: true,
+    tags: ['AI', 'Creative Tools', 'Design Process', 'Essay'],
+    content: [
+      {
+        type: 'heading',
+        level: 2,
+        content: 'The Old Model: Wait for the Feature'
+      },
+      {
+        type: 'text',
+        content: 'In Figma, if you wanted a specific creative tool—a new way to organize your work, a custom interaction pattern, a better way to track iterations—you waited. You waited for a team of engineers and designers to prioritize it, build it, ship it, and hope it matched what you actually needed. Your creative process was bounded by the features someone else decided to give you.'
+      },
+      {
+        type: 'text',
+        content: 'That dependency is dissolving. When you can describe what you want to a tool like Claude Code and have it built in minutes, the relationship between creator and tool changes fundamentally. You\'re no longer a user waiting for capabilities. You\'re someone who conjures them.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'Building the Tool You Need, When You Need It'
+      },
+      {
+        type: 'text',
+        content: 'This portfolio site is itself an example. Every feature on it was built by describing what I wanted and iterating in conversation. But the more interesting shift isn\'t about building products—it\'s about building the creative tools within the product that support how you think and work.'
+      },
+      {
+        type: 'text',
+        content: 'Want to choose between different AI models for a chat interface? Don\'t wait for an API playground to add that feature. Build a model picker. Want a way to visually compare design approaches? Build it. The gap between "I wish this tool existed" and "I have this tool" has collapsed from months to minutes.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'Iterations as Artifacts'
+      },
+      {
+        type: 'text',
+        content: 'But the most interesting creative tooling problem I\'ve run into is about iterations—specifically, how you preserve and present the journey of how something evolved.'
+      },
+      {
+        type: 'text',
+        content: 'In Figma, this was natural. You had a canvas with history. You could scroll through frames and see V1, V2, V3 side by side. The design tool doubled as a record of your thinking. Someone could look at your file and understand not just what you landed on, but why—what you tried, what you rejected, what trade-offs you navigated.'
+      },
+      {
+        type: 'text',
+        content: 'Working in code, that history disappears. Technically it exists in git commits, but nobody browses git history to understand design decisions. The friction is too high. The signal is buried in diffs that mix meaningful design changes with implementation details.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'Feature Branches as a Design Canvas'
+      },
+      {
+        type: 'text',
+        content: 'So I started doing something different. As I build a feature and make significant iterations, I save each version behind a feature flag. Not as dead code or a screenshot in a slide deck—as a living, interactive version you can actually use.'
+      },
+      {
+        type: 'text',
+        content: 'Each version is accessible in staging or in a lightweight version of the product. You can click through V1, V2, V3, V4 and experience the evolution yourself. When someone asks "why didn\'t we do it this way?", I don\'t have to explain from memory. I can show the version where we tried that, and walk through what we learned.'
+      },
+      {
+        type: 'text',
+        content: 'The feature branch becomes the canvas. The feature flag becomes the frame selector. The code itself becomes the design artifact.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'Telling the Story of Trade-offs'
+      },
+      {
+        type: 'text',
+        content: 'This matters because design decisions aren\'t obvious from the final output. The finished product looks inevitable—clean, resolved, like it couldn\'t have been any other way. But every version represents a set of trade-offs. V1 might have prioritized simplicity over power. V2 might have added flexibility but introduced confusion. V3 might have found a middle ground by rethinking the information architecture entirely.'
+      },
+      {
+        type: 'text',
+        content: 'When you can show all of these versions running side by side, the conversation about design decisions becomes concrete instead of abstract. You\'re not arguing about hypotheticals—you\'re comparing real, interactive implementations.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'The Shift in Creative Practice'
+      },
+      {
+        type: 'text',
+        content: 'What\'s happening here is bigger than any single technique. The entire relationship between a creator and their tools is inverting. Previously, you adapted your creative process to fit the tools available. You learned the tool\'s mental model. You accepted its constraints. You worked within its paradigm.'
+      },
+      {
+        type: 'text',
+        content: 'Now the tool adapts to your creative process. If your workflow needs something that doesn\'t exist, you make it exist. If the way you think about iterations doesn\'t match how any tool presents them, you build presentation that matches how you think.'
+      },
+      {
+        type: 'text',
+        content: 'This is what it looks like when the friction between imagination and implementation approaches zero. Not that everything becomes easy—the thinking is still hard. But the gap between having an idea for how to work and actually working that way has never been smaller.'
+      },
+    ],
+    chatContext: {
+      description: 'Essay about how AI coding tools change creative practice by letting you build custom tools on demand instead of waiting for features, and how feature branches with flags can preserve design iteration history',
+      suggestedQuestions: [
+        'How do you decide when to save an iteration as a version?',
+        'What\'s an example of a tool you conjured that surprised you?',
+        'How does this compare to design system tooling in Figma?',
+      ],
+      followUpQuestions: [
+        'Do you think this approach scales to teams?',
+        'What gets lost when you move from canvas-based to code-based iteration?',
+        'How do non-technical stakeholders interact with versioned features?',
+        'Is there a risk of over-engineering your own tools?',
+      ]
+    }
+  },
+  {
     id: 'gui-vs-chat',
     title: 'The GUI Has to Earn Its Place',
     description: 'I used to accept GUIs as the default. Now, if a chat interface could do it faster, the GUI feels like friction.',

@@ -51,6 +51,19 @@ function renderMarkdown(text: string): ReactNode {
 // Changelog entries - newest first
 const CHANGELOG = [
   {
+    version: '1.1.0',
+    date: '2026-02-05',
+    title: 'New Essay: You Can Conjure Your Own Tools Now',
+    description: 'Added a new article about how AI coding tools change creative practice — building custom tools on demand and preserving design iterations as living artifacts.',
+    changes: [
+      'Published essay on creative tooling and the shift from waiting for features to conjuring them',
+      'Explores using feature branches and flags as a design canvas for iteration history',
+      'New project entry accessible from the projects page',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/creative-tooling-post',
+  },
+  {
     version: '1.0.0',
     date: '2026-02-05',
     title: 'New Essay: The GUI Has to Earn Its Place',
