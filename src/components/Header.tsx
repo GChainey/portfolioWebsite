@@ -33,6 +33,9 @@ export function Header({ showBack }: HeaderProps) {
           <Link href="/projects" className="text-sm text-muted hover:text-foreground transition-colors">
             Projects
           </Link>
+          <Link href="/feed" className="text-sm text-muted hover:text-foreground transition-colors">
+            Feed
+          </Link>
           <Link href="/blog" className="text-sm text-muted hover:text-foreground transition-colors">
             Blog
           </Link>
