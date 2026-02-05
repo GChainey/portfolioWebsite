@@ -51,6 +51,22 @@ function renderMarkdown(text: string): ReactNode {
 // Changelog entries - newest first
 const CHANGELOG = [
   {
+    version: '1.3.0',
+    date: '2026-02-05',
+    title: 'Interactive CV Page with LLM Chat',
+    description: 'Added a dedicated CV page with rich content, PDF download, and an AI chat sidebar for exploring career details in depth.',
+    changes: [
+      'Created /cv route with structured CV content (experience, skills, education, testimonials)',
+      'Added CV-specific LLM chat context for detailed career Q&A',
+      'CV content data file at src/content/cv.ts acts as a simple CMS',
+      'PDF download button preserved on the page for traditional CV access',
+      'Updated Header nav to link to /cv page instead of raw PDF',
+      'Chat sidebar opens by default with CV-focused suggested questions',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/interactive-cv-page',
+  },
+  {
     version: '1.2.0',
     date: '2026-02-05',
     title: 'Contact Page',
