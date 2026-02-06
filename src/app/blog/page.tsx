@@ -51,6 +51,19 @@ function renderMarkdown(text: string): ReactNode {
 // Changelog entries - newest first
 const CHANGELOG = [
   {
+    version: '1.3.1',
+    date: '2026-02-06',
+    title: 'Fix Pages Not Loading at Top',
+    description: 'Fixed a bug where pages would sometimes load scrolled partway down instead of at the top, hiding the hero/title.',
+    changes: [
+      'Added global ScrollToTop component to root layout that resets scroll position on every route change',
+      'Disabled browser scroll restoration to prevent conflicts with client-side navigation',
+      'Removed duplicate scroll-to-top logic from project detail page',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/fix-scroll-on-load',
+  },
+  {
     version: '1.3.0',
     date: '2026-02-05',
     title: 'Interactive CV Page with LLM Chat',

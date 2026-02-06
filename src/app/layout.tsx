@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/context/ThemeContext'
 import { FeatureFlagProvider } from '@/context/FeatureFlagContext'
 import { FeatureFlagDrawer } from '@/components/FeatureFlagDrawer'
 import { AgentationProvider } from '@/components/AgentationProvider'
+import { ScrollToTop } from '@/components/ScrollToTop'
 import './globals.css'
 
 const inter = Inter({
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body className={`${inter.variable} ${mono.variable} antialiased`}>
         <ThemeProvider>
           <FeatureFlagProvider>
+            <ScrollToTop />
             {children}
             <FeatureFlagDrawer />
           </FeatureFlagProvider>
