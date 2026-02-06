@@ -136,12 +136,18 @@ const TESTIMONIALS = [
 
 
 export default function Home() {
+  const [mounted, setMounted] = useState(false)
   const [roleIndex, setRoleIndex] = useState(0)
   const [chatOpen, setChatOpen] = useState(false)
   const [chatMounted, setChatMounted] = useState(false)
   const [carouselIndex, setCarouselIndex] = useState(0)
   const carouselRef = useRef<HTMLDivElement>(null)
   const { flags } = useFeatureFlags()
+
+  // Track client-side mount to prevent hydration issues with animations
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Cycle through roles
   useEffect(() => {
@@ -195,7 +201,7 @@ export default function Home() {
                 {/* Tagline */}
                 <motion.p
                   className="text-sm text-muted uppercase tracking-widest mb-4"
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={mounted ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
                   animate={{ opacity: 1, y: 0 }}
                 >
                   The future is Now
@@ -204,7 +210,7 @@ export default function Home() {
                 {/* Animated Role */}
                 <motion.div
                   className="h-12 mb-8"
-                  initial={{ opacity: 0 }}
+                  initial={mounted ? { opacity: 0 } : { opacity: 1 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}
                 >
@@ -224,7 +230,7 @@ export default function Home() {
 
                 {/* GitHub Contributions - Centered */}
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={mounted ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
                   className="flex flex-col items-center"
@@ -246,7 +252,7 @@ export default function Home() {
             {/* About section */}
             <section className="p-8 border-b border-border">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={mounted ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
               >
@@ -262,7 +268,7 @@ export default function Home() {
             {/* Projects Carousel */}
             <section className="border-b border-border overflow-hidden">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={mounted ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.65 }}
               >
@@ -296,7 +302,7 @@ export default function Home() {
                         <motion.div
                           className={`flex-shrink-0 w-96 overflow-hidden cursor-pointer ${index < PROJECTS.length - 1 ? 'border-r border-border' : ''}`}
                           style={{ scrollSnapAlign: 'start' }}
-                          initial={{ opacity: 0, x: 20 }}
+                          initial={mounted ? { opacity: 0, x: 20 } : { opacity: 1, x: 0 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: 0.7 + index * 0.1 }}
                         >
@@ -340,7 +346,7 @@ export default function Home() {
             {/* Experience section */}
             <section className="p-8 border-b border-border">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={mounted ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.75 }}
               >
@@ -354,7 +360,7 @@ export default function Home() {
                       <motion.div
                         key={exp.company}
                         className="flex gap-6 relative"
-                        initial={{ opacity: 0, x: -20 }}
+                        initial={mounted ? { opacity: 0, x: -20 } : { opacity: 1, x: 0 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.8 + index * 0.1 }}
                       >
@@ -379,7 +385,7 @@ export default function Home() {
             {/* Product Thinkers section */}
             <section className="border-b border-border">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={mounted ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.78 }}
               >
@@ -406,7 +412,7 @@ export default function Home() {
             {/* Testimonials section */}
             <section className="border-b border-border overflow-hidden">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={mounted ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.85 }}
               >
@@ -422,7 +428,7 @@ export default function Home() {
                         key={testimonial.name}
                         className={`flex-shrink-0 p-5 ${index === 0 ? 'pl-8' : ''} ${index < TESTIMONIALS.length - 1 ? 'border-r border-border' : ''}`}
                         style={{ width: `${100 / TESTIMONIALS.length}%`, scrollSnapAlign: 'start' }}
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={mounted ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.9 + index * 0.1 }}
                       >
