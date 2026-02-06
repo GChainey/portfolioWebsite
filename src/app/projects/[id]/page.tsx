@@ -75,23 +75,6 @@ export default function ProjectPage() {
     }
   }, [params.id])
 
-  // Scroll to top on mount - disable scroll restoration and force scroll
-  useEffect(() => {
-    if ('scrollRestoration' in history) {
-      history.scrollRestoration = 'manual'
-    }
-    window.scrollTo(0, 0)
-    document.documentElement.scrollTop = 0
-    document.body.scrollTop = 0
-
-    // Also run after a short delay for any async content
-    const timer = setTimeout(() => {
-      window.scrollTo(0, 0)
-    }, 100)
-
-    return () => clearTimeout(timer)
-  }, [params.id])
-
   const generateTldr = async () => {
     if (!project) return
     setTldrLoading(true)
