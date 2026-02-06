@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, X } from 'lucide-react'
 import { Header } from '@/components/Header'
@@ -33,8 +33,21 @@ function getInitials(name: string, initials?: string): string {
 }
 
 export default function ThinkersPage() {
-  const [chatOpen, setChatOpen] = useState(true)
+  const [chatOpen, setChatOpen] = useState(false)
+  const [chatMounted, setChatMounted] = useState(false)
   const { flags } = useFeatureFlags()
+
+  // Mount chat after delay, open on desktop only
+  useEffect(() => {
+    const isDesktop = window.innerWidth >= 768
+    const timer = setTimeout(() => {
+      setChatMounted(true)
+      if (isDesktop) {
+        setChatOpen(true)
+      }
+    }, 1500)
+    return () => clearTimeout(timer)
+  }, [])
 
   return (
     <div className="min-h-screen bg-background transition-colors duration-700">

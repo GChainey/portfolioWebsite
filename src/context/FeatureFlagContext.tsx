@@ -4,6 +4,8 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 
 interface FeatureFlags {
   sectionTitleBorders: boolean
+  particleField: boolean
+  feedPage: boolean
 }
 
 interface FeatureFlagContextType {
@@ -15,6 +17,8 @@ interface FeatureFlagContextType {
 
 const defaultFlags: FeatureFlags = {
   sectionTitleBorders: true,
+  particleField: false,
+  feedPage: false,
 }
 
 const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(undefined)
