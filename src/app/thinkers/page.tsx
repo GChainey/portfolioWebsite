@@ -121,7 +121,7 @@ export default function ThinkersPage() {
 
           {/* Chat toggle button */}
           <AnimatePresence>
-            {chatMounted && !chatOpen && (
+            {!chatOpen && (
               <motion.button
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -136,9 +136,9 @@ export default function ThinkersPage() {
 
           {/* Chat sidebar */}
           <AnimatePresence>
-            {chatMounted && chatOpen && (
+            {chatOpen && (
               <motion.aside
-                initial={{ width: 0, opacity: 0 }}
+                initial={false}
                 animate={{ width: 380, opacity: 1 }}
                 exit={{ width: 0, opacity: 0 }}
                 transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}

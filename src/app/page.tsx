@@ -138,12 +138,18 @@ const TESTIMONIALS = [
 
 
 export default function Home() {
+  const [mounted, setMounted] = useState(false)
   const [roleIndex, setRoleIndex] = useState(0)
   const [chatOpen, setChatOpen] = useState(false)
   const [chatMounted, setChatMounted] = useState(false)
   const [carouselIndex, setCarouselIndex] = useState(0)
   const carouselRef = useRef<HTMLDivElement>(null)
   const { flags } = useFeatureFlags()
+
+  // Track client-side mount to prevent hydration issues with animations
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Cycle through roles
   useEffect(() => {
@@ -198,7 +204,7 @@ export default function Home() {
                 {/* Tagline */}
                 <motion.p
                   className="text-sm text-muted uppercase tracking-widest mb-4"
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={mounted ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
                   animate={{ opacity: 1, y: 0 }}
                 >
                   The future is Now
@@ -207,7 +213,7 @@ export default function Home() {
                 {/* Animated Role */}
                 <motion.div
                   className="h-12 mb-8"
-                  initial={{ opacity: 0 }}
+                  initial={mounted ? { opacity: 0 } : { opacity: 1 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}
                 >
@@ -227,7 +233,7 @@ export default function Home() {
 
                 {/* GitHub Contributions - Centered */}
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={mounted ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
                   className="flex flex-col items-center"

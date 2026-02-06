@@ -29,9 +29,9 @@ export function Header({ showBack }: HeaderProps) {
           )}
         </div>
         <nav className="flex items-center gap-6">
-          <a href="/GarethChaineyCV.pdf" target="_blank" rel="noopener noreferrer" className="text-sm text-muted hover:text-foreground transition-colors">
+          <Link href="/cv" className="text-sm text-muted hover:text-foreground transition-colors">
             CV
-          </a>
+          </Link>
           <Link href="/projects" className="text-sm text-muted hover:text-foreground transition-colors">
             Projects
           </Link>

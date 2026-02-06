@@ -40,7 +40,7 @@ export default function ProjectsPage() {
                 return (
                   <Link
                     key={project.id}
-                    href={`/projects/${project.id}`}
+                    href={project.externalUrl || `/projects/${project.id}`}
                     className="group block"
                   >
                     <motion.div
