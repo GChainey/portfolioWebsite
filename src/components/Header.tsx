@@ -3,12 +3,14 @@
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { ThemeSelector } from './ThemeSelector'
+import { useFeatureFlags } from '@/context/FeatureFlagContext'
 
 interface HeaderProps {
   showBack?: boolean
 }
 
 export function Header({ showBack }: HeaderProps) {
+  const { flags } = useFeatureFlags()
   return (
     <header className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-sm border-b border-border">
       <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
@@ -33,9 +35,11 @@ export function Header({ showBack }: HeaderProps) {
           <Link href="/projects" className="text-sm text-muted hover:text-foreground transition-colors">
             Projects
           </Link>
-          <Link href="/feed" className="text-sm text-muted hover:text-foreground transition-colors">
-            Feed
-          </Link>
+          {flags.feedPage && (
+            <Link href="/feed" className="text-sm text-muted hover:text-foreground transition-colors">
+              Feed
+            </Link>
+          )}
           <Link href="/blog" className="text-sm text-muted hover:text-foreground transition-colors">
             Blog
           </Link>

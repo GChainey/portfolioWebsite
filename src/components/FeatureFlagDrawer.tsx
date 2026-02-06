@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Flag } from 'lucide-react'
+import { X } from 'lucide-react'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 
 export function FeatureFlagDrawer() {
@@ -35,10 +35,7 @@ export function FeatureFlagDrawer() {
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-border">
-              <div className="flex items-center gap-2">
-                <Flag className="w-4 h-4 text-accent" />
-                <h2 className="font-medium text-foreground">Feature Flags</h2>
-              </div>
+              <h2 className="font-medium text-foreground">Feature Flags</h2>
               <button
                 onClick={() => setDrawerOpen(false)}
                 className="p-1 hover:bg-border rounded transition-colors"
@@ -68,6 +65,50 @@ export function FeatureFlagDrawer() {
                 </div>
                 <p className="text-xs text-muted">
                   Add border below section titles (Projects, Testimonials)
+                </p>
+              </div>
+
+              {/* Feed Page Toggle */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-foreground">Feed Page</p>
+                  <button
+                    onClick={() => setFlag('feedPage', !flags.feedPage)}
+                    className={`relative w-11 h-6 rounded-full transition-colors ${
+                      flags.feedPage ? 'bg-accent' : 'bg-border'
+                    }`}
+                  >
+                    <motion.div
+                      className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow"
+                      animate={{ x: flags.feedPage ? 20 : 0 }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                    />
+                  </button>
+                </div>
+                <p className="text-xs text-muted">
+                  Show the Feed link in navigation
+                </p>
+              </div>
+
+              {/* Particle Field Toggle */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-foreground">Particle Field</p>
+                  <button
+                    onClick={() => setFlag('particleField', !flags.particleField)}
+                    className={`relative w-11 h-6 rounded-full transition-colors ${
+                      flags.particleField ? 'bg-accent' : 'bg-border'
+                    }`}
+                  >
+                    <motion.div
+                      className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow"
+                      animate={{ x: flags.particleField ? 20 : 0 }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                    />
+                  </button>
+                </div>
+                <p className="text-xs text-muted">
+                  Interactive particle constellation in the hero section
                 </p>
               </div>
             </div>

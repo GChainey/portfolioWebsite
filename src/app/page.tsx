@@ -10,6 +10,8 @@ import { GitHubContributions } from '@/components/GitHubContributions'
 import { ThinkerCard } from '@/components/ThinkerCard'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import { thinkers } from '@/content/thinkers'
+import { ParticleField } from '@/components/ParticleField'
+import { Magnetic } from '@/components/Magnetic'
 
 // Roles that animate
 const ROLES = ['Product Designer', 'Design Engineer', 'Product Manager', 'Engineer']
@@ -190,8 +192,9 @@ export default function Home() {
           <main className="flex-1 min-w-0 border-x border-border overflow-hidden">
 
             {/* Hero Section - Centered */}
-            <section className="py-24 px-8 border-b border-border">
-              <div className="flex flex-col items-center text-center">
+            <section className="relative py-24 px-8 border-b border-border overflow-hidden">
+              {flags.particleField && <ParticleField />}
+              <div className="relative z-10 flex flex-col items-center text-center">
                 {/* Tagline */}
                 <motion.p
                   className="text-sm text-muted uppercase tracking-widest mb-4"
@@ -232,13 +235,15 @@ export default function Home() {
                   <GitHubContributions variant="full" animate />
 
                   {/* CTA */}
-                  <Link
-                    href="/projects/the-future-is-now"
-                    className="mt-8 inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-white text-sm font-medium rounded-full hover:brightness-110 transition-all group"
-                  >
-                    Read how
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Link>
+                  <Magnetic strength={0.25} radius={100}>
+                    <Link
+                      href="/projects/the-future-is-now"
+                      className="mt-8 inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-white text-sm font-medium rounded-full hover:brightness-110 transition-all group"
+                    >
+                      Read how
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </Magnetic>
                 </motion.div>
               </div>
             </section>
@@ -247,8 +252,9 @@ export default function Home() {
             <section className="p-8 border-b border-border">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
               >
                 <p className="text-xs text-muted uppercase tracking-widest mb-4">About</p>
                 <p className="text-lg text-muted leading-relaxed max-w-2xl">
@@ -263,8 +269,9 @@ export default function Home() {
             <section className="border-b border-border overflow-hidden">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.65 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
               >
                 <div className={`flex items-center justify-between px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
                   <p className="text-xs text-muted uppercase tracking-widest">Projects</p>
@@ -297,8 +304,9 @@ export default function Home() {
                           className={`flex-shrink-0 w-96 overflow-hidden cursor-pointer ${index < PROJECTS.length - 1 ? 'border-r border-border' : ''}`}
                           style={{ scrollSnapAlign: 'start' }}
                           initial={{ opacity: 0, x: 20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.7 + index * 0.1 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.5, delay: index * 0.08 }}
                         >
                           {/* Card visual - GitHub activity or ASCII placeholder */}
                           <div className="h-44 bg-border/50 flex items-center justify-center overflow-hidden">
@@ -341,8 +349,9 @@ export default function Home() {
             <section className="p-8 border-b border-border">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.75 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
               >
                 <p className="text-xs text-muted uppercase tracking-widest mb-6">Experience</p>
                 <div className="relative">
@@ -355,8 +364,9 @@ export default function Home() {
                         key={exp.company}
                         className="flex gap-6 relative"
                         initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.8 + index * 0.1 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: index * 0.12 }}
                       >
                         {/* Timeline dot */}
                         <div className="flex-shrink-0 w-4 h-4 rounded-full bg-foreground border-4 border-background z-10 mt-1" />
@@ -380,8 +390,9 @@ export default function Home() {
             <section className="border-b border-border">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.78 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
               >
                 <div className={`flex items-center justify-between px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
                   <p className="text-xs text-muted uppercase tracking-widest">Product Thinkers</p>
@@ -407,8 +418,9 @@ export default function Home() {
             <section className="border-b border-border overflow-hidden">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.85 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
               >
                 <div className={`px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
                   <p className="text-xs text-muted uppercase tracking-widest">Kind words from colleagues</p>
@@ -423,8 +435,9 @@ export default function Home() {
                         className={`flex-shrink-0 p-5 ${index === 0 ? 'pl-8' : ''} ${index < TESTIMONIALS.length - 1 ? 'border-r border-border' : ''}`}
                         style={{ width: `${100 / TESTIMONIALS.length}%`, scrollSnapAlign: 'start' }}
                         initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.9 + index * 0.1 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: index * 0.08 }}
                       >
                         <div className="flex items-center gap-3 mb-3">
                           <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center text-foreground font-medium text-sm flex-shrink-0">

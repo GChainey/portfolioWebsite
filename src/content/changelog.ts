@@ -14,6 +14,21 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.3.0',
+    date: '2026-02-06',
+    title: 'Interactive Hero & Scroll Animations',
+    description: 'Added an interactive particle constellation canvas to the hero section, magnetic hover effects on CTAs, and converted all below-fold sections to scroll-triggered reveal animations.',
+    changes: [
+      'Built canvas-based particle field with organic flow, mouse attraction, spotlight glow, and accent-color-aware rendering',
+      'Particles connect with distance-based lines and pulse with breathing opacity',
+      'Added Magnetic wrapper component for satisfying cursor-follow hover effects on buttons',
+      'Converted About, Projects, Experience, Thinkers, and Testimonials to scroll-triggered `whileInView` animations',
+      'Respects `prefers-reduced-motion` and adapts particle count for mobile devices',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/wow-interactive-hero',
+  },
+  {
     version: '1.2.0',
     date: '2026-02-05',
     title: 'Feed View',
