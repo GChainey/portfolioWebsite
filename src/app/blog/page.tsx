@@ -51,6 +51,21 @@ function renderMarkdown(text: string): ReactNode {
 // Changelog entries - newest first
 const CHANGELOG = [
   {
+    version: '1.4.0',
+    date: '2026-02-06',
+    title: 'How I Work Page',
+    description: 'New page showcasing Gareth\'s AI-augmented workflow with an embedded Supercut video demo, tools breakdown, and full transcript — with GarethLLM sidebar for Q&A.',
+    changes: [
+      'Created /how-i-work route with Supercut video embed as the hero',
+      'Added tools section highlighting Conductor, GitHub, SuperWhisper, and Vercel',
+      'Full timestamped transcript of the workflow demo',
+      'GarethLLM chat sidebar with workflow-specific context and suggested questions',
+      'Added How I Work link to site-wide Header navigation',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/how-i-work-page',
+  },
+  {
     version: '1.3.1',
     date: '2026-02-06',
     title: 'Homepage Loading Fix',
