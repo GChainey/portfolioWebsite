@@ -37,6 +37,7 @@ export interface Project {
   tags: string[]
   featured?: boolean // Show in hero with special treatment
   showGitHubActivity?: boolean // Show GitHub activity visualization in card
+  externalUrl?: string // Link to external page instead of /projects/[id]
   content: ContentBlock[]
   chatContext: {
     description: string
@@ -46,6 +47,29 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+  {
+    id: 'how-i-work',
+    title: 'How I Work',
+    description: 'A video demo and essay on my AI-augmented workflow — shipping multiple features in parallel using Conductor, GitHub, SuperWhisper, and Vercel.',
+    category: 'Process',
+    year: '2026',
+    featured: true,
+    tags: ['AI', 'Workflow', 'Video', 'Essay'],
+    externalUrl: '/how-i-work',
+    content: [],
+    chatContext: {
+      description: 'Video demo and essay about AI-augmented design workflow',
+      suggestedQuestions: [
+        'How do you use AI agents day-to-day?',
+        'What is Conductor?',
+        'How long does it take to ship a feature?',
+      ],
+      followUpQuestions: [
+        'How do you handle iteration and refinement?',
+        'What role does voice play in your workflow?',
+      ]
+    }
+  },
   {
     id: 'creative-tooling',
     title: 'You Can Conjure Your Own Tools Now',
