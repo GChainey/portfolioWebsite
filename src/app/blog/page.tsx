@@ -52,7 +52,7 @@ function renderMarkdown(text: string): ReactNode {
 const CHANGELOG = [
   {
     version: '1.4.0',
-    date: '2026-02-05',
+    date: '2026-02-06',
     title: 'How I Work Page',
     description: 'New page showcasing Gareth\'s AI-augmented workflow with an embedded Supercut video demo, tools breakdown, and full transcript — with GarethLLM sidebar for Q&A.',
     changes: [
@@ -64,6 +64,19 @@ const CHANGELOG = [
     ],
     aiTools: ['Claude Code'],
     branch: 'GChainey/how-i-work-page',
+  },
+  {
+    version: '1.3.1',
+    date: '2026-02-06',
+    title: 'Homepage Loading Fix',
+    description: 'Fixed a bug where the homepage would sometimes appear empty until manually refreshed due to Framer Motion hydration issues.',
+    changes: [
+      'Added client-side mount detection to prevent hydration mismatch with animations',
+      'All motion components now render visible content on initial load, then animate after mounting',
+      'Prevents blank page scenarios caused by JavaScript hydration delays',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/fix-homepage-bug',
   },
   {
     version: '1.3.0',
