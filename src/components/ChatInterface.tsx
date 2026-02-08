@@ -123,7 +123,7 @@ export function ChatInterface({ pageContext = DEFAULT_CONTEXT }: ChatInterfacePr
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [showFollowUps, setShowFollowUps] = useState(false)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const messagesContainerRef = useRef<HTMLDivElement>(null)
 
   // Build context with page-specific info
   const fullContext = `${BASE_CONTEXT}
@@ -134,7 +134,10 @@ Page description: ${pageContext.description}
 Focus answers on this context when relevant, but can reference other experience too.`
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    const container = messagesContainerRef.current
+    if (container) {
+      container.scrollTop = container.scrollHeight
+    }
   }
 
   useEffect(() => {
@@ -188,7 +191,7 @@ Focus answers on this context when relevant, but can reference other experience 
       </div>
 
       {/* Messages */}
-      <div className="flex-1 min-h-0 overflow-y-auto chat-scroll p-4 space-y-4">
+      <div ref={messagesContainerRef} className="flex-1 min-h-0 overflow-y-auto chat-scroll p-4 space-y-4">
         {messages.length === 0 && (
           <div className="space-y-2">
             {pageContext.suggestedQuestions.map((q, i) => (
@@ -268,7 +271,6 @@ Focus answers on this context when relevant, but can reference other experience 
           </motion.div>
         )}
 
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Input */}

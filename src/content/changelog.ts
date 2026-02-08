@@ -14,6 +14,17 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.6.1',
+    date: '2026-02-08',
+    title: 'Fix chat sidebar scroll bug',
+    description: 'Fixed a bug where opening the chat sidebar caused the main page content to scroll down unexpectedly.',
+    changes: [
+      'Replaced scrollIntoView() with direct scrollTop manipulation to prevent scroll from bubbling to parent containers',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/fix-chat-scroll-bug',
+  },
+  {
     version: '1.6.0',
     date: '2026-02-08',
     title: 'Interactive Venn Diagram Skills Section',
