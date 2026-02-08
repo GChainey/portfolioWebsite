@@ -7,6 +7,7 @@ import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import { cvData } from '@/content/cv'
+import { VennSkills } from '@/components/VennSkills'
 
 const CV_PAGE_CONTEXT = {
   page: 'CV',
@@ -135,7 +136,7 @@ export default function CVPage() {
               </motion.div>
             </section>
 
-            {/* Skills section */}
+            {/* Skills Venn diagram */}
             <section className="px-8 py-6 border-b border-border">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -143,18 +144,7 @@ export default function CVPage() {
                 transition={{ delay: 0.55 }}
               >
                 <p className="text-xs text-muted uppercase tracking-widest mb-4">Skills</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {cvData.skills.flatMap((group) =>
-                    group.items.map((item) => (
-                      <span
-                        key={item}
-                        className="px-2 py-0.5 text-xs border border-border rounded text-muted"
-                      >
-                        {item}
-                      </span>
-                    ))
-                  )}
-                </div>
+                <VennSkills />
               </motion.div>
             </section>
 
