@@ -258,7 +258,7 @@ export default function Home() {
                   <GitHubContributions variant="full" animate />
 
                   {/* CTA */}
-                  <Magnetic strength={0.25} radius={100}>
+                  <Magnetic strength={0.25} radius={100} disabled={!flags.particleField}>
                     <Link
                       href="/projects/the-future-is-now"
                       className="mt-8 inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-white text-sm font-medium rounded-full hover:brightness-110 transition-all group"

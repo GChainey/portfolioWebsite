@@ -14,7 +14,7 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: '1.6.1',
+    version: '1.6.2',
     date: '2026-02-08',
     title: 'Subtle Accent Treatment for Selection & Chat FAB',
     description: 'Replaced bright accent backgrounds with a subtle muted treatment using color-mix() for text selection and the floating chat button.',
@@ -25,6 +25,18 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
     aiTools: ['Claude Code'],
     branch: 'GChainey/subtle-text-selection',
+  },
+  {
+    version: '1.6.1',
+    date: '2026-02-08',
+    title: 'Fix Button Gravity When Particle Field Off',
+    description: 'Fixed a bug where the magnetic cursor-pull effect on buttons remained active even when the particle field feature flag was disabled.',
+    changes: [
+      'Added disabled prop to Magnetic component that resets offset and skips mouse listener',
+      'Linked Magnetic disabled state to the particleField feature flag',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/fix-button-gravity',
   },
   {
     version: '1.6.0',
