@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.6.1',
+    date: '2026-02-08',
+    title: 'Subtle Accent Treatment for Selection & Chat FAB',
+    description: 'Replaced bright accent backgrounds with a subtle muted treatment using color-mix() for text selection and the floating chat button.',
+    changes: [
+      'Added --selection-bg and --selection-text CSS variables using color-mix() for light and dark modes',
+      'Text selection now uses muted accent background with medium-toned accent text',
+      'Floating chat button across all 6 pages uses the same subtle treatment',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/subtle-text-selection',
+  },
+  {
     version: '1.6.0',
     date: '2026-02-08',
     title: 'Interactive Venn Diagram Skills Section',
