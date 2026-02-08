@@ -41,7 +41,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [mode, setModeState] = useState<Mode>('system')
+  const [mode, setModeState] = useState<Mode>('dark')
   const [systemPreference, setSystemPreference] = useState<ResolvedMode>('dark')
   const [accent, setAccentState] = useState<AccentColor>('amber')
   const [mounted, setMounted] = useState(false)
@@ -55,8 +55,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const storedAccent = localStorage.getItem('theme-accent') as AccentColor | null
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
 
-    // Default to 'system' if no stored preference
-    const initialMode = storedMode || 'system'
+    // Default to 'dark' if no stored preference (portfolio looks best in dark)
+    const initialMode = storedMode || 'dark'
     const initialAccent = storedAccent || 'amber'
     const initialSystemPref = prefersDark ? 'dark' : 'light'
 
