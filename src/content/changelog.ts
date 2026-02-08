@@ -14,6 +14,21 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.4.0',
+    date: '2026-02-08',
+    title: '2x2 Bento Projects Grid',
+    description: 'Replaced the horizontal auto-scrolling projects carousel with a 2x2 bento grid showcasing 4 curated case studies with SVG illustrations.',
+    changes: [
+      'Replaced horizontal carousel with 2x2 bento grid layout (responsive: stacks on mobile)',
+      'Added themed SVG illustrations per card: GitHub heatmap, code brackets, workflow nodes, sparkle',
+      'Curated 4 featured projects: The Future is Now, Respond to RFP, How I Work, Conjure Your Own Tools',
+      'Added numbered cards (01-04) and "View all" link to /projects',
+      'Removed carousel auto-scroll, dot indicators, and related state management',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/bento-projects-grid',
+  },
+  {
     version: '1.3.0',
     date: '2026-02-06',
     title: 'Interactive Hero & Scroll Animations',

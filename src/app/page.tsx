@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { MessageCircle, X, ArrowRight } from 'lucide-react'
@@ -33,52 +33,89 @@ const HOME_PAGE_CONTEXT = {
   ]
 }
 
-// Projects data - Case Studies
-const PROJECTS = [
+// Bento grid projects - 4 curated case studies
+const BENTO_PROJECTS = [
   {
     id: 'the-future-is-now',
+    number: '01',
     title: 'The Future is Now',
-    description: 'AI has fundamentally changed how designers produce their work. This is my journey from Figma to shipping real code.',
+    description: 'From Figma to shipping real code. My journey into AI-augmented design.',
     category: 'Article',
-    year: '2025',
-    showGitHubActivity: true,
-  },
-  {
-    id: 'conflict-and-experiments',
-    title: 'How I Handle Conflict',
-    description: 'Disagreements aren\'t problems—they\'re opportunities. Turn product debates into experiments.',
-    category: 'Article',
-    year: '2025',
+    href: '/projects/the-future-is-now',
+    visual: 'github' as const,
   },
   {
     id: 'rfp',
+    number: '02',
     title: 'Respond to RFP',
-    description: 'One man army to win a deal. Demonstrating how AI augmentation enables a single designer to deliver enterprise-quality proposals.',
+    description: 'One-person army winning enterprise deals with AI-powered prototypes.',
     category: 'Enterprise AI',
-    year: '2025',
+    href: '/projects/rfp',
+    visual: 'icon' as const,
+    icon: 'code',
   },
   {
-    id: 'productlite',
-    title: 'ProductLite',
-    description: 'Real code prototyping that enables rapid experimentation, user testing, and production-ready output.',
-    category: 'Prototyping',
-    year: '2025',
+    id: 'how-i-work',
+    number: '03',
+    title: 'How I Work',
+    description: 'AI agents, parallel branches, voice-to-code. My daily workflow.',
+    category: 'Process',
+    href: '/how-i-work',
+    visual: 'icon' as const,
+    icon: 'workflow',
   },
   {
-    id: 'configurator',
-    title: 'Configurator',
-    description: 'No-code LLM workflow tool prototype. Building complex AI pipelines without writing code.',
-    category: 'No-Code AI',
-    year: '2025',
-  },
-  {
-    id: 'llm-features',
-    title: 'Things I Built with LLMs',
-    description: 'Feature Flags, LLM Chat, Dynamic Workflows—features that would be impossible in Figma, now real.',
-    category: 'AI Development',
-    year: '2025',
+    id: 'creative-tooling',
+    number: '04',
+    title: 'Conjure Your Own Tools',
+    description: 'Stop waiting for features. Build the creative tool you need, when you need it.',
+    category: 'Article',
+    href: '/projects/creative-tooling',
+    visual: 'icon' as const,
+    icon: 'sparkle',
   },
 ]
+
+function BentoCardVisual({ icon }: { icon?: string }) {
+  switch (icon) {
+    case 'code':
+      return (
+        <div className="text-accent/20 group-hover:text-accent/40 transition-colors">
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+            <path d="M28 20L8 40L28 60" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M52 20L72 40L52 60" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M45 16L35 64" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+          </svg>
+        </div>
+      )
+    case 'workflow':
+      return (
+        <div className="text-accent/20 group-hover:text-accent/40 transition-colors">
+          <svg width="120" height="60" viewBox="0 0 120 60" fill="none">
+            <circle cx="20" cy="30" r="12" stroke="currentColor" strokeWidth="2"/>
+            <circle cx="60" cy="30" r="12" stroke="currentColor" strokeWidth="2"/>
+            <circle cx="100" cy="30" r="12" stroke="currentColor" strokeWidth="2"/>
+            <path d="M32 30H48" stroke="currentColor" strokeWidth="2"/>
+            <path d="M72 30H88" stroke="currentColor" strokeWidth="2"/>
+            <path d="M44 26L48 30L44 34" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M84 26L88 30L84 34" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+      )
+    case 'sparkle':
+      return (
+        <div className="text-accent/20 group-hover:text-accent/40 transition-colors">
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+            <path d="M40 8V16M40 64V72M8 40H16M64 40H72" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+            <path d="M20 20L25 25M55 55L60 60M60 20L55 25M25 55L20 60" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            <circle cx="40" cy="40" r="8" stroke="currentColor" strokeWidth="2.5"/>
+          </svg>
+        </div>
+      )
+    default:
+      return null
+  }
+}
 
 // Experience data
 const EXPERIENCE = [
@@ -142,8 +179,6 @@ export default function Home() {
   const [roleIndex, setRoleIndex] = useState(0)
   const [chatOpen, setChatOpen] = useState(false)
   const [chatMounted, setChatMounted] = useState(false)
-  const [carouselIndex, setCarouselIndex] = useState(0)
-  const carouselRef = useRef<HTMLDivElement>(null)
   const { flags } = useFeatureFlags()
 
   // Track client-side mount to prevent hydration issues with animations
@@ -167,24 +202,6 @@ export default function Home() {
     return () => clearTimeout(timer)
   }, [])
 
-  // Auto-scroll carousel
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCarouselIndex((prev) => (prev + 1) % PROJECTS.length)
-    }, 4000)
-    return () => clearInterval(interval)
-  }, [])
-
-  // Scroll carousel when index changes
-  useEffect(() => {
-    if (carouselRef.current) {
-      const cardWidth = 288 + 16
-      carouselRef.current.scrollTo({
-        left: carouselIndex * cardWidth,
-        behavior: 'smooth'
-      })
-    }
-  }, [carouselIndex])
 
   return (
     <div className="min-h-screen bg-background transition-colors duration-700">
@@ -271,8 +288,8 @@ export default function Home() {
               </motion.div>
             </section>
 
-            {/* Projects Carousel */}
-            <section className="border-b border-border overflow-hidden">
+            {/* Projects Bento Grid */}
+            <section className="border-b border-border">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -281,72 +298,54 @@ export default function Home() {
               >
                 <div className={`flex items-center justify-between px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
                   <p className="text-xs text-muted uppercase tracking-widest">Projects</p>
-                  <div className="flex gap-1">
-                    {PROJECTS.map((_, i) => (
-                      <button
-                        key={i}
-                        onClick={() => setCarouselIndex(i)}
-                        className={`w-2 h-2 rounded-full transition-colors ${
-                          i === carouselIndex ? 'bg-foreground' : 'bg-border'
-                        }`}
-                      />
-                    ))}
-                  </div>
+                  <Link href="/projects" className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1">
+                    View all <ArrowRight className="w-3 h-3" />
+                  </Link>
                 </div>
 
-                <div
-                  ref={carouselRef}
-                  className="overflow-x-auto scrollbar-hide scroll-smooth"
-                  style={{ scrollSnapType: 'x mandatory' }}
-                >
-                  <div className="flex" style={{ width: 'fit-content' }}>
-                    {PROJECTS.map((project, index) => (
+                <div className="grid grid-cols-1 md:grid-cols-2">
+                  {BENTO_PROJECTS.map((project, index) => {
+                    const isLeft = index % 2 === 0
+                    const isTopRow = index < 2
+
+                    return (
                       <Link
                         key={project.id}
-                        href={`/projects/${project.id}`}
-                        className="group"
+                        href={project.href}
+                        className="group block"
                       >
                         <motion.div
-                          className={`flex-shrink-0 w-96 overflow-hidden cursor-pointer ${index < PROJECTS.length - 1 ? 'border-r border-border' : ''}`}
-                          style={{ scrollSnapAlign: 'start' }}
-                          initial={{ opacity: 0, x: 20 }}
-                          whileInView={{ opacity: 1, x: 0 }}
+                          className={`${isLeft ? 'md:border-r border-border' : ''} ${isTopRow ? 'border-b border-border' : ''}`}
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true }}
-                          transition={{ duration: 0.5, delay: index * 0.08 }}
+                          transition={{ duration: 0.5, delay: index * 0.1 }}
                         >
-                          {/* Card visual - GitHub activity or ASCII placeholder */}
-                          <div className="h-44 bg-border/50 flex items-center justify-center overflow-hidden">
-                            {project.showGitHubActivity ? (
+                          {/* Visual area */}
+                          <div className="h-48 md:h-56 bg-border/30 flex items-center justify-center overflow-hidden relative">
+                            <span className="absolute top-4 right-4 text-xs font-mono text-muted/60">
+                              {project.number}
+                            </span>
+                            {project.visual === 'github' ? (
                               <GitHubContributions variant="card" monthsToShow={12} />
                             ) : (
-                              <div className="font-mono text-[8px] leading-none text-foreground/20 group-hover:text-foreground/40 transition-colors whitespace-pre select-none">
-{`    ╔══════════════════╗
-    ║  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ║
-    ║  ▓            ▓  ║
-    ║  ▓   ${project.id.slice(0, 4).toUpperCase().padEnd(4)}   ▓  ║
-    ║  ▓            ▓  ║
-    ║  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ║
-    ╚══════════════════╝`}
-                              </div>
+                              <BentoCardVisual icon={project.icon} />
                             )}
                           </div>
 
-                          <div className="p-4">
+                          {/* Text content */}
+                          <div className="p-5">
                             <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center gap-2">
-                                <span className="text-xs text-muted">{project.category}</span>
-                                <span className="text-xs text-muted">•</span>
-                                <span className="text-xs text-muted">{project.year}</span>
-                              </div>
+                              <span className="text-xs text-muted uppercase tracking-wide">{project.category}</span>
                               <ArrowRight className="w-4 h-4 text-muted group-hover:text-accent group-hover:translate-x-1 transition-all" />
                             </div>
-                            <h3 className="font-medium text-foreground group-hover:text-accent mb-1 transition-colors">{project.title}</h3>
+                            <h3 className="font-medium text-foreground group-hover:text-accent transition-colors mb-1">{project.title}</h3>
                             <p className="text-sm text-muted line-clamp-2">{project.description}</p>
                           </div>
                         </motion.div>
                       </Link>
-                    ))}
-                  </div>
+                    )
+                  })}
                 </div>
               </motion.div>
             </section>
