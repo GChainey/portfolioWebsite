@@ -28,6 +28,18 @@ export const CHANGELOG: ChangelogEntry[] = [
     branch: 'GChainey/animate-commit-count',
   },
   {
+    version: '1.6.6',
+    date: '2026-02-08',
+    title: 'Neutral Chat Input Styling',
+    description: 'Removed accent color from chat send button and input focus, using Fin-style neutral black/white theming instead.',
+    changes: [
+      'Send button: black in light mode, white in dark mode; grayed out when disabled',
+      'Chat input focus uses standard ring style instead of accent-colored border',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/chat-send-btn-muted',
+  },
+  {
     version: '1.6.5',
     date: '2026-02-08',
     title: 'Typewriter Hero & Commit Count',

@@ -281,12 +281,12 @@ Focus answers on this context when relevant, but can reference other experience 
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type your question..."
-            className="flex-1 bg-transparent border border-border rounded px-3 py-2 text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-accent transition-colors"
+            className="flex-1 bg-transparent border border-border rounded px-3 py-2 text-sm text-foreground placeholder:text-muted focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring transition-colors"
           />
           <button
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="px-4 py-2 bg-accent text-white text-sm font-medium rounded disabled:opacity-50 hover:brightness-110 transition-all"
+            className="px-4 py-2 text-sm font-medium rounded transition-all disabled:bg-neutral-200 disabled:text-neutral-400 disabled:dark:bg-neutral-700 disabled:dark:text-neutral-500 bg-black text-white dark:bg-white dark:text-black hover:opacity-90"
           >
             Send
           </button>
