@@ -14,6 +14,23 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.7.0',
+    date: '2026-02-08',
+    title: 'Article Table of Contents',
+    description: 'Added a Substack-style table of contents for case study articles with inline collapsible TOC and a fixed sidebar TOC that appears when scrolling.',
+    changes: [
+      'Inline TOC at top of article with collapsible heading list (Contents toggle)',
+      'Fixed sidebar TOC rendered outside main container to avoid overflow clipping',
+      'Compact abstract lines on left border indicate sections, expand to full panel on click',
+      'Active heading tracking via IntersectionObserver',
+      'Click-to-scroll navigation with smooth scrolling',
+      'Escape and click-outside to close expanded panel',
+      'Responsive: hidden on mobile, visible on lg+ screens',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/article-toc',
+  },
+  {
     version: '1.6.5',
     date: '2026-02-08',
     title: 'Typewriter Hero & Commit Count',

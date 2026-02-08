@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import type { ContentBlock } from '@/content/projects'
+import { slugify } from '@/components/TableOfContents'
 
 interface CaseStudyContentProps {
   blocks: ContentBlock[]
@@ -96,9 +97,12 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay }}
             >
-              <Tag className={`font-medium text-foreground ${
-                block.level === 2 ? 'text-2xl mt-12 mb-4' : 'text-xl mt-8 mb-3'
-              }`}>
+              <Tag
+                id={slugify(block.content)}
+                className={`font-medium text-foreground scroll-mt-24 ${
+                  block.level === 2 ? 'text-2xl mt-12 mb-4' : 'text-xl mt-8 mb-3'
+                }`}
+              >
                 {block.content}
               </Tag>
             </motion.div>

@@ -8,6 +8,8 @@ import { MessageCircle, X, Clock, ArrowRight, RotateCcw } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
 import { CaseStudyContent } from '@/components/CaseStudyContent'
+import { TableOfContents } from '@/components/TableOfContents'
+import { FixedTableOfContents } from '@/components/FixedTableOfContents'
 import { ShimmeringText } from '@/components/ui/shimmering-text'
 import { getProjectById, projects, type Project } from '@/content/projects'
 
@@ -287,6 +289,13 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
 
             {/* Content */}
             <article className="p-8">
+              {/* Table of Contents - inline at top, becomes fixed when scrolled past */}
+              {!tldrContent && (
+                <div className="hidden lg:block" data-inline-toc>
+                  <TableOfContents blocks={project.content} />
+                </div>
+              )}
+
               {tldrContent ? (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -387,6 +396,11 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
           )}
         </div>
       </div>
+
+      {/* Fixed Table of Contents - rendered outside main to avoid overflow clipping */}
+      {!tldrContent && (
+        <FixedTableOfContents blocks={project.content} />
+      )}
 
       {/* TLDR Mode Dialog */}
       <AnimatePresence>
