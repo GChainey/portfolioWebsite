@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.7.0',
+    date: '2026-02-08',
+    title: 'Dynamic GitHub Commit Count',
+    description: 'Live commit count fetched from GitHub API with a count-up animation.',
+    changes: [
+      'Added API route to fetch real contribution count from GitHub GraphQL API',
+      'Count-up animation rolls numbers from 0 using framer-motion springs',
+      'Server-side caching (1 hour TTL) to avoid GitHub rate limits',
+      'Graceful fallback to static count when API is unavailable',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/animate-commit-count',
+  },
+  {
     version: '1.6.5',
     date: '2026-02-08',
     title: 'Typewriter Hero & Commit Count',
