@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, X, Download } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import { cvData } from '@/content/cv'
+import { VennSkills } from '@/components/VennSkills'
 
 const CV_PAGE_CONTEXT = {
   page: 'CV',
@@ -28,6 +29,10 @@ const CV_PAGE_CONTEXT = {
 export default function CVPage() {
   const [chatOpen, setChatOpen] = useState(true)
   const { flags } = useFeatureFlags()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   return (
     <div className="min-h-screen bg-background transition-colors duration-700">
@@ -57,34 +62,6 @@ export default function CVPage() {
                   <Download className="w-4 h-4" />
                   Download PDF
                 </a>
-              </motion.div>
-            </section>
-
-            {/* Skills section */}
-            <section className="p-8 border-b border-border">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-              >
-                <p className="text-xs text-muted uppercase tracking-widest mb-6">Skills</p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {cvData.skills.map((group) => (
-                    <div key={group.category}>
-                      <p className="font-medium text-foreground text-sm mb-2">{group.category}</p>
-                      <div className="flex flex-wrap gap-2">
-                        {group.items.map((item) => (
-                          <span
-                            key={item}
-                            className="px-2 py-0.5 text-xs border border-border rounded text-muted"
-                          >
-                            {item}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
               </motion.div>
             </section>
 
@@ -159,6 +136,18 @@ export default function CVPage() {
               </motion.div>
             </section>
 
+            {/* Skills Venn diagram */}
+            <section className="px-8 py-6 border-b border-border">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.55 }}
+              >
+                <p className="text-xs text-muted uppercase tracking-widest mb-4">Skills</p>
+                <VennSkills />
+              </motion.div>
+            </section>
+
             {/* Testimonials section */}
             <section className="border-b border-border overflow-hidden">
               <motion.div
@@ -218,7 +207,7 @@ export default function CVPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 onClick={() => setChatOpen(true)}
-                className="fixed bottom-6 right-6 z-50 p-4 bg-accent text-white rounded-full shadow-lg hover:scale-105 hover:brightness-110 transition-all"
+                className="fixed bottom-6 right-6 z-50 p-4 bg-[var(--selection-bg)] text-[var(--selection-text)] rounded-full shadow-lg hover:scale-105 hover:brightness-110 transition-all"
               >
                 <MessageCircle className="w-6 h-6" />
               </motion.button>

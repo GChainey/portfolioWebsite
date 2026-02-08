@@ -322,7 +322,7 @@ export default function Home() {
 
                   {/* CTAs */}
                   <div className="mt-8 flex items-center gap-3">
-                    <Magnetic strength={0.25} radius={100}>
+                    <Magnetic strength={0.25} radius={100} disabled={!flags.particleField}>
                       <Link
                         href="/projects/the-future-is-now"
                         className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-white text-sm font-medium rounded-full hover:brightness-110 transition-all group"
@@ -331,7 +331,7 @@ export default function Home() {
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </Link>
                     </Magnetic>
-                    <Magnetic strength={0.25} radius={100}>
+                    <Magnetic strength={0.25} radius={100} disabled={!flags.particleField}>
                       <a
                         href="https://github.com/GChainey"
                         target="_blank"
@@ -556,7 +556,7 @@ export default function Home() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 onClick={() => setChatOpen(true)}
-                className="fixed bottom-6 right-6 z-50 p-4 bg-accent text-white rounded-full shadow-lg hover:scale-105 hover:brightness-110 transition-all"
+                className="fixed bottom-6 right-6 z-50 p-4 bg-[var(--selection-bg)] text-[var(--selection-text)] rounded-full shadow-lg hover:scale-105 hover:brightness-110 transition-all"
               >
                 <MessageCircle className="w-6 h-6" />
               </motion.button>
