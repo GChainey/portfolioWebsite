@@ -40,8 +40,8 @@ export function Header({ showBack }: HeaderProps) {
               Feed
             </Link>
           )}
-          <Link href="/blog" className="text-sm text-muted hover:text-foreground transition-colors">
-            Blog
+          <Link href="/changelog" className="text-sm text-muted hover:text-foreground transition-colors">
+            Changelog
           </Link>
           <Link href="/contact" className="text-sm text-muted hover:text-foreground transition-colors">
             Contact
