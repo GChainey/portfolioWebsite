@@ -14,6 +14,23 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.6.0',
+    date: '2026-02-08',
+    title: 'Interactive Venn Diagram Skills Section',
+    description: 'Replaced the flat skills list with an interactive 3-circle Venn diagram (Product, Design, Engineering) to showcase cross-disciplinary skills.',
+    changes: [
+      'Moved skills section from below header to just above testimonials',
+      'Added interactive SVG Venn diagram with Product, Design, and Engineering circles',
+      'Click any region (single, overlap, or center) to filter skills to that intersection',
+      'Two-column layout: Venn diagram (2/3) with scrollable skill tags (1/3)',
+      'Gradient borders on multi-zone skills using background-clip trick for rounded corners',
+      'Multi-zone title shows each zone name in its own color',
+      'Scroll-to-top on CV page mount to fix navigation issue',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/cv-skills-reposition',
+  },
+  {
     version: '1.5.0',
     date: '2026-02-08',
     title: 'Blog → Changelog',
