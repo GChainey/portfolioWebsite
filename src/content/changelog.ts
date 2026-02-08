@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.4.1',
+    date: '2026-02-08',
+    title: 'CV Skills Section Repositioned',
+    description: 'Moved the skills section lower on the CV page and made it more compact to better prioritise experience and education.',
+    changes: [
+      'Moved skills section from below header to just above testimonials',
+      'Flattened skill categories into a single flowing row of tags for a less prominent presentation',
+      'Reduced vertical padding and tag spacing for a more compact layout',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/cv-skills-reposition',
+  },
+  {
     version: '1.4.0',
     date: '2026-02-08',
     title: '2x2 Bento Projects Grid',

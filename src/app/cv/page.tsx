@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, X, Download } from 'lucide-react'
 import { Header } from '@/components/Header'
@@ -28,6 +28,10 @@ const CV_PAGE_CONTEXT = {
 export default function CVPage() {
   const [chatOpen, setChatOpen] = useState(true)
   const { flags } = useFeatureFlags()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   return (
     <div className="min-h-screen bg-background transition-colors duration-700">
@@ -57,34 +61,6 @@ export default function CVPage() {
                   <Download className="w-4 h-4" />
                   Download PDF
                 </a>
-              </motion.div>
-            </section>
-
-            {/* Skills section */}
-            <section className="p-8 border-b border-border">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-              >
-                <p className="text-xs text-muted uppercase tracking-widest mb-6">Skills</p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {cvData.skills.map((group) => (
-                    <div key={group.category}>
-                      <p className="font-medium text-foreground text-sm mb-2">{group.category}</p>
-                      <div className="flex flex-wrap gap-2">
-                        {group.items.map((item) => (
-                          <span
-                            key={item}
-                            className="px-2 py-0.5 text-xs border border-border rounded text-muted"
-                          >
-                            {item}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
               </motion.div>
             </section>
 
@@ -155,6 +131,29 @@ export default function CVPage() {
                       )}
                     </div>
                   ))}
+                </div>
+              </motion.div>
+            </section>
+
+            {/* Skills section */}
+            <section className="px-8 py-6 border-b border-border">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.55 }}
+              >
+                <p className="text-xs text-muted uppercase tracking-widest mb-4">Skills</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {cvData.skills.flatMap((group) =>
+                    group.items.map((item) => (
+                      <span
+                        key={item}
+                        className="px-2 py-0.5 text-xs border border-border rounded text-muted"
+                      >
+                        {item}
+                      </span>
+                    ))
+                  )}
                 </div>
               </motion.div>
             </section>
