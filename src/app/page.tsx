@@ -12,9 +12,18 @@ import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import { thinkers } from '@/content/thinkers'
 import { ParticleField } from '@/components/ParticleField'
 import { Magnetic } from '@/components/Magnetic'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
-// Roles that animate
-const ROLES = ['Product Designer', 'Design Engineer', 'Product Manager', 'Engineer']
+// Typewriter sequence: target text + pause after reaching it (ms)
+const TYPING_STEPS = [
+  { text: 'Designer', pause: 1500 },
+  { text: 'Designer?', pause: 1000 },
+  { text: '', pause: 300 },
+  { text: 'Engineer?', pause: 1000 },
+  { text: '', pause: 300 },
+  { text: 'Orchestrator', pause: 0 },
+]
+const CHAR_DELAY = 80
 
 // Page context for chat
 const HOME_PAGE_CONTEXT = {
@@ -176,7 +185,9 @@ const TESTIMONIALS = [
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
-  const [roleIndex, setRoleIndex] = useState(0)
+  const [suffix, setSuffix] = useState('')
+  const [typingDone, setTypingDone] = useState(false)
+  const [showTooltip, setShowTooltip] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
   const [chatMounted, setChatMounted] = useState(false)
   const { flags } = useFeatureFlags()
@@ -186,12 +197,39 @@ export default function Home() {
     setMounted(true)
   }, [])
 
-  // Cycle through roles
+  // Typewriter effect
   useEffect(() => {
-    const interval = setInterval(() => {
-      setRoleIndex((prev) => (prev + 1) % ROLES.length)
-    }, 2500)
-    return () => clearInterval(interval)
+    const timeouts: ReturnType<typeof setTimeout>[] = []
+    let time = 800 // initial delay before typing starts
+    let current = ''
+
+    for (const step of TYPING_STEPS) {
+      const target = step.text
+      // Find common prefix length
+      let common = 0
+      while (common < current.length && common < target.length && current[common] === target[common]) {
+        common++
+      }
+      // Delete back to common prefix
+      for (let i = current.length; i > common; i--) {
+        const text = current.substring(0, i - 1)
+        timeouts.push(setTimeout(() => setSuffix(text), time))
+        time += CHAR_DELAY
+      }
+      // Type forward to target
+      for (let i = common + 1; i <= target.length; i++) {
+        const text = target.substring(0, i)
+        timeouts.push(setTimeout(() => setSuffix(text), time))
+        time += CHAR_DELAY
+      }
+      current = target
+      time += step.pause
+    }
+    // Done typing, show tooltip after 1s
+    timeouts.push(setTimeout(() => setTypingDone(true), time))
+    timeouts.push(setTimeout(() => setShowTooltip(true), time + 1000))
+
+    return () => timeouts.forEach(clearTimeout)
   }, [])
 
   // Mount chat but don't auto-open on homepage
@@ -229,23 +267,48 @@ export default function Home() {
 
                 {/* Animated Role */}
                 <motion.div
-                  className="h-12 mb-8"
+                  className="mb-8"
                   initial={mounted ? { opacity: 0 } : { opacity: 1 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}
                 >
-                  <AnimatePresence mode="wait">
-                    <motion.h1
-                      key={roleIndex}
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -30 }}
-                      transition={{ duration: 0.4 }}
-                      className="text-4xl md:text-5xl font-medium text-foreground"
-                    >
-                      {ROLES[roleIndex]}
-                    </motion.h1>
-                  </AnimatePresence>
+                  <h1 className="text-4xl md:text-5xl font-medium text-foreground whitespace-nowrap">
+                    <span>Product </span>
+                    <span className="relative inline">
+                      {suffix}
+                      {!typingDone && (
+                        <motion.span
+                          animate={{ opacity: [1, 0] }}
+                          transition={{ duration: 0.6, repeat: Infinity, repeatType: 'reverse' }}
+                          className="inline-block w-[3px] h-[1em] bg-foreground ml-0.5 align-baseline translate-y-[0.1em]"
+                        />
+                      )}
+                      {/* Asterisk tooltip pinned to top-right of last character */}
+                      <AnimatePresence>
+                        {showTooltip && (
+                          <motion.span
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+                            className="absolute -top-3 -right-4"
+                          >
+                            <TooltipProvider delayDuration={200}>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-lg font-bold text-foreground cursor-default hover:opacity-60 transition-opacity">
+                                    *
+                                  </span>
+                                </TooltipTrigger>
+                                <TooltipContent side="top" className="text-sm bg-card text-foreground border border-border shadow-lg max-w-xs">
+                                  Gareth Chainey&#8482; is still professionally licensed as a product designer
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </motion.span>
+                        )}
+                      </AnimatePresence>
+                    </span>
+                  </h1>
                 </motion.div>
 
                 {/* GitHub Contributions - Centered */}
@@ -257,16 +320,28 @@ export default function Home() {
                 >
                   <GitHubContributions variant="full" animate />
 
-                  {/* CTA */}
-                  <Magnetic strength={0.25} radius={100}>
-                    <Link
-                      href="/projects/the-future-is-now"
-                      className="mt-8 inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-white text-sm font-medium rounded-full hover:brightness-110 transition-all group"
-                    >
-                      Read how
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                  </Magnetic>
+                  {/* CTAs */}
+                  <div className="mt-8 flex items-center gap-3">
+                    <Magnetic strength={0.25} radius={100}>
+                      <Link
+                        href="/projects/the-future-is-now"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-white text-sm font-medium rounded-full hover:brightness-110 transition-all group"
+                      >
+                        Read how
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </Link>
+                    </Magnetic>
+                    <Magnetic strength={0.25} radius={100}>
+                      <a
+                        href="https://github.com/GChainey"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 border border-border text-sm font-medium rounded-full text-muted hover:text-foreground hover:border-foreground transition-all"
+                      >
+                        View on GitHub
+                      </a>
+                    </Magnetic>
+                  </div>
                 </motion.div>
               </div>
             </section>

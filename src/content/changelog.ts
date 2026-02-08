@@ -14,6 +14,18 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.4.1',
+    date: '2026-02-08',
+    title: 'Homepage Commit Count',
+    description: 'Added total commit count above the GitHub contribution graph on the homepage to make the data more personal and impressive.',
+    changes: [
+      'Computed total commits from the last 12 months of contribution data',
+      'Displayed commit count with animation above the contribution graph in the full variant',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/homepage-commit-count',
+  },
+  {
     version: '1.4.0',
     date: '2026-02-08',
     title: '2x2 Bento Projects Grid',
