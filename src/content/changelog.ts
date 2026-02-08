@@ -14,7 +14,7 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: '1.6.3',
+    version: '1.6.4',
     date: '2026-02-08',
     title: 'Typewriter Hero & Commit Count',
     description: 'Added typewriter role animation on homepage and commit count above the GitHub contribution graph.',
@@ -26,6 +26,17 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
     aiTools: ['Claude Code'],
     branch: 'GChainey/homepage-commit-count',
+  },
+  {
+    version: '1.6.3',
+    date: '2026-02-08',
+    title: 'Fix chat sidebar scroll bug',
+    description: 'Fixed a bug where opening the chat sidebar caused the main page content to scroll down unexpectedly.',
+    changes: [
+      'Replaced scrollIntoView() with direct scrollTop manipulation to prevent scroll from bubbling to parent containers',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/fix-chat-scroll-bug',
   },
   {
     version: '1.6.2',
