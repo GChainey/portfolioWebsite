@@ -59,7 +59,7 @@ function changelogToFeedItem(entry: ChangelogEntry): FeedItem {
     description: entry.description,
     year: entry.date.slice(0, 4),
     tags: entry.aiTools,
-    href: '/blog',
+    href: '/changelog',
     previewText: entry.changes.slice(0, 3).join(' · '),
   }
 }
