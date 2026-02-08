@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.6.5',
+    date: '2026-02-08',
+    title: 'Typewriter Hero & Commit Count',
+    description: 'Added typewriter role animation on homepage and commit count above the GitHub contribution graph.',
+    changes: [
+      'Typewriter effect: Designer → Designer? → Engineer? → Orchestrator',
+      'Trademark disclaimer tooltip on Orchestrator with shadcn tooltip',
+      'Computed and displayed 872 commits in last 12 months above contribution graph',
+      'Added GitHub profile outline button next to primary CTA',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/homepage-commit-count',
+  },
+  {
     version: '1.6.4',
     date: '2026-02-08',
     title: 'Default Dark Mode with No Flash',

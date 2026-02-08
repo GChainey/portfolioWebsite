@@ -75,9 +75,31 @@ export function GitHubContributions({
     )
   }
 
+  // Calculate total commits from last 12 months
+  // Each cell represents a day-of-week across ~4 weeks in a month
+  const totalCommits = CONTRIBUTION_MONTHS.slice(-12).reduce((total, month) =>
+    total + month.data.reduce((sum, level) => sum + level, 0), 0
+  ) * 4
+
   // Full variant with labels and animation
   return (
     <div className="flex flex-col items-center">
+      {/* Commit count */}
+      {animate ? (
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+          className="text-sm text-muted mb-3"
+        >
+          <span className="text-foreground font-medium">{totalCommits.toLocaleString()}</span> commits in the last 12 months
+        </motion.p>
+      ) : (
+        <p className="text-sm text-muted mb-3">
+          <span className="text-foreground font-medium">{totalCommits.toLocaleString()}</span> commits in the last 12 months
+        </p>
+      )}
+
       {/* Year markers */}
       <div className="flex justify-between mb-1 px-1" style={{ width: `${CONTRIBUTION_MONTHS.length * 19}px` }}>
         <span className="text-xs text-muted">2024</span>
