@@ -137,11 +137,11 @@ export function FixedTableOfContents({ blocks }: FixedTableOfContentsProps) {
         position: 'fixed',
         left: `${leftPos - 8}px`,
         top: '50%',
-        transform: 'translateY(-50%)',
+        transform: show ? 'translateY(-50%) translateX(0)' : 'translateY(-50%) translateX(20px)',
         zIndex: 45,
         pointerEvents: show ? 'auto' : 'none',
         opacity: show ? 1 : 0,
-        transition: 'opacity 0.2s ease',
+        transition: 'opacity 0.3s ease, transform 0.3s ease',
       }}
       className="hidden lg:block"
     >
@@ -170,6 +170,7 @@ export function FixedTableOfContents({ blocks }: FixedTableOfContentsProps) {
                 opacity: h.id === activeId ? 0.7 : 0.25,
                 borderRadius: '1px',
                 transition: 'all 0.2s ease',
+                transitionDelay: show ? `${i * 50}ms` : '0ms',
               }}
             />
           ))}
