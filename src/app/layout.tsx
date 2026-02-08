@@ -28,7 +28,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark accent-amber" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var m=localStorage.getItem('theme-mode');var a=localStorage.getItem('theme-accent')||'amber';var d=document.documentElement;d.className=d.className.split(' ').filter(function(c){return!c.startsWith('accent-')}).join(' ');d.classList.add('accent-'+a);if(m==='light'){d.classList.remove('dark')}else if(m==='system'){if(!window.matchMedia('(prefers-color-scheme: dark)').matches){d.classList.remove('dark')}};}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body className={`${inter.variable} ${mono.variable} antialiased`}>
         <ThemeProvider>
           <FeatureFlagProvider>
