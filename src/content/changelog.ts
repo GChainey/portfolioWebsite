@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.6.4',
+    date: '2026-02-08',
+    title: 'Default Dark Mode with No Flash',
+    description: 'Changed the default theme to dark mode for a stronger first impression on portfolio visitors, and eliminated the flash of light mode on page load.',
+    changes: [
+      'Default theme changed from system to dark mode for new visitors',
+      'Added inline blocking script to set dark class before first paint, preventing white flash',
+      'Server-rendered HTML now includes dark class on html element',
+      'Existing user preferences (light/system) are still respected via localStorage',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/default-dark-mode',
+  },
+  {
     version: '1.6.3',
     date: '2026-02-08',
     title: 'Fix chat sidebar scroll bug',
