@@ -12,6 +12,8 @@
     /* Default accent: amber */
     --accent: #d97706;
     --accent-light: #fef3c7;
+    --selection-bg: color-mix(in srgb, var(--accent) 15%, white);
+    --selection-text: color-mix(in srgb, var(--accent) 85%, black);
 
     /* shadcn compatibility */
     --card: #ffffff;
@@ -40,6 +42,8 @@
     /* Default accent: amber (dark) */
     --accent: #fbbf24;
     --accent-light: #451a03;
+    --selection-bg: color-mix(in srgb, var(--accent) 20%, #0a0a0a);
+    --selection-text: color-mix(in srgb, var(--accent) 65%, white);
 
     /* shadcn compatibility */
     --card: #0a0a0a;
@@ -107,13 +111,13 @@ html.dark.accent-yellow { --accent: #facc15; --accent-light: #422006; }
 
 /* Text selection highlight with accent color */
 ::selection {
-  background-color: var(--accent);
-  color: white;
+  background-color: var(--selection-bg);
+  color: var(--selection-text);
 }
 
 ::-moz-selection {
-  background-color: var(--accent);
-  color: white;
+  background-color: var(--selection-bg);
+  color: var(--selection-text);
 }
 
 /* Edge-to-edge grid styling */
