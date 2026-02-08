@@ -14,7 +14,7 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: '1.6.1',
+    version: '1.6.2',
     date: '2026-02-08',
     title: 'Fix chat sidebar scroll bug',
     description: 'Fixed a bug where opening the chat sidebar caused the main page content to scroll down unexpectedly.',
@@ -23,6 +23,18 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
     aiTools: ['Claude Code'],
     branch: 'GChainey/fix-chat-scroll-bug',
+  },
+  {
+    version: '1.6.1',
+    date: '2026-02-08',
+    title: 'Fix Button Gravity When Particle Field Off',
+    description: 'Fixed a bug where the magnetic cursor-pull effect on buttons remained active even when the particle field feature flag was disabled.',
+    changes: [
+      'Added disabled prop to Magnetic component that resets offset and skips mouse listener',
+      'Linked Magnetic disabled state to the particleField feature flag',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/fix-button-gravity',
   },
   {
     version: '1.6.0',

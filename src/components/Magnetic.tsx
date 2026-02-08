@@ -7,6 +7,7 @@ interface MagneticProps {
   strength?: number
   radius?: number
   className?: string
+  disabled?: boolean
 }
 
 export function Magnetic({
@@ -14,14 +15,19 @@ export function Magnetic({
   strength = 0.3,
   radius = 120,
   className,
+  disabled = false,
 }: MagneticProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [offset, setOffset] = useState({ x: 0, y: 0 })
   const isActive = useRef(false)
 
   useEffect(() => {
-    // Skip on touch devices
-    if (window.matchMedia('(pointer: coarse)').matches) return
+    // Skip on touch devices or when disabled
+    if (disabled || window.matchMedia('(pointer: coarse)').matches) {
+      setOffset({ x: 0, y: 0 })
+      isActive.current = false
+      return
+    }
 
     const el = ref.current
     if (!el) return
@@ -46,7 +52,7 @@ export function Magnetic({
 
     window.addEventListener('mousemove', handleMove)
     return () => window.removeEventListener('mousemove', handleMove)
-  }, [strength, radius])
+  }, [strength, radius, disabled])
 
   const isSnappingBack = !isActive.current && (offset.x !== 0 || offset.y !== 0)
 
