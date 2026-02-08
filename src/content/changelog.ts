@@ -14,7 +14,7 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: '1.5.0',
+    version: '1.6.0',
     date: '2026-02-08',
     title: 'Interactive Venn Diagram Skills Section',
     description: 'Replaced the flat skills list with an interactive 3-circle Venn diagram (Product, Design, Engineering) to showcase cross-disciplinary skills.',
@@ -29,6 +29,19 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
     aiTools: ['Claude Code'],
     branch: 'GChainey/cv-skills-reposition',
+  },
+  {
+    version: '1.5.0',
+    date: '2026-02-08',
+    title: 'Blog → Changelog',
+    description: 'Replaced the blog page with a concise changelog. Moved route from /blog to /changelog, stripped the long-form article, and kept just the version timeline.',
+    changes: [
+      'Renamed /blog route to /changelog',
+      'Removed blog article and markdown renderer — page now shows only the version timeline',
+      'Updated header nav and feed links to point to /changelog',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/blog-to-changelog',
   },
   {
     version: '1.4.0',
