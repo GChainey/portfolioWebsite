@@ -14,7 +14,7 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: '1.7.0',
+    version: '1.8.0',
     date: '2026-02-08',
     title: 'Article Table of Contents',
     description: 'Added a Substack-style table of contents for case study articles with inline collapsible TOC and a fixed sidebar TOC that appears when scrolling.',
@@ -29,6 +29,32 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
     aiTools: ['Claude Code'],
     branch: 'GChainey/article-toc',
+  },
+  {
+    version: '1.7.0',
+    date: '2026-02-08',
+    title: 'Dynamic GitHub Commit Count',
+    description: 'Live commit count fetched from GitHub API with a count-up animation.',
+    changes: [
+      'Added API route to fetch real contribution count from GitHub GraphQL API',
+      'Count-up animation rolls numbers from 0 using framer-motion springs',
+      'Server-side caching (1 hour TTL) to avoid GitHub rate limits',
+      'Graceful fallback to static count when API is unavailable',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/animate-commit-count',
+  },
+  {
+    version: '1.6.6',
+    date: '2026-02-08',
+    title: 'Neutral Chat Input Styling',
+    description: 'Removed accent color from chat send button and input focus, using Fin-style neutral black/white theming instead.',
+    changes: [
+      'Send button: black in light mode, white in dark mode; grayed out when disabled',
+      'Chat input focus uses standard ring style instead of accent-colored border',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/chat-send-btn-muted',
   },
   {
     version: '1.6.5',

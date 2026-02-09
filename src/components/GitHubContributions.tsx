@@ -1,6 +1,9 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { ExternalLink } from 'lucide-react'
+import { AnimatedCounter } from './AnimatedCounter'
 
 // Contribution data showing transformation - shared across the site
 export const CONTRIBUTION_MONTHS = [
@@ -75,29 +78,53 @@ export function GitHubContributions({
     )
   }
 
-  // Calculate total commits from last 12 months
+  // Calculate total commits from last 12 months (static fallback)
   // Each cell represents a day-of-week across ~4 weeks in a month
   const totalCommits = CONTRIBUTION_MONTHS.slice(-12).reduce((total, month) =>
     total + month.data.reduce((sum, level) => sum + level, 0), 0
   ) * 4
+
+  // Fetch real commit count from GitHub API
+  const [commitCount, setCommitCount] = useState<number | null>(null)
+
+  useEffect(() => {
+    fetch('/api/github')
+      .then(res => res.ok ? res.json() : Promise.reject(res))
+      .then(data => setCommitCount(data.totalContributions))
+      .catch(() => {
+        // Silently fall back to static count
+      })
+  }, [])
+
+  const displayCount = commitCount ?? totalCommits
 
   // Full variant with labels and animation
   return (
     <div className="flex flex-col items-center">
       {/* Commit count */}
       {animate ? (
-        <motion.p
+        <motion.a
+          href="https://github.com/GChainey"
+          target="_blank"
+          rel="noopener noreferrer"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
-          className="text-sm text-muted mb-3"
+          className="inline-flex items-center gap-1.5 text-sm text-muted mb-3 hover:text-foreground transition-colors"
         >
-          <span className="text-foreground font-medium">{totalCommits.toLocaleString()}</span> commits in the last 12 months
-        </motion.p>
+          <AnimatedCounter value={displayCount} className="text-foreground font-medium" duration={2} /> commits in the last 12 months
+          <ExternalLink className="w-3 h-3" />
+        </motion.a>
       ) : (
-        <p className="text-sm text-muted mb-3">
-          <span className="text-foreground font-medium">{totalCommits.toLocaleString()}</span> commits in the last 12 months
-        </p>
+        <a
+          href="https://github.com/GChainey"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-sm text-muted mb-3 hover:text-foreground transition-colors"
+        >
+          <span className="text-foreground font-medium">{displayCount.toLocaleString()}</span> commits in the last 12 months
+          <ExternalLink className="w-3 h-3" />
+        </a>
       )}
 
       {/* Year markers */}
