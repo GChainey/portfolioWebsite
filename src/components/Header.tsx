@@ -35,6 +35,9 @@ export function Header({ showBack }: HeaderProps) {
           <Link href="/projects" className="text-sm text-muted hover:text-foreground transition-colors">
             Projects
           </Link>
+          <Link href="/match" className="text-sm text-muted hover:text-foreground transition-colors">
+            Match
+          </Link>
           {flags.feedPage && (
             <Link href="/feed" className="text-sm text-muted hover:text-foreground transition-colors">
               Feed

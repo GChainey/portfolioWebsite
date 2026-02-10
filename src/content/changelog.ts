@@ -14,6 +14,23 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.9.0',
+    date: '2026-02-10',
+    title: 'Job Match Analyzer',
+    description: 'New /match page where recruiters paste a job description and AI generates a witty side-by-side comparison showing why Gareth is the best fit.',
+    changes: [
+      'New /match page with three input methods: paste text, URL fetch, and file upload',
+      'AI-powered job analysis using Claude to generate tailored comparison points',
+      'Skeleton scaffolding loading state that builds the table structure before results arrive',
+      'Animated comparison table with staggered row reveals and spring-animated icons',
+      'Server-side URL fetching API route to avoid CORS issues',
+      'Witty rotating status messages during AI analysis',
+      'Summary footer with match score and contact CTA',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/job-fit-pitch',
+  },
+  {
     version: '1.8.0',
     date: '2026-02-08',
     title: 'Article Table of Contents',
