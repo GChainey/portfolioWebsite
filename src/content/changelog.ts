@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.8.2',
+    date: '2026-02-12',
+    title: 'Testimonial Carousel Scroll Indicators',
+    description: 'Added dot indicators and arrow navigation to the testimonial carousel for clearer scroll affordance.',
+    changes: [
+      'Added dot pagination indicators below testimonial cards',
+      'Added left/right chevron arrow buttons for navigation',
+      'Left arrow hidden when at the start, right arrow hidden at the end',
+      'Extracted shared TestimonialCarousel component used on both home and CV pages',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/scroll-indicators',
+  },
+  {
     version: '1.8.1',
     date: '2026-02-12',
     title: 'Auto-open GarethLLM Chat',
