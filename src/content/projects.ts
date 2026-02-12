@@ -38,6 +38,7 @@ export interface Project {
   featured?: boolean // Show in hero with special treatment
   showGitHubActivity?: boolean // Show GitHub activity visualization in card
   externalUrl?: string // Link to external page instead of /projects/[id]
+  companyId?: string // Link project to a company experience (e.g. 'enterpriseai', 'seek', 'bestpractice')
   content: ContentBlock[]
   chatContext: {
     description: string
@@ -494,6 +495,7 @@ export const projects: Project[] = [
     year: '2025',
     featured: true,
     showGitHubActivity: true,
+    companyId: 'enterpriseai',
     tags: ['AI', 'Design', 'Transformation', 'Essay'],
     content: [
       {
@@ -949,6 +951,7 @@ export const projects: Project[] = [
     description: 'No-code LLM workflow tool prototype. Building complex AI pipelines without writing code.',
     category: 'No-Code AI',
     year: '2025',
+    companyId: 'enterpriseai',
     tags: ['LLM', 'No-Code', 'Workflows', 'Enterprise'],
     content: [
       {
@@ -1048,6 +1051,97 @@ export const projects: Project[] = [
       ]
     }
   },
+  // --- Placeholder case studies ---
+  {
+    id: 'daisy-assist',
+    title: 'Daisy Assist',
+    description: 'AI-powered assistance tool for enterprise workflows.',
+    category: 'Enterprise AI',
+    year: '2025',
+    companyId: 'enterpriseai',
+    tags: ['AI', 'Enterprise', 'LLM'],
+    content: [
+      { type: 'heading', level: 2, content: 'Coming Soon' },
+      { type: 'text', content: 'This case study is currently being written. Check back soon.' },
+    ],
+    chatContext: {
+      description: 'Daisy Assist - an AI-powered assistance tool built at EnterpriseAI',
+      suggestedQuestions: ['What is Daisy Assist?', 'What problem does it solve?'],
+      followUpQuestions: ['How does it use LLMs?', 'Who are the users?'],
+    },
+  },
+  {
+    id: 'daisy-assess',
+    title: 'Daisy Assess',
+    description: 'AI-driven assessment and evaluation platform for enterprise.',
+    category: 'Enterprise AI',
+    year: '2025',
+    companyId: 'enterpriseai',
+    tags: ['AI', 'Enterprise', 'Assessment'],
+    content: [
+      { type: 'heading', level: 2, content: 'Coming Soon' },
+      { type: 'text', content: 'This case study is currently being written. Check back soon.' },
+    ],
+    chatContext: {
+      description: 'Daisy Assess - an AI-driven assessment platform built at EnterpriseAI',
+      suggestedQuestions: ['What is Daisy Assess?', 'How does assessment work?'],
+      followUpQuestions: ['What makes it different?', 'How accurate is it?'],
+    },
+  },
+  {
+    id: 'seek-case-study-1',
+    title: 'SEEK Case Study 1',
+    description: 'Case study from SEEK — details coming soon.',
+    category: 'Product Design',
+    year: '2024',
+    companyId: 'seek',
+    tags: ['Product Design', 'Discovery', 'B2C'],
+    content: [
+      { type: 'heading', level: 2, content: 'Coming Soon' },
+      { type: 'text', content: 'This case study is currently being written. Check back soon.' },
+    ],
+    chatContext: {
+      description: 'A case study from SEEK - details coming soon',
+      suggestedQuestions: ['What was this project about?'],
+      followUpQuestions: ['What was the impact?'],
+    },
+  },
+  {
+    id: 'seek-case-study-2',
+    title: 'SEEK Case Study 2',
+    description: 'Case study from SEEK — details coming soon.',
+    category: 'Product Design',
+    year: '2024',
+    companyId: 'seek',
+    tags: ['Product Design', 'Discovery', 'B2C'],
+    content: [
+      { type: 'heading', level: 2, content: 'Coming Soon' },
+      { type: 'text', content: 'This case study is currently being written. Check back soon.' },
+    ],
+    chatContext: {
+      description: 'A case study from SEEK - details coming soon',
+      suggestedQuestions: ['What was this project about?'],
+      followUpQuestions: ['What was the impact?'],
+    },
+  },
+  {
+    id: 'bestpractice-case-study-1',
+    title: 'Best Practice Case Study',
+    description: 'Case study from Best Practice Software — details coming soon.',
+    category: 'Healthcare SaaS',
+    year: '2021',
+    companyId: 'bestpractice',
+    tags: ['SaaS', 'Healthcare', 'Design System'],
+    content: [
+      { type: 'heading', level: 2, content: 'Coming Soon' },
+      { type: 'text', content: 'This case study is currently being written. Check back soon.' },
+    ],
+    chatContext: {
+      description: 'A case study from Best Practice Software - details coming soon',
+      suggestedQuestions: ['What was this project about?'],
+      followUpQuestions: ['What was the impact?'],
+    },
+  },
 ]
 
 export function getProjectById(id: string): Project | undefined {
@@ -1056,4 +1150,8 @@ export function getProjectById(id: string): Project | undefined {
 
 export function getAllProjectIds(): string[] {
   return projects.map(p => p.id)
+}
+
+export function getProjectsByCompanyId(companyId: string): Project[] {
+  return projects.filter(p => p.companyId === companyId)
 }

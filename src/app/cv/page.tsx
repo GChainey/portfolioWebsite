@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MessageCircle, X, Download } from 'lucide-react'
+import { MessageCircle, X, Download, ArrowRight } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
 import { TestimonialCarousel } from '@/components/TestimonialCarousel'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import { cvData } from '@/content/cv'
 import { VennSkills } from '@/components/VennSkills'
+import { ExperienceDialog } from '@/components/ExperienceDialog'
 
 const CV_PAGE_CONTEXT = {
   page: 'CV',
@@ -29,6 +30,8 @@ const CV_PAGE_CONTEXT = {
 
 export default function CVPage() {
   const [chatOpen, setChatOpen] = useState(true)
+  const [experienceDialogOpen, setExperienceDialogOpen] = useState(false)
+  const [selectedCompanyId, setSelectedCompanyId] = useState('enterpriseai')
   const { flags } = useFeatureFlags()
 
   useEffect(() => {
@@ -73,7 +76,15 @@ export default function CVPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <p className="text-xs text-muted uppercase tracking-widest mb-6">Experience</p>
+                <div className="flex items-center justify-between mb-6">
+                  <p className="text-xs text-muted uppercase tracking-widest">Experience</p>
+                  <button
+                    onClick={() => { setSelectedCompanyId('enterpriseai'); setExperienceDialogOpen(true) }}
+                    className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1"
+                  >
+                    View <ArrowRight className="w-3 h-3" />
+                  </button>
+                </div>
                 <div className="relative">
                   {/* Timeline line */}
                   <div className="absolute left-[7px] top-2 bottom-2 w-[2px] bg-border" />
@@ -82,17 +93,18 @@ export default function CVPage() {
                     {cvData.experience.map((exp, index) => (
                       <motion.div
                         key={exp.id}
-                        className="flex gap-6 relative"
+                        className="flex gap-6 relative cursor-pointer group"
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.3 + index * 0.1 }}
+                        onClick={() => { setSelectedCompanyId(exp.id); setExperienceDialogOpen(true) }}
                       >
                         {/* Timeline dot */}
                         <div className="flex-shrink-0 w-4 h-4 rounded-full bg-foreground border-4 border-background z-10 mt-1" />
 
                         <div className="flex-1 pb-2">
                           <div className="flex items-baseline gap-3 mb-1">
-                            <h3 className="font-medium text-foreground">{exp.company}</h3>
+                            <h3 className="font-medium text-foreground group-hover:text-accent transition-colors">{exp.company}</h3>
                             <span className="text-xs text-muted">{exp.period}</span>
                           </div>
                           <p className="text-sm text-muted mb-1">{exp.role} · {exp.location}</p>
@@ -112,6 +124,12 @@ export default function CVPage() {
                 </div>
               </motion.div>
             </section>
+
+            <ExperienceDialog
+              isOpen={experienceDialogOpen}
+              onClose={() => setExperienceDialogOpen(false)}
+              initialCompanyId={selectedCompanyId}
+            />
 
             {/* Education section */}
             <section className="p-8 border-b border-border">
