@@ -263,7 +263,7 @@ Focus answers on this context when relevant, but can reference other experience 
             animate={{ opacity: 1, y: 0 }}
             className="flex justify-start"
           >
-            <div className="max-w-[85%] p-3 text-sm bg-border text-foreground rounded-tl-lg rounded-tr-lg rounded-br-lg">
+            <div className="max-w-[85%] p-3 text-sm bg-[color-mix(in_srgb,var(--foreground)_5%,var(--background))] text-foreground rounded-tl-lg rounded-tr-lg rounded-br-lg">
               {welcomeText}
             </div>
           </motion.div>
@@ -299,7 +299,7 @@ Focus answers on this context when relevant, but can reference other experience 
                 className={`max-w-[85%] px-4 py-3 text-sm ${
                   msg.role === 'user'
                     ? 'bg-foreground text-background rounded-t-2xl rounded-bl-2xl rounded-br-md'
-                    : 'bg-border text-foreground rounded-t-2xl rounded-br-2xl rounded-bl-md'
+                    : 'bg-[color-mix(in_srgb,var(--foreground)_5%,var(--background))] text-foreground rounded-t-2xl rounded-br-2xl rounded-bl-md'
                 }`}
               >
                 {msg.role === 'assistant' ? <MessageContent content={msg.content} /> : msg.content}
@@ -322,7 +322,7 @@ Focus answers on this context when relevant, but can reference other experience 
             animate={{ opacity: 1 }}
             className="flex justify-start"
           >
-            <div className="max-w-[85%] px-4 py-3 text-sm bg-border text-foreground rounded-t-2xl rounded-br-2xl rounded-bl-md">
+            <div className="max-w-[85%] px-4 py-3 text-sm bg-[color-mix(in_srgb,var(--foreground)_5%,var(--background))] text-foreground rounded-t-2xl rounded-br-2xl rounded-bl-md">
               <ShimmeringText
                 text="Thinking..."
                 duration={1.5}
