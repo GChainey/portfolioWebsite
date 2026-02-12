@@ -422,7 +422,7 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
                     <button
                       onClick={generateTldr}
                       disabled={tldrLoading}
-                      className="w-full py-3 bg-accent text-white font-medium rounded-lg hover:brightness-110 transition-all disabled:opacity-50"
+                      className="w-full py-3 bg-[var(--accent-cta)] text-white font-medium rounded-lg hover:brightness-110 transition-all disabled:opacity-50"
                     >
                       {tldrLoading ? (
                         <ShimmeringText
@@ -456,7 +456,7 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
                       </button>
                       <button
                         onClick={() => setTldrOpen(false)}
-                        className="flex-1 py-2 bg-accent text-white rounded-lg hover:brightness-110 transition-all"
+                        className="flex-1 py-2 bg-[var(--accent-cta)] text-white rounded-lg hover:brightness-110 transition-all"
                       >
                         Done
                       </button>

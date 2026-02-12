@@ -88,7 +88,7 @@ export function ContentDialog({ isOpen, onClose, title, content, link }: Content
               <div className="p-6 border-t border-border">
                 <a
                   href={link.href}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-accent text-white text-sm font-medium rounded hover:brightness-110 transition-all"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--accent-cta)] text-white text-sm font-medium rounded hover:brightness-110 transition-all"
                 >
                   {link.label}
                 </a>
