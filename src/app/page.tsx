@@ -332,7 +332,7 @@ export default function Home() {
                     <Magnetic strength={0.25} radius={100} disabled={!flags.particleField}>
                       <Link
                         href="/projects/the-future-is-now"
-                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-white text-sm font-medium rounded-full hover:brightness-110 transition-all group"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--accent-cta)] text-white text-sm font-medium rounded-full hover:brightness-110 transition-all group"
                       >
                         Read how
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

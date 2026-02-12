@@ -11,6 +11,7 @@
 
     /* Default accent: amber */
     --accent: #d97706;
+    --accent-cta: var(--accent);
     --accent-light: #fef3c7;
     --selection-bg: color-mix(in srgb, var(--accent) 15%, white);
     --selection-text: color-mix(in srgb, var(--accent) 85%, black);
@@ -41,6 +42,7 @@
 
     /* Default accent: amber (dark) */
     --accent: #fbbf24;
+    --accent-cta: color-mix(in srgb, var(--accent) 85%, #000);
     --accent-light: #451a03;
     --selection-bg: color-mix(in srgb, var(--accent) 20%, #0a0a0a);
     --selection-text: color-mix(in srgb, var(--accent) 65%, white);
