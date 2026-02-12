@@ -25,6 +25,7 @@ export interface CVTestimonial {
   role: string
   company: string
   content: string
+  linkedIn?: string
 }
 
 export interface CVData {
@@ -174,6 +175,7 @@ export const cvData: CVData = {
       name: 'Winnie Bamra',
       role: 'Senior Product Manager',
       company: 'Ex-SpaceX · SEEK',
+      linkedIn: 'https://www.linkedin.com/in/wbamra/',
       content:
         'Gareth is a pleasure to work with and an asset to any team. He is diligent in discovery, passionate about the end user, empathetic, and collaborative in his approach. He is excellent at leading user interviews, enabling the team to collect and extract actionable insights.',
     },
@@ -181,6 +183,7 @@ export const cvData: CVData = {
       name: 'Richard Simms',
       role: 'Principal Product Designer',
       company: 'SEEK',
+      linkedIn: 'https://www.linkedin.com/in/richardsimms/',
       content:
         'A talented senior UX designer who can independently drive projects forward. His designs reflected a deep understanding of our users, combined with a mastery of UX principles. Meticulous attention to detail and craft are evident in everything he produces.',
     },
@@ -188,6 +191,7 @@ export const cvData: CVData = {
       name: 'Ahmed Hakeem',
       role: 'Staff Engineer',
       company: 'SEEK',
+      linkedIn: 'https://www.linkedin.com/in/meds/',
       content:
         "A developer's best friend. I have many fond memories bouncing ideas around and jamming out features end to end from fake door tests to deployment. At every step Gareth was inquisitive, collaborative and open to thinking on their feet.",
     },
@@ -195,6 +199,7 @@ export const cvData: CVData = {
       name: 'David Deville',
       role: 'Senior Content Designer',
       company: 'SEEK',
+      linkedIn: 'https://www.linkedin.com/in/david-deville-98b287b8/',
       content:
         'Gareth goes above and beyond designing for customer needs. Fast experimentation, elegant designs and constant iteration resulted in products like an AI-powered resume generator that genuinely helped candidates. A positive, creative and likeable teammate.',
     },
@@ -202,6 +207,7 @@ export const cvData: CVData = {
       name: 'Henry Vesander',
       role: 'Chief Product Officer',
       company: 'Best Practice Software',
+      linkedIn: 'https://www.linkedin.com/in/henrikvesander/',
       content:
         'An outstanding UX/product designer. I hired him to build a cloud-based practice management SaaS. He is a driven individual that can be trusted in getting the job done once given guidance and a brief. I definitely recommend Gareth!',
     },

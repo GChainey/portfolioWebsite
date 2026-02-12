@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.10.1',
+    date: '2026-02-13',
+    title: 'LinkedIn Links on Testimonials',
+    description: 'Colleague names in the testimonial carousel now link to their LinkedIn profiles.',
+    changes: [
+      'Added LinkedIn URLs to all five testimonial entries',
+      'Testimonial names render as links that open LinkedIn in a new tab',
+      'Hover state uses accent color for consistency with site theme',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/linkedin-testimonials',
+  },
+  {
     version: '1.10.0',
     date: '2026-02-12',
     title: 'Facehash Chat Avatars',

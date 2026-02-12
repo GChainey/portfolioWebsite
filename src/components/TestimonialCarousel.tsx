@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react'
 import { Facehash, stringHash } from 'facehash'
 
 // All 16 theme accent colors — color-mix with background adapts to light/dark
@@ -21,6 +21,7 @@ interface Testimonial {
   role: string
   company: string
   content: string
+  linkedIn?: string
 }
 
 interface TestimonialCarouselProps {
@@ -113,7 +114,14 @@ export function TestimonialCarousel({ testimonials, animationDelay = 0 }: Testim
                   }}
                 />
                 <div className="min-w-0">
-                  <p className="font-medium text-foreground text-sm">{testimonial.name}</p>
+                  {testimonial.linkedIn ? (
+                    <a href={testimonial.linkedIn} target="_blank" rel="noopener noreferrer" className="group/link inline-flex items-center gap-1 font-medium text-foreground text-sm hover:text-accent transition-colors">
+                      {testimonial.name}
+                      <ExternalLink className="w-3 h-3 text-muted group-hover/link:text-accent transition-colors" />
+                    </a>
+                  ) : (
+                    <p className="font-medium text-foreground text-sm">{testimonial.name}</p>
+                  )}
                   <p className="text-xs text-muted">{testimonial.role} · {testimonial.company}</p>
                 </div>
               </div>
