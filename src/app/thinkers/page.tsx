@@ -2,11 +2,21 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MessageCircle, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
+import { Facehash, stringHash } from 'facehash'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import { thinkers } from '@/content/thinkers'
+
+const THEME_ACCENT_COLORS = [
+  '#d97706', '#ea580c', '#dc2626', '#e11d48', '#db2777', '#c026d3',
+  '#9333ea', '#7c3aed', '#4f46e5', '#2563eb', '#0891b2', '#0d9488',
+  '#059669', '#16a34a', '#65a30d', '#ca8a04',
+]
+function getAvatarColor(name: string): string {
+  return THEME_ACCENT_COLORS[stringHash(name) % THEME_ACCENT_COLORS.length]
+}
 
 const THINKERS_PAGE_CONTEXT = {
   page: 'Product Thinkers',
@@ -24,13 +34,6 @@ const THINKERS_PAGE_CONTEXT = {
   ],
 }
 
-function getInitials(name: string, initials?: string): string {
-  if (initials) return initials
-  return name
-    .split(' ')
-    .map((n) => n[0])
-    .join('')
-}
 
 export default function ThinkersPage() {
   const [chatOpen, setChatOpen] = useState(true)
@@ -81,9 +84,18 @@ export default function ThinkersPage() {
                       transition={{ delay: index * 0.1 }}
                     >
                       <div className="flex items-center gap-4 mb-4">
-                        <div className="w-14 h-14 rounded-full bg-border flex items-center justify-center text-foreground font-medium text-lg flex-shrink-0">
-                          {getInitials(thinker.name, thinker.initials)}
-                        </div>
+                        <Facehash
+                          name={thinker.name}
+                          size={56}
+                          showInitial
+                          enableBlink
+                          interactive={false}
+                          intensity3d="subtle"
+                          style={{
+                            backgroundColor: `color-mix(in srgb, ${getAvatarColor(thinker.name)} 60%, var(--background))`,
+                            borderRadius: '9999px',
+                          }}
+                        />
                         <div>
                           <h3 className="font-medium text-foreground text-lg">
                             {thinker.name}
@@ -121,9 +133,9 @@ export default function ThinkersPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 onClick={() => setChatOpen(true)}
-                className="fixed bottom-6 right-6 z-50 p-4 bg-[var(--selection-bg)] text-[var(--selection-text)] rounded-full shadow-lg hover:scale-105 hover:brightness-110 transition-all"
+                className="fixed bottom-6 right-6 z-50 shadow-lg hover:scale-110 transition-all"
               >
-                <MessageCircle className="w-6 h-6" />
+                <Facehash name="Gareth Chainey" size={48} showInitial enableBlink interactive={false} intensity3d="subtle" style={{ backgroundColor: 'color-mix(in srgb, var(--accent) 60%, var(--background))', borderRadius: '9999px' }} />
               </motion.button>
             )}
           </AnimatePresence>

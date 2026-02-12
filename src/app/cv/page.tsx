@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MessageCircle, X, Download, ArrowRight } from 'lucide-react'
+import { X, Download, ArrowRight } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
 import { TestimonialCarousel } from '@/components/TestimonialCarousel'
+import { Facehash } from 'facehash'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import { cvData } from '@/content/cv'
+
 import { VennSkills } from '@/components/VennSkills'
 import { ExperienceDialog } from '@/components/ExperienceDialog'
 
@@ -202,9 +204,9 @@ export default function CVPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 onClick={() => setChatOpen(true)}
-                className="fixed bottom-6 right-6 z-50 p-4 bg-[var(--selection-bg)] text-[var(--selection-text)] rounded-full shadow-lg hover:scale-105 hover:brightness-110 transition-all"
+                className="fixed bottom-6 right-6 z-50 shadow-lg hover:scale-110 transition-all"
               >
-                <MessageCircle className="w-6 h-6" />
+                <Facehash name="Gareth Chainey" size={48} showInitial enableBlink interactive={false} intensity3d="subtle" style={{ backgroundColor: 'color-mix(in srgb, var(--accent) 60%, var(--background))', borderRadius: '9999px' }} />
               </motion.button>
             )}
           </AnimatePresence>

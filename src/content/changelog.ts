@@ -14,7 +14,7 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: '1.9.1',
+    version: '1.10.2',
     date: '2026-02-12',
     title: 'Experience Dialog Two-Column Layout & Inline Case Studies',
     description: 'Restructured the experience dialog to a two-column layout with full-height chat, and replaced project card links with inline scrollable case study sections.',
@@ -34,6 +34,36 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
     aiTools: ['Claude Code'],
     branch: 'GChainey/experience-dialog-layout',
+  },
+  {
+    version: '1.10.1',
+    date: '2026-02-13',
+    title: 'LinkedIn Links on Testimonials',
+    description: 'Colleague names in the testimonial carousel now link to their LinkedIn profiles.',
+    changes: [
+      'Added LinkedIn URLs to all five testimonial entries',
+      'Testimonial names render as links that open LinkedIn in a new tab',
+      'Hover state uses accent color for consistency with site theme',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/linkedin-testimonials',
+  },
+  {
+    version: '1.10.0',
+    date: '2026-02-12',
+    title: 'Facehash Chat Avatars',
+    description: 'Added deterministic facehash avatars to the GarethLLM chat. Gareth gets a consistent avatar, and visitors get their own unique face after telling GarethLLM their name.',
+    changes: [
+      'Integrated facehash package for deterministic avatar generation from names',
+      'Gareth avatar (with blinking eyes) shown on all assistant messages and loading state',
+      'GarethLLM welcome message asks visitors for their name',
+      'Name extraction via [[name:X]] tag parsed from LLM responses',
+      'Visitor name persisted in localStorage — returning visitors get greeted by name',
+      'Visitor facehash avatar appears on their messages once name is known',
+      'All existing suggested and follow-up questions preserved',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/facehash-chat-avatars',
   },
   {
     version: '1.9.0',

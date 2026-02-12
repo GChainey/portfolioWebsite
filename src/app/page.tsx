@@ -3,9 +3,10 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { MessageCircle, X, ArrowRight } from 'lucide-react'
+import { X, ArrowRight } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
+import { Facehash } from 'facehash'
 import { GitHubContributions } from '@/components/GitHubContributions'
 import { ThinkerCard } from '@/components/ThinkerCard'
 import { TestimonialCarousel } from '@/components/TestimonialCarousel'
@@ -159,30 +160,35 @@ const TESTIMONIALS = [
     name: 'Winnie Bamra',
     role: 'Senior Product Manager',
     company: 'Ex-SpaceX · SEEK',
+    linkedIn: 'https://www.linkedin.com/in/wbamra/',
     content: 'Gareth is a pleasure to work with and an asset to any team. He is diligent in discovery, passionate about the end user, empathetic, and collaborative in his approach. He is excellent at leading user interviews, enabling the team to collect and extract actionable insights.',
   },
   {
     name: 'Richard Simms',
     role: 'Principal Product Designer',
     company: 'SEEK',
+    linkedIn: 'https://www.linkedin.com/in/richardsimms/',
     content: 'A talented senior UX designer who can independently drive projects forward. His designs reflected a deep understanding of our users, combined with a mastery of UX principles. Meticulous attention to detail and craft are evident in everything he produces.',
   },
   {
     name: 'Ahmed Hakeem',
     role: 'Staff Engineer',
     company: 'SEEK',
+    linkedIn: 'https://www.linkedin.com/in/meds/',
     content: "A developer's best friend. I have many fond memories bouncing ideas around and jamming out features end to end from fake door tests to deployment. At every step Gareth was inquisitive, collaborative and open to thinking on their feet.",
   },
   {
     name: 'David Deville',
     role: 'Senior Content Designer',
     company: 'SEEK',
+    linkedIn: 'https://www.linkedin.com/in/david-deville-98b287b8/',
     content: "Gareth goes above and beyond designing for customer needs. Fast experimentation, elegant designs and constant iteration resulted in products like an AI-powered resume generator that genuinely helped candidates. A positive, creative and likeable teammate.",
   },
   {
     name: 'Henry Vesander',
     role: 'Chief Product Officer',
     company: 'Best Practice Software',
+    linkedIn: 'https://www.linkedin.com/in/henrikvesander/',
     content: 'An outstanding UX/product designer. I hired him to build a cloud-based practice management SaaS. He is a driven individual that can be trusted in getting the job done once given guidance and a brief. I definitely recommend Gareth!',
   },
 ]
@@ -536,9 +542,9 @@ export default function Home() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 onClick={() => setChatOpen(true)}
-                className="fixed bottom-6 right-6 z-50 p-4 bg-[var(--selection-bg)] text-[var(--selection-text)] rounded-full shadow-lg hover:scale-105 hover:brightness-110 transition-all"
+                className="fixed bottom-6 right-6 z-50 shadow-lg hover:scale-110 transition-all"
               >
-                <MessageCircle className="w-6 h-6" />
+                <Facehash name="Gareth Chainey" size={48} showInitial enableBlink interactive={false} intensity3d="subtle" style={{ backgroundColor: 'color-mix(in srgb, var(--accent) 60%, var(--background))', borderRadius: '9999px' }} />
               </motion.button>
             )}
           </AnimatePresence>

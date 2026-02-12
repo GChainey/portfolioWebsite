@@ -2,13 +2,26 @@
 
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react'
+import { Facehash, stringHash } from 'facehash'
+
+// All 16 theme accent colors — color-mix with background adapts to light/dark
+const THEME_ACCENT_COLORS = [
+  '#d97706', '#ea580c', '#dc2626', '#e11d48', '#db2777', '#c026d3',
+  '#9333ea', '#7c3aed', '#4f46e5', '#2563eb', '#0891b2', '#0d9488',
+  '#059669', '#16a34a', '#65a30d', '#ca8a04',
+]
+
+function getAvatarColor(name: string): string {
+  return THEME_ACCENT_COLORS[stringHash(name) % THEME_ACCENT_COLORS.length]
+}
 
 interface Testimonial {
   name: string
   role: string
   company: string
   content: string
+  linkedIn?: string
 }
 
 interface TestimonialCarouselProps {
@@ -88,11 +101,27 @@ export function TestimonialCarousel({ testimonials, animationDelay = 0 }: Testim
               transition={{ duration: 0.5, delay: animationDelay + index * 0.08 }}
             >
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center text-foreground font-medium text-sm flex-shrink-0">
-                  {testimonial.name.split(' ').map(n => n[0]).join('')}
-                </div>
+                <Facehash
+                  name={testimonial.name}
+                  size={40}
+                  showInitial
+                  enableBlink
+                  interactive={false}
+                  intensity3d="subtle"
+                  style={{
+                    backgroundColor: `color-mix(in srgb, ${getAvatarColor(testimonial.name)} 60%, var(--background))`,
+                    borderRadius: '9999px',
+                  }}
+                />
                 <div className="min-w-0">
-                  <p className="font-medium text-foreground text-sm">{testimonial.name}</p>
+                  {testimonial.linkedIn ? (
+                    <a href={testimonial.linkedIn} target="_blank" rel="noopener noreferrer" className="group/link inline-flex items-center gap-1 font-medium text-foreground text-sm hover:text-accent transition-colors">
+                      {testimonial.name}
+                      <ExternalLink className="w-3 h-3 text-muted group-hover/link:text-accent transition-colors" />
+                    </a>
+                  ) : (
+                    <p className="font-medium text-foreground text-sm">{testimonial.name}</p>
+                  )}
                   <p className="text-xs text-muted">{testimonial.role} · {testimonial.company}</p>
                 </div>
               </div>
