@@ -1,12 +1,13 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ChevronLeft, ChevronRight, ArrowRight, MessageCircle } from 'lucide-react'
-import { useEffect, useState, useCallback } from 'react'
+import { X, ArrowRight, MessageCircle } from 'lucide-react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { cvData } from '@/content/cv'
 import { getProjectsByCompanyId } from '@/content/projects'
 import { ChatInterface } from '@/components/ChatInterface'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 interface ExperienceDialogProps {
   isOpen: boolean
@@ -37,6 +38,7 @@ export function ExperienceDialog({ isOpen, onClose, initialCompanyId = 'enterpri
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
   const [direction, setDirection] = useState(0)
   const [chatOpen, setChatOpen] = useState(true)
+  const scrollRef = useRef<HTMLDivElement>(null)
 
   // Reset to initial company when dialog opens
   useEffect(() => {
@@ -51,6 +53,7 @@ export function ExperienceDialog({ isOpen, onClose, initialCompanyId = 'enterpri
   const goTo = useCallback((index: number) => {
     setDirection(index > currentIndex ? 1 : -1)
     setCurrentIndex(index)
+    scrollRef.current?.scrollTo({ top: 0 })
   }, [currentIndex])
 
   const goPrev = useCallback(() => {
@@ -116,43 +119,35 @@ export function ExperienceDialog({ isOpen, onClose, initialCompanyId = 'enterpri
             onClick={onClose}
           />
 
-          {/* Dialog container */}
+          {/* Dialog container - two column layout */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.2 }}
-            className="relative w-full max-w-7xl h-[92vh] bg-background border border-border rounded-lg shadow-2xl overflow-hidden flex flex-col"
+            className="relative w-full max-w-7xl h-[92vh] bg-background dark:bg-[color-mix(in_srgb,var(--foreground)_3%,var(--background))] border border-border rounded-lg shadow-2xl dark:shadow-none overflow-hidden flex"
           >
-            {/* Header with company tabs */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-border flex-shrink-0">
-              <div className="flex items-center gap-1">
-                {companies.map((c, i) => (
-                  <button
-                    key={c.id}
-                    onClick={() => goTo(i)}
-                    className={`px-3 py-1.5 text-sm rounded transition-colors ${
-                      i === currentIndex
-                        ? 'bg-foreground/10 text-foreground font-medium'
-                        : 'text-muted hover:text-foreground'
-                    }`}
-                  >
-                    {c.company}
-                  </button>
-                ))}
+            {/* Column 1: Header + Content */}
+            <div className="flex-1 flex flex-col overflow-hidden">
+              {/* Header with title and tabs */}
+              <div className="flex items-center gap-4 px-6 py-3 flex-shrink-0">
+                <h2 className="font-medium text-foreground">Work Experience</h2>
+                <Tabs value={company.id} onValueChange={(id) => {
+                  const idx = companies.findIndex(c => c.id === id)
+                  if (idx >= 0) goTo(idx)
+                }}>
+                  <TabsList className="h-auto w-auto">
+                    {companies.map((c) => (
+                      <TabsTrigger key={c.id} value={c.id}>
+                        {c.company}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                </Tabs>
               </div>
-              <button
-                onClick={onClose}
-                className="p-2 text-muted hover:text-foreground hover:bg-border/50 rounded transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
 
-            {/* Main body: content + chat */}
-            <div className="flex-1 flex overflow-hidden">
-              {/* Carousel content */}
-              <div className="flex-1 overflow-y-auto overflow-x-hidden">
+              {/* Scrollable content */}
+              <div ref={scrollRef} className="flex-1 overflow-y-auto overflow-x-hidden">
                 <AnimatePresence mode="wait" custom={direction}>
                   <motion.div
                     key={company.id}
@@ -207,104 +202,145 @@ export function ExperienceDialog({ isOpen, onClose, initialCompanyId = 'enterpri
                       </ul>
                     </div>
 
-                    {/* Related projects */}
-                    {relatedProjects.length > 0 && (
-                      <div>
-                        <p className="text-xs text-muted uppercase tracking-widest mb-3">Related work</p>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                          {relatedProjects.map((project) => (
-                            <Link
-                              key={project.id}
-                              href={project.externalUrl || `/projects/${project.id}`}
-                              className="group block border border-border rounded-lg overflow-hidden hover:border-foreground/30 transition-colors"
-                            >
-                              {/* Card placeholder image */}
-                              <div className="aspect-[16/9] bg-border/30 flex items-center justify-center">
-                                <div className="font-mono text-[8px] leading-none text-foreground/15 whitespace-pre select-none">
+                    {/* Inline case studies */}
+                    {relatedProjects.length > 0 && relatedProjects.map((project) => (
+                      <div key={project.id} className="mt-10 pt-10 border-t border-border">
+                        <span className="text-xs text-muted uppercase tracking-widest">{project.category}</span>
+                        <h3 className="text-xl font-medium text-foreground mt-2 mb-2">{project.title}</h3>
+                        <p className="text-sm text-muted leading-relaxed mb-6">{project.description}</p>
+
+                        {/* Hero image placeholder */}
+                        <div className="mb-4 rounded-lg border border-border overflow-hidden bg-border/30">
+                          <div className="aspect-[16/9] flex items-center justify-center">
+                            <div className="text-center">
+                              <div className="font-mono text-[10px] leading-none text-foreground/15 whitespace-pre select-none mb-3">
+{`    ╔════════════════════════════════════╗
+    ║                                    ║
+    ║     ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓     ║
+    ║     ▓                        ▓     ║
+    ║     ▓    ${project.title.slice(0, 16).toUpperCase().padEnd(16)}    ▓     ║
+    ║     ▓                        ▓     ║
+    ║     ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓     ║
+    ║                                    ║
+    ╚════════════════════════════════════╝`}
+                              </div>
+                              <p className="text-xs text-muted">Hero image coming soon</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Detail image placeholders - two side by side */}
+                        <div className="grid grid-cols-2 gap-4 mb-6">
+                          <div className="rounded-lg border border-border overflow-hidden bg-border/30">
+                            <div className="aspect-[4/3] flex items-center justify-center">
+                              <div className="text-center">
+                                <div className="font-mono text-[8px] leading-none text-foreground/15 whitespace-pre select-none mb-2">
 {`  ╔══════════════════╗
   ║  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ║
   ║  ▓            ▓  ║
-  ║  ▓   ${project.id.slice(0, 6).toUpperCase().padEnd(6)}   ▓  ║
+  ║  ▓  SCREEN 1  ▓  ║
   ║  ▓            ▓  ║
   ║  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ║
   ╚══════════════════╝`}
                                 </div>
+                                <p className="text-[10px] text-muted">UI screenshot</p>
                               </div>
-                              <div className="p-4">
-                                <div className="flex items-center justify-between mb-1">
-                                  <span className="text-xs text-muted uppercase tracking-wide">{project.category}</span>
-                                  <ArrowRight className="w-3.5 h-3.5 text-muted group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
+                            </div>
+                          </div>
+                          <div className="rounded-lg border border-border overflow-hidden bg-border/30">
+                            <div className="aspect-[4/3] flex items-center justify-center">
+                              <div className="text-center">
+                                <div className="font-mono text-[8px] leading-none text-foreground/15 whitespace-pre select-none mb-2">
+{`  ╔══════════════════╗
+  ║  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ║
+  ║  ▓            ▓  ║
+  ║  ▓  SCREEN 2  ▓  ║
+  ║  ▓            ▓  ║
+  ║  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ║
+  ╚══════════════════╝`}
                                 </div>
-                                <h3 className="font-medium text-foreground group-hover:text-accent transition-colors text-sm mb-1">
-                                  {project.title}
-                                </h3>
-                                <p className="text-xs text-muted line-clamp-2">{project.description}</p>
+                                <p className="text-[10px] text-muted">UI screenshot</p>
                               </div>
-                            </Link>
-                          ))}
+                            </div>
+                          </div>
                         </div>
+
+                        {/* Wide detail image placeholder */}
+                        <div className="mb-6 rounded-lg border border-border overflow-hidden bg-border/30">
+                          <div className="aspect-[21/9] flex items-center justify-center">
+                            <div className="text-center">
+                              <div className="font-mono text-[8px] leading-none text-foreground/15 whitespace-pre select-none mb-2">
+{`  ╔══════════════════════════════════════════════╗
+  ║  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ║
+  ║  ▓                                      ▓  ║
+  ║  ▓         WORKFLOW / INTERACTION        ▓  ║
+  ║  ▓                                      ▓  ║
+  ║  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ║
+  ╚══════════════════════════════════════════════╝`}
+                              </div>
+                              <p className="text-[10px] text-muted">Workflow or interaction detail</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <Link
+                          href={project.externalUrl || `/projects/${project.id}`}
+                          className="group inline-flex items-center gap-1.5 text-sm text-muted hover:text-accent transition-colors"
+                        >
+                          View full case study
+                          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                        </Link>
                       </div>
-                    )}
+                    ))}
                   </motion.div>
                 </AnimatePresence>
               </div>
+            </div>
 
-              {/* Chat toggle button */}
-              <AnimatePresence>
-                {!chatOpen && (
-                  <motion.button
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    onClick={() => setChatOpen(true)}
-                    className="absolute bottom-6 right-6 z-10 p-4 bg-[var(--selection-bg)] text-[var(--selection-text)] rounded-full shadow-lg hover:scale-105 hover:brightness-110 transition-all"
-                  >
-                    <MessageCircle className="w-5 h-5" />
-                  </motion.button>
-                )}
-              </AnimatePresence>
+            {/* Chat toggle button */}
+            <AnimatePresence>
+              {!chatOpen && (
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  onClick={() => setChatOpen(true)}
+                  className="absolute bottom-6 right-6 z-10 p-4 bg-[var(--selection-bg)] text-[var(--selection-text)] rounded-full shadow-lg hover:scale-105 hover:brightness-110 transition-all"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                </motion.button>
+              )}
+            </AnimatePresence>
 
-              {/* Chat sidebar */}
-              <AnimatePresence>
-                {chatOpen && (
-                  <motion.div
-                    initial={{ width: 0, opacity: 0 }}
-                    animate={{ width: 380, opacity: 1 }}
-                    exit={{ width: 0, opacity: 0 }}
-                    transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-                    className="flex-shrink-0 border-l border-border overflow-hidden"
-                    style={{ minWidth: 0 }}
-                  >
-                    <div className="relative h-full flex flex-col w-[380px]">
-                      <ChatInterface pageContext={getCompanyContext(company)} />
+            {/* Column 2: Chat sidebar (full height) */}
+            <AnimatePresence>
+              {chatOpen && (
+                <motion.div
+                  initial={{ width: 0, opacity: 0 }}
+                  animate={{ width: 380, opacity: 1 }}
+                  exit={{ width: 0, opacity: 0 }}
+                  transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                  className="flex-shrink-0 border-l border-border overflow-hidden flex flex-col"
+                  style={{ minWidth: 0 }}
+                >
+                  <div className="w-[380px] flex flex-col h-full">
+                    {/* Chat header */}
+                    <div className="flex items-center justify-between px-4 py-4 flex-shrink-0">
+                      <h3 className="font-medium text-foreground">GarethLLM<sup className="text-xs text-muted ml-0.5">™</sup></h3>
+                      <button
+                        onClick={onClose}
+                        className="p-2 text-muted hover:text-foreground hover:bg-border/50 rounded transition-colors"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Footer navigation */}
-            <div className="flex items-center justify-between px-6 py-3 border-t border-border flex-shrink-0">
-              <button
-                onClick={goPrev}
-                disabled={currentIndex === 0}
-                className="flex items-center gap-1 text-sm text-muted hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-              >
-                <ChevronLeft className="w-4 h-4" />
-                Previous
-              </button>
-              <span className="text-xs text-muted">
-                {currentIndex + 1} / {companies.length}
-              </span>
-              <button
-                onClick={goNext}
-                disabled={currentIndex === companies.length - 1}
-                className="flex items-center gap-1 text-sm text-muted hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-              >
-                Next
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
+                    <div className="flex-1 min-h-0">
+                      <ChatInterface pageContext={getCompanyContext(company)} hideHeader />
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         </motion.div>
       )}

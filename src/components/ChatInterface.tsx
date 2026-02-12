@@ -80,6 +80,7 @@ interface PageContext {
 
 interface ChatInterfaceProps {
   pageContext?: PageContext
+  hideHeader?: boolean
 }
 
 const DEFAULT_CONTEXT: PageContext = {
@@ -133,7 +134,7 @@ A: "Here's ProductLite—a prototyping tool I built with AI: [[project:productli
 
 Keep it SHORT. Answer like you're texting a colleague.`
 
-export function ChatInterface({ pageContext = DEFAULT_CONTEXT }: ChatInterfaceProps) {
+export function ChatInterface({ pageContext = DEFAULT_CONTEXT, hideHeader = false }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -245,10 +246,12 @@ Focus answers on this context when relevant, but can reference other experience 
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
-      <div className="p-4 border-b border-border flex-shrink-0 flex items-center gap-3">
-        <Facehash name="Gareth Chainey" size={28} showInitial enableBlink interactive={false} intensity3d="subtle" style={{ backgroundColor: 'color-mix(in srgb, var(--accent) 60%, var(--background))', borderRadius: '6px' }} />
-        <h3 className="font-medium text-foreground">GarethLLM<sup className="text-xs text-muted ml-0.5">™</sup></h3>
-      </div>
+      {!hideHeader && (
+        <div className="p-4 border-b border-border flex-shrink-0 flex items-center gap-3">
+          <Facehash name="Gareth Chainey" size={28} showInitial enableBlink interactive={false} intensity3d="subtle" style={{ backgroundColor: 'color-mix(in srgb, var(--accent) 60%, var(--background))', borderRadius: '6px' }} />
+          <h3 className="font-medium text-foreground">GarethLLM<sup className="text-xs text-muted ml-0.5">™</sup></h3>
+        </div>
+      )}
 
       {/* Messages */}
       <div ref={messagesContainerRef} className="flex-1 min-h-0 overflow-y-auto chat-scroll p-4 space-y-4">
