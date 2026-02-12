@@ -14,6 +14,22 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.9.0',
+    date: '2026-02-12',
+    title: 'Experience Dialog Carousel',
+    description: 'Clickable company names in the Experience section now open a dialog carousel showing company synopsis, key achievements, and related case study links.',
+    changes: [
+      'New ExperienceDialog component with carousel navigation between companies',
+      'Company names in Experience section are now clickable on both homepage and CV page',
+      'View button opens dialog starting at most recent company (EnterpriseAI)',
+      'Arrow keys and tab navigation to browse between companies',
+      'Added placeholder case studies for Daisy Assist, Daisy Assess, SEEK, and Best Practice',
+      'Projects linked to companies via companyId field',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/experience-case-studies',
+  },
+  {
     version: '1.8.0',
     date: '2026-02-08',
     title: 'Article Table of Contents',
