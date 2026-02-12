@@ -2,18 +2,22 @@
 
 import { motion } from 'framer-motion'
 import { Thinker } from '@/content/thinkers'
+import { Facehash, stringHash } from 'facehash'
+
+// All 16 theme accent colors (light-mode values) — color-mix with background adapts to light/dark
+const THEME_ACCENT_COLORS = [
+  '#d97706', '#ea580c', '#dc2626', '#e11d48', '#db2777', '#c026d3',
+  '#9333ea', '#7c3aed', '#4f46e5', '#2563eb', '#0891b2', '#0d9488',
+  '#059669', '#16a34a', '#65a30d', '#ca8a04',
+]
+
+function getAvatarColor(name: string): string {
+  return THEME_ACCENT_COLORS[stringHash(name) % THEME_ACCENT_COLORS.length]
+}
 
 interface ThinkerCardProps {
   thinker: Thinker
   index?: number
-}
-
-function getInitials(thinker: Thinker): string {
-  if (thinker.initials) return thinker.initials
-  return thinker.name
-    .split(' ')
-    .map((n) => n[0])
-    .join('')
 }
 
 export function ThinkerCard({ thinker, index = 0 }: ThinkerCardProps) {
@@ -25,9 +29,18 @@ export function ThinkerCard({ thinker, index = 0 }: ThinkerCardProps) {
       transition={{ delay: index * 0.1 }}
     >
       <div className="flex items-center gap-3 mb-2">
-        <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center text-foreground font-medium text-sm flex-shrink-0">
-          {getInitials(thinker)}
-        </div>
+        <Facehash
+          name={thinker.name}
+          size={40}
+          showInitial
+          enableBlink
+          interactive={false}
+          intensity3d="subtle"
+          style={{
+            backgroundColor: `color-mix(in srgb, ${getAvatarColor(thinker.name)} 60%, var(--background))`,
+            borderRadius: '9999px',
+          }}
+        />
         <div className="min-w-0">
           <h3 className="font-medium text-foreground group-hover:text-accent transition-colors text-sm">
             {thinker.name}

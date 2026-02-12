@@ -5,9 +5,18 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, Download } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
-import { Facehash } from 'facehash'
+import { Facehash, stringHash } from 'facehash'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import { cvData } from '@/content/cv'
+
+const THEME_ACCENT_COLORS = [
+  '#d97706', '#ea580c', '#dc2626', '#e11d48', '#db2777', '#c026d3',
+  '#9333ea', '#7c3aed', '#4f46e5', '#2563eb', '#0891b2', '#0d9488',
+  '#059669', '#16a34a', '#65a30d', '#ca8a04',
+]
+function getAvatarColor(name: string): string {
+  return THEME_ACCENT_COLORS[stringHash(name) % THEME_ACCENT_COLORS.length]
+}
 import { VennSkills } from '@/components/VennSkills'
 
 const CV_PAGE_CONTEXT = {
@@ -172,9 +181,18 @@ export default function CVPage() {
                         transition={{ delay: 0.65 + index * 0.1 }}
                       >
                         <div className="flex items-center gap-3 mb-3">
-                          <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center text-foreground font-medium text-sm flex-shrink-0">
-                            {testimonial.name.split(' ').map(n => n[0]).join('')}
-                          </div>
+                          <Facehash
+                            name={testimonial.name}
+                            size={40}
+                            showInitial
+                            enableBlink
+                            interactive={false}
+                            intensity3d="subtle"
+                            style={{
+                              backgroundColor: `color-mix(in srgb, ${getAvatarColor(testimonial.name)} 60%, var(--background))`,
+                              borderRadius: '9999px',
+                            }}
+                          />
                           <div className="min-w-0">
                             <p className="font-medium text-foreground text-sm">{testimonial.name}</p>
                             <p className="text-xs text-muted">{testimonial.role} · {testimonial.company}</p>
