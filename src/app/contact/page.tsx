@@ -110,7 +110,7 @@ export default function ContactPage() {
 
                   <button
                     type="submit"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-white text-sm font-medium rounded hover:brightness-110 transition-all"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--accent-cta)] text-white text-sm font-medium rounded hover:brightness-110 transition-all"
                   >
                     Send Message
                     <Send className="w-4 h-4" />

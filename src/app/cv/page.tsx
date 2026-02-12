@@ -63,7 +63,7 @@ export default function CVPage() {
                 <a
                   href="/GarethChaineyCV.pdf"
                   download="GarethChaineyCV.pdf"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-white text-sm font-medium rounded-full hover:brightness-110 transition-all"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--accent-cta)] text-white text-sm font-medium rounded-full hover:brightness-110 transition-all"
                 >
                   <Download className="w-4 h-4" />
                   Download PDF

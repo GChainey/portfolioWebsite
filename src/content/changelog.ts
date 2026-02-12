@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.10.3',
+    date: '2026-02-13',
+    title: 'Softer CTA Buttons in Dark Mode',
+    description: 'Reduced brightness of primary CTA buttons in dark mode for a less harsh appearance against the dark background.',
+    changes: [
+      'Added --accent-cta CSS variable that darkens the accent by 15% in dark mode',
+      'Applied to all primary CTA buttons across homepage, CV, contact, projects, and content dialogs',
+      'Light mode CTA buttons remain unchanged',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/darker-cta-dark-mode',
+  },
+  {
     version: '1.10.2',
     date: '2026-02-12',
     title: 'Experience Dialog Two-Column Layout & Inline Case Studies',
