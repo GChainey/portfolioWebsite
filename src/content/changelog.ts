@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.10.4',
+    date: '2026-02-13',
+    title: 'Subtler Chat Bubbles',
+    description: 'Chat message backgrounds now use a color-mix approach for a subtler appearance in both light and dark mode.',
+    changes: [
+      'Replaced flat bg-border with color-mix(foreground 5%, background) for assistant messages',
+      'Dark mode: barely lifted off the dark surface instead of noticeable grey',
+      'Light mode: near-white instead of wireframe grey',
+      'Applied to welcome message, conversation bubbles, and loading state',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/chat-dark-msg-color',
+  },
+  {
     version: '1.10.3',
     date: '2026-02-13',
     title: 'Softer CTA Buttons in Dark Mode',
