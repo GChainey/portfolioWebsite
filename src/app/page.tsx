@@ -6,24 +6,16 @@ import Link from 'next/link'
 import { X, ArrowRight } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
-import { Facehash, stringHash } from 'facehash'
+import { Facehash } from 'facehash'
 import { GitHubContributions } from '@/components/GitHubContributions'
 import { ThinkerCard } from '@/components/ThinkerCard'
+import { TestimonialCarousel } from '@/components/TestimonialCarousel'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import { thinkers } from '@/content/thinkers'
 import { ParticleField } from '@/components/ParticleField'
 import { Magnetic } from '@/components/Magnetic'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-
-// All 16 theme accent colors — color-mix with background adapts to light/dark
-const THEME_ACCENT_COLORS = [
-  '#d97706', '#ea580c', '#dc2626', '#e11d48', '#db2777', '#c026d3',
-  '#9333ea', '#7c3aed', '#4f46e5', '#2563eb', '#0891b2', '#0d9488',
-  '#059669', '#16a34a', '#65a30d', '#ca8a04',
-]
-function getAvatarColor(name: string): string {
-  return THEME_ACCENT_COLORS[stringHash(name) % THEME_ACCENT_COLORS.length]
-}
+import { ExperienceDialog } from '@/components/ExperienceDialog'
 
 // Typewriter sequence: target text + pause after reaching it (ms)
 const TYPING_STEPS = [
@@ -140,18 +132,21 @@ function BentoCardVisual({ icon }: { icon?: string }) {
 // Experience data
 const EXPERIENCE = [
   {
+    id: 'enterpriseai',
     company: 'Enterprise AI Group',
     role: 'Product Designer',
     period: '2024 – Present',
     description: 'Building AI-powered enterprise solutions. One-person product team delivering prototypes that win deals.',
   },
   {
+    id: 'seek',
     company: 'SEEK',
     role: 'Senior Product Designer',
     period: '2021 – 2024',
     description: 'Led discovery and design for candidate-facing products. Built AI resume tools and skills-based course finders.',
   },
   {
+    id: 'bestpractice',
     company: 'Best Practice Software',
     role: 'UX Designer',
     period: '2018 – 2021',
@@ -201,6 +196,8 @@ export default function Home() {
   const [showTooltip, setShowTooltip] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
   const [chatMounted, setChatMounted] = useState(false)
+  const [experienceDialogOpen, setExperienceDialogOpen] = useState(false)
+  const [selectedCompanyId, setSelectedCompanyId] = useState('enterpriseai')
   const { flags } = useFeatureFlags()
 
   // Track client-side mount to prevent hydration issues with animations
@@ -428,7 +425,15 @@ export default function Home() {
                 viewport={{ once: true, margin: '-80px' }}
                 transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
               >
-                <p className="text-xs text-muted uppercase tracking-widest mb-6">Experience</p>
+                <div className="flex items-center justify-between mb-6">
+                  <p className="text-xs text-muted uppercase tracking-widest">Experience</p>
+                  <button
+                    onClick={() => { setSelectedCompanyId('enterpriseai'); setExperienceDialogOpen(true) }}
+                    className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1"
+                  >
+                    View <ArrowRight className="w-3 h-3" />
+                  </button>
+                </div>
                 <div className="relative">
                   {/* Timeline line */}
                   <div className="absolute left-[7px] top-2 bottom-2 w-[2px] bg-border" />
@@ -437,18 +442,19 @@ export default function Home() {
                     {EXPERIENCE.map((exp, index) => (
                       <motion.div
                         key={exp.company}
-                        className="flex gap-6 relative"
+                        className="flex gap-6 relative cursor-pointer group"
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: index * 0.12 }}
+                        onClick={() => { setSelectedCompanyId(exp.id); setExperienceDialogOpen(true) }}
                       >
                         {/* Timeline dot */}
                         <div className="flex-shrink-0 w-4 h-4 rounded-full bg-foreground border-4 border-background z-10 mt-1" />
 
                         <div className="flex-1 pb-2">
                           <div className="flex items-baseline gap-3 mb-1">
-                            <h3 className="font-medium text-foreground">{exp.company}</h3>
+                            <h3 className="font-medium text-foreground group-hover:text-accent transition-colors">{exp.company}</h3>
                             <span className="text-xs text-muted">{exp.period}</span>
                           </div>
                           <p className="text-sm text-muted mb-2">{exp.role}</p>
@@ -460,6 +466,12 @@ export default function Home() {
                 </div>
               </motion.div>
             </section>
+
+            <ExperienceDialog
+              isOpen={experienceDialogOpen}
+              onClose={() => setExperienceDialogOpen(false)}
+              initialCompanyId={selectedCompanyId}
+            />
 
             {/* Product Thinkers section */}
             <section className="border-b border-border">
@@ -501,42 +513,7 @@ export default function Home() {
                   <p className="text-xs text-muted uppercase tracking-widest">Kind words from colleagues</p>
                 </div>
 
-                {/* Horizontal carousel - 2 visible at a time */}
-                <div className="overflow-x-auto scrollbar-hide scroll-smooth" style={{ scrollSnapType: 'x mandatory' }}>
-                  <div className="flex" style={{ width: `${TESTIMONIALS.length * 50}%` }}>
-                    {TESTIMONIALS.map((testimonial, index) => (
-                      <motion.div
-                        key={testimonial.name}
-                        className={`flex-shrink-0 p-5 ${index === 0 ? 'pl-8' : ''} ${index < TESTIMONIALS.length - 1 ? 'border-r border-border' : ''}`}
-                        style={{ width: `${100 / TESTIMONIALS.length}%`, scrollSnapAlign: 'start' }}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: index * 0.08 }}
-                      >
-                        <div className="flex items-center gap-3 mb-3">
-                          <Facehash
-                            name={testimonial.name}
-                            size={40}
-                            showInitial
-                            enableBlink
-                            interactive={false}
-                            intensity3d="subtle"
-                            style={{
-                              backgroundColor: `color-mix(in srgb, ${getAvatarColor(testimonial.name)} 60%, var(--background))`,
-                              borderRadius: '9999px',
-                            }}
-                          />
-                          <div className="min-w-0">
-                            <p className="font-medium text-foreground text-sm">{testimonial.name}</p>
-                            <p className="text-xs text-muted">{testimonial.role} · {testimonial.company}</p>
-                          </div>
-                        </div>
-                        <p className="text-sm text-muted leading-relaxed">{testimonial.content}</p>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
+                <TestimonialCarousel testimonials={TESTIMONIALS} />
               </motion.div>
             </section>
 

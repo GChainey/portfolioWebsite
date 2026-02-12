@@ -14,7 +14,7 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: '1.9.0',
+    version: '1.10.0',
     date: '2026-02-12',
     title: 'Facehash Chat Avatars',
     description: 'Added deterministic facehash avatars to the GarethLLM chat. Gareth gets a consistent avatar, and visitors get their own unique face after telling GarethLLM their name.',
@@ -29,6 +29,63 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
     aiTools: ['Claude Code'],
     branch: 'GChainey/facehash-chat-avatars',
+  },
+  {
+    version: '1.9.0',
+    date: '2026-02-12',
+    title: 'Experience Dialog Carousel',
+    description: 'Clickable company names in the Experience section now open a dialog carousel showing company synopsis, key achievements, and related case study links.',
+    changes: [
+      'New ExperienceDialog component with carousel navigation between companies',
+      'Company names in Experience section are now clickable on both homepage and CV page',
+      'View button opens dialog starting at most recent company (EnterpriseAI)',
+      'Arrow keys and tab navigation to browse between companies',
+      'Added placeholder case studies for Daisy Assist, Daisy Assess, SEEK, and Best Practice',
+      'Projects linked to companies via companyId field',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/experience-case-studies',
+  },
+  {
+    version: '1.8.4',
+    date: '2026-02-12',
+    title: 'Testimonial Carousel Scroll Indicators',
+    description: 'Added dot indicators and arrow navigation to the testimonial carousel for clearer scroll affordance.',
+    changes: [
+      'Added dot pagination indicators below testimonial cards',
+      'Added left/right chevron arrow buttons for navigation',
+      'Left arrow hidden when at the start, right arrow hidden at the end',
+      'Extracted shared TestimonialCarousel component used on both home and CV pages',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/scroll-indicators',
+  },
+  {
+    version: '1.8.3',
+    date: '2026-02-12',
+    title: 'GarethLLM Open by Default on All Pages',
+    description: 'Chat sidebar now opens immediately on all pages except homepage, which keeps its animation delay.',
+    changes: [
+      'Thinkers page: chat opens by default instead of after 1.5s delay',
+      'Project pages: chat opens by default instead of waiting for useEffect',
+      'Mobile: chat still stays closed on small screens',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/chat-open-all-pages',
+  },
+  {
+    version: '1.8.2',
+    date: '2026-02-12',
+    title: 'Intercom-style Chat Input & Bubbles',
+    description: 'Redesigned chat input and message bubbles to match Intercom/Fin style.',
+    changes: [
+      'Combined input field and send button into a single bordered container',
+      'Replaced "Send" text button with a circular ArrowUp icon button',
+      'Switched to multiline textarea with auto-resize (Enter to send, Shift+Enter for new line)',
+      'Increased chat bubble border radius to match Fin-style rounded bubbles with tail corners',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/chat-input-redesign',
   },
   {
     version: '1.8.1',

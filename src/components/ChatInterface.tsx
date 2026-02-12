@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, ArrowUp } from 'lucide-react'
 import { ContentDialog } from './ContentDialog'
 import { ShimmeringText } from './ui/shimmering-text'
 import { projects } from '@/content/projects'
@@ -141,6 +141,7 @@ export function ChatInterface({ pageContext = DEFAULT_CONTEXT }: ChatInterfacePr
   const [userName, setUserName] = useState<string | null>(null)
   const [welcomeText, setWelcomeText] = useState('')
   const messagesContainerRef = useRef<HTMLDivElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   // Load user name from localStorage on mount
   useEffect(() => {
@@ -183,6 +184,7 @@ Focus answers on this context when relevant, but can reference other experience 
     const userMessage: Message = { role: 'user', content }
     setMessages(prev => [...prev, userMessage])
     setInput('')
+    if (textareaRef.current) textareaRef.current.style.height = 'auto'
     setIsLoading(true)
     setShowFollowUps(false)
 
@@ -224,6 +226,21 @@ Focus answers on this context when relevant, but can reference other experience 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     sendMessage(input)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      sendMessage(input)
+    }
+  }
+
+  const resizeTextarea = () => {
+    const textarea = textareaRef.current
+    if (textarea) {
+      textarea.style.height = 'auto'
+      textarea.style.height = `${Math.min(textarea.scrollHeight, 120)}px`
+    }
   }
 
   return (
@@ -276,10 +293,10 @@ Focus answers on this context when relevant, but can reference other experience 
               className={`flex gap-2 items-start ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-[85%] p-3 text-sm ${
+                className={`max-w-[85%] px-4 py-3 text-sm ${
                   msg.role === 'user'
-                    ? 'bg-foreground text-background rounded-tl-lg rounded-tr-lg rounded-bl-lg'
-                    : 'bg-border text-foreground rounded-tl-lg rounded-tr-lg rounded-br-lg'
+                    ? 'bg-foreground text-background rounded-t-2xl rounded-bl-2xl rounded-br-md'
+                    : 'bg-border text-foreground rounded-t-2xl rounded-br-2xl rounded-bl-md'
                 }`}
               >
                 {msg.role === 'assistant' ? <MessageContent content={msg.content} /> : msg.content}
@@ -302,7 +319,7 @@ Focus answers on this context when relevant, but can reference other experience 
             animate={{ opacity: 1 }}
             className="flex justify-start"
           >
-            <div className="max-w-[85%] p-3 text-sm bg-border text-foreground rounded-tl-lg rounded-tr-lg rounded-br-lg">
+            <div className="max-w-[85%] px-4 py-3 text-sm bg-border text-foreground rounded-t-2xl rounded-br-2xl rounded-bl-md">
               <ShimmeringText
                 text="Thinking..."
                 duration={1.5}
@@ -341,20 +358,22 @@ Focus answers on this context when relevant, but can reference other experience 
 
       {/* Input */}
       <form onSubmit={handleSubmit} className="p-4 flex-shrink-0">
-        <div className="flex gap-2">
-          <input
-            type="text"
+        <div className="flex items-end gap-2 border border-border rounded-xl px-3 py-2 focus-within:ring-1 focus-within:ring-ring transition-colors">
+          <textarea
+            ref={textareaRef}
             value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your question..."
-            className="flex-1 bg-transparent border border-border rounded px-3 py-2 text-sm text-foreground placeholder:text-muted focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring transition-colors"
+            onChange={(e) => { setInput(e.target.value); resizeTextarea() }}
+            onKeyDown={handleKeyDown}
+            placeholder="Ask Gareth a question"
+            rows={1}
+            className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted focus-visible:outline-none resize-none leading-[1.75rem]"
           />
           <button
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="px-4 py-2 text-sm font-medium rounded transition-all disabled:bg-neutral-200 disabled:text-neutral-400 disabled:dark:bg-neutral-700 disabled:dark:text-neutral-500 bg-black text-white dark:bg-white dark:text-black hover:opacity-90"
+            className="flex-shrink-0 w-7 h-7 mb-px flex items-center justify-center rounded-full transition-all disabled:opacity-30 bg-foreground text-background"
           >
-            Send
+            <ArrowUp className="w-4 h-4" />
           </button>
         </div>
       </form>
