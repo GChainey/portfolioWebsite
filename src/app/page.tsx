@@ -8,6 +8,7 @@ import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
 import { GitHubContributions } from '@/components/GitHubContributions'
 import { ThinkerCard } from '@/components/ThinkerCard'
+import { TestimonialCarousel } from '@/components/TestimonialCarousel'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import { thinkers } from '@/content/thinkers'
 import { ParticleField } from '@/components/ParticleField'
@@ -231,19 +232,13 @@ export default function Home() {
       current = target
       time += step.pause
     }
-    // Done typing, show tooltip after 1s
+    // Done typing, show tooltip after 1s, then open chat
     timeouts.push(setTimeout(() => setTypingDone(true), time))
     timeouts.push(setTimeout(() => setShowTooltip(true), time + 1000))
+    timeouts.push(setTimeout(() => setChatMounted(true), time + 1000))
+    timeouts.push(setTimeout(() => setChatOpen(true), time + 1500))
 
     return () => timeouts.forEach(clearTimeout)
-  }, [])
-
-  // Mount chat but don't auto-open on homepage
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setChatMounted(true)
-    }, 1500)
-    return () => clearTimeout(timer)
   }, [])
 
 
@@ -517,33 +512,7 @@ export default function Home() {
                   <p className="text-xs text-muted uppercase tracking-widest">Kind words from colleagues</p>
                 </div>
 
-                {/* Horizontal carousel - 2 visible at a time */}
-                <div className="overflow-x-auto scrollbar-hide scroll-smooth" style={{ scrollSnapType: 'x mandatory' }}>
-                  <div className="flex" style={{ width: `${TESTIMONIALS.length * 50}%` }}>
-                    {TESTIMONIALS.map((testimonial, index) => (
-                      <motion.div
-                        key={testimonial.name}
-                        className={`flex-shrink-0 p-5 ${index === 0 ? 'pl-8' : ''} ${index < TESTIMONIALS.length - 1 ? 'border-r border-border' : ''}`}
-                        style={{ width: `${100 / TESTIMONIALS.length}%`, scrollSnapAlign: 'start' }}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: index * 0.08 }}
-                      >
-                        <div className="flex items-center gap-3 mb-3">
-                          <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center text-foreground font-medium text-sm flex-shrink-0">
-                            {testimonial.name.split(' ').map(n => n[0]).join('')}
-                          </div>
-                          <div className="min-w-0">
-                            <p className="font-medium text-foreground text-sm">{testimonial.name}</p>
-                            <p className="text-xs text-muted">{testimonial.role} · {testimonial.company}</p>
-                          </div>
-                        </div>
-                        <p className="text-sm text-muted leading-relaxed">{testimonial.content}</p>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
+                <TestimonialCarousel testimonials={TESTIMONIALS} />
               </motion.div>
             </section>
 

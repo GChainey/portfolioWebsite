@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, X, Download, ArrowRight } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
+import { TestimonialCarousel } from '@/components/TestimonialCarousel'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import { cvData } from '@/content/cv'
 import { VennSkills } from '@/components/VennSkills'
@@ -177,31 +178,7 @@ export default function CVPage() {
                   <p className="text-xs text-muted uppercase tracking-widest">Kind words from colleagues</p>
                 </div>
 
-                <div className="overflow-x-auto scrollbar-hide scroll-smooth" style={{ scrollSnapType: 'x mandatory' }}>
-                  <div className="flex" style={{ width: `${cvData.testimonials.length * 50}%` }}>
-                    {cvData.testimonials.map((testimonial, index) => (
-                      <motion.div
-                        key={testimonial.name}
-                        className={`flex-shrink-0 p-5 ${index === 0 ? 'pl-8' : ''} ${index < cvData.testimonials.length - 1 ? 'border-r border-border' : ''}`}
-                        style={{ width: `${100 / cvData.testimonials.length}%`, scrollSnapAlign: 'start' }}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.65 + index * 0.1 }}
-                      >
-                        <div className="flex items-center gap-3 mb-3">
-                          <div className="w-10 h-10 rounded-full bg-border flex items-center justify-center text-foreground font-medium text-sm flex-shrink-0">
-                            {testimonial.name.split(' ').map(n => n[0]).join('')}
-                          </div>
-                          <div className="min-w-0">
-                            <p className="font-medium text-foreground text-sm">{testimonial.name}</p>
-                            <p className="text-xs text-muted">{testimonial.role} · {testimonial.company}</p>
-                          </div>
-                        </div>
-                        <p className="text-sm text-muted leading-relaxed">{testimonial.content}</p>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
+                <TestimonialCarousel testimonials={cvData.testimonials} animationDelay={0.65} />
               </motion.div>
             </section>
 
