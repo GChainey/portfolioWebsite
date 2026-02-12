@@ -14,6 +14,28 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.9.1',
+    date: '2026-02-12',
+    title: 'Experience Dialog Two-Column Layout & Inline Case Studies',
+    description: 'Restructured the experience dialog to a two-column layout with full-height chat, and replaced project card links with inline scrollable case study sections.',
+    changes: [
+      'Changed dialog from stacked (header/content/footer) to two-column layout',
+      'Column 1 contains header tabs and scrollable content',
+      'Column 2 (GarethLLM chat) now spans the full height of the dialog',
+      'Moved close button into the chat panel header',
+      'Removed redundant footer navigation since tab group already handles company switching',
+      'Replaced project card grid with inline case study sections per project',
+      'Each case study has title, description, hero image, detail screenshots, and workflow placeholders',
+      'Added View full case study links for each project',
+      'Dialog background slightly lighter than base layer for elevated surface feel',
+      'Added "Work Experience" title to dialog header',
+      'Company tabs now sticky at top of scrollable content',
+      'Removed separator from GarethLLM chat header',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/experience-dialog-layout',
+  },
+  {
     version: '1.9.0',
     date: '2026-02-12',
     title: 'Experience Dialog Carousel',
