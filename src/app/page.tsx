@@ -225,19 +225,13 @@ export default function Home() {
       current = target
       time += step.pause
     }
-    // Done typing, show tooltip after 1s
+    // Done typing, show tooltip after 1s, then open chat
     timeouts.push(setTimeout(() => setTypingDone(true), time))
     timeouts.push(setTimeout(() => setShowTooltip(true), time + 1000))
+    timeouts.push(setTimeout(() => setChatMounted(true), time + 1000))
+    timeouts.push(setTimeout(() => setChatOpen(true), time + 1500))
 
     return () => timeouts.forEach(clearTimeout)
-  }, [])
-
-  // Mount chat but don't auto-open on homepage
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setChatMounted(true)
-    }, 1500)
-    return () => clearTimeout(timer)
   }, [])
 
 

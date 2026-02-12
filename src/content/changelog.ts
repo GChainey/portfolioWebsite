@@ -14,6 +14,18 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.8.1',
+    date: '2026-02-12',
+    title: 'Auto-open GarethLLM Chat',
+    description: 'GarethLLM chat sidebar now automatically opens after the hero typewriter animation and tooltip complete.',
+    changes: [
+      'Chat opens automatically after Product Orchestrator animation sequence finishes',
+      'Removed separate chat mount timer in favor of sequenced timing tied to animation completion',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/auto-open-chat',
+  },
+  {
     version: '1.8.0',
     date: '2026-02-08',
     title: 'Article Table of Contents',
