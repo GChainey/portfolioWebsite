@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.11.0',
+    date: '2026-02-13',
+    title: 'Live GitHub Contribution Count',
+    description: 'Contribution count now syncs live from the GitHub GraphQL API while the heatmap keeps its narrative arc.',
+    changes: [
+      'Contribution count fetches live total (public + private) from GitHub API',
+      'Changed label from "commits" to "contributions" to match GitHub terminology',
+      'Removed duplicate CONTRIBUTION_MONTHS from project detail page, uses shared component',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/live-github-commits',
+  },
+  {
     version: '1.10.1',
     date: '2026-02-13',
     title: 'LinkedIn Links on Testimonials',
