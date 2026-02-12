@@ -14,7 +14,7 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: '1.8.3',
+    version: '1.8.4',
     date: '2026-02-12',
     title: 'Testimonial Carousel Scroll Indicators',
     description: 'Added dot indicators and arrow navigation to the testimonial carousel for clearer scroll affordance.',
@@ -26,6 +26,19 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
     aiTools: ['Claude Code'],
     branch: 'GChainey/scroll-indicators',
+  },
+  {
+    version: '1.8.3',
+    date: '2026-02-12',
+    title: 'GarethLLM Open by Default on All Pages',
+    description: 'Chat sidebar now opens immediately on all pages except homepage, which keeps its animation delay.',
+    changes: [
+      'Thinkers page: chat opens by default instead of after 1.5s delay',
+      'Project pages: chat opens by default instead of waiting for useEffect',
+      'Mobile: chat still stays closed on small screens',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/chat-open-all-pages',
   },
   {
     version: '1.8.2',
