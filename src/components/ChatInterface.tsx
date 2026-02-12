@@ -7,6 +7,9 @@ import { ArrowRight } from 'lucide-react'
 import { ContentDialog } from './ContentDialog'
 import { ShimmeringText } from './ui/shimmering-text'
 import { projects } from '@/content/projects'
+import { Facehash } from 'facehash'
+
+const AVATAR_COLORS = ['#1a3040', '#1d5c52', '#6b5a2a', '#7a4a2a', '#6b3530']
 
 // Project card component for inline chat responses
 function ProjectCard({ projectId }: { projectId: string }) {
@@ -27,10 +30,16 @@ function ProjectCard({ projectId }: { projectId: string }) {
   )
 }
 
+// Strip [[name:X]] tags from content
+function stripNameTag(content: string): string {
+  return content.replace(/\s*\[\[name:[^\]]+\]\]\s*/g, '').trim()
+}
+
 // Parse message content and render project cards
 function MessageContent({ content }: { content: string }) {
+  const cleaned = stripNameTag(content)
   // Match [[project:id]] pattern
-  const parts = content.split(/(\[\[project:[^\]]+\]\])/g)
+  const parts = cleaned.split(/(\[\[project:[^\]]+\]\])/g)
 
   return (
     <>
@@ -43,6 +52,12 @@ function MessageContent({ content }: { content: string }) {
       })}
     </>
   )
+}
+
+// Extract name from [[name:X]] tag in LLM response
+function extractName(content: string): string | null {
+  const match = content.match(/\[\[name:([^\]]+)\]\]/)
+  return match ? match[1].trim() : null
 }
 
 interface Message {
@@ -123,10 +138,28 @@ export function ChatInterface({ pageContext = DEFAULT_CONTEXT }: ChatInterfacePr
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [showFollowUps, setShowFollowUps] = useState(false)
+  const [userName, setUserName] = useState<string | null>(null)
+  const [welcomeText, setWelcomeText] = useState('')
   const messagesContainerRef = useRef<HTMLDivElement>(null)
 
-  // Build context with page-specific info
+  // Load user name from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem('chat-user-name')
+    if (stored) {
+      setUserName(stored)
+      setWelcomeText(`Hey ${stored}! What would you like to know?`)
+    } else {
+      setWelcomeText("Hey! I'm GarethLLM — Gareth's AI stand-in. What's your name?")
+    }
+  }, [])
+
+  // Build context with page-specific info and name extraction
   const fullContext = `${BASE_CONTEXT}
+
+VISITOR NAME: ${userName ? `The visitor's name is ${userName}. Use their name occasionally.` : "You don't know the visitor's name yet. Your greeting already asked for it — if they tell you, greet them warmly."}
+
+NAME EXTRACTION:
+If the visitor tells you their name at any point, include [[name:TheirName]] at the very end of your response. This tag is parsed and hidden from display. Only include it the FIRST time you learn their name. Example: "Nice to meet you, Sarah! What would you like to know? [[name:Sarah]]"
 
 CURRENT PAGE CONTEXT:
 The user is viewing: ${pageContext.page}
@@ -166,6 +199,15 @@ Focus answers on this context when relevant, but can reference other experience 
       if (!response.ok) throw new Error('Failed to get response')
 
       const data = await response.json()
+
+      // Extract name if present in response
+      const detectedName = extractName(data.content)
+      if (detectedName && !userName) {
+        setUserName(detectedName)
+        localStorage.setItem('chat-user-name', detectedName)
+      }
+
+      // Store clean content (name tag stripped in MessageContent rendering)
       setMessages(prev => [...prev, { role: 'assistant', content: data.content }])
       setShowFollowUps(true)
     } catch (error) {
@@ -186,12 +228,28 @@ Focus answers on this context when relevant, but can reference other experience 
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
-      <div className="p-4 border-b border-border flex-shrink-0">
+      <div className="p-4 border-b border-border flex-shrink-0 flex items-center gap-3">
+        <Facehash name="Gareth Chainey" size={28} showInitial enableBlink interactive={false} intensity3d="subtle" style={{ backgroundColor: 'color-mix(in srgb, var(--accent) 60%, var(--background))', borderRadius: '6px' }} />
         <h3 className="font-medium text-foreground">GarethLLM<sup className="text-xs text-muted ml-0.5">™</sup></h3>
       </div>
 
       {/* Messages */}
       <div ref={messagesContainerRef} className="flex-1 min-h-0 overflow-y-auto chat-scroll p-4 space-y-4">
+
+        {/* Welcome message from GarethLLM */}
+        {welcomeText && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex justify-start"
+          >
+            <div className="max-w-[85%] p-3 text-sm bg-border text-foreground rounded-tl-lg rounded-tr-lg rounded-br-lg">
+              {welcomeText}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Suggested questions */}
         {messages.length === 0 && (
           <div className="space-y-2">
             {pageContext.suggestedQuestions.map((q, i) => (
@@ -215,7 +273,7 @@ Focus answers on this context when relevant, but can reference other experience 
               key={i}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              className={`flex gap-2 items-start ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
                 className={`max-w-[85%] p-3 text-sm ${
@@ -226,15 +284,23 @@ Focus answers on this context when relevant, but can reference other experience 
               >
                 {msg.role === 'assistant' ? <MessageContent content={msg.content} /> : msg.content}
               </div>
+
+              {/* User avatar (once name is known) */}
+              {msg.role === 'user' && userName && (
+                <div className="flex-shrink-0 pt-0.5">
+                  <Facehash name={userName} size={40} showInitial enableBlink interactive={false} intensity3d="subtle" colors={AVATAR_COLORS} style={{ borderRadius: '6px' }} />
+                </div>
+              )}
             </motion.div>
           ))}
         </AnimatePresence>
 
+        {/* Loading state */}
         {isLoading && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="p-3"
+            className="flex justify-start"
           >
             <div className="max-w-[85%] p-3 text-sm bg-border text-foreground rounded-tl-lg rounded-tr-lg rounded-br-lg">
               <ShimmeringText

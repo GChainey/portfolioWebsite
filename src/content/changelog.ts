@@ -14,6 +14,23 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.9.0',
+    date: '2026-02-12',
+    title: 'Facehash Chat Avatars',
+    description: 'Added deterministic facehash avatars to the GarethLLM chat. Gareth gets a consistent avatar, and visitors get their own unique face after telling GarethLLM their name.',
+    changes: [
+      'Integrated facehash package for deterministic avatar generation from names',
+      'Gareth avatar (with blinking eyes) shown on all assistant messages and loading state',
+      'GarethLLM welcome message asks visitors for their name',
+      'Name extraction via [[name:X]] tag parsed from LLM responses',
+      'Visitor name persisted in localStorage — returning visitors get greeted by name',
+      'Visitor facehash avatar appears on their messages once name is known',
+      'All existing suggested and follow-up questions preserved',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/facehash-chat-avatars',
+  },
+  {
     version: '1.8.1',
     date: '2026-02-12',
     title: 'Auto-open GarethLLM Chat',
