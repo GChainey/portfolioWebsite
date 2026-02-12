@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.8.2',
+    date: '2026-02-12',
+    title: 'Intercom-style Chat Input & Bubbles',
+    description: 'Redesigned chat input and message bubbles to match Intercom/Fin style.',
+    changes: [
+      'Combined input field and send button into a single bordered container',
+      'Replaced "Send" text button with a circular ArrowUp icon button',
+      'Switched to multiline textarea with auto-resize (Enter to send, Shift+Enter for new line)',
+      'Increased chat bubble border radius to match Fin-style rounded bubbles with tail corners',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/chat-input-redesign',
+  },
+  {
     version: '1.8.1',
     date: '2026-02-12',
     title: 'Auto-open GarethLLM Chat',
