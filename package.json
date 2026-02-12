@@ -28,6 +28,11 @@
     "tailwindcss-animate": "^1.0.7",
     "use-stick-to-bottom": "^1.1.1"
   },
+  "overrides": {
+    "facehash": {
+      "next": "$next"
+    }
+  },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
