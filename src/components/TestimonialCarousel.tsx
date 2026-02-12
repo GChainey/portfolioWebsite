@@ -47,7 +47,12 @@ export function TestimonialCarousel({ testimonials, animationDelay = 0 }: Testim
     if (!el) return
     updateScrollState()
     el.addEventListener('scroll', updateScrollState, { passive: true })
-    return () => el.removeEventListener('scroll', updateScrollState)
+    const ro = new ResizeObserver(updateScrollState)
+    ro.observe(el)
+    return () => {
+      el.removeEventListener('scroll', updateScrollState)
+      ro.disconnect()
+    }
   }, [updateScrollState])
 
   const scrollTo = (direction: 'left' | 'right') => {
@@ -98,25 +103,25 @@ export function TestimonialCarousel({ testimonials, animationDelay = 0 }: Testim
       </div>
 
       {/* Navigation: arrows + dots */}
-      <div className="flex items-center justify-between px-8 py-3 border-t border-border">
+      <div className="flex items-center justify-center gap-2 py-2 border-t border-border">
         <button
           onClick={() => scrollTo('left')}
           disabled={!canScrollLeft}
-          className={`p-1 rounded transition-colors ${canScrollLeft ? 'text-muted hover:text-foreground' : 'invisible'}`}
+          className={`rounded transition-colors ${canScrollLeft ? 'text-muted hover:text-foreground' : 'invisible'}`}
           aria-label="Previous testimonial"
         >
-          <ChevronLeft className="w-4 h-4" />
+          <ChevronLeft className="w-3.5 h-3.5" />
         </button>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1">
           {Array.from({ length: totalDots }).map((_, i) => (
             <button
               key={i}
               onClick={() => scrollToDot(i)}
               className={`rounded-full transition-all ${
                 i === activeIndex
-                  ? 'w-2 h-2 bg-foreground'
-                  : 'w-1.5 h-1.5 bg-muted hover:bg-foreground/50'
+                  ? 'w-1.5 h-1.5 bg-foreground'
+                  : 'w-1 h-1 bg-muted hover:bg-foreground/50'
               }`}
               aria-label={`Go to testimonial ${i + 1}`}
             />
@@ -126,10 +131,10 @@ export function TestimonialCarousel({ testimonials, animationDelay = 0 }: Testim
         <button
           onClick={() => scrollTo('right')}
           disabled={!canScrollRight}
-          className={`p-1 rounded transition-colors ${canScrollRight ? 'text-muted hover:text-foreground' : 'invisible'}`}
+          className={`rounded transition-colors ${canScrollRight ? 'text-muted hover:text-foreground' : 'invisible'}`}
           aria-label="Next testimonial"
         >
-          <ChevronRight className="w-4 h-4" />
+          <ChevronRight className="w-3.5 h-3.5" />
         </button>
       </div>
     </div>
