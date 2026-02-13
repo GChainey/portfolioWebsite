@@ -23,7 +23,6 @@ interface ThinkerCardProps {
 export function ThinkerCard({ thinker, index = 0 }: ThinkerCardProps) {
   return (
     <motion.div
-      className="group"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
@@ -42,7 +41,7 @@ export function ThinkerCard({ thinker, index = 0 }: ThinkerCardProps) {
           }}
         />
         <div className="min-w-0">
-          <h3 className="font-medium text-foreground group-hover:text-accent transition-colors text-sm">
+          <h3 className="font-medium text-foreground text-sm">
             {thinker.name}
           </h3>
           <p className="text-xs text-muted">{thinker.role}</p>
