@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server'
 
+interface CachedData {
+  totalContributions: number
+  fetchedAt: string
+}
+
 // In-memory cache
-let cachedData: { totalContributions: number; fetchedAt: string } | null = null
+let cachedData: CachedData | null = null
 let cacheTimestamp = 0
 const CACHE_TTL = 60 * 60 * 1000 // 1 hour
 

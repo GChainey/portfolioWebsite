@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { ExternalLink } from 'lucide-react'
 import { AnimatedCounter } from './AnimatedCounter'
 
-// Contribution data showing transformation - shared across the site
+// Narrative heatmap: transformation from minimal (early 2024) to very active (2025)
 export const CONTRIBUTION_MONTHS = [
   { label: 'Jan 2024', data: [0, 0, 0, 0, 0, 0, 0] },
   { label: 'Feb', data: [0, 0, 1, 0, 0, 0, 0] },
@@ -26,6 +26,11 @@ export const CONTRIBUTION_MONTHS = [
   { label: 'May', data: [4, 4, 3, 4, 4, 4, 4] },
   { label: 'Jun', data: [4, 4, 4, 4, 4, 3, 4] },
 ]
+
+// Fallback count from static data
+const fallbackTotal = CONTRIBUTION_MONTHS.slice(-12).reduce((total, month) =>
+  total + month.data.reduce((sum, level) => sum + level, 0), 0
+) * 4
 
 interface GitHubContributionsProps {
   variant?: 'full' | 'compact' | 'card'
@@ -78,13 +83,7 @@ export function GitHubContributions({
     )
   }
 
-  // Calculate total commits from last 12 months (static fallback)
-  // Each cell represents a day-of-week across ~4 weeks in a month
-  const totalCommits = CONTRIBUTION_MONTHS.slice(-12).reduce((total, month) =>
-    total + month.data.reduce((sum, level) => sum + level, 0), 0
-  ) * 4
-
-  // Fetch real commit count from GitHub API
+  // Full variant: fetch live count from GitHub API
   const [commitCount, setCommitCount] = useState<number | null>(null)
 
   useEffect(() => {
@@ -96,12 +95,12 @@ export function GitHubContributions({
       })
   }, [])
 
-  const displayCount = commitCount ?? totalCommits
+  const displayCount = commitCount ?? fallbackTotal
 
   // Full variant with labels and animation
   return (
     <div className="flex flex-col items-center">
-      {/* Commit count */}
+      {/* Contribution count - live from GitHub API */}
       {animate ? (
         <motion.a
           href="https://github.com/GChainey"
@@ -112,7 +111,7 @@ export function GitHubContributions({
           transition={{ delay: 0.6 }}
           className="inline-flex items-center gap-1.5 text-sm text-muted mb-3 hover:text-foreground transition-colors"
         >
-          <AnimatedCounter value={displayCount} className="text-foreground font-medium" duration={2} /> commits in the last 12 months
+          <AnimatedCounter value={displayCount} className="text-foreground font-medium" duration={2} /> contributions in the last 12 months
           <ExternalLink className="w-3 h-3" />
         </motion.a>
       ) : (
@@ -122,7 +121,7 @@ export function GitHubContributions({
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 text-sm text-muted mb-3 hover:text-foreground transition-colors"
         >
-          <span className="text-foreground font-medium">{displayCount.toLocaleString()}</span> commits in the last 12 months
+          <span className="text-foreground font-medium">{displayCount.toLocaleString()}</span> contributions in the last 12 months
           <ExternalLink className="w-3 h-3" />
         </a>
       )}
@@ -133,7 +132,7 @@ export function GitHubContributions({
         <span className="text-xs text-muted">2025</span>
       </div>
 
-      {/* Grid */}
+      {/* Narrative grid - shows journey from minimal to very active */}
       <div className="flex gap-[3px]">
         {CONTRIBUTION_MONTHS.map((month, mi) => (
           <div key={mi} className="flex flex-col gap-[3px]">
