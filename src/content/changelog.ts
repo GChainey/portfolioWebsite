@@ -14,6 +14,18 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.11.1',
+    date: '2026-02-13',
+    title: 'Remove Thinker Name Hover Effect',
+    description: 'Removed misleading hover styling from product thinker names since the cards are not clickable.',
+    changes: [
+      'Removed group-hover:text-accent from thinker name heading',
+      'Removed group class from ThinkerCard container',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/fix-thinker-hover',
+  },
+  {
     version: '1.11.0',
     date: '2026-02-13',
     title: 'Live GitHub Contribution Count',
