@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.12.0',
+    date: '2026-02-13',
+    title: 'Facehash Avatar Styling & Identity Notification',
+    description: 'Circular facehash avatars and a system notification when visitors receive their facehash identity.',
+    changes: [
+      'Made Gareth\'s chat header avatar circular to match facehash style',
+      'Made user chat avatars circular',
+      'Added system notification when a visitor\'s name is detected, telling them they\'ve been given a facehash identity',
+      'Small facehash preview shown inline with the identity notification',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/facehash-avatars',
+  },
+  {
     version: '1.11.1',
     date: '2026-02-13',
     title: 'Remove Thinker Name Hover Effect',

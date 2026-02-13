@@ -61,7 +61,7 @@ function extractName(content: string): string | null {
 }
 
 interface Message {
-  role: 'user' | 'assistant'
+  role: 'user' | 'assistant' | 'system'
   content: string
 }
 
@@ -211,7 +211,13 @@ Focus answers on this context when relevant, but can reference other experience 
       }
 
       // Store clean content (name tag stripped in MessageContent rendering)
-      setMessages(prev => [...prev, { role: 'assistant', content: data.content }])
+      setMessages(prev => [
+        ...prev,
+        { role: 'assistant', content: data.content },
+        ...(detectedName && !userName
+          ? [{ role: 'system' as const, content: `You've been given a facehash identity, ${detectedName}` }]
+          : []),
+      ])
       setShowFollowUps(true)
     } catch (error) {
       console.error('Chat error:', error)
@@ -248,7 +254,7 @@ Focus answers on this context when relevant, but can reference other experience 
     <div className="h-full flex flex-col overflow-hidden">
       {!hideHeader && (
         <div className="p-4 border-b border-border flex-shrink-0 flex items-center gap-3">
-          <Facehash name="Gareth Chainey" size={28} showInitial enableBlink interactive={false} intensity3d="subtle" style={{ backgroundColor: 'color-mix(in srgb, var(--accent) 60%, var(--background))', borderRadius: '6px' }} />
+          <Facehash name="GarethLLM" size={28} showInitial enableBlink interactive={false} intensity3d="subtle" style={{ backgroundColor: 'color-mix(in srgb, var(--accent) 60%, var(--background))', borderRadius: '9999px' }} />
           <h3 className="font-medium text-foreground">GarethLLM<sup className="text-xs text-muted ml-0.5">™</sup></h3>
         </div>
       )}
@@ -289,29 +295,45 @@ Focus answers on this context when relevant, but can reference other experience 
 
         <AnimatePresence>
           {messages.map((msg, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={`flex gap-2 items-start ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-            >
-              <div
-                className={`max-w-[85%] px-4 py-3 text-sm ${
-                  msg.role === 'user'
-                    ? 'bg-foreground text-background rounded-t-2xl rounded-bl-2xl rounded-br-md'
-                    : 'bg-[color-mix(in_srgb,var(--foreground)_5%,var(--background))] text-foreground rounded-t-2xl rounded-br-2xl rounded-bl-md'
-                }`}
+            msg.role === 'system' ? (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex justify-center"
               >
-                {msg.role === 'assistant' ? <MessageContent content={msg.content} /> : msg.content}
-              </div>
-
-              {/* User avatar (once name is known) */}
-              {msg.role === 'user' && userName && (
-                <div className="flex-shrink-0 pt-0.5">
-                  <Facehash name={userName} size={40} showInitial enableBlink interactive={false} intensity3d="subtle" colors={AVATAR_COLORS} style={{ borderRadius: '6px' }} />
+                <div className="flex items-center gap-2 px-3 py-1.5 text-xs text-muted">
+                  {userName && (
+                    <Facehash name={userName} size={20} showInitial enableBlink={false} interactive={false} intensity3d="subtle" colors={AVATAR_COLORS} style={{ borderRadius: '9999px' }} />
+                  )}
+                  <span>{msg.content}</span>
                 </div>
-              )}
-            </motion.div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`flex gap-2 items-start ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div
+                  className={`max-w-[85%] px-4 py-3 text-sm ${
+                    msg.role === 'user'
+                      ? 'bg-foreground text-background rounded-t-2xl rounded-bl-2xl rounded-br-md'
+                      : 'bg-[color-mix(in_srgb,var(--foreground)_5%,var(--background))] text-foreground rounded-t-2xl rounded-br-2xl rounded-bl-md'
+                  }`}
+                >
+                  {msg.role === 'assistant' ? <MessageContent content={msg.content} /> : msg.content}
+                </div>
+
+                {/* User avatar (once name is known) */}
+                {msg.role === 'user' && userName && (
+                  <div className="flex-shrink-0 pt-0.5">
+                    <Facehash name={userName} size={40} showInitial enableBlink interactive={false} intensity3d="subtle" colors={AVATAR_COLORS} style={{ borderRadius: '9999px' }} />
+                  </div>
+                )}
+              </motion.div>
+            )
           ))}
         </AnimatePresence>
 
