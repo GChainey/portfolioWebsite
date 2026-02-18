@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.13.0',
+    date: '2026-02-17',
+    title: 'Case / Visual Tab Toggle on Project Pages',
+    description: 'Added a tab group to project pages that lets visitors quickly switch between the full case study and a visual-only gallery of all media.',
+    changes: [
+      'Added Case/Visual tab toggle below the project header on pages with media content',
+      'Visual mode shows only images, videos, embeds, and GIFs with section headings for context',
+      'Tab only appears on projects that contain media blocks',
+      'Table of contents hidden in visual mode',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/case-study-visual-tabs',
+  },
+  {
     version: '1.12.0',
     date: '2026-02-13',
     title: 'Facehash Avatar Styling & Identity Notification',

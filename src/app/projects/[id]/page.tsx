@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { X, Clock, ArrowRight, RotateCcw } from 'lucide-react'
+import { X, Clock, ArrowRight, RotateCcw, LayoutGrid, FileText } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
 import { Facehash } from 'facehash'
@@ -12,7 +12,7 @@ import { CaseStudyContent } from '@/components/CaseStudyContent'
 import { TableOfContents } from '@/components/TableOfContents'
 import { FixedTableOfContents } from '@/components/FixedTableOfContents'
 import { ShimmeringText } from '@/components/ui/shimmering-text'
-import { getProjectById, projects, type Project } from '@/content/projects'
+import { getProjectById, projects, type Project, type ContentBlock } from '@/content/projects'
 import { GitHubContributions } from '@/components/GitHubContributions'
 
 // Calculate read time from content blocks
@@ -40,6 +40,81 @@ const TLDR_OPTIONS = [
   { id: 'engineer', label: "I'm an engineer", description: 'Tech stack, architecture' },
 ]
 
+function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
+  const mediaBlocks = blocks.filter(
+    (b): b is ContentBlock & { type: 'image' | 'gif' | 'video' | 'embed' } =>
+      b.type === 'image' || b.type === 'gif' || b.type === 'video' || b.type === 'embed'
+  )
+
+  // Find the heading that precedes each media block for context
+  function getHeadingForMedia(mediaIndex: number): string | null {
+    const originalIndex = blocks.indexOf(mediaBlocks[mediaIndex])
+    for (let i = originalIndex - 1; i >= 0; i--) {
+      if (blocks[i].type === 'heading') {
+        return (blocks[i] as { type: 'heading'; content: string }).content
+      }
+    }
+    return null
+  }
+
+  return (
+    <div className="space-y-8">
+      {mediaBlocks.map((block, index) => {
+        const heading = getHeadingForMedia(index)
+        const aspectRatio = block.aspectRatio || '16/9'
+
+        return (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.08 }}
+          >
+            {heading && (
+              <p className="text-xs text-muted uppercase tracking-widest mb-2">
+                {heading}
+              </p>
+            )}
+            <div
+              className="relative w-full bg-border/30 rounded-lg overflow-hidden"
+              style={{ aspectRatio }}
+            >
+              {block.type === 'video' ? (
+                <video
+                  src={block.src}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
+              ) : block.type === 'embed' ? (
+                <iframe
+                  src={block.src}
+                  className="w-full h-full border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <img
+                  src={block.src}
+                  alt={block.alt || ''}
+                  className="w-full h-full object-cover"
+                />
+              )}
+            </div>
+            {block.caption && (
+              <p className="mt-2 text-sm text-muted text-center">
+                {block.caption}
+              </p>
+            )}
+          </motion.div>
+        )
+      })}
+    </div>
+  )
+}
+
 export default function ProjectPage() {
   const params = useParams()
   const [project, setProject] = useState<Project | null>(null)
@@ -49,6 +124,7 @@ export default function ProjectPage() {
   const [tldrFocus, setTldrFocus] = useState('')
   const [tldrContent, setTldrContent] = useState<string | null>(null)
   const [tldrLoading, setTldrLoading] = useState(false)
+  const [viewMode, setViewMode] = useState<'case' | 'visual'>('case')
 
   useEffect(() => {
     if (params.id) {
@@ -229,32 +305,68 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
               </motion.div>
             </header>
 
+            {/* View Mode Tabs - only show if project has media */}
+            {project.content.some((b: ContentBlock) => b.type === 'image' || b.type === 'gif' || b.type === 'video' || b.type === 'embed') && (
+              <div className="flex justify-center py-4 border-b border-border">
+                <div className="flex bg-border/40 rounded-full p-0.5">
+                  <button
+                    onClick={() => setViewMode('case')}
+                    className={`flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-full transition-all ${
+                      viewMode === 'case'
+                        ? 'bg-foreground text-background font-medium'
+                        : 'text-muted hover:text-foreground'
+                    }`}
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    Case
+                  </button>
+                  <button
+                    onClick={() => setViewMode('visual')}
+                    className={`flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-full transition-all ${
+                      viewMode === 'visual'
+                        ? 'bg-foreground text-background font-medium'
+                        : 'text-muted hover:text-foreground'
+                    }`}
+                  >
+                    <LayoutGrid className="w-3.5 h-3.5" />
+                    Visual
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* Content */}
             <article className="p-8">
-              {/* Table of Contents - inline at top, becomes fixed when scrolled past */}
-              {!tldrContent && (
-                <div className="hidden lg:block" data-inline-toc>
-                  <TableOfContents blocks={project.content} />
-                </div>
-              )}
-
-              {tldrContent ? (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="max-w-2xl mx-auto"
-                >
-                  <div className="mb-6 px-4 py-3 bg-amber-100 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800/50 rounded-lg">
-                    <p className="text-sm text-amber-800 dark:text-amber-200">
-                      Showing TLDR version • <button onClick={() => setTldrContent(null)} className="underline hover:no-underline font-medium">View full article</button>
-                    </p>
-                  </div>
-                  <div className="prose prose-neutral dark:prose-invert">
-                    <p className="text-lg text-foreground leading-relaxed whitespace-pre-wrap">{tldrContent}</p>
-                  </div>
-                </motion.div>
+              {viewMode === 'visual' ? (
+                <VisualGallery blocks={project.content} />
               ) : (
-                <CaseStudyContent blocks={project.content} />
+                <>
+                  {/* Table of Contents - inline at top, becomes fixed when scrolled past */}
+                  {!tldrContent && (
+                    <div className="hidden lg:block" data-inline-toc>
+                      <TableOfContents blocks={project.content} />
+                    </div>
+                  )}
+
+                  {tldrContent ? (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="max-w-2xl mx-auto"
+                    >
+                      <div className="mb-6 px-4 py-3 bg-amber-100 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800/50 rounded-lg">
+                        <p className="text-sm text-amber-800 dark:text-amber-200">
+                          Showing TLDR version • <button onClick={() => setTldrContent(null)} className="underline hover:no-underline font-medium">View full article</button>
+                        </p>
+                      </div>
+                      <div className="prose prose-neutral dark:prose-invert">
+                        <p className="text-lg text-foreground leading-relaxed whitespace-pre-wrap">{tldrContent}</p>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <CaseStudyContent blocks={project.content} />
+                  )}
+                </>
               )}
             </article>
 
@@ -340,7 +452,7 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
       </div>
 
       {/* Fixed Table of Contents - rendered outside main to avoid overflow clipping */}
-      {!tldrContent && (
+      {!tldrContent && viewMode === 'case' && (
         <FixedTableOfContents blocks={project.content} />
       )}
 
