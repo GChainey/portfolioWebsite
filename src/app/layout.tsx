@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter, JetBrains_Mono } from 'next/font/google'
+import { Inter, JetBrains_Mono, Caveat } from 'next/font/google'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { FeatureFlagProvider } from '@/context/FeatureFlagContext'
 import { FeatureFlagDrawer } from '@/components/FeatureFlagDrawer'
@@ -15,6 +15,11 @@ const inter = Inter({
 const mono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
+})
+
+const caveat = Caveat({
+  subsets: ['latin'],
+  variable: '--font-signature',
 })
 
 export const metadata: Metadata = {
@@ -36,7 +41,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.variable} ${mono.variable} antialiased`}>
+      <body className={`${inter.variable} ${mono.variable} ${caveat.variable} antialiased`}>
         <ThemeProvider>
           <FeatureFlagProvider>
             <ScrollToTop />

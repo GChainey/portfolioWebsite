@@ -7,6 +7,7 @@ import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
 import { Facehash } from 'facehash'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
+import { Signature } from '@/components/Signature'
 
 const TOOLS = [
   {
@@ -202,14 +203,17 @@ export default function HowIWorkPage() {
             </section>
 
             {/* Footer */}
-            <footer className="p-8 flex items-center justify-between">
-              <p className="text-xs text-muted">&copy; 2025 Gareth Chainey</p>
-              <button
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="text-xs text-muted hover:text-foreground transition-colors"
-              >
-                &uarr; Back to top
-              </button>
+            <footer className="p-8">
+              <Signature className="mb-4" />
+              <div className="flex items-center justify-between">
+                <p className="text-xs text-muted">&copy; 2025 Gareth Chainey</p>
+                <button
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  className="text-xs text-muted hover:text-foreground transition-colors"
+                >
+                  &uarr; Back to top
+                </button>
+              </div>
             </footer>
           </main>
 

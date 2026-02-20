@@ -16,6 +16,7 @@ import { ParticleField } from '@/components/ParticleField'
 import { Magnetic } from '@/components/Magnetic'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { ExperienceDialog } from '@/components/ExperienceDialog'
+import { Signature } from '@/components/Signature'
 
 // Typewriter sequence: target text + pause after reaching it (ms)
 const TYPING_STEPS = [
@@ -523,14 +524,17 @@ export default function Home() {
             </section>
 
             {/* Footer */}
-            <footer className="p-8 mt-auto flex items-center justify-between">
-              <p className="text-xs text-muted">© 2025 Gareth Chainey</p>
-              <button
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="text-xs text-muted hover:text-foreground transition-colors"
-              >
-                ↑ Back to top
-              </button>
+            <footer className="p-8 mt-auto">
+              <Signature className="mb-4" />
+              <div className="flex items-center justify-between">
+                <p className="text-xs text-muted">© 2025 Gareth Chainey</p>
+                <button
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  className="text-xs text-muted hover:text-foreground transition-colors"
+                >
+                  ↑ Back to top
+                </button>
+              </div>
             </footer>
           </main>
 

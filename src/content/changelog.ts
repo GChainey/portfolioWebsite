@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.14.0',
+    date: '2026-02-20',
+    title: 'Animated Signature Component',
+    description: 'Added an animated cursive signature that reveals with a writing effect, shown in page footers and the about section.',
+    changes: [
+      'Created Signature component with Caveat handwriting font and clip-path reveal animation',
+      'Added signature to footer on home, CV, and How I Work pages',
+      'Added signature below about section on homepage',
+      'Added Caveat Google Font as --font-signature CSS variable',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/add-signature',
+  },
+  {
     version: '1.13.0',
     date: '2026-02-17',
     title: 'Case / Visual Tab Toggle on Project Pages',
