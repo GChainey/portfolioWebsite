@@ -56,7 +56,11 @@ export default function CVPage() {
                 animate={{ opacity: 1, y: 0 }}
               >
                 <p className="text-xs text-muted uppercase tracking-widest mb-4">Curriculum Vitae</p>
-                <Signature className="mb-4 text-4xl" />
+                {flags.signature ? (
+                  <Signature className="mb-4 text-4xl" />
+                ) : (
+                  <h1 className="text-4xl font-medium text-foreground mb-4">{cvData.name}</h1>
+                )}
                 <p className="text-lg text-muted max-w-2xl mb-2">
                   {cvData.summary}
                 </p>
@@ -187,7 +191,7 @@ export default function CVPage() {
 
             {/* Footer */}
             <footer className="p-8">
-              <Signature className="mb-4" />
+              {flags.signature && <Signature className="mb-4" />}
               <div className="flex items-center justify-between">
                 <p className="text-xs text-muted">&copy; 2025 Gareth Chainey</p>
                 <button

@@ -525,7 +525,7 @@ export default function Home() {
 
             {/* Footer */}
             <footer className="p-8 mt-auto">
-              <Signature className="mb-4" />
+              {flags.signature && <Signature className="mb-4" />}
               <div className="flex items-center justify-between">
                 <p className="text-xs text-muted">© 2025 Gareth Chainey</p>
                 <button

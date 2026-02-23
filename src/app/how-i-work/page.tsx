@@ -204,7 +204,7 @@ export default function HowIWorkPage() {
 
             {/* Footer */}
             <footer className="p-8">
-              <Signature className="mb-4" />
+              {flags.signature && <Signature className="mb-4" />}
               <div className="flex items-center justify-between">
                 <p className="text-xs text-muted">&copy; 2025 Gareth Chainey</p>
                 <button
