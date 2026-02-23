@@ -90,6 +90,28 @@ export function FeatureFlagDrawer() {
                 </p>
               </div>
 
+              {/* Signature Toggle */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-foreground">Signature</p>
+                  <button
+                    onClick={() => setFlag('signature', !flags.signature)}
+                    className={`relative w-11 h-6 rounded-full transition-colors ${
+                      flags.signature ? 'bg-accent' : 'bg-border'
+                    }`}
+                  >
+                    <motion.div
+                      className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow"
+                      animate={{ x: flags.signature ? 20 : 0 }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                    />
+                  </button>
+                </div>
+                <p className="text-xs text-muted">
+                  Animated cursive signature in footers and CV title
+                </p>
+              </div>
+
               {/* Particle Field Toggle */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">

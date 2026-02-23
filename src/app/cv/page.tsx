@@ -12,6 +12,7 @@ import { cvData } from '@/content/cv'
 
 import { VennSkills } from '@/components/VennSkills'
 import { ExperienceDialog } from '@/components/ExperienceDialog'
+import { Signature } from '@/components/Signature'
 
 const CV_PAGE_CONTEXT = {
   page: 'CV',
@@ -55,7 +56,11 @@ export default function CVPage() {
                 animate={{ opacity: 1, y: 0 }}
               >
                 <p className="text-xs text-muted uppercase tracking-widest mb-4">Curriculum Vitae</p>
-                <h1 className="text-4xl font-medium text-foreground mb-4">{cvData.name}</h1>
+                {flags.signature ? (
+                  <Signature className="mb-4 text-4xl" />
+                ) : (
+                  <h1 className="text-4xl font-medium text-foreground mb-4">{cvData.name}</h1>
+                )}
                 <p className="text-lg text-muted max-w-2xl mb-2">
                   {cvData.summary}
                 </p>
@@ -185,14 +190,17 @@ export default function CVPage() {
             </section>
 
             {/* Footer */}
-            <footer className="p-8 flex items-center justify-between">
-              <p className="text-xs text-muted">&copy; 2025 Gareth Chainey</p>
-              <button
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="text-xs text-muted hover:text-foreground transition-colors"
-              >
-                &uarr; Back to top
-              </button>
+            <footer className="p-8">
+              {flags.signature && <Signature className="mb-4" />}
+              <div className="flex items-center justify-between">
+                <p className="text-xs text-muted">&copy; 2025 Gareth Chainey</p>
+                <button
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  className="text-xs text-muted hover:text-foreground transition-colors"
+                >
+                  &uarr; Back to top
+                </button>
+              </div>
             </footer>
           </main>
 

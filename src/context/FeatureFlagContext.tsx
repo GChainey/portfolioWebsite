@@ -6,6 +6,7 @@ interface FeatureFlags {
   sectionTitleBorders: boolean
   particleField: boolean
   feedPage: boolean
+  signature: boolean
 }
 
 interface FeatureFlagContextType {
@@ -19,6 +20,7 @@ const defaultFlags: FeatureFlags = {
   sectionTitleBorders: true,
   particleField: false,
   feedPage: false,
+  signature: false,
 }
 
 const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(undefined)
