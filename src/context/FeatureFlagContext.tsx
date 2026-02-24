@@ -2,16 +2,20 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 
+type SignatureVariant = 'off' | 'clippath' | 'penflow'
+
 interface FeatureFlags {
   sectionTitleBorders: boolean
   particleField: boolean
   feedPage: boolean
   signature: boolean
+  signatureVariant: SignatureVariant
+  signatureSize: number
 }
 
 interface FeatureFlagContextType {
   flags: FeatureFlags
-  setFlag: (key: keyof FeatureFlags, value: boolean) => void
+  setFlag: <K extends keyof FeatureFlags>(key: K, value: FeatureFlags[K]) => void
   isDrawerOpen: boolean
   setDrawerOpen: (open: boolean) => void
 }
@@ -21,6 +25,8 @@ const defaultFlags: FeatureFlags = {
   particleField: false,
   feedPage: false,
   signature: false,
+  signatureVariant: 'off',
+  signatureSize: 36,
 }
 
 const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(undefined)
@@ -58,7 +64,7 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
-  const setFlag = (key: keyof FeatureFlags, value: boolean) => {
+  const setFlag = <K extends keyof FeatureFlags>(key: K, value: FeatureFlags[K]) => {
     setFlags((prev) => ({ ...prev, [key]: value }))
   }
 
