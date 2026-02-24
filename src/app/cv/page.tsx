@@ -12,6 +12,7 @@ import { cvData } from '@/content/cv'
 
 import { VennSkills } from '@/components/VennSkills'
 import { ExperienceDialog } from '@/components/ExperienceDialog'
+import { PenflowSignature } from '@/components/PenflowSignature'
 import { Signature } from '@/components/Signature'
 
 const CV_PAGE_CONTEXT = {
@@ -56,8 +57,10 @@ export default function CVPage() {
                 animate={{ opacity: 1, y: 0 }}
               >
                 <p className="text-xs text-muted uppercase tracking-widest mb-4">Curriculum Vitae</p>
-                {flags.signature ? (
+                {flags.signatureVariant === 'clippath' ? (
                   <Signature className="mb-4 text-4xl" />
+                ) : flags.signatureVariant === 'penflow' ? (
+                  <PenflowSignature className="mb-4 text-4xl" />
                 ) : (
                   <h1 className="text-4xl font-medium text-foreground mb-4">{cvData.name}</h1>
                 )}
@@ -191,7 +194,8 @@ export default function CVPage() {
 
             {/* Footer */}
             <footer className="p-8">
-              {flags.signature && <Signature className="mb-4" />}
+              {flags.signatureVariant === 'clippath' && <Signature className="mb-4" />}
+              {flags.signatureVariant === 'penflow' && <PenflowSignature className="mb-4" />}
               <div className="flex items-center justify-between">
                 <p className="text-xs text-muted">&copy; 2025 Gareth Chainey</p>
                 <button

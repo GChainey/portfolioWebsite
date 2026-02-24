@@ -16,6 +16,7 @@ import { ParticleField } from '@/components/ParticleField'
 import { Magnetic } from '@/components/Magnetic'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { ExperienceDialog } from '@/components/ExperienceDialog'
+import { PenflowSignature } from '@/components/PenflowSignature'
 import { Signature } from '@/components/Signature'
 
 // Typewriter sequence: target text + pause after reaching it (ms)
@@ -525,7 +526,8 @@ export default function Home() {
 
             {/* Footer */}
             <footer className="p-8 mt-auto">
-              {flags.signature && <Signature className="mb-4" />}
+              {flags.signatureVariant === 'clippath' && <Signature className="mb-4" />}
+              {flags.signatureVariant === 'penflow' && <PenflowSignature className="mb-4" />}
               <div className="flex items-center justify-between">
                 <p className="text-xs text-muted">© 2025 Gareth Chainey</p>
                 <button

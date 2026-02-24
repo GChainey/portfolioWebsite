@@ -7,6 +7,7 @@ import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
 import { Facehash } from 'facehash'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
+import { PenflowSignature } from '@/components/PenflowSignature'
 import { Signature } from '@/components/Signature'
 
 const TOOLS = [
@@ -204,7 +205,8 @@ export default function HowIWorkPage() {
 
             {/* Footer */}
             <footer className="p-8">
-              {flags.signature && <Signature className="mb-4" />}
+              {flags.signatureVariant === 'clippath' && <Signature className="mb-4" />}
+              {flags.signatureVariant === 'penflow' && <PenflowSignature className="mb-4" />}
               <div className="flex items-center justify-between">
                 <p className="text-xs text-muted">&copy; 2025 Gareth Chainey</p>
                 <button

@@ -90,23 +90,42 @@ export function FeatureFlagDrawer() {
                 </p>
               </div>
 
-              {/* Signature Toggle */}
+              {/* Signature Variant Picker */}
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium text-foreground">Signature</p>
-                  <button
-                    onClick={() => setFlag('signature', !flags.signature)}
-                    className={`relative w-11 h-6 rounded-full transition-colors ${
-                      flags.signature ? 'bg-accent' : 'bg-border'
-                    }`}
-                  >
-                    <motion.div
-                      className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow"
-                      animate={{ x: flags.signature ? 20 : 0 }}
-                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                    />
-                  </button>
+                <p className="text-sm font-medium text-foreground">Signature</p>
+                <div className="flex gap-1 bg-border/50 rounded-lg p-1">
+                  {([
+                    { value: 'off', label: 'Off' },
+                    { value: 'clippath', label: 'Clip-path' },
+                    { value: 'penflow', label: 'Penflow' },
+                  ] as const).map(({ value, label }) => (
+                    <button
+                      key={value}
+                      onClick={() => setFlag('signatureVariant', value)}
+                      className={`flex-1 text-xs py-1.5 px-2 rounded-md transition-colors ${
+                        flags.signatureVariant === value
+                          ? 'bg-accent text-white'
+                          : 'text-muted hover:text-foreground'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
                 </div>
+                {flags.signatureVariant !== 'off' && (
+                  <div className="flex items-center gap-3 pt-1">
+                    <input
+                      type="range"
+                      min={20}
+                      max={72}
+                      step={2}
+                      value={flags.signatureSize}
+                      onChange={(e) => setFlag('signatureSize', Number(e.target.value))}
+                      className="flex-1 accent-accent h-1"
+                    />
+                    <span className="text-xs text-muted tabular-nums w-8 text-right">{flags.signatureSize}px</span>
+                  </div>
+                )}
                 <p className="text-xs text-muted">
                   Animated cursive signature in footers and CV title
                 </p>
