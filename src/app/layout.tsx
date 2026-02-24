@@ -37,7 +37,7 @@ export default function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var m=localStorage.getItem('theme-mode');var a=localStorage.getItem('theme-accent')||'amber';var d=document.documentElement;d.className=d.className.split(' ').filter(function(c){return!c.startsWith('accent-')}).join(' ');d.classList.add('accent-'+a);if(m==='light'){d.classList.remove('dark')}else if(m==='system'){if(!window.matchMedia('(prefers-color-scheme: dark)').matches){d.classList.remove('dark')}};}catch(e){}})();`,
+            __html: `(function(){try{var m=localStorage.getItem('theme-mode');var a=localStorage.getItem('theme-accent')||'amber';var w=localStorage.getItem('theme-warm');var d=document.documentElement;d.className=d.className.split(' ').filter(function(c){return!c.startsWith('accent-')}).join(' ');d.classList.add('accent-'+a);if(w==='true'){d.classList.add('warm')}else{d.classList.remove('warm')}if(m==='light'){d.classList.remove('dark')}else if(m==='system'){if(!window.matchMedia('(prefers-color-scheme: dark)').matches){d.classList.remove('dark')}};}catch(e){}})();`,
           }}
         />
       </head>

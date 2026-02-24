@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.15.0',
+    date: '2026-02-24',
+    title: 'Warmth Mode',
+    description: 'Added a warmth toggle to the theme selector that shifts the neutral palette to warmer tones, like f.lux for the website.',
+    changes: [
+      'Added warm mode toggle in theme selector dropdown with Flame icon',
+      'Light warm: creamy off-white background and softened text',
+      'Dark warm: warm dark grey background instead of pure black',
+      'Warmth persists via localStorage and applies before hydration to prevent flash',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/add-warmth-theme',
+  },
+  {
     version: '1.14.0',
     date: '2026-02-20',
     title: 'Animated Signature Component',

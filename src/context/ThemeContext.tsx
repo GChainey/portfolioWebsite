@@ -29,9 +29,12 @@ interface ThemeContextType {
   mode: Mode
   resolvedMode: ResolvedMode
   accent: AccentColor
+  warm: boolean
   setMode: (mode: Mode) => void
   setAccent: (accent: AccentColor) => void
+  setWarm: (warm: boolean) => void
   toggleMode: () => void
+  toggleWarm: () => void
   mounted: boolean
   // Legacy support
   theme: ResolvedMode
@@ -44,6 +47,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [mode, setModeState] = useState<Mode>('dark')
   const [systemPreference, setSystemPreference] = useState<ResolvedMode>('dark')
   const [accent, setAccentState] = useState<AccentColor>('amber')
+  const [warm, setWarmState] = useState(false)
   const [mounted, setMounted] = useState(false)
 
   // Get resolved mode based on mode setting and system preference
@@ -53,20 +57,24 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setMounted(true)
     const storedMode = localStorage.getItem('theme-mode') as Mode | null
     const storedAccent = localStorage.getItem('theme-accent') as AccentColor | null
+    const storedWarm = localStorage.getItem('theme-warm')
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
 
     // Default to 'dark' if no stored preference (portfolio looks best in dark)
     const initialMode = storedMode || 'dark'
     const initialAccent = storedAccent || 'amber'
+    const initialWarm = storedWarm === 'true'
     const initialSystemPref = prefersDark ? 'dark' : 'light'
 
     setModeState(initialMode)
     setAccentState(initialAccent)
+    setWarmState(initialWarm)
     setSystemPreference(initialSystemPref)
 
     // Apply classes based on resolved mode
     const resolved = initialMode === 'system' ? initialSystemPref : initialMode
     document.documentElement.classList.toggle('dark', resolved === 'dark')
+    document.documentElement.classList.toggle('warm', initialWarm)
     document.documentElement.className = document.documentElement.className
       .split(' ')
       .filter(c => !c.startsWith('accent-'))
@@ -96,6 +104,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
   }, [mode, mounted])
 
+  // Apply warm class when warm changes
+  useEffect(() => {
+    if (mounted) {
+      document.documentElement.classList.toggle('warm', warm)
+      localStorage.setItem('theme-warm', String(warm))
+    }
+  }, [warm, mounted])
+
   useEffect(() => {
     if (mounted) {
       // Remove old accent class and add new one
@@ -110,6 +126,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   const setMode = (newMode: Mode) => setModeState(newMode)
   const setAccent = (newAccent: AccentColor) => setAccentState(newAccent)
+  const setWarm = (newWarm: boolean) => setWarmState(newWarm)
+  const toggleWarm = () => setWarmState(prev => !prev)
   const toggleMode = () => setModeState(prev => {
     if (prev === 'system') return 'light'
     if (prev === 'light') return 'dark'
@@ -121,9 +139,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       mode,
       resolvedMode,
       accent,
+      warm,
       setMode,
       setAccent,
+      setWarm,
       toggleMode,
+      toggleWarm,
       mounted,
       // Legacy support
       theme: resolvedMode,
