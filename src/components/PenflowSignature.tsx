@@ -2,9 +2,14 @@
 
 import { useRef, useState, useEffect } from 'react'
 import { useInView } from 'motion/react'
-import { Penflow } from 'penflow/react'
+import dynamic from 'next/dynamic'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import { useTheme } from '@/context/ThemeContext'
+
+const Penflow = dynamic(
+  () => import('penflow/react').then((mod) => mod.Penflow),
+  { ssr: false }
+)
 
 interface PenflowSignatureProps {
   className?: string
