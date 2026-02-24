@@ -111,6 +111,44 @@ html.dark.accent-green { --accent: #4ade80; --accent-light: #052e16; }
 html.dark.accent-lime { --accent: #a3e635; --accent-light: #1a2e05; }
 html.dark.accent-yellow { --accent: #facc15; --accent-light: #422006; }
 
+/* Warm mode — light */
+html.warm {
+  --background: #faf6f0;
+  --foreground: #1c1a16;
+  --border: #e3dcd2;
+  --muted: #887f74;
+  --card: #faf6f0;
+  --card-foreground: #1c1a16;
+  --popover: #faf6f0;
+  --popover-foreground: #1c1a16;
+  --primary: #1c1a16;
+  --primary-foreground: #faf6f0;
+  --secondary: #f0ebe3;
+  --secondary-foreground: #1c1a16;
+  --muted-foreground: #887f74;
+  --input: #e3dcd2;
+  --ring: #1c1a16;
+}
+
+/* Warm mode — dark */
+html.dark.warm {
+  --background: #161310;
+  --foreground: #f0ebe2;
+  --border: #2c2720;
+  --muted: #a69d90;
+  --card: #161310;
+  --card-foreground: #f0ebe2;
+  --popover: #161310;
+  --popover-foreground: #f0ebe2;
+  --primary: #f0ebe2;
+  --primary-foreground: #161310;
+  --secondary: #2c2720;
+  --secondary-foreground: #f0ebe2;
+  --muted-foreground: #a69d90;
+  --input: #2c2720;
+  --ring: #ccc5ba;
+}
+
 /* Text selection highlight with accent color */
 ::selection {
   background-color: var(--selection-bg);

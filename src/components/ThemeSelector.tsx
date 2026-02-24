@@ -1,7 +1,8 @@
 'use client'
 
-import { Sun, Moon, Monitor, Check } from 'lucide-react'
+import { Sun, Moon, Monitor, Check, Flame } from 'lucide-react'
 import { useTheme, ACCENT_COLORS } from '@/context/ThemeContext'
+import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +12,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 export function ThemeSelector() {
-  const { mode, resolvedMode, accent, setMode, setAccent } = useTheme()
+  const { mode, resolvedMode, accent, warm, setMode, setAccent, toggleWarm } = useTheme()
+  const { flags } = useFeatureFlags()
 
   // Icon for the trigger button based on current resolved mode
   const TriggerIcon = resolvedMode === 'dark' ? Moon : Sun
@@ -53,6 +55,19 @@ export function ThemeSelector() {
           </span>
           {mode === 'dark' && <Check className="w-4 h-4" />}
         </DropdownMenuItem>
+
+        {flags.warmth && (
+          <>
+            <DropdownMenuLabel className="text-xs text-muted-foreground mt-2">Warmth</DropdownMenuLabel>
+            <DropdownMenuItem onSelect={(e) => { e.preventDefault(); toggleWarm() }} className="flex items-center justify-between">
+              <span className="flex items-center gap-2">
+                <Flame className="w-4 h-4" />
+                Warm
+              </span>
+              {warm && <Check className="w-4 h-4" />}
+            </DropdownMenuItem>
+          </>
+        )}
 
         <DropdownMenuLabel className="text-xs text-muted-foreground mt-2">Accent Color</DropdownMenuLabel>
         <div className="grid grid-cols-8 gap-1 p-2">

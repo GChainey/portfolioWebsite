@@ -11,6 +11,7 @@ interface FeatureFlags {
   signature: boolean
   signatureVariant: SignatureVariant
   signatureSize: number
+  warmth: boolean
 }
 
 interface FeatureFlagContextType {
@@ -27,6 +28,7 @@ const defaultFlags: FeatureFlags = {
   signature: false,
   signatureVariant: 'off',
   signatureSize: 36,
+  warmth: false,
 }
 
 const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(undefined)
