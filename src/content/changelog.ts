@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.16.0',
+    date: '2026-02-27',
+    title: 'Animated Accent SVG Cards',
+    description: 'Gave project card SVGs the same accent colour treatment as the GitHub contributions grid — draw-in animation with varying accent opacities.',
+    changes: [
+      'SVG paths now draw in with staggered pathLength animation on scroll',
+      'Each SVG element uses a different accent opacity (0.3–1.0) matching the contribution grid range',
+      'Workflow circles have subtle accent fills that intensify left-to-right',
+      'Sparkle rays animate outward from center with decreasing opacity',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/accent-svg-project-cards',
+  },
+  {
     version: '1.15.0',
     date: '2026-02-24',
     title: 'Warmth Mode',

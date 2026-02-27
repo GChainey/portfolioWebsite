@@ -91,40 +91,244 @@ const BENTO_PROJECTS = [
 ]
 
 function BentoCardVisual({ icon }: { icon?: string }) {
+  const ease = [0.25, 0.1, 0.25, 1]
+
   switch (icon) {
     case 'code':
       return (
-        <div className="text-accent/20 group-hover:text-accent/40 transition-colors">
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}>
           <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-            <path d="M28 20L8 40L28 60" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M52 20L72 40L52 60" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M45 16L35 64" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+            <motion.path
+              d="M28 20L8 40L28 60"
+              stroke="var(--accent)"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 0.65 },
+              }}
+              transition={{ duration: 0.8, delay: 0.2, ease }}
+            />
+            <motion.path
+              d="M52 20L72 40L52 60"
+              stroke="var(--accent)"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 0.45 },
+              }}
+              transition={{ duration: 0.8, delay: 0.4, ease }}
+            />
+            <motion.path
+              d="M45 16L35 64"
+              stroke="var(--accent)"
+              strokeWidth="3"
+              strokeLinecap="round"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 1 },
+              }}
+              transition={{ duration: 0.6, delay: 0.6, ease }}
+            />
           </svg>
-        </div>
+        </motion.div>
       )
     case 'workflow':
       return (
-        <div className="text-accent/20 group-hover:text-accent/40 transition-colors">
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}>
           <svg width="120" height="60" viewBox="0 0 120 60" fill="none">
-            <circle cx="20" cy="30" r="12" stroke="currentColor" strokeWidth="2"/>
-            <circle cx="60" cy="30" r="12" stroke="currentColor" strokeWidth="2"/>
-            <circle cx="100" cy="30" r="12" stroke="currentColor" strokeWidth="2"/>
-            <path d="M32 30H48" stroke="currentColor" strokeWidth="2"/>
-            <path d="M72 30H88" stroke="currentColor" strokeWidth="2"/>
-            <path d="M44 26L48 30L44 34" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M84 26L88 30L84 34" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <motion.circle
+              cx="20" cy="30" r="12"
+              stroke="var(--accent)"
+              strokeWidth="2"
+              fill="var(--accent)"
+              fillOpacity="0.08"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 0.4 },
+              }}
+              transition={{ duration: 0.6, delay: 0.2, ease }}
+            />
+            <motion.path
+              d="M32 30H48"
+              stroke="var(--accent)"
+              strokeWidth="2"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 0.5 },
+              }}
+              transition={{ duration: 0.4, delay: 0.5, ease }}
+            />
+            <motion.path
+              d="M44 26L48 30L44 34"
+              stroke="var(--accent)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 0.5 },
+              }}
+              transition={{ duration: 0.3, delay: 0.6, ease }}
+            />
+            <motion.circle
+              cx="60" cy="30" r="12"
+              stroke="var(--accent)"
+              strokeWidth="2"
+              fill="var(--accent)"
+              fillOpacity="0.12"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 0.65 },
+              }}
+              transition={{ duration: 0.6, delay: 0.65, ease }}
+            />
+            <motion.path
+              d="M72 30H88"
+              stroke="var(--accent)"
+              strokeWidth="2"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 0.75 },
+              }}
+              transition={{ duration: 0.4, delay: 0.85, ease }}
+            />
+            <motion.path
+              d="M84 26L88 30L84 34"
+              stroke="var(--accent)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 0.75 },
+              }}
+              transition={{ duration: 0.3, delay: 0.95, ease }}
+            />
+            <motion.circle
+              cx="100" cy="30" r="12"
+              stroke="var(--accent)"
+              strokeWidth="2"
+              fill="var(--accent)"
+              fillOpacity="0.18"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 1 },
+              }}
+              transition={{ duration: 0.6, delay: 1.0, ease }}
+            />
           </svg>
-        </div>
+        </motion.div>
       )
     case 'sparkle':
       return (
-        <div className="text-accent/20 group-hover:text-accent/40 transition-colors">
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}>
           <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-            <path d="M40 8V16M40 64V72M8 40H16M64 40H72" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-            <path d="M20 20L25 25M55 55L60 60M60 20L55 25M25 55L20 60" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            <circle cx="40" cy="40" r="8" stroke="currentColor" strokeWidth="2.5"/>
+            <motion.circle
+              cx="40" cy="40" r="8"
+              stroke="var(--accent)"
+              strokeWidth="2.5"
+              fill="var(--accent)"
+              fillOpacity="0.15"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 1 },
+              }}
+              transition={{ duration: 0.6, delay: 0.2, ease }}
+            />
+            <motion.path
+              d="M40 8V16"
+              stroke="var(--accent)"
+              strokeWidth="3"
+              strokeLinecap="round"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 0.7 },
+              }}
+              transition={{ duration: 0.4, delay: 0.5, ease }}
+            />
+            <motion.path
+              d="M40 64V72"
+              stroke="var(--accent)"
+              strokeWidth="3"
+              strokeLinecap="round"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 0.65 },
+              }}
+              transition={{ duration: 0.4, delay: 0.6, ease }}
+            />
+            <motion.path
+              d="M8 40H16"
+              stroke="var(--accent)"
+              strokeWidth="3"
+              strokeLinecap="round"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 0.55 },
+              }}
+              transition={{ duration: 0.4, delay: 0.7, ease }}
+            />
+            <motion.path
+              d="M64 40H72"
+              stroke="var(--accent)"
+              strokeWidth="3"
+              strokeLinecap="round"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 0.5 },
+              }}
+              transition={{ duration: 0.4, delay: 0.8, ease }}
+            />
+            <motion.path
+              d="M20 20L25 25"
+              stroke="var(--accent)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 0.35 },
+              }}
+              transition={{ duration: 0.3, delay: 0.85, ease }}
+            />
+            <motion.path
+              d="M55 55L60 60"
+              stroke="var(--accent)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 0.3 },
+              }}
+              transition={{ duration: 0.3, delay: 0.9, ease }}
+            />
+            <motion.path
+              d="M60 20L55 25"
+              stroke="var(--accent)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 0.35 },
+              }}
+              transition={{ duration: 0.3, delay: 0.95, ease }}
+            />
+            <motion.path
+              d="M25 55L20 60"
+              stroke="var(--accent)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              variants={{
+                hidden: { pathLength: 0, opacity: 0 },
+                visible: { pathLength: 1, opacity: 0.3 },
+              }}
+              transition={{ duration: 0.3, delay: 1.0, ease }}
+            />
           </svg>
-        </div>
+        </motion.div>
       )
     default:
       return null
