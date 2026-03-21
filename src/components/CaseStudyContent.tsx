@@ -3,6 +3,12 @@
 import { motion } from 'framer-motion'
 import type { ContentBlock } from '@/content/projects'
 import { slugify } from '@/components/TableOfContents'
+import { FunnelDiagram } from '@/components/FunnelDiagram'
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const componentRegistry: Record<string, React.ComponentType<any>> = {
+  'funnel-diagram': FunnelDiagram,
+}
 
 interface CaseStudyContentProps {
   blocks: ContentBlock[]
@@ -136,6 +142,24 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
                 <li key={i}>{item}</li>
               ))}
             </motion.ul>
+          )
+        }
+
+        if (block.type === 'component') {
+          const Component = componentRegistry[block.componentId]
+          if (!Component) return null
+          return (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay }}
+            >
+              <Component {...(block.props || {})} />
+              {block.caption && (
+                <p className="mt-2 text-sm text-muted text-center">{block.caption}</p>
+              )}
+            </motion.div>
           )
         }
 
