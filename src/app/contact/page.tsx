@@ -166,7 +166,7 @@ export default function ContactPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 onClick={() => setChatOpen(true)}
-                className="fixed bottom-6 right-6 z-50 shadow-lg hover:scale-110 transition-all"
+                className="fixed bottom-6 right-6 z-50 rounded-full shadow-lg hover:scale-110 transition-all"
               >
                 <Facehash name="GarethLLM" size={48} showInitial enableBlink interactive={false} intensity3d="subtle" style={{ backgroundColor: 'color-mix(in srgb, var(--accent) 60%, var(--background))', borderRadius: '9999px' }} />
               </motion.button>

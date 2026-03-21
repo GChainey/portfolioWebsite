@@ -14,6 +14,18 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.16.1',
+    date: '2026-03-21',
+    title: 'Fix FAB White Rectangle',
+    description: 'Fixed the floating chat avatar button showing a white rectangle behind it in light mode.',
+    changes: [
+      'Added rounded-full to the FAB button element so the shadow and background clip to a circle',
+      'Applied fix across all pages (home, contact, how-i-work, cv, projects)',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/fix-fab-background',
+  },
+  {
     version: '1.16.0',
     date: '2026-02-27',
     title: 'Animated Accent SVG Cards',
