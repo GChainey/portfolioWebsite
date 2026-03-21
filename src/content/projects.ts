@@ -25,7 +25,14 @@ export interface ListBlock {
   items: string[]
 }
 
-export type ContentBlock = MediaBlock | TextBlock | HeadingBlock | ListBlock
+export interface ComponentBlock {
+  type: 'component'
+  componentId: string
+  props?: Record<string, unknown>
+  caption?: string
+}
+
+export type ContentBlock = MediaBlock | TextBlock | HeadingBlock | ListBlock | ComponentBlock
 
 export interface Project {
   id: string
@@ -1090,20 +1097,81 @@ export const projects: Project[] = [
   },
   {
     id: 'seek-case-study-1',
-    title: 'SEEK Case Study 1',
-    description: 'Case study from SEEK — details coming soon.',
+    title: 'Iterating to Impact: SEEK Learning',
+    description: 'When the MVP didn\'t hit targets, we diagnosed the funnel, tested our assumptions with small changes, and shipped our way to the goal.',
     category: 'Product Design',
     year: '2024',
     companyId: 'seek',
-    tags: ['Product Design', 'Discovery', 'B2C'],
+    tags: ['Product Design', 'Experimentation', 'Conversion Optimisation', 'B2C'],
     content: [
-      { type: 'heading', level: 2, content: 'Coming Soon' },
-      { type: 'text', content: 'This case study is currently being written. Check back soon.' },
+      { type: 'heading', level: 2, content: 'The challenge' },
+      { type: 'text', content: 'SEEK Learning helps job seekers discover courses and connect with education providers. We released an MVP that gave users a way to browse courses by category, view course details, and submit a lead to the provider. The goal was clear: drive qualified leads to education partners.' },
+      { type: 'text', content: 'After launch, the numbers told a different story. Conversion through the funnel was well below target. Rather than redesigning from scratch, we needed to understand exactly where and why users were dropping off.' },
+
+      { type: 'heading', level: 2, content: 'Diagnosing the funnel' },
+      { type: 'text', content: 'We mapped the user journey as a conversion funnel with five stages, from first impression through to submitting a lead. By measuring drop-off between each stage, we could see where the biggest losses were happening.' },
+      {
+        type: 'component',
+        componentId: 'funnel-diagram',
+        props: {
+          title: 'MVP release',
+          stages: [
+            { label: 'Impressions', highlight: false },
+            { label: 'Find the right course (tabs)', highlight: true },
+            { label: 'Select a course', highlight: true },
+            { label: 'Course information', highlight: false },
+            { label: 'Lead/Link', highlight: true },
+          ],
+        },
+        caption: 'The MVP conversion funnel — highlighted stages showed the largest drop-offs',
+      },
+      { type: 'text', content: 'Three stages stood out with disproportionate drop-off. We formed hypotheses for each:' },
+
+      { type: 'heading', level: 2, content: 'Identifying assumptions' },
+      { type: 'text', content: 'For each problem area in the funnel, we identified a specific assumption about what was causing the drop-off. These became our test targets.' },
+      {
+        type: 'component',
+        componentId: 'funnel-diagram',
+        props: {
+          title: 'MVP release',
+          stages: [
+            { label: 'Impressions', highlight: false },
+            { label: 'Find the right course (tabs)', highlight: true, assumption: 'Too much friction to find a course' },
+            { label: 'Select a course', highlight: true, assumption: 'Missing design details' },
+            { label: 'Course information', highlight: false },
+            { label: 'Lead/Link', highlight: true, assumption: 'Too long to make a connection' },
+          ],
+        },
+        caption: 'Each drop-off point mapped to a specific assumption we could test',
+      },
+      {
+        type: 'list',
+        items: [
+          'Too much friction to find a course — the tab-based navigation required too many taps to discover relevant options',
+          'Missing design details — the course cards lacked the visual information needed to make a confident selection',
+          'Too long to make a connection — the path from interest to lead submission had unnecessary steps',
+        ],
+      },
+
+      { type: 'heading', level: 2, content: 'Testing with small changes' },
+      { type: 'text', content: 'Instead of a big redesign, we tested each assumption independently with the smallest change that could validate or invalidate it. This let us isolate what was actually driving the problem and avoid wasting effort on the wrong solution.' },
+      { type: 'text', content: 'Each experiment was scoped to a single funnel stage and measured against the specific drop-off rate at that point. When a change moved the needle, we kept it and moved to the next assumption.' },
+
+      { type: 'heading', level: 2, content: 'Outcome' },
+      { type: 'text', content: 'By working through the funnel systematically — one assumption at a time — we improved conversion at each stage and ultimately hit our lead generation target. The approach proved that disciplined experimentation on a live product can be more effective than redesigning from first principles.' },
     ],
     chatContext: {
-      description: 'A case study from SEEK - details coming soon',
-      suggestedQuestions: ['What was this project about?'],
-      followUpQuestions: ['What was the impact?'],
+      description: 'A case study about iterating on SEEK Learning\'s course discovery funnel. After the MVP underperformed, the team diagnosed drop-offs at three stages (finding courses, selecting courses, and submitting leads), formed hypotheses for each, and ran targeted experiments to improve conversion.',
+      suggestedQuestions: [
+        'What was the MVP and why didn\'t it work?',
+        'How did you decide what to test first?',
+        'What were the three main assumptions?',
+      ],
+      followUpQuestions: [
+        'How did you measure success for each experiment?',
+        'What was the biggest single improvement?',
+        'How long did the iteration cycle take?',
+      ],
     },
   },
   {

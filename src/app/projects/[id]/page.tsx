@@ -8,7 +8,7 @@ import { X, Clock, ArrowRight, RotateCcw, LayoutGrid, FileText } from 'lucide-re
 import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
 import { Facehash } from 'facehash'
-import { CaseStudyContent } from '@/components/CaseStudyContent'
+import { CaseStudyContent, componentRegistry } from '@/components/CaseStudyContent'
 import { TableOfContents } from '@/components/TableOfContents'
 import { FixedTableOfContents } from '@/components/FixedTableOfContents'
 import { ShimmeringText } from '@/components/ui/shimmering-text'
@@ -41,14 +41,14 @@ const TLDR_OPTIONS = [
 ]
 
 function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
-  const mediaBlocks = blocks.filter(
-    (b): b is ContentBlock & { type: 'image' | 'gif' | 'video' | 'embed' } =>
-      b.type === 'image' || b.type === 'gif' || b.type === 'video' || b.type === 'embed'
+  // Collect visual blocks: media + components (artifacts like FunnelDiagram)
+  const visualBlocks = blocks.filter(
+    b => b.type === 'image' || b.type === 'gif' || b.type === 'video' || b.type === 'embed' || b.type === 'component'
   )
 
-  // Find the heading that precedes each media block for context
-  function getHeadingForMedia(mediaIndex: number): string | null {
-    const originalIndex = blocks.indexOf(mediaBlocks[mediaIndex])
+  // Find the heading that precedes each visual block for context
+  function getHeadingForVisual(visualIndex: number): string | null {
+    const originalIndex = blocks.indexOf(visualBlocks[visualIndex])
     for (let i = originalIndex - 1; i >= 0; i--) {
       if (blocks[i].type === 'heading') {
         return (blocks[i] as { type: 'heading'; content: string }).content
@@ -59,9 +59,38 @@ function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
 
   return (
     <div className="space-y-8">
-      {mediaBlocks.map((block, index) => {
-        const heading = getHeadingForMedia(index)
-        const aspectRatio = block.aspectRatio || '16/9'
+      {visualBlocks.map((block, index) => {
+        const heading = getHeadingForVisual(index)
+
+        // Component blocks (e.g. FunnelDiagram)
+        if (block.type === 'component') {
+          const Component = componentRegistry[block.componentId]
+          if (!Component) return null
+          return (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.08 }}
+            >
+              {heading && (
+                <p className="text-xs text-muted uppercase tracking-widest mb-2">
+                  {heading}
+                </p>
+              )}
+              <Component {...(block.props || {})} />
+              {block.caption && (
+                <p className="mt-2 text-sm text-muted text-center">
+                  {block.caption}
+                </p>
+              )}
+            </motion.div>
+          )
+        }
+
+        // Media blocks
+        const mediaBlock = block as ContentBlock & { type: 'image' | 'gif' | 'video' | 'embed' }
+        const aspectRatio = mediaBlock.aspectRatio || '16/9'
 
         return (
           <motion.div
@@ -79,33 +108,33 @@ function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
               className="relative w-full bg-border/30 rounded-lg overflow-hidden"
               style={{ aspectRatio }}
             >
-              {block.type === 'video' ? (
+              {mediaBlock.type === 'video' ? (
                 <video
-                  src={block.src}
+                  src={mediaBlock.src}
                   autoPlay
                   loop
                   muted
                   playsInline
                   className="w-full h-full object-cover"
                 />
-              ) : block.type === 'embed' ? (
+              ) : mediaBlock.type === 'embed' ? (
                 <iframe
-                  src={block.src}
+                  src={mediaBlock.src}
                   className="w-full h-full border-0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 />
               ) : (
                 <img
-                  src={block.src}
-                  alt={block.alt || ''}
+                  src={mediaBlock.src}
+                  alt={(mediaBlock as unknown as { alt?: string }).alt || ''}
                   className="w-full h-full object-cover"
                 />
               )}
             </div>
-            {block.caption && (
+            {mediaBlock.caption && (
               <p className="mt-2 text-sm text-muted text-center">
-                {block.caption}
+                {mediaBlock.caption}
               </p>
             )}
           </motion.div>
@@ -306,7 +335,7 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
             </header>
 
             {/* View Mode Tabs - only show if project has media */}
-            {project.content.some((b: ContentBlock) => b.type === 'image' || b.type === 'gif' || b.type === 'video' || b.type === 'embed') && (
+            {project.content.some((b: ContentBlock) => b.type === 'image' || b.type === 'gif' || b.type === 'video' || b.type === 'embed' || b.type === 'component') && (
               <div className="flex justify-center py-4 border-b border-border">
                 <div className="flex bg-border/40 rounded-full p-0.5">
                   <button
