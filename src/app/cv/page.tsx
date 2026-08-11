@@ -35,7 +35,7 @@ const CV_PAGE_CONTEXT = {
 export default function CVPage() {
   const [chatOpen, setChatOpen] = useState(true)
   const [experienceDialogOpen, setExperienceDialogOpen] = useState(false)
-  const [selectedCompanyId, setSelectedCompanyId] = useState('enterpriseai')
+  const [selectedCompanyId, setSelectedCompanyId] = useState('adaptovate')
   const { flags } = useFeatureFlags()
 
   useEffect(() => {
@@ -89,7 +89,7 @@ export default function CVPage() {
                 <div className="flex items-center justify-between mb-6">
                   <p className="text-xs text-muted uppercase tracking-widest">Experience</p>
                   <button
-                    onClick={() => { setSelectedCompanyId('enterpriseai'); setExperienceDialogOpen(true) }}
+                    onClick={() => { setSelectedCompanyId('adaptovate'); setExperienceDialogOpen(true) }}
                     className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1"
                   >
                     View <ArrowRight className="w-3 h-3" />
