@@ -14,7 +14,7 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: '1.17.0',
+    version: '1.19.0',
     date: '2026-08-11',
     title: 'Playground Sandbox & Lifeline Timeline',
     description:
@@ -31,6 +31,37 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
     aiTools: ['Claude Code'],
     branch: 'GChainey/playground-section',
+  },
+  {
+    version: '1.18.0',
+    date: '2026-08-11',
+    title: 'Products Section',
+    description: 'Added a Products section for things I\'ve built and shipped — each one gets its own case study and can link out to the live product.',
+    changes: [
+      'New Products section on the home page and at the top of /projects',
+      'Added Dispatch and Thesis as the first two products, with case studies marked coming soon',
+      'New ProductCard component with animated accent SVG visuals and a Live status badge',
+      'Cards carry two destinations — a stretched link to the case study, plus a separate link out to the live product once a URL is set',
+      'Product case studies show a "Visit <product>" CTA and status in the header',
+      'Split /projects into Products and Writing & case studies via a new kind field on Project',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/projects-section-dispatch-thesis',
+  },
+  {
+    version: '1.17.0',
+    date: '2026-08-11',
+    title: 'New Role at ADAPTOVATE',
+    description: 'Updated experience across the site for the move to ADAPTOVATE in New York as Lead Product Designer.',
+    changes: [
+      'Added ADAPTOVATE (Lead Product Designer, New York, Jun 2026 – Present) as the current role in the CV data',
+      'Closed out the EnterpriseAI period at May 2026 and switched its copy to past tense',
+      'Updated the CV title and location to Lead Product Designer, New York, USA',
+      'Refreshed the LLM context so the chat answers with the current role',
+      'Added ADAPTOVATE to the homepage experience timeline and defaulted the experience dialog to it',
+      'Normalised every role period to abbreviated month + year and aligned the homepage dates with the CV data',
+    ],
+    aiTools: ['Claude Code'],
   },
   {
     version: '1.16.1',

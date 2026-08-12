@@ -17,7 +17,7 @@ const career = defineLifeline({
   slug: 'gareth-chainey',
   name: 'Gareth Chainey',
   birthYear: 2013,
-  description: 'Ten years of product design, from IT graduate to designing with LLMs.',
+  description: 'A decade of product design, from IT graduate to leading design with LLMs.',
   milestones: {
     2013: {
       id: 'qut',
@@ -70,10 +70,11 @@ const career = defineLifeline({
       ],
     },
     2026: {
-      id: 'portfolio',
+      id: 'adaptovate',
       events: [
+        'Lead Product Designer at ADAPTOVATE, New York — leading product design across client engagements',
+        'Wrapped up at EnterpriseAI after a year of LLM product work',
         'Rebuilt this portfolio with Next.js and Claude Code',
-        'Set up and led customer discovery and acquisition for EnterpriseAI products',
       ],
     },
   },

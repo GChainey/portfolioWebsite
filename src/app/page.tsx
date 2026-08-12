@@ -9,6 +9,8 @@ import { ChatInterface } from '@/components/ChatInterface'
 import { Facehash } from 'facehash'
 import { GitHubContributions } from '@/components/GitHubContributions'
 import { ThinkerCard } from '@/components/ThinkerCard'
+import { ProductCard } from '@/components/ProductCard'
+import { products } from '@/content/projects'
 import { TestimonialCarousel } from '@/components/TestimonialCarousel'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import { thinkers } from '@/content/thinkers'
@@ -33,7 +35,7 @@ const CHAR_DELAY = 80
 // Page context for chat
 const HOME_PAGE_CONTEXT = {
   page: 'Home',
-  description: 'Portfolio homepage showing experience at Enterprise AI Group, SEEK, and Best Practice Software. Projects include RFP response system, ProductLite prototyping, and LLM Configurator.',
+  description: 'Portfolio homepage showing experience at ADAPTOVATE, Enterprise AI Group, SEEK, and Best Practice Software. Products built and shipped include Dispatch and Thesis. Projects include RFP response system, ProductLite prototyping, and LLM Configurator.',
   suggestedQuestions: [
     "How has your role evolved with AI?",
     "What's your design philosophy?",
@@ -338,24 +340,31 @@ function BentoCardVisual({ icon }: { icon?: string }) {
 // Experience data
 const EXPERIENCE = [
   {
+    id: 'adaptovate',
+    company: 'ADAPTOVATE',
+    role: 'Lead Product Designer',
+    period: 'Jun 2026 – Present',
+    description: 'Leading product design across transformation engagements. AI-assisted prototyping to shape and validate the work.',
+  },
+  {
     id: 'enterpriseai',
     company: 'Enterprise AI Group',
     role: 'Product Designer',
-    period: '2024 – Present',
+    period: 'May 2025 – May 2026',
     description: 'Building AI-powered enterprise solutions. One-person product team delivering prototypes that win deals.',
   },
   {
     id: 'seek',
     company: 'SEEK',
     role: 'Senior Product Designer',
-    period: '2021 – 2024',
+    period: 'May 2022 – Sep 2024',
     description: 'Led discovery and design for candidate-facing products. Built AI resume tools and skills-based course finders.',
   },
   {
     id: 'bestpractice',
     company: 'Best Practice Software',
     role: 'UX Designer',
-    period: '2018 – 2021',
+    period: 'Oct 2019 – May 2022',
     description: 'Designed cloud-based practice management SaaS. Prototyping, validation, workshops, and component libraries.',
   },
 ]
@@ -408,7 +417,7 @@ export default function Home() {
   const [chatOpen, setChatOpen] = useState(false)
   const [chatMounted, setChatMounted] = useState(false)
   const [experienceDialogOpen, setExperienceDialogOpen] = useState(false)
-  const [selectedCompanyId, setSelectedCompanyId] = useState('enterpriseai')
+  const [selectedCompanyId, setSelectedCompanyId] = useState('adaptovate')
   const { flags } = useFeatureFlags()
 
   // Track client-side mount to prevent hydration issues with animations
@@ -566,6 +575,39 @@ export default function Home() {
               </motion.div>
             </section>
 
+            {/* Products - things I've built and shipped */}
+            {products.length > 0 && (
+              <section className="border-b border-border">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+                >
+                  <div className={`flex items-center justify-between px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
+                    <p className="text-xs text-muted uppercase tracking-widest">Products</p>
+                    <p className="text-xs text-muted">Things I&apos;ve built and shipped</p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2">
+                    {products.map((product, index) => {
+                      const isLeft = index % 2 === 0
+                      const isLastRow = index >= products.length - (products.length % 2 === 0 ? 2 : 1)
+
+                      return (
+                        <ProductCard
+                          key={product.id}
+                          product={product}
+                          index={index}
+                          className={`${isLeft ? 'md:border-r border-border' : ''} ${!isLastRow ? 'border-b border-border' : ''}`}
+                        />
+                      )
+                    })}
+                  </div>
+                </motion.div>
+              </section>
+            )}
+
             {/* Projects Bento Grid */}
             <section className="border-b border-border">
               <motion.div
@@ -639,7 +681,7 @@ export default function Home() {
                 <div className="flex items-center justify-between mb-6">
                   <p className="text-xs text-muted uppercase tracking-widest">Experience</p>
                   <button
-                    onClick={() => { setSelectedCompanyId('enterpriseai'); setExperienceDialogOpen(true) }}
+                    onClick={() => { setSelectedCompanyId('adaptovate'); setExperienceDialogOpen(true) }}
                     className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1"
                   >
                     View <ArrowRight className="w-3 h-3" />
