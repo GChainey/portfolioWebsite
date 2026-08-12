@@ -14,6 +14,25 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.17.0',
+    date: '2026-08-11',
+    title: 'Playground Sandbox & Lifeline Timeline',
+    description:
+      'Added an unlisted /playground route for trialling components before they land on the site, and installed evilrabbit/lifeline as its first specimen — a scrub-along career timeline fed from the CV.',
+    changes: [
+      'New /playground route with a specimen switcher, viewport presets (full/1280/768/390) and a bounds outline toggle',
+      'Specimens registered in a single src/app/playground/specimens.tsx file; stage remounts on switch so entry animations replay',
+      'Installed evilrabbit/lifeline from its shadcn registry (npx shadcn add evilrabbit/lifeline/lifeline)',
+      'Career timeline data in src/content/lifeline-career.ts, sourced from src/content/cv.ts',
+      'Hoisted Lifeline keyframes out of the registry’s Tailwind v4 @theme block — this project is on Tailwind 3.4, where that at-rule is dropped along with its contents',
+      'Pointed --lifeline-font at the site’s Inter instead of Geist so the timeline matches surrounding typography',
+      'Set tsconfig target to ES2017; the registry iterates a Map, which fails to typecheck against the previous ES5 default',
+      'Suppressed Lifeline age labels — this is a career axis, not a life, so year-minus-birthYear would read as a wrong age',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/playground-section',
+  },
+  {
     version: '1.16.1',
     date: '2026-03-21',
     title: 'Fix FAB White Rectangle',
