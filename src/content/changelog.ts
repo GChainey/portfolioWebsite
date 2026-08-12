@@ -14,6 +14,22 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.18.0',
+    date: '2026-08-11',
+    title: 'Products Section',
+    description: 'Added a Products section for things I\'ve built and shipped — each one gets its own case study and can link out to the live product.',
+    changes: [
+      'New Products section on the home page and at the top of /projects',
+      'Added Dispatch and Thesis as the first two products, with case studies marked coming soon',
+      'New ProductCard component with animated accent SVG visuals and a Live status badge',
+      'Cards carry two destinations — a stretched link to the case study, plus a separate link out to the live product once a URL is set',
+      'Product case studies show a "Visit <product>" CTA and status in the header',
+      'Split /projects into Products and Writing & case studies via a new kind field on Project',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/projects-section-dispatch-thesis',
+  },
+  {
     version: '1.17.0',
     date: '2026-08-11',
     title: 'New Role at ADAPTOVATE',

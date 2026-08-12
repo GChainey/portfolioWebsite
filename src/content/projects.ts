@@ -46,6 +46,10 @@ export interface Project {
   showGitHubActivity?: boolean // Show GitHub activity visualization in card
   externalUrl?: string // Link to external page instead of /projects/[id]
   companyId?: string // Link project to a company experience (e.g. 'enterpriseai', 'seek', 'bestpractice')
+  kind?: 'product' // Products I've built — shown in the Products section with a live link
+  liveUrl?: string // Live product URL — rendered alongside the case study, not instead of it
+  status?: 'Live' | 'Beta' | 'In development' // Product status badge
+  productVisual?: 'dispatch' | 'thesis' // Which animated card visual to render
   content: ContentBlock[]
   chatContext: {
     description: string
@@ -55,6 +59,63 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+  // --- Products I've built ---
+  {
+    id: 'dispatch',
+    title: 'Dispatch',
+    description: 'A product I designed and built. Case study coming soon.',
+    category: 'Product',
+    year: '2026',
+    kind: 'product',
+    status: 'Live',
+    // liveUrl: '', // TODO: add the real Dispatch URL to show the "Visit Dispatch" link
+    productVisual: 'dispatch',
+    tags: ['Product', 'AI', 'Built solo'],
+    content: [
+      { type: 'heading', level: 2, content: 'Coming Soon' },
+      { type: 'text', content: 'This case study is currently being written. Check back soon.' },
+    ],
+    chatContext: {
+      description: 'Dispatch — a product Gareth designed and built. Case study details are still being written.',
+      suggestedQuestions: [
+        'What is Dispatch?',
+        'What problem does Dispatch solve?',
+        'How was Dispatch built?',
+      ],
+      followUpQuestions: [
+        'Who is Dispatch for?',
+        'What did you learn building it?',
+      ],
+    },
+  },
+  {
+    id: 'thesis',
+    title: 'Thesis',
+    description: 'A product I designed and built. Case study coming soon.',
+    category: 'Product',
+    year: '2026',
+    kind: 'product',
+    status: 'Live',
+    // liveUrl: '', // TODO: add the real Thesis URL to show the "Visit Thesis" link
+    productVisual: 'thesis',
+    tags: ['Product', 'AI', 'Built solo'],
+    content: [
+      { type: 'heading', level: 2, content: 'Coming Soon' },
+      { type: 'text', content: 'This case study is currently being written. Check back soon.' },
+    ],
+    chatContext: {
+      description: 'Thesis — a product Gareth designed and built. Case study details are still being written.',
+      suggestedQuestions: [
+        'What is Thesis?',
+        'What problem does Thesis solve?',
+        'How was Thesis built?',
+      ],
+      followUpQuestions: [
+        'Who is Thesis for?',
+        'What did you learn building it?',
+      ],
+    },
+  },
   {
     id: 'how-i-work',
     title: 'How I Work',
@@ -1211,6 +1272,12 @@ export const projects: Project[] = [
     },
   },
 ]
+
+// Products I've built — shipped things with a live URL, kept separate from writing and case studies
+export const products: Project[] = projects.filter(p => p.kind === 'product')
+
+// Everything that isn't a product: articles, essays, and client case studies
+export const writing: Project[] = projects.filter(p => p.kind !== 'product')
 
 export function getProjectById(id: string): Project | undefined {
   return projects.find(p => p.id === id)
