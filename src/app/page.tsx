@@ -9,6 +9,8 @@ import { ChatInterface } from '@/components/ChatInterface'
 import { Facehash } from 'facehash'
 import { GitHubContributions } from '@/components/GitHubContributions'
 import { ThinkerCard } from '@/components/ThinkerCard'
+import { ProductCard } from '@/components/ProductCard'
+import { products } from '@/content/projects'
 import { TestimonialCarousel } from '@/components/TestimonialCarousel'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import { thinkers } from '@/content/thinkers'
@@ -33,7 +35,7 @@ const CHAR_DELAY = 80
 // Page context for chat
 const HOME_PAGE_CONTEXT = {
   page: 'Home',
-  description: 'Portfolio homepage showing experience at ADAPTOVATE, Enterprise AI Group, SEEK, and Best Practice Software. Projects include RFP response system, ProductLite prototyping, and LLM Configurator.',
+  description: 'Portfolio homepage showing experience at ADAPTOVATE, Enterprise AI Group, SEEK, and Best Practice Software. Products built and shipped include Dispatch and Thesis. Projects include RFP response system, ProductLite prototyping, and LLM Configurator.',
   suggestedQuestions: [
     "How has your role evolved with AI?",
     "What's your design philosophy?",
@@ -572,6 +574,39 @@ export default function Home() {
                 </p>
               </motion.div>
             </section>
+
+            {/* Products - things I've built and shipped */}
+            {products.length > 0 && (
+              <section className="border-b border-border">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+                >
+                  <div className={`flex items-center justify-between px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
+                    <p className="text-xs text-muted uppercase tracking-widest">Products</p>
+                    <p className="text-xs text-muted">Things I&apos;ve built and shipped</p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2">
+                    {products.map((product, index) => {
+                      const isLeft = index % 2 === 0
+                      const isLastRow = index >= products.length - (products.length % 2 === 0 ? 2 : 1)
+
+                      return (
+                        <ProductCard
+                          key={product.id}
+                          product={product}
+                          index={index}
+                          className={`${isLeft ? 'md:border-r border-border' : ''} ${!isLastRow ? 'border-b border-border' : ''}`}
+                        />
+                      )
+                    })}
+                  </div>
+                </motion.div>
+              </section>
+            )}
 
             {/* Projects Bento Grid */}
             <section className="border-b border-border">

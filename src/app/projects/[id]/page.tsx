@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { X, Clock, ArrowRight, RotateCcw, LayoutGrid, FileText } from 'lucide-react'
+import { X, Clock, ArrowRight, ArrowUpRight, RotateCcw, LayoutGrid, FileText } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
 import { Facehash } from 'facehash'
@@ -263,6 +263,15 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
                   <span className="text-xs text-muted uppercase tracking-widest">{project.category}</span>
                   <span className="text-xs text-muted">•</span>
                   <span className="text-xs text-muted">{project.year}</span>
+                  {project.status && (
+                    <>
+                      <span className="text-xs text-muted">•</span>
+                      <span className="flex items-center gap-1.5 text-xs text-muted">
+                        <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                        {project.status}
+                      </span>
+                    </>
+                  )}
                 </div>
 
                 <h1 className="text-4xl md:text-5xl font-medium text-foreground mb-4 hover-accent-text">
@@ -272,6 +281,19 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
                 <p className="text-xl text-muted max-w-2xl mb-6">
                   {project.description}
                 </p>
+
+                {/* Live product CTA */}
+                {project.liveUrl && (
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 mb-8 bg-[var(--accent-cta)] text-white text-sm font-medium rounded-full hover:brightness-110 transition-all group/cta"
+                  >
+                    Visit {project.title}
+                    <ArrowUpRight className="w-4 h-4 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5 transition-transform" />
+                  </a>
+                )}
 
                 {/* Tags */}
                 <div className="flex flex-wrap justify-center gap-2 mb-8">

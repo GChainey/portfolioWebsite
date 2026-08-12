@@ -5,8 +5,9 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { GitHubContributions } from '@/components/GitHubContributions'
+import { ProductCard } from '@/components/ProductCard'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
-import { projects } from '@/content/projects'
+import { products, writing } from '@/content/projects'
 
 export default function ProjectsPage() {
   const { flags } = useFeatureFlags()
@@ -25,17 +26,48 @@ export default function ProjectsPage() {
             >
               <h1 className="text-4xl font-medium text-foreground mb-4">Projects</h1>
               <p className="text-lg text-muted max-w-2xl">
-                Case studies and experiments in AI-augmented design and development.
+                Products I&apos;ve built and shipped, plus case studies and experiments in
+                AI-augmented design and development.
               </p>
             </motion.div>
           </section>
 
-          {/* Projects grid - edges touching */}
+          {/* Products - things I've built and shipped */}
+          {products.length > 0 && (
+            <section className="border-b border-border">
+              <div className={`flex items-center justify-between px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
+                <p className="text-xs text-muted uppercase tracking-widest">Products</p>
+                <p className="text-xs text-muted">Things I&apos;ve built and shipped</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2">
+                {products.map((product, index) => {
+                  const isLeft = index % 2 === 0
+                  const isLastRow = index >= products.length - (products.length % 2 === 0 ? 2 : 1)
+
+                  return (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      index={index}
+                      className={`${isLeft ? 'md:border-r border-border' : ''} ${!isLastRow ? 'border-b border-border' : ''}`}
+                    />
+                  )
+                })}
+              </div>
+            </section>
+          )}
+
+          {/* Writing and case studies - edges touching */}
           <section className="border-b border-border">
+            <div className={`px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
+              <p className="text-xs text-muted uppercase tracking-widest">Writing &amp; case studies</p>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2">
-              {projects.map((project, index) => {
+              {writing.map((project, index) => {
                 const isOdd = index % 2 === 1
-                const isLastRow = index >= projects.length - (projects.length % 2 === 0 ? 2 : 1)
+                const isLastRow = index >= writing.length - (writing.length % 2 === 0 ? 2 : 1)
 
                 return (
                   <Link
