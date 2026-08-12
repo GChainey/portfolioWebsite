@@ -32,7 +32,7 @@ function getCompanyContext(company: typeof cvData.experience[0]) {
   }
 }
 
-export function ExperienceDialog({ isOpen, onClose, initialCompanyId = 'enterpriseai' }: ExperienceDialogProps) {
+export function ExperienceDialog({ isOpen, onClose, initialCompanyId = 'adaptovate' }: ExperienceDialogProps) {
   const companies = cvData.experience
   const initialIndex = Math.max(0, companies.findIndex(c => c.id === initialCompanyId))
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
