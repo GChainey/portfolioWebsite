@@ -14,6 +14,23 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.19.2',
+    date: '2026-09-25',
+    title: 'Experience: Lead Product Designer at Enterprise AI, NYC',
+    description:
+      'Consolidated current experience into a single role: Lead Product Designer at Enterprise AI, now based in New York City.',
+    changes: [
+      'Removed the separate ADAPTOVATE role from the CV data, homepage experience timeline and career Lifeline',
+      'Enterprise AI is now Lead Product Designer, May 2025 – Present, based in New York City',
+      'CV location updated to New York City, USA',
+      'Experience dialog and "View" buttons default to Enterprise AI',
+      'Chat context (llmContext) updated so the assistant describes the current role correctly',
+      'Lifeline 2026 milestone now covers the move to New York City and the app-builder prototyping work',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/consolidate-enterprise-ai',
+  },
+  {
     version: '1.19.1',
     date: '2026-09-25',
     title: 'Real GitHub Heatmap',

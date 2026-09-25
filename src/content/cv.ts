@@ -45,27 +45,15 @@ export const cvData: CVData = {
   title: 'Lead Product Designer',
   summary:
     'Product designer with 10+ years experience working with startups and large scale companies in B2C and B2B SaaS. I create high quality prototypes to rapidly experiment, make product decisions and win deals.',
-  location: 'New York, USA',
+  location: 'New York City, USA',
 
   experience: [
     {
-      id: 'adaptovate',
-      company: 'ADAPTOVATE',
-      role: 'Lead Product Designer',
-      location: 'New York, USA',
-      period: 'Jun 2026 – Present',
-      companyDescription:
-        'ADAPTOVATE is a global business transformation consultancy helping large organisations change how they work. Leading product design across client engagements, bringing AI-assisted prototyping into how transformation work gets shaped and validated.',
-      highlights: [
-        'Leading product design across client engagements',
-      ],
-    },
-    {
       id: 'enterpriseai',
       company: 'EnterpriseAI',
-      role: 'Senior Product Designer',
-      location: 'Sydney, Australia',
-      period: 'May 2025 – May 2026',
+      role: 'Lead Product Designer',
+      location: 'New York City, USA',
+      period: 'May 2025 – Present',
       companyDescription:
         'EnterpriseAI is building products that solve business problems by leveraging the powers of LLMs. Building two main products: An agentic workflow creation tool for the enterprise, and a government building application platform.',
       highlights: [
@@ -225,13 +213,10 @@ export const cvData: CVData = {
     },
   ],
 
-  llmContext: `Gareth Chainey is a Lead Product Designer based in New York, USA with 10+ years experience across startups and large-scale companies in B2C and B2B SaaS. He creates high quality prototypes to rapidly experiment, make product decisions, and win deals.
+  llmContext: `Gareth Chainey is a Lead Product Designer based in New York City, USA with 10+ years experience across startups and large-scale companies in B2C and B2B SaaS. He creates high quality prototypes to rapidly experiment, make product decisions, and win deals.
 
-CURRENT ROLE - ADAPTOVATE (Jun 2026 - Present, New York):
-ADAPTOVATE is a global business transformation consultancy helping large organisations change how they work. Gareth leads product design across client engagements, bringing AI-assisted prototyping into how transformation work gets shaped and validated.
-
-PREVIOUS ROLE - EnterpriseAI (May 2025 - May 2026, Sydney):
-EnterpriseAI builds products solving business problems with LLMs. He worked on two main products: an agentic workflow creation tool for the enterprise, and a government building application platform. He single-handedly built high quality prototypes to respond to multi-million dollar RFP deals — work that would previously require entire teams. He set up and led customer discovery and acquisition/conversion. He designed LLM-integrated prototypes for an enterprise-ready agentic workflow management tool. He closely collaborated with product and engineering to continually improve product and strategy. He operated as a one-person product team: PM, designer, QA, and engineer — using AI tools like Claude, Claude Code, and Cursor to ship real code rather than just Figma mockups.
+CURRENT ROLE - EnterpriseAI (May 2025 - Present, Lead Product Designer, New York City):
+Gareth joined EnterpriseAI in Sydney and has since moved to New York City, where he continues to lead product design for EnterpriseAI. EnterpriseAI builds products solving business problems with LLMs. He worked on two main products: an agentic workflow creation tool for the enterprise, and a government building application platform. He single-handedly built high quality prototypes to respond to multi-million dollar RFP deals — work that would previously require entire teams. He set up and led customer discovery and acquisition/conversion. He designed LLM-integrated prototypes for an enterprise-ready agentic workflow management tool. He closely collaborated with product and engineering to continually improve product and strategy. He operated as a one-person product team: PM, designer, QA, and engineer — using AI tools like Claude, Claude Code, and Cursor to ship real code rather than just Figma mockups.
 
 PREVIOUS ROLE - SEEK (May 2022 - Sep 2024, Melbourne):
 SEEK is APAC's largest employment marketplace. Gareth led continuous discovery for a team empowering candidates to live fulfilling working lives. Key achievements: Led design for an initiative connecting candidates with education courses, increasing conversion rate by 75% and adding $500,000 in annual revenue. Led discovery and design for projects that increased organic visits by 25.9% in a single year (over a million annual visits). Conducted 100s of customer interviews, experiments, and assumption tests. Led initiative to implement the HEART framework for long-term alignment of customer value and business objectives.

@@ -35,7 +35,7 @@ const CHAR_DELAY = 80
 // Page context for chat
 const HOME_PAGE_CONTEXT = {
   page: 'Home',
-  description: 'Portfolio homepage showing experience at ADAPTOVATE, Enterprise AI Group, SEEK, and Best Practice Software. Products built and shipped include Dispatch and Thesis. Projects include RFP response system, ProductLite prototyping, and LLM Configurator.',
+  description: 'Portfolio homepage showing experience at Enterprise AI Group, SEEK, and Best Practice Software. Products built and shipped include Dispatch and Thesis. Projects include RFP response system, ProductLite prototyping, and LLM Configurator.',
   suggestedQuestions: [
     "How has your role evolved with AI?",
     "What's your design philosophy?",
@@ -340,17 +340,10 @@ function BentoCardVisual({ icon }: { icon?: string }) {
 // Experience data
 const EXPERIENCE = [
   {
-    id: 'adaptovate',
-    company: 'ADAPTOVATE',
-    role: 'Lead Product Designer',
-    period: 'Jun 2026 – Present',
-    description: 'Leading product design across transformation engagements. AI-assisted prototyping to shape and validate the work.',
-  },
-  {
     id: 'enterpriseai',
     company: 'Enterprise AI Group',
-    role: 'Product Designer',
-    period: 'May 2025 – May 2026',
+    role: 'Lead Product Designer',
+    period: 'May 2025 – Present',
     description: 'Building AI-powered enterprise solutions. One-person product team delivering prototypes that win deals.',
   },
   {
@@ -417,7 +410,7 @@ export default function Home() {
   const [chatOpen, setChatOpen] = useState(false)
   const [chatMounted, setChatMounted] = useState(false)
   const [experienceDialogOpen, setExperienceDialogOpen] = useState(false)
-  const [selectedCompanyId, setSelectedCompanyId] = useState('adaptovate')
+  const [selectedCompanyId, setSelectedCompanyId] = useState('enterpriseai')
   const { flags } = useFeatureFlags()
 
   // Track client-side mount to prevent hydration issues with animations
@@ -681,7 +674,7 @@ export default function Home() {
                 <div className="flex items-center justify-between mb-6">
                   <p className="text-xs text-muted uppercase tracking-widest">Experience</p>
                   <button
-                    onClick={() => { setSelectedCompanyId('adaptovate'); setExperienceDialogOpen(true) }}
+                    onClick={() => { setSelectedCompanyId('enterpriseai'); setExperienceDialogOpen(true) }}
                     className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1"
                   >
                     View <ArrowRight className="w-3 h-3" />

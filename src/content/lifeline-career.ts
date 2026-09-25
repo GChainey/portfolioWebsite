@@ -64,16 +64,16 @@ const career = defineLifeline({
     2025: {
       id: 'enterpriseai',
       events: [
-        'Senior Product Designer at EnterpriseAI, building products on LLMs',
+        'Lead Product Designer at EnterpriseAI, building products on LLMs',
         'Prototypes answering multi-million dollar RFPs — work that previously took entire teams',
         'Designed an enterprise-ready agentic workflow management tool',
       ],
     },
     2026: {
-      id: 'adaptovate',
+      id: 'new-york',
       events: [
-        'Lead Product Designer at ADAPTOVATE, New York — leading product design across client engagements',
-        'Wrapped up at EnterpriseAI after a year of LLM product work',
+        'Moved to New York City, still leading product design at EnterpriseAI',
+        'Prototyped the EnterpriseAI app builder in code — 130 commits in six weeks',
         'Rebuilt this portfolio with Next.js and Claude Code',
       ],
     },
