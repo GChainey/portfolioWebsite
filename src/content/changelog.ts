@@ -14,6 +14,24 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.19.1',
+    date: '2026-09-25',
+    title: 'Real GitHub Heatmap',
+    description:
+      'The homepage heatmap was a hand-drawn Jan 2024 – Jun 2025 narrative. It now plots real contributions for the last 24 months, and the headline count no longer double counts private work.',
+    changes: [
+      '/api/github now returns daily contributions for the last two years (two aliased one-year contributionsCollection windows) alongside the 12-month total',
+      'Fixed the total double counting: the viewer calendar already includes private contributions, so restrictedContributionsCount is no longer added on top',
+      'Heatmap columns are months and rows are weekdays, with GitHub-style quartile levels. Each column has a hover title with that month’s total',
+      'Range label reads "Oct 2024 → Now" and moves forward automatically each month',
+      'Static fallback replaced with a snapshot of real data, used until the API responds or if it fails',
+      'One shared request for every heatmap on the page; hooks no longer called after early returns',
+      'Full heatmap uses smaller cells under the sm breakpoint so 24 months fit on mobile',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/portfolio-html-redesigns',
+  },
+  {
     version: '1.19.0',
     date: '2026-08-11',
     title: 'Playground Sandbox & Lifeline Timeline',

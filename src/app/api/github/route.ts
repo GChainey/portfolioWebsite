@@ -1,16 +1,30 @@
 import { NextResponse } from 'next/server'
 
-interface CachedData {
+export interface ContributionDay {
+  date: string
+  count: number
+}
+
+export interface GitHubContributionsResponse {
   totalContributions: number
+  days: ContributionDay[]
   fetchedAt: string
 }
 
 // In-memory cache
-let cachedData: CachedData | null = null
+let cachedData: GitHubContributionsResponse | null = null
 let cacheTimestamp = 0
 const CACHE_TTL = 60 * 60 * 1000 // 1 hour
 
 const GITHUB_GRAPHQL_URL = 'https://api.github.com/graphql'
+const DAY_MS = 24 * 60 * 60 * 1000
+
+interface CalendarResponse {
+  contributionCalendar: {
+    totalContributions: number
+    weeks: { contributionDays: { date: string; contributionCount: number }[] }[]
+  }
+}
 
 export async function GET() {
   // Return cached data if fresh
@@ -29,15 +43,21 @@ export async function GET() {
   }
 
   try {
-    // Use viewer query (authenticated user) to include private contributions
+    // A contributionsCollection can span at most one year, so fetch the last
+    // two years as two aliased windows. Using `viewer` (the token's owner)
+    // means the calendar already includes private contributions — adding
+    // restrictedContributionsCount on top would double count them.
+    const now = Date.now()
+    const yearAgo = new Date(now - 365 * DAY_MS).toISOString()
+    const twoYearsAgo = new Date(now - 730 * DAY_MS).toISOString()
     const query = `
       query {
         viewer {
-          contributionsCollection {
-            contributionCalendar {
-              totalContributions
-            }
-            restrictedContributionsCount
+          recent: contributionsCollection(from: "${yearAgo}", to: "${new Date(now).toISOString()}") {
+            contributionCalendar { totalContributions weeks { contributionDays { date contributionCount } } }
+          }
+          prior: contributionsCollection(from: "${twoYearsAgo}", to: "${yearAgo}") {
+            contributionCalendar { totalContributions weeks { contributionDays { date contributionCount } } }
           }
         }
       }
@@ -57,18 +77,29 @@ export async function GET() {
     }
 
     const data = await response.json()
-    const collection = data?.data?.viewer?.contributionsCollection
-    const publicContributions = collection?.contributionCalendar?.totalContributions
-    const privateContributions = collection?.restrictedContributionsCount ?? 0
+    const recent: CalendarResponse | undefined = data?.data?.viewer?.recent
+    const prior: CalendarResponse | undefined = data?.data?.viewer?.prior
+    const totalContributions = recent?.contributionCalendar?.totalContributions
 
-    if (typeof publicContributions !== 'number') {
+    if (!recent || !prior || typeof totalContributions !== 'number') {
       throw new Error('Unexpected response shape from GitHub API')
     }
 
-    const totalContributions = publicContributions + privateContributions
+    // The two windows share a boundary day; key by date to de-duplicate
+    const byDate = new Map<string, number>()
+    for (const calendar of [prior, recent]) {
+      for (const week of calendar.contributionCalendar.weeks) {
+        for (const day of week.contributionDays) {
+          byDate.set(day.date, day.contributionCount)
+        }
+      }
+    }
+    const days = Array.from(byDate, ([date, count]) => ({ date, count }))
+      .sort((a, b) => a.date.localeCompare(b.date))
 
     cachedData = {
       totalContributions,
+      days,
       fetchedAt: new Date().toISOString(),
     }
     cacheTimestamp = Date.now()
