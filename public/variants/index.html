@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Portfolio variants</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,sans-serif;background:#0E0E0E;color:#fff;padding:56px 40px 80px}
+h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:64px;margin:0 0 8px;line-height:1}h1 i{color:#FF5A1F}
+.sub{color:#9A9A9A;margin:0 0 40px;max-width:640px;line-height:1.5}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:18px}
+a.card{display:flex;flex-direction:column;border-radius:18px;text-decoration:none;color:inherit;background:#181817;box-shadow:inset 0 0 0 1px #2A2A27;overflow:hidden;transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s}
+a.card:hover{transform:translateY(-6px);box-shadow:inset 0 0 0 1px #4A4A45,0 30px 60px -30px rgba(0,0,0,.8)}
+.thumb{aspect-ratio:16/10;overflow:hidden;background:#222;border-bottom:1px solid #2A2A27}
+.thumb img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;transition:transform 1.2s cubic-bezier(.16,1,.3,1)}
+a.card:hover .thumb img{transform:scale(1.04)}
+.body{padding:22px 24px 26px;display:flex;flex-direction:column;gap:10px;flex:1}
+.top{display:flex;justify-content:space-between;align-items:center;font:500 12px 'JetBrains Mono',monospace;letter-spacing:.04em;color:#8A8A84}
+.v{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:7px;font-weight:700;color:#0E0E0E;margin-right:10px}
+.tag{padding:3px 9px;border-radius:999px;box-shadow:inset 0 0 0 1px #3A3A36}
+.tag.live{color:#4ADE80;box-shadow:inset 0 0 0 1px #1F5E36}
+h2{font-size:28px;letter-spacing:-.02em;margin:4px 0 0;font-weight:600}
+.body p{margin:0;color:#A8A8A2;line-height:1.5;font-size:15px}
+.body .go{margin-top:auto;padding-top:10px;font-size:14px;color:#fff}
+</style></head><body>
+<h1>Portfolio <i>variants</i></h1>
+<p class="sub">Three directions for A/B/C testing. They share the same designer and the same content, but each homepage makes a different pitch.</p>
+<div class="g">
+  <a class="card" href="/">
+    <div class="thumb"><img src="/variants/shots/v-original.jpg" alt="Current portfolio homepage"></div>
+    <div class="body">
+      <div class="top"><span><span class="v" style="background:#F5B301">A</span>ORIGINAL</span><span class="tag live">● CURRENT</span></div>
+      <h2>Product Designer → Orchestrator</h2>
+      <p>The current site. Typewriter hero, GitHub contributions, products, projects bento, experience, testimonials and the AI chat sidebar.</p>
+      <span class="go">Open current site →</span>
+    </div>
+  </a>
+  <a class="card" href="/variants/brand">
+    <div class="thumb"><img src="/variants/shots/v-brand.jpg" alt="Brand variant"></div>
+    <div class="body">
+      <div class="top"><span><span class="v" style="background:#FA5400">B</span>BRAND</span><span class="tag">BRAND-LED</span></div>
+      <h2>Design it once. Ship it for real.</h2>
+      <p>Full-bleed and loud. Every career chapter is a full-page panel in that company&rsquo;s brand, and testimonials carry each colleague&rsquo;s company branding. Day and night modes.</p>
+      <span class="go">Open prototype →</span>
+    </div>
+  </a>
+  <a class="card" href="/variants/showcase">
+    <div class="thumb"><img src="/variants/shots/v-showcase.jpg" alt="Showcase variant"></div>
+    <div class="body">
+      <div class="top"><span><span class="v" style="background:#fff">C</span>SHOWCASE</span><span class="tag">WORK-FIRST</span></div>
+      <h2>I design products by building them.</h2>
+      <p>The work is the homepage. Real prototype screens, a featured product you can click into live, case studies and a wall of every screen.</p>
+      <span class="go">Open prototype →</span>
+    </div>
+  </a>
+</div>
+</body></html>

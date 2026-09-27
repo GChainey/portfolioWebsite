@@ -14,6 +14,21 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.20.0',
+    date: '2026-09-27',
+    title: 'Homepage Variants Launch Pad',
+    description:
+      'Added an unlisted /variants launch pad with two alternative homepage directions, built as static HTML prototypes, alongside the current site. The live homepage is unchanged.',
+    changes: [
+      '/variants launch pad: A · Original (the current site), B · Brand and C · Showcase',
+      'B · Brand (/variants/brand): full-bleed brand-led layout; career chapters as horizontally scrolling, full-viewport panels in each company’s brand; testimonials carry each colleague’s company branding; Dispatch, Shaders and Thesis product cards with a live, shuffleable shader; day/night mode',
+      'C · Showcase (/variants/showcase): work-first layout built from real prototype screenshots, a featured product stage, case studies and a filterable wall of screens',
+      'Served from public/variants via Next rewrites for clean URLs, with noindex headers and meta tags so they stay out of search',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/variants-launchpad',
+  },
+  {
     version: '1.19.2',
     date: '2026-09-25',
     title: 'Experience: Lead Product Designer at Enterprise AI, NYC',
