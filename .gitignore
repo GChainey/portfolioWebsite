@@ -37,3 +37,10 @@ next-env.d.ts
 
 # Misc
 .claude/
+.vercel
+.env*
+!.env.example
+
+# Local agent skills installed by marketplace integrations
+.agents/
+skills-lock.json
