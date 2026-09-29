@@ -199,9 +199,9 @@ Focus answers on this context when relevant, but can reference other experience 
         })
       })
 
-      if (!response.ok) throw new Error('Failed to get response')
-
       const data = await response.json()
+
+      if (!response.ok) throw new Error(data?.error || 'Failed to get response')
 
       // Extract name if present in response
       const detectedName = extractName(data.content)
@@ -223,7 +223,10 @@ Focus answers on this context when relevant, but can reference other experience 
       console.error('Chat error:', error)
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: "I'm having trouble connecting right now. Please try again in a moment."
+        content:
+          error instanceof Error && error.message !== 'Failed to get response' && error.message !== 'Failed to process chat request'
+            ? error.message
+            : "I'm having trouble connecting right now. Please try again in a moment."
       }])
     } finally {
       setIsLoading(false)

@@ -14,6 +14,21 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.20.1',
+    date: '2026-09-29',
+    title: 'AI Chat Fix and Spend Cap',
+    description:
+      'Fixed the production AI chat, which was calling a Claude model ID that does not exist, and added a monthly spend cap plus abuse protection.',
+    changes: [
+      'Corrected the production model to claude-haiku-4-5-20251001',
+      'Monthly spend cap (default $10, set via CHAT_MONTHLY_CAP_USD) tracked in Upstash Redis from real token usage; chat pauses with a friendly message once reached',
+      'Per-IP rate limit (20 messages an hour), and caps on history length, message length and system prompt size',
+      'Production now fails closed when the API key or Redis is missing instead of silently falling back to Groq',
+      'Chat UI shows the server’s friendly limit messages instead of a generic error',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.20.0',
     date: '2026-09-27',
     title: 'Homepage Variants Launch Pad',
