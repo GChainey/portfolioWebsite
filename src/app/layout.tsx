@@ -5,6 +5,7 @@ import { FeatureFlagProvider } from '@/context/FeatureFlagContext'
 import { FeatureFlagDrawer } from '@/components/FeatureFlagDrawer'
 import { AgentationProvider } from '@/components/AgentationProvider'
 import { ScrollToTop } from '@/components/ScrollToTop'
+import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 
 const inter = Inter({
@@ -50,6 +51,7 @@ export default function RootLayout({
           </FeatureFlagProvider>
         </ThemeProvider>
         <AgentationProvider />
+        <Analytics />
       </body>
     </html>
   )

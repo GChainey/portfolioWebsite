@@ -14,6 +14,18 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.20.2',
+    date: '2026-09-29',
+    title: 'Vercel Web Analytics',
+    description:
+      'Added Vercel Web Analytics so pageviews are recorded in production after deploy.',
+    changes: [
+      'Installed @vercel/analytics and mounted Analytics in the root layout',
+    ],
+    aiTools: ['Cursor'],
+    branch: 'cursor/vercel-web-analytics-68d8',
+  },
+  {
     version: '1.20.1',
     date: '2026-09-29',
     title: 'AI Chat Fix and Spend Cap',
