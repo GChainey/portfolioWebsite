@@ -1,0 +1,80 @@
+/* Add document state machine: the real dialog, shown in place on the stage. */
+.dts-stage { display: flex; justify-content: center; padding: 32px; border-radius: 12px; background: rgba(9, 9, 11, 0.32); }
+.dts-stage .dr-dialog.is-inline { position: relative; inset: auto; margin: 0; max-height: none; box-shadow: 0 18px 60px rgba(0, 0, 0, 0.2); }
+.scs-rail h1 { margin-bottom: 16px; }
+.scs-main { gap: 24px; }
+
+/* Axes: one group each, options stacked. Radios pick one; Show uses checkboxes. */
+#dts-rail { display: flex; flex-direction: column; gap: 24px; }
+.dts-axis { display: flex; flex-direction: column; gap: 4px; margin: 0; padding: 0; border: 0; min-width: 0; }
+.dts-axis-label { margin-bottom: 4px; padding: 0; font-size: var(--ad-t-small); line-height: var(--ad-lh-small); font-weight: 500; color: var(--ad-mute); }
+.dts-opt { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: var(--ad-t-body); line-height: var(--ad-lh-body); color: var(--ad-ink); cursor: pointer; }
+.dts-opt input { width: 16px; height: 16px; margin: 0; flex: none; accent-color: var(--ad-ink); cursor: pointer; }
+.dts-opt:has(input:not(:checked)) { color: var(--ad-ink-4); }
+
+/* The rail floats like a macOS sidebar: inset from the window edge, rounded,
+   translucent over the page, and scrolls on its own. */
+body.scs { align-items: flex-start; }
+.scs-rail {
+  position: sticky; top: 0; align-self: flex-start;
+  height: calc(100vh - 16px); box-sizing: border-box; overflow: auto;
+  margin: 8px 0 8px 8px; padding: 16px 16px 24px;
+  border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 16px;
+  background: rgba(250, 250, 250, 0.72);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6); backdrop-filter: blur(24px) saturate(1.6);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+.scs-rail h1 { padding: 0 4px; }
+.dts-axis { padding: 0 4px; }
+
+/* Demo: Play demo runs the showcase script in the real dialog for recording. */
+.dts-demo-ctrl { display: flex; align-items: center; gap: 12px; margin: 0 4px 24px; }
+.dts-demo-btn { height: 32px; padding: 0 12px; border: 0; border-radius: 8px; background: var(--ad-ink); color: #fff; font: inherit; font-size: var(--ad-t-body); font-weight: 500; cursor: pointer; }
+.dts-demo-btn:hover { background: var(--ad-ink-4); }
+.dts-demo-ctrl .dts-opt { padding: 0; color: var(--ad-ink-4); }
+/* In the demo the rail and title go; the dialog sits centred on a soft stage. */
+body.dts-demo .scs-rail, body.dts-demo .scs-cap { display: none; }
+body.dts-demo .scs-main { padding: 0; min-height: 100vh; justify-content: center; }
+body.dts-demo .dts-stage { min-height: 100vh; align-items: center; border-radius: 0; padding: 48px; background: radial-gradient(120% 90% at 50% 0%, var(--ad-wash), var(--ad-line) 100%); }
+.dts-demo-caption {
+  position: fixed; z-index: 10; left: 50%; bottom: 32px; transform: translateX(-50%);
+  max-width: min(720px, calc(100vw - 64px)); padding: 12px 24px; border-radius: 999px;
+  background: rgba(9, 9, 11, 0.88); color: #fff; font-size: var(--ad-t-heading); line-height: var(--ad-lh-heading); font-weight: 500; text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.24);
+}
+.dts-demo-caption[hidden] { display: none; }
+/* Exit stays out of the recording until you point at the corner. */
+.dts-demo-exit { position: fixed; z-index: 10; top: 16px; right: 16px; padding: 8px 12px; border: 0; border-radius: 8px; background: rgba(9, 9, 11, 0.72); color: #fff; font: inherit; font-size: var(--ad-t-small); cursor: pointer; opacity: 0; transition: opacity .2s; }
+.dts-demo-exit:hover, .dts-demo-exit:focus-visible { opacity: 1; }
+.dts-demo-exit[hidden] { display: none; }
+/* Leave room under the dialog for the caption. */
+body.dts-demo .dts-stage { box-sizing: border-box; padding: 24px 48px 96px; }
+body.dts-demo .dts-stage .dr-dialog.dr-dialog--split { height: min(780px, calc(100vh - 120px)); }
+.dts-demo-caption { bottom: 24px; }
+
+/* Two demos: the feature (rail hidden) and the state machine tour (rail shown). */
+.dts-demo-ctrl { flex-wrap: wrap; }
+.dts-demo-btn.is-quiet { border: 1px solid var(--ad-line); background: #fff; color: var(--ad-ink); }
+.dts-demo-btn.is-quiet:hover { background: var(--ad-line-2); }
+/* The option the tour just changed pulses, so viewers see what was clicked. */
+.dts-opt { border-radius: 6px; }
+.dts-opt.is-pulse { animation: dts-pulse 1.2s ease-out; }
+@keyframes dts-pulse { 0% { background: var(--ad-ai-wash); box-shadow: 0 0 0 4px var(--ad-ai-wash); } 100% { background: transparent; box-shadow: 0 0 0 4px transparent; } }
+/* During the tour the caption centres under the stage, not the window. */
+body.dts-touring .dts-demo-caption { left: calc(50% + 148px); }
+/* Compact enough for every axis to fit a 1000px-tall window. */
+#dts-rail { gap: 16px; }
+.dts-axis { gap: 0; }
+.dts-opt { padding: 4px 0; }
+.dts-demo-ctrl { gap: 8px; margin-bottom: 16px; }
+.scs-rail h1 { margin-bottom: 12px; }
+
+/* Tour cursor: an arrow that glides to each control and rings when it clicks. */
+.dts-cursor { position: fixed; z-index: 20; top: 0; left: 0; width: 24px; height: 24px; pointer-events: none; transition: transform .75s cubic-bezier(.3, .7, .2, 1); }
+.dts-cursor[hidden] { display: none; }
+.dts-cursor svg { position: relative; z-index: 1; display: block; width: 32px; height: 32px; margin: -4px 0 0 -7px; fill: var(--ad-ink); stroke: #fff; stroke-width: 1.5; stroke-linejoin: round; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3)); }
+.dts-cursor-ring { position: absolute; top: -16px; left: -16px; width: 32px; height: 32px; border-radius: 50%; background: rgba(124, 58, 237, 0.32); transform: scale(0); opacity: 0; }
+.dts-cursor.is-click .dts-cursor-ring { animation: dts-click .5s ease-out; }
+.dts-cursor.is-click svg { animation: dts-press .3s ease-out; }
+@keyframes dts-click { 0% { transform: scale(0.3); opacity: 1; } 100% { transform: scale(1.6); opacity: 0; } }
+@keyframes dts-press { 50% { transform: scale(0.86); } }

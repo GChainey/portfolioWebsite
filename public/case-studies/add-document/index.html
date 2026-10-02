@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Add document — state machine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/admin.css" />
+<link rel="stylesheet" href="assets/settings-card-states.css" />
+<link rel="stylesheet" href="assets/doc-type-states.css" />
+<!-- Portfolio embed: the case study page has its own demo buttons. -->
+<style>.is-embedded .dts-demo-ctrl { display: none; }</style>
+<script>if (window.self !== window.top) document.documentElement.classList.add('is-embedded');</script>
+</head>
+<body class="scs">
+
+<aside class="scs-rail">
+  <h1>Add document</h1>
+  <div class="dts-demo-ctrl"><button type="button" class="dts-demo-btn" data-demo-play>Feature demo</button><button type="button" class="dts-demo-btn is-quiet" data-tour-play>State machine demo</button><label class="dts-opt"><input type="checkbox" data-demo-captions checked><span>Captions</span></label></div>
+  <div id="dts-rail"></div>
+</aside>
+
+<main class="scs-main">
+  <div class="scs-cap">
+    <b id="dts-capName"></b>
+  </div>
+  <div class="dts-stage" id="dts-stage"></div>
+</main>
+
+<script src="assets/admin-doc-preview.js"></script>
+<script src="assets/admin-doc-type-dialog.js"></script>
+<div class="dts-demo-caption" data-demo-caption hidden></div>
+<button type="button" class="dts-demo-exit" data-demo-exit hidden>Exit demo · Esc</button>
+<script src="assets/doc-type-states.js"></script>
+</body>
+</html>

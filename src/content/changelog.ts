@@ -14,6 +14,22 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.21.0',
+    date: '2026-10-02',
+    title: 'Add Document Case Study',
+    description:
+      'New case study on the Add document dialog for AI Document Review, with the live state machine embedded on a canvas and an interactive log of all 27 rounds of feedback.',
+    changes: [
+      'Brought the state machine prototype across as static HTML under /case-studies/add-document',
+      'DemoCanvas component: a live prototype on a dotted canvas, scaled to fit, with Explore, Feature demo and State machine tour modes',
+      'IterationTimelapse component: scrub or play through 23 real screenshots of the dialog, one per round of feedback, with the feedback that caused each change',
+      'IterationLog component: every round of feedback as a column of changes, filterable by theme, with the original feedback and what changed',
+      'Drafted the story: the problem, the preview, the state machine and what 27 rounds of tinkering with AI looked like',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/o83j2',
+  },
+  {
     version: '1.20.2',
     date: '2026-09-29',
     title: 'Vercel Web Analytics',

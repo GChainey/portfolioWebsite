@@ -4,10 +4,16 @@ import { motion } from 'framer-motion'
 import type { ContentBlock } from '@/content/projects'
 import { slugify } from '@/components/TableOfContents'
 import { FunnelDiagram } from '@/components/FunnelDiagram'
+import { DemoCanvas } from '@/components/DemoCanvas'
+import { IterationLog } from '@/components/IterationLog'
+import { IterationTimelapse } from '@/components/IterationTimelapse'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const componentRegistry: Record<string, React.ComponentType<any>> = {
   'funnel-diagram': FunnelDiagram,
+  'demo-canvas': DemoCanvas,
+  'iteration-log': IterationLog,
+  'iteration-timelapse': IterationTimelapse,
 }
 
 interface CaseStudyContentProps {

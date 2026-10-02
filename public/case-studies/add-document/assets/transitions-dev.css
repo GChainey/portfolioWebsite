@@ -1,0 +1,189 @@
+/* transitions.dev — motion tokens + admin shell hooks (signed-in workspace prototype) */
+
+:root {
+  --duration-stagger: 40ms;
+  --duration-micro: 80ms;
+  --duration-quick: 150ms;
+  --duration-fast: 250ms;
+  --duration-medium: 350ms;
+  --duration-slow: 400ms;
+  --duration-very-slow: 500ms;
+  --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: ease-in-out;
+  --ease-out: ease-out;
+  --dropdown-open-dur: 250ms;
+  --dropdown-close-dur: 150ms;
+  --dropdown-pre-scale: 0.97;
+  --dropdown-closing-scale: 0.99;
+  --dropdown-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --modal-open-dur: 250ms;
+  --modal-close-dur: 150ms;
+  --modal-scale: 0.96;
+  --modal-scale-close: 0.96;
+  --modal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --toast-open: 350ms;
+  --toast-close: 250ms;
+  --toast-distance: 16px;
+  --toast-blur: 2px;
+  --toast-scale: 0.97;
+  --toast-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --acc-expand: 250ms;
+  --acc-collapse: 250ms;
+  --acc-chevron: 250ms;
+  --acc-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 22 — Toast */
+.ad-toast.t-toast {
+  opacity: 0;
+  transform: translateX(-50%) translateY(var(--toast-distance)) scale(var(--toast-scale));
+  filter: blur(var(--toast-blur));
+  will-change: transform, opacity, filter;
+  transition:
+    opacity var(--toast-close) var(--toast-ease),
+    transform var(--toast-close) var(--toast-ease),
+    filter var(--toast-close) var(--toast-ease);
+}
+.ad-toast.t-toast.is-open {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) scale(1);
+  filter: blur(0);
+  transition:
+    opacity var(--toast-open) var(--toast-ease),
+    transform var(--toast-open) var(--toast-ease),
+    filter var(--toast-open) var(--toast-ease);
+}
+
+/* 05 — Menu dropdown */
+.ad-company-menu.t-dropdown,
+.ad-notif-panel.t-dropdown,
+.ad-range-pop.t-dropdown,
+.ad-pop-wrap .ad-menu.t-dropdown {
+  transform-origin: top left;
+  transform: scale(var(--dropdown-pre-scale));
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--dropdown-open-dur) var(--dropdown-ease),
+    opacity var(--dropdown-open-dur) var(--dropdown-ease);
+  will-change: transform, opacity;
+}
+.ad-notif-panel.t-dropdown,
+.ad-range-pop.t-dropdown,
+.ad-pop-wrap .ad-menu.t-dropdown {
+  transform-origin: top right;
+}
+.ad-search-pal.t-dropdown {
+  transform-origin: top center;
+  transform: translateX(-50%) scale(var(--dropdown-pre-scale));
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--dropdown-open-dur) var(--dropdown-ease),
+    opacity var(--dropdown-open-dur) var(--dropdown-ease);
+  will-change: transform, opacity;
+}
+.ad-company-menu.t-dropdown.is-open,
+.ad-notif-panel.t-dropdown.is-open,
+.ad-range-pop.t-dropdown.is-open,
+.ad-pop-wrap .ad-menu.t-dropdown.is-open,
+.ad-search-pal.t-dropdown.is-open {
+  transform: scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+.ad-search-pal.t-dropdown.is-open {
+  transform: translateX(-50%) scale(1);
+}
+.ad-company-menu.t-dropdown.is-closing,
+.ad-notif-panel.t-dropdown.is-closing,
+.ad-range-pop.t-dropdown.is-closing,
+.ad-pop-wrap .ad-menu.t-dropdown.is-closing {
+  transform: scale(var(--dropdown-closing-scale));
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--dropdown-close-dur) var(--dropdown-ease),
+    opacity var(--dropdown-close-dur) var(--dropdown-ease);
+}
+.ad-search-pal.t-dropdown.is-closing {
+  transform: translateX(-50%) scale(var(--dropdown-closing-scale));
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform var(--dropdown-close-dur) var(--dropdown-ease),
+    opacity var(--dropdown-close-dur) var(--dropdown-ease);
+}
+
+/* 21 — Accordion */
+.ad-cli-reveal.t-acc .t-acc-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--acc-collapse) var(--acc-ease);
+}
+.ad-cli-reveal.t-acc[data-open="true"] .t-acc-panel {
+  grid-template-rows: 1fr;
+  transition: grid-template-rows var(--acc-expand) var(--acc-ease);
+}
+.ad-cli-reveal.t-acc .t-acc-panel-inner {
+  overflow: hidden;
+  opacity: 0;
+  filter: blur(2px);
+  transition:
+    opacity var(--acc-collapse) var(--acc-ease),
+    filter var(--acc-collapse) var(--acc-ease);
+}
+.ad-cli-reveal.t-acc[data-open="true"] .t-acc-panel-inner {
+  opacity: 1;
+  filter: blur(0);
+  transition:
+    opacity var(--acc-expand) var(--acc-ease),
+    filter var(--acc-expand) var(--acc-ease);
+}
+.ad-cli-reveal.t-acc .hd .chev.t-acc-chevron {
+  display: inline-flex;
+  transform: scaleY(1);
+  transform-origin: center;
+  transition: transform var(--acc-chevron) var(--acc-ease);
+}
+.ad-cli-reveal.t-acc .hd .chev.t-acc-chevron path {
+  vector-effect: non-scaling-stroke;
+}
+.ad-cli-reveal.t-acc[data-open="true"] .hd .chev.t-acc-chevron {
+  transform: scaleY(-1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ad-toast.t-toast,
+  .ad-company-menu.t-dropdown,
+  .ad-notif-panel.t-dropdown,
+  .ad-search-pal.t-dropdown,
+  .ad-range-pop.t-dropdown,
+  .ad-pop-wrap .ad-menu.t-dropdown,
+  .ad-cli-reveal.t-acc .t-acc-panel,
+  .ad-cli-reveal.t-acc .t-acc-panel-inner,
+  .ad-cli-reveal.t-acc .hd .chev.t-acc-chevron {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* 06 — Modal (profile dialog) */
+.ad-profile-dialog.t-modal {
+  transform-origin: center;
+  transform: scale(var(--modal-scale));
+  opacity: 0;
+  transition:
+    transform var(--modal-open-dur) var(--modal-ease),
+    opacity var(--modal-open-dur) var(--modal-ease);
+  will-change: transform, opacity;
+}
+.ad-profile-dialog.t-modal.is-open { transform: scale(1); opacity: 1; }
+.ad-profile-dialog.t-modal.is-closing {
+  transform: scale(var(--modal-scale-close));
+  opacity: 0;
+  transition-duration: var(--modal-close-dur);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ad-profile-dialog.t-modal { transition: none; transform: none; }
+}
