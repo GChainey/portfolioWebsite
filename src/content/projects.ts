@@ -694,6 +694,83 @@ export const projects: Project[] = [
     }
   },
   {
+    id: 'add-document',
+    title: 'Showing AI What to Look For',
+    description: 'People setting up AI document review didn\'t know what a rule was. So I drew the document, lit up what each rule checks, and built a state machine to review every state with the team.',
+    category: 'Enterprise AI',
+    year: '2026',
+    companyId: 'enterpriseai',
+    tags: ['AI', 'Enterprise', 'Prototyping', 'State Machines', 'Claude Code'],
+    content: [
+      { type: 'heading', level: 2, content: 'TLDR' },
+      { type: 'text', content: 'Our platform lets people set up AI features themselves. One of them, AI Document Review, checks the documents people upload against rules you write. The setup asked for a name, a description and some rules, and people didn\'t know what any of those were for. I added a live preview that draws the document and lights up the part each rule checks. Then I built a state machine so the team could see, and argue about, every state the dialog can be in. It took 27 rounds of feedback with an AI coding agent to get one dialog right.' },
+
+      { type: 'heading', level: 2, content: 'The problem' },
+      { type: 'text', content: 'To set up AI Document Review, you add the kinds of document you expect, like a driver\'s license or a doctor\'s note. For each one you give a name, a description, and a list of rules: "Holder is 18 or over", "License hasn\'t expired". The AI reads every upload and checks it against those rules.' },
+      { type: 'text', content: 'The form was a stacked list of text boxes. People stopped at it. What\'s the difference between a description and a rule? How specific should a rule be? Will the AI know where to find the date of birth? They were writing instructions for something they couldn\'t see.' },
+
+      { type: 'heading', level: 2, content: 'Show the document' },
+      { type: 'text', content: 'The fix was to stop describing the document and draw it. The dialog became two columns: the form on the left and a lo-fi sample of the document on the right. Type "Driver\'s license" and a license appears. Click into "Holder is 18 or over" and the date of birth lights up in purple, the colour we keep for what AI is looking at.' },
+      { type: 'text', content: 'A rule stops being an abstract instruction. It becomes a place on a page. The description gets a Generate button, and suggested rules come from what the description mentions, so you can start from something.' },
+      { type: 'text', content: 'Then a harder case came up. I added the rule "Company matches our insurers" to a certificate of insurance, and the sample had nothing to light up. Rather than outline the whole page, which read as "everything", a rule the sample can\'t show gets its own dashed field, labelled from the rule. It tells you the AI will go and find it on the real document.' },
+
+      { type: 'heading', level: 2, content: 'A state machine to think in' },
+      { type: 'text', content: 'Once the preview existed, the dialog had a lot of states. Three kinds of document. A description or not. No rules, a few, many, or twenty with some a paragraph long. A rule in focus, a rule the sample can\'t show, suggestions open, errors showing. A handful of screenshots couldn\'t cover that, and in reviews we kept asking "but what happens when…".' },
+      { type: 'text', content: 'So I built a state machine: the real dialog, with each of those things as its own axis. Any document pairs with any set of rules. Every combination has its own URL, so in a review anyone can link the exact state they mean. Here it is, live. Pick options on the left, or play one of the demos.' },
+      {
+        type: 'component',
+        componentId: 'demo-canvas',
+        props: {
+          src: '/case-studies/add-document/index.html',
+          title: 'Add document state machine',
+          modes: [
+            { label: 'Explore' },
+            { label: 'Feature demo', query: 'demo=1' },
+            { label: 'State machine tour', query: 'demo=states' },
+          ],
+        },
+        caption: 'The state machine, running the same HTML and CSS as the prototype',
+      },
+
+      { type: 'heading', level: 2, content: 'Twenty-seven rounds' },
+      { type: 'text', content: 'An AI coding agent wrote every line of this. I logged every round of feedback I gave it and what changed. Most rounds weren\'t about structure. They were about taste: spacing, weight, wording, where a button sits.' },
+      { type: 'text', content: 'The agent took a screenshot to check its work most rounds. Played back in order, they show the dialog finding its shape. Scrub through, or let it play.' },
+      {
+        type: 'component',
+        componentId: 'iteration-timelapse',
+        caption: 'Every frame is a screenshot the agent took while it worked',
+      },
+      { type: 'text', content: 'And here is every round as data: one column per round, one square per change.' },
+      {
+        type: 'component',
+        componentId: 'iteration-log',
+        props: { commits: 21 },
+      },
+      { type: 'text', content: 'The agent got the structure right quickly. The time went on the last 10%: a label 2px too big, a button in the wrong corner, a weight that was 500 instead of 400. The Generate button lived in three places before it settled. Adding a rule took four layouts. The agent can\'t see those things until someone looks at the screen.' },
+
+      { type: 'heading', level: 2, content: 'What I took from it' },
+      { type: 'list', items: [
+        'Show, don\'t label. People didn\'t need better help text. They needed to see the thing the AI would look at.',
+        'Plan for what you can\'t show. The dashed field for an unknown rule came from pushing on an edge case, not from the first idea.',
+        'Build the state machine early. Reviewing combinations, not screens, is what surfaced the edge cases.',
+        'With AI writing the code, the design work is looking and deciding. Twenty-seven rounds is what that looks like.',
+      ] },
+    ],
+    chatContext: {
+      description: 'Gareth designed the Add document dialog for AI Document Review at Enterprise AI. Users were confused about what a document name, description and rule were for, so he added a live lo-fi preview of the document that highlights the area each rule checks, in AI purple. Rules the sample cannot show get a dashed field labelled from the rule. He built a state machine with independent axes (mode, document, description, rules, focus, show) so the team could review every combination via shareable URLs. The whole dialog was built with an AI coding agent over 27 logged rounds of feedback, mostly about taste: spacing, weight, wording and placement.',
+      suggestedQuestions: [
+        'Why build a state machine instead of screens?',
+        'How did the document preview help?',
+        'What were the 27 rounds of feedback about?',
+      ],
+      followUpQuestions: [
+        'What happens when a rule isn\'t on the sample?',
+        'How do you give feedback to an AI coding agent?',
+        'What did the agent get wrong?',
+      ],
+    },
+  },
+  {
     id: 'rfp',
     title: 'Responding to an RFP',
     description: 'A small startup competing against large organizations for a major government tender. One designer with AI tools delivered what would normally require a multi-team effort.',
