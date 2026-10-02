@@ -27,7 +27,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       'Drafted the story: the problem, the preview, the state machine and what 27 rounds of tinkering with AI looked like',
     ],
     aiTools: ['Claude Code'],
-    branch: 'GChainey/o83j2',
+    branch: 'GChainey/html-demos-blog-post',
   },
   {
     version: '1.20.2',
