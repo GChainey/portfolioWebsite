@@ -12,8 +12,6 @@ export interface Round {
   theme: RoundTheme
 }
 
-export const ROUND_THEMES: RoundTheme[] = ['Words', 'Layout', 'Polish', 'Preview', 'State machine']
-
 export const ROUNDS: Round[] = [
   {
     n: 1,
@@ -268,14 +266,6 @@ export const ROUNDS: Round[] = [
     theme: 'Preview',
     changes: ['Adding a rule lights up the part of the document it checks for a moment, not only when you click into it'],
   },
-]
-
-// How many times one decision moved before it settled.
-export const MIGRATIONS: { label: string; path: string[] }[] = [
-  { label: 'Adding a rule', path: ['Stacked boxes', 'Chips + input', 'Input + table', 'The table\'s last row'] },
-  { label: 'Generate button', path: ['Inside the box', 'Corner of the box', 'Label row'] },
-  { label: 'Suggesting rules', path: ['Chips', 'Dropdown + generate button', 'One dropdown'] },
-  { label: '"Sample" label', path: ['Preview header', 'Top right of the document', 'Above it', 'Gone'] },
 ]
 
 // Screenshots the agent took while working, keyed by the round they were taken
