@@ -699,6 +699,7 @@ export const projects: Project[] = [
     description: 'People setting up AI document review didn\'t know what a rule was. So I drew the document, lit up what each rule checks, and built a state machine to review every state with the team.',
     category: 'Enterprise AI',
     year: '2026',
+    heroImage: '/case-studies/add-document/hero.webp',
     companyId: 'enterpriseai',
     tags: ['AI', 'Enterprise', 'Prototyping', 'State Machines', 'Claude Code'],
     content: [

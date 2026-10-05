@@ -14,6 +14,18 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.21.2',
+    date: '2026-10-05',
+    title: 'Add Document Case Study: Hero Image',
+    description:
+      'Added a hero image to the Add document case study: a rule selected in the dialog, with the part of the driver\'s license it checks lit up in purple.',
+    changes: [
+      'Captured the hero from the live prototype at 2x, with "Holder is 18 or over" selected and date of birth highlighted',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/add-document-hero',
+  },
+  {
     version: '1.21.1',
     date: '2026-10-05',
     title: 'Add Document Case Study: Shorter Ending',
