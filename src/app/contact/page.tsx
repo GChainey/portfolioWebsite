@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Send, MapPin, Globe, Mail } from 'lucide-react'
+import { X, Send, MapPin, MessageCircle, Mail } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
 import { Facehash } from 'facehash'
@@ -10,17 +10,17 @@ import { useFeatureFlags } from '@/context/FeatureFlagContext'
 
 const CONTACT_PAGE_CONTEXT = {
   page: 'Contact',
-  description: 'Contact page for reaching Gareth. He is currently based in Singapore. His wife is finishing her PhD, after which they plan to move to the United States. He is open to remote projects worldwide and in-person work in the USA.',
+  description: 'Contact page for reaching Gareth. He is an Australian product designer based in New York City. He is genuinely interested in talking — about product, design, AI, what you are building, or career in general. Happy to meet for coffee in NYC, jump on a call, or exchange emails. No pitch required.',
   suggestedQuestions: [
-    'Where are you currently based?',
-    'Are you open to remote work?',
-    'When are you moving to the US?',
+    'Where are you based now?',
+    'What do you like talking about?',
+    'Can we meet up in NYC?',
   ],
   followUpQuestions: [
-    'What types of projects interest you?',
-    'What\'s your ideal team setup?',
-    'Are you open to contract work?',
-    'What timezone do you work in?',
+    'What are you working on lately?',
+    'How do you like to connect with people?',
+    'What timezone are you in?',
+    'What kind of conversations do you enjoy?',
   ],
 }
 
@@ -52,11 +52,11 @@ export default function ContactPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
               >
-                <p className="text-xs text-muted uppercase tracking-widest mb-4">Get in Touch</p>
+                <p className="text-xs text-muted uppercase tracking-widest mb-4">Let&apos;s Talk</p>
                 <h1 className="text-4xl font-medium text-foreground mb-4">Contact</h1>
                 <p className="text-lg text-muted max-w-2xl">
-                  Open to remote projects worldwide and in-person work in the United States.
-                  Currently based in Singapore.
+                  I&apos;m an Aussie based in New York City and always keen for a conversation — product,
+                  design, AI, or whatever you&apos;re working on. No agenda required; say hello anytime.
                 </p>
               </motion.div>
             </section>
@@ -129,8 +129,8 @@ export default function ContactPage() {
                   transition={{ delay: 0.2 }}
                 >
                   <MapPin className="w-5 h-5 text-accent mb-3" />
-                  <h3 className="font-medium text-foreground mb-1">Based in Singapore</h3>
-                  <p className="text-sm text-muted">Currently working from Singapore, GMT+8 timezone.</p>
+                  <h3 className="font-medium text-foreground mb-1">Aussie in NYC</h3>
+                  <p className="text-sm text-muted">Australian by background, living in New York City (Eastern Time).</p>
                 </motion.div>
 
                 <motion.div
@@ -139,9 +139,9 @@ export default function ContactPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
                 >
-                  <Globe className="w-5 h-5 text-accent mb-3" />
-                  <h3 className="font-medium text-foreground mb-1">Moving to the USA</h3>
-                  <p className="text-sm text-muted">Planning to relocate to the United States.</p>
+                  <MessageCircle className="w-5 h-5 text-accent mb-3" />
+                  <h3 className="font-medium text-foreground mb-1">Keen to connect</h3>
+                  <p className="text-sm text-muted">Coffee in the city, a video call, or a message — whatever suits you.</p>
                 </motion.div>
 
                 <motion.div
@@ -151,8 +151,8 @@ export default function ContactPage() {
                   transition={{ delay: 0.4 }}
                 >
                   <Mail className="w-5 h-5 text-accent mb-3" />
-                  <h3 className="font-medium text-foreground mb-1">Open to Opportunities</h3>
-                  <p className="text-sm text-muted">Remote projects worldwide or in-person work in the USA.</p>
+                  <h3 className="font-medium text-foreground mb-1">Just talking</h3>
+                  <p className="text-sm text-muted">Swap ideas, compare notes, or catch up — I&apos;m interested in the chat itself.</p>
                 </motion.div>
               </div>
             </section>
