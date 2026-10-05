@@ -740,21 +740,6 @@ export const projects: Project[] = [
         componentId: 'iteration-timelapse',
         caption: 'Every frame is a screenshot the agent took while it worked',
       },
-      { type: 'text', content: 'And here is every round as data: one column per round, one square per change.' },
-      {
-        type: 'component',
-        componentId: 'iteration-log',
-        props: { commits: 21 },
-      },
-      { type: 'text', content: 'The agent got the structure right quickly. The time went on the last 10%: a label 2px too big, a button in the wrong corner, a weight that was 500 instead of 400. The Generate button lived in three places before it settled. Adding a rule took four layouts. The agent can\'t see those things until someone looks at the screen.' },
-
-      { type: 'heading', level: 2, content: 'What I took from it' },
-      { type: 'list', items: [
-        'Show, don\'t label. People didn\'t need better help text. They needed to see the thing the AI would look at.',
-        'Plan for what you can\'t show. The dashed field for an unknown rule came from pushing on an edge case, not from the first idea.',
-        'Build the state machine early. Reviewing combinations, not screens, is what surfaced the edge cases.',
-        'With AI writing the code, the design work is looking and deciding. Twenty-seven rounds is what that looks like.',
-      ] },
     ],
     chatContext: {
       description: 'Gareth designed the Add document dialog for AI Document Review at Enterprise AI. Users were confused about what a document name, description and rule were for, so he added a live lo-fi preview of the document that highlights the area each rule checks, in AI purple. Rules the sample cannot show get a dashed field labelled from the rule. He built a state machine with independent axes (mode, document, description, rules, focus, show) so the team could review every combination via shareable URLs. The whole dialog was built with an AI coding agent over 27 logged rounds of feedback, mostly about taste: spacing, weight, wording and placement.',

@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.21.1',
+    date: '2026-10-05',
+    title: 'Add Document Case Study: Shorter Ending',
+    description:
+      'Trimmed the end of the Add document case study so it finishes on the timelapse.',
+    changes: [
+      'Removed the round-by-round data card, the closing paragraph and the "What I took from it" list',
+      'Removed the now-unused IterationLog component',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/add-document-trim-ending',
+  },
+  {
     version: '1.21.0',
     date: '2026-10-02',
     title: 'Add Document Case Study',
