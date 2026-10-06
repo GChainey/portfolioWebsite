@@ -23,6 +23,7 @@ export interface HeadingBlock {
 export interface ListBlock {
   type: 'list'
   items: string[]
+  ordered?: boolean // Numbered list — for steps where the order matters
 }
 
 export interface ComponentBlock {
@@ -136,6 +137,143 @@ export const projects: Project[] = [
       followUpQuestions: [
         'How do you handle iteration and refinement?',
         'What role does voice play in your workflow?',
+      ]
+    }
+  },
+  {
+    id: 'agentic-user-testing',
+    title: 'Agentic user testing',
+    description: 'Removing the friction of setting up user tests, and getting results you can trust when you design in HTML, not Figma.',
+    category: 'Article',
+    year: '2026',
+    featured: true,
+    heroImage: '/essays/agentic-user-testing/cover.png',
+    tags: ['AI', 'User Testing', 'Research', 'Essay'],
+    content: [
+      {
+        type: 'heading',
+        level: 2,
+        content: 'TLDR: here\'s how I did it'
+      },
+      {
+        type: 'list',
+        items: [
+          'use Grokbot\'s VM to sign into Lyssna and create an unmoderated test based off your hosted html prototype',
+          'tell your agent to set up your prototypes to have event listening for the task you are testing for on posthog',
+          'use posthog to evaluate experiments and evaluate their responses without lifting a finger',
+          'compare lyssna transcript/video results to prototype results',
+          'design with user testing earlier and faster to help the creative process',
+        ]
+      },
+      {
+        type: 'text',
+        content: 'Designing for usability in 2026 probably gets an eye-roll. We\'re building faster than ever and slowing that down to get some feedback feels so pre-2026. But testing assumptions is good and if you can increase the speed to insight, it can aid your design and help you make less assumptions and in-turn make better decisions.'
+      },
+      {
+        type: 'text',
+        content: 'I would design a workflow, set up an unmoderated test for 5 users, run the test and then watch the results.'
+      },
+      {
+        type: 'text',
+        content: 'For example, in one round of testing I tasked people to set up an AI chatbot for their app and 0/5 people were able to complete the task. Interestingly, every tester self-reported they had completed the task but had only completed one step of the setup.'
+      },
+      {
+        type: 'text',
+        content: 'In the second round, I set up a clear onward journey, re-ran the test, and 5/5 were able to complete it.'
+      },
+      {
+        type: 'text',
+        content: 'The user testing was valuable but the setup was long, boring, and felt really at odds with how design is working in 2026.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'I had three main issues'
+      },
+      {
+        type: 'list',
+        ordered: true,
+        items: [
+          'It\'s slow to construct an experiment on Lyssna. The MCP is read-only and not write. So creating an experiment was taking too much time.',
+          'I can\'t trust the results so it takes up too much time for manual review. I\'m designing flows in html prototypes and not Figma and Lyssna is doing a bad job for this. Lyssna lets you set a URL, and record the video and voice. But because you can\'t set the goal, you are relying on self-assessments of completion. Testers think they have completed a task, but have they really?',
+          'Missing info. A video is just a bunch of frames, but there\'s interesting information being lost. How long did it take for each tester to get through a flow? Did a particular point have a spike in length of completion? Why?',
+        ]
+      },
+      {
+        type: 'text',
+        content: 'So I sped this up, and I think this is really just scratching the surface of how user-testing could be incorporated into making products.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'How to set it up'
+      },
+      {
+        type: 'image',
+        src: '/essays/agentic-user-testing/setup.jpg',
+        alt: 'Flow diagram of headless user testing: the designer and agent write the experiment plan in Notion, the agent adds events to the prototype and dry-runs it, Grokbot builds the test in Lyssna, participants do the task while Lyssna records screen and voice and PostHog records events, then the agent matches the two and writes the report.',
+        aspectRatio: '1148/1964'
+      },
+      {
+        type: 'heading',
+        level: 3,
+        content: 'Once'
+      },
+      {
+        type: 'list',
+        items: [
+          'Create a PostHog project and turn on session replay',
+          'Have your agent add a small tracker to the prototype repo: pages, clicks and task steps',
+          'Connect your agent to PostHog so it can read results',
+          'Give your agent a browser login to Lyssna',
+        ]
+      },
+      {
+        type: 'heading',
+        level: 3,
+        content: 'Every test'
+      },
+      {
+        type: 'list',
+        ordered: true,
+        items: [
+          'Write the plan with your agent in Notion: task wording, expected steps, audience, pass mark (the agent often already knows this, so setup is instant)',
+          'The agent adds the task’s events to the prototype and dry-runs it',
+          'Publish the prototype at a public link',
+          'The agent reads the plan, logs in to Lyssna and builds the test',
+          'People take part: Lyssna records screen and voice, PostHog records what they did',
+          'The agent matches the two and writes the report',
+        ]
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'What\'s next'
+      },
+      {
+        type: 'text',
+        content: 'I believe this is just scratching the surface, and by removing the barriers of user-testing I can imagine a world where:'
+      },
+      {
+        type: 'list',
+        items: [
+          'usability tests are kicked off as you receive an updated build',
+          'In the age where everyone is a builder, have people verify their designs before shipping',
+        ]
+      },
+    ],
+    chatContext: {
+      description: 'Essay about agentic user testing: using an agent with a browser to build unmoderated tests in Lyssna from a plan in Notion, instrumenting HTML prototypes with PostHog events so task completion is measured instead of self-reported, and having the agent match Lyssna recordings to PostHog data and write the report',
+      suggestedQuestions: [
+        'Why can\'t you trust self-reported task completion?',
+        'What does PostHog add that a Lyssna recording doesn\'t?',
+        'How long does it take to set up a test now?',
+      ],
+      followUpQuestions: [
+        'What changed between the 0/5 round and the 5/5 round?',
+        'Why test HTML prototypes instead of Figma ones?',
+        'How does the agent build the test in Lyssna?',
+        'Where does this go next?',
       ]
     }
   },

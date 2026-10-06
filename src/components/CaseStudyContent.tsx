@@ -134,10 +134,11 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
         }
 
         if (block.type === 'list') {
+          const List = block.ordered ? motion.ol : motion.ul
           return (
-            <motion.ul
+            <List
               key={index}
-              className="list-disc list-inside text-muted mb-6 space-y-2"
+              className={`${block.ordered ? 'list-decimal' : 'list-disc'} list-inside text-muted mb-6 space-y-2`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay }}
@@ -145,7 +146,7 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
               {block.items.map((item, i) => (
                 <li key={i}>{item}</li>
               ))}
-            </motion.ul>
+            </List>
           )
         }
 
