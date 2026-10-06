@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.22.0',
+    date: '2026-10-06',
+    title: 'New Essay: Agentic User Testing',
+    description:
+      'Published "Agentic user testing" on the site, an essay first posted as an article on X about having an agent set up Lyssna tests and read PostHog results from HTML prototypes.',
+    changes: [
+      'Added the essay to Writing & case studies with its cover image and the whole-flow diagram',
+      'Content lists can now be numbered, for steps where the order matters',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/twitter-article-to-blog',
+  },
+  {
     version: '1.21.2',
     date: '2026-10-05',
     title: 'Add Document Case Study: Hero Image',
