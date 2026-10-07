@@ -14,6 +14,22 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.24.0',
+    date: '2026-10-07',
+    title: 'Gallery (not live yet)',
+    description:
+      'Built a gallery: a dump of real screens, prototypes and sites in a bento grid, where clicking a tile opens the artefact itself in a large dialog. It is merged but switched off in production while I decide what goes in it.',
+    changes: [
+      'A /gallery page with group filters, a homepage section and a header link, all local-only for now',
+      'Websites get the large tiles; features and interactions get small ones',
+      'Tiles open a live prototype you can use, a video or an image',
+      'The same gallery is ready for the Brand and Showcase homepage variants, which stay as they are until it goes live',
+      'An edit mode with a Share checkbox on every tile, for choosing what is shown',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/bento-grid-gallery-section',
+  },
+  {
     version: '1.23.0',
     date: '2026-10-07',
     title: 'SEEK and Best Practice Case Studies',

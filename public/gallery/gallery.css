@@ -1,0 +1,125 @@
+/* Shared gallery: bento grid + artefact dialog.
+   Used by the Next site and the static homepage variants, so it reads its look from
+   --gal-* variables that each host maps onto its own tokens. */
+gc-gallery {
+  --_fg: var(--gal-fg, #0b0b0b);
+  --_muted: var(--gal-muted, #6b6b68);
+  --_line: var(--gal-line, #e4e4df);
+  --_card: var(--gal-card, #fff);
+  --_accent: var(--gal-accent, #ff5a1f);
+  --_radius: var(--gal-radius, 12px);
+  --_gap: var(--gal-gap, 16px);
+  --_cols: 4;
+  /* Rows follow the column width, so a 1x1 tile keeps roughly the shape of a screenshot at any size */
+  --_row: calc((100cqw - (var(--_cols) - 1) * var(--_gap)) / var(--_cols) * .68);
+  display: block;
+  container-type: inline-size;
+  color: var(--_fg);
+}
+
+/* ------------------------------------------------------------ filters */
+.gal-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+.gal-filters button {
+  height: 34px; padding: 0 14px; border: 0; border-radius: 999px; cursor: pointer;
+  background: var(--_card); color: var(--_muted); box-shadow: inset 0 0 0 1px var(--_line);
+  font: inherit; font-size: 13px; transition: color .2s, background .2s;
+}
+.gal-filters button:hover { color: var(--_fg); }
+.gal-filters button[aria-pressed="true"] { background: var(--_fg); color: var(--_card); box-shadow: none; }
+
+/* ------------------------------------------------------------ bento */
+.gal-grid {
+  display: grid; grid-template-columns: repeat(var(--_cols), minmax(0, 1fr));
+  grid-auto-rows: var(--_row); grid-auto-flow: dense; gap: var(--_gap);
+}
+.gal-tile {
+  position: relative; overflow: hidden;
+  border-radius: var(--_radius); background: var(--_card); box-shadow: 0 0 0 1px var(--_line);
+}
+.gal-open {
+  position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: 0; background: none;
+  cursor: zoom-in; text-align: left; font: inherit; color: inherit;
+}
+.gal-tile[data-size="wide"] { grid-column: span 2; }
+.gal-tile[data-size="lg"] { grid-column: span 2; grid-row: span 2; }
+.gal-tile img, .gal-tile video {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; display: block;
+  transition: transform 1.2s cubic-bezier(.16, 1, .3, 1);
+}
+.gal-tile:hover img, .gal-tile:hover video { transform: scale(1.04); }
+.gal-open:focus-visible { outline: none; }
+.gal-tile:has(.gal-open:focus-visible) { outline: 2px solid var(--_accent); outline-offset: 2px; }
+.gal-cap {
+  position: absolute; inset: auto 0 0 0; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px;
+  padding: 36px 14px 12px; color: #fff; font-size: 13px; line-height: 1.3;
+  background: linear-gradient(to top, rgba(0, 0, 0, .78), transparent);
+  opacity: 0; transform: translateY(6px); transition: opacity .3s, transform .3s;
+}
+.gal-tile:hover .gal-cap, .gal-open:focus-visible .gal-cap { opacity: 1; transform: none; }
+.gal-cap b { font-weight: 500; }
+.gal-cap span { flex: none; opacity: .7; }
+.gal-kind {
+  position: absolute; top: 10px; left: 10px; height: 22px; padding: 0 8px; border-radius: 999px;
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(10, 10, 9, .7); color: #fff; backdrop-filter: blur(6px);
+  font-size: 10px; letter-spacing: .06em; text-transform: uppercase;
+}
+.gal-kind::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--_accent); }
+@media (hover: none) { .gal-cap { opacity: 1; transform: none; } }
+@media (max-width: 960px) { gc-gallery { --_cols: 2; } }
+@media (max-width: 560px) {
+  gc-gallery { --_cols: 1; }
+  .gal-tile[data-size] { grid-column: auto; grid-row: auto; }
+}
+
+/* ------------------------------------------------------------ edit mode (?edit, local only) */
+.gal-editbar { margin: 0 0 16px; font-size: 13px; color: var(--_muted); }
+.gal-editbar b { color: var(--_fg); font-weight: 500; }
+.gal-editbar [data-error] { color: #dc2626; }
+.gal-share {
+  position: absolute; top: 10px; right: 10px; height: 26px; padding: 0 10px 0 8px; border-radius: 999px; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(10, 10, 9, .8); color: #fff; backdrop-filter: blur(6px); font-size: 12px;
+}
+.gal-share input { margin: 0; accent-color: var(--_accent); cursor: pointer; }
+.gal-tile.gal-off img, .gal-tile.gal-off video { filter: grayscale(1); opacity: .25; }
+.gal-tile.gal-off .gal-kind { opacity: .4; }
+
+/* ------------------------------------------------------------ dialog */
+.gal-dialog {
+  width: min(1600px, calc(100vw - 32px)); height: calc(100dvh - 32px); max-width: none; max-height: none;
+  padding: 0; border: 0; border-radius: 14px; overflow: hidden;
+  background: #0e0e0d; color: #f2f2ee; box-shadow: 0 30px 80px rgba(0, 0, 0, .6);
+  font-family: inherit;
+}
+.gal-dialog[open] { display: flex; flex-direction: column; animation: gal-in .25s cubic-bezier(.16, 1, .3, 1); }
+.gal-dialog::backdrop { background: rgba(10, 10, 9, .8); backdrop-filter: blur(8px); }
+@keyframes gal-in { from { opacity: 0; transform: translateY(12px) scale(.985); } }
+.gal-bar {
+  flex: none; display: flex; align-items: center; gap: 8px; height: 52px; padding: 0 10px 0 16px;
+  border-bottom: 1px solid #2a2a27; font-size: 14px;
+}
+.gal-bar .gal-title { min-width: 0; margin-right: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gal-bar .gal-title span { color: #8a8a84; margin-left: 10px; }
+.gal-bar .gal-count { color: #8a8a84; font-variant-numeric: tabular-nums; padding: 0 6px; }
+.gal-bar button, .gal-bar a {
+  flex: none; height: 34px; min-width: 34px; padding: 0 12px; border: 0; border-radius: 999px; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: #2a2a27; color: #fff; text-decoration: none; font: inherit; font-size: 13px;
+}
+.gal-bar button:hover, .gal-bar a:hover { background: #3a3a36; }
+.gal-bar button:focus-visible, .gal-bar a:focus-visible { outline: 2px solid var(--_accent); outline-offset: 2px; }
+.gal-bar [hidden] { display: none; }
+.gal-stage { position: relative; flex: 1; min-height: 0; display: grid; place-items: center; background: #0a0a09; }
+.gal-stage iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+.gal-stage img, .gal-stage video { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+/* The thumbnail sits behind the frame so a slow prototype never shows as a blank box */
+.gal-stage .gal-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; filter: blur(14px) brightness(.6); transform: scale(1.05); }
+@media (max-width: 560px) {
+  .gal-dialog { width: 100vw; height: 100dvh; border-radius: 0; }
+  .gal-bar .gal-title span, .gal-bar .gal-count { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gal-dialog[open] { animation: none; }
+  .gal-tile img, .gal-tile video, .gal-cap { transition: none; }
+}
