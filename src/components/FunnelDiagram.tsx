@@ -1,8 +1,5 @@
 'use client'
 
-import { useState, useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
-
 interface FunnelStage {
   label: string
   highlight?: boolean
@@ -23,44 +20,41 @@ const defaultStages: FunnelStage[] = [
   { label: 'Lead/Link', highlight: true, assumption: 'Too long to make a connection' },
 ]
 
-type ThemeKey = 'accent' | 'subtle' | 'minimal' | 'outline'
-
-const themeLabels: Record<ThemeKey, string> = {
-  accent: 'Accent',
-  subtle: 'Subtle',
-  minimal: 'Minimal',
-  outline: 'Outline',
-}
-
-const ease = [0.22, 1, 0.36, 1] as const
+// Tints of the accent colour. Tailwind's /opacity modifiers don't apply to our CSS-variable colours.
+const accentTint = (percent: number) => `color-mix(in srgb, var(--accent) ${percent}%, transparent)`
 
 export function FunnelDiagram({
   title = 'MVP release',
   stages = defaultStages,
   caption,
 }: FunnelDiagramProps) {
-  const [themeKey, setThemeKey] = useState<ThemeKey>('accent')
-  const containerRef = useRef<HTMLDivElement>(null)
-  const isInView = useInView(containerRef, { once: true, margin: '-100px' })
-
   // Collect stages that have assumptions, alternating sides
   const assumptionStages = stages
     .map((stage, i) => ({ stage, index: i }))
     .filter(({ stage }) => stage.assumption)
 
-  // SVG dimensions
+  // SVG dimensions. The SVG renders 1:1, so these are also pixels.
   const svgWidth = 400
-  const svgHeight = 480
   const funnelTopWidth = 280
   const funnelBottomWidth = 100
   const funnelStartY = 50
   const stageHeight = 72
   const stageGap = 4
+  const svgHeight = funnelStartY + stages.length * (stageHeight + stageGap) - stageGap + 28
   const centerX = svgWidth / 2
+
+  // Assumption cards sit this far from their stage, joined by a dashed connector
+  const connectorLength = 28
+  // Space kept between a card and the diagram's border
+  const edgePadding = 20
 
   function getStageWidth(index: number): number {
     const progress = index / (stages.length - 1)
     return funnelTopWidth - progress * (funnelTopWidth - funnelBottomWidth)
+  }
+
+  function getStageBottomWidth(index: number): number {
+    return index === stages.length - 1 ? getStageWidth(index) * 0.7 : getStageWidth(index + 1)
   }
 
   function getStageY(index: number): number {
@@ -69,52 +63,28 @@ export function FunnelDiagram({
 
   function getStagePath(i: number): string {
     const topWidth = getStageWidth(i)
-    const bottomWidth = getStageWidth(i + (i < stages.length - 1 ? 1 : 0))
-    const actualBottomWidth = i === stages.length - 1 ? topWidth * 0.7 : bottomWidth
+    const bottomWidth = getStageBottomWidth(i)
     const y = getStageY(i)
 
     const tl = `${centerX - topWidth / 2},${y}`
     const tr = `${centerX + topWidth / 2},${y}`
-    const br = `${centerX + actualBottomWidth / 2},${y + stageHeight}`
-    const bl = `${centerX - actualBottomWidth / 2},${y + stageHeight}`
+    const br = `${centerX + bottomWidth / 2},${y + stageHeight}`
+    const bl = `${centerX - bottomWidth / 2},${y + stageHeight}`
 
     return `M${tl} L${tr} L${br} L${bl} Z`
   }
 
+  // Distance from the funnel's centre line to a stage's edge, halfway down the stage
+  function getStageHalfWidth(index: number): number {
+    return (getStageWidth(index) + getStageBottomWidth(index)) / 4
+  }
+
   function getStageColors(stage: FunnelStage) {
-    const isHighlight = stage.highlight
-
-    if (themeKey === 'outline') {
-      return {
-        fill: 'none',
-        fillOpacity: 0,
-        stroke: 'var(--foreground)',
-        strokeWidth: 1,
-        strokeOpacity: isHighlight ? 0.6 : 0.15,
-        textFill: 'var(--foreground)',
-        textOpacity: isHighlight ? 0.9 : 0.5,
-      }
-    }
-
-    if (themeKey === 'minimal') {
-      return {
-        fill: 'none',
-        fillOpacity: 0,
-        stroke: isHighlight ? 'var(--accent)' : 'var(--border)',
-        strokeWidth: 1.5,
-        strokeOpacity: isHighlight ? 0.4 : 0.2,
-        textFill: isHighlight ? 'var(--accent)' : 'var(--muted-foreground)',
-        textOpacity: isHighlight ? 0.7 : 0.5,
-      }
-    }
-
-    // accent & subtle
-    if (isHighlight) {
+    if (stage.highlight) {
       return {
         fill: 'var(--accent)',
         fillOpacity: 0.15,
         stroke: 'var(--accent)',
-        strokeWidth: 1,
         strokeOpacity: 0.3,
         textFill: 'var(--accent)',
         textOpacity: 0.8,
@@ -122,216 +92,125 @@ export function FunnelDiagram({
     }
 
     return {
-      fill: themeKey === 'subtle' ? 'var(--foreground)' : 'none',
+      fill: 'none',
       fillOpacity: 0.04,
       stroke: 'var(--foreground)',
-      strokeWidth: 1,
       strokeOpacity: 0.08,
       textFill: 'var(--muted-foreground)',
       textOpacity: 0.6,
     }
   }
 
-  // Calculate vertical position as percentage for assumption cards
-  function getStageVerticalPercent(index: number): number {
-    const y = getStageY(index) + stageHeight / 2
-    return (y / svgHeight) * 100
-  }
+  const assumptionCard = (assumption: string) => (
+    <div
+      className="rounded-lg border px-3 py-2.5"
+      style={{ borderColor: accentTint(30), backgroundColor: accentTint(8) }}
+    >
+      <p className="text-[10px] uppercase tracking-wider text-accent font-semibold mb-1">Assumption</p>
+      <p className="text-xs text-foreground leading-relaxed font-medium">{assumption}</p>
+    </div>
+  )
 
   return (
-    <figure className="my-10" ref={containerRef}>
-      <div
-        className={`relative w-full rounded-xl overflow-hidden border border-border/10 ${
-          themeKey === 'subtle' ? 'bg-secondary/30' : 'bg-transparent'
-        }`}
-      >
-        {/* Layout: assumption cards on sides, funnel in center */}
-        <div className="relative flex items-start">
-          {/* Left assumption cards */}
-          <div className="relative w-1/4 flex-shrink-0" style={{ height: `${svgHeight}px` }}>
-            {assumptionStages
-              .filter((_, i) => i % 2 === 0)
-              .map(({ stage, index }, cardIdx) => {
-                const topPercent = getStageVerticalPercent(index)
-                const animDelay = 0.15 + stages.length * 0.2 + 0.3 + cardIdx * 0.25
-                return (
-                  <motion.div
-                    key={index}
-                    className="absolute right-0 w-full pr-3"
-                    style={{ top: `${topPercent}%`, transform: 'translateY(-50%)' }}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-                    transition={{ delay: animDelay, duration: 0.5, ease }}
-                  >
-                    <div className="rounded-lg border border-accent/20 bg-accent/5 px-3 py-2.5">
-                      <p className="text-[10px] uppercase tracking-wider text-accent/50 font-semibold mb-1">
-                        Assumption
-                      </p>
-                      <p className="text-xs text-foreground/80 leading-relaxed font-medium">
-                        {stage.assumption}
-                      </p>
-                    </div>
-                  </motion.div>
-                )
-              })}
-          </div>
+    <figure className="my-10">
+      <div className="relative w-full rounded-xl overflow-hidden border border-border">
+        <div className="relative" style={{ height: `${svgHeight}px` }}>
+          {/* Funnel, centred */}
+          <svg
+            viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+            className="absolute left-1/2 top-0 -translate-x-1/2 max-w-full"
+            style={{ width: `${svgWidth}px`, height: `${svgHeight}px` }}
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {title && (
+              <text
+                x={centerX}
+                y={30}
+                textAnchor="middle"
+                fill="var(--foreground)"
+                fontSize="18"
+                fontWeight="700"
+                fontFamily="system-ui, -apple-system, sans-serif"
+              >
+                {title}
+              </text>
+            )}
 
-          {/* Center funnel SVG */}
-          <div className="flex-1 flex-shrink-0">
-            <svg
-              viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-              className="w-full"
-              style={{ height: `${svgHeight}px` }}
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {/* Title */}
-              {title && (
-                <motion.text
-                  x={centerX}
-                  y={30}
-                  textAnchor="middle"
-                  fill="var(--foreground)"
-                  fontSize="18"
-                  fontWeight="700"
-                  fontFamily="system-ui, -apple-system, sans-serif"
-                  initial={{ opacity: 0 }}
-                  animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-                  transition={{ duration: 0.5 }}
+            {stages.map((stage, i) => {
+              const y = getStageY(i)
+              const path = getStagePath(i)
+              const colors = getStageColors(stage)
+
+              return (
+                <g key={i}>
+                  <path
+                    d={path}
+                    fill={colors.fill}
+                    fillOpacity={colors.fillOpacity}
+                    stroke={colors.stroke}
+                    strokeWidth={1}
+                    strokeOpacity={colors.strokeOpacity}
+                    strokeLinejoin="round"
+                  />
+                  <text
+                    x={centerX}
+                    y={y + stageHeight / 2 + 5}
+                    textAnchor="middle"
+                    fill={colors.textFill}
+                    fillOpacity={colors.textOpacity}
+                    fontSize="13"
+                    fontWeight={stage.highlight ? '700' : '500'}
+                    fontFamily="system-ui, -apple-system, sans-serif"
+                  >
+                    {stage.label}
+                  </text>
+                </g>
+              )
+            })}
+          </svg>
+
+          {/* Assumption cards beside their stage, alternating sides (wider screens) */}
+          {assumptionStages.map(({ stage, index }, assumptionIdx) => {
+            const isLeft = assumptionIdx % 2 === 0
+            const side = isLeft ? 'right' : 'left'
+            const halfWidth = getStageHalfWidth(index)
+            const midY = getStageY(index) + stageHeight / 2
+
+            return (
+              <div key={index} className="hidden sm:block">
+                {/* Dashed connector from the stage's edge to the card */}
+                <div
+                  className="absolute border-t border-dashed"
+                  style={{
+                    top: `${midY}px`,
+                    [side]: `calc(50% + ${halfWidth}px)`,
+                    width: `${connectorLength}px`,
+                    borderColor: accentTint(45),
+                  }}
+                />
+                <div
+                  className="absolute -translate-y-1/2"
+                  style={{
+                    top: `${midY}px`,
+                    [side]: `calc(50% + ${halfWidth + connectorLength}px)`,
+                    maxWidth: `min(220px, calc(50% - ${halfWidth + connectorLength + edgePadding}px))`,
+                  }}
                 >
-                  {title}
-                </motion.text>
-              )}
-
-              {/* Funnel stages */}
-              {stages.map((stage, i) => {
-                const y = getStageY(i)
-                const path = getStagePath(i)
-                const colors = getStageColors(stage)
-                const baseDelay = 0.15 + i * 0.2
-
-                return (
-                  <g key={i}>
-                    {/* Stroke draws in */}
-                    <motion.path
-                      d={path}
-                      fill="none"
-                      stroke={colors.stroke}
-                      strokeWidth={colors.strokeWidth}
-                      strokeOpacity={colors.strokeOpacity}
-                      strokeLinejoin="round"
-                      initial={{ pathLength: 0, opacity: 0 }}
-                      animate={isInView ? { pathLength: 1, opacity: 1 } : { pathLength: 0, opacity: 0 }}
-                      transition={{ delay: baseDelay, duration: 0.6, ease }}
-                    />
-
-                    {/* Fill */}
-                    <motion.path
-                      d={path}
-                      fill={colors.fill}
-                      fillOpacity={colors.fillOpacity}
-                      stroke="none"
-                      initial={{ opacity: 0 }}
-                      animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-                      transition={{ delay: baseDelay + 0.4, duration: 0.3, ease }}
-                    />
-
-                    {/* Label */}
-                    <motion.text
-                      x={centerX}
-                      y={y + stageHeight / 2 + 5}
-                      textAnchor="middle"
-                      fill={colors.textFill}
-                      fillOpacity={colors.textOpacity}
-                      fontSize="13"
-                      fontWeight={stage.highlight ? '700' : '500'}
-                      fontFamily="system-ui, -apple-system, sans-serif"
-                      initial={{ opacity: 0 }}
-                      animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-                      transition={{ delay: baseDelay + 0.5, duration: 0.3 }}
-                    >
-                      {stage.label}
-                    </motion.text>
-
-                    {/* Dashed connector lines to assumption cards */}
-                    {stage.assumption && (() => {
-                      const assumptionIdx = assumptionStages.findIndex(a => a.index === i)
-                      const isLeft = assumptionIdx % 2 === 0
-                      const stageWidth = getStageWidth(i)
-                      const edgeX = isLeft
-                        ? centerX - stageWidth / 2
-                        : centerX + stageWidth / 2
-                      const lineEndX = isLeft ? 0 : svgWidth
-                      const midY = y + stageHeight / 2
-                      const connectorDelay = 0.15 + stages.length * 0.2 + 0.15 + assumptionIdx * 0.25
-
-                      return (
-                        <motion.line
-                          x1={edgeX}
-                          y1={midY}
-                          x2={lineEndX}
-                          y2={midY}
-                          stroke="var(--accent)"
-                          strokeWidth="1"
-                          strokeDasharray="3,3"
-                          strokeOpacity={0.25}
-                          initial={{ pathLength: 0, opacity: 0 }}
-                          animate={isInView ? { pathLength: 1, opacity: 1 } : { pathLength: 0, opacity: 0 }}
-                          transition={{ delay: connectorDelay, duration: 0.4, ease }}
-                        />
-                      )
-                    })()}
-                  </g>
-                )
-              })}
-            </svg>
-          </div>
-
-          {/* Right assumption cards */}
-          <div className="relative w-1/4 flex-shrink-0" style={{ height: `${svgHeight}px` }}>
-            {assumptionStages
-              .filter((_, i) => i % 2 === 1)
-              .map(({ stage, index }, cardIdx) => {
-                const topPercent = getStageVerticalPercent(index)
-                const animDelay = 0.15 + stages.length * 0.2 + 0.3 + (cardIdx * 2 + 1) * 0.25
-                return (
-                  <motion.div
-                    key={index}
-                    className="absolute left-0 w-full pl-3"
-                    style={{ top: `${topPercent}%`, transform: 'translateY(-50%)' }}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
-                    transition={{ delay: animDelay, duration: 0.5, ease }}
-                  >
-                    <div className="rounded-lg border border-accent/20 bg-accent/5 px-3 py-2.5">
-                      <p className="text-[10px] uppercase tracking-wider text-accent/50 font-semibold mb-1">
-                        Assumption
-                      </p>
-                      <p className="text-xs text-foreground/80 leading-relaxed font-medium">
-                        {stage.assumption}
-                      </p>
-                    </div>
-                  </motion.div>
-                )
-              })}
-          </div>
+                  {assumptionCard(stage.assumption!)}
+                </div>
+              </div>
+            )
+          })}
         </div>
 
-        {/* Theme toggle */}
-        <div className="absolute bottom-3 right-3 flex items-center gap-1 bg-background/80 backdrop-blur-sm rounded-lg border border-border/20 p-1">
-          {(Object.keys(themeLabels) as ThemeKey[]).map((key) => (
-            <button
-              key={key}
-              onClick={() => setThemeKey(key)}
-              className={`px-2.5 py-1 text-xs rounded-md transition-colors ${
-                themeKey === key
-                  ? 'bg-foreground/10 text-foreground font-medium'
-                  : 'text-muted hover:text-foreground'
-              }`}
-            >
-              {themeLabels[key]}
-            </button>
-          ))}
-        </div>
+        {/* Narrow screens: no room beside the funnel, so the assumptions follow it */}
+        {assumptionStages.length > 0 && (
+          <div className="sm:hidden grid gap-2 px-4 pb-4">
+            {assumptionStages.map(({ stage, index }) => (
+              <div key={index}>{assumptionCard(stage.assumption!)}</div>
+            ))}
+          </div>
+        )}
       </div>
       {caption && (
         <figcaption className="mt-2 text-sm text-muted text-center">
