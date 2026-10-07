@@ -1,8 +1,8 @@
 'use client'
 
-import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { ArrowRight, ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import type { Project } from '@/content/projects'
 
 const ease = [0.25, 0.1, 0.25, 1]
@@ -108,6 +108,9 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, index = 0, className = '' }: ProductCardProps) {
+  // Not ready to share yet — the card shows the product but doesn't link anywhere
+  const comingSoon = product.status === 'Coming soon'
+
   return (
     <motion.div
       className={`group relative ${className}`}
@@ -124,7 +127,17 @@ export function ProductCard({ product, index = 0, className = '' }: ProductCardP
             {product.status}
           </span>
         )}
-        <ProductVisual visual={product.productVisual} />
+        {product.logo ? (
+          <Image
+            src={product.logo}
+            alt={`${product.title} logo`}
+            width={96}
+            height={96}
+            className={`w-24 h-24 transition-transform duration-300 ${comingSoon ? '' : 'group-hover:scale-105'}`}
+          />
+        ) : (
+          <ProductVisual visual={product.productVisual} />
+        )}
       </div>
 
       <div className="p-5">
@@ -140,7 +153,7 @@ export function ProductCard({ product, index = 0, className = '' }: ProductCardP
           </div>
         </div>
 
-        <h3 className="font-medium text-lg text-foreground group-hover:text-accent transition-colors mb-2">
+        <h3 className={`font-medium text-lg text-foreground transition-colors mb-2 ${comingSoon ? '' : 'group-hover:text-accent'}`}>
           {product.title}
         </h3>
         <p className="text-sm text-muted">{product.description}</p>
@@ -155,30 +168,50 @@ export function ProductCard({ product, index = 0, className = '' }: ProductCardP
           </div>
         )}
 
-        {/* Two destinations: the case study (whole card) and the live product */}
-        <div className="flex items-center gap-4 mt-4">
-          {/* Stretched link — makes the entire card a target for the case study */}
-          <Link
-            href={`/projects/${product.id}`}
-            className="text-sm text-muted hover:text-accent transition-colors flex items-center gap-1 before:absolute before:inset-0 before:content-['']"
-          >
-            Read case study
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-          </Link>
-
-          {product.liveUrl && (
-            <a
-              href={product.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative z-10 text-sm text-muted hover:text-accent transition-colors flex items-center gap-1"
-            >
-              Visit {product.title}
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </a>
+        {/* The whole card clicks out to the live product */}
+        <div className="mt-4">
+          {comingSoon ? (
+            <span className="text-sm text-muted">Coming soon</span>
+          ) : (
+            product.liveUrl && (
+              <a
+                href={product.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-muted hover:text-accent transition-colors inline-flex items-center gap-1 before:absolute before:inset-0 before:content-['']"
+              >
+                Visit {product.title}
+                <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </a>
+            )
           )}
         </div>
       </div>
     </motion.div>
+  )
+}
+
+// Products grid with touching edges — three across when the count divides evenly, otherwise two
+export function ProductGrid({ products }: { products: Project[] }) {
+  const cols = products.length % 3 === 0 ? 3 : 2
+  const lastRowStart = products.length - (products.length % cols || cols)
+
+  return (
+    <div className={`grid grid-cols-1 ${cols === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}>
+      {products.map((product, index) => {
+        const isRowEnd = index % cols === cols - 1
+        const isLast = index === products.length - 1
+        const isLastRow = index >= lastRowStart
+
+        return (
+          <ProductCard
+            key={product.id}
+            product={product}
+            index={index}
+            className={`border-border ${!isRowEnd ? 'md:border-r' : ''} ${!isLast ? 'border-b' : ''} ${isLastRow ? 'md:border-b-0' : ''}`}
+          />
+        )
+      })}
+    </div>
   )
 }

@@ -14,6 +14,24 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.23.0',
+    date: '2026-10-07',
+    title: 'Shader Wall in Products',
+    description:
+      'Added Shader Wall to the products section, and made it and Dispatch click out to their live sites, on the homepage and on both homepage variants. Thesis is marked coming soon.',
+    changes: [
+      'Added Shader Wall as a product, with its app icon, linking to shaderwall.com',
+      'Dispatch now clicks out to dispatchmac.com',
+      'Product cards no longer link to a case study, the whole card just opens the product',
+      'Thesis is marked coming soon and doesn’t link anywhere until it’s ready to share',
+      'Dispatch shows its app icon in place of the animated visual',
+      'Products sit three across on the homepage and the projects page',
+      'Brand and Showcase variants: Shader Wall and Dispatch icons added, and both cards link out',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/shaderwall-website-update',
+  },
+  {
     version: '1.22.0',
     date: '2026-10-06',
     title: 'New Essay: Agentic User Testing',

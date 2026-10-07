@@ -33,7 +33,7 @@ function projectToFeedItem(project: Project): FeedItem {
     description: project.description,
     year: project.year,
     tags: project.tags,
-    href: `/projects/${project.id}`,
+    href: project.externalUrl || `/projects/${project.id}`,
     previewText: firstText?.content,
   }
 }

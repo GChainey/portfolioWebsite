@@ -148,11 +148,13 @@ img { display: block; max-width: 100%; }
 
 /* bespoke panels for work without screenshots */
 .panel { border-radius: 14px; overflow: hidden; position: relative; aspect-ratio: 16 / 9; }
-.panel.prod { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; aspect-ratio: auto; }
+.panel.prod { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; aspect-ratio: auto; }
 .prodcard { position: relative; aspect-ratio: 4 / 5; border-radius: 14px; overflow: hidden; color: #fff; padding: 26px; display: flex; flex-direction: column; text-decoration: none; }
-.prodcard .nm { margin-top: auto; font-size: clamp(44px, 5vw, 76px); line-height: .95; }
+.prodcard .nm { margin-top: auto; font-size: clamp(36px, 3.6vw, 60px); line-height: .95; }
+.prodcard .logo { position: absolute; top: 16px; left: 22px; width: 40px; height: 40px; }
 .prodcard .live { position: absolute; top: 22px; right: 22px; display: inline-flex; gap: 6px; align-items: center; font-size: 11px; font-weight: 700; letter-spacing: .1em; background: rgba(255,255,255,.95); color: #111; padding: 5px 10px; border-radius: 999px; }
 .prodcard .live::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #22C55E; }
+.prodcard .live.soon::before { background: #F5A623; }
 .prodcard .ui { position: absolute; left: 26px; right: 26px; top: 70px; border-radius: 12px; background: rgba(255,255,255,.14); backdrop-filter: blur(8px); padding: 18px; transform: rotate(-3deg); transition: transform .8s var(--ease); }
 .prodcard:hover .ui { transform: rotate(0) translateY(-6px); }
 .prodcard .ui i { display: block; height: 10px; border-radius: 5px; background: rgba(255,255,255,.4); margin-bottom: 9px; }
@@ -429,10 +431,10 @@ const CASES = [
     did: 'Prototyped the full journey, from mocked search to deployed app. Four complete passes plus a statemachine page showing every screen and failure state.',
     result: 'Collapsed into "one prompt on the homepage" and the product takes it from there.',
     tags: ['Onboarding', 'Native + CLI', 'Statemachines', '4 passes'], shots: ['build', 'cli', 'statemachine'] },
-  { id: 'shipped', title: 'Dispatch & Thesis. <em>Shipped solo.</em>', short: 'Dispatch & Thesis', org: 'Independent · Products', year: '2026',
+  { id: 'shipped', title: 'Three products. <em>Shipped solo.</em>', short: 'Dispatch, Shader Wall & Thesis', org: 'Independent · Products', year: '2026',
     problem: 'Proving an AI-native designer can own a product from blank page to production.',
-    did: 'Designed, built and deployed both products myself. No handoff, no waiting.',
-    result: 'Both live. Full case studies coming soon.',
+    did: 'Designed, built and deployed all three myself. No handoff, no waiting.',
+    result: 'Dispatch is live and Shader Wall is taking a waitlist. Thesis is coming soon.',
     tags: ['Product', 'Built solo', 'Live'], panel: 'prod' },
   { id: 'seek', title: 'SEEK Learning: <em>iterating to impact.</em>', short: 'SEEK Learning', org: 'SEEK · Growth', year: '2022–24',
     problem: 'The course-discovery MVP launched and missed its targets.',
@@ -448,8 +450,9 @@ const CASES = [
 const browserHTML = (k, i) => `<div class="browser" data-shot="${k}"><div class="chrome"><span class="dots"><i></i><i></i><i></i></span><span class="url">${SHOTS[k].host}</span>${i === 0 ? `<a class="act" href="${LIVE + SHOTS[k].url}" target="_blank" rel="noopener">Open live ↗</a>` : ''}</div><div class="screen"><img src="${src(k)}" alt="${SHOTS[k].t}" loading="lazy" /></div></div>`
 const PANELS = {
   prod: `<div class="panel prod">
-    <a class="prodcard" href="#" style="background:radial-gradient(120% 90% at 20% 0%, #FF8A3D 0%, #FF3D7F 45%, #3A0CA3 100%)"><span class="live">LIVE</span><div class="ui"><i style="width:40%"></i><i></i><i style="width:70%"></i><i style="width:55%;height:34px;border-radius:8px;background:rgba(255,255,255,.6);margin-top:14px"></i></div><span class="nm serif">Dispatch</span></a>
-    <a class="prodcard" href="#" style="background:radial-gradient(120% 90% at 80% 0%, #6EE7F9 0%, #3B82F6 40%, #0B1026 100%)"><span class="live">LIVE</span><div class="ui"><i style="width:30%"></i><i></i><i></i><i style="width:60%"></i></div><span class="nm serif">Thesis</span></a></div>`,
+    <a class="prodcard" href="https://www.dispatchmac.com" target="_blank" rel="noopener" style="background:radial-gradient(120% 90% at 20% 0%, #FF8A3D 0%, #FF3D7F 45%, #3A0CA3 100%)"><span class="live">LIVE</span><img class="logo" src="/products/dispatch.png" alt="Dispatch logo" /><div class="ui"><i style="width:40%"></i><i></i><i style="width:70%"></i><i style="width:55%;height:34px;border-radius:8px;background:rgba(255,255,255,.6);margin-top:14px"></i></div><span class="nm serif">Dispatch</span></a>
+    <a class="prodcard" href="https://www.shaderwall.com" target="_blank" rel="noopener" style="background:radial-gradient(120% 90% at 50% 0%, #F5A623 0%, #D77BE8 38%, #6A1BFF 72%, #12062B 100%)"><span class="live">WAITLIST</span><img class="logo" src="/products/shader-wall.png" alt="Shader Wall logo" /><div class="ui"><i style="width:50%"></i><i></i><i style="width:65%"></i><i style="width:35%"></i></div><span class="nm serif">Shader Wall</span></a>
+    <div class="prodcard" style="background:radial-gradient(120% 90% at 80% 0%, #6EE7F9 0%, #3B82F6 40%, #0B1026 100%)"><span class="live soon">COMING SOON</span><div class="ui"><i style="width:30%"></i><i></i><i></i><i style="width:60%"></i></div><span class="nm serif">Thesis</span></div></div>`,
   funnel: `<div class="panel funnel" id="funnel"><div><div class="num">+75%</div><div style="color:#C9D4EE;margin-top:10px">course conversion, after the MVP missed its targets</div>
     <div class="kpis"><div><b>+$500K</b><span>annual revenue</span></div><div><b>+25.9%</b><span>organic visits in a year</span></div></div></div>
     <div class="stages">${[['Find a course', 100, 'hypothesis → test'], ['Select a course', 80, 'hypothesis → test'], ['Submit a lead', 60, 'hypothesis → test']].map(([l, w, h]) => `<div class="stage" style="--w:${w}%"><b>${l}</b><span>${h}</span></div>`).join('')}</div></div>`,

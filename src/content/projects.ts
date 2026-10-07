@@ -48,8 +48,9 @@ export interface Project {
   externalUrl?: string // Link to external page instead of /projects/[id]
   companyId?: string // Link project to a company experience (e.g. 'enterpriseai', 'seek', 'bestpractice')
   kind?: 'product' // Products I've built — shown in the Products section with a live link
-  liveUrl?: string // Live product URL — rendered alongside the case study, not instead of it
-  status?: 'Live' | 'Beta' | 'In development' // Product status badge
+  liveUrl?: string // Live product URL — the product card clicks out to it
+  logo?: string // Product logo, shown in the card instead of the animated visual
+  status?: 'Live' | 'Waitlist' | 'Beta' | 'In development' | 'Coming soon' // Product status badge — 'Coming soon' cards don't link anywhere
   productVisual?: 'dispatch' | 'thesis' // Which animated card visual to render
   content: ContentBlock[]
   chatContext: {
@@ -64,12 +65,13 @@ export const projects: Project[] = [
   {
     id: 'dispatch',
     title: 'Dispatch',
-    description: 'A product I designed and built. Case study coming soon.',
+    description: 'Send articles to your Kindle in one click, from your browser or your Mac.',
     category: 'Product',
     year: '2026',
     kind: 'product',
     status: 'Live',
-    // liveUrl: '', // TODO: add the real Dispatch URL to show the "Visit Dispatch" link
+    liveUrl: 'https://www.dispatchmac.com',
+    logo: '/products/dispatch.png',
     productVisual: 'dispatch',
     tags: ['Product', 'AI', 'Built solo'],
     content: [
@@ -77,7 +79,7 @@ export const projects: Project[] = [
       { type: 'text', content: 'This case study is currently being written. Check back soon.' },
     ],
     chatContext: {
-      description: 'Dispatch — a product Gareth designed and built. Case study details are still being written.',
+      description: 'Dispatch — a product Gareth designed and built that sends articles to your Kindle in one click, from the browser or a Mac app. It is live at dispatchmac.com. Case study details are still being written.',
       suggestedQuestions: [
         'What is Dispatch?',
         'What problem does Dispatch solve?',
@@ -90,14 +92,40 @@ export const projects: Project[] = [
     },
   },
   {
-    id: 'thesis',
-    title: 'Thesis',
-    description: 'A product I designed and built. Case study coming soon.',
+    id: 'shader-wall',
+    title: 'Shader Wall',
+    description: 'A macOS app that puts a living shader behind your windows. Try the whole app in your browser.',
     category: 'Product',
     year: '2026',
     kind: 'product',
-    status: 'Live',
-    // liveUrl: '', // TODO: add the real Thesis URL to show the "Visit Thesis" link
+    status: 'Waitlist',
+    liveUrl: 'https://www.shaderwall.com',
+    externalUrl: 'https://www.shaderwall.com', // No case study yet — the feed links to the site too
+    logo: '/products/shader-wall.png',
+    tags: ['Product', 'macOS', 'Built solo'],
+    content: [],
+    chatContext: {
+      description: 'Shader Wall — a macOS app Gareth designed and built that sets an animated shader as an ambient desktop wallpaper. The site at shaderwall.com runs the whole app on a Mac desktop in the browser and has a waitlist.',
+      suggestedQuestions: [
+        'What is Shader Wall?',
+        'How was Shader Wall built?',
+        'Where can I try Shader Wall?',
+      ],
+      followUpQuestions: [
+        'Who is Shader Wall for?',
+        'What did you learn building it?',
+      ],
+    },
+  },
+  {
+    id: 'thesis',
+    title: 'Thesis',
+    description: 'A product I designed and built. Coming soon.',
+    category: 'Product',
+    year: '2026',
+    kind: 'product',
+    status: 'Coming soon',
+    // liveUrl: 'https://thesis-phi-self.vercel.app', // Not ready to share yet — restore with status: 'Live'
     productVisual: 'thesis',
     tags: ['Product', 'AI', 'Built solo'],
     content: [
