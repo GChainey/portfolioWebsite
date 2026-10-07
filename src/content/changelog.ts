@@ -14,7 +14,7 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: '1.23.0',
+    version: '1.25.0',
     date: '2026-10-07',
     title: 'Shader Wall in Products',
     description:
@@ -30,6 +30,39 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
     aiTools: ['Claude Code'],
     branch: 'GChainey/shaderwall-website-update',
+  },
+  {
+    version: '1.24.0',
+    date: '2026-10-07',
+    title: 'Gallery (not live yet)',
+    description:
+      'Built a gallery: a dump of real screens, prototypes and sites in a bento grid, where clicking a tile opens the artefact itself in a large dialog. It is merged but switched off in production while I decide what goes in it.',
+    changes: [
+      'A /gallery page with group filters, a homepage section and a header link, all local-only for now',
+      'Websites get the large tiles; features and interactions get small ones',
+      'Tiles open a live prototype you can use, a video or an image',
+      'The same gallery is ready for the Brand and Showcase homepage variants, which stay as they are until it goes live',
+      'An edit mode with a Share checkbox on every tile, for choosing what is shown',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/bento-grid-gallery-section',
+  },
+  {
+    version: '1.23.0',
+    date: '2026-10-07',
+    title: 'SEEK and Best Practice Case Studies',
+    description:
+      'Wrote up two case studies from earlier roles, taken from my portfolio presentation: recovering an underperforming MVP at SEEK, and the two-panel appointment dialog at Best Practice.',
+    changes: [
+      'SEEK: rewrote the funnel case study to start at the MVP release, with the three fixes, real screens and the results',
+      'Best Practice: replaced the placeholder with the full appointment booking story, from the original dialog to the two-panel design',
+      'Cropped images out of the presentation slides and pulled 12 screen recordings from them, so the interactions play in the articles',
+      'Brand variant: each case study has its own page in that company\'s brand, linked from the work track and the career panels',
+      'An article hero can now be a video: the Best Practice piece opens on the final design playing',
+      'Experience dialog shows a case study\'s hero image when it has one, instead of placeholder art',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/seek-best-practice-case-studies',
   },
   {
     version: '1.22.0',

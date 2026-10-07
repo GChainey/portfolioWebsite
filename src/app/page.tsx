@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { X, ArrowRight } from 'lucide-react'
 import { Header } from '@/components/Header'
+import { Gallery, GALLERY_LIVE } from '@/components/Gallery'
 import { ChatInterface } from '@/components/ChatInterface'
 import { Facehash } from 'facehash'
 import { GitHubContributions } from '@/components/GitHubContributions'
@@ -648,6 +649,28 @@ export default function Home() {
                 </div>
               </motion.div>
             </section>
+
+            {/* Gallery - bento of real screens, each opens the artefact in a dialog */}
+            {GALLERY_LIVE && (
+              <section className="border-b border-border">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+                >
+                  <div className={`flex items-center justify-between px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
+                    <p className="text-xs text-muted uppercase tracking-widest">Gallery</p>
+                    <Link href="/gallery" className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1">
+                      View all <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                  <div className="gallery-flush">
+                    <Gallery limit={7} />
+                  </div>
+                </motion.div>
+              </section>
+            )}
 
             {/* Experience section */}
             <section className="p-8 border-b border-border">

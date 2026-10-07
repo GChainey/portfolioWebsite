@@ -74,6 +74,21 @@
   }
 }
 
+/* Gallery (public/gallery) - map the shared <gc-gallery> onto the site tokens */
+gc-gallery {
+  --gal-fg: var(--foreground);
+  --gal-muted: var(--muted);
+  --gal-line: var(--border);
+  --gal-card: var(--card);
+  --gal-accent: var(--accent);
+  --gal-radius: 8px;
+}
+/* Homepage: tiles sit edge to edge on hairlines, like the other bento sections */
+.gallery-flush gc-gallery {
+  --gal-radius: 0px;
+  --gal-gap: 1px;
+}
+
 /* Accent color themes - OUTSIDE @layer for higher cascade priority */
 /* Light mode */
 html.accent-amber { --accent: #d97706; --accent-light: #fef3c7; }
