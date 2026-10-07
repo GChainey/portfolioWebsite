@@ -322,11 +322,24 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
                 {/* Hero Image for non-GitHub articles */}
                 {!project.showGitHubActivity && project.heroImage && (
                   <div className="w-full mb-8">
-                    <img
-                      src={project.heroImage}
-                      alt={project.title}
-                      className="w-full h-auto rounded-lg"
-                    />
+                    {project.heroVideo ? (
+                      <video
+                        src={project.heroVideo}
+                        poster={project.heroImage}
+                        aria-label={project.title}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="w-full h-auto rounded-lg"
+                      />
+                    ) : (
+                      <img
+                        src={project.heroImage}
+                        alt={project.title}
+                        className="w-full h-auto rounded-lg"
+                      />
+                    )}
                   </div>
                 )}
 

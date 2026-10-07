@@ -209,11 +209,17 @@ export function ExperienceDialog({ isOpen, onClose, initialCompanyId = 'enterpri
                         <h3 className="text-xl font-medium text-foreground mt-2 mb-2">{project.title}</h3>
                         <p className="text-sm text-muted leading-relaxed mb-6">{project.description}</p>
 
-                        {/* Hero image placeholder */}
-                        <div className="mb-4 rounded-lg border border-border overflow-hidden bg-border/30">
-                          <div className="aspect-[16/9] flex items-center justify-center">
-                            <div className="text-center">
-                              <div className="font-mono text-[10px] leading-none text-foreground/15 whitespace-pre select-none mb-3">
+                        {project.heroImage ? (
+                          <div className="mb-6 rounded-lg border border-border overflow-hidden">
+                            <img src={project.heroImage} alt={project.title} className="w-full h-auto" />
+                          </div>
+                        ) : (
+                          <>
+                            {/* Hero image placeholder */}
+                            <div className="mb-4 rounded-lg border border-border overflow-hidden bg-border/30">
+                              <div className="aspect-[16/9] flex items-center justify-center">
+                                <div className="text-center">
+                                  <div className="font-mono text-[10px] leading-none text-foreground/15 whitespace-pre select-none mb-3">
 {`    ╔════════════════════════════════════╗
     ║                                    ║
     ║     ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓     ║
@@ -223,18 +229,18 @@ export function ExperienceDialog({ isOpen, onClose, initialCompanyId = 'enterpri
     ║     ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓     ║
     ║                                    ║
     ╚════════════════════════════════════╝`}
+                                  </div>
+                                  <p className="text-xs text-muted">Hero image coming soon</p>
+                                </div>
                               </div>
-                              <p className="text-xs text-muted">Hero image coming soon</p>
                             </div>
-                          </div>
-                        </div>
 
-                        {/* Detail image placeholders - two side by side */}
-                        <div className="grid grid-cols-2 gap-4 mb-6">
-                          <div className="rounded-lg border border-border overflow-hidden bg-border/30">
-                            <div className="aspect-[4/3] flex items-center justify-center">
-                              <div className="text-center">
-                                <div className="font-mono text-[8px] leading-none text-foreground/15 whitespace-pre select-none mb-2">
+                            {/* Detail image placeholders - two side by side */}
+                            <div className="grid grid-cols-2 gap-4 mb-6">
+                              <div className="rounded-lg border border-border overflow-hidden bg-border/30">
+                                <div className="aspect-[4/3] flex items-center justify-center">
+                                  <div className="text-center">
+                                    <div className="font-mono text-[8px] leading-none text-foreground/15 whitespace-pre select-none mb-2">
 {`  ╔══════════════════╗
   ║  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ║
   ║  ▓            ▓  ║
@@ -242,15 +248,15 @@ export function ExperienceDialog({ isOpen, onClose, initialCompanyId = 'enterpri
   ║  ▓            ▓  ║
   ║  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ║
   ╚══════════════════╝`}
+                                    </div>
+                                    <p className="text-[10px] text-muted">UI screenshot</p>
+                                  </div>
                                 </div>
-                                <p className="text-[10px] text-muted">UI screenshot</p>
                               </div>
-                            </div>
-                          </div>
-                          <div className="rounded-lg border border-border overflow-hidden bg-border/30">
-                            <div className="aspect-[4/3] flex items-center justify-center">
-                              <div className="text-center">
-                                <div className="font-mono text-[8px] leading-none text-foreground/15 whitespace-pre select-none mb-2">
+                              <div className="rounded-lg border border-border overflow-hidden bg-border/30">
+                                <div className="aspect-[4/3] flex items-center justify-center">
+                                  <div className="text-center">
+                                    <div className="font-mono text-[8px] leading-none text-foreground/15 whitespace-pre select-none mb-2">
 {`  ╔══════════════════╗
   ║  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ║
   ║  ▓            ▓  ║
@@ -258,18 +264,18 @@ export function ExperienceDialog({ isOpen, onClose, initialCompanyId = 'enterpri
   ║  ▓            ▓  ║
   ║  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ║
   ╚══════════════════╝`}
+                                    </div>
+                                    <p className="text-[10px] text-muted">UI screenshot</p>
+                                  </div>
                                 </div>
-                                <p className="text-[10px] text-muted">UI screenshot</p>
                               </div>
                             </div>
-                          </div>
-                        </div>
 
-                        {/* Wide detail image placeholder */}
-                        <div className="mb-6 rounded-lg border border-border overflow-hidden bg-border/30">
-                          <div className="aspect-[21/9] flex items-center justify-center">
-                            <div className="text-center">
-                              <div className="font-mono text-[8px] leading-none text-foreground/15 whitespace-pre select-none mb-2">
+                            {/* Wide detail image placeholder */}
+                            <div className="mb-6 rounded-lg border border-border overflow-hidden bg-border/30">
+                              <div className="aspect-[21/9] flex items-center justify-center">
+                                <div className="text-center">
+                                  <div className="font-mono text-[8px] leading-none text-foreground/15 whitespace-pre select-none mb-2">
 {`  ╔══════════════════════════════════════════════╗
   ║  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ║
   ║  ▓                                      ▓  ║
@@ -277,11 +283,13 @@ export function ExperienceDialog({ isOpen, onClose, initialCompanyId = 'enterpri
   ║  ▓                                      ▓  ║
   ║  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ║
   ╚══════════════════════════════════════════════╝`}
+                                  </div>
+                                  <p className="text-[10px] text-muted">Workflow or interaction detail</p>
+                                </div>
                               </div>
-                              <p className="text-[10px] text-muted">Workflow or interaction detail</p>
                             </div>
-                          </div>
-                        </div>
+                          </>
+                        )}
 
                         <Link
                           href={project.externalUrl || `/projects/${project.id}`}

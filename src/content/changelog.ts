@@ -14,6 +14,23 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.23.0',
+    date: '2026-10-07',
+    title: 'SEEK and Best Practice Case Studies',
+    description:
+      'Wrote up two case studies from earlier roles, taken from my portfolio presentation: recovering an underperforming MVP at SEEK, and the two-panel appointment dialog at Best Practice.',
+    changes: [
+      'SEEK: rewrote the funnel case study to start at the MVP release, with the three fixes, real screens and the results',
+      'Best Practice: replaced the placeholder with the full appointment booking story, from the original dialog to the two-panel design',
+      'Cropped images out of the presentation slides and pulled 12 screen recordings from them, so the interactions play in the articles',
+      'Brand variant: each case study has its own page in that company\'s brand, linked from the work track and the career panels',
+      'An article hero can now be a video: the Best Practice piece opens on the final design playing',
+      'Experience dialog shows a case study\'s hero image when it has one, instead of placeholder art',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/seek-best-practice-case-studies',
+  },
+  {
     version: '1.22.0',
     date: '2026-10-06',
     title: 'New Essay: Agentic User Testing',

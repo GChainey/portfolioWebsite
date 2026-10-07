@@ -18,6 +18,8 @@ const nextConfig = {
       { source: '/variants', destination: '/variants/index.html' },
       { source: '/variants/brand', destination: '/variants/02-brand.html' },
       { source: '/variants/showcase', destination: '/variants/04-showcase.html' },
+      { source: '/variants/brand/seek', destination: '/variants/brand-case.html' },
+      { source: '/variants/brand/best-practice', destination: '/variants/brand-case.html' },
     ]
   },
   async headers() {
