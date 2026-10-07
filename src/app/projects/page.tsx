@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { GitHubContributions } from '@/components/GitHubContributions'
-import { ProductCard } from '@/components/ProductCard'
+import { ProductGrid } from '@/components/ProductCard'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import { products, writing } from '@/content/projects'
 
@@ -40,21 +40,7 @@ export default function ProjectsPage() {
                 <p className="text-xs text-muted">Things I&apos;ve built and shipped</p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2">
-                {products.map((product, index) => {
-                  const isLeft = index % 2 === 0
-                  const isLastRow = index >= products.length - (products.length % 2 === 0 ? 2 : 1)
-
-                  return (
-                    <ProductCard
-                      key={product.id}
-                      product={product}
-                      index={index}
-                      className={`${isLeft ? 'md:border-r border-border' : ''} ${!isLastRow ? 'border-b border-border' : ''}`}
-                    />
-                  )
-                })}
-              </div>
+              <ProductGrid products={products} />
             </section>
           )}
 

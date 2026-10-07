@@ -162,6 +162,11 @@ gc-gallery { --gal-fg: var(--ink); --gal-muted: var(--muted); --gal-line: var(--
 .shuffle .die { display: inline-block; font-size: 18px; transition: transform .5s cubic-bezier(.34,1.56,.64,1); }
 .shuffle:active .die, .shuffle.spin .die { transform: rotate(360deg) scale(1.15); }
 .shuffle small { font-weight: 400; opacity: .75; text-transform: none; letter-spacing: 0; font-family: 'JetBrains Mono', monospace; }
+.product .plogo { width: 72px; height: 72px; margin-top: auto; display: block; }
+.product .plogo + .name { margin-top: 20px; }
+/* The whole card clicks out to the live product */
+.product .cover { position: absolute; inset: 0; z-index: 1; }
+.product .shuffle { position: relative; z-index: 2; }
 @media (max-width: 1100px) { .products { grid-template-columns: 1fr; } .product { min-height: 64vh; } .product .name { font-size: clamp(64px, 16vw, 150px); } }
 @media (max-width: 800px) { .product { padding: 24px 18px; } }
 
@@ -399,28 +404,31 @@ gc-gallery { --gal-fg: var(--ink); --gal-muted: var(--muted); --gal-line: var(--
     <article class="product p-dispatch">
       <span class="ghostnum disp">1</span>
       <div class="top label"><span class="status">Live · 2026</span><span>Reading</span></div>
+      <img class="plogo" src="/products/dispatch.png" alt="Dispatch logo" width="72" height="72" />
       <div class="name disp">Dispatch</div>
       <div class="what">Read-it-later, for Kindle</div>
       <p class="desc">Send anything you want to read straight to your Kindle. It can also turn what you've saved into digests with custom illustrations.</p>
-      <a class="big-arrow" href="#" aria-label="Dispatch"><span>→</span></a>
+      <span class="big-arrow" aria-hidden="true"><span>→</span></span>
+      <a class="cover" href="https://www.dispatchmac.com" target="_blank" rel="noopener" aria-label="Visit Dispatch"></a>
     </article>
     <article class="product p-shaders">
       <canvas id="shader" aria-hidden="true"></canvas>
       <span class="ghostnum disp">2</span>
-      <div class="top label"><span class="status">macOS · 2026</span><span>Desktop</span></div>
+      <div class="top label"><span class="status">Waitlist · 2026</span><span>Desktop</span></div>
       <button type="button" class="shuffle" id="shuffle" aria-label="Apply a random shader"><span class="die">🎲</span>Random shader <small id="shader-name"></small></button>
-      <div class="name disp">Shaders</div>
+      <img class="plogo" src="/products/shader-wall.png" alt="Shader Wall logo" width="72" height="72" />
+      <div class="name disp">Shader Wall</div>
       <div class="what">Live wallpapers for your Mac</div>
-      <p class="desc">A macOS tool that lets you make your desktop background out of live shaders, like this one.</p>
-      <a class="big-arrow" href="#" aria-label="Shaders"><span>→</span></a>
+      <p class="desc">A macOS app that puts a living shader behind your windows, like this one.</p>
+      <span class="big-arrow" aria-hidden="true"><span>→</span></span>
+      <a class="cover" href="https://www.shaderwall.com" target="_blank" rel="noopener" aria-label="Visit Shader Wall"></a>
     </article>
     <article class="product p-thesis">
       <span class="ghostnum disp">3</span>
-      <div class="top label"><span class="status">Live · 2026</span><span>Product teams</span></div>
+      <div class="top label"><span class="status">Coming soon · 2026</span><span>Product teams</span></div>
       <div class="name disp">Thesis</div>
       <div class="what">Assumption testing, as a practice</div>
       <p class="desc">A product tool that makes assumption testing a routine part of how teams build, not an afterthought.</p>
-      <a class="big-arrow" href="#" aria-label="Thesis"><span>→</span></a>
     </article>
   </div>
 </section>
@@ -582,7 +590,7 @@ const QUOTES = [
 
 /* ---------------------------------------------------------- build DOM */
 // marquee
-const MQ = ['Enterprise AI', 'SEEK', 'Best Practice', 'Claude Code', 'Dispatch', 'Thesis', 'New York', 'Shape Up', 'Real code']
+const MQ = ['Enterprise AI', 'SEEK', 'Best Practice', 'Claude Code', 'Dispatch', 'Shader Wall', 'Thesis', 'New York', 'Shape Up', 'Real code']
 const mqHTML = MQ.map(w => `<span class="mq-item">${w}<span class="star">✺</span></span>`).join('')
 $('mq').innerHTML = mqHTML + mqHTML + mqHTML
 
