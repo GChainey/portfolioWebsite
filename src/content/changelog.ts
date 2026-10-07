@@ -14,6 +14,21 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.24.0',
+    date: '2026-10-07',
+    title: 'EAI Shader Bento Tile',
+    description:
+      'Added a live Warp shader banner tile to the home projects bento grid, cycling Enterprise AI colourways and logo layouts.',
+    changes: [
+      'New full-width 16:9 bento tile with @paper-design/shaders-react Warp banners',
+      'Crossfades light, cyan, and dark colourways with centred and bottom-right EAI logo layouts',
+      'Pauses WebGL when off-screen; static fallback when prefers-reduced-motion is on',
+      'Reusable EAILogo SVG component with colour prop',
+    ],
+    aiTools: ['Cursor'],
+    branch: 'cursor/eai-shader-bento-tile-8461',
+  },
+  {
     version: '1.23.0',
     date: '2026-10-07',
     title: 'SEEK and Best Practice Case Studies',

@@ -20,6 +20,16 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { ExperienceDialog } from '@/components/ExperienceDialog'
 import { PenflowSignature } from '@/components/PenflowSignature'
 import { Signature } from '@/components/Signature'
+import dynamic from 'next/dynamic'
+
+const EAIShaderBannerVisual = dynamic(
+  () =>
+    import('@/components/eai-shader-banner/EAIShaderBannerVisual').then((m) => m.EAIShaderBannerVisual),
+  {
+    ssr: false,
+    loading: () => <div className="h-full w-full bg-[#0D3856]/20 animate-pulse" aria-hidden />,
+  },
+)
 
 // Typewriter sequence: target text + pause after reaching it (ms)
 const TYPING_STEPS = [
@@ -89,6 +99,14 @@ const BENTO_PROJECTS = [
     href: '/projects/creative-tooling',
     visual: 'icon' as const,
     icon: 'sparkle',
+  },
+  {
+    id: 'eai-shader-banners',
+    number: '05',
+    title: 'EAI shader banners',
+    description: 'Animated Warp shader banners for Enterprise AI — three colourways and two logo layouts.',
+    category: 'Enterprise AI',
+    visual: 'eai-shader' as const,
   },
 ]
 
@@ -618,29 +636,35 @@ export default function Home() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2">
                   {BENTO_PROJECTS.map((project, index) => {
+                    const isFullWidth = project.visual === 'eai-shader'
                     const isLeft = index % 2 === 0
                     const isTopRow = index < 2
+                    const isMiddleRow = index >= 2 && index < 4
+                    const href = 'href' in project ? project.href : undefined
 
-                    return (
-                      <Link
-                        key={project.id}
-                        href={project.href}
-                        className="group block"
-                      >
+                    const card = (
                         <motion.div
-                          className={`${isLeft ? 'md:border-r border-border' : ''} ${isTopRow ? 'border-b border-border' : ''}`}
+                          className={`${isFullWidth ? 'md:col-span-2' : ''} ${!isFullWidth && isLeft ? 'md:border-r border-border' : ''} ${isTopRow || isMiddleRow ? 'border-b border-border' : ''}`}
                           initial={{ opacity: 0, y: 20 }}
                           whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true }}
                           transition={{ duration: 0.5, delay: index * 0.1 }}
                         >
                           {/* Visual area */}
-                          <div className="h-48 md:h-56 bg-border/30 flex items-center justify-center overflow-hidden relative">
-                            <span className="absolute top-4 right-4 text-xs font-mono text-muted/60">
+                          <div
+                            className={
+                              isFullWidth
+                                ? 'relative aspect-video w-full overflow-hidden bg-border/30'
+                                : 'relative h-48 md:h-56 bg-border/30 flex items-center justify-center overflow-hidden'
+                            }
+                          >
+                            <span className="absolute top-4 right-4 z-20 text-xs font-mono text-muted/60">
                               {project.number}
                             </span>
                             {project.visual === 'github' ? (
                               <GitHubContributions variant="card" monthsToShow={12} />
+                            ) : project.visual === 'eai-shader' ? (
+                              <EAIShaderBannerVisual className="h-full w-full" />
                             ) : (
                               <BentoCardVisual icon={project.icon} />
                             )}
@@ -650,13 +674,26 @@ export default function Home() {
                           <div className="p-5">
                             <div className="flex items-center justify-between mb-2">
                               <span className="text-xs text-muted uppercase tracking-wide">{project.category}</span>
-                              <ArrowRight className="w-4 h-4 text-muted group-hover:text-accent group-hover:translate-x-1 transition-all" />
+                              {href ? (
+                                <ArrowRight className="w-4 h-4 text-muted group-hover:text-accent group-hover:translate-x-1 transition-all" />
+                              ) : (
+                                <span className="w-4 h-4" aria-hidden />
+                              )}
                             </div>
                             <h3 className="font-medium text-foreground group-hover:text-accent transition-colors mb-1">{project.title}</h3>
                             <p className="text-sm text-muted line-clamp-2">{project.description}</p>
                           </div>
                         </motion.div>
+                    )
+
+                    return href ? (
+                      <Link key={project.id} href={href} className="group block">
+                        {card}
                       </Link>
+                    ) : (
+                      <div key={project.id} className="group block">
+                        {card}
+                      </div>
                     )
                   })}
                 </div>

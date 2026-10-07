@@ -1,0 +1,158 @@
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
+import { Warp } from '@paper-design/shaders-react'
+import { EAILogo } from '@/components/EAILogo'
+import {
+  EAI_BANNER_VARIANTS,
+  VARIANT_CROSSFADE_MS,
+  VARIANT_HOLD_MS,
+  WARP_SETTINGS,
+  type EAIBannerVariant,
+} from './constants'
+
+const fadeStyle = {
+  transition: `opacity ${VARIANT_CROSSFADE_MS}ms ease-in-out`,
+}
+
+function BannerWarpLayer({
+  variant,
+  animate,
+  maxPixelCount,
+}: {
+  variant: EAIBannerVariant
+  animate: boolean
+  maxPixelCount: number
+}) {
+  return (
+    <div className="absolute inset-0">
+      <Warp
+        {...WARP_SETTINGS}
+        speed={animate ? WARP_SETTINGS.speed : 0}
+        colors={[...variant.colors]}
+        maxPixelCount={maxPixelCount}
+        className="absolute inset-0 h-full w-full"
+        style={{ width: '100%', height: '100%' }}
+      />
+    </div>
+  )
+}
+
+export function EAIShaderBannerVisual({ className = '' }: { className?: string }) {
+  const rootRef = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(false)
+  const [reducedMotion, setReducedMotion] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [outgoingIndex, setOutgoingIndex] = useState<number | null>(null)
+  const [crossfading, setCrossfading] = useState(false)
+  const [incomingVisible, setIncomingVisible] = useState(false)
+
+  const active = EAI_BANNER_VARIANTS[activeIndex]
+  const outgoing = outgoingIndex !== null ? EAI_BANNER_VARIANTS[outgoingIndex] : null
+
+  useEffect(() => {
+    setReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const onChange = () => setReducedMotion(mq.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+
+  useEffect(() => {
+    const node = rootRef.current
+    if (!node) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { rootMargin: '10% 0px', threshold: 0.15 },
+    )
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (!crossfading) {
+      setIncomingVisible(false)
+      return
+    }
+    setIncomingVisible(false)
+    const id = requestAnimationFrame(() => setIncomingVisible(true))
+    return () => cancelAnimationFrame(id)
+  }, [crossfading, activeIndex])
+
+  useEffect(() => {
+    if (!isVisible || reducedMotion) return
+
+    let cancelled = false
+    let holdTimer: ReturnType<typeof setTimeout>
+    let fadeTimer: ReturnType<typeof setTimeout>
+    let index = activeIndex
+
+    const advance = () => {
+      holdTimer = setTimeout(() => {
+        if (cancelled) return
+        const next = (index + 1) % EAI_BANNER_VARIANTS.length
+        setOutgoingIndex(index)
+        setActiveIndex(next)
+        setCrossfading(true)
+        index = next
+
+        fadeTimer = setTimeout(() => {
+          if (cancelled) return
+          setCrossfading(false)
+          setOutgoingIndex(null)
+          advance()
+        }, VARIANT_CROSSFADE_MS)
+      }, VARIANT_HOLD_MS)
+    }
+
+    advance()
+
+    return () => {
+      cancelled = true
+      clearTimeout(holdTimer)
+      clearTimeout(fadeTimer)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- timer only restarts when visibility / motion prefs change
+  }, [isVisible, reducedMotion])
+
+  const shouldAnimate = isVisible && !reducedMotion
+  const maxPixelCount = 480_000
+
+  return (
+    <div ref={rootRef} className={`relative h-full w-full overflow-hidden bg-[#0D3856] ${className}`}>
+      {!crossfading && (
+        <BannerWarpLayer variant={active} animate={shouldAnimate} maxPixelCount={maxPixelCount} />
+      )}
+
+      {crossfading && outgoing && (
+        <>
+          <div className="absolute inset-0" style={{ ...fadeStyle, opacity: incomingVisible ? 0 : 1 }}>
+            <BannerWarpLayer variant={outgoing} animate={shouldAnimate} maxPixelCount={maxPixelCount} />
+          </div>
+          <div className="absolute inset-0" style={{ ...fadeStyle, opacity: incomingVisible ? 1 : 0 }}>
+            <BannerWarpLayer variant={active} animate={shouldAnimate} maxPixelCount={maxPixelCount} />
+          </div>
+        </>
+      )}
+
+      <div
+        className={`pointer-events-none absolute z-10 transition-all ease-in-out ${
+          active.placement === 'center'
+            ? 'inset-0 flex items-center justify-center'
+            : 'bottom-4 right-4 md:bottom-5 md:right-5'
+        }`}
+        style={{ transitionDuration: `${VARIANT_CROSSFADE_MS}ms` }}
+      >
+        <EAILogo
+          color={active.logoColor}
+          className={
+            active.placement === 'center'
+              ? 'h-auto w-[38%] max-w-[140px] min-w-[72px] sm:max-w-[160px] md:max-w-[180px]'
+              : 'h-auto w-[22%] max-w-[88px] min-w-[56px] sm:max-w-[100px] md:max-w-[112px]'
+          }
+        />
+      </div>
+    </div>
+  )
+}
