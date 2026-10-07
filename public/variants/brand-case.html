@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gareth Chainey — Case study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..800&family=JetBrains+Mono:wght@400..700&family=Plus+Jakarta+Sans:wght@400..800&family=Jost:wght@300..600&display=swap" rel="stylesheet" />
+<style>
+/* A case study in the Brand variant: the whole page wears the brand of the company the work was for */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--c-bg); color: var(--c-ink); font-family: var(--c-body); font-size: 18px; line-height: 1.55; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+a { color: inherit; }
+.pad { padding-left: 40px; padding-right: 40px; }
+@media (max-width: 720px) { .pad { padding-left: 18px; padding-right: 18px; } body { font-size: 16px; } }
+
+/* ============================================================ BRANDS */
+/* SEEK: pink, navy, tight Jakarta, the dotted mark as a giant watermark */
+[data-co="seek"] {
+  --c-bg: #FFFFFF; --c-ink: #0D3880; --c-muted: #5B6C8F; --c-line: #DCE3F0; --c-surface: #F3F6FB; --c-accent: #E60278; --c-accent-ink: #FFFFFF;
+  --c-band: #0D3880; --c-band-ink: #FFFFFF; --c-band-muted: #B9C8E6; --c-band-pop: #FF7DBD; --c-media: #000000; --c-r: 14px;
+  --c-display: 'Plus Jakarta Sans', sans-serif; --c-weight: 800; --c-track: -.045em; --c-lead: 1; --c-body: 'Plus Jakarta Sans', sans-serif; --c-label: 'Plus Jakarta Sans', sans-serif; --c-bullet: '●';
+  --cp-bg: #E60278; --cp-ink: #FFFFFF; --cp-muted: #FFE0EF; --cp-line: rgba(255,255,255,.35); --cp-mark-ink: #0D3880; --cp-size: clamp(46px, min(8.4vw, 14vh), 150px); --cp-logo-h: 44px;
+}
+/* Best Practice: deep navy to teal, light geometric Jost, soft glass bubbles */
+[data-co="bp"] {
+  --c-bg: #F3F8F9; --c-ink: #123A57; --c-muted: #55707F; --c-line: #D3E3E7; --c-surface: #FFFFFF; --c-accent: #2B7C84; --c-accent-ink: #FFFFFF;
+  --c-band: linear-gradient(160deg, #123A57 0%, #1D5670 50%, #3E8A8F 100%); --c-band-ink: #FFFFFF; --c-band-muted: #C3DCE2; --c-band-pop: #7FD4DC; --c-media: #F4F4F4; --c-r: 22px;
+  --c-display: 'Jost', 'Futura', sans-serif; --c-weight: 400; --c-track: -.015em; --c-lead: 1.04; --c-body: 'Jost', 'Futura', sans-serif; --c-label: 'Jost', sans-serif; --c-bullet: '✓';
+  --cp-bg: linear-gradient(160deg, #123A57 0%, #1D5670 50%, #3E8A8F 100%); --cp-ink: #FFFFFF; --cp-muted: #C3DCE2; --cp-line: rgba(255,255,255,.25); --cp-mark-ink: #7FD4DC; --cp-size: clamp(40px, min(6.6vw, 11.5vh), 116px); --cp-logo-h: 46px;
+}
+[data-co="bp"] body, body[data-co="bp"] { font-size: 19px; }
+
+.label { font-family: var(--c-label); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; line-height: 1.3; }
+.disp { font-family: var(--c-display); font-weight: var(--c-weight); letter-spacing: var(--c-track); line-height: var(--c-lead); }
+
+/* ============================================================ NAV */
+.nav { position: fixed; inset: 0 0 auto 0; z-index: 50; height: 64px; display: flex; align-items: center; gap: 22px; color: #fff; mix-blend-mode: normal; transition: background .4s, color .4s, border-color .4s, transform .4s cubic-bezier(.2,.7,.2,1); border-bottom: 1px solid transparent; }
+.nav.solid { background: color-mix(in srgb, var(--c-bg) 90%, transparent); color: var(--c-ink); border-bottom-color: var(--c-line); backdrop-filter: saturate(180%) blur(18px); -webkit-backdrop-filter: saturate(180%) blur(18px); }
+.nav.hide { transform: translateY(-100%); }
+.nav a { text-decoration: none; font-weight: 600; font-size: 14px; }
+.nav .home { display: flex; align-items: center; gap: 12px; }
+.nav .mono-mark { display: grid; width: 32px; height: 32px; background: currentColor; place-items: center; border-radius: 8px; }
+.nav .mono-mark b { font: 800 13px 'Inter', sans-serif; color: var(--cp-bg-solid, #111); mix-blend-mode: normal; }
+.nav.solid .mono-mark b { color: var(--c-bg); }
+.nav .sp { margin-left: auto; }
+.nav .pill { height: 38px; padding: 0 16px; display: inline-flex; align-items: center; border-radius: 999px; box-shadow: inset 0 0 0 1.5px currentColor; }
+@media (max-width: 720px) { .nav .hide-s { display: none; } }
+
+/* ============================================================ HERO: the career panel, grown to a full page */
+.cp { position: relative; min-height: 100vh; min-height: 100svh; overflow: hidden; isolation: isolate; background: var(--cp-bg); color: var(--cp-ink); }
+.cp-in { position: relative; z-index: 2; min-height: 100vh; min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto; padding-top: 92px; padding-bottom: 44px; }
+.cp-top { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--cp-line); }
+.cp-logo .lg { height: var(--cp-logo-h); width: auto; display: block; }
+.cp-logo .mk { fill: #FFFFFF; }
+.cp-meta { font-family: var(--c-label); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--cp-muted); text-align: right; }
+.cp-h .ln { display: block; }
+.cp-h { align-self: center; margin: 40px 0; font-family: var(--c-display); font-weight: var(--c-weight); letter-spacing: var(--c-track); line-height: .98; font-size: var(--cp-size); }
+[data-co="bp"] .cp-h { line-height: 1.02; }
+.cp-h mark { background: transparent; color: var(--cp-mark-ink); }
+[data-co="bp"] .cp-h mark { font-weight: 500; }
+.cp-h .w { display: inline-block; opacity: 0; transform: translateY(.35em); transition: opacity .7s, transform .9s cubic-bezier(.16,1,.3,1); }
+.cp.in .cp-h .w { opacity: 1; transform: none; }
+.cp-grid { display: grid; grid-template-columns: 1.2fr 1.2fr 1.6fr; gap: 40px; align-items: end; padding-top: 24px; border-top: 1px solid var(--cp-line); }
+.cp-role b { display: block; font-size: 20px; font-weight: 700; }
+.cp-role .where { display: block; margin-top: 4px; font-family: var(--c-label); font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--cp-muted); }
+.cp-role p { margin: 14px 0 0; color: var(--cp-muted); font-size: 16px; line-height: 1.5; max-width: 400px; }
+.cp-hl { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 16px; line-height: 1.45; }
+.cp-hl li { display: grid; grid-template-columns: 20px 1fr; gap: 8px; }
+.cp-hl li::before { content: var(--c-bullet); color: var(--cp-mark-ink); font-weight: 700; }
+[data-co="seek"] .cp-hl li::before { color: #FFFFFF; font-size: .7em; padding-top: .35em; }
+.cp-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.cp-stat b { display: block; font-family: var(--c-display); font-weight: var(--c-weight); font-size: clamp(26px, 3vw, 50px); line-height: 1; letter-spacing: var(--c-track); white-space: nowrap; }
+.cp-stat span { display: block; margin-top: 6px; font-size: 13px; line-height: 1.35; color: var(--cp-muted); }
+[data-co="seek"] .cp-stat { border-left: 4px solid #FFFFFF; padding-left: 14px; }
+[data-co="bp"] .cp-stat { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); backdrop-filter: blur(10px); border-radius: 18px; padding: 14px 16px; }
+.cp-deco { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+[data-co="seek"] .cp-deco svg { position: absolute; right: -9vw; top: -12vw; width: 44vw; max-width: 720px; opacity: .16; color: #FFFFFF; }
+[data-co="bp"] .cp-deco i, [data-co="bp"] .band-deco i { position: absolute; border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), rgba(255,255,255,.04) 60%, transparent 70%); filter: blur(1px); }
+@media (max-width: 980px) { .cp-grid { grid-template-columns: 1fr; gap: 26px; } .cp-stats { grid-template-columns: 1fr; } }
+
+/* ============================================================ CHAPTERS */
+.ch { border-top: 1px solid var(--c-line); padding-top: 96px; padding-bottom: 96px; }
+.ch-head { display: grid; grid-template-columns: 120px 1fr; gap: 24px; align-items: baseline; margin-bottom: 48px; }
+.ch-n { color: var(--c-accent); font-family: var(--c-display); font-weight: var(--c-weight); font-size: clamp(22px, 2vw, 30px); letter-spacing: var(--c-track); }
+.ch-t { margin: 0; font-size: clamp(38px, 5.4vw, 92px); max-width: 16ch; }
+[data-co="bp"] .ch-t { max-width: 20ch; }
+.ch-body { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 64px; align-items: start; padding-left: 144px; }
+.ch-body.solo { grid-template-columns: minmax(0, 760px); }
+.ch-text { position: sticky; top: 96px; }
+.ch-text p { margin: 0 0 18px; color: var(--c-muted); }
+.ch-text p.lead { color: var(--c-ink); font-size: 1.18em; line-height: 1.45; }
+.ch-text h4 { margin: 34px 0 10px; font-family: var(--c-display); font-weight: var(--c-weight); letter-spacing: var(--c-track); font-size: 26px; line-height: 1.1; }
+[data-co="bp"] .ch-text h4 { font-weight: 500; }
+.ch-text ul { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 10px; }
+.ch-text li { display: grid; grid-template-columns: 24px 1fr; gap: 8px; }
+.ch-text li::before { content: var(--c-bullet); color: var(--c-accent); font-weight: 700; }
+[data-co="seek"] .ch-text li::before { font-size: .6em; padding-top: .7em; }
+.ch-media { display: grid; gap: 28px; min-width: 0; }
+/* a chapter with no text: the images carry it, two across */
+.ch-media.grid2 { grid-template-columns: 1fr 1fr; align-items: start; }
+.ch-media.grid2 .span { grid-column: 1 / -1; }
+@media (max-width: 720px) { .ch-media.grid2 { grid-template-columns: 1fr; } }
+@media (max-width: 1000px) { .ch-head { grid-template-columns: 1fr; gap: 8px; } .ch-body { grid-template-columns: 1fr; gap: 32px; padding-left: 0; } .ch-text { position: static; } .ch { padding-top: 64px; padding-bottom: 64px; } }
+
+figure.m { margin: 0; min-width: 0; }
+figure.m .fr { border-radius: var(--c-r); overflow: hidden; background: var(--c-media); border: 1px solid var(--c-line); }
+[data-co="seek"] figure.m .fr { border-color: #0D3880; box-shadow: 10px 10px 0 var(--c-accent); }
+[data-co="bp"] figure.m .fr { box-shadow: 0 30px 60px -34px rgba(18,58,87,.45); }
+figure.m img, figure.m video { display: block; width: 100%; height: auto; }
+figure.m figcaption { margin-top: 14px; display: flex; gap: 10px; align-items: baseline; font-size: 14px; color: var(--c-muted); }
+figure.m figcaption b { flex: none; font-family: var(--c-label); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--c-accent-ink); background: var(--c-accent); padding: 3px 8px; border-radius: 999px; }
+[data-co="seek"] figure.m { padding-right: 10px; padding-bottom: 10px; }
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+@media (max-width: 720px) { .duo { grid-template-columns: 1fr; } }
+
+/* cards: goals, lessons, findings */
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.card { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--c-r); padding: 24px; }
+.card b { display: block; font-family: var(--c-display); font-weight: var(--c-weight); letter-spacing: var(--c-track); font-size: 24px; line-height: 1.12; margin-bottom: 10px; }
+[data-co="bp"] .card b { font-weight: 500; }
+.card p { margin: 0; color: var(--c-muted); font-size: 16px; line-height: 1.5; }
+.card .k { display: inline-grid; place-items: center; width: 34px; height: 34px; margin-bottom: 16px; border-radius: 50%; background: var(--c-accent); color: var(--c-accent-ink); font-weight: 700; font-size: 15px; }
+[data-co="seek"] .card { border-color: #0D3880; border-width: 1.5px; }
+@media (max-width: 900px) { .cards { grid-template-columns: 1fr; } }
+
+/* outcome table: goal against result */
+.gv { display: grid; gap: 0; border-top: 1.5px solid var(--c-ink); }
+.gv-row { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 20px; align-items: baseline; padding: 22px 0; border-bottom: 1px solid var(--c-line); }
+.gv-row .what { color: var(--c-muted); }
+.gv-row .goal b, .gv-row .got b { display: block; font-family: var(--c-display); font-weight: var(--c-weight); letter-spacing: var(--c-track); line-height: 1; }
+.gv-row .goal b { font-size: clamp(22px, 2.4vw, 36px); opacity: .45; }
+.gv-row .got b { font-size: clamp(34px, 4.4vw, 68px); color: var(--c-accent); }
+.gv-row span { font-family: var(--c-label); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--c-muted); }
+@media (max-width: 720px) { .gv-row { grid-template-columns: 1fr 1fr; } .gv-row .what { grid-column: 1 / -1; } }
+
+/* ============================================================ BANDS: full-bleed moments */
+.band { position: relative; overflow: hidden; isolation: isolate; background: var(--c-band); color: var(--c-band-ink); padding-top: 120px; padding-bottom: 120px; }
+.band.hot { background: var(--cp-bg); }
+.band-deco { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.band-t { margin: 0; font-size: clamp(64px, 13vw, 240px); line-height: .9; }
+[data-co="bp"] .band-t { font-size: clamp(48px, 8.6vw, 150px); line-height: 1; max-width: 14ch; }
+.band-t mark { background: transparent; color: var(--c-band-pop); }
+.band.hot .band-t mark { color: var(--cp-mark-ink); }
+.band p { margin: 28px 0 0; max-width: 620px; font-size: 22px; line-height: 1.4; color: var(--c-band-muted); }
+.band.hot p { color: var(--cp-muted); }
+.band-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+.band-stats b { display: block; font-family: var(--c-display); font-weight: var(--c-weight); letter-spacing: var(--c-track); font-size: clamp(56px, 8.6vw, 150px); line-height: .92; }
+.band-stats b i { font-style: normal; color: var(--c-band-pop); }
+.band-stats span { display: block; margin-top: 14px; color: var(--c-band-muted); max-width: 26ch; }
+@media (max-width: 800px) { .band-stats { grid-template-columns: 1fr; gap: 32px; } .band { padding-top: 80px; padding-bottom: 80px; } }
+
+/* ============================================================ FUNNEL */
+.funnel { display: grid; gap: 6px; }
+.fn-row { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 22px; align-items: center; }
+.fn-bar { height: 76px; display: grid; place-items: center; text-align: center; padding: 0 12%; font-weight: 700; font-size: 16px; background: color-mix(in srgb, var(--c-ink) 10%, var(--c-bg)); color: var(--c-ink); clip-path: polygon(var(--a) 0, calc(100% - var(--a)) 0, calc(100% - var(--b)) 100%, var(--b) 100%); transform: scaleX(.6); opacity: 0; transition: transform .8s cubic-bezier(.16,1,.3,1), opacity .5s; }
+.funnel.in .fn-bar { transform: none; opacity: 1; }
+.fn-bar.leak { background: var(--c-accent); color: var(--c-accent-ink); }
+.fn-why { opacity: 0; transform: translateX(-14px); transition: opacity .6s .5s, transform .7s .5s cubic-bezier(.16,1,.3,1); }
+.funnel.in .fn-why { opacity: 1; transform: none; }
+.fn-why span { display: block; font-family: var(--c-label); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--c-accent); margin-bottom: 4px; }
+.fn-why b { font-size: 19px; line-height: 1.25; }
+@media (max-width: 720px) { .fn-row { grid-template-columns: 1fr; gap: 6px; } .fn-why { padding-bottom: 12px; } }
+
+/* ============================================================ NEXT */
+.next { display: block; text-decoration: none; position: relative; overflow: hidden; isolation: isolate; padding-top: 110px; padding-bottom: 110px; background: var(--cp-bg); color: var(--cp-ink); }
+.next .label { color: var(--cp-muted); }
+.next .t { display: block; margin-top: 18px; font-family: var(--c-display); font-weight: var(--c-weight); letter-spacing: var(--c-track); line-height: .98; font-size: clamp(44px, 7.4vw, 128px); max-width: 16ch; transition: transform .6s cubic-bezier(.16,1,.3,1); }
+.next:hover .t { transform: translateX(18px); }
+.next .lg { height: 40px; width: auto; display: block; margin-bottom: 34px; }
+.next .mk { fill: #FFFFFF; }
+.foot { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding-top: 26px; padding-bottom: 26px; font-size: 14px; color: var(--c-muted); background: var(--c-bg); }
+.foot a { text-underline-offset: 4px; }
+
+.reveal { opacity: 0; transform: translateY(36px); transition: opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } .reveal, .cp-h .w, .fn-bar, .fn-why { opacity: 1 !important; transform: none !important; } }
+</style>
+</head>
+<body>
+<nav class="nav pad" id="nav">
+  <a class="home" href="/variants/brand" aria-label="Gareth Chainey, brand variant home"><span class="mono-mark" aria-hidden="true"><b>GC</b></span><span class="hide-s">Gareth Chainey</span></a>
+  <span class="sp"></span>
+  <a class="hide-s" id="nav-std" href="#">Standard version</a>
+  <a class="pill" href="/variants/brand#work">All work</a>
+</nav>
+<div id="app"></div>
+
+<script>
+(() => {
+const LOGOS = {
+  seek: `<svg class="lg" aria-label="SEEK" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170.079 68.031"><g fill="currentColor"><path d="M86.641,45.601c-3.697,0-7.037-0.408-10.012-3.385l3.834-3.833c1.942,1.938,4.467,2.208,6.269,2.208 c2.031,0,4.148-0.675,4.148-2.434c0-1.174-0.629-1.985-2.479-2.167l-3.699-0.36c-4.24-0.404-6.854-2.253-6.854-6.586 c0-4.869,4.282-7.485,9.064-7.485c3.653,0,6.72,0.632,8.976,2.75l-3.607,3.653c-1.354-1.217-3.43-1.576-5.459-1.576 c-2.344,0-3.336,1.082-3.336,2.254c0,0.857,0.361,1.85,2.436,2.03l3.7,0.361c4.643,0.45,6.992,2.932,6.992,6.9 C96.612,43.118,92.19,45.601,86.641,45.601z"></path><path d="M104.548,35.405c0,3.022,1.85,5.232,5.143,5.232c2.568,0,3.832-0.722,5.32-2.21l3.564,3.472 c-2.391,2.392-4.691,3.701-8.932,3.701c-5.547,0-10.867-2.526-10.867-12.045c0-7.668,4.148-11.997,10.236-11.997 c6.539,0,10.238,4.783,10.238,11.232v2.614H104.548z M112.938,28.863c-0.635-1.396-1.943-2.434-3.926-2.434 c-1.986,0-3.293,1.038-3.924,2.434c-0.361,0.859-0.494,1.491-0.541,2.529h8.932C113.433,30.354,113.298,29.723,112.938,28.863z"></path><path d="M127.685,35.405c0,3.022,1.852,5.232,5.141,5.232c2.572,0,3.836-0.722,5.324-2.21l3.562,3.472 c-2.391,2.392-4.691,3.701-8.93,3.701c-5.549,0-10.871-2.526-10.871-12.045c0-7.668,4.15-11.997,10.24-11.997 c6.539,0,10.238,4.783,10.238,11.232v2.614H127.685z M136.075,28.863c-0.633-1.396-1.941-2.434-3.924-2.434 c-1.986,0-3.295,1.038-3.926,2.434c-0.361,0.859-0.496,1.491-0.541,2.529h8.932C136.571,30.354,136.435,29.723,136.075,28.863z"></path><path d="M160.339,45.331l-5.77-9.792l-2.486,2.802v6.99h-5.861V13.214h5.861v18.224l7.805-9.608h7.084l-8.391,9.473l9.02,14.029 H160.339z"></path></g><path class="mk" d="M34.015,1.51c-17.952,0-32.506,14.552-32.506,32.507c0,17.952,14.554,32.505,32.506,32.505 c17.958,0,32.508-14.553,32.508-32.505C66.523,16.062,51.972,1.51,34.015,1.51z M8.262,41.733c-0.281,0-0.511-0.226-0.511-0.504 c0-0.281,0.229-0.511,0.511-0.511c0.278,0,0.504,0.229,0.504,0.511C8.766,41.508,8.541,41.733,8.262,41.733z M8.262,34.907 c-0.281,0-0.511-0.229-0.511-0.51s0.229-0.509,0.511-0.509c0.278,0,0.504,0.228,0.504,0.509S8.541,34.907,8.262,34.907z M8.262,28.077c-0.281,0-0.511-0.229-0.511-0.509c0-0.281,0.229-0.507,0.511-0.507c0.278,0,0.504,0.226,0.504,0.507 C8.766,27.849,8.541,28.077,8.262,28.077z M11.764,41.991c-0.422,0-0.762-0.342-0.762-0.762c0-0.422,0.34-0.765,0.762-0.765 c0.421,0,0.762,0.343,0.762,0.765C12.526,41.649,12.186,41.991,11.764,41.991z M11.764,35.158c-0.422,0-0.762-0.339-0.762-0.761 c0-0.42,0.34-0.761,0.762-0.761c0.421,0,0.762,0.341,0.762,0.761C12.526,34.819,12.186,35.158,11.764,35.158z M11.764,28.33 c-0.422,0-0.762-0.341-0.762-0.762c0-0.422,0.34-0.763,0.762-0.763c0.421,0,0.762,0.341,0.762,0.763 C12.526,27.989,12.186,28.33,11.764,28.33z M15.867,42.246c-0.562,0-1.019-0.455-1.019-1.017c0-0.561,0.457-1.018,1.019-1.018 c0.558,0,1.016,0.457,1.016,1.018C16.882,41.791,16.424,42.246,15.867,42.246z M15.867,35.412c-0.562,0-1.019-0.453-1.019-1.015 c0-0.562,0.457-1.016,1.019-1.016c0.558,0,1.016,0.453,1.016,1.016C16.882,34.959,16.424,35.412,15.867,35.412z M15.867,28.583 c-0.562,0-1.019-0.451-1.019-1.015c0-0.562,0.457-1.016,1.019-1.016c0.558,0,1.016,0.453,1.016,1.016 C16.882,28.132,16.424,28.583,15.867,28.583z M20.18,42.497c-0.702,0-1.27-0.567-1.27-1.268c0-0.705,0.568-1.27,1.27-1.27 c0.704,0,1.27,0.564,1.27,1.27C21.45,41.93,20.884,42.497,20.18,42.497z M20.18,35.669c-0.702,0-1.27-0.568-1.27-1.271 s0.568-1.269,1.27-1.269c0.704,0,1.27,0.565,1.27,1.269S20.884,35.669,20.18,35.669z M20.18,28.84c-0.702,0-1.27-0.568-1.27-1.271 s0.568-1.271,1.27-1.271c0.704,0,1.27,0.567,1.27,1.271S20.884,28.84,20.18,28.84z M25.234,42.752c-0.842,0-1.523-0.681-1.523-1.522 c0-0.845,0.682-1.523,1.523-1.523c0.84,0,1.522,0.679,1.522,1.523C26.756,42.071,26.074,42.752,25.234,42.752z M25.234,35.922 c-0.842,0-1.523-0.684-1.523-1.524c0-0.842,0.682-1.523,1.523-1.523c0.84,0,1.522,0.682,1.522,1.523 C26.756,35.238,26.074,35.922,25.234,35.922z M25.234,29.093c-0.842,0-1.523-0.683-1.523-1.524s0.682-1.525,1.523-1.525 c0.84,0,1.522,0.684,1.522,1.525S26.074,29.093,25.234,29.093z M30.523,43.005c-0.983,0-1.778-0.792-1.778-1.775 c0-0.982,0.795-1.78,1.778-1.78c0.985,0,1.779,0.798,1.779,1.78C32.302,42.213,31.508,43.005,30.523,43.005z M30.523,36.176 c-0.983,0-1.778-0.796-1.778-1.778s0.795-1.776,1.778-1.776c0.985,0,1.779,0.794,1.779,1.776S31.508,36.176,30.523,36.176z M30.523,29.346c-0.983,0-1.778-0.796-1.778-1.777s0.795-1.776,1.778-1.776c0.985,0,1.779,0.795,1.779,1.776 S31.508,29.346,30.523,29.346z M36.812,56.922c-1.121,0-2.027-0.911-2.027-2.034c0-1.119,0.906-2.027,2.027-2.027 c1.125,0,2.035,0.908,2.035,2.027C38.847,56.011,37.938,56.922,36.812,56.922z M36.812,50.091c-1.121,0-2.027-0.91-2.027-2.03 c0-1.122,0.906-2.036,2.027-2.036c1.125,0,2.035,0.914,2.035,2.036C38.847,49.181,37.938,50.091,36.812,50.091z M36.812,43.26 c-1.121,0-2.027-0.909-2.027-2.03c0-1.123,0.906-2.033,2.027-2.033c1.125,0,2.035,0.91,2.035,2.033 C38.847,42.351,37.938,43.26,36.812,43.26z M36.812,36.43c-1.121,0-2.027-0.91-2.027-2.032c0-1.124,0.906-2.03,2.027-2.03 c1.125,0,2.035,0.906,2.035,2.03C38.847,35.52,37.938,36.43,36.812,36.43z M36.812,29.6c-1.121,0-2.027-0.908-2.027-2.031 c0-1.122,0.906-2.031,2.027-2.031c1.125,0,2.035,0.909,2.035,2.031C38.847,28.691,37.938,29.6,36.812,29.6z M36.812,22.77 c-1.121,0-2.027-0.912-2.027-2.032c0-1.123,0.906-2.03,2.027-2.03c1.125,0,2.035,0.907,2.035,2.03 C38.847,21.857,37.938,22.77,36.812,22.77z M36.812,15.938c-1.121,0-2.027-0.91-2.027-2.029c0-1.123,0.906-2.033,2.027-2.033 c1.125,0,2.035,0.91,2.035,2.033C38.847,15.027,37.938,15.938,36.812,15.938z M43.342,50.3c-1.233,0-2.238-1.002-2.238-2.239 c0-1.239,1.004-2.242,2.238-2.242c1.24,0,2.243,1.003,2.243,2.242C45.585,49.298,44.582,50.3,43.342,50.3z M43.342,43.469 c-1.233,0-2.238-1.003-2.238-2.239c0-1.239,1.004-2.242,2.238-2.242c1.24,0,2.243,1.003,2.243,2.242 C45.585,42.466,44.582,43.469,43.342,43.469z M43.342,36.64c-1.233,0-2.238-1.004-2.238-2.242c0-1.237,1.004-2.238,2.238-2.238 c1.24,0,2.243,1.001,2.243,2.238C45.585,35.636,44.582,36.64,43.342,36.64z M43.342,29.807c-1.233,0-2.238-1.002-2.238-2.238 c0-1.238,1.004-2.24,2.238-2.24c1.24,0,2.243,1.002,2.243,2.24C45.585,28.805,44.582,29.807,43.342,29.807z M43.342,22.977 c-1.233,0-2.238-1.003-2.238-2.239c0-1.239,1.004-2.242,2.238-2.242c1.24,0,2.243,1.003,2.243,2.242 C45.585,21.974,44.582,22.977,43.342,22.977z M50.351,43.765c-1.393,0-2.517-1.126-2.517-2.517c0-1.389,1.124-2.516,2.517-2.516 c1.391,0,2.513,1.127,2.513,2.516C52.863,42.639,51.742,43.765,50.351,43.765z M50.351,36.933c-1.393,0-2.517-1.123-2.517-2.515 c0-1.386,1.124-2.517,2.517-2.517c1.391,0,2.513,1.131,2.513,2.517C52.863,35.81,51.742,36.933,50.351,36.933z M50.351,30.104 c-1.393,0-2.517-1.125-2.517-2.515c0-1.393,1.124-2.517,2.517-2.517c1.391,0,2.513,1.124,2.513,2.517 C52.863,28.979,51.742,30.104,50.351,30.104z M57.49,37.219c-1.519,0-2.756-1.234-2.756-2.754c0-1.523,1.238-2.757,2.756-2.757 c1.521,0,2.754,1.233,2.754,2.757C60.244,35.984,59.012,37.219,57.49,37.219z"></path></svg>`,
+  bp: `<svg class="lg" aria-label="Best Practice" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 299 68"><g fill="currentColor"><path d="M49.922 51.613c-.276-.69-.921-.875-1.566-.829-.874.046-1.795.138-2.624.368-2.9.875-5.295 2.578-7.274 4.88a.88.88 0 0 1-.645.322c-.736.092-1.52.092-2.256.184-2.026.276-4.097.46-6.123.875-2.256.46-4.328 1.427-5.801 3.36-1.013 1.335-1.52 2.716-.875 4.373.322.829.92 1.335 1.796 1.473-.23-.138-.46-.23-.645-.368-.967-.782-1.29-1.795-1.013-3.038.23-.967.829-1.795 1.52-2.44 1.196-1.15 2.67-1.795 4.281-2.163 2.624-.599 5.295-.737 7.965-.783.092 0 .138 0 .276.046a27.78 27.78 0 0 0-1.105 1.841c-1.15 1.98-2.302 3.96-2.854 6.169-.092.414-.23.828-.276 1.289-.046.322.092.644.414.69.645.092.967-.506 1.013-.644.69-1.335 1.381-2.716 2.118-4.051.875-1.611 1.795-3.222 2.716-4.88.276-.46.645-.598 1.151-.598 2.026-.184 3.96-.506 5.801-1.427 1.428-.69 2.717-1.52 3.637-2.854.369-.553.645-1.105.369-1.795zm-1.335.828a.35.35 0 0 1-.093.184c-.736.921-1.703 1.52-2.716 1.98-1.473.69-2.992 1.197-4.604 1.38h-.368c.46-.46.829-.874 1.243-1.242 1.15-.967 2.302-1.842 3.683-2.348a2.28 2.28 0 0 1 .599-.184c.506-.138 1.058-.23 1.611-.322.184 0 .46-.092.599.092a.44.44 0 0 1 .092.46h-.046z"/><path d="M33.531 59.945a.942.942 0 0 0 0-.506c0-.092-.092-.138-.138-.138-.138 0-.368 0-.506.092-.184.138-.276.368-.415.552-.414.783-.828 1.565-1.197 2.348a77.005 77.005 0 0 0-1.197 2.9c-.138.322-.276.737.184.92.415.185.553-.23.691-.506.783-1.427 1.611-2.854 2.118-4.373.138-.414.276-.828.46-1.289zM25.06 44.892c1.473-.553 2.716-1.52 3.821-2.578.553-.553.553-.506.875.138.184.368.414.69.92.737.507 0 .968-.139 1.198-.599.138-.23.23-.506.322-.782.323-1.06-.184-2.302-1.15-2.9-.876-.553-2.027-.369-2.855.414-.184.184-.415.368-.553.598-1.197 1.381-2.67 2.164-4.512 2.164-1.381 0-2.624-.46-3.775-1.105-1.98-1.059-3.683-2.578-5.203-4.281-2.163-2.394-3.913-5.064-5.386-7.918-1.428-2.762-2.67-5.662-3.591-8.654-.553-1.611-1.013-4.511-2.072-9.483.184.645 3.59 4.511 5.156 6.03a78.625 78.625 0 0 0 5.065 4.512c1.335 1.105 2.808 2.025 4.281 2.992 2.487 1.657 5.157 2.946 7.873 4.005 2.993 1.197 6.078 2.071 9.3 2.486 1.934.276 3.868.184 5.848-.046h.092c.184-.139.138-.415-.046-.507h-1.566c-1.335-.092-2.716-.092-4.051-.322-2.21-.368-4.328-1.105-6.4-1.933a48.452 48.452 0 0 1-6.261-2.9c-1.566-.875-3.177-1.796-4.65-2.809-1.796-1.242-3.546-2.531-5.203-3.912-1.565-1.335-2.993-2.762-4.42-4.235-1.98-2.026-3.775-4.235-5.249-6.63A3.59 3.59 0 0 1 2.27 5.35c-.046-1.289 0-2.577.322-3.82.184-.645-.184-1.29-.69-1.473C1.349-.13.75.148.474.838c-.23.69-.414 1.473-.46 2.21-.092 1.519.322 2.946.967 4.28.506.968.69 1.98.644 3.085 0 .69 0 1.335.092 2.025.185 3.913.83 7.734 1.888 11.509 1.013 3.59 2.486 6.997 4.282 10.22 1.657 2.945 3.545 5.707 6.17 7.917 1.335 1.15 2.808 2.21 4.511 2.808 2.164.782 4.374.92 6.63.138l-.138-.138zM90.161 25.328c-.138-.92-.92-1.519-2.118-1.703-1.887-.322-3.729.046-5.479.645a11.286 11.286 0 0 0-4.19 2.44c-1.61 1.519-2.163 3.498-2.485 5.57v.23c0 .092 0 .138.046.23.092 0 .184-.046.276-.138a.35.35 0 0 0 .092-.184c.092-.139.138-.323.184-.46.415-1.198.967-2.256 1.796-3.177 1.98-2.072 4.42-3.268 7.182-3.867.507-.092 1.013-.184 1.52-.184 1.933 0 2.394.598 1.519 1.933-1.151 1.658-2.717 2.947-4.42 4.005-3.223 2.072-6.814 3.269-10.682 3.407-2.9.138-5.709-.369-8.517-.967a56.643 56.643 0 0 0-4.88-.736c-.599-.093-1.243.046-1.98.138.23-.737.322-1.52.645-2.21.322-.736.828-1.427 1.289-2.071a.845.845 0 0 1 .46-.323c.414-.092.599-.368.46-.736-.69-1.75-1.841-3.084-3.729-3.499-1.75-.414-3.499-.184-5.202.277-3.361.92-6.078 2.9-8.564 5.247-1.703 1.611-3.177 3.407-4.604 5.248-2.118 2.762-4.052 5.662-5.94 8.608-2.07 3.315-4.143 6.629-6.445 9.76-1.473 2.025-3.084 3.912-4.972 5.57-.46.367-.921.736-1.565.736-.415 0-.553-.23-.369-.645.046-.138.138-.276.184-.368-.322.184-.598.414-.506.783.092.368.414.506.783.506.276 0 .598 0 .828-.138 1.105-.415 1.934-1.197 2.763-1.98a45.035 45.035 0 0 0 5.709-6.49c2.026-2.808 4.051-5.616 6.031-8.47 2.072-2.992 4.144-5.939 6.492-8.7 1.933-2.302 4.005-4.42 6.445-6.169 1.98-1.381 4.098-2.44 6.492-2.762 1.98-.276 3.73.092 4.88 1.933.184.277.184.46 0 .737-.782 1.013-1.565 2.025-1.887 3.36-.69 2.9-1.934 5.524-3.914 7.826-1.473 1.75-3.177 3.222-4.972 4.603-2.302 1.703-4.65 3.36-7.136 4.696-1.474.782-2.947 1.565-4.42 2.255-.737.322-1.612.507-2.394.69-.783.185-1.06.6-.875 1.29.138.552.783.782 1.427.552.369-.138.783-.276 1.197-.46l1.013-.46s.092 0 .138-.047c1.105-.46 2.21-.874 3.315-1.38 2.44-1.151 4.742-2.578 6.814-4.282a45.742 45.742 0 0 0 5.479-5.294c1.842-2.117 3.453-4.419 4.42-7.135.276-.736.322-.736 1.105-.782h.368c2.256 0 4.42.598 6.584 1.15 1.841.461 3.683.967 5.57 1.151 4.098.46 7.966-.184 11.649-2.071 2.624-1.335 4.926-3.084 6.584-5.57.414-.644.782-1.335.598-2.164l-.092.046z"/><path d="M60.465 37.158h10.543c5.8 0 8.932 3.084 8.932 7.458 0 4.373-2.164 5.938-4.65 6.628 2.163.599 5.754 2.716 5.754 7.504 0 4.787-4.557 8.746-9.806 8.746H60.51v-30.29l-.047-.046zm9.76 13.028c5.249 0 7.228-1.934 7.228-5.432 0-3.499-2.071-5.386-6.307-5.386h-8.38v10.864h7.505l-.046-.046zm-7.458 15.098h8.517c3.96 0 7.32-1.979 7.32-6.444s-2.486-6.49-8.563-6.49h-7.274v12.934zM88.089 56.86c0 5.57 2.854 9.023 6.998 9.023s5.433-2.302 6.215-4.051h2.21c-.921 2.854-3.223 6.076-8.517 6.076-5.295 0-9.116-5.662-9.116-11.14 0-5.478 3.084-11.508 9.392-11.508s8.794 5.754 8.794 9.805v1.795H88.089zm13.72-1.887c0-4.281-2.394-7.642-6.63-7.642s-6.492 3.13-6.952 7.642h13.582zM110.28 61.464c.737 2.808 2.717 4.511 6.124 4.511 3.407 0 5.386-1.795 5.386-4.188 0-2.394-1.059-3.683-5.893-4.834-5.571-1.335-6.952-3.038-6.952-5.892 0-2.854 2.256-5.754 7.136-5.754 4.881 0 7.229 2.992 7.551 6.076h-2.164c-.368-1.795-1.796-4.05-5.479-4.05s-4.834 1.84-4.834 3.59c0 1.749 1.059 2.992 5.341 4.005 6.077 1.473 7.596 3.452 7.596 6.72 0 3.269-3.222 6.353-7.734 6.353-4.512 0-7.689-2.578-8.288-6.49h2.21v-.047zM126.532 45.812h4.006v-6.767h2.164v6.767h5.156v2.025h-5.156v14.04c0 2.44.506 3.821 2.578 3.821s1.565 0 2.256-.276v1.887c-.737.322-1.796.368-2.67.368-2.763 0-4.328-1.38-4.328-4.833V47.791h-4.006v-2.025.046zM155.124 37.158h10.819c5.525 0 9.346 3.084 9.346 8.424s-3.775 8.654-9.668 8.654h-8.149v13.212h-2.394v-30.29h.046zm2.348 14.915h8.333c4.88 0 6.906-2.578 6.906-6.399 0-3.82-2.67-6.352-6.768-6.352h-8.517v12.75h.046zM180.354 51.705v-5.892h2.117c0 .69.093 2.072.093 4.834 1.243-3.223 4.005-5.202 7.504-5.34v2.347c-4.512.323-7.504 3.407-7.504 8.563v11.231H180.4V51.705h-.046zM208.898 63.305c0 1.887.185 3.406.323 4.097h-2.072c-.184-.507-.322-1.473-.368-3.315-.737 1.611-2.625 3.867-7.091 3.867s-7.182-3.222-7.182-6.49c0-4.742 3.683-6.906 10.175-6.906h4.098v-2.21c0-2.163-.645-5.063-5.571-5.063-4.927 0-5.019 2.302-5.479 4.051h-2.164c.276-2.394 1.75-6.076 7.689-6.076s7.688 2.071 7.688 6.813v11.186l-.046.046zm-2.117-6.905h-4.236c-4.788 0-7.781 1.243-7.781 4.971 0 3.729 1.934 4.604 4.972 4.604 6.17 0 7.045-4.097 7.045-8.793V56.4zM232.379 61.096c-1.059 3.82-3.545 6.859-8.38 6.859-4.834 0-9.254-4.005-9.254-11.232 0-7.227 3.177-11.416 9.531-11.416 6.353 0 7.734 3.912 8.149 6.905h-2.21c-.645-2.486-2.302-4.88-5.985-4.88-3.684 0-7.183 3.913-7.183 9.299 0 5.386 2.441 9.298 6.952 9.298 4.512 0 5.065-1.61 6.17-4.833h2.21zM235.141 45.812h4.006v-6.767h2.164v6.767h5.156v2.025h-5.156v14.04c0 2.44.506 3.821 2.578 3.821s1.565 0 2.256-.276v1.887c-.737.322-1.796.368-2.67.368-2.763 0-4.328-1.38-4.328-4.833V47.791h-4.006v-2.025.046zM251.302 39h2.163v3.36h-2.163V39zm0 6.813h2.163v21.635h-2.163V45.813zM276.9 61.096c-1.059 3.82-3.545 6.859-8.379 6.859-4.835 0-9.255-4.005-9.255-11.232 0-7.227 3.177-11.416 9.531-11.416 6.353 0 7.735 3.912 8.149 6.905h-2.21c-.645-2.486-2.302-4.88-5.985-4.88-3.683 0-7.183 3.913-7.183 9.299 0 5.386 2.441 9.298 6.953 9.298 4.512 0 5.064-1.61 6.169-4.833h2.21zM283.024 56.86c0 5.57 2.854 9.023 6.998 9.023s5.433-2.302 6.215-4.051h2.21c-.92 2.854-3.222 6.076-8.517 6.076s-9.116-5.662-9.116-11.14c0-5.478 3.085-11.508 9.392-11.508 6.308 0 8.794 5.754 8.794 9.805v1.795h-15.976zm13.72-1.887c0-4.281-2.394-7.642-6.63-7.642s-6.492 3.13-6.952 7.642h13.582z"/></g></svg>`,
+}
+const SEEK = '/case-studies/seek-learning/', BP = '/case-studies/bestpractice-booking/'
+
+/* ---------------------------------------------------------- content */
+const CASES = {
+  seek: {
+    title: 'The MVP missed. So we fixed the funnel.', std: '/projects/seek-case-study-1', solid: '#E60278',
+    meta: 'Case study<br>SEEK · 2024',
+    h: ['The MVP missed.', 'So we <mark>fixed the funnel.</mark>'],
+    role: 'Lead designer, team of seven', where: 'SEEK Career Advice · Melbourne',
+    about: 'We shipped a courses module on SEEK’s role pages and the numbers came back short. This starts at the release.',
+    hl: ['Mapped the journey as a five-stage funnel', 'Found three leaks and wrote one assumption for each', 'Shipped one small fix per leak', 'Scaled it to all 3,000+ role pages'],
+    stats: [['9→20%', 'education conversion, against a goal of 12%'], ['+34%', 'paid connections, against a goal of 10 to 15%'], ['+$500K', 'additional yearly revenue']],
+    blocks: [
+      { ch: 'The release', text: [
+          ['lead', 'My team was asked to get more candidates connecting with education providers from Career Advice, the pages that describe a role: what it pays, how fast it’s growing, how to become one.'],
+          ['p', 'About three months in we shipped an MVP: a module of courses on the role page. Courses were grouped into tabs by qualification, and each course was a card. Pick a card, read the course information, then enquire with the provider or follow the link to their site. That last step is the paid connection we were measured on.'],
+          ['p', 'We released it bare on purpose. We wanted it live quickly, and a raw first version gave us a baseline to measure every improvement against.'],
+        ], media: [
+          { v: SEEK + 'mvp.mp4', tag: 'MVP', cap: 'One category of courses at a time' },
+          { i: SEEK + 'role-page.webp', cap: 'The courses module on a Career Advice role page' },
+        ] },
+      { band: 'hot', t: 'Uh<mark>-</mark>oh.', p: 'The numbers came back short of the target. The tempting move was to go back to the drawing board. We went to the data instead.' },
+      { ch: 'Find the leaks', text: [
+          ['lead', 'We laid the journey out as a funnel with five stages, from seeing the module to making a connection, and looked at where people were leaving.'],
+          ['p', 'Three stages were leaking. For each one we wrote down a single assumption about why, and planned one small fix aimed at that stage.'],
+        ], funnel: [
+          ['Impressions'], ['Find the right course', 'Too much friction to find a course'], ['Select a course', 'Missing design details'], ['Course information'], ['Lead or link', 'Too long to make a connection'],
+        ] },
+      { ch: 'Too much friction to find a course', kicker: 'Fix one', text: [
+          ['lead', 'The module opened on one category. To see what else was on offer you had to work through the tabs one at a time.'],
+          ['p', 'We added an All tab and made it the default. Every qualification is on one page, grouped under its heading, and the tabs are still there as shortcuts.'],
+        ], media: [
+          { v: SEEK + 'all-tab.mp4', tag: 'After', cap: 'The All tab: every qualification on one scroll' },
+          { i: SEEK + 'find-a-course.webp', cap: 'Left: the MVP. Right: the All tab' },
+        ] },
+      { ch: 'Missing design details', kicker: 'Fix two', text: [
+          ['lead', 'The first course cards were mostly text. The provider’s name sat where the course name should be, and there was no logo.'],
+          ['p', 'Nothing helped you tell one card from the next. The new card leads with the provider’s logo and the name of the course, then the provider, how long it takes, where it runs and when it starts.'],
+        ], media: [
+          { i: SEEK + 'select-a-course.webp', cap: 'The original card and the improved one' },
+        ] },
+      { ch: 'Too long to make a connection', kicker: 'Fix three', text: [
+          ['lead', 'Once someone found a course they liked, the click took them off the role page to a separate course page on SEEK Learning. Only there could they ask the provider for more information.'],
+          ['p', 'We brought the connection onto the role page. On desktop, a course card opens a fly-out with a short summary, Enquire and Visit website. On mobile the same thing slides up as a sheet. Choose Enquire and the form opens in place.'],
+        ], media: [
+          { v: SEEK + 'connection-before.mp4', tag: 'Before', cap: 'Role page, then a course page, then the enquiry form' },
+          { v: SEEK + 'flyout.mp4', tag: 'After', cap: 'Desktop: a fly-out on the card, and the form in place' },
+          { v: SEEK + 'connection-mobile.mp4', tag: 'After', cap: 'Mobile: a sheet with the summary, then the form' },
+        ] },
+      { bandStats: [['33.2<i>%</i>', 'better conversion than the first release'], ['75<i>%</i>', 'better than the module it replaced'], ['3,000<i>+</i>', 'role pages it was rolled out to, about six months after we started']] },
+      { ch: 'Outcome', text: [
+          ['lead', 'Three small fixes, each aimed at one stage of the funnel, took the module past every target we were given.'],
+        ], gv: [
+          ['Education conversion', '9 → 12%', '20%'], ['Paid connections', '+10 to 15%', '+34%'], ['Conversion across the whole role page', 'from 5%', '9%'], ['Yearly revenue', '', '+$500K'],
+        ], media: [ { v: SEEK + 'final-desktop.mp4', tag: 'Shipped', cap: 'The version that went to every role page' } ] },
+      { ch: 'Lessons', cards: [
+          ['Can is not will', 'A usability test tells you whether people can use something. It doesn’t tell you whether they will. The tabs got through usability testing and still leaked.'],
+          ['Bare has a cost', 'Releasing bare was the right call. We got a clean baseline and a fast release, and we also got a first version that missed.'],
+          ['Find the gap sooner', 'We were a new team and it took discovery to find the product gap. I’d want to spot that sooner next time.'],
+        ] },
+    ],
+    next: 'bp',
+  },
+  bp: {
+    title: 'Booking an appointment in two panels', std: '/projects/bestpractice-case-study-1', solid: '#123A57',
+    meta: 'Case study<br>Best Practice · 2021',
+    h: ['Booking an appointment,', '<mark>in two panels.</mark>'],
+    role: 'Lead designer', where: 'Best Practice Software · Brisbane',
+    about: 'Booking an appointment was slow and frustrating for receptionists, and the dialog kept getting longer.',
+    hl: ['The left panel is the appointment, readable at a glance', 'Anything that needs room opens on the right', 'One pattern for times, repeats and injury claims', 'Tested as a prototype before launch'],
+    stats: [['2', 'panels: the appointment, and room to work'], ['3', 'workflows on one pattern'], ['5', 'people tested the prototype']],
+    blocks: [
+      { ch: 'Best Practice', text: [
+          ['lead', 'Best Practice is Australia’s largest practice management system, with more market share than all of its competitors combined.'],
+          ['p', 'It runs the workflows of a whole practice: booking appointments, patient consults, prescribing and billing. Practices range from a solo practitioner to a regional hospital with 500 staff.'],
+          ['p', 'I worked on the new product, the SaaS successor to the legacy one. It was pre-launch. I was the lead designer, working with a lead product manager, a lead developer, a subject matter expert and an onsite doctor.'],
+        ] },
+      { ch: 'The problem', text: [
+          ['lead', 'A key part of the patient journey was a frustrating and slow experience, for receptionists and for patients.'],
+          ['p', 'In the first version of the dialog you had to pick a provider before you could see any times. Receptionists often start from the other end: when is anyone free?'],
+          ['p', 'Then the rest of the job arrived. Repeat appointments. The waiting list. Urgent appointments. Conflicts across a run of dates. Each one was added inline, and the dialog grew downwards every time.'],
+        ], media: [
+          { i: BP + 'original-flow.webp', tag: 'Before', cap: 'No times until you pick a provider' },
+          { i: BP + 'ui-problems.webp', tag: 'Before', cap: 'Repeats, the waiting list and a conflict edge case, all inline' },
+        ] },
+      { ch: 'Goals and constraints', cards: [
+          ['Fast, and true to the job', 'Booking an appointment is fast and matches how receptionists work in the real world.'],
+          ['Readable at a glance', 'You can tell the state of the appointment without reading the whole dialog.'],
+          ['Robust', 'The design pattern is strong enough to handle features that haven’t been designed yet.'],
+        ], after: [
+          ['p', 'Three things to measure: the time it takes to book, how often people book through the dialog instead of the calendar, and receptionist satisfaction.'],
+          ['p', 'Time was limited. Re-work had to stay low. And because the product was pre-launch, we couldn’t talk directly with customers.'],
+        ] },
+      { ch: 'Early iterations', text: [
+          ['lead', 'I started with the pattern we already had and kept everything inline. Times for several providers went into one grid. Then each provider got a tab.'],
+          ['p', 'None of it held up. There wasn’t enough screen space to do the workflows. You couldn’t read the appointment at a glance. And the pattern wasn’t robust: every new feature would mean another fight for space.'],
+        ], media: [ { i: BP + 'early-iterations.webp', cap: 'A mixed grid of times, then a tab per provider' } ] },
+      { band: 'hot', t: 'Split the dialog <mark>in two.</mark>', p: 'The idea came out of a design workshop. The left panel is the appointment. Anything that needs room to work opens in a panel on the right.' },
+      { ch: 'The two-panel idea', text: [
+          ['lead', 'The left panel says who it’s for, what kind it is, how long, with whom and when.'],
+          ['p', 'When you’re done on the right, that panel gets out of the way and the left shows a short summary of what you chose.'],
+        ], media: [ { v: BP + 'two-panel-idea.mp4', tag: 'Prototype', cap: 'The first two-panel prototype' } ] },
+      { ch: 'Cleaning up the left panel', media: [
+          { i: BP + 'toggles.webp', cap: 'Three toggles become one segmented control' },
+          { i: BP + 'bundling.webp', cap: 'Provider, date and time bundled into one row' },
+          { i: BP + 'comparison.webp', cap: 'The old dialog next to the new left panel', wide: true },
+        ] },
+      { ch: 'Proof of concept: repeats', text: [
+          ['lead', 'Repeat appointments took up the most room in the old dialog, so I used them to prove the pattern.'],
+          ['p', 'Choose Repeat and the setup happens in the right panel. Back on the left, the whole thing collapses into one line: repeats every 2 weeks, 3 of 5 occurrences, with the next and final dates underneath.'],
+        ], media: [
+          { v: BP + 'repeat.mp4', tag: 'Prototype', cap: 'Setting up a repeat in the right panel' },
+          { i: BP + 'repeat.webp', cap: 'The same repeat appointment, before and after' },
+        ] },
+      { ch: 'Could future workflows use this pattern?', text: [
+          ['lead', 'The third goal was about what came next. If the pattern only solved today’s dialog, we’d be back here in six months.'],
+          ['p', 'So I tried it on workflows that were still coming. Each one became a row on the left with an empty state and a filled state, and a panel on the right to do the work.'],
+        ], media: [
+          { i: BP + 'future-workflows.webp', cap: 'Every workflow is a row: empty on the left, filled on the right' },
+          { i: BP + 'injury-claim.webp', cap: 'An injury claim in the same pattern' },
+        ] },
+      { ch: 'Testing it', text: [
+          ['lead', 'We ran a Figma prototype past five people, each working through the same booking scenarios.'],
+          ['ul', ['The general interaction was understood', 'People could complete the existing workflows', 'People could tell the state of the appointment at a glance']],
+          ['p', 'The tests also taught us how receptionists really book times for providers. Two things came up that the design didn’t handle yet.'],
+          ['h', 'Juggling provider availability'],
+          ['p', 'Receptionists compare several providers at once, and not always on the same day. The first version had one date for the whole panel. I changed it so each selected provider has its own date picker.'],
+          ['h', 'Providers are often unavailable'],
+          ['p', 'The old panel answered “no available times for this date” and left it there. The new one shows that provider’s next available appointment, with a link to jump straight to that date.'],
+        ], media: [
+          { v: BP + 'tested-prototype.mp4', tag: 'Tested', cap: 'The prototype we tested' },
+          { i: BP + 'provider-dates.webp', cap: 'From one global date to a date picker per provider' },
+          { v: BP + 'provider-dates.mp4', tag: 'After', cap: 'Changing the date for one provider at a time' },
+          { i: BP + 'unavailable.webp', cap: 'An unavailable provider now tells you when they’re next free' },
+          { v: BP + 'unavailable.mp4', tag: 'After', cap: 'Jumping to the next available appointment' },
+        ] },
+      { ch: 'Where it landed', text: [
+          ['lead', 'The final dialog opens short. Patient, appointment type, one row for who and when, one control for urgent, repeat or waiting list, and a comment.'],
+          ['p', 'Everything else is one click away in the right panel and comes back as a single line.'],
+          ['p', 'Booking now follows how receptionists work: see who is free, then choose. The appointment reads at a glance. And the pattern took repeats and injury claims without the dialog getting any longer, which is what a robust pattern is for.'],
+        ], media: [ { v: BP + 'final.mp4', tag: 'Final', cap: 'The final design, start to finish' } ] },
+    ],
+    next: 'seek',
+  },
+}
+
+/* ---------------------------------------------------------- render */
+const key = /best-practice|[?&]c=bp/.test(location.pathname + location.search) ? 'bp' : 'seek'
+const C = CASES[key], N = CASES[C.next]
+document.documentElement.dataset.co = key
+document.body.dataset.co = key
+document.title = `Gareth Chainey — ${C.title}`
+document.getElementById('nav-std').href = C.std
+document.getElementById('nav').style.setProperty('--cp-bg-solid', C.solid)
+
+const words = h => h.replace(/(<mark>)|(<\/mark>)|([^\s<]+)/g, (t, o, c, w) => o || c || `<span class="w">${w}</span>`)
+const bubbles = '<i style="width:38vw;height:38vw;right:-8vw;top:-10vw"></i><i style="width:22vw;height:22vw;right:18vw;bottom:-6vw"></i><i style="width:12vw;height:12vw;left:46vw;top:14vh"></i>'
+const deco = co => co === 'seek'
+  ? LOGOS.seek.replace('class="lg"', 'class="wm"').replace(/viewBox="[^"]+"/, 'viewBox="0 0 68.031 68.031"').replace(/<g fill="currentColor">[\s\S]*?<\/g>/, '').replace('class="mk"', 'fill="currentColor"')
+  : bubbles
+const fig = m => `<figure class="m reveal${m.wide ? ' span' : ''}"><div class="fr">${m.v
+  ? `<video src="${m.v}" muted loop playsinline preload="metadata" aria-label="${m.cap}"></video>`
+  : `<img src="${m.i}" alt="${m.cap}" loading="lazy" />`}</div><figcaption>${m.tag ? `<b>${m.tag}</b>` : ''}<span>${m.cap}</span></figcaption></figure>`
+const text = rows => (rows || []).map(([k, v]) => k === 'ul' ? `<ul>${v.map(x => `<li><span>${x}</span></li>`).join('')}</ul>` : k === 'h' ? `<h4>${v}</h4>` : `<p${k === 'lead' ? ' class="lead"' : ''}>${v}</p>`).join('')
+
+let n = 0
+const block = b => {
+  if (b.band) return `<section class="band ${b.band} pad"><div class="band-deco" aria-hidden="true">${key === 'bp' ? bubbles : ''}</div><h2 class="band-t disp reveal">${b.t}</h2><p class="reveal">${b.p}</p></section>`
+  if (b.bandStats) return `<section class="band pad"><div class="band-deco" aria-hidden="true">${key === 'bp' ? bubbles : ''}</div><div class="band-stats">${b.bandStats.map(([v, l]) => `<div class="reveal"><b>${v}</b><span>${l}</span></div>`).join('')}</div></section>`
+  n++
+  const right = [
+    b.funnel ? `<div class="funnel reveal">${b.funnel.map(([l, why], i, a) => `<div class="fn-row"><div class="fn-bar${why ? ' leak' : ''}" style="--a:${i * 8}%;--b:${(i + 1) * 8}%;transition-delay:${i * 90}ms">${l}</div><div class="fn-why">${why ? `<span>Assumption</span><b>${why}</b>` : ''}</div></div>`).join('')}</div>` : '',
+    b.gv ? `<div class="gv reveal">${b.gv.map(([w, g, o]) => `<div class="gv-row"><div class="what">${w}</div><div class="goal">${g ? `<span>${/→|\+/.test(g) ? 'Goal' : 'Was'}</span><b>${g}</b>` : ''}</div><div class="got"><span>Outcome</span><b>${o}</b></div></div>`).join('')}</div>` : '',
+    ...(b.media || []).map(fig),
+  ].join('')
+  const cards = b.cards ? `<div class="cards">${b.cards.map(([t, p], i) => `<div class="card reveal" style="transition-delay:${i * 80}ms"><span class="k">${key === 'bp' ? '✓' : i + 1}</span><b>${t}</b><p>${p}</p></div>`).join('')}</div>` : ''
+  return `<section class="ch pad">
+    <div class="ch-head reveal"><span class="ch-n">${String(n).padStart(2, '0')}</span><div>${b.kicker ? `<span class="label" style="color:var(--c-accent)">${b.kicker}</span>` : ''}<h2 class="ch-t disp">${b.ch}</h2></div></div>
+    ${cards ? `<div class="ch-body solo" style="grid-template-columns:1fr">${cards}${b.after ? `<div class="ch-text" style="position:static;max-width:760px;margin-top:36px">${text(b.after)}</div>` : ''}</div>`
+      : !b.text ? `<div class="ch-body solo" style="grid-template-columns:1fr"><div class="ch-media grid2">${right}</div></div>`
+      : `<div class="ch-body${right ? '' : ' solo'}"><div class="ch-text reveal">${text(b.text)}</div>${right ? `<div class="ch-media">${right}</div>` : ''}</div>`}
+  </section>`
+}
+
+document.getElementById('app').innerHTML = `
+<header class="cp" id="top">
+  <div class="cp-deco" aria-hidden="true">${deco(key)}</div>
+  <div class="cp-in pad">
+    <div class="cp-top"><span class="cp-logo">${LOGOS[key]}</span><span class="cp-meta">${C.meta}</span></div>
+    <h1 class="cp-h">${C.h.map(l => `<span class="ln">${words(l)}</span>`).join(' ')}</h1>
+    <div class="cp-grid">
+      <div class="cp-role"><b>${C.role}</b><span class="where">${C.where}</span><p>${C.about}</p></div>
+      <ul class="cp-hl">${C.hl.map(h => `<li>${h}</li>`).join('')}</ul>
+      <div class="cp-stats">${C.stats.map(([v, l]) => `<div class="cp-stat"><b>${v}</b><span>${l}</span></div>`).join('')}</div>
+    </div>
+  </div>
+</header>
+<main>${C.blocks.map(block).join('')}</main>
+<a class="next pad" data-co="${C.next}" href="/variants/brand/${C.next === 'bp' ? 'best-practice' : 'seek'}">
+  <div class="cp-deco" aria-hidden="true">${deco(C.next)}</div>
+  ${LOGOS[C.next]}
+  <span class="label">Next case study</span>
+  <span class="t">${N.title} →</span>
+</a>
+<footer class="foot pad"><span>Gareth Chainey · Brand variant</span><span><a href="/variants/brand">Brand home</a> · <a href="${C.std}">Standard version</a> · <a href="/variants">All variants</a></span></footer>`
+
+/* ---------------------------------------------------------- motion */
+const cp = document.querySelector('.cp')
+cp.querySelectorAll('.cp-h .w').forEach((w, k) => w.style.transitionDelay = (k * 45) + 'ms')
+requestAnimationFrame(() => cp.classList.add('in'))
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target) } }), { threshold: .12, rootMargin: '0px 0px -6% 0px' })
+document.querySelectorAll('.reveal').forEach(el => io.observe(el))
+// videos only play while they are on screen
+const vio = new IntersectionObserver(es => es.forEach(e => { e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause() }), { threshold: .35 })
+document.querySelectorAll('video').forEach(v => vio.observe(v))
+// nav: clear over the hero, solid after it, hidden on the way down
+const nav = document.getElementById('nav')
+let lastY = 0
+addEventListener('scroll', () => {
+  const y = scrollY
+  nav.classList.toggle('solid', y > 40)
+  nav.classList.toggle('hide', y > lastY && y > 80)
+  lastY = y
+}, { passive: true })
+})()
+</script>
+</body>
+</html>
