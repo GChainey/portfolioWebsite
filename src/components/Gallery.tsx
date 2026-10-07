@@ -20,7 +20,11 @@ interface GalleryProps {
 export function Gallery({ filters, limit, deeplink }: GalleryProps) {
   return (
     <>
-      <Script src="/gallery/gallery.js" strategy="afterInteractive" />
+      <Script
+        src="/gallery/gallery.js"
+        strategy="afterInteractive"
+        onLoad={() => document.dispatchEvent(new CustomEvent('gal-live-mount'))}
+      />
       <GalleryLiveMount />
       {createElement('gc-gallery', {
         filters: filters ? '' : undefined,

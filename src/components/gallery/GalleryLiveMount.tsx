@@ -2,13 +2,7 @@
 
 import { useEffect, useRef, type ComponentType } from 'react'
 import { createRoot, type Root } from 'react-dom/client'
-import dynamic from 'next/dynamic'
-
-const EAIShaderBannerVisual = dynamic(
-  () =>
-    import('@/components/eai-shader-banner/EAIShaderBannerVisual').then((m) => m.EAIShaderBannerVisual),
-  { ssr: false },
-)
+import { EAIShaderBannerVisual } from '@/components/eai-shader-banner/EAIShaderBannerVisual'
 
 const LIVE_COMPONENTS: Record<string, ComponentType<{ className?: string }>> = {
   'eai-shader-banners': EAIShaderBannerVisual,
@@ -47,8 +41,28 @@ export function GalleryLiveMount() {
 
     sync()
     document.addEventListener('gal-live-mount', sync)
+
+    const observer = new MutationObserver(sync)
+    document.querySelectorAll('gc-gallery').forEach((gallery) => {
+      observer.observe(gallery, { childList: true, subtree: true })
+    })
+
+    const galleryObserver = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        m.addedNodes.forEach((node) => {
+          if (node instanceof HTMLElement && node.tagName === 'GC-GALLERY') {
+            observer.observe(node, { childList: true, subtree: true })
+            sync()
+          }
+        })
+      }
+    })
+    galleryObserver.observe(document.body, { childList: true, subtree: true })
+
     return () => {
       document.removeEventListener('gal-live-mount', sync)
+      observer.disconnect()
+      galleryObserver.disconnect()
       for (const root of rootsRef.current.values()) root.unmount()
       rootsRef.current.clear()
     }
