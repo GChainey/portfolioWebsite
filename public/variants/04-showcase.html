@@ -178,6 +178,8 @@ img { display: block; max-width: 100%; }
 
 /* ---------------------------------------------------------------- the wall */
 .wall { padding: 60px 0 120px; }
+gc-gallery { --gal-fg: var(--ink); --gal-muted: var(--muted); --gal-line: var(--line); --gal-card: var(--card); --gal-accent: var(--accent); }
+[hidden] { display: none !important; }
 .filters { display: flex; gap: 6px; flex-wrap: wrap; }
 .filters button { height: 34px; padding: 0 14px; border-radius: 999px; border: 0; background: var(--card); box-shadow: inset 0 0 0 1px var(--line); font-size: 13px; color: var(--muted); }
 .filters button.on { background: var(--ink); color: var(--bg); box-shadow: none; }
@@ -312,9 +314,10 @@ footer .base { display: flex; justify-content: space-between; margin-top: 70px; 
 <section class="wall" id="wall">
   <div class="wrap">
     <div class="sh reveal"><div><span class="mono muted">Everything, unfiltered</span><h2>The <em>wall.</em></h2></div>
-      <div class="filters" id="filters"></div>
+      <div class="filters" id="filters" data-gallery-fallback></div>
     </div>
-    <div class="wall-grid" id="wallgrid"></div>
+    <div class="wall-grid" id="wallgrid" data-gallery-fallback></div>
+    <gc-gallery filters></gc-gallery>
   </div>
 </section>
 
@@ -352,6 +355,7 @@ footer .base { display: flex; justify-content: space-between; margin-top: 70px; 
   <div class="bar"><button id="lb-prev" aria-label="Previous">←</button><span class="t" id="lb-t"></span><button id="lb-next" aria-label="Next">→</button><a id="lb-live" href="#" target="_blank" rel="noopener">Open live ↗</a><button id="lb-x">Close</button></div>
 </div>
 <a class="back" href="/variants">← all variants</a>
+<script src="/gallery/gallery.js" defer></script>
 
 <script>
 (() => {

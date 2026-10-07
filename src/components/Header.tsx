@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { ThemeSelector } from './ThemeSelector'
+import { GALLERY_LIVE } from './Gallery'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 
 interface HeaderProps {
@@ -35,6 +36,11 @@ export function Header({ showBack }: HeaderProps) {
           <Link href="/projects" className="text-sm text-muted hover:text-foreground transition-colors">
             Projects
           </Link>
+          {GALLERY_LIVE && (
+            <Link href="/gallery" className="text-sm text-muted hover:text-foreground transition-colors">
+              Gallery
+            </Link>
+          )}
           {flags.feedPage && (
             <Link href="/feed" className="text-sm text-muted hover:text-foreground transition-colors">
               Feed
