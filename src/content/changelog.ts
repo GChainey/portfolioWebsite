@@ -14,19 +14,69 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: '1.24.0',
+    version: '1.26.0',
     date: '2026-10-07',
-    title: 'EAI Shader Bento Tile',
+    title: 'EAI Shader Banners in Gallery',
     description:
-      'Added a live Warp shader banner tile to the home projects bento grid, cycling Enterprise AI colourways and logo layouts.',
+      'Added live Warp shader banners for Enterprise AI to the gallery as a large marketing tile, cycling colourways and logo layouts from the Paper design.',
     changes: [
-      'New full-width 16:9 bento tile with @paper-design/shaders-react Warp banners',
-      'Crossfades light, cyan, and dark colourways with centred and bottom-right EAI logo layouts',
-      'Pauses WebGL when off-screen; static fallback when prefers-reduced-motion is on',
+      'Gallery item type "live" mounts React components in grid tiles and the artefact dialog',
+      'EAI banners use @paper-design/shaders-react with light, cyan and dark colourways',
+      'Logo size and bottom-right insets match Paper proportions (12% width; 75px / 50px at 1920×1080)',
+      'Pauses WebGL when off-screen; at most two Warp layers during crossfades; prefers-reduced-motion fallback',
       'Reusable EAILogo SVG component with colour prop',
     ],
     aiTools: ['Cursor'],
     branch: 'cursor/eai-shader-bento-tile-8461',
+  },
+  {
+    version: '1.25.0',
+    date: '2026-10-07',
+    title: 'Shader Wall in Products',
+    description:
+      'Added Shader Wall to the products section, and made it and Dispatch click out to their live sites, on the homepage and on both homepage variants. Thesis is marked coming soon.',
+    changes: [
+      'Added Shader Wall as a product, with its app icon, linking to shaderwall.com',
+      'Dispatch now clicks out to dispatchmac.com',
+      'Product cards no longer link to a case study, the whole card just opens the product',
+      'Thesis is marked coming soon and doesn’t link anywhere until it’s ready to share',
+      'Dispatch shows its app icon in place of the animated visual',
+      'Products sit three across on the homepage and the projects page',
+      'Brand and Showcase variants: Shader Wall and Dispatch icons added, and both cards link out',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/shaderwall-website-update',
+  },
+  {
+    version: '1.24.1',
+    date: '2026-10-07',
+    title: 'SEEK Case Study: Cards, Funnel and Light Mode',
+    description:
+      'Polish on the SEEK case study: results as cards, a tidier funnel diagram, and screens that no longer sit on black in light mode.',
+    changes: [
+      'Results are cards instead of a bulleted list: the number, what it measures, and the goal it was up against',
+      'Funnel diagram: assumption cards use the accent colour, sit beside their stage and keep clear of the border; the style switcher and the entrance animation are gone',
+      'Device screenshots have transparent backgrounds, and phone recordings sit on a panel that follows the theme',
+      'Cropped the laptop frame and black borders out of the desktop recordings',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/seek-best-practice-case-studies',
+  },
+  {
+    version: '1.24.0',
+    date: '2026-10-07',
+    title: 'Gallery (not live yet)',
+    description:
+      'Built a gallery: a dump of real screens, prototypes and sites in a bento grid, where clicking a tile opens the artefact itself in a large dialog. It is merged but switched off in production while I decide what goes in it.',
+    changes: [
+      'A /gallery page with group filters, a homepage section and a header link, all local-only for now',
+      'Websites get the large tiles; features and interactions get small ones',
+      'Tiles open a live prototype you can use, a video or an image',
+      'The same gallery is ready for the Brand and Showcase homepage variants, which stay as they are until it goes live',
+      'An edit mode with a Share checkbox on every tile, for choosing what is shown',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/bento-grid-gallery-section',
   },
   {
     version: '1.23.0',

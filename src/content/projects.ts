@@ -7,6 +7,7 @@ export interface MediaBlock {
   alt?: string
   caption?: string
   aspectRatio?: string // e.g., '16/9', '4/3', '1/1'
+  frame?: 'phone' // A portrait screen recording: shown as a phone on the panel instead of filling it
 }
 
 export interface TextBlock {
@@ -26,6 +27,11 @@ export interface ListBlock {
   ordered?: boolean // Numbered list — for steps where the order matters
 }
 
+export interface StatsBlock {
+  type: 'stats'
+  items: { value: string; label: string; note?: string }[] // Result cards — the number, what it measures, and the goal or baseline
+}
+
 export interface ComponentBlock {
   type: 'component'
   componentId: string
@@ -33,7 +39,7 @@ export interface ComponentBlock {
   caption?: string
 }
 
-export type ContentBlock = MediaBlock | TextBlock | HeadingBlock | ListBlock | ComponentBlock
+export type ContentBlock = MediaBlock | TextBlock | HeadingBlock | ListBlock | StatsBlock | ComponentBlock
 
 export interface Project {
   id: string
@@ -49,8 +55,9 @@ export interface Project {
   externalUrl?: string // Link to external page instead of /projects/[id]
   companyId?: string // Link project to a company experience (e.g. 'enterpriseai', 'seek', 'bestpractice')
   kind?: 'product' // Products I've built — shown in the Products section with a live link
-  liveUrl?: string // Live product URL — rendered alongside the case study, not instead of it
-  status?: 'Live' | 'Beta' | 'In development' // Product status badge
+  liveUrl?: string // Live product URL — the product card clicks out to it
+  logo?: string // Product logo, shown in the card instead of the animated visual
+  status?: 'Live' | 'Waitlist' | 'Beta' | 'In development' | 'Coming soon' // Product status badge — 'Coming soon' cards don't link anywhere
   productVisual?: 'dispatch' | 'thesis' // Which animated card visual to render
   content: ContentBlock[]
   chatContext: {
@@ -65,12 +72,13 @@ export const projects: Project[] = [
   {
     id: 'dispatch',
     title: 'Dispatch',
-    description: 'A product I designed and built. Case study coming soon.',
+    description: 'Send articles to your Kindle in one click, from your browser or your Mac.',
     category: 'Product',
     year: '2026',
     kind: 'product',
     status: 'Live',
-    // liveUrl: '', // TODO: add the real Dispatch URL to show the "Visit Dispatch" link
+    liveUrl: 'https://www.dispatchmac.com',
+    logo: '/products/dispatch.png',
     productVisual: 'dispatch',
     tags: ['Product', 'AI', 'Built solo'],
     content: [
@@ -78,7 +86,7 @@ export const projects: Project[] = [
       { type: 'text', content: 'This case study is currently being written. Check back soon.' },
     ],
     chatContext: {
-      description: 'Dispatch — a product Gareth designed and built. Case study details are still being written.',
+      description: 'Dispatch — a product Gareth designed and built that sends articles to your Kindle in one click, from the browser or a Mac app. It is live at dispatchmac.com. Case study details are still being written.',
       suggestedQuestions: [
         'What is Dispatch?',
         'What problem does Dispatch solve?',
@@ -91,14 +99,40 @@ export const projects: Project[] = [
     },
   },
   {
-    id: 'thesis',
-    title: 'Thesis',
-    description: 'A product I designed and built. Case study coming soon.',
+    id: 'shader-wall',
+    title: 'Shader Wall',
+    description: 'A macOS app that puts a living shader behind your windows. Try the whole app in your browser.',
     category: 'Product',
     year: '2026',
     kind: 'product',
-    status: 'Live',
-    // liveUrl: '', // TODO: add the real Thesis URL to show the "Visit Thesis" link
+    status: 'Waitlist',
+    liveUrl: 'https://www.shaderwall.com',
+    externalUrl: 'https://www.shaderwall.com', // No case study yet — the feed links to the site too
+    logo: '/products/shader-wall.png',
+    tags: ['Product', 'macOS', 'Built solo'],
+    content: [],
+    chatContext: {
+      description: 'Shader Wall — a macOS app Gareth designed and built that sets an animated shader as an ambient desktop wallpaper. The site at shaderwall.com runs the whole app on a Mac desktop in the browser and has a waitlist.',
+      suggestedQuestions: [
+        'What is Shader Wall?',
+        'How was Shader Wall built?',
+        'Where can I try Shader Wall?',
+      ],
+      followUpQuestions: [
+        'Who is Shader Wall for?',
+        'What did you learn building it?',
+      ],
+    },
+  },
+  {
+    id: 'thesis',
+    title: 'Thesis',
+    description: 'A product I designed and built. Coming soon.',
+    category: 'Product',
+    year: '2026',
+    kind: 'product',
+    status: 'Coming soon',
+    // liveUrl: 'https://thesis-phi-self.vercel.app', // Not ready to share yet — restore with status: 'Live'
     productVisual: 'thesis',
     tags: ['Product', 'AI', 'Built solo'],
     content: [
@@ -1380,16 +1414,10 @@ export const projects: Project[] = [
         alt: 'A recording of the MVP on a phone, tapping through the category tabs',
         caption: 'The MVP: one category of courses at a time',
         aspectRatio: '3/2',
+        frame: 'phone',
       },
       { type: 'text', content: 'We released it bare on purpose. We wanted it live quickly, and a raw first version gave us a baseline to measure every improvement against.' },
       { type: 'text', content: 'I was the lead designer in a team of seven, with a lead product manager, a lead developer, a senior data scientist, a business analyst, a content designer and a software engineer.' },
-      {
-        type: 'image',
-        src: '/case-studies/seek-learning/role-page.webp',
-        alt: 'The Software Developer role page on SEEK Career Advice, with job numbers at the top and the courses module underneath',
-        caption: 'The courses module on a Career Advice role page',
-        aspectRatio: '16/9',
-      },
 
       { type: 'heading', level: 2, content: 'Uh-oh' },
       { type: 'text', content: 'The numbers came back short of the target. The tempting move was to go back to the drawing board. We went to the data instead.' },
@@ -1406,8 +1434,8 @@ export const projects: Project[] = [
             { label: 'Course information', highlight: false },
             { label: 'Lead/Link', highlight: true, assumption: 'Too long to make a connection' },
           ],
+          caption: 'Three leaks in the funnel, and one assumption for each',
         },
-        caption: 'Three leaks in the funnel, and one assumption for each',
       },
 
       { type: 'heading', level: 2, content: 'Too much friction to find a course' },
@@ -1415,16 +1443,17 @@ export const projects: Project[] = [
       {
         type: 'image',
         src: '/case-studies/seek-learning/find-a-course.webp',
-        alt: 'Two phones side by side. The first shows the MVP with category tabs only. The second shows the same module opening on a new All tab.',
-        caption: 'Left: the MVP, one category at a time. Right: the All tab',
+        alt: 'The MVP on a phone, showing category tabs with no way to see every course at once',
+        caption: 'Before: one category at a time',
         aspectRatio: '3/2',
       },
       {
         type: 'video',
         src: '/case-studies/seek-learning/all-tab.mp4',
         alt: 'A recording of the All tab, scrolling through every qualification on one page',
-        caption: 'The All tab: every qualification on one scroll',
+        caption: 'After: the All tab, every qualification on one scroll',
         aspectRatio: '3/2',
+        frame: 'phone',
       },
 
       { type: 'heading', level: 2, content: 'Missing design details' },
@@ -1433,7 +1462,7 @@ export const projects: Project[] = [
         type: 'image',
         src: '/case-studies/seek-learning/select-a-course.webp',
         alt: 'The original course card next to the improved card, which adds the provider logo and the course name',
-        caption: 'The original card and the improved one',
+        caption: 'Left: the original card. Right: the improved one',
         aspectRatio: '3/2',
       },
 
@@ -1444,7 +1473,7 @@ export const projects: Project[] = [
         src: '/case-studies/seek-learning/connection-before.mp4',
         alt: 'A recording of the MVP on desktop: from the role page, to a separate course page, to an enquiry form',
         caption: 'Before: role page, then a course page, then the enquiry form',
-        aspectRatio: '1600/990',
+        aspectRatio: '1600/958',
       },
       { type: 'text', content: 'We brought the connection onto the role page. On desktop, a course card opens a fly-out with a short summary, Enquire and Visit website. On mobile the same thing slides up as a sheet. Choose Enquire and the form opens in place.' },
       {
@@ -1452,7 +1481,7 @@ export const projects: Project[] = [
         src: '/case-studies/seek-learning/flyout.mp4',
         alt: 'A recording of the desktop fly-out on a course card, then the enquiry form opening beside the page',
         caption: 'After, on desktop: a fly-out on the card, and the enquiry form in place',
-        aspectRatio: '1600/1180',
+        aspectRatio: '1600/1166',
       },
       {
         type: 'video',
@@ -1460,6 +1489,7 @@ export const projects: Project[] = [
         alt: 'A recording of the mobile sheet with a course summary, then the enquiry form',
         caption: 'After, on mobile: a sheet with the summary, then the form',
         aspectRatio: '3/2',
+        frame: 'phone',
       },
 
       { type: 'heading', level: 2, content: 'Outcome' },
@@ -1472,12 +1502,12 @@ export const projects: Project[] = [
         aspectRatio: '1506/978',
       },
       {
-        type: 'list',
+        type: 'stats',
         items: [
-          'Education conversion: the goal was to lift it from 9% to 12%. It reached 20%.',
-          'Paid connections: the goal was a 10 to 15% increase. They rose 34%.',
-          'Conversion across the role page as a whole went from 5% to 9%.',
-          'Around $500,000 in additional yearly revenue.',
+          { value: '20%', label: 'Education conversion', note: 'Goal: lift it from 9% to 12%' },
+          { value: '+34%', label: 'Paid connections', note: 'Goal: a 10 to 15% increase' },
+          { value: '9%', label: 'Conversion across the whole role page', note: 'Up from 5%' },
+          { value: '~$500K', label: 'Additional yearly revenue' },
         ],
       },
 

@@ -54,3 +54,8 @@ export const EAI_BANNER_VARIANTS: EAIBannerVariant[] = [
 
 export const VARIANT_HOLD_MS = 2900
 export const VARIANT_CROSSFADE_MS = 600
+
+/** Paper artboard 1920×1080 — logo 230px wide, inset 75px / 50px bottom-right */
+export const LOGO_WIDTH_RATIO = 230 / 1920
+export const LOGO_INSET_RIGHT_RATIO = 75 / 1920
+export const LOGO_INSET_BOTTOM_RATIO = 50 / 1080

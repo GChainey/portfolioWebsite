@@ -1,0 +1,177 @@
+{
+  "items": [
+    {
+      "id": "shader-wall-site",
+      "title": "Shader Wall: the whole app, running in the browser",
+      "group": "Marketing",
+      "project": "Shader Wall",
+      "kind": "website",
+      "type": "html",
+      "focus": "left top",
+      "thumb": "/gallery/shots/shader-wall-site.jpg",
+      "src": "https://www.shaderwall.com"
+    },
+    {
+      "id": "eai-shader-banners",
+      "title": "EAI shader banners",
+      "group": "Marketing",
+      "project": "Enterprise AI",
+      "kind": "website",
+      "type": "live",
+      "live": "eai-shader-banners"
+    },
+    {
+      "id": "workspace",
+      "title": "Signed-in workspace",
+      "group": "Product",
+      "project": "Enterprise AI",
+      "kind": "feature",
+      "type": "html",
+      "thumb": "/variants/shots/workspace.jpg",
+      "src": "https://eai-website.github.io/prototypes/workspace-ai-demo/build-web/ws-home.html?tenancy=seeded&workflowOption=1"
+    },
+    {
+      "id": "template-flow",
+      "title": "Template library: 50 living templates",
+      "group": "Product",
+      "project": "Enterprise AI",
+      "kind": "feature",
+      "type": "html",
+      "thumb": "/variants/shots/template-flow.jpg",
+      "src": "https://eai-website.github.io/prototypes/smart-blocks-config/template-flow/index.html"
+    },
+    {
+      "id": "billing",
+      "title": "Plans, credits and billing",
+      "group": "Product",
+      "project": "Enterprise AI",
+      "kind": "feature",
+      "type": "html",
+      "thumb": "/variants/shots/billing.jpg",
+      "src": "https://eai-website.github.io/prototypes/workspace-ai-demo-pricing/build-web/ws-home.html?settings=billing-plans&tenancy=seeded&workflowOption=1"
+    },
+    {
+      "id": "app-editor",
+      "title": "Choose how you edit: no-code or your own AI",
+      "group": "Product",
+      "project": "Enterprise AI",
+      "kind": "feature",
+      "type": "html",
+      "thumb": "/variants/shots/app-editor.jpg",
+      "src": "https://eai-website.github.io/prototypes/workspace-ai-demo-pricing/build-web/app-editor.html?app=kyc-onboarding&tenancy=seeded&workflowOption=1"
+    },
+    {
+      "id": "eai-website",
+      "title": "Enterprise AI website, with pricing",
+      "group": "Marketing",
+      "project": "Enterprise AI",
+      "kind": "website",
+      "type": "html",
+      "thumb": "/gallery/shots/eai-website.jpg",
+      "src": "https://eai-website.github.io/prototypes/sell-to-many/remix/27-taglines/after-the-build/index.html?site=1"
+    },
+    {
+      "id": "shapeshifter",
+      "title": "Shapeshifter: the page wears your client",
+      "group": "Marketing",
+      "project": "Enterprise AI",
+      "kind": "website",
+      "type": "html",
+      "focus": "left top",
+      "thumb": "/variants/shots/shapeshifter.jpg",
+      "src": "https://eai-website.github.io/prototypes/sell-to-many/remix/04-shapeshifter/?wear=nike"
+    },
+    {
+      "id": "build",
+      "title": "One prompt, from homepage to product",
+      "group": "Onboarding",
+      "project": "Enterprise AI",
+      "kind": "feature",
+      "size": "wide",
+      "type": "html",
+      "thumb": "/variants/shots/build.jpg",
+      "src": "https://eai-website.github.io/prototypes/build/"
+    },
+    {
+      "id": "statemachine",
+      "title": "Installer statemachine: every screen and failure",
+      "group": "States",
+      "project": "Enterprise AI",
+      "kind": "feature",
+      "size": "wide",
+      "type": "html",
+      "thumb": "/variants/shots/statemachine.jpg",
+      "src": "https://eai-website.github.io/prototypes/setup-states/index.html"
+    },
+    {
+      "id": "app-builder",
+      "title": "App builder with smart blocks",
+      "group": "Product",
+      "project": "Enterprise AI",
+      "kind": "feature",
+      "type": "html",
+      "thumb": "/variants/shots/app-builder.jpg",
+      "src": "https://eai-website.github.io/prototypes/app-states/index.html?blocks=1"
+    },
+    {
+      "id": "cli",
+      "title": "EAI Setup: native installer + CLI",
+      "group": "Onboarding",
+      "project": "Enterprise AI",
+      "kind": "feature",
+      "type": "html",
+      "thumb": "/variants/shots/cli.jpg",
+      "src": "https://eai-website.github.io/prototypes/cli/"
+    },
+    {
+      "id": "dark-shader",
+      "title": "Chat-first on a live shader (user tested)",
+      "group": "Marketing",
+      "project": "Enterprise AI",
+      "kind": "website",
+      "type": "html",
+      "thumb": "/variants/shots/dark-shader.jpg",
+      "src": "https://eai-website.github.io/prototypes/sell-to-many/remix/14-dark-shader/index.html"
+    },
+    {
+      "id": "surface",
+      "title": "App shell: every state on one page",
+      "group": "States",
+      "project": "Enterprise AI",
+      "kind": "feature",
+      "type": "html",
+      "thumb": "/variants/shots/surface.jpg",
+      "src": "https://eai-website.github.io/prototypes/surface-states/index.html"
+    },
+    {
+      "id": "ut-chatbot",
+      "title": "User test: AI chatbot in a vending app",
+      "group": "Research",
+      "project": "Enterprise AI",
+      "kind": "feature",
+      "type": "html",
+      "thumb": "/variants/shots/ut-chatbot.jpg",
+      "src": "https://eai-website.github.io/prototypes/workspace-ai-demo/build-web/ut-ai-features.html"
+    },
+    {
+      "id": "sell-to-many",
+      "title": "Build once. Sell to many.",
+      "group": "Marketing",
+      "project": "Enterprise AI",
+      "kind": "website",
+      "type": "html",
+      "thumb": "/variants/shots/sell-to-many.jpg",
+      "src": "https://eai-website.github.io/prototypes/sell-to-many/index.html"
+    },
+    {
+      "id": "builder-web",
+      "title": "Describe a process, get an app",
+      "group": "Marketing",
+      "project": "Enterprise AI",
+      "kind": "website",
+      "type": "html",
+      "thumb": "/variants/shots/builder-web.jpg",
+      "src": "https://eai-website.github.io/prototypes/build-web/index.html"
+    }
+  ]
+}

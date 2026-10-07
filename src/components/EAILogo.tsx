@@ -1,15 +1,19 @@
+import type { CSSProperties } from 'react'
+
 type EAILogoProps = {
   color: string
   className?: string
+  style?: CSSProperties
 }
 
 /** EAI wordmark from Paper export (viewBox 0 32.894 175.003 107.008). */
-export function EAILogo({ color, className }: EAILogoProps) {
+export function EAILogo({ color, className, style }: EAILogoProps) {
   return (
     <svg
       viewBox="0 32.894 175.003 107.008"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
+      style={style}
       aria-hidden
     >
       <g transform="translate(-4 92)">

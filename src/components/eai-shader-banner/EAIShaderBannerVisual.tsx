@@ -8,6 +8,9 @@ import {
   VARIANT_CROSSFADE_MS,
   VARIANT_HOLD_MS,
   WARP_SETTINGS,
+  LOGO_INSET_BOTTOM_RATIO,
+  LOGO_INSET_RIGHT_RATIO,
+  LOGO_WIDTH_RATIO,
   type EAIBannerVariant,
 } from './constants'
 
@@ -136,22 +139,26 @@ export function EAIShaderBannerVisual({ className = '' }: { className?: string }
         </>
       )}
 
-      <div
-        className={`pointer-events-none absolute z-10 transition-all ease-in-out ${
-          active.placement === 'center'
-            ? 'inset-0 flex items-center justify-center'
-            : 'bottom-4 right-4 md:bottom-5 md:right-5'
-        }`}
-        style={{ transitionDuration: `${VARIANT_CROSSFADE_MS}ms` }}
-      >
-        <EAILogo
-          color={active.logoColor}
-          className={
-            active.placement === 'center'
-              ? 'h-auto w-[38%] max-w-[140px] min-w-[72px] sm:max-w-[160px] md:max-w-[180px]'
-              : 'h-auto w-[22%] max-w-[88px] min-w-[56px] sm:max-w-[100px] md:max-w-[112px]'
-          }
-        />
+      <div className="pointer-events-none absolute inset-0 z-10">
+        <div
+          className="absolute transition-all ease-in-out"
+          style={{
+            width: `${LOGO_WIDTH_RATIO * 100}%`,
+            transitionDuration: `${VARIANT_CROSSFADE_MS}ms`,
+            ...(active.placement === 'center'
+              ? {
+                  left: '50%',
+                  top: '50%',
+                  transform: 'translate(-50%, -50%)',
+                }
+              : {
+                  right: `${LOGO_INSET_RIGHT_RATIO * 100}%`,
+                  bottom: `${LOGO_INSET_BOTTOM_RATIO * 100}%`,
+                }),
+          }}
+        >
+          <EAILogo color={active.logoColor} className="h-auto w-full" />
+        </div>
       </div>
     </div>
   )

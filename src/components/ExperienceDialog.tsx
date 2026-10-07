@@ -210,7 +210,7 @@ export function ExperienceDialog({ isOpen, onClose, initialCompanyId = 'enterpri
                         <p className="text-sm text-muted leading-relaxed mb-6">{project.description}</p>
 
                         {project.heroImage ? (
-                          <div className="mb-6 rounded-lg border border-border overflow-hidden">
+                          <div className="mb-6 rounded-lg border border-border overflow-hidden bg-secondary">
                             <img src={project.heroImage} alt={project.title} className="w-full h-auto" />
                           </div>
                         ) : (

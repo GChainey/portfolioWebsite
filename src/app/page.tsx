@@ -5,11 +5,12 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { X, ArrowRight } from 'lucide-react'
 import { Header } from '@/components/Header'
+import { Gallery, GALLERY_LIVE } from '@/components/Gallery'
 import { ChatInterface } from '@/components/ChatInterface'
 import { Facehash } from 'facehash'
 import { GitHubContributions } from '@/components/GitHubContributions'
 import { ThinkerCard } from '@/components/ThinkerCard'
-import { ProductCard } from '@/components/ProductCard'
+import { ProductGrid } from '@/components/ProductCard'
 import { products } from '@/content/projects'
 import { TestimonialCarousel } from '@/components/TestimonialCarousel'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
@@ -20,16 +21,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { ExperienceDialog } from '@/components/ExperienceDialog'
 import { PenflowSignature } from '@/components/PenflowSignature'
 import { Signature } from '@/components/Signature'
-import dynamic from 'next/dynamic'
-
-const EAIShaderBannerVisual = dynamic(
-  () =>
-    import('@/components/eai-shader-banner/EAIShaderBannerVisual').then((m) => m.EAIShaderBannerVisual),
-  {
-    ssr: false,
-    loading: () => <div className="h-full w-full bg-[#0D3856]/20 animate-pulse" aria-hidden />,
-  },
-)
 
 // Typewriter sequence: target text + pause after reaching it (ms)
 const TYPING_STEPS = [
@@ -45,7 +36,7 @@ const CHAR_DELAY = 80
 // Page context for chat
 const HOME_PAGE_CONTEXT = {
   page: 'Home',
-  description: 'Portfolio homepage showing experience at Enterprise AI Group, SEEK, and Best Practice Software. Products built and shipped include Dispatch and Thesis. Projects include RFP response system, ProductLite prototyping, and LLM Configurator.',
+  description: 'Portfolio homepage showing experience at Enterprise AI Group, SEEK, and Best Practice Software. Products built and shipped include Dispatch, Shader Wall and Thesis. Projects include RFP response system, ProductLite prototyping, and LLM Configurator.',
   suggestedQuestions: [
     "How has your role evolved with AI?",
     "What's your design philosophy?",
@@ -99,14 +90,6 @@ const BENTO_PROJECTS = [
     href: '/projects/creative-tooling',
     visual: 'icon' as const,
     icon: 'sparkle',
-  },
-  {
-    id: 'eai-shader-banners',
-    number: '05',
-    title: 'EAI shader banners',
-    description: 'Animated Warp shader banners for Enterprise AI — three colourways and two logo layouts.',
-    category: 'Enterprise AI',
-    visual: 'eai-shader' as const,
   },
 ]
 
@@ -600,21 +583,7 @@ export default function Home() {
                     <p className="text-xs text-muted">Things I&apos;ve built and shipped</p>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2">
-                    {products.map((product, index) => {
-                      const isLeft = index % 2 === 0
-                      const isLastRow = index >= products.length - (products.length % 2 === 0 ? 2 : 1)
-
-                      return (
-                        <ProductCard
-                          key={product.id}
-                          product={product}
-                          index={index}
-                          className={`${isLeft ? 'md:border-r border-border' : ''} ${!isLastRow ? 'border-b border-border' : ''}`}
-                        />
-                      )
-                    })}
-                  </div>
+                  <ProductGrid products={products} />
                 </motion.div>
               </section>
             )}
@@ -636,35 +605,29 @@ export default function Home() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2">
                   {BENTO_PROJECTS.map((project, index) => {
-                    const isFullWidth = project.visual === 'eai-shader'
                     const isLeft = index % 2 === 0
                     const isTopRow = index < 2
-                    const isMiddleRow = index >= 2 && index < 4
-                    const href = 'href' in project ? project.href : undefined
 
-                    const card = (
+                    return (
+                      <Link
+                        key={project.id}
+                        href={project.href}
+                        className="group block"
+                      >
                         <motion.div
-                          className={`${isFullWidth ? 'md:col-span-2' : ''} ${!isFullWidth && isLeft ? 'md:border-r border-border' : ''} ${isTopRow || isMiddleRow ? 'border-b border-border' : ''}`}
+                          className={`${isLeft ? 'md:border-r border-border' : ''} ${isTopRow ? 'border-b border-border' : ''}`}
                           initial={{ opacity: 0, y: 20 }}
                           whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true }}
                           transition={{ duration: 0.5, delay: index * 0.1 }}
                         >
                           {/* Visual area */}
-                          <div
-                            className={
-                              isFullWidth
-                                ? 'relative aspect-video w-full overflow-hidden bg-border/30'
-                                : 'relative h-48 md:h-56 bg-border/30 flex items-center justify-center overflow-hidden'
-                            }
-                          >
-                            <span className="absolute top-4 right-4 z-20 text-xs font-mono text-muted/60">
+                          <div className="h-48 md:h-56 bg-border/30 flex items-center justify-center overflow-hidden relative">
+                            <span className="absolute top-4 right-4 text-xs font-mono text-muted/60">
                               {project.number}
                             </span>
                             {project.visual === 'github' ? (
                               <GitHubContributions variant="card" monthsToShow={12} />
-                            ) : project.visual === 'eai-shader' ? (
-                              <EAIShaderBannerVisual className="h-full w-full" />
                             ) : (
                               <BentoCardVisual icon={project.icon} />
                             )}
@@ -674,31 +637,40 @@ export default function Home() {
                           <div className="p-5">
                             <div className="flex items-center justify-between mb-2">
                               <span className="text-xs text-muted uppercase tracking-wide">{project.category}</span>
-                              {href ? (
-                                <ArrowRight className="w-4 h-4 text-muted group-hover:text-accent group-hover:translate-x-1 transition-all" />
-                              ) : (
-                                <span className="w-4 h-4" aria-hidden />
-                              )}
+                              <ArrowRight className="w-4 h-4 text-muted group-hover:text-accent group-hover:translate-x-1 transition-all" />
                             </div>
                             <h3 className="font-medium text-foreground group-hover:text-accent transition-colors mb-1">{project.title}</h3>
                             <p className="text-sm text-muted line-clamp-2">{project.description}</p>
                           </div>
                         </motion.div>
-                    )
-
-                    return href ? (
-                      <Link key={project.id} href={href} className="group block">
-                        {card}
                       </Link>
-                    ) : (
-                      <div key={project.id} className="group block">
-                        {card}
-                      </div>
                     )
                   })}
                 </div>
               </motion.div>
             </section>
+
+            {/* Gallery - bento of real screens, each opens the artefact in a dialog */}
+            {GALLERY_LIVE && (
+              <section className="border-b border-border">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+                >
+                  <div className={`flex items-center justify-between px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
+                    <p className="text-xs text-muted uppercase tracking-widest">Gallery</p>
+                    <Link href="/gallery" className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1">
+                      View all <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                  <div className="gallery-flush">
+                    <Gallery limit={7} />
+                  </div>
+                </motion.div>
+              </section>
+            )}
 
             {/* Experience section */}
             <section className="p-8 border-b border-border">
