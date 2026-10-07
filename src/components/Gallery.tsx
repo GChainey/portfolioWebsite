@@ -2,6 +2,7 @@
 
 import { createElement } from 'react'
 import Script from 'next/script'
+import { GalleryLiveMount } from '@/components/gallery/GalleryLiveMount'
 
 // Not in production yet: the gallery only shows on the local dev server. LIVE in
 // public/gallery/gallery.js is the matching switch for the static variants. Flip both to launch.
@@ -19,7 +20,12 @@ interface GalleryProps {
 export function Gallery({ filters, limit, deeplink }: GalleryProps) {
   return (
     <>
-      <Script src="/gallery/gallery.js" strategy="afterInteractive" />
+      <Script
+        src="/gallery/gallery.js"
+        strategy="afterInteractive"
+        onLoad={() => document.dispatchEvent(new CustomEvent('gal-live-mount'))}
+      />
+      <GalleryLiveMount />
       {createElement('gc-gallery', {
         filters: filters ? '' : undefined,
         limit,

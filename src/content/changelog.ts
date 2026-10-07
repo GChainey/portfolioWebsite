@@ -14,6 +14,22 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.26.0',
+    date: '2026-10-07',
+    title: 'EAI Shader Banners in Gallery',
+    description:
+      'Added live Warp shader banners for Enterprise AI to the gallery as a large marketing tile, cycling colourways and logo layouts from the Paper design.',
+    changes: [
+      'Gallery item type "live" mounts React components in grid tiles and the artefact dialog',
+      'EAI banners use @paper-design/shaders-react with light, cyan and dark colourways',
+      'Logo size and bottom-right insets match Paper proportions (12% width; 75px / 50px at 1920×1080)',
+      'Pauses WebGL when off-screen; at most two Warp layers during crossfades; prefers-reduced-motion fallback',
+      'Reusable EAILogo SVG component with colour prop',
+    ],
+    aiTools: ['Cursor'],
+    branch: 'cursor/eai-shader-bento-tile-8461',
+  },
+  {
     version: '1.25.0',
     date: '2026-10-07',
     title: 'Shader Wall in Products',

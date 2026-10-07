@@ -12,6 +12,15 @@
       "src": "https://www.shaderwall.com"
     },
     {
+      "id": "eai-shader-banners",
+      "title": "EAI shader banners",
+      "group": "Marketing",
+      "project": "Enterprise AI",
+      "kind": "website",
+      "type": "live",
+      "live": "eai-shader-banners"
+    },
+    {
       "id": "workspace",
       "title": "Signed-in workspace",
       "group": "Product",

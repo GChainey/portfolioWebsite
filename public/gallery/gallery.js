@@ -20,7 +20,7 @@ document.querySelectorAll('[data-gallery]').forEach(el => { el.hidden = false })
 document.querySelectorAll('[data-gallery-fallback]').forEach(el => { el.hidden = true })
 
 const CSS = '/gallery/gallery.css'
-const KIND = { html: 'Live', video: 'Video' }
+const KIND = { html: 'Live', video: 'Video', live: 'Live' }
 // The bento rule: a website gets a large tile, a feature or interaction a small one
 const SIZE = { website: 'lg' }
 // Curating writes to the content file, which only the local dev server can do
@@ -84,16 +84,28 @@ class Gallery extends HTMLElement {
     // An item's own size is a hand-tuned exception that makes the full set pack without holes,
     // so it only applies when nothing is filtered out
     const size = i => (this.group === 'All' && i.size) || SIZE[i.kind]
+    const media = i => i.type === 'live'
+      ? `<div class="gal-live-host" data-live="${esc(i.live)}"></div>`
+      : i.thumb
+        ? `<img src="${esc(i.thumb)}" alt="" loading="lazy"${i.focus ? ` style="object-position:${esc(i.focus)}"` : ''} />`
+        : i.type === 'video'
+          ? `<video src="${esc(i.src)}" muted playsinline preload="metadata"></video>`
+          : `<img src="${esc(i.src)}" alt="" loading="lazy" />`
     this.querySelector('.gal-grid').innerHTML = this.visible.map(i => `
       <div class="gal-tile${i.hidden ? ' gal-off' : ''}" data-id="${esc(i.id)}"${size(i) ? ` data-size="${esc(size(i))}"` : ''}>
         <button type="button" class="gal-open" aria-label="${esc(i.title)}">
-        ${i.thumb ? `<img src="${esc(i.thumb)}" alt="" loading="lazy"${i.focus ? ` style="object-position:${esc(i.focus)}"` : ''} />` : i.type === 'video' ? `<video src="${esc(i.src)}" muted playsinline preload="metadata"></video>` : `<img src="${esc(i.src)}" alt="" loading="lazy" />`}
+        ${media(i)}
         ${KIND[i.type] ? `<span class="gal-kind">${KIND[i.type]}</span>` : ''}
         <span class="gal-cap"><b>${esc(i.title)}</b><span>${esc(i.project || i.group)}</span></span>
         </button>
         ${EDIT ? `<label class="gal-share"><input type="checkbox"${i.hidden ? '' : ' checked'} />Share</label>` : ''}
       </div>`).join('')
     if (EDIT) this.status()
+    this.notifyLiveMount()
+  }
+
+  notifyLiveMount() {
+    this.dispatchEvent(new CustomEvent('gal-live-mount', { bubbles: true }))
   }
 
   status(error) {
@@ -165,11 +177,13 @@ class Gallery extends HTMLElement {
     q('.gal-title').innerHTML = `${esc(i.title)}<span>${esc([i.project, i.group].filter(Boolean).join(' · '))}</span>`
     q('.gal-count').textContent = `${this.index + 1} / ${this.list.length}`
     q('[data-act="live"]').hidden = i.type !== 'html'
-    q('[data-act="live"]').href = i.src
+    q('[data-act="live"]').href = i.src || ''
     q('.gal-stage').innerHTML =
-      i.type === 'html' ? `${i.thumb ? `<img class="gal-poster" src="${esc(i.thumb)}" alt="" />` : ''}<iframe src="${esc(i.src)}" title="${esc(i.title)}" allow="fullscreen"></iframe>`
+      i.type === 'live' ? `<div class="gal-live-host gal-live-stage" data-live="${esc(i.live)}"></div>`
+      : i.type === 'html' ? `${i.thumb ? `<img class="gal-poster" src="${esc(i.thumb)}" alt="" />` : ''}<iframe src="${esc(i.src)}" title="${esc(i.title)}" allow="fullscreen"></iframe>`
       : i.type === 'video' ? `<video src="${esc(i.src)}"${i.thumb ? ` poster="${esc(i.thumb)}"` : ''} controls autoplay playsinline></video>`
       : `<img src="${esc(i.src)}" alt="${esc(i.title)}" />`
+    this.notifyLiveMount()
     if (this.hasAttribute('deeplink')) history.replaceState(null, '', `#${encodeURIComponent(i.id)}`)
   }
 
@@ -178,6 +192,7 @@ class Gallery extends HTMLElement {
     this.dialog.querySelector('.gal-stage').innerHTML = ''
     document.documentElement.style.overflow = ''
     if (this.hasAttribute('deeplink')) history.replaceState(null, '', location.pathname + location.search)
+    this.notifyLiveMount()
   }
 }
 
