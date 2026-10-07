@@ -32,6 +32,21 @@ export const CHANGELOG: ChangelogEntry[] = [
     branch: 'GChainey/shaderwall-website-update',
   },
   {
+    version: '1.24.1',
+    date: '2026-10-07',
+    title: 'SEEK Case Study: Cards, Funnel and Light Mode',
+    description:
+      'Polish on the SEEK case study: results as cards, a tidier funnel diagram, and screens that no longer sit on black in light mode.',
+    changes: [
+      'Results are cards instead of a bulleted list: the number, what it measures, and the goal it was up against',
+      'Funnel diagram: assumption cards use the accent colour, sit beside their stage and keep clear of the border; the style switcher and the entrance animation are gone',
+      'Device screenshots have transparent backgrounds, and phone recordings sit on a panel that follows the theme',
+      'Cropped the laptop frame and black borders out of the desktop recordings',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/seek-best-practice-case-studies',
+  },
+  {
     version: '1.24.0',
     date: '2026-10-07',
     title: 'Gallery (not live yet)',

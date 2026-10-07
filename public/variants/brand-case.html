@@ -21,7 +21,7 @@ a { color: inherit; }
 /* SEEK: pink, navy, tight Jakarta, the dotted mark as a giant watermark */
 [data-co="seek"] {
   --c-bg: #FFFFFF; --c-ink: #0D3880; --c-muted: #5B6C8F; --c-line: #DCE3F0; --c-surface: #F3F6FB; --c-accent: #E60278; --c-accent-ink: #FFFFFF;
-  --c-band: #0D3880; --c-band-ink: #FFFFFF; --c-band-muted: #B9C8E6; --c-band-pop: #FF7DBD; --c-media: #000000; --c-r: 14px;
+  --c-band: #0D3880; --c-band-ink: #FFFFFF; --c-band-muted: #B9C8E6; --c-band-pop: #FF7DBD; --c-media: #F3F6FB; --c-r: 14px;
   --c-display: 'Plus Jakarta Sans', sans-serif; --c-weight: 800; --c-track: -.045em; --c-lead: 1; --c-body: 'Plus Jakarta Sans', sans-serif; --c-label: 'Plus Jakarta Sans', sans-serif; --c-bullet: '●';
   --cp-bg: #E60278; --cp-ink: #FFFFFF; --cp-muted: #FFE0EF; --cp-line: rgba(255,255,255,.35); --cp-mark-ink: #0D3880; --cp-size: clamp(46px, min(8.4vw, 14vh), 150px); --cp-logo-h: 44px;
 }
@@ -111,6 +111,9 @@ figure.m .fr { border-radius: var(--c-r); overflow: hidden; background: var(--c-
 [data-co="seek"] figure.m .fr { border-color: #0D3880; box-shadow: 10px 10px 0 var(--c-accent); }
 [data-co="bp"] figure.m .fr { box-shadow: 0 30px 60px -34px rgba(18,58,87,.45); }
 figure.m img, figure.m video { display: block; width: 100%; height: auto; }
+/* a portrait screen recording: shown as a phone on the panel */
+figure.m .fr.ph { display: grid; place-items: center; padding: 32px; }
+figure.m .fr.ph video { width: auto; height: min(560px, 70vh); border-radius: 14.6% / 7.1%; box-shadow: 0 24px 50px -30px rgba(13,56,128,.45); }
 figure.m figcaption { margin-top: 14px; display: flex; gap: 10px; align-items: baseline; font-size: 14px; color: var(--c-muted); }
 figure.m figcaption b { flex: none; font-family: var(--c-label); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--c-accent-ink); background: var(--c-accent); padding: 3px 8px; border-radius: 999px; }
 [data-co="seek"] figure.m { padding-right: 10px; padding-bottom: 10px; }
@@ -213,8 +216,7 @@ const CASES = {
           ['p', 'About three months in we shipped an MVP: a module of courses on the role page. Courses were grouped into tabs by qualification, and each course was a card. Pick a card, read the course information, then enquire with the provider or follow the link to their site. That last step is the paid connection we were measured on.'],
           ['p', 'We released it bare on purpose. We wanted it live quickly, and a raw first version gave us a baseline to measure every improvement against.'],
         ], media: [
-          { v: SEEK + 'mvp.mp4', tag: 'MVP', cap: 'One category of courses at a time' },
-          { i: SEEK + 'role-page.webp', cap: 'The courses module on a Career Advice role page' },
+          { v: SEEK + 'mvp.mp4', ph: true, tag: 'MVP', cap: 'One category of courses at a time' },
         ] },
       { band: 'hot', t: 'Uh<mark>-</mark>oh.', p: 'The numbers came back short of the target. The tempting move was to go back to the drawing board. We went to the data instead.' },
       { ch: 'Find the leaks', text: [
@@ -227,14 +229,14 @@ const CASES = {
           ['lead', 'The module opened on one category. To see what else was on offer you had to work through the tabs one at a time.'],
           ['p', 'We added an All tab and made it the default. Every qualification is on one page, grouped under its heading, and the tabs are still there as shortcuts.'],
         ], media: [
-          { v: SEEK + 'all-tab.mp4', tag: 'After', cap: 'The All tab: every qualification on one scroll' },
-          { i: SEEK + 'find-a-course.webp', cap: 'Left: the MVP. Right: the All tab' },
+          { i: SEEK + 'find-a-course.webp', tag: 'Before', cap: 'One category at a time' },
+          { v: SEEK + 'all-tab.mp4', ph: true, tag: 'After', cap: 'The All tab: every qualification on one scroll' },
         ] },
       { ch: 'Missing design details', kicker: 'Fix two', text: [
           ['lead', 'The first course cards were mostly text. The provider’s name sat where the course name should be, and there was no logo.'],
           ['p', 'Nothing helped you tell one card from the next. The new card leads with the provider’s logo and the name of the course, then the provider, how long it takes, where it runs and when it starts.'],
         ], media: [
-          { i: SEEK + 'select-a-course.webp', cap: 'The original card and the improved one' },
+          { i: SEEK + 'select-a-course.webp', cap: 'Left: the original card. Right: the improved one' },
         ] },
       { ch: 'Too long to make a connection', kicker: 'Fix three', text: [
           ['lead', 'Once someone found a course they liked, the click took them off the role page to a separate course page on SEEK Learning. Only there could they ask the provider for more information.'],
@@ -242,7 +244,7 @@ const CASES = {
         ], media: [
           { v: SEEK + 'connection-before.mp4', tag: 'Before', cap: 'Role page, then a course page, then the enquiry form' },
           { v: SEEK + 'flyout.mp4', tag: 'After', cap: 'Desktop: a fly-out on the card, and the form in place' },
-          { v: SEEK + 'connection-mobile.mp4', tag: 'After', cap: 'Mobile: a sheet with the summary, then the form' },
+          { v: SEEK + 'connection-mobile.mp4', ph: true, tag: 'After', cap: 'Mobile: a sheet with the summary, then the form' },
         ] },
       { bandStats: [['33.2<i>%</i>', 'better conversion than the first release'], ['75<i>%</i>', 'better than the module it replaced'], ['3,000<i>+</i>', 'role pages it was rolled out to, about six months after we started']] },
       { ch: 'Outcome', text: [
@@ -355,7 +357,7 @@ const bubbles = '<i style="width:38vw;height:38vw;right:-8vw;top:-10vw"></i><i s
 const deco = co => co === 'seek'
   ? LOGOS.seek.replace('class="lg"', 'class="wm"').replace(/viewBox="[^"]+"/, 'viewBox="0 0 68.031 68.031"').replace(/<g fill="currentColor">[\s\S]*?<\/g>/, '').replace('class="mk"', 'fill="currentColor"')
   : bubbles
-const fig = m => `<figure class="m reveal${m.wide ? ' span' : ''}"><div class="fr">${m.v
+const fig = m => `<figure class="m reveal${m.wide ? ' span' : ''}"><div class="fr${m.ph ? ' ph' : ''}">${m.v
   ? `<video src="${m.v}" muted loop playsinline preload="metadata" aria-label="${m.cap}"></video>`
   : `<img src="${m.i}" alt="${m.cap}" loading="lazy" />`}</div><figcaption>${m.tag ? `<b>${m.tag}</b>` : ''}<span>${m.cap}</span></figcaption></figure>`
 const text = rows => (rows || []).map(([k, v]) => k === 'ul' ? `<ul>${v.map(x => `<li><span>${x}</span></li>`).join('')}</ul>` : k === 'h' ? `<h4>${v}</h4>` : `<p${k === 'lead' ? ' class="lead"' : ''}>${v}</p>`).join('')

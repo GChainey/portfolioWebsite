@@ -26,6 +26,10 @@ function calculateReadTime(content: Project['content']): number {
       block.items.forEach(item => {
         wordCount += item.split(/\s+/).length
       })
+    } else if (block.type === 'stats') {
+      block.items.forEach(item => {
+        wordCount += `${item.label} ${item.note ?? ''}`.split(/\s+/).length
+      })
     }
   })
   return Math.max(1, Math.ceil(wordCount / wordsPerMinute))
@@ -105,7 +109,7 @@ function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
               </p>
             )}
             <div
-              className="relative w-full bg-border/30 rounded-lg overflow-hidden"
+              className={`relative w-full bg-secondary rounded-lg overflow-hidden ${mediaBlock.frame === 'phone' ? 'flex items-center justify-center' : ''}`}
               style={{ aspectRatio }}
             >
               {mediaBlock.type === 'video' ? (
@@ -115,7 +119,7 @@ function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
                   loop
                   muted
                   playsInline
-                  className="w-full h-full object-cover"
+                  className={mediaBlock.frame === 'phone' ? 'h-[88%] w-auto rounded-[14.6%/7.1%]' : 'w-full h-full object-cover'}
                 />
               ) : mediaBlock.type === 'embed' ? (
                 <iframe
@@ -337,7 +341,7 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
                       <img
                         src={project.heroImage}
                         alt={project.title}
-                        className="w-full h-auto rounded-lg"
+                        className="w-full h-auto rounded-lg bg-secondary"
                       />
                     )}
                   </div>

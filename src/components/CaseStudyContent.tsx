@@ -26,7 +26,7 @@ function MediaBlock({ block }: { block: ContentBlock & { type: 'image' | 'gif' |
     return (
       <figure className="my-8">
         <div
-          className="relative w-full bg-border/30 rounded-lg overflow-hidden"
+          className={`relative w-full bg-secondary rounded-lg overflow-hidden ${block.frame === 'phone' ? 'flex items-center justify-center' : ''}`}
           style={{ aspectRatio }}
         >
           <video
@@ -35,7 +35,7 @@ function MediaBlock({ block }: { block: ContentBlock & { type: 'image' | 'gif' |
             loop
             muted
             playsInline
-            className="w-full h-full object-cover"
+            className={block.frame === 'phone' ? 'h-[88%] w-auto rounded-[14.6%/7.1%]' : 'w-full h-full object-cover'}
           />
         </div>
         {block.caption && (
@@ -74,7 +74,7 @@ function MediaBlock({ block }: { block: ContentBlock & { type: 'image' | 'gif' |
   return (
     <figure className="my-8">
       <div
-        className="relative w-full bg-border/30 rounded-lg overflow-hidden"
+        className="relative w-full bg-secondary rounded-lg overflow-hidden"
         style={{ aspectRatio }}
       >
         <img
@@ -147,6 +147,26 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
                 <li key={i}>{item}</li>
               ))}
             </List>
+          )
+        }
+
+        if (block.type === 'stats') {
+          return (
+            <motion.div
+              key={index}
+              className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay }}
+            >
+              {block.items.map((item, i) => (
+                <div key={i} className="border border-border rounded-lg p-5 bg-border/20">
+                  <p className="text-4xl md:text-5xl font-medium text-foreground tracking-tight">{item.value}</p>
+                  <p className="mt-4 text-foreground">{item.label}</p>
+                  {item.note && <p className="mt-1 text-sm text-muted">{item.note}</p>}
+                </div>
+              ))}
+            </motion.div>
           )
         }
 
