@@ -164,7 +164,9 @@ export default function ProjectPage() {
 
   useEffect(() => {
     if (params.id) {
-      const p = getProjectById(params.id as string)
+      const found = getProjectById(params.id as string)
+      // A study marked Coming soon is a draft: it only opens on the dev server
+      const p = found?.status === 'Coming soon' && found.kind !== 'product' && process.env.NODE_ENV !== 'development' ? undefined : found
       setProject(p || null)
     }
   }, [params.id])
@@ -447,7 +449,7 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
                 <h2 className="text-xl font-medium text-foreground mb-6">Explore the Projects</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {projects
-                    .filter(p => p.id !== project.id && !p.featured)
+                    .filter(p => p.id !== project.id && !p.featured && p.status !== 'Coming soon')
                     .map((p) => (
                       <Link
                         key={p.id}

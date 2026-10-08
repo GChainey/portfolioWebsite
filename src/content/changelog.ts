@@ -14,16 +14,34 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.29.0',
+    date: '2026-10-08',
+    title: 'The New Homepage Is Live, with the RFP Clips',
+    description:
+      'The reworked homepage is switched on, and the RFP case study now leads its examples with recordings of the real prototype.',
+    changes: [
+      'Homepage order: hero, products, three case studies under "How design has changed with AI", experience, kind words, product thinkers, then earlier work, essays and small studies',
+      'RFP case study: five clips of the prototype in place (overview, seed data, the council-wording rewrite, a request for information and a determination letter)',
+      'RFP case study: a new section on ProductLite, the mocked-up product in code that became the source of truth for demos and for engineering',
+      'Configurator opens with a clip of the prototype running on real LLM data',
+      'The website case study shows as Coming soon until it is written',
+      'Each testimonial carries its company mark: SpaceX, SEEK or Best Practice',
+      'Thesis has a real synopsis on its card',
+      'Removed the switch that held all of this back, and the published versions it kept alive',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.28.0',
     date: '2026-10-08',
     title: 'Three Main Projects, and a Quieter Homepage (not live yet)',
     description:
-      'The homepage now leads with three projects framed around what AI made possible, then lists the earlier work, the small studies and the essays. The RFP case study is rewritten as before and now, and the hero button leads there. It is merged but switched off in production until the case study clips are in.',
+      'The homepage now leads with products and three projects framed around what AI made possible, and closes with lists of essays and case studies. The RFP case study is rewritten as before and now, and the hero button leads there. It is merged but switched off in production until the case study clips are in.',
     changes: [
       'Product cards lose the category and year line, the tags and the status badge, leaving the name, one line and the link',
-      'Experience sits directly under Products on the homepage',
-      'Projects is three cards: the RFP response, a website built from an HTML brand, and Configurator',
-      'Under them, three plain lists: Earlier work (SEEK, Best Practice), Small studies and Essays',
+      'Homepage order: hero, products, three case studies, experience, kind words, product thinkers, then earlier work, essays and small studies',
+      'Projects becomes "Case studies: how design has changed with AI", three cards: the RFP response, a website built from an HTML brand, and Configurator',
+      'The page closes with three plain lists: Earlier work (SEEK, Best Practice), Essays and Small studies',
       'A new case study stub for the website built with the Little Plains HTML brand approach, and a new opening line for Configurator',
       'The RFP case study is now "One RFP, Two Ways to Answer It": five examples, each shown as a Before and Now pair, at about half the length',
       'A new comparison block for case studies puts two ways of doing the same job side by side',

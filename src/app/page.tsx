@@ -12,7 +12,6 @@ import { GitHubContributions } from '@/components/GitHubContributions'
 import { ThinkerCard } from '@/components/ThinkerCard'
 import { ProductGrid } from '@/components/ProductCard'
 import { products, writing, getProjectById } from '@/content/projects'
-import { NEW_HOME_LIVE } from '@/content/preview'
 import { TestimonialCarousel } from '@/components/TestimonialCarousel'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import { thinkers } from '@/content/thinkers'
@@ -58,52 +57,9 @@ interface ProjectCard {
   description: string
   category: string
   href: string
-  visual?: 'github' | 'icon' // The contribution graph, or an animated icon
   icon?: string
+  comingSoon?: boolean // Not written up yet: the card shows, but doesn't link
 }
-
-// The four cards as published. Delete when NEW_HOME_LIVE flips.
-const PUBLISHED_PROJECTS: ProjectCard[] = [
-  {
-    id: 'the-future-is-now',
-    number: '01',
-    title: 'The Future is Now',
-    description: 'From Figma to shipping real code. My journey into AI-augmented design.',
-    category: 'Article',
-    href: '/projects/the-future-is-now',
-    visual: 'github' as const,
-  },
-  {
-    id: 'rfp',
-    number: '02',
-    title: 'Respond to RFP',
-    description: 'One-person army winning enterprise deals with AI-powered prototypes.',
-    category: 'Enterprise AI',
-    href: '/projects/rfp',
-    visual: 'icon' as const,
-    icon: 'code',
-  },
-  {
-    id: 'how-i-work',
-    number: '03',
-    title: 'How I Work',
-    description: 'AI agents, parallel branches, voice-to-code. My daily workflow.',
-    category: 'Process',
-    href: '/how-i-work',
-    visual: 'icon' as const,
-    icon: 'workflow',
-  },
-  {
-    id: 'creative-tooling',
-    number: '04',
-    title: 'Conjure Your Own Tools',
-    description: 'Stop waiting for features. Build the creative tool you need, when you need it.',
-    category: 'Article',
-    href: '/projects/creative-tooling',
-    visual: 'icon' as const,
-    icon: 'sparkle',
-  },
-]
 
 // The three main projects, each framed around what AI made possible
 const MAIN_PROJECTS: ProjectCard[] = [
@@ -124,6 +80,7 @@ const MAIN_PROJECTS: ProjectCard[] = [
     category: 'Brand & Web',
     href: '/projects/html-brand-website',
     icon: 'sparkle',
+    comingSoon: true,
   },
   {
     id: 'configurator',
@@ -136,9 +93,7 @@ const MAIN_PROJECTS: ProjectCard[] = [
   },
 ]
 
-const PROJECT_CARDS = NEW_HOME_LIVE ? MAIN_PROJECTS : PUBLISHED_PROJECTS
-
-// Under the main three, as plain lists: the earlier jobs, the small studies, then the essays
+// Plain lists that close the page: the earlier jobs, the essays, then the small studies
 const EARLIER_WORK = ['seek-case-study-1', 'bestpractice-case-study-1']
 const SMALL_STUDIES = ['eai-settings', 'add-document']
 const ESSAYS = writing.filter((p) => p.category === 'Article').map((p) => p.id)
@@ -459,6 +414,7 @@ const TESTIMONIALS = [
     name: 'Winnie Bamra',
     role: 'Senior Product Manager',
     company: 'Ex-SpaceX · SEEK',
+    logo: 'spacex' as const,
     linkedIn: 'https://www.linkedin.com/in/wbamra/',
     content: 'Gareth is a pleasure to work with and an asset to any team. He is diligent in discovery, passionate about the end user, empathetic, and collaborative in his approach. He is excellent at leading user interviews, enabling the team to collect and extract actionable insights.',
   },
@@ -466,6 +422,7 @@ const TESTIMONIALS = [
     name: 'Richard Simms',
     role: 'Principal Product Designer',
     company: 'SEEK',
+    logo: 'seek' as const,
     linkedIn: 'https://www.linkedin.com/in/richardsimms/',
     content: 'A talented senior UX designer who can independently drive projects forward. His designs reflected a deep understanding of our users, combined with a mastery of UX principles. Meticulous attention to detail and craft are evident in everything he produces.',
   },
@@ -473,6 +430,7 @@ const TESTIMONIALS = [
     name: 'Ahmed Hakeem',
     role: 'Staff Engineer',
     company: 'SEEK',
+    logo: 'seek' as const,
     linkedIn: 'https://www.linkedin.com/in/meds/',
     content: "A developer's best friend. I have many fond memories bouncing ideas around and jamming out features end to end from fake door tests to deployment. At every step Gareth was inquisitive, collaborative and open to thinking on their feet.",
   },
@@ -480,6 +438,7 @@ const TESTIMONIALS = [
     name: 'David Deville',
     role: 'Senior Content Designer',
     company: 'SEEK',
+    logo: 'seek' as const,
     linkedIn: 'https://www.linkedin.com/in/david-deville-98b287b8/',
     content: "Gareth goes above and beyond designing for customer needs. Fast experimentation, elegant designs and constant iteration resulted in products like an AI-powered resume generator that genuinely helped candidates. A positive, creative and likeable teammate.",
   },
@@ -487,6 +446,7 @@ const TESTIMONIALS = [
     name: 'Henry Vesander',
     role: 'Chief Product Officer',
     company: 'Best Practice Software',
+    logo: 'bestpractice' as const,
     linkedIn: 'https://www.linkedin.com/in/henrikvesander/',
     content: 'An outstanding UX/product designer. I hired him to build a cloud-based practice management SaaS. He is a driven individual that can be trusted in getting the job done once given guidance and a brief. I definitely recommend Gareth!',
   },
@@ -550,7 +510,58 @@ export default function Home() {
 
 
 
-  // Sits under Products on the reworked homepage, after Projects on the published one
+  const thinkersSection = (
+    <>
+      {/* Product Thinkers section */}
+      <section className="border-b border-border">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+        >
+          <div className={`flex items-center justify-between px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
+            <p className="text-xs text-muted uppercase tracking-widest">Product Thinkers</p>
+            <Link href="/thinkers" className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1">
+              View all <ArrowRight className="w-3 h-3" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2">
+            {thinkers.map((thinker, index) => (
+              <div
+                key={thinker.id}
+                className={`p-5 ${index % 2 === 0 ? 'md:border-r border-border' : ''} ${index < thinkers.length - (thinkers.length % 2 === 0 ? 2 : 1) ? 'border-b border-border' : ''}`}
+              >
+                <ThinkerCard thinker={thinker} index={index} />
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </section>
+    </>
+  )
+
+  const testimonialsSection = (
+    <>
+      {/* Testimonials section */}
+      <section className="border-b border-border overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+        >
+          <div className={`px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
+            <p className="text-xs text-muted uppercase tracking-widest">Kind words from colleagues</p>
+          </div>
+
+          <TestimonialCarousel testimonials={TESTIMONIALS} />
+        </motion.div>
+      </section>
+    </>
+  )
+
   const experienceSection = (
     <>
       {/* Experience section */}
@@ -694,7 +705,7 @@ export default function Home() {
                   <div className="mt-8">
                     <Magnetic strength={0.25} radius={100} disabled={!flags.particleField}>
                       <Link
-                        href={NEW_HOME_LIVE ? '/projects/rfp' : '/projects/the-future-is-now'}
+                        href="/projects/rfp"
                         className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--accent-cta)] text-white text-sm font-medium rounded-full hover:brightness-110 transition-all group"
                       >
                         Read how
@@ -772,8 +783,6 @@ export default function Home() {
               </section>
             )}
 
-            {NEW_HOME_LIVE && experienceSection}
-
             {/* The three main projects */}
             <section className="border-b border-border">
               <motion.div
@@ -783,54 +792,56 @@ export default function Home() {
                 transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
               >
                 <div className={`flex items-center justify-between px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
-                  <p className="text-xs text-muted uppercase tracking-widest">Projects</p>
+                  <p className="text-xs text-muted">
+                    <span className="uppercase tracking-widest">Case studies</span>
+                    <span className="mx-2">·</span>
+                    How design has changed with AI
+                  </p>
                   <Link href="/projects" className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1">
                     View all <ArrowRight className="w-3 h-3" />
                   </Link>
                 </div>
 
-                <div className={`grid grid-cols-1 ${NEW_HOME_LIVE ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}>
-                  {PROJECT_CARDS.map((project, index) => {
-                    // Three across, or the published two-by-two
-                    const edges = NEW_HOME_LIVE
-                      ? `h-full border-border ${index === PROJECT_CARDS.length - 1 ? '' : 'border-b md:border-b-0 md:border-r'}`
-                      : `${index % 2 === 0 ? 'md:border-r border-border' : ''} ${index < 2 ? 'border-b border-border' : ''}`
-
-                    return (
-                      <Link
-                        key={project.id}
-                        href={project.href}
-                        className="group block"
+                <div className="grid grid-cols-1 md:grid-cols-3">
+                  {MAIN_PROJECTS.map((project, index) => {
+                    const card = (
+                      <motion.div
+                        className={`h-full border-border ${index === MAIN_PROJECTS.length - 1 ? '' : 'border-b md:border-b-0 md:border-r'}`}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
                       >
-                        <motion.div
-                          className={edges}
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.5, delay: index * 0.1 }}
-                        >
-                          {/* Visual area */}
-                          <div className="h-48 md:h-56 bg-border/30 flex items-center justify-center overflow-hidden relative">
-                            <span className="absolute top-4 right-4 text-xs font-mono text-muted/60">
-                              {project.number}
-                            </span>
-                            {project.visual === 'github' ? (
-                              <GitHubContributions variant="card" monthsToShow={12} />
+                        {/* Visual area */}
+                        <div className="h-48 md:h-56 bg-border/30 flex items-center justify-center overflow-hidden relative">
+                          <span className="absolute top-4 right-4 text-xs font-mono text-muted/60">
+                            {project.number}
+                          </span>
+                          <BentoCardVisual icon={project.icon} />
+                        </div>
+
+                        {/* Text content */}
+                        <div className="p-5">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-xs text-muted uppercase tracking-wide">{project.category}</span>
+                            {project.comingSoon ? (
+                              <span className="text-xs text-muted">Coming soon</span>
                             ) : (
-                              <BentoCardVisual icon={project.icon} />
+                              <ArrowRight className="w-4 h-4 text-muted group-hover:text-accent group-hover:translate-x-1 transition-all" />
                             )}
                           </div>
+                          <h3 className={`font-medium text-foreground mb-1 ${project.comingSoon ? '' : 'group-hover:text-accent transition-colors'}`}>{project.title}</h3>
+                          <p className="text-sm text-muted line-clamp-2">{project.description}</p>
+                        </div>
+                      </motion.div>
+                    )
 
-                          {/* Text content */}
-                          <div className="p-5">
-                            <div className="flex items-center justify-between mb-2">
-                              <span className="text-xs text-muted uppercase tracking-wide">{project.category}</span>
-                              <ArrowRight className="w-4 h-4 text-muted group-hover:text-accent group-hover:translate-x-1 transition-all" />
-                            </div>
-                            <h3 className="font-medium text-foreground group-hover:text-accent transition-colors mb-1">{project.title}</h3>
-                            <p className="text-sm text-muted line-clamp-2">{project.description}</p>
-                          </div>
-                        </motion.div>
+                    // Not written up yet: the card shows, but doesn't link
+                    return project.comingSoon ? (
+                      <div key={project.id}>{card}</div>
+                    ) : (
+                      <Link key={project.id} href={project.href} className="group block">
+                        {card}
                       </Link>
                     )
                   })}
@@ -838,59 +849,15 @@ export default function Home() {
               </motion.div>
             </section>
 
-            {NEW_HOME_LIVE ? (
-              <>
-                <WorkList label="Earlier work" note="SEEK and Best Practice" ids={EARLIER_WORK} titleBorders={flags.sectionTitleBorders} />
-                <WorkList label="Small studies" note="For the curious" ids={SMALL_STUDIES} titleBorders={flags.sectionTitleBorders} />
-                <WorkList label="Essays" ids={ESSAYS} titleBorders={flags.sectionTitleBorders} />
-              </>
-            ) : (
-              experienceSection
-            )}
+            {experienceSection}
 
-            {/* Product Thinkers section */}
-            <section className="border-b border-border">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-              >
-                <div className={`flex items-center justify-between px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
-                  <p className="text-xs text-muted uppercase tracking-widest">Product Thinkers</p>
-                  <Link href="/thinkers" className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1">
-                    View all <ArrowRight className="w-3 h-3" />
-                  </Link>
-                </div>
+            {testimonialsSection}
+            {thinkersSection}
 
-                <div className="grid grid-cols-1 md:grid-cols-2">
-                  {thinkers.map((thinker, index) => (
-                    <div
-                      key={thinker.id}
-                      className={`p-5 ${index % 2 === 0 ? 'md:border-r border-border' : ''} ${index < thinkers.length - (thinkers.length % 2 === 0 ? 2 : 1) ? 'border-b border-border' : ''}`}
-                    >
-                      <ThinkerCard thinker={thinker} index={index} />
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            </section>
-
-            {/* Testimonials section */}
-            <section className="border-b border-border overflow-hidden">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-              >
-                <div className={`px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
-                  <p className="text-xs text-muted uppercase tracking-widest">Kind words from colleagues</p>
-                </div>
-
-                <TestimonialCarousel testimonials={TESTIMONIALS} />
-              </motion.div>
-            </section>
+            {/* The reading closes the page: earlier work, essays, then the small studies */}
+            <WorkList label="Earlier work" note="SEEK and Best Practice" ids={EARLIER_WORK} titleBorders={flags.sectionTitleBorders} />
+            <WorkList label="Essays" ids={ESSAYS} titleBorders={flags.sectionTitleBorders} />
+            <WorkList label="Small studies" note="For the curious" ids={SMALL_STUDIES} titleBorders={flags.sectionTitleBorders} />
 
               </>
             )}
