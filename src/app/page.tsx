@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { X, ArrowRight } from 'lucide-react'
+import { X, ArrowRight, FileText, LayoutGrid } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { Gallery, GALLERY_LIVE } from '@/components/Gallery'
 import { ChatInterface } from '@/components/ChatInterface'
@@ -11,7 +11,8 @@ import { Facehash } from 'facehash'
 import { GitHubContributions } from '@/components/GitHubContributions'
 import { ThinkerCard } from '@/components/ThinkerCard'
 import { ProductGrid } from '@/components/ProductCard'
-import { products } from '@/content/projects'
+import { products, writing, getProjectById } from '@/content/projects'
+import { NEW_HOME_LIVE } from '@/content/preview'
 import { TestimonialCarousel } from '@/components/TestimonialCarousel'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import { thinkers } from '@/content/thinkers'
@@ -50,8 +51,19 @@ const HOME_PAGE_CONTEXT = {
   ]
 }
 
-// Bento grid projects - 4 curated case studies
-const BENTO_PROJECTS = [
+interface ProjectCard {
+  id: string
+  number: string
+  title: string
+  description: string
+  category: string
+  href: string
+  visual?: 'github' | 'icon' // The contribution graph, or an animated icon
+  icon?: string
+}
+
+// The four cards as published. Delete when NEW_HOME_LIVE flips.
+const PUBLISHED_PROJECTS: ProjectCard[] = [
   {
     id: 'the-future-is-now',
     number: '01',
@@ -92,6 +104,84 @@ const BENTO_PROJECTS = [
     icon: 'sparkle',
   },
 ]
+
+// The three main projects, each framed around what AI made possible
+const MAIN_PROJECTS: ProjectCard[] = [
+  {
+    id: 'rfp',
+    number: '01',
+    title: 'One RFP, Two Ways to Answer It',
+    description: 'The features and flexibility that were only possible because of AI.',
+    category: 'Enterprise AI',
+    href: '/projects/rfp',
+    icon: 'code',
+  },
+  {
+    id: 'html-brand-website',
+    number: '02',
+    title: 'A Website Built from an HTML Brand',
+    description: 'Built with the Little Plains approach, then structured and styled page by page so it all looks consistent.',
+    category: 'Brand & Web',
+    href: '/projects/html-brand-website',
+    icon: 'sparkle',
+  },
+  {
+    id: 'configurator',
+    number: '03',
+    title: 'Configurator',
+    description: 'Real LLM data, so people get a genuine feel for the product.',
+    category: 'No-Code AI',
+    href: '/projects/configurator',
+    icon: 'workflow',
+  },
+]
+
+const PROJECT_CARDS = NEW_HOME_LIVE ? MAIN_PROJECTS : PUBLISHED_PROJECTS
+
+// Under the main three, as plain lists: the earlier jobs, the small studies, then the essays
+const EARLIER_WORK = ['seek-case-study-1', 'bestpractice-case-study-1']
+const SMALL_STUDIES = ['eai-settings', 'add-document']
+const ESSAYS = writing.filter((p) => p.category === 'Article').map((p) => p.id)
+
+const COMPANY: Record<string, string> = { enterpriseai: 'Enterprise AI', seek: 'SEEK', bestpractice: 'Best Practice' }
+
+// A titled list of case studies or essays, one per row
+function WorkList({ label, note, ids, titleBorders }: { label: string; note?: string; ids: string[]; titleBorders: boolean }) {
+  const items = ids.map(getProjectById).filter((p) => p !== undefined)
+
+  return (
+    <section className="border-b border-border">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-60px' }}
+        transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+      >
+        <div className={`flex items-center justify-between px-8 ${titleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
+          <p className="text-xs text-muted uppercase tracking-widest">{label}</p>
+          {note && <p className="text-xs text-muted">{note}</p>}
+        </div>
+
+        {items.map((project, index) => (
+          <Link
+            key={project.id}
+            href={project.externalUrl || `/projects/${project.id}`}
+            className={`group flex items-center gap-6 px-8 py-4 ${index < items.length - 1 ? 'border-b border-border' : ''}`}
+          >
+            <div className="min-w-0 flex-1">
+              <h3 className="font-medium text-foreground group-hover:text-accent transition-colors">{project.title}</h3>
+              <p className="text-sm text-muted line-clamp-1">{project.description}</p>
+            </div>
+            <span className="hidden sm:block shrink-0 text-xs text-muted">
+              {[project.companyId && COMPANY[project.companyId], project.year].filter(Boolean).join(' · ')}
+            </span>
+            <ArrowRight className="shrink-0 w-4 h-4 text-muted group-hover:text-accent group-hover:translate-x-1 transition-all" />
+          </Link>
+        ))}
+      </motion.div>
+    </section>
+  )
+}
 
 function BentoCardVisual({ icon }: { icon?: string }) {
   const ease = [0.25, 0.1, 0.25, 1]
@@ -412,6 +502,8 @@ export default function Home() {
   const [chatMounted, setChatMounted] = useState(false)
   const [experienceDialogOpen, setExperienceDialogOpen] = useState(false)
   const [selectedCompanyId, setSelectedCompanyId] = useState('enterpriseai')
+  // The page as written, or nothing but the gallery
+  const [view, setView] = useState<'page' | 'visuals'>('page')
   const { flags } = useFeatureFlags()
 
   // Track client-side mount to prevent hydration issues with animations
@@ -456,6 +548,68 @@ export default function Home() {
     return () => timeouts.forEach(clearTimeout)
   }, [])
 
+
+
+  // Sits under Products on the reworked homepage, after Projects on the published one
+  const experienceSection = (
+    <>
+      {/* Experience section */}
+      <section className="p-8 border-b border-border">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+        >
+          <div className="flex items-center justify-between mb-6">
+            <p className="text-xs text-muted uppercase tracking-widest">Experience</p>
+            <button
+              onClick={() => { setSelectedCompanyId('enterpriseai'); setExperienceDialogOpen(true) }}
+              className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1"
+            >
+              View <ArrowRight className="w-3 h-3" />
+            </button>
+          </div>
+          <div className="relative">
+            {/* Timeline line */}
+            <div className="absolute left-[7px] top-2 bottom-2 w-[2px] bg-border" />
+
+            <div className="space-y-8">
+              {EXPERIENCE.map((exp, index) => (
+                <motion.div
+                  key={exp.company}
+                  className="flex gap-6 relative cursor-pointer group"
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.12 }}
+                  onClick={() => { setSelectedCompanyId(exp.id); setExperienceDialogOpen(true) }}
+                >
+                  {/* Timeline dot */}
+                  <div className="flex-shrink-0 w-4 h-4 rounded-full bg-foreground border-4 border-background z-10 mt-1" />
+
+                  <div className="flex-1 pb-2">
+                    <div className="flex items-baseline gap-3 mb-1">
+                      <h3 className="font-medium text-foreground group-hover:text-accent transition-colors">{exp.company}</h3>
+                      <span className="text-xs text-muted">{exp.period}</span>
+                    </div>
+                    <p className="text-sm text-muted mb-2">{exp.role}</p>
+                    <p className="text-sm text-muted">{exp.description}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      <ExperienceDialog
+        isOpen={experienceDialogOpen}
+        onClose={() => setExperienceDialogOpen(false)}
+        initialCompanyId={selectedCompanyId}
+      />
+    </>
+  )
 
   return (
     <div className="min-h-screen bg-background transition-colors duration-700">
@@ -540,7 +694,7 @@ export default function Home() {
                   <div className="mt-8">
                     <Magnetic strength={0.25} radius={100} disabled={!flags.particleField}>
                       <Link
-                        href="/projects/the-future-is-now"
+                        href={NEW_HOME_LIVE ? '/projects/rfp' : '/projects/the-future-is-now'}
                         className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--accent-cta)] text-white text-sm font-medium rounded-full hover:brightness-110 transition-all group"
                       >
                         Read how
@@ -552,6 +706,36 @@ export default function Home() {
               </div>
             </section>
 
+            {/* Page or visuals - the same switch the case studies have. The gallery isn't live yet. */}
+            {GALLERY_LIVE && (
+              <div className="flex justify-center py-4 border-b border-border">
+                <div className="flex bg-border/40 rounded-full p-0.5">
+                  {([
+                    { id: 'page', label: 'Page', icon: FileText },
+                    { id: 'visuals', label: 'Visuals', icon: LayoutGrid },
+                  ] as const).map(({ id, label, icon: Icon }) => (
+                    <button
+                      key={id}
+                      onClick={() => setView(id)}
+                      aria-pressed={view === id}
+                      className={`flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-full transition-all ${
+                        view === id ? 'bg-foreground text-background font-medium' : 'text-muted hover:text-foreground'
+                      }`}
+                    >
+                      <Icon className="w-3.5 h-3.5" />
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {view === 'visuals' ? (
+              <section className="p-8 border-b border-border">
+                <Gallery filters />
+              </section>
+            ) : (
+              <>
             {/* About section */}
             <section className="p-8 border-b border-border">
               <motion.div
@@ -588,7 +772,9 @@ export default function Home() {
               </section>
             )}
 
-            {/* Projects Bento Grid */}
+            {NEW_HOME_LIVE && experienceSection}
+
+            {/* The three main projects */}
             <section className="border-b border-border">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -603,10 +789,12 @@ export default function Home() {
                   </Link>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2">
-                  {BENTO_PROJECTS.map((project, index) => {
-                    const isLeft = index % 2 === 0
-                    const isTopRow = index < 2
+                <div className={`grid grid-cols-1 ${NEW_HOME_LIVE ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}>
+                  {PROJECT_CARDS.map((project, index) => {
+                    // Three across, or the published two-by-two
+                    const edges = NEW_HOME_LIVE
+                      ? `h-full border-border ${index === PROJECT_CARDS.length - 1 ? '' : 'border-b md:border-b-0 md:border-r'}`
+                      : `${index % 2 === 0 ? 'md:border-r border-border' : ''} ${index < 2 ? 'border-b border-border' : ''}`
 
                     return (
                       <Link
@@ -615,7 +803,7 @@ export default function Home() {
                         className="group block"
                       >
                         <motion.div
-                          className={`${isLeft ? 'md:border-r border-border' : ''} ${isTopRow ? 'border-b border-border' : ''}`}
+                          className={edges}
                           initial={{ opacity: 0, y: 20 }}
                           whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true }}
@@ -650,83 +838,15 @@ export default function Home() {
               </motion.div>
             </section>
 
-            {/* Gallery - bento of real screens, each opens the artefact in a dialog */}
-            {GALLERY_LIVE && (
-              <section className="border-b border-border">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-60px' }}
-                  transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-                >
-                  <div className={`flex items-center justify-between px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
-                    <p className="text-xs text-muted uppercase tracking-widest">Gallery</p>
-                    <Link href="/gallery" className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1">
-                      View all <ArrowRight className="w-3 h-3" />
-                    </Link>
-                  </div>
-                  <div className="gallery-flush">
-                    <Gallery limit={7} />
-                  </div>
-                </motion.div>
-              </section>
+            {NEW_HOME_LIVE ? (
+              <>
+                <WorkList label="Earlier work" note="SEEK and Best Practice" ids={EARLIER_WORK} titleBorders={flags.sectionTitleBorders} />
+                <WorkList label="Small studies" note="For the curious" ids={SMALL_STUDIES} titleBorders={flags.sectionTitleBorders} />
+                <WorkList label="Essays" ids={ESSAYS} titleBorders={flags.sectionTitleBorders} />
+              </>
+            ) : (
+              experienceSection
             )}
-
-            {/* Experience section */}
-            <section className="p-8 border-b border-border">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-              >
-                <div className="flex items-center justify-between mb-6">
-                  <p className="text-xs text-muted uppercase tracking-widest">Experience</p>
-                  <button
-                    onClick={() => { setSelectedCompanyId('enterpriseai'); setExperienceDialogOpen(true) }}
-                    className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1"
-                  >
-                    View <ArrowRight className="w-3 h-3" />
-                  </button>
-                </div>
-                <div className="relative">
-                  {/* Timeline line */}
-                  <div className="absolute left-[7px] top-2 bottom-2 w-[2px] bg-border" />
-
-                  <div className="space-y-8">
-                    {EXPERIENCE.map((exp, index) => (
-                      <motion.div
-                        key={exp.company}
-                        className="flex gap-6 relative cursor-pointer group"
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: index * 0.12 }}
-                        onClick={() => { setSelectedCompanyId(exp.id); setExperienceDialogOpen(true) }}
-                      >
-                        {/* Timeline dot */}
-                        <div className="flex-shrink-0 w-4 h-4 rounded-full bg-foreground border-4 border-background z-10 mt-1" />
-
-                        <div className="flex-1 pb-2">
-                          <div className="flex items-baseline gap-3 mb-1">
-                            <h3 className="font-medium text-foreground group-hover:text-accent transition-colors">{exp.company}</h3>
-                            <span className="text-xs text-muted">{exp.period}</span>
-                          </div>
-                          <p className="text-sm text-muted mb-2">{exp.role}</p>
-                          <p className="text-sm text-muted">{exp.description}</p>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            </section>
-
-            <ExperienceDialog
-              isOpen={experienceDialogOpen}
-              onClose={() => setExperienceDialogOpen(false)}
-              initialCompanyId={selectedCompanyId}
-            />
 
             {/* Product Thinkers section */}
             <section className="border-b border-border">
@@ -771,6 +891,9 @@ export default function Home() {
                 <TestimonialCarousel testimonials={TESTIMONIALS} />
               </motion.div>
             </section>
+
+              </>
+            )}
 
             {/* Footer */}
             <footer className="p-8 mt-auto">

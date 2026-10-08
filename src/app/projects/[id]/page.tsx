@@ -30,6 +30,8 @@ function calculateReadTime(content: Project['content']): number {
       block.items.forEach(item => {
         wordCount += `${item.label} ${item.note ?? ''}`.split(/\s+/).length
       })
+    } else if (block.type === 'comparison') {
+      wordCount += [block.before, block.after].flat().join(' ').split(/\s+/).length
     }
   })
   return Math.max(1, Math.ceil(wordCount / wordsPerMinute))
@@ -44,11 +46,12 @@ const TLDR_OPTIONS = [
   { id: 'engineer', label: "I'm an engineer", description: 'Tech stack, architecture' },
 ]
 
+// Media and artifacts (like FunnelDiagram) that exist. A pending slot has nothing to show yet.
+const isVisual = (b: ContentBlock) =>
+  b.type === 'component' || ((b.type === 'image' || b.type === 'gif' || b.type === 'video' || b.type === 'embed') && !b.pending)
+
 function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
-  // Collect visual blocks: media + components (artifacts like FunnelDiagram)
-  const visualBlocks = blocks.filter(
-    b => b.type === 'image' || b.type === 'gif' || b.type === 'video' || b.type === 'embed' || b.type === 'component'
-  )
+  const visualBlocks = blocks.filter(isVisual)
 
   // Find the heading that precedes each visual block for context
   function getHeadingForVisual(visualIndex: number): string | null {
@@ -374,7 +377,7 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
             </header>
 
             {/* View Mode Tabs - only show if project has media */}
-            {project.content.some((b: ContentBlock) => b.type === 'image' || b.type === 'gif' || b.type === 'video' || b.type === 'embed' || b.type === 'component') && (
+            {project.content.some(isVisual) && (
               <div className="flex justify-center py-4 border-b border-border">
                 <div className="flex bg-border/40 rounded-full p-0.5">
                   <button
