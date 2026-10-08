@@ -14,6 +14,27 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.28.0',
+    date: '2026-10-08',
+    title: 'Three Main Projects, and a Quieter Homepage (not live yet)',
+    description:
+      'The homepage now leads with three projects framed around what AI made possible, then lists the earlier work, the small studies and the essays. The RFP case study is rewritten as before and now, and the hero button leads there. It is merged but switched off in production until the case study clips are in.',
+    changes: [
+      'Product cards lose the category and year line, the tags and the status badge, leaving the name, one line and the link',
+      'Experience sits directly under Products on the homepage',
+      'Projects is three cards: the RFP response, a website built from an HTML brand, and Configurator',
+      'Under them, three plain lists: Earlier work (SEEK, Best Practice), Small studies and Essays',
+      'A new case study stub for the website built with the Little Plains HTML brand approach, and a new opening line for Configurator',
+      'The RFP case study is now "One RFP, Two Ways to Answer It": five examples, each shown as a Before and Now pair, at about half the length',
+      'A new comparison block for case studies puts two ways of doing the same job side by side',
+      'Each RFP example leads with a clip. Until a clip is switched on its slot only shows on the dev server: a labelled placeholder with a brief for what to film, or the clip itself once the file is in the folder',
+      'One switch, NEW_HOME_LIVE, holds all of it back: with it off, production renders the homepage and case studies exactly as published',
+      'The homepage gallery section is gone. On the dev server a Page / Visuals switch under the hero swaps the whole page for the gallery instead',
+      'The hero "Read how" button goes to the RFP study',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.27.0',
     date: '2026-10-07',
     title: 'Demos (not live yet)',

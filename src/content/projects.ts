@@ -1,6 +1,8 @@
 // Project/Case Study Content - Acts as a simple CMS
 // Add your case studies here
 
+import { NEW_HOME_LIVE } from './preview'
+
 export interface MediaBlock {
   type: 'image' | 'gif' | 'video' | 'embed'
   src: string
@@ -8,6 +10,8 @@ export interface MediaBlock {
   caption?: string
   aspectRatio?: string // e.g., '16/9', '4/3', '1/1'
   frame?: 'phone' // A portrait screen recording: shown as a phone on the panel instead of filling it
+  pending?: boolean // Not made yet: a labelled slot on the dev server, nothing on the live site. Remove once the file is in.
+  brief?: string // For a pending slot: what the clip should show
 }
 
 export interface TextBlock {
@@ -32,6 +36,15 @@ export interface StatsBlock {
   items: { value: string; label: string; note?: string }[] // Result cards — the number, what it measures, and the goal or baseline
 }
 
+export interface ComparisonBlock {
+  type: 'comparison'
+  // The same job done two ways, side by side. A string for one line, an array for a short list.
+  before: string | string[]
+  after: string | string[]
+  beforeLabel?: string // Defaults to 'Before'
+  afterLabel?: string // Defaults to 'Now'
+}
+
 export interface ComponentBlock {
   type: 'component'
   componentId: string
@@ -39,7 +52,7 @@ export interface ComponentBlock {
   caption?: string
 }
 
-export type ContentBlock = MediaBlock | TextBlock | HeadingBlock | ListBlock | StatsBlock | ComponentBlock
+export type ContentBlock = MediaBlock | TextBlock | HeadingBlock | ListBlock | StatsBlock | ComparisonBlock | ComponentBlock
 
 export interface Project {
   id: string
@@ -66,6 +79,9 @@ export interface Project {
     followUpQuestions: string[]
   }
 }
+
+// Include these only when a switch is on
+const when = <T>(on: boolean, items: T[]): T[] => (on ? items : [])
 
 export const projects: Project[] = [
   // --- Products I've built ---
@@ -1080,279 +1096,520 @@ export const projects: Project[] = [
       ],
     },
   },
-  {
-    id: 'rfp',
-    title: 'Responding to an RFP',
-    description: 'A small startup competing against large organizations for a major government tender. One designer with AI tools delivered what would normally require a multi-team effort.',
-    category: 'Enterprise AI',
-    year: '2025',
-    tags: ['AI', 'Enterprise', 'Prototyping', 'Claude Code', 'RFP'],
-    content: [
-      // --- TLDR ---
-      {
-        type: 'heading',
-        level: 2,
-        content: 'TLDR'
-      },
-      {
-        type: 'text',
-        content: 'I was the sole designer at a small startup competing for a large government tender against well-resourced organizations. Figma couldn\'t handle the scope—so I switched to building a working code prototype with Claude Code. What would normally require a squad of designers, engineers, and solution architects became a one-person operation. The result: a fully interactive prototype with real data, live LLM features, and rapid iteration that\'s still being referenced and iterated on today.'
-      },
+  // The RFP study as published. Delete when NEW_HOME_LIVE flips.
+  ...when<Project>(!NEW_HOME_LIVE, [
+    {
+      id: 'rfp',
+      title: 'Responding to an RFP',
+      description: 'A small startup competing against large organizations for a major government tender. One designer with AI tools delivered what would normally require a multi-team effort.',
+      category: 'Enterprise AI',
+      year: '2025',
+      tags: ['AI', 'Enterprise', 'Prototyping', 'Claude Code', 'RFP'],
+      content: [
+        // --- TLDR ---
+        {
+          type: 'heading',
+          level: 2,
+          content: 'TLDR'
+        },
+        {
+          type: 'text',
+          content: 'I was the sole designer at a small startup competing for a large government tender against well-resourced organizations. Figma couldn\'t handle the scope—so I switched to building a working code prototype with Claude Code. What would normally require a squad of designers, engineers, and solution architects became a one-person operation. The result: a fully interactive prototype with real data, live LLM features, and rapid iteration that\'s still being referenced and iterated on today.'
+        },
 
-      // --- Context ---
-      {
-        type: 'heading',
-        level: 2,
-        content: 'The Situation'
-      },
-      {
-        type: 'text',
-        content: 'I was working for a small startup that had built a product for small local councils. A major opportunity came in—a large government tender at the state level. The RFP was extensive, with complex requirements that went far beyond what our existing product handled. We were competing against established enterprise vendors with large teams.'
-      },
-      {
-        type: 'text',
-        content: 'The team responding to this RFP was lean: me as the designer, a product manager I collaborated with closely, and the founder who provided in-depth knowledge of the RFP requirements. That was it.'
-      },
+        // --- Context ---
+        {
+          type: 'heading',
+          level: 2,
+          content: 'The Situation'
+        },
+        {
+          type: 'text',
+          content: 'I was working for a small startup that had built a product for small local councils. A major opportunity came in—a large government tender at the state level. The RFP was extensive, with complex requirements that went far beyond what our existing product handled. We were competing against established enterprise vendors with large teams.'
+        },
+        {
+          type: 'text',
+          content: 'The team responding to this RFP was lean: me as the designer, a product manager I collaborated with closely, and the founder who provided in-depth knowledge of the RFP requirements. That was it.'
+        },
 
-      // --- The Problem ---
-      {
-        type: 'heading',
-        level: 2,
-        content: 'Why Figma Wasn\'t Enough'
-      },
-      {
-        type: 'text',
-        content: 'I started in Figma, which was our standard design tool. But the scope and complexity of the RFP quickly exposed Figma\'s limitations for this kind of work:'
-      },
-      {
-        type: 'list',
-        items: [
-          'Requirements changed frequently—updating static mockups across dozens of screens was slow and error-prone',
-          'The RFP required demonstrating realistic data scenarios that were consistent throughout the product',
-          'Key features like LLM-powered document analysis needed to feel real, not just be static wireframes',
-          'The scale shift from small councils to an entire state meant rethinking data architecture, not just reskinning screens',
-          'Stakeholders needed to interact with the prototype, not just view screenshots'
-        ]
-      },
-      {
-        type: 'text',
-        content: 'Figma prototypes are inherently linear—click through a predefined path. For this RFP, we needed something people could explore, something that felt like a real product.'
-      },
+        // --- The Problem ---
+        {
+          type: 'heading',
+          level: 2,
+          content: 'Why Figma Wasn\'t Enough'
+        },
+        {
+          type: 'text',
+          content: 'I started in Figma, which was our standard design tool. But the scope and complexity of the RFP quickly exposed Figma\'s limitations for this kind of work:'
+        },
+        {
+          type: 'list',
+          items: [
+            'Requirements changed frequently—updating static mockups across dozens of screens was slow and error-prone',
+            'The RFP required demonstrating realistic data scenarios that were consistent throughout the product',
+            'Key features like LLM-powered document analysis needed to feel real, not just be static wireframes',
+            'The scale shift from small councils to an entire state meant rethinking data architecture, not just reskinning screens',
+            'Stakeholders needed to interact with the prototype, not just view screenshots'
+          ]
+        },
+        {
+          type: 'text',
+          content: 'Figma prototypes are inherently linear—click through a predefined path. For this RFP, we needed something people could explore, something that felt like a real product.'
+        },
 
-      // --- The Approach ---
-      {
-        type: 'heading',
-        level: 2,
-        content: 'The Approach: Code as Design'
-      },
-      {
-        type: 'text',
-        content: 'I had already built a lightweight version of the product—a "ProductLite" prototype in code. Using Claude Code, I created a new branch and began adapting it for the state-level tender. Instead of Figma being the source of truth, the working prototype became the reference that engineers and stakeholders could access directly.'
-      },
-      {
-        type: 'text',
-        content: 'This changed the dynamic entirely. I could design faster than the engineering team was able to build, unconstrained by their existing technical limitations. And rather than handing off static files, I was delivering something people could use.'
-      },
+        // --- The Approach ---
+        {
+          type: 'heading',
+          level: 2,
+          content: 'The Approach: Code as Design'
+        },
+        {
+          type: 'text',
+          content: 'I had already built a lightweight version of the product—a "ProductLite" prototype in code. Using Claude Code, I created a new branch and began adapting it for the state-level tender. Instead of Figma being the source of truth, the working prototype became the reference that engineers and stakeholders could access directly.'
+        },
+        {
+          type: 'text',
+          content: 'This changed the dynamic entirely. I could design faster than the engineering team was able to build, unconstrained by their existing technical limitations. And rather than handing off static files, I was delivering something people could use.'
+        },
 
-      // --- Key Features Section ---
-      {
-        type: 'heading',
-        level: 2,
-        content: 'Key Features: What Code Made Possible'
-      },
-      {
-        type: 'text',
-        content: 'These are the features that made the difference—things that simply couldn\'t be done in Figma. Each one demonstrates why a working prototype was essential for winning this tender.'
-      },
+        // --- Key Features Section ---
+        {
+          type: 'heading',
+          level: 2,
+          content: 'Key Features: What Code Made Possible'
+        },
+        {
+          type: 'text',
+          content: 'These are the features that made the difference—things that simply couldn\'t be done in Figma. Each one demonstrates why a working prototype was essential for winning this tender.'
+        },
 
-      // Feature 1: Seed Data
-      {
-        type: 'heading',
-        level: 3,
-        content: 'Consistent Seed Data'
-      },
-      {
-        type: 'text',
-        content: 'The RFP required demonstrating how the product would handle real-world government data at scale. We needed consistent data throughout—names, case numbers, dates, statuses—that told a coherent story across every screen. In Figma, changing a single data point means manually updating every screen it appears on. In code, changing the seed data updates everywhere instantly.'
-      },
-      // VIDEO PLACEHOLDER: Seed data demo
-      {
-        type: 'video',
-        src: '/projects/rfp/seed-data-demo.mp4',
-        alt: 'Seed data consistency across the prototype',
-        caption: 'Consistent seed data flowing through every screen—change it once, it updates everywhere',
-        aspectRatio: '16/9'
-      },
+        // Feature 1: Seed Data
+        {
+          type: 'heading',
+          level: 3,
+          content: 'Consistent Seed Data'
+        },
+        {
+          type: 'text',
+          content: 'The RFP required demonstrating how the product would handle real-world government data at scale. We needed consistent data throughout—names, case numbers, dates, statuses—that told a coherent story across every screen. In Figma, changing a single data point means manually updating every screen it appears on. In code, changing the seed data updates everywhere instantly.'
+        },
+        // VIDEO PLACEHOLDER: Seed data demo
+        {
+          type: 'video',
+          src: '/projects/rfp/seed-data-demo.mp4',
+          alt: 'Seed data consistency across the prototype',
+          caption: 'Consistent seed data flowing through every screen—change it once, it updates everywhere',
+          aspectRatio: '16/9'
+        },
 
-      // Feature 2: LLM Chat
-      {
-        type: 'heading',
-        level: 3,
-        content: 'Live LLM Document Analysis'
-      },
-      {
-        type: 'text',
-        content: 'A core requirement was showing how AI could help government workers analyze and respond to documents. In Figma, this would be a linear click-through with predetermined responses. In the code prototype, we connected an actual LLM—users could ask real questions about documents and get contextual, dynamic answers. This was a fundamentally better proof of concept.'
-      },
-      // VIDEO PLACEHOLDER: LLM chat demo
-      {
-        type: 'video',
-        src: '/projects/rfp/llm-chat-demo.mp4',
-        alt: 'Live LLM chat interface responding to document queries',
-        caption: 'A working LLM chat interface that responds to real queries—impossible to replicate in Figma',
-        aspectRatio: '16/9'
-      },
+        // Feature 2: LLM Chat
+        {
+          type: 'heading',
+          level: 3,
+          content: 'Live LLM Document Analysis'
+        },
+        {
+          type: 'text',
+          content: 'A core requirement was showing how AI could help government workers analyze and respond to documents. In Figma, this would be a linear click-through with predetermined responses. In the code prototype, we connected an actual LLM—users could ask real questions about documents and get contextual, dynamic answers. This was a fundamentally better proof of concept.'
+        },
+        // VIDEO PLACEHOLDER: LLM chat demo
+        {
+          type: 'video',
+          src: '/projects/rfp/llm-chat-demo.mp4',
+          alt: 'Live LLM chat interface responding to document queries',
+          caption: 'A working LLM chat interface that responds to real queries—impossible to replicate in Figma',
+          aspectRatio: '16/9'
+        },
 
-      // Feature 3: Scale Adaptation
-      {
-        type: 'heading',
-        level: 3,
-        content: 'Small Council to State-Level Scale'
-      },
-      {
-        type: 'text',
-        content: 'The existing product was designed for small local councils. The RFP required demonstrating it at state scale—different data hierarchies, different user roles, different reporting structures. In code, I could restructure the data model and UI to reflect this new scale without starting from scratch.'
-      },
-      // VIDEO PLACEHOLDER: Scale comparison
-      {
-        type: 'video',
-        src: '/projects/rfp/scale-demo.mp4',
-        alt: 'Product adapted from council-level to state-level operations',
-        caption: 'Adapting the product from small council to state-level scope—restructured data and UI in days, not months',
-        aspectRatio: '16/9'
-      },
+        // Feature 3: Scale Adaptation
+        {
+          type: 'heading',
+          level: 3,
+          content: 'Small Council to State-Level Scale'
+        },
+        {
+          type: 'text',
+          content: 'The existing product was designed for small local councils. The RFP required demonstrating it at state scale—different data hierarchies, different user roles, different reporting structures. In code, I could restructure the data model and UI to reflect this new scale without starting from scratch.'
+        },
+        // VIDEO PLACEHOLDER: Scale comparison
+        {
+          type: 'video',
+          src: '/projects/rfp/scale-demo.mp4',
+          alt: 'Product adapted from council-level to state-level operations',
+          caption: 'Adapting the product from small council to state-level scope—restructured data and UI in days, not months',
+          aspectRatio: '16/9'
+        },
 
-      // Feature 4: Rapid Iteration
-      {
-        type: 'heading',
-        level: 3,
-        content: 'Rapid Requirement Changes'
-      },
-      {
-        type: 'text',
-        content: 'RFP requirements evolved constantly as we dug deeper into the tender documents. New fields, new workflows, new compliance requirements would surface weekly. In Figma, each change cascades across screens. With Claude Code, I could describe the change and have it implemented across the prototype in minutes.'
-      },
-      // VIDEO PLACEHOLDER: Rapid iteration demo
-      {
-        type: 'video',
-        src: '/projects/rfp/iteration-demo.mp4',
-        alt: 'Rapidly iterating on prototype requirements',
-        caption: 'Implementing a requirement change across the entire prototype—what would take days in Figma done in minutes',
-        aspectRatio: '16/9'
-      },
+        // Feature 4: Rapid Iteration
+        {
+          type: 'heading',
+          level: 3,
+          content: 'Rapid Requirement Changes'
+        },
+        {
+          type: 'text',
+          content: 'RFP requirements evolved constantly as we dug deeper into the tender documents. New fields, new workflows, new compliance requirements would surface weekly. In Figma, each change cascades across screens. With Claude Code, I could describe the change and have it implemented across the prototype in minutes.'
+        },
+        // VIDEO PLACEHOLDER: Rapid iteration demo
+        {
+          type: 'video',
+          src: '/projects/rfp/iteration-demo.mp4',
+          alt: 'Rapidly iterating on prototype requirements',
+          caption: 'Implementing a requirement change across the entire prototype—what would take days in Figma done in minutes',
+          aspectRatio: '16/9'
+        },
 
-      // Feature 5: Interactive Workflows
-      {
-        type: 'heading',
-        level: 3,
-        content: 'Interactive Workflows'
-      },
-      {
-        type: 'text',
-        content: 'The RFP required demonstrating complex multi-step workflows—case management, approvals, escalations. Static mockups can show the screens, but they can\'t show how data flows between steps, how state changes, or how edge cases are handled. The code prototype let evaluators walk through real workflows with real state management.'
-      },
-      // VIDEO PLACEHOLDER: Workflow demo
-      {
-        type: 'video',
-        src: '/projects/rfp/workflow-demo.mp4',
-        alt: 'Interactive workflow demonstration with state management',
-        caption: 'Multi-step workflows with real state management—evaluators could explore freely, not follow a script',
-        aspectRatio: '16/9'
-      },
+        // Feature 5: Interactive Workflows
+        {
+          type: 'heading',
+          level: 3,
+          content: 'Interactive Workflows'
+        },
+        {
+          type: 'text',
+          content: 'The RFP required demonstrating complex multi-step workflows—case management, approvals, escalations. Static mockups can show the screens, but they can\'t show how data flows between steps, how state changes, or how edge cases are handled. The code prototype let evaluators walk through real workflows with real state management.'
+        },
+        // VIDEO PLACEHOLDER: Workflow demo
+        {
+          type: 'video',
+          src: '/projects/rfp/workflow-demo.mp4',
+          alt: 'Interactive workflow demonstration with state management',
+          caption: 'Multi-step workflows with real state management—evaluators could explore freely, not follow a script',
+          aspectRatio: '16/9'
+        },
 
-      // --- Impact ---
-      {
-        type: 'heading',
-        level: 2,
-        content: 'The Impact'
-      },
-      {
-        type: 'text',
-        content: 'This project is the clearest demonstration of what AI-augmented design makes possible. Here\'s the contrast:'
-      },
+        // --- Impact ---
+        {
+          type: 'heading',
+          level: 2,
+          content: 'The Impact'
+        },
+        {
+          type: 'text',
+          content: 'This project is the clearest demonstration of what AI-augmented design makes possible. Here\'s the contrast:'
+        },
 
-      {
-        type: 'heading',
-        level: 3,
-        content: 'Without AI Tools'
-      },
-      {
-        type: 'list',
-        items: [
-          'A team of 3-5 designers for Figma mockups across all required screens',
-          'Solution architects to document technical feasibility',
-          'Engineers to build any interactive demos',
-          'Weeks of coordination between design, engineering, and proposal writing',
-          'Static deliverables that can\'t be explored freely',
-          'Every requirement change triggers a cascade of manual updates',
-        ]
-      },
+        {
+          type: 'heading',
+          level: 3,
+          content: 'Without AI Tools'
+        },
+        {
+          type: 'list',
+          items: [
+            'A team of 3-5 designers for Figma mockups across all required screens',
+            'Solution architects to document technical feasibility',
+            'Engineers to build any interactive demos',
+            'Weeks of coordination between design, engineering, and proposal writing',
+            'Static deliverables that can\'t be explored freely',
+            'Every requirement change triggers a cascade of manual updates',
+          ]
+        },
 
-      {
-        type: 'heading',
-        level: 3,
-        content: 'With AI Tools'
-      },
-      {
-        type: 'list',
-        items: [
-          'One designer with Claude Code delivering the full prototype',
-          'A product manager for collaboration and direction',
-          'The founder for RFP domain expertise',
-          'Days instead of weeks for major feature additions',
-          'A living prototype that stakeholders could interact with',
-          'Requirement changes implemented same-day',
-        ]
-      },
+        {
+          type: 'heading',
+          level: 3,
+          content: 'With AI Tools'
+        },
+        {
+          type: 'list',
+          items: [
+            'One designer with Claude Code delivering the full prototype',
+            'A product manager for collaboration and direction',
+            'The founder for RFP domain expertise',
+            'Days instead of weeks for major feature additions',
+            'A living prototype that stakeholders could interact with',
+            'Requirement changes implemented same-day',
+          ]
+        },
 
-      // --- Outcome ---
-      {
-        type: 'heading',
-        level: 2,
-        content: 'The Outcome'
-      },
-      {
-        type: 'text',
-        content: 'The prototype delivered for the RFP wasn\'t just a proposal artifact—it became a product asset. It\'s still being referenced and iterated on today, which is the opposite of what happens with Figma files after a tender. The designs didn\'t get handed off and forgotten; they became the foundation that engineering continued building on.'
-      },
-      {
-        type: 'text',
-        content: 'This project proved that the shift from static design tools to AI-augmented code prototyping isn\'t just about speed—it\'s about producing fundamentally better work. A working prototype with real data, real LLM integration, and real interactivity tells a story that no amount of polished mockups can match.'
-      },
+        // --- Outcome ---
+        {
+          type: 'heading',
+          level: 2,
+          content: 'The Outcome'
+        },
+        {
+          type: 'text',
+          content: 'The prototype delivered for the RFP wasn\'t just a proposal artifact—it became a product asset. It\'s still being referenced and iterated on today, which is the opposite of what happens with Figma files after a tender. The designs didn\'t get handed off and forgotten; they became the foundation that engineering continued building on.'
+        },
+        {
+          type: 'text',
+          content: 'This project proved that the shift from static design tools to AI-augmented code prototyping isn\'t just about speed—it\'s about producing fundamentally better work. A working prototype with real data, real LLM integration, and real interactivity tells a story that no amount of polished mockups can match.'
+        },
 
-      // --- Tools & Process ---
-      {
-        type: 'heading',
-        level: 2,
-        content: 'Tools & Process'
-      },
-      {
-        type: 'list',
-        items: [
-          'Claude Code for rapid prototyping and code generation',
-          'Next.js + React for the prototype framework',
-          'Tailwind CSS for consistent, rapid styling',
-          'LLM API integration for live chat features',
-          'Git branching to manage prototype variants',
-          'Vercel for instant deployment and stakeholder access',
-        ]
-      },
-    ],
-    chatContext: {
-      description: 'Case study about a designer using AI tools to single-handedly deliver an enterprise RFP response with a working code prototype, competing against large organizations for a government tender',
-      suggestedQuestions: [
-        'How did you approach this RFP differently?',
-        'What couldn\'t you do in Figma that code solved?',
-        'How long did the prototype take to build?',
+        // --- Tools & Process ---
+        {
+          type: 'heading',
+          level: 2,
+          content: 'Tools & Process'
+        },
+        {
+          type: 'list',
+          items: [
+            'Claude Code for rapid prototyping and code generation',
+            'Next.js + React for the prototype framework',
+            'Tailwind CSS for consistent, rapid styling',
+            'LLM API integration for live chat features',
+            'Git branching to manage prototype variants',
+            'Vercel for instant deployment and stakeholder access',
+          ]
+        },
       ],
-      followUpQuestions: [
-        'What was the outcome of the tender?',
-        'Is the prototype still being used?',
-        'How did the engineers react to your code prototype?',
-        'What would you do differently next time?',
-      ]
-    }
-  },
+      chatContext: {
+        description: 'Case study about a designer using AI tools to single-handedly deliver an enterprise RFP response with a working code prototype, competing against large organizations for a government tender',
+        suggestedQuestions: [
+          'How did you approach this RFP differently?',
+          'What couldn\'t you do in Figma that code solved?',
+          'How long did the prototype take to build?',
+        ],
+        followUpQuestions: [
+          'What was the outcome of the tender?',
+          'Is the prototype still being used?',
+          'How did the engineers react to your code prototype?',
+          'What would you do differently next time?',
+        ]
+      }
+    },
+  ]),
+  // Its before-and-now rewrite, and the website study
+  ...when<Project>(NEW_HOME_LIVE, [
+    {
+      id: 'rfp',
+      title: 'One RFP, Two Ways to Answer It',
+      description: 'A state government tender and a three-person team. How I would have designed the response before AI, and how I actually did it.',
+      category: 'Enterprise AI',
+      year: '2025',
+      tags: ['AI', 'Enterprise', 'Prototyping', 'Claude Code', 'RFP'],
+      content: [
+        {
+          type: 'video',
+          src: '/case-studies/rfp/overview.mp4',
+          alt: 'The prototype in thirty seconds',
+          caption: 'The working prototype we answered with',
+          brief: 'The whole prototype at speed: dashboard, a case, a question to the AI, an approval. No narration needed.',
+          pending: true,
+        },
+        { type: 'heading', level: 2, content: 'The short version' },
+        { type: 'text', content: 'I was the only designer on a small startup\'s response to a state government tender, up against vendors with whole teams. Before AI, I would have answered it with Figma mock-ups and a lot of help. This time I built a working prototype with Claude Code. This is the difference, example by example.' },
+
+        { type: 'heading', level: 2, content: 'The setup' },
+        {
+          type: 'list',
+          items: [
+            'A startup with a product built for small local councils',
+            'A state-level tender, with requirements well beyond what that product handled',
+            'Three of us on the response: me as the designer, a product manager, and the founder, who knew the RFP in depth',
+            'Established enterprise vendors with large teams on the other side',
+          ]
+        },
+
+        { type: 'heading', level: 2, content: 'Five things that changed' },
+        { type: 'text', content: 'I started in Figma and hit its limits quickly. Each of these is something the RFP asked for that a mock-up couldn\'t do.' },
+
+        // Each example leads with a clip. None are recorded yet, so every slot is pending: drop
+        // the file into public/case-studies/rfp and delete `pending` and `brief`.
+        { type: 'heading', level: 3, content: '1. Data that stays consistent' },
+        {
+          type: 'video',
+          src: '/case-studies/rfp/seed-data.mp4',
+          alt: 'Pick a scenario, everything follows',
+          caption: 'One set of seed data behind every screen',
+          brief: 'Start on the launchpad and pick a scenario. Show the case number and a workflow step, go back, pick another, and show the same screens changed.',
+          pending: true,
+        },
+        {
+          type: 'comparison',
+          before: 'Names, case numbers, dates and statuses are typed into each screen. Change one and you update every screen it appears on by hand.',
+          after: 'One set of seed data feeds every screen. A launchpad starts the prototype in any scenario, and the case numbers, even some of the workflow steps, change with it.',
+        },
+
+        { type: 'heading', level: 3, content: '2. AI features that really answer' },
+        {
+          type: 'video',
+          src: '/case-studies/rfp/llm-chat.mp4',
+          alt: 'Rough notes in, council wording out',
+          caption: 'A real LLM rewriting notes into the council\'s own standard',
+          brief: 'Type a few rough bullet points, press rewrite, and watch them become the way that council writes them. Then ask a question about the document that isn\'t on any script.',
+          pending: true,
+        },
+        {
+          type: 'comparison',
+          before: 'A linear click-through with replies written in advance.',
+          after: 'A real LLM connected to the prototype. It rewrites your rough bullet points, live, into the standard that council writes them in, and answers your own questions about a document in context.',
+        },
+
+        { type: 'heading', level: 3, content: '3. From council scale to state scale' },
+        {
+          type: 'video',
+          src: '/case-studies/rfp/scale.mp4',
+          alt: 'One council, then the whole state',
+          caption: 'The same product restructured for a state',
+          brief: 'Start on a single council, switch to the state view, and show regions, roles and reporting rolling up.',
+          pending: true,
+        },
+        {
+          type: 'comparison',
+          before: 'Reskin the existing screens and leave the structure underneath alone.',
+          after: 'Restructured the data hierarchy, user roles and reporting in the prototype itself, without starting from scratch.',
+        },
+
+        { type: 'heading', level: 3, content: '4. Requirements that keep moving' },
+        {
+          type: 'video',
+          src: '/case-studies/rfp/iteration.mp4',
+          alt: 'A requirement lands, the prototype changes',
+          caption: 'A requirement change, across the whole prototype',
+          brief: 'Describe a new field to Claude Code, then cut to it on the form, in the list and in the report.',
+          pending: true,
+        },
+        {
+          type: 'comparison',
+          before: 'New fields, workflows and compliance rules surface every week, and each one cascades through dozens of mock-ups.',
+          after: 'I describe the change to Claude Code and it is across the prototype in minutes.',
+        },
+
+        { type: 'heading', level: 3, content: '5. Workflows that end somewhere real' },
+        {
+          type: 'video',
+          src: '/case-studies/rfp/workflow.mp4',
+          alt: 'A different path, a different outcome',
+          caption: 'The outcome is written from the path taken, not drawn in advance',
+          brief: 'Run the same case twice in a live demo, making different choices. End on the two documents it produces: a request for information one time, a determination the other.',
+          pending: true,
+        },
+        {
+          type: 'comparison',
+          before: 'Held to one narrow happy path. Every click is wired by hand, and the result at the end is a screen drawn in advance.',
+          after: 'Run it as a live demo and take any path. The prototype collects each choice along the way, then produces a real request for information or a real determination from that case\'s data and story.',
+        },
+
+        { type: 'heading', level: 2, content: 'What it would have taken' },
+        {
+          type: 'comparison',
+          beforeLabel: 'Without AI tools',
+          afterLabel: 'With AI tools',
+          before: [
+            '3 to 5 designers for mock-ups of every required screen',
+            'Solution architects to document feasibility',
+            'Engineers to build any interactive demo',
+            'Weeks of coordination between design, engineering and proposal writing',
+            'Static deliverables nobody can explore',
+          ],
+          after: [
+            'One designer with Claude Code',
+            'A product manager for direction',
+            'The founder for RFP expertise',
+            'Days instead of weeks for a major feature',
+            'A prototype stakeholders can use, changed the same day',
+          ],
+        },
+
+        { type: 'heading', level: 2, content: 'What happened next' },
+        {
+          type: 'list',
+          items: [
+            'The prototype outlived the tender. It is still referenced and iterated on today.',
+            'Engineering kept building on it, instead of receiving a hand-off and filing it away.',
+            'I could design faster than engineering could build, without being held to the existing technical limits.',
+          ]
+        },
+
+        { type: 'heading', level: 2, content: 'Tools' },
+        {
+          type: 'list',
+          items: [
+            'Claude Code for building the prototype',
+            'Next.js, React and Tailwind CSS',
+            'An LLM API for the live chat',
+            'Git branches for prototype variants',
+            'Vercel so stakeholders could open it',
+          ]
+        },
+      ],
+      chatContext: {
+        description: 'Case study contrasting how a designer would have answered a government RFP before AI with how Gareth actually did it: as the sole designer at a small startup, building a working code prototype with Claude Code instead of Figma mock-ups, competing against large organizations for a state-level tender',
+        suggestedQuestions: [
+          'How did you approach this RFP differently?',
+          'What couldn\'t you do in Figma that code solved?',
+          'How long did the prototype take to build?',
+        ],
+        followUpQuestions: [
+          'What was the outcome of the tender?',
+          'Is the prototype still being used?',
+          'How did the engineers react to your code prototype?',
+          'What would you do differently next time?',
+        ]
+      }
+    },
+    {
+      id: 'html-brand-website',
+      title: 'A Website Built from an HTML Brand',
+      description: 'A website built from a brand that lives as HTML, then given its information architecture and styled page by page so it all looks consistent.',
+      category: 'Brand & Web',
+      year: '2026',
+      tags: ['AI', 'Brand', 'Website', 'HTML'],
+      content: [
+        // A stub: the framing is in, the detail and every visual are still to come.
+        {
+          type: 'image',
+          src: '/case-studies/html-brand-website/overview.webp',
+          alt: 'The finished site',
+          caption: 'The site, built from the brand files',
+          brief: 'The homepage and two inner pages side by side, to show they belong together.',
+          pending: true,
+        },
+        { type: 'heading', level: 2, content: 'The short version' },
+        { type: 'text', content: 'I built this site using the approach Emmett Shine of Little Plains describes in "The HTML Brand: The Rise of Input-Based Outcomes": the brand is delivered as structured files an AI agent can read and build from, not as a PDF of guidelines. Then I worked out the information architecture and styled every page so the whole site looks consistent.' },
+        { type: 'heading', level: 2, content: 'How it went' },
+        {
+          type: 'list',
+          ordered: true,
+          items: [
+            'Start from the brand as HTML, using the Little Plains approach',
+            'Work out the information architecture: which pages exist and what each one is for',
+            'Style every page so it all looks consistent',
+          ]
+        },
+        {
+          type: 'image',
+          src: '/case-studies/html-brand-website/brand-files.webp',
+          alt: 'The brand as files',
+          caption: 'The brand, as something an agent can build from',
+          brief: 'The brand files open beside a page generated from them.',
+          pending: true,
+        },
+        {
+          type: 'image',
+          src: '/case-studies/html-brand-website/architecture.webp',
+          alt: 'The information architecture',
+          caption: 'Every page and its job',
+          brief: 'The site map: every page and what it is for.',
+          pending: true,
+        },
+        {
+          type: 'video',
+          src: '/case-studies/html-brand-website/consistency.mp4',
+          alt: 'Every page, one system',
+          caption: 'The same system on every page',
+          brief: 'Scroll through each page in turn so the shared type, colour and spacing are obvious.',
+          pending: true,
+        },
+      ],
+      chatContext: {
+        description: 'Case study about building a website from a brand delivered as HTML, following the Little Plains approach described in Emmett Shine\'s "The HTML Brand: The Rise of Input-Based Outcomes", then doing the information architecture and styling every page consistently',
+        suggestedQuestions: [
+          'What is an HTML brand?',
+          'How did AI help build the site?',
+          'What did you do by hand?',
+        ],
+        followUpQuestions: [
+          'How did you keep the pages consistent?',
+          'How did you approach the information architecture?',
+        ]
+      }
+    },
+  ]),
   {
     id: 'productlite',
     title: 'ProductLite',
@@ -1403,12 +1660,25 @@ export const projects: Project[] = [
   {
     id: 'configurator',
     title: 'Configurator',
-    description: 'No-code LLM workflow tool prototype. Building complex AI pipelines without writing code.',
+    description: NEW_HOME_LIVE
+      ? 'A no-code LLM workflow tool, prototyped with real LLM data so people get a genuine feel for the product.'
+      : 'No-code LLM workflow tool prototype. Building complex AI pipelines without writing code.',
     category: 'No-Code AI',
     year: '2025',
     companyId: 'enterpriseai',
     tags: ['LLM', 'No-Code', 'Workflows', 'Enterprise'],
     content: [
+      ...when<ContentBlock>(NEW_HOME_LIVE, [
+        {
+          type: 'video',
+          src: '/case-studies/configurator/real-data.mp4',
+          alt: 'Real LLM output in the prototype',
+          caption: 'The prototype running on real LLM data',
+          brief: 'Run a workflow in the prototype and show the real LLM response coming back, not placeholder text.',
+          pending: true,
+        },
+        { type: 'text', content: 'The prototype uses real LLM data, so people get a genuine feel for the product, with the flexibility that comes from that.' },
+      ]),
       {
         type: 'heading',
         level: 2,

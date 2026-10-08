@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import type { Project } from '@/content/projects'
+import { NEW_HOME_LIVE } from '@/content/preview'
 
 const ease = [0.25, 0.1, 0.25, 1]
 
@@ -107,6 +108,7 @@ interface ProductCardProps {
   className?: string
 }
 
+// The category line, tags and status badge are the published card. The reworked homepage drops them.
 export function ProductCard({ product, index = 0, className = '' }: ProductCardProps) {
   // Not ready to share yet — the card shows the product but doesn't link anywhere
   const comingSoon = product.status === 'Coming soon'
@@ -121,7 +123,7 @@ export function ProductCard({ product, index = 0, className = '' }: ProductCardP
     >
       {/* Visual area */}
       <div className="h-48 md:h-56 bg-border/30 flex items-center justify-center overflow-hidden relative">
-        {product.status && (
+        {!NEW_HOME_LIVE && product.status && (
           <span className="absolute top-4 left-4 flex items-center gap-1.5 text-xs text-muted">
             <span className="w-1.5 h-1.5 rounded-full bg-accent" />
             {product.status}
@@ -141,24 +143,26 @@ export function ProductCard({ product, index = 0, className = '' }: ProductCardP
       </div>
 
       <div className="p-5">
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-muted uppercase tracking-wide">{product.category}</span>
-            {product.year && (
-              <>
-                <span className="text-xs text-muted">•</span>
-                <span className="text-xs text-muted">{product.year}</span>
-              </>
-            )}
+        {!NEW_HOME_LIVE && (
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted uppercase tracking-wide">{product.category}</span>
+              {product.year && (
+                <>
+                  <span className="text-xs text-muted">•</span>
+                  <span className="text-xs text-muted">{product.year}</span>
+                </>
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         <h3 className={`font-medium text-lg text-foreground transition-colors mb-2 ${comingSoon ? '' : 'group-hover:text-accent'}`}>
           {product.title}
         </h3>
         <p className="text-sm text-muted">{product.description}</p>
 
-        {product.tags && product.tags.length > 0 && (
+        {!NEW_HOME_LIVE && product.tags && product.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-3">
             {product.tags.slice(0, 3).map((tag) => (
               <span key={tag} className="px-2 py-0.5 text-xs border border-border rounded text-muted">
