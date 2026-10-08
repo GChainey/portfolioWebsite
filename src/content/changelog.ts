@@ -14,6 +14,21 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.26.0',
+    date: '2026-10-07',
+    title: 'Case Study: Workspace and App Settings',
+    description:
+      'A new Enterprise AI case study on the logic behind a settings redesign: grouping the parts of the system into features, then making workspace settings and app settings easy to tell apart.',
+    changes: [
+      'New case study, Two Levels of Settings Without Getting Lost, linked to Enterprise AI',
+      'Two before recordings from earlier builds: settings as a list of parts, and app settings and workspace settings looking the same',
+      'Three after recordings: the features inside app settings, nested app settings with the colours swapped, and workspace settings as a dialog',
+      'A closing section on what AI made possible: working HTML prototypes with real state and seeded tenancies',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/workspace-app-settings-design',
+  },
+  {
     version: '1.25.0',
     date: '2026-10-07',
     title: 'Shader Wall in Products',
