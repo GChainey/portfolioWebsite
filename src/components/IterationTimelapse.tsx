@@ -8,13 +8,15 @@ import { ROUNDS, TIMELAPSE_FRAMES, frameForRound } from '@/content/add-document-
 interface IterationTimelapseProps {
   // How long each round stays on screen while playing.
   interval?: number
+  // Replaces the article spacing, for use outside a case study.
+  className?: string
 }
 
 // Tailwind can't apply opacity to the CSS-variable colours, so mix them here.
 const mix = (pct: number) => `color-mix(in srgb, var(--foreground) ${pct}%, transparent)`
 
 // Scrub or play through the dialog as it looked after each round of feedback.
-export function IterationTimelapse({ interval = 2200 }: IterationTimelapseProps) {
+export function IterationTimelapse({ interval = 2200, className = 'my-8' }: IterationTimelapseProps) {
   const [index, setIndex] = useState(0)
   const [playing, setPlaying] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
@@ -53,7 +55,7 @@ export function IterationTimelapse({ interval = 2200 }: IterationTimelapseProps)
   }
 
   return (
-    <div ref={rootRef} className="not-prose my-8 rounded-xl border border-border overflow-hidden">
+    <div ref={rootRef} className={`not-prose rounded-xl border border-border overflow-hidden ${className}`}>
       {/* Stage */}
       <div className="relative aspect-[4/3] sm:aspect-[16/10]" style={{ backgroundColor: mix(5) }}>
         {TIMELAPSE_FRAMES.map((src) => (
