@@ -11,11 +11,13 @@ export type ShowCard = {
   title: string
   href: string
   external?: boolean
-  span: 'hero' | 'wide' | 'tall' | 'default'
+  span: 'hero' | 'wide' | 'full' | 'tall' | 'default'
   /** Live iframe URL when set */
   liveSrc?: string
   /** Static background when no iframe */
   image?: string
+  /** Prefer a cropped poster over a live iframe (still links out via href) */
+  posterImage?: string
   /** Optional metric — use null to omit; placeholder string when unknown */
   metric?: string | null
   hoverProblem: string
@@ -24,6 +26,7 @@ export type ShowCard = {
 
 const EAI_PROTO = 'https://eai-website.github.io/prototypes'
 
+/** Grid order: hero 2×2, four tiles on the right, full-width workspace footer. */
 export const SHOW_CARDS: ShowCard[] = [
   {
     id: 'eai-shader',
@@ -41,7 +44,7 @@ export const SHOW_CARDS: ShowCard[] = [
     href: 'https://www.shaderwall.com',
     external: true,
     span: 'default',
-    liveSrc: 'https://www.shaderwall.com',
+    posterImage: '/gallery/shots/shader-wall-site.jpg',
     metric: '[Shader Wall visitors TBD]',
     hoverProblem: 'Mac wallpapers should feel ambient, not like another settings panel.',
     hoverRole: 'Solo designer & builder — whole app runs in the browser at shaderwall.com.',
@@ -61,7 +64,7 @@ export const SHOW_CARDS: ShowCard[] = [
     id: 'add-document',
     title: 'Showing AI what to look for',
     href: '/projects/add-document',
-    span: 'wide',
+    span: 'default',
     image: '/case-studies/add-document/hero.webp',
     hoverProblem: 'Teams could not write document rules because they could not see what the AI would check.',
     hoverRole: 'Lead designer — live document preview + state machine, 27 rounds with an AI coding agent.',
@@ -70,7 +73,7 @@ export const SHOW_CARDS: ShowCard[] = [
     id: 'seek-funnel',
     title: 'The MVP missed. So we fixed the funnel.',
     href: '/projects/seek-case-study-1',
-    span: 'wide',
+    span: 'default',
     image: '/case-studies/seek-learning/hero.webp',
     hoverProblem: 'A courses module on SEEK Career Advice underperformed after launch.',
     hoverRole: 'Lead designer on a team of seven — three funnel fixes took conversion from 9% to 20%.',
@@ -80,8 +83,8 @@ export const SHOW_CARDS: ShowCard[] = [
     title: 'Signed-in workspace',
     href: `${EAI_PROTO}/workspace-ai-demo/build-web/ws-home.html?tenancy=seeded&workflowOption=1`,
     external: true,
-    span: 'default',
-    liveSrc: `${EAI_PROTO}/workspace-ai-demo/build-web/ws-home.html?tenancy=seeded&workflowOption=1`,
+    span: 'full',
+    posterImage: '/variants/shots/workspace.jpg',
     hoverProblem: 'Enterprise buyers needed to see a credible product surface, not slides.',
     hoverRole: 'Lead designer — seeded HTML prototypes with real state for RFPs and discovery.',
   },
@@ -137,6 +140,7 @@ export const THINK_INTRO = [
 export const DESIGN_TO_CODE_DEMO = {
   designImage: '/variants/shots/shapeshifter.jpg',
   designCaption: 'Paper explorations for the Enterprise AI marketing site (sell-to-many remix).',
+  livePoster: '/variants/shots/dark-shader.jpg',
   liveSrc: `${EAI_PROTO}/sell-to-many/remix/14-dark-shader/index.html`,
   liveCaption: 'Same programme shipped as live HTML — chat-first layout on a running shader, user tested.',
 }

@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import { VariantChrome } from '@/components/homepage-variants/VariantChrome'
 import { PositioningLine } from '@/components/homepage-variants/InlineMarks'
 import { BentoWorkCard } from '@/components/homepage-variants/BentoWorkCard'
@@ -13,7 +12,7 @@ export default function ShowVariantPage() {
       <VariantChrome variant="show" label="Show" />
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-8 pb-20">
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="mb-10 sm:mb-12">
+        <div className="mb-10 sm:mb-12">
           <p className="text-xs text-muted uppercase tracking-widest mb-4">Variant A · Visual-first</p>
           <PositioningLine />
           <p className="mt-6 text-base text-muted max-w-2xl leading-relaxed">{VARIANT_OPEN_TO}</p>
@@ -31,9 +30,9 @@ export default function ShowVariantPage() {
               CV
             </Link>
           </div>
-        </motion.div>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 sm:gap-4 auto-rows-fr">
+        <div className="grid grid-cols-1 md:grid-cols-4 md:grid-flow-dense gap-3 sm:gap-4">
           {SHOW_CARDS.map((card) => (
             <BentoWorkCard key={card.id} card={card} />
           ))}

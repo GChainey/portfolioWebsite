@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import { VariantChrome } from '@/components/homepage-variants/VariantChrome'
 import { ThinkIntroParagraph } from '@/components/homepage-variants/InlineMarks'
 import { DesignToCodePanel } from '@/components/homepage-variants/DesignToCodePanel'
@@ -15,7 +14,7 @@ export default function ThinkVariantPage() {
       <VariantChrome variant="think" label="Think" />
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-8 pb-20">
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="mb-10 sm:mb-14">
+        <div className="mb-10 sm:mb-14">
           <p className="text-xs text-muted uppercase tracking-widest mb-4">Variant B · AI-native</p>
           <ThinkIntroParagraph />
           <p className="mt-8 text-base text-muted max-w-2xl leading-relaxed">{VARIANT_OPEN_TO}</p>
@@ -27,25 +26,17 @@ export default function ThinkVariantPage() {
               Get in touch
             </Link>
           </div>
-        </motion.div>
+        </div>
 
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.1 }}
-          className="mb-14 sm:mb-16"
-        >
+        <section className="mb-14 sm:mb-16">
           <h2 className="text-sm font-medium text-foreground mb-1">Paper → live code</h2>
-          <p className="text-sm text-muted mb-5 max-w-2xl">One thread from the Enterprise AI marketing work: explorations on canvas, then the same idea as shipped HTML.</p>
+          <p className="text-sm text-muted mb-5 max-w-2xl">
+            One thread from the Enterprise AI marketing work: explorations on canvas, then the same idea as shipped HTML.
+          </p>
           <DesignToCodePanel />
-        </motion.section>
+        </section>
 
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.15 }}
-          className="mb-14 sm:mb-16"
-        >
+        <section className="mb-14 sm:mb-16">
           <h2 className="text-sm font-medium text-foreground mb-1">Decision records</h2>
           <p className="text-sm text-muted mb-5">Where AI helped, what I pushed back on, and what shipped.</p>
           <div className="grid md:grid-cols-3 gap-4">
@@ -53,11 +44,9 @@ export default function ThinkVariantPage() {
               <DecisionRecordCard key={record.projectId} record={record} />
             ))}
           </div>
-        </motion.section>
+        </section>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.2 }}>
-          <VelocityStrip />
-        </motion.div>
+        <VelocityStrip />
 
         <p className="mt-12 text-center text-xs text-muted">
           Unlisted preview ·{' '}
