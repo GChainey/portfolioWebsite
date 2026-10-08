@@ -867,6 +867,157 @@ export const projects: Project[] = [
     }
   },
   {
+    id: 'eai-settings',
+    title: 'Two Levels of Settings Without Getting Lost',
+    description: 'People couldn\'t set up the AI in their own apps. We grouped the parts into features, then fixed the confusion between workspace settings and app settings with two moves: swapped colours and a dialog.',
+    category: 'Enterprise AI',
+    year: '2026',
+    heroImage: '/case-studies/eai-settings/hero.webp',
+    companyId: 'enterpriseai',
+    tags: ['AI', 'Enterprise', 'Information Architecture', 'Navigation', 'Prototyping'],
+    content: [
+      { type: 'heading', level: 2, content: 'TLDR' },
+      {
+        type: 'list',
+        items: [
+          'People couldn\'t set up the AI in their own apps',
+          'We grouped the parts into features that live in app settings',
+          'Workspace settings and app settings looked the same, so we swapped the colours and made workspace settings a dialog',
+          'All of it was designed and tested as working HTML prototypes, generated with AI',
+        ],
+      },
+
+      { type: 'heading', level: 2, content: 'People couldn\'t set up the important parts' },
+      { type: 'text', content: 'Workspace settings was a list of parts, organised the way the system was built:' },
+      {
+        type: 'list',
+        items: [
+          'Knowledge',
+          'Documents',
+          'Model profiles',
+          'Prompt configuration',
+          'Workflow templates',
+          'Services',
+        ],
+      },
+      { type: 'text', content: 'Nobody arrives wanting a model profile. They want a chatbot on their form.' },
+      {
+        type: 'video',
+        src: '/case-studies/eai-settings/before-parts.mp4',
+        alt: 'A recording of the earlier workspace settings: a long list including Knowledge, Documents, Model profiles, Prompt configuration, Workflow templates and Services, each opening its own page',
+        caption: 'Before: settings organised by how the system is built',
+        aspectRatio: '16/10',
+      },
+
+      { type: 'heading', level: 2, content: 'Group the parts by the job' },
+      { type: 'text', content: 'Four features, named for what people ask for:' },
+      {
+        type: 'list',
+        items: [
+          'AI Chatbot',
+          'AI Document Review',
+          'AI Document Creation',
+          'Document Checklist',
+        ],
+      },
+      { type: 'text', content: 'Each one lives in the app\'s own settings, not in workspace settings.' },
+      {
+        type: 'video',
+        src: '/case-studies/eai-settings/features.mp4',
+        alt: 'A recording of opening an app and clicking through its four features in the app settings sidebar: AI Document Review, AI Chatbot, AI Document Creation and Document Checklist',
+        caption: 'After: four features, inside the app\'s own settings',
+        aspectRatio: '16/10',
+      },
+
+      { type: 'heading', level: 2, content: 'Two sets of settings that looked the same' },
+      { type: 'text', content: 'A feature is turned on in workspace settings and set up in app settings, so people move between the two. They looked alike:' },
+      {
+        type: 'list',
+        items: [
+          'The same sidebar, listing the same features',
+          'The same page title beside it',
+          'Closing workspace settings left you on the workspace home, not back in the app',
+        ],
+      },
+      { type: 'text', content: 'Give someone a task and they lost track of which one they were in.' },
+      {
+        type: 'video',
+        src: '/case-studies/eai-settings/before-levels.mp4',
+        alt: 'A recording of the earlier design: a feature page in app settings links to workspace settings, which shows the same feature list and the same page title, and closing it lands on the workspace home',
+        caption: 'Before: the same list and the same page in app settings and in workspace settings',
+        aspectRatio: '16/10',
+      },
+
+      { type: 'heading', level: 2, content: 'Swap the colours' },
+      {
+        type: 'list',
+        items: [
+          'Workspace: grey sidebar, white page',
+          'App: white sidebar, grey page, nested inside the workspace as a card',
+          'The workspace name stays in the top bar, with the app\'s name beside it for switching apps',
+        ],
+      },
+      { type: 'text', content: 'You can tell which level you\'re on before you read a word.' },
+      {
+        type: 'video',
+        src: '/case-studies/eai-settings/nested.mp4',
+        alt: 'A recording of opening an app from the workspace: its settings appear as a card with a white sidebar and grey page, then switching to a second app and going back to the workspace',
+        caption: 'After: into an app, across to another, and back out',
+        aspectRatio: '16/10',
+      },
+
+      { type: 'heading', level: 2, content: 'Make workspace settings a dialog' },
+      {
+        type: 'list',
+        items: [
+          'It opens over whatever you\'re looking at',
+          'Closing it only closes it',
+          'You never left, so there\'s nothing to find your way back to',
+        ],
+      },
+      {
+        type: 'video',
+        src: '/case-studies/eai-settings/dialog.mp4',
+        alt: 'A recording of workspace settings opening as a dialog over the workspace home, then over an app\'s settings, and closing back to the same page each time',
+        caption: 'After: the same dialog over the workspace and over an app',
+        aspectRatio: '16/10',
+      },
+
+      { type: 'heading', level: 2, content: 'Did it work?' },
+      {
+        type: 'list',
+        items: [
+          '5 of 5 people found the feature they were asked to add',
+          '5 of 5 switched to the right app',
+        ],
+      },
+
+      { type: 'heading', level: 2, content: 'What AI made possible' },
+      { type: 'text', content: 'Every screen above is a working HTML prototype that I generated with AI coding agents. A few years ago this would have been a click-through mock-up.' },
+      {
+        type: 'list',
+        items: [
+          'State is real. Turn a feature on in workspace settings and it is on in the app. That jump is the thing we were testing, and a mock-up can\'t hold it',
+          'Seeded tenancies. For each test, the workspace was filled with the apps, workflows and documents the task needed: a vending issue form, an identity verification app, and six documents to pick from, four of them decoys',
+          'Fast to change. A problem found in one test was fixed and back in front of people three days later',
+        ],
+      },
+    ],
+    chatContext: {
+      description: 'An Enterprise AI case study about the logic behind a settings redesign. Before, workspace settings was a list of parts organised the way the system was built (Knowledge, Documents, Model profiles, Prompt configuration, Workflow templates, Services), so people could not set up the important AI parts of their app. The parts were grouped into four features (AI Chatbot, AI Document Review, AI Document Creation, Document Checklist) that moved out of workspace settings into the app\'s own settings, where each is added to one of the app\'s workflows, with the raw parts kept under Advanced Settings. A feature is turned on in workspace settings and set up in app settings, so people move between the two, and they looked the same: both were a sidebar listing the same features beside a page with the same title, and closing workspace settings left you on the workspace home, not back in the app. Two changes fixed it. App settings became a card nested inside the workspace with inverted colours (the workspace has a grey sidebar and white page, the app has a white sidebar and grey page), with the workspace name and an app switcher in the top bar. Workspace settings became a dialog that opens over whatever page you are on and only closes itself. Everything was designed and tested as working HTML prototypes generated with AI coding agents, not click-through mock-ups: state is real (a feature turned on in workspace settings is on in the app), and each test ran on a seeded tenancy, a workspace pre-filled with the apps, workflows and documents the task needed (a vending issue form, an identity verification app, and six documents to choose from, four of them decoys). In unmoderated testing on Lyssna, 5 of 5 people found the feature and 5 of 5 switched apps in the first round. Completing setup was 1 of 5 in round one, then 3 of 6 for the chatbot and 5 of 6 for document review in round two after a Set up button was added that leads from the switch straight into the app.',
+      suggestedQuestions: [
+        'Why swap the colours?',
+        'Why is workspace settings a dialog?',
+        'What was wrong with the old settings?',
+      ],
+      followUpQuestions: [
+        'How did you decide what counts as a feature?',
+        'Why set features up on a workflow?',
+        'How did AI help with this?',
+      ],
+    },
+  },
+  {
     id: 'add-document',
     title: 'Showing AI What to Look For',
     description: 'People setting up AI document review didn\'t know what a rule was. So I drew the document, lit up what each rule checks, and built a state machine to review every state with the team.',
