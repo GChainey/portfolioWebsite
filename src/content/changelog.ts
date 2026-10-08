@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.28.0',
+    date: '2026-10-08',
+    title: 'Homepage variants: Show & Think',
+    description:
+      'Two experimental homepage directions on the existing /variants launch pad for A/B testing hiring replies. Production homepage and main nav unchanged.',
+    changes: [
+      '/variants/show — visual-first bento with inline company marks, live iframe tiles, and case study cards',
+      '/variants/think — AI-native intro with tool icons, Paper-to-live-code demo, decision record cards, and changelog velocity strip',
+      'Launch pad index updated; noindex via existing /variants headers plus page metadata',
+    ],
+    aiTools: ['Cursor'],
+    branch: 'cursor/homepage-variants-show-think-67f7',
+  },
+  {
     version: '1.27.0',
     date: '2026-10-07',
     title: 'Demos (not live yet)',
