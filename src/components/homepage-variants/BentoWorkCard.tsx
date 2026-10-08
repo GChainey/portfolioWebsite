@@ -61,7 +61,7 @@ export function BentoWorkCard({ card }: BentoWorkCardProps) {
           <h2 className="text-base sm:text-lg font-medium text-foreground group-hover:text-accent transition-colors">{card.title}</h2>
           <ArrowUpRight className="w-4 h-4 shrink-0 text-muted group-hover:text-accent transition-colors" />
         </div>
-        <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-[grid-template-rows] duration-300 ease-out">
+        <div className="grid grid-rows-[1fr] sm:grid-rows-[0fr] sm:group-hover:grid-rows-[1fr] transition-[grid-template-rows] duration-300 ease-out">
           <div className="overflow-hidden">
             <p className="pt-2 text-sm text-muted leading-relaxed">
               <span className="text-foreground/90">{card.hoverProblem}</span>
