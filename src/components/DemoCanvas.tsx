@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { ArrowUpRight } from 'lucide-react'
+import { ScaledFrame } from './ScaledFrame'
 
 interface DemoMode {
   label: string
@@ -19,21 +20,9 @@ interface DemoCanvasProps {
 
 // A live HTML prototype on a dotted canvas, scaled down to fit the column.
 export function DemoCanvas({ src, title, modes = [], width = 1280, height = 900 }: DemoCanvasProps) {
-  const frameRef = useRef<HTMLDivElement>(null)
-  const [scale, setScale] = useState(1)
   const [mode, setMode] = useState(0)
   // Bumping the key reloads the iframe so a demo replays from the start.
   const [run, setRun] = useState(0)
-
-  useEffect(() => {
-    const el = frameRef.current
-    if (!el) return
-    const observer = new ResizeObserver(([entry]) => {
-      setScale(Math.min(1, entry.contentRect.width / width))
-    })
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [width])
 
   const query = modes[mode]?.query
   const url = query ? `${src}?${query}` : src
@@ -78,20 +67,7 @@ export function DemoCanvas({ src, title, modes = [], width = 1280, height = 900 
             </a>
           </div>
         )}
-        <div
-          ref={frameRef}
-          className="relative w-full overflow-hidden rounded-lg border border-border bg-background shadow-xl"
-          style={{ height: height * scale }}
-        >
-          <iframe
-            key={run}
-            src={url}
-            title={title}
-            loading="lazy"
-            className="absolute top-0 left-0 border-0 origin-top-left"
-            style={{ width, height, transform: `scale(${scale})` }}
-          />
-        </div>
+        <ScaledFrame src={url} title={title} width={width} height={height} run={run} />
       </div>
     </figure>
   )

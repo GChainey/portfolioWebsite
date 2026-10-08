@@ -14,6 +14,22 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.27.0',
+    date: '2026-10-07',
+    title: 'Demos (not live yet)',
+    description:
+      'A single scrolling page of things you can press, as a tighter alternative to the gallery. Each demo is a real prototype in a frame with its controls beside it. Like the gallery, it is switched off in production for now.',
+    changes: [
+      'A /demos page with six demos: a brand switcher, the installer state machine, a layout toggle, the Add document timelapse, its self-running tour, and three directions for this homepage',
+      'Buttons build the URL each prototype already understands, so the page never redraws a screen and every state is a link',
+      'Three layouts to compare: a split one with the controls beside each prototype, a document one at /demos/doc that reads like a written page with the options as rows of a table, and a hybrid at /demos/hybrid with the text on the page and the options beside the prototype',
+      'A floating dock follows the scroll and jumps between demos',
+      'Frames only run while they are near the screen, and stay out of the way of the scroll until you click into one',
+      'The scaled prototype frame from the case studies is now a shared component',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.26.0',
     date: '2026-10-07',
     title: 'Case Study: Workspace and App Settings',

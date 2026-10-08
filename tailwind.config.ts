@@ -53,6 +53,16 @@ const config: Config = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)'
+      },
+      keyframes: {
+        // A sliver sliding across the top of a frame while a prototype loads
+        'frame-loading': {
+          from: { transform: 'translateX(-100%)' },
+          to: { transform: 'translateX(300%)' }
+        }
+      },
+      animation: {
+        'frame-loading': 'frame-loading 1.1s ease-in-out infinite'
       }
     }
   },
