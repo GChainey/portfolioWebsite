@@ -26,6 +26,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       'A floating dock follows the scroll and jumps between demos',
       'Frames only run while they are near the screen, and stay out of the way of the scroll until you click into one',
       'The scaled prototype frame from the case studies is now a shared component',
+      'A local-only /parked page lists everything that is merged but not on the public site (demos, gallery, homepage variants, playground, feed, flagged experiments), with what switches each one on and what is left to decide',
     ],
     aiTools: ['Claude Code'],
   },
