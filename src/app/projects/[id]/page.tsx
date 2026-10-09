@@ -30,6 +30,8 @@ function calculateReadTime(content: Project['content']): number {
       block.items.forEach(item => {
         wordCount += `${item.label} ${item.note ?? ''}`.split(/\s+/).length
       })
+    } else if (block.type === 'comparison') {
+      wordCount += [block.before, block.after].flat().join(' ').split(/\s+/).length
     }
   })
   return Math.max(1, Math.ceil(wordCount / wordsPerMinute))
@@ -44,11 +46,12 @@ const TLDR_OPTIONS = [
   { id: 'engineer', label: "I'm an engineer", description: 'Tech stack, architecture' },
 ]
 
+// Media and artifacts (like FunnelDiagram) that exist. A pending slot has nothing to show yet.
+const isVisual = (b: ContentBlock) =>
+  b.type === 'component' || ((b.type === 'image' || b.type === 'gif' || b.type === 'video' || b.type === 'embed') && !b.pending)
+
 function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
-  // Collect visual blocks: media + components (artifacts like FunnelDiagram)
-  const visualBlocks = blocks.filter(
-    b => b.type === 'image' || b.type === 'gif' || b.type === 'video' || b.type === 'embed' || b.type === 'component'
-  )
+  const visualBlocks = blocks.filter(isVisual)
 
   // Find the heading that precedes each visual block for context
   function getHeadingForVisual(visualIndex: number): string | null {
@@ -161,7 +164,9 @@ export default function ProjectPage() {
 
   useEffect(() => {
     if (params.id) {
-      const p = getProjectById(params.id as string)
+      const found = getProjectById(params.id as string)
+      // A study marked Coming soon is a draft: it only opens on the dev server
+      const p = found?.status === 'Coming soon' && found.kind !== 'product' && process.env.NODE_ENV !== 'development' ? undefined : found
       setProject(p || null)
     }
   }, [params.id])
@@ -374,7 +379,7 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
             </header>
 
             {/* View Mode Tabs - only show if project has media */}
-            {project.content.some((b: ContentBlock) => b.type === 'image' || b.type === 'gif' || b.type === 'video' || b.type === 'embed' || b.type === 'component') && (
+            {project.content.some(isVisual) && (
               <div className="flex justify-center py-4 border-b border-border">
                 <div className="flex bg-border/40 rounded-full p-0.5">
                   <button
@@ -444,7 +449,7 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
                 <h2 className="text-xl font-medium text-foreground mb-6">Explore the Projects</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {projects
-                    .filter(p => p.id !== project.id && !p.featured)
+                    .filter(p => p.id !== project.id && !p.featured && p.status !== 'Coming soon')
                     .map((p) => (
                       <Link
                         key={p.id}

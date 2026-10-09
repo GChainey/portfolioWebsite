@@ -4,6 +4,7 @@ import { useRef, useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react'
 import { Facehash, stringHash } from 'facehash'
+import { CompanyLogo, type CompanyLogoId } from './CompanyLogo'
 
 // All 16 theme accent colors — color-mix with background adapts to light/dark
 const THEME_ACCENT_COLORS = [
@@ -22,6 +23,7 @@ interface Testimonial {
   company: string
   content: string
   linkedIn?: string
+  logo?: CompanyLogoId // The company to show beside the name
 }
 
 interface TestimonialCarouselProps {
@@ -124,6 +126,7 @@ export function TestimonialCarousel({ testimonials, animationDelay = 0 }: Testim
                   )}
                   <p className="text-xs text-muted">{testimonial.role} · {testimonial.company}</p>
                 </div>
+                {testimonial.logo && <CompanyLogo id={testimonial.logo} className="ml-auto text-muted" />}
               </div>
               <p className="text-sm text-muted leading-relaxed">{testimonial.content}</p>
             </motion.div>

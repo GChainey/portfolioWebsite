@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { X, ArrowRight } from 'lucide-react'
+import { X, ArrowRight, FileText, LayoutGrid } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { Gallery, GALLERY_LIVE } from '@/components/Gallery'
 import { ChatInterface } from '@/components/ChatInterface'
@@ -11,7 +11,7 @@ import { Facehash } from 'facehash'
 import { GitHubContributions } from '@/components/GitHubContributions'
 import { ThinkerCard } from '@/components/ThinkerCard'
 import { ProductGrid } from '@/components/ProductCard'
-import { products } from '@/content/projects'
+import { products, writing, getProjectById } from '@/content/projects'
 import { TestimonialCarousel } from '@/components/TestimonialCarousel'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import { thinkers } from '@/content/thinkers'
@@ -50,48 +50,93 @@ const HOME_PAGE_CONTEXT = {
   ]
 }
 
-// Bento grid projects - 4 curated case studies
-const BENTO_PROJECTS = [
-  {
-    id: 'the-future-is-now',
-    number: '01',
-    title: 'The Future is Now',
-    description: 'From Figma to shipping real code. My journey into AI-augmented design.',
-    category: 'Article',
-    href: '/projects/the-future-is-now',
-    visual: 'github' as const,
-  },
+interface ProjectCard {
+  id: string
+  number: string
+  title: string
+  description: string
+  category: string
+  href: string
+  icon?: string
+  comingSoon?: boolean // Not written up yet: the card shows, but doesn't link
+}
+
+// The three main projects, each framed around what AI made possible
+const MAIN_PROJECTS: ProjectCard[] = [
   {
     id: 'rfp',
-    number: '02',
-    title: 'Respond to RFP',
-    description: 'One-person army winning enterprise deals with AI-powered prototypes.',
+    number: '01',
+    title: 'One RFP, Two Ways to Answer It',
+    description: 'The features and flexibility that were only possible because of AI.',
     category: 'Enterprise AI',
     href: '/projects/rfp',
-    visual: 'icon' as const,
     icon: 'code',
   },
   {
-    id: 'how-i-work',
-    number: '03',
-    title: 'How I Work',
-    description: 'AI agents, parallel branches, voice-to-code. My daily workflow.',
-    category: 'Process',
-    href: '/how-i-work',
-    visual: 'icon' as const,
-    icon: 'workflow',
+    id: 'html-brand-website',
+    number: '02',
+    title: 'A Website Built from an HTML Brand',
+    description: 'Built with the Little Plains approach, then structured and styled page by page so it all looks consistent.',
+    category: 'Brand & Web',
+    href: '/projects/html-brand-website',
+    icon: 'sparkle',
+    comingSoon: true,
   },
   {
-    id: 'creative-tooling',
-    number: '04',
-    title: 'Conjure Your Own Tools',
-    description: 'Stop waiting for features. Build the creative tool you need, when you need it.',
-    category: 'Article',
-    href: '/projects/creative-tooling',
-    visual: 'icon' as const,
-    icon: 'sparkle',
+    id: 'configurator',
+    number: '03',
+    title: 'Configurator',
+    description: 'Real LLM data, so people get a genuine feel for the product.',
+    category: 'No-Code AI',
+    href: '/projects/configurator',
+    icon: 'workflow',
   },
 ]
+
+// Plain lists that close the page: the earlier jobs, the essays, then the small studies
+const EARLIER_WORK = ['seek-case-study-1', 'bestpractice-case-study-1']
+const SMALL_STUDIES = ['eai-settings', 'add-document']
+const ESSAYS = writing.filter((p) => p.category === 'Article').map((p) => p.id)
+
+const COMPANY: Record<string, string> = { enterpriseai: 'Enterprise AI', seek: 'SEEK', bestpractice: 'Best Practice' }
+
+// A titled list of case studies or essays, one per row
+function WorkList({ label, note, ids, titleBorders }: { label: string; note?: string; ids: string[]; titleBorders: boolean }) {
+  const items = ids.map(getProjectById).filter((p) => p !== undefined)
+
+  return (
+    <section className="border-b border-border">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-60px' }}
+        transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+      >
+        <div className={`flex items-center justify-between px-8 ${titleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
+          <p className="text-xs text-muted uppercase tracking-widest">{label}</p>
+          {note && <p className="text-xs text-muted">{note}</p>}
+        </div>
+
+        {items.map((project, index) => (
+          <Link
+            key={project.id}
+            href={project.externalUrl || `/projects/${project.id}`}
+            className={`group flex items-center gap-6 px-8 py-4 ${index < items.length - 1 ? 'border-b border-border' : ''}`}
+          >
+            <div className="min-w-0 flex-1">
+              <h3 className="font-medium text-foreground group-hover:text-accent transition-colors">{project.title}</h3>
+              <p className="text-sm text-muted line-clamp-1">{project.description}</p>
+            </div>
+            <span className="hidden sm:block shrink-0 text-xs text-muted">
+              {[project.companyId && COMPANY[project.companyId], project.year].filter(Boolean).join(' · ')}
+            </span>
+            <ArrowRight className="shrink-0 w-4 h-4 text-muted group-hover:text-accent group-hover:translate-x-1 transition-all" />
+          </Link>
+        ))}
+      </motion.div>
+    </section>
+  )
+}
 
 function BentoCardVisual({ icon }: { icon?: string }) {
   const ease = [0.25, 0.1, 0.25, 1]
@@ -369,6 +414,7 @@ const TESTIMONIALS = [
     name: 'Winnie Bamra',
     role: 'Senior Product Manager',
     company: 'Ex-SpaceX · SEEK',
+    logo: 'spacex' as const,
     linkedIn: 'https://www.linkedin.com/in/wbamra/',
     content: 'Gareth is a pleasure to work with and an asset to any team. He is diligent in discovery, passionate about the end user, empathetic, and collaborative in his approach. He is excellent at leading user interviews, enabling the team to collect and extract actionable insights.',
   },
@@ -376,6 +422,7 @@ const TESTIMONIALS = [
     name: 'Richard Simms',
     role: 'Principal Product Designer',
     company: 'SEEK',
+    logo: 'seek' as const,
     linkedIn: 'https://www.linkedin.com/in/richardsimms/',
     content: 'A talented senior UX designer who can independently drive projects forward. His designs reflected a deep understanding of our users, combined with a mastery of UX principles. Meticulous attention to detail and craft are evident in everything he produces.',
   },
@@ -383,6 +430,7 @@ const TESTIMONIALS = [
     name: 'Ahmed Hakeem',
     role: 'Staff Engineer',
     company: 'SEEK',
+    logo: 'seek' as const,
     linkedIn: 'https://www.linkedin.com/in/meds/',
     content: "A developer's best friend. I have many fond memories bouncing ideas around and jamming out features end to end from fake door tests to deployment. At every step Gareth was inquisitive, collaborative and open to thinking on their feet.",
   },
@@ -390,6 +438,7 @@ const TESTIMONIALS = [
     name: 'David Deville',
     role: 'Senior Content Designer',
     company: 'SEEK',
+    logo: 'seek' as const,
     linkedIn: 'https://www.linkedin.com/in/david-deville-98b287b8/',
     content: "Gareth goes above and beyond designing for customer needs. Fast experimentation, elegant designs and constant iteration resulted in products like an AI-powered resume generator that genuinely helped candidates. A positive, creative and likeable teammate.",
   },
@@ -397,6 +446,7 @@ const TESTIMONIALS = [
     name: 'Henry Vesander',
     role: 'Chief Product Officer',
     company: 'Best Practice Software',
+    logo: 'bestpractice' as const,
     linkedIn: 'https://www.linkedin.com/in/henrikvesander/',
     content: 'An outstanding UX/product designer. I hired him to build a cloud-based practice management SaaS. He is a driven individual that can be trusted in getting the job done once given guidance and a brief. I definitely recommend Gareth!',
   },
@@ -412,6 +462,8 @@ export default function Home() {
   const [chatMounted, setChatMounted] = useState(false)
   const [experienceDialogOpen, setExperienceDialogOpen] = useState(false)
   const [selectedCompanyId, setSelectedCompanyId] = useState('enterpriseai')
+  // The page as written, or nothing but the gallery
+  const [view, setView] = useState<'page' | 'visuals'>('page')
   const { flags } = useFeatureFlags()
 
   // Track client-side mount to prevent hydration issues with animations
@@ -456,6 +508,119 @@ export default function Home() {
     return () => timeouts.forEach(clearTimeout)
   }, [])
 
+
+
+  const thinkersSection = (
+    <>
+      {/* Product Thinkers section */}
+      <section className="border-b border-border">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+        >
+          <div className={`flex items-center justify-between px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
+            <p className="text-xs text-muted uppercase tracking-widest">Product Thinkers</p>
+            <Link href="/thinkers" className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1">
+              View all <ArrowRight className="w-3 h-3" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2">
+            {thinkers.map((thinker, index) => (
+              <div
+                key={thinker.id}
+                className={`p-5 ${index % 2 === 0 ? 'md:border-r border-border' : ''} ${index < thinkers.length - (thinkers.length % 2 === 0 ? 2 : 1) ? 'border-b border-border' : ''}`}
+              >
+                <ThinkerCard thinker={thinker} index={index} />
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </section>
+    </>
+  )
+
+  const testimonialsSection = (
+    <>
+      {/* Testimonials section */}
+      <section className="border-b border-border overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+        >
+          <div className={`px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
+            <p className="text-xs text-muted uppercase tracking-widest">Kind words from colleagues</p>
+          </div>
+
+          <TestimonialCarousel testimonials={TESTIMONIALS} />
+        </motion.div>
+      </section>
+    </>
+  )
+
+  const experienceSection = (
+    <>
+      {/* Experience section */}
+      <section className="p-8 border-b border-border">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+        >
+          <div className="flex items-center justify-between mb-6">
+            <p className="text-xs text-muted uppercase tracking-widest">Experience</p>
+            <button
+              onClick={() => { setSelectedCompanyId('enterpriseai'); setExperienceDialogOpen(true) }}
+              className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1"
+            >
+              View <ArrowRight className="w-3 h-3" />
+            </button>
+          </div>
+          <div className="relative">
+            {/* Timeline line */}
+            <div className="absolute left-[7px] top-2 bottom-2 w-[2px] bg-border" />
+
+            <div className="space-y-8">
+              {EXPERIENCE.map((exp, index) => (
+                <motion.div
+                  key={exp.company}
+                  className="flex gap-6 relative cursor-pointer group"
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.12 }}
+                  onClick={() => { setSelectedCompanyId(exp.id); setExperienceDialogOpen(true) }}
+                >
+                  {/* Timeline dot */}
+                  <div className="flex-shrink-0 w-4 h-4 rounded-full bg-foreground border-4 border-background z-10 mt-1" />
+
+                  <div className="flex-1 pb-2">
+                    <div className="flex items-baseline gap-3 mb-1">
+                      <h3 className="font-medium text-foreground group-hover:text-accent transition-colors">{exp.company}</h3>
+                      <span className="text-xs text-muted">{exp.period}</span>
+                    </div>
+                    <p className="text-sm text-muted mb-2">{exp.role}</p>
+                    <p className="text-sm text-muted">{exp.description}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      <ExperienceDialog
+        isOpen={experienceDialogOpen}
+        onClose={() => setExperienceDialogOpen(false)}
+        initialCompanyId={selectedCompanyId}
+      />
+    </>
+  )
 
   return (
     <div className="min-h-screen bg-background transition-colors duration-700">
@@ -540,7 +705,7 @@ export default function Home() {
                   <div className="mt-8">
                     <Magnetic strength={0.25} radius={100} disabled={!flags.particleField}>
                       <Link
-                        href="/projects/the-future-is-now"
+                        href="/projects/rfp"
                         className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--accent-cta)] text-white text-sm font-medium rounded-full hover:brightness-110 transition-all group"
                       >
                         Read how
@@ -552,6 +717,36 @@ export default function Home() {
               </div>
             </section>
 
+            {/* Page or visuals - the same switch the case studies have. The gallery isn't live yet. */}
+            {GALLERY_LIVE && (
+              <div className="flex justify-center py-4 border-b border-border">
+                <div className="flex bg-border/40 rounded-full p-0.5">
+                  {([
+                    { id: 'page', label: 'Page', icon: FileText },
+                    { id: 'visuals', label: 'Visuals', icon: LayoutGrid },
+                  ] as const).map(({ id, label, icon: Icon }) => (
+                    <button
+                      key={id}
+                      onClick={() => setView(id)}
+                      aria-pressed={view === id}
+                      className={`flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-full transition-all ${
+                        view === id ? 'bg-foreground text-background font-medium' : 'text-muted hover:text-foreground'
+                      }`}
+                    >
+                      <Icon className="w-3.5 h-3.5" />
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {view === 'visuals' ? (
+              <section className="p-8 border-b border-border">
+                <Gallery filters />
+              </section>
+            ) : (
+              <>
             {/* About section */}
             <section className="p-8 border-b border-border">
               <motion.div
@@ -588,7 +783,7 @@ export default function Home() {
               </section>
             )}
 
-            {/* Projects Bento Grid */}
+            {/* The three main projects */}
             <section className="border-b border-border">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -597,52 +792,56 @@ export default function Home() {
                 transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
               >
                 <div className={`flex items-center justify-between px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
-                  <p className="text-xs text-muted uppercase tracking-widest">Projects</p>
+                  <p className="text-xs text-muted">
+                    <span className="uppercase tracking-widest">Case studies</span>
+                    <span className="mx-2">·</span>
+                    How design has changed with AI
+                  </p>
                   <Link href="/projects" className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1">
                     View all <ArrowRight className="w-3 h-3" />
                   </Link>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2">
-                  {BENTO_PROJECTS.map((project, index) => {
-                    const isLeft = index % 2 === 0
-                    const isTopRow = index < 2
-
-                    return (
-                      <Link
-                        key={project.id}
-                        href={project.href}
-                        className="group block"
+                <div className="grid grid-cols-1 md:grid-cols-3">
+                  {MAIN_PROJECTS.map((project, index) => {
+                    const card = (
+                      <motion.div
+                        className={`h-full border-border ${index === MAIN_PROJECTS.length - 1 ? '' : 'border-b md:border-b-0 md:border-r'}`}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
                       >
-                        <motion.div
-                          className={`${isLeft ? 'md:border-r border-border' : ''} ${isTopRow ? 'border-b border-border' : ''}`}
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.5, delay: index * 0.1 }}
-                        >
-                          {/* Visual area */}
-                          <div className="h-48 md:h-56 bg-border/30 flex items-center justify-center overflow-hidden relative">
-                            <span className="absolute top-4 right-4 text-xs font-mono text-muted/60">
-                              {project.number}
-                            </span>
-                            {project.visual === 'github' ? (
-                              <GitHubContributions variant="card" monthsToShow={12} />
+                        {/* Visual area */}
+                        <div className="h-48 md:h-56 bg-border/30 flex items-center justify-center overflow-hidden relative">
+                          <span className="absolute top-4 right-4 text-xs font-mono text-muted/60">
+                            {project.number}
+                          </span>
+                          <BentoCardVisual icon={project.icon} />
+                        </div>
+
+                        {/* Text content */}
+                        <div className="p-5">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-xs text-muted uppercase tracking-wide">{project.category}</span>
+                            {project.comingSoon ? (
+                              <span className="text-xs text-muted">Coming soon</span>
                             ) : (
-                              <BentoCardVisual icon={project.icon} />
+                              <ArrowRight className="w-4 h-4 text-muted group-hover:text-accent group-hover:translate-x-1 transition-all" />
                             )}
                           </div>
+                          <h3 className={`font-medium text-foreground mb-1 ${project.comingSoon ? '' : 'group-hover:text-accent transition-colors'}`}>{project.title}</h3>
+                          <p className="text-sm text-muted line-clamp-2">{project.description}</p>
+                        </div>
+                      </motion.div>
+                    )
 
-                          {/* Text content */}
-                          <div className="p-5">
-                            <div className="flex items-center justify-between mb-2">
-                              <span className="text-xs text-muted uppercase tracking-wide">{project.category}</span>
-                              <ArrowRight className="w-4 h-4 text-muted group-hover:text-accent group-hover:translate-x-1 transition-all" />
-                            </div>
-                            <h3 className="font-medium text-foreground group-hover:text-accent transition-colors mb-1">{project.title}</h3>
-                            <p className="text-sm text-muted line-clamp-2">{project.description}</p>
-                          </div>
-                        </motion.div>
+                    // Not written up yet: the card shows, but doesn't link
+                    return project.comingSoon ? (
+                      <div key={project.id}>{card}</div>
+                    ) : (
+                      <Link key={project.id} href={project.href} className="group block">
+                        {card}
                       </Link>
                     )
                   })}
@@ -650,127 +849,18 @@ export default function Home() {
               </motion.div>
             </section>
 
-            {/* Gallery - bento of real screens, each opens the artefact in a dialog */}
-            {GALLERY_LIVE && (
-              <section className="border-b border-border">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-60px' }}
-                  transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-                >
-                  <div className={`flex items-center justify-between px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
-                    <p className="text-xs text-muted uppercase tracking-widest">Gallery</p>
-                    <Link href="/gallery" className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1">
-                      View all <ArrowRight className="w-3 h-3" />
-                    </Link>
-                  </div>
-                  <div className="gallery-flush">
-                    <Gallery limit={7} />
-                  </div>
-                </motion.div>
-              </section>
+            {experienceSection}
+
+            {testimonialsSection}
+            {thinkersSection}
+
+            {/* The reading closes the page: earlier work, essays, then the small studies */}
+            <WorkList label="Earlier work" note="SEEK and Best Practice" ids={EARLIER_WORK} titleBorders={flags.sectionTitleBorders} />
+            <WorkList label="Essays" ids={ESSAYS} titleBorders={flags.sectionTitleBorders} />
+            <WorkList label="Small studies" note="For the curious" ids={SMALL_STUDIES} titleBorders={flags.sectionTitleBorders} />
+
+              </>
             )}
-
-            {/* Experience section */}
-            <section className="p-8 border-b border-border">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-              >
-                <div className="flex items-center justify-between mb-6">
-                  <p className="text-xs text-muted uppercase tracking-widest">Experience</p>
-                  <button
-                    onClick={() => { setSelectedCompanyId('enterpriseai'); setExperienceDialogOpen(true) }}
-                    className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1"
-                  >
-                    View <ArrowRight className="w-3 h-3" />
-                  </button>
-                </div>
-                <div className="relative">
-                  {/* Timeline line */}
-                  <div className="absolute left-[7px] top-2 bottom-2 w-[2px] bg-border" />
-
-                  <div className="space-y-8">
-                    {EXPERIENCE.map((exp, index) => (
-                      <motion.div
-                        key={exp.company}
-                        className="flex gap-6 relative cursor-pointer group"
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: index * 0.12 }}
-                        onClick={() => { setSelectedCompanyId(exp.id); setExperienceDialogOpen(true) }}
-                      >
-                        {/* Timeline dot */}
-                        <div className="flex-shrink-0 w-4 h-4 rounded-full bg-foreground border-4 border-background z-10 mt-1" />
-
-                        <div className="flex-1 pb-2">
-                          <div className="flex items-baseline gap-3 mb-1">
-                            <h3 className="font-medium text-foreground group-hover:text-accent transition-colors">{exp.company}</h3>
-                            <span className="text-xs text-muted">{exp.period}</span>
-                          </div>
-                          <p className="text-sm text-muted mb-2">{exp.role}</p>
-                          <p className="text-sm text-muted">{exp.description}</p>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            </section>
-
-            <ExperienceDialog
-              isOpen={experienceDialogOpen}
-              onClose={() => setExperienceDialogOpen(false)}
-              initialCompanyId={selectedCompanyId}
-            />
-
-            {/* Product Thinkers section */}
-            <section className="border-b border-border">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-              >
-                <div className={`flex items-center justify-between px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
-                  <p className="text-xs text-muted uppercase tracking-widest">Product Thinkers</p>
-                  <Link href="/thinkers" className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1">
-                    View all <ArrowRight className="w-3 h-3" />
-                  </Link>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2">
-                  {thinkers.map((thinker, index) => (
-                    <div
-                      key={thinker.id}
-                      className={`p-5 ${index % 2 === 0 ? 'md:border-r border-border' : ''} ${index < thinkers.length - (thinkers.length % 2 === 0 ? 2 : 1) ? 'border-b border-border' : ''}`}
-                    >
-                      <ThinkerCard thinker={thinker} index={index} />
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            </section>
-
-            {/* Testimonials section */}
-            <section className="border-b border-border overflow-hidden">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-              >
-                <div className={`px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
-                  <p className="text-xs text-muted uppercase tracking-widest">Kind words from colleagues</p>
-                </div>
-
-                <TestimonialCarousel testimonials={TESTIMONIALS} />
-              </motion.div>
-            </section>
 
             {/* Footer */}
             <footer className="p-8 mt-auto">
