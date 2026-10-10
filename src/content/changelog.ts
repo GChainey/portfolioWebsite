@@ -14,6 +14,18 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.29.1',
+    date: '2026-10-10',
+    title: 'Paper Added to How I Work',
+    description: 'Paper joins the tools listed on the How I Work page.',
+    changes: [
+      'Paper is the fifth tool on How I Work, alongside Conductor, GitHub, SuperWhisper and Vercel',
+      'The tools row now wraps cleanly at narrower widths, with the last tool filling the row',
+      'The chat on that page knows about Paper too',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.29.0',
     date: '2026-10-08',
     title: 'The New Homepage Is Live, with the RFP Clips',
