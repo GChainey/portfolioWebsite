@@ -792,11 +792,7 @@ export default function Home() {
                 transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
               >
                 <div className={`flex items-center justify-between px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
-                  <p className="text-xs text-muted">
-                    <span className="uppercase tracking-widest">Case studies</span>
-                    <span className="mx-2">·</span>
-                    How design has changed with AI
-                  </p>
+                  <p className="text-xs text-muted uppercase tracking-widest">How design has changed with AI</p>
                   <Link href="/projects" className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1">
                     View all <ArrowRight className="w-3 h-3" />
                   </Link>
