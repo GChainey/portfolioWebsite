@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.29.2',
+    date: '2026-10-09',
+    title: 'One Frame for Every Clip',
+    description:
+      'The prototype recordings arrived with a browser window and a grey backdrop baked into them, and the page was cropping their top and bottom. The site now crops each one to the app itself and draws its own frame.',
+    changes: [
+      'Clips in the RFP and Configurator case studies are cropped to the app, with no browser bar, backdrop or shadow from the recording',
+      'One frame for every clip: rounded corners, a hairline border and a soft shadow, in both themes',
+      'Clips keep their own shape, so the title bar and the bottom of the screen are no longer cut off',
+      'The homepage section is headed "How design has changed with AI"',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.29.1',
     date: '2026-10-10',
     title: 'Paper Added to How I Work',

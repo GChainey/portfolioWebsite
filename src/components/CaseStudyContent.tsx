@@ -7,6 +7,7 @@ import { slugify } from '@/components/TableOfContents'
 import { FunnelDiagram } from '@/components/FunnelDiagram'
 import { DemoCanvas } from '@/components/DemoCanvas'
 import { IterationTimelapse } from '@/components/IterationTimelapse'
+import { ClipFrame, clipGeometry } from '@/components/ClipFrame'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const componentRegistry: Record<string, React.ComponentType<any>> = {
@@ -28,13 +29,15 @@ type Media = ContentBlock & { type: 'image' | 'gif' | 'video' | 'embed' }
 function PendingSlot({ block, aspectRatio }: { block: Media; aspectRatio: string }) {
   const [state, setState] = useState<'checking' | 'here' | 'missing'>('checking')
   const cover = 'absolute inset-0 w-full h-full object-cover'
+  // A slot for a cropped clip takes the crop's shape, and plays the file cropped once it's in
+  const clip = block.crop ? clipGeometry(block.crop) : null
 
   return (
     <figure className="my-8">
       <div
         className="relative w-full rounded-lg border border-dashed border-border overflow-hidden flex flex-col items-center justify-center text-center gap-2 p-6"
         style={{
-          aspectRatio,
+          aspectRatio: clip?.aspectRatio ?? aspectRatio,
           backgroundImage: 'radial-gradient(color-mix(in srgb, var(--foreground) 14%, transparent) 1px, transparent 1px)',
           backgroundSize: '16px 16px',
         }}
@@ -53,7 +56,8 @@ function PendingSlot({ block, aspectRatio }: { block: Media; aspectRatio: string
             playsInline
             onLoadedData={() => setState('here')}
             onError={() => setState('missing')}
-            className={cover}
+            className={clip ? undefined : cover}
+            style={clip?.video}
           />
         )}
         {state !== 'missing' && (block.type === 'image' || block.type === 'gif') && (
@@ -83,19 +87,23 @@ function MediaBlock({ block }: { block: Media }) {
   if (block.type === 'video') {
     return (
       <figure className="my-8">
-        <div
-          className={`relative w-full bg-secondary rounded-lg overflow-hidden ${block.frame === 'phone' ? 'flex items-center justify-center' : ''}`}
-          style={{ aspectRatio }}
-        >
-          <video
-            src={block.src}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className={block.frame === 'phone' ? 'h-[88%] w-auto rounded-[14.6%/7.1%]' : 'w-full h-full object-cover'}
-          />
-        </div>
+        {block.crop ? (
+          <ClipFrame src={block.src} crop={block.crop} />
+        ) : (
+          <div
+            className={`relative w-full bg-secondary rounded-lg overflow-hidden ${block.frame === 'phone' ? 'flex items-center justify-center' : ''}`}
+            style={{ aspectRatio }}
+          >
+            <video
+              src={block.src}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className={block.frame === 'phone' ? 'h-[88%] w-auto rounded-[14.6%/7.1%]' : 'w-full h-full object-cover'}
+            />
+          </div>
+        )}
         {block.caption && (
           <figcaption className="mt-2 text-sm text-muted text-center">
             {block.caption}

@@ -14,6 +14,7 @@ import { FixedTableOfContents } from '@/components/FixedTableOfContents'
 import { ShimmeringText } from '@/components/ui/shimmering-text'
 import { getProjectById, projects, type Project, type ContentBlock } from '@/content/projects'
 import { GitHubContributions } from '@/components/GitHubContributions'
+import { ClipFrame } from '@/components/ClipFrame'
 
 // Calculate read time from content blocks
 function calculateReadTime(content: Project['content']): number {
@@ -111,6 +112,9 @@ function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
                 {heading}
               </p>
             )}
+            {mediaBlock.type === 'video' && mediaBlock.crop ? (
+              <ClipFrame src={mediaBlock.src} crop={mediaBlock.crop} />
+            ) : (
             <div
               className={`relative w-full bg-secondary rounded-lg overflow-hidden ${mediaBlock.frame === 'phone' ? 'flex items-center justify-center' : ''}`}
               style={{ aspectRatio }}
@@ -139,6 +143,7 @@ function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
                 />
               )}
             </div>
+            )}
             {mediaBlock.caption && (
               <p className="mt-2 text-sm text-muted text-center">
                 {mediaBlock.caption}
