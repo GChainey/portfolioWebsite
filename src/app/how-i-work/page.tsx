@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Monitor, Github, Mic, Triangle } from 'lucide-react'
+import { X, Monitor, Github, Mic, Triangle, Frame } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
 import { Facehash } from 'facehash'
@@ -30,6 +30,11 @@ const TOOLS = [
     name: 'Vercel',
     description: 'Instant preview deployments to verify each change before merging.',
     icon: Triangle,
+  },
+  {
+    name: 'Paper',
+    description: 'A design canvas agents can read and draw on, for working out a layout before it becomes code.',
+    icon: Frame,
   },
 ]
 
@@ -62,7 +67,7 @@ const TRANSCRIPT_FOR_LLM = `
 
 const HOW_I_WORK_CONTEXT = {
   page: 'How I Work',
-  description: `This page shows a video demo and essay about Gareth's AI-augmented workflow. He uses Conductor to run multiple AI coding agents in parallel, GitHub issues as task inputs, SuperWhisper for voice-to-text dictation, and Vercel for instant preview deployments.
+  description: `This page shows a video demo and essay about Gareth's AI-augmented workflow. He uses Conductor to run multiple AI coding agents in parallel, GitHub issues as task inputs, SuperWhisper for voice-to-text dictation, and Vercel for instant preview deployments. He also uses Paper, a design canvas that AI agents can read and draw on, to work out layouts before they become code; Paper is not shown in the demo video.
 
 His workflow: create an issue → open a Conductor workspace → paste the issue link → describe the task via voice → let the agent create a feature branch and build it → verify on a local preview → merge when happy. He can run multiple workspaces simultaneously — for example building a CV page and contact page at the same time — and ship both in about ten minutes.
 
@@ -149,11 +154,12 @@ export default function HowIWorkPage() {
               <div className={`px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
                 <p className="text-xs text-muted uppercase tracking-widest">Tools</p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+              {/* Five tools: the last one fills the row when they wrap to two or three across */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-px bg-border">
                 {TOOLS.map((tool, index) => (
                   <motion.div
                     key={tool.name}
-                    className={`p-6 ${index < TOOLS.length - 1 ? 'border-b md:border-b-0 md:border-r border-border' : ''}`}
+                    className={`p-6 bg-background ${index === TOOLS.length - 1 ? 'md:col-span-2 xl:col-span-1' : ''}`}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 + index * 0.1 }}
