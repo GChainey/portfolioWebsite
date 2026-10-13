@@ -85,8 +85,8 @@ const MAIN_PROJECTS: ProjectCard[] = [
   {
     id: 'configurator',
     number: '03',
-    title: 'Configurator',
-    description: 'Real LLM data, so people get a genuine feel for the product.',
+    title: 'Testing Whether It Works, Not Just How It Looks',
+    description: 'A no-code builder prototyped on live models, to test feasibility and viability along with usability.',
     category: 'No-Code AI',
     href: '/projects/configurator',
     icon: 'workflow',
