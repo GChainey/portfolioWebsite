@@ -66,7 +66,7 @@ const MAIN_PROJECTS: ProjectCard[] = [
   {
     id: 'rfp',
     number: '01',
-    title: 'One RFP, Two Ways to Answer It',
+    title: 'Utilising AI to Help Sales Win Deals',
     description: 'The features and flexibility that were only possible because of AI.',
     category: 'Enterprise AI',
     href: '/projects/rfp',

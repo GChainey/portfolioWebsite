@@ -113,7 +113,7 @@ function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
               </p>
             )}
             {mediaBlock.type === 'video' && mediaBlock.crop ? (
-              <ClipFrame src={mediaBlock.src} crop={mediaBlock.crop} />
+              <ClipFrame src={mediaBlock.src} crop={mediaBlock.crop} url={mediaBlock.url} />
             ) : (
             <div
               className={`relative w-full bg-secondary rounded-lg overflow-hidden ${mediaBlock.frame === 'phone' ? 'flex items-center justify-center' : ''}`}

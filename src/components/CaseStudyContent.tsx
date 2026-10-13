@@ -88,7 +88,7 @@ function MediaBlock({ block }: { block: Media }) {
     return (
       <figure className="my-8">
         {block.crop ? (
-          <ClipFrame src={block.src} crop={block.crop} />
+          <ClipFrame src={block.src} crop={block.crop} url={block.url} />
         ) : (
           <div
             className={`relative w-full bg-secondary rounded-lg overflow-hidden ${block.frame === 'phone' ? 'flex items-center justify-center' : ''}`}
@@ -236,40 +236,38 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
           )
         }
 
+        // Read like a diff: what came out, in grey with a minus, and what went in, lit with a plus
         if (block.type === 'comparison') {
           const sides = [
-            { label: block.beforeLabel ?? 'Before', body: block.before, now: false },
-            { label: block.afterLabel ?? 'Now', body: block.after, now: true },
+            { label: block.beforeLabel ?? 'Before', lines: [block.before].flat(), now: false },
+            { label: block.afterLabel ?? 'Now', lines: [block.after].flat(), now: true },
           ]
           return (
             <motion.div
               key={index}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-6"
+              className="my-6 overflow-hidden rounded-xl border border-border"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay }}
             >
-              {sides.map(({ label, body, now }) => (
+              {sides.map(({ label, lines, now }) => (
                 <div
                   key={label}
-                  className="rounded-lg p-5 border border-border"
+                  className={`px-4 py-4 sm:px-5 ${now ? 'border-t border-border' : ''}`}
                   // Tailwind can't apply opacity to the CSS-variable colours, so mix them here
-                  style={
-                    now
-                      ? { borderColor: 'color-mix(in srgb, var(--accent) 45%, transparent)', backgroundColor: 'color-mix(in srgb, var(--accent) 7%, transparent)' }
-                      : { backgroundColor: 'color-mix(in srgb, var(--foreground) 4%, transparent)' }
-                  }
+                  style={{ backgroundColor: `color-mix(in srgb, var(${now ? '--accent' : '--foreground'}) ${now ? 9 : 3}%, transparent)` }}
                 >
-                  <p className={`text-xs uppercase tracking-widest mb-3 ${now ? 'text-accent' : 'text-muted'}`}>{label}</p>
-                  {Array.isArray(body) ? (
-                    <ul className={`list-disc list-inside space-y-2 ${now ? 'text-foreground' : 'text-muted'}`}>
-                      {body.map((item) => (
-                        <li key={item}>{item}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className={`leading-relaxed ${now ? 'text-foreground' : 'text-muted'}`}>{body}</p>
-                  )}
+                  <p className={`pl-7 mb-1.5 text-xs uppercase tracking-widest ${now ? 'text-accent' : 'text-muted'}`}>{label}</p>
+                  <ul className="space-y-1.5">
+                    {lines.map((line) => (
+                      <li key={line} className="flex gap-3 leading-relaxed">
+                        <span className={`w-4 shrink-0 text-center font-mono ${now ? 'text-accent' : 'text-muted'}`} aria-hidden>
+                          {now ? '+' : '−'}
+                        </span>
+                        <span className={now ? 'text-foreground' : 'text-muted'}>{line}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               ))}
             </motion.div>

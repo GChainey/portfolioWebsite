@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.30.0',
+    date: '2026-10-10',
+    title: 'Clips on a Backdrop, and Before / Now as a Diff',
+    description:
+      'The case study clips now sit the way a product site shows them, and the Before and Now comparisons read like a diff.',
+    changes: [
+      'Each clip sits on a padded backdrop: soft washes of the accent colour, so it follows the theme',
+      'The site draws a browser window around each clip, with the address in its bar',
+      'Before and Now are one block read top to bottom: what came out in grey with a minus, what went in lit with a plus',
+      'The RFP case study is titled "Utilising AI to Help Sales Win Deals"',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.29.2',
     date: '2026-10-09',
     title: 'One Frame for Every Clip',

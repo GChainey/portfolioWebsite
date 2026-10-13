@@ -9,6 +9,7 @@ export interface MediaBlock {
   aspectRatio?: string // e.g., '16/9', '4/3', '1/1'
   frame?: 'phone' // A portrait screen recording: shown as a phone on the panel instead of filling it
   crop?: 'browser-window' // The recording has its own window and backdrop baked in: crop to the app (see ClipFrame)
+  url?: string // For a cropped clip: the address shown in the browser bar the site draws around it
   pending?: boolean // Not made yet: a labelled slot on the dev server, nothing on the live site. Remove once the file is in.
   brief?: string // For a pending slot: what the clip should show
 }
@@ -1094,7 +1095,7 @@ export const projects: Project[] = [
   },
   {
     id: 'rfp',
-    title: 'One RFP, Two Ways to Answer It',
+    title: 'Utilising AI to Help Sales Win Deals',
     description: 'A state government tender and a three-person team. How I would have designed the response before AI, and how I actually did it.',
     category: 'Enterprise AI',
     year: '2025',
@@ -1104,6 +1105,7 @@ export const projects: Project[] = [
         type: 'video',
         src: '/case-studies/rfp/overview.mp4',
         crop: 'browser-window',
+        url: 'enterpriseai.com/daisy-assess',
         alt: 'The prototype in thirty seconds',
         caption: 'The working prototype we answered with',
       },
@@ -1144,6 +1146,7 @@ export const projects: Project[] = [
         type: 'video',
         src: '/case-studies/rfp/seed-data.mp4',
         crop: 'browser-window',
+        url: 'enterpriseai.com/daisy-assess',
         alt: 'Pick a scenario, everything follows',
         caption: 'One set of seed data behind every screen',
       },
@@ -1158,6 +1161,7 @@ export const projects: Project[] = [
         type: 'video',
         src: '/case-studies/rfp/llm-chat.mp4',
         crop: 'browser-window',
+        url: 'enterpriseai.com/daisy-assess',
         alt: 'Rough notes in, council wording out',
         caption: 'A real LLM rewriting notes into the council\'s own standard',
       },
@@ -1172,6 +1176,7 @@ export const projects: Project[] = [
         type: 'video',
         src: '/case-studies/rfp/scale.mp4',
         crop: 'browser-window',
+        url: 'enterpriseai.com/daisy-assess',
         alt: 'One council, then the whole state',
         caption: 'The same product restructured for a state',
         brief: 'Start on a single council, switch to the state view, and show regions, roles and reporting rolling up.',
@@ -1188,6 +1193,7 @@ export const projects: Project[] = [
         type: 'video',
         src: '/case-studies/rfp/iteration.mp4',
         crop: 'browser-window',
+        url: 'enterpriseai.com/daisy-assess',
         alt: 'A requirement lands, the prototype changes',
         caption: 'A requirement change, across the whole prototype',
         brief: 'Describe a new field to Claude Code, then cut to it on the form, in the list and in the report.',
@@ -1204,6 +1210,7 @@ export const projects: Project[] = [
         type: 'video',
         src: '/case-studies/rfp/workflow-rfi.mp4',
         crop: 'browser-window',
+        url: 'enterpriseai.com/daisy-assess',
         alt: 'A request for information, compiled from the issues raised',
         caption: 'One path ends in a request for information, compiled from every issue flagged along the way',
       },
@@ -1211,6 +1218,7 @@ export const projects: Project[] = [
         type: 'video',
         src: '/case-studies/rfp/workflow-determination.mp4',
         crop: 'browser-window',
+        url: 'enterpriseai.com/daisy-assess',
         alt: 'A determination letter, written from the assessment',
         caption: 'Another ends in a determination letter, written to the council\'s standard from the work already done',
       },
@@ -1406,6 +1414,7 @@ export const projects: Project[] = [
         type: 'video',
         src: '/case-studies/configurator/real-data.mp4',
         crop: 'browser-window',
+        url: 'enterpriseai.com/configurator',
         alt: 'Real LLM output in the prototype',
         caption: 'The prototype running on real LLM data',
       },
