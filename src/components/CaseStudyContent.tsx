@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, MotionConfig } from 'framer-motion'
 import type { ContentBlock } from '@/content/projects'
 import { slugify } from '@/components/TableOfContents'
 import { FunnelDiagram } from '@/components/FunnelDiagram'
@@ -158,20 +158,31 @@ function MediaBlock({ block }: { block: Media }) {
   )
 }
 
+const ease = [0.25, 0.1, 0.25, 1] as const
+
+// Each block comes in the first time it is scrolled to, so the page builds as it is read:
+// the paragraph, then the clip, then the card that goes with it. The blocks already on screen
+// when the page opens come in one after another.
+const reveal = (index: number) => ({
+  initial: { opacity: 0, y: 16 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '0px 0px -12% 0px' },
+  transition: { duration: 0.5, ease, delay: index < 6 ? 0.1 + index * 0.06 : 0 },
+})
+
 export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
   return (
+    // Visitors who ask for reduced motion get the fades without the movement
+    <MotionConfig reducedMotion="user">
     <div className="prose prose-neutral dark:prose-invert max-w-none">
       {blocks.map((block, index) => {
-        const delay = 0.1 + index * 0.05
 
         if (block.type === 'heading') {
           const Tag = block.level === 2 ? 'h2' : 'h3'
           return (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay }}
+              {...reveal(index)}
             >
               <Tag
                 id={slugify(block.content)}
@@ -190,9 +201,7 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
             <motion.p
               key={index}
               className="text-muted leading-relaxed mb-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay }}
+              {...reveal(index)}
             >
               {block.content}
             </motion.p>
@@ -205,9 +214,7 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
             <List
               key={index}
               className={`${block.ordered ? 'list-decimal' : 'list-disc'} list-inside text-muted mb-6 space-y-2`}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay }}
+              {...reveal(index)}
             >
               {block.items.map((item, i) => (
                 <li key={i}>{item}</li>
@@ -221,9 +228,7 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
             <motion.div
               key={index}
               className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-8"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay }}
+              {...reveal(index)}
             >
               {block.items.map((item, i) => (
                 <div key={i} className="border border-border rounded-lg p-5 bg-border/20">
@@ -246,13 +251,16 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
             <motion.div
               key={index}
               className="my-6 overflow-hidden rounded-xl border border-border"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay }}
+              // The old way lands first, then the new way answers it
+              initial="hidden"
+              whileInView="shown"
+              viewport={{ once: true, margin: '0px 0px -18% 0px' }}
+              variants={{ hidden: { opacity: 0 }, shown: { opacity: 1, transition: { duration: 0.3, staggerChildren: 0.45 } } }}
             >
               {sides.map(({ label, lines, now }) => (
-                <div
+                <motion.div
                   key={label}
+                  variants={{ hidden: { opacity: 0, y: 12 }, shown: { opacity: 1, y: 0, transition: { duration: 0.5, ease } } }}
                   className={`px-4 py-4 sm:px-5 ${now ? 'border-t border-border' : ''}`}
                   // Tailwind can't apply opacity to the CSS-variable colours, so mix them here
                   style={{ backgroundColor: `color-mix(in srgb, var(${now ? '--accent' : '--foreground'}) ${now ? 9 : 3}%, transparent)` }}
@@ -268,7 +276,7 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
                       </li>
                     ))}
                   </ul>
-                </div>
+                </motion.div>
               ))}
             </motion.div>
           )
@@ -280,9 +288,7 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
           return (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay }}
+              {...reveal(index)}
             >
               <Component {...(block.props || {})} />
               {block.caption && (
@@ -296,9 +302,7 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
           return (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay }}
+              {...reveal(index)}
             >
               <MediaBlock block={block} />
             </motion.div>
@@ -308,5 +312,6 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
         return null
       })}
     </div>
+    </MotionConfig>
   )
 }
