@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.31.0',
+    date: '2026-10-12',
+    title: 'New Essay: Opportunity Sizing, but Balatro',
+    description:
+      'Published an essay about a prototype inside Thesis that sizes a product bet like a hand of Balatro: people are chips, dollars are mult, and a growth loop is a joker.',
+    changes: [
+      'The essay is in the Essays list on the homepage, with a 20 second reel at the top',
+      'Six clips through it: reading the thesis, playing it, the next best move, writing a test, comparing bets and creating one',
+      'The feed no longer lists case studies that are not written yet',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.30.1',
     date: '2026-10-12',
     title: 'Case Studies Build as You Read',

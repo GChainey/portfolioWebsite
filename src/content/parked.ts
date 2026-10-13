@@ -78,6 +78,7 @@ export const PARKED: ParkedItem[] = [
       'Website study: all four',
       'For each one that lands, delete `pending` and `brief` from its block',
       'The Daisy workspace also made a combined reel.mp4 that is not used anywhere yet',
+      'Balatro essay: the clips are silent. Re-record them with sound from the Thesis repo, keeping the caption box',
     ],
   },
   {
@@ -138,20 +139,5 @@ export const PARKED: ParkedItem[] = [
     links: [{ label: 'Homepage', href: '/' }],
     gate: 'particleField, signatureVariant and warmth in the flag drawer (Cmd+K); defaults in src/context/FeatureFlagContext.tsx',
     todo: ['For each one: turn it on by default, or delete the flag and its component'],
-  },
-  {
-    id: 'balatro-sizing-essay',
-    name: 'Essay: Opportunity sizing, but Balatro (draft)',
-    status: 'local',
-    since: '2026-10-12',
-    summary: 'A drafted essay about the sizing table in Thesis, with a hero reel and six clips cut from the takes recorded in the Thesis workspace. The words are a first draft built from the pull requests and the build session, not yet read by Gareth.',
-    links: [{ label: 'Essay draft', href: '/projects/balatro-opportunity-sizing' }],
-    gate: "`status: 'Coming soon'` on the balatro-opportunity-sizing project in src/content/projects.ts",
-    todo: [
-      'Gareth to read and rewrite it in his own words',
-      'Decide whether to publish while Thesis itself is still not ready to share',
-      'The clips are silent and carry the reel captions in the bottom-left corner; re-record if either should change',
-      'Then remove the Coming soon status, set featured if wanted, and add a changelog entry',
-    ],
   },
 ]

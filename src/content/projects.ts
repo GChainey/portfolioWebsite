@@ -328,8 +328,6 @@ export const projects: Project[] = [
   {
     id: 'balatro-opportunity-sizing',
     title: 'Opportunity sizing, but Balatro',
-    // A draft: it only opens on the dev server until Gareth has read and edited it.
-    status: 'Coming soon',
     description: 'Sizing a product bet like a hand of cards: people are chips, dollars are mult, and a growth loop is a joker.',
     category: 'Article',
     year: '2026',

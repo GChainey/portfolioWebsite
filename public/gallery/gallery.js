@@ -1,5 +1,6 @@
 /* <gc-gallery> — bento grid of work; click a tile to open the artefact (live HTML, video or image)
    in a large dialog. Framework-free so the Next site and the static homepage variants share it.
+   A video with no thumb plays in its tile; "preview" is a shorter cut to play there.
 
    Attributes: src (items JSON, default /gallery/items.json) · filters (show group filters)
                limit (cap the number of tiles) · deeplink (keep the open item in the URL hash)
@@ -87,7 +88,7 @@ class Gallery extends HTMLElement {
     this.querySelector('.gal-grid').innerHTML = this.visible.map(i => `
       <div class="gal-tile${i.hidden ? ' gal-off' : ''}" data-id="${esc(i.id)}"${size(i) ? ` data-size="${esc(size(i))}"` : ''}>
         <button type="button" class="gal-open" aria-label="${esc(i.title)}">
-        ${i.thumb ? `<img src="${esc(i.thumb)}" alt="" loading="lazy"${i.focus ? ` style="object-position:${esc(i.focus)}"` : ''} />` : i.type === 'video' ? `<video src="${esc(i.src)}" muted playsinline preload="metadata"></video>` : `<img src="${esc(i.src)}" alt="" loading="lazy" />`}
+        ${i.thumb ? `<img src="${esc(i.thumb)}" alt="" loading="lazy"${i.focus ? ` style="object-position:${esc(i.focus)}"` : ''} />` : i.type === 'video' ? `<video src="${esc(i.preview || i.src)}" autoplay loop muted playsinline></video>` : `<img src="${esc(i.src)}" alt="" loading="lazy" />`}
         ${KIND[i.type] ? `<span class="gal-kind">${KIND[i.type]}</span>` : ''}
         <span class="gal-cap"><b>${esc(i.title)}</b><span>${esc(i.project || i.group)}</span></span>
         </button>
