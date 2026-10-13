@@ -14,7 +14,7 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: '1.31.0',
+    version: '1.32.0',
     date: '2026-10-12',
     title: 'The Configurator Case Study',
     description:
@@ -24,6 +24,19 @@ export const CHANGELOG: ChangelogEntry[] = [
       'Seven questions, each with a clip and a Before and Now: understanding a business, simplifying a process, choosing a model, reading the prompt, structure in place of code, branding from a name, and a phone preview by QR code',
       'A closing section on where it led: four smart blocks and a classifier that selects from templates',
       'Nine new clips, recorded from the prototypes running on live models',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
+    version: '1.31.0',
+    date: '2026-10-12',
+    title: 'New Essay: Opportunity Sizing, but Balatro',
+    description:
+      'Published an essay about a prototype inside Thesis that sizes a product bet like a hand of Balatro: people are chips, dollars are mult, and a growth loop is a joker.',
+    changes: [
+      'The essay is in the Essays list on the homepage, with a 20 second reel at the top',
+      'Six clips through it: reading the thesis, playing it, the next best move, writing a test, comparing bets and creating one',
+      'The feed no longer lists case studies that are not written yet',
     ],
     aiTools: ['Claude Code'],
   },

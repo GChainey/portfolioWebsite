@@ -1,6 +1,16 @@
 {
   "items": [
     {
+      "id": "sizing-table",
+      "title": "Opportunity sizing, but Balatro",
+      "group": "Product",
+      "project": "Thesis",
+      "kind": "website",
+      "type": "video",
+      "preview": "/essays/balatro-opportunity-sizing/reel.mp4",
+      "src": "/essays/balatro-opportunity-sizing/reel-60.mp4"
+    },
+    {
       "id": "shader-wall-site",
       "title": "Shader Wall: the whole app, running in the browser",
       "group": "Marketing",

@@ -78,6 +78,7 @@ export const PARKED: ParkedItem[] = [
       'Website study: all four',
       'For each one that lands, delete `pending` and `brief` from its block',
       'The Daisy workspace also made a combined reel.mp4 that is not used anywhere yet',
+      'Balatro essay: the clips are silent. Re-record them with sound from the Thesis repo, keeping the caption box',
     ],
   },
   {
