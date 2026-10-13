@@ -45,6 +45,14 @@ export interface ComparisonBlock {
   afterLabel?: string // Defaults to 'Now'
 }
 
+export interface TableBlock {
+  type: 'table'
+  headers: string[]
+  rows: string[][] // The first column is the row's name; the rest are read as numbers
+  highlight?: number // The row that makes the point, picked out in the accent colour
+  caption?: string
+}
+
 export interface ComponentBlock {
   type: 'component'
   componentId: string
@@ -52,7 +60,7 @@ export interface ComponentBlock {
   caption?: string
 }
 
-export type ContentBlock = MediaBlock | TextBlock | HeadingBlock | ListBlock | StatsBlock | ComparisonBlock | ComponentBlock
+export type ContentBlock = MediaBlock | TextBlock | HeadingBlock | ListBlock | StatsBlock | ComparisonBlock | TableBlock | ComponentBlock
 
 export interface Project {
   id: string
@@ -62,7 +70,7 @@ export interface Project {
   year: string
   heroImage?: string
   heroVideo?: string // Plays in place of the hero image, which becomes its poster
-  heroFrame?: 'device' // The hero image is a device on a transparent background: it stands on the backdrop with no window
+  heroFrame?: 'device' | 'grid' // device: the hero image is a device on a transparent background, and stands on the backdrop with no window. grid: the hero sits on the dotted canvas the live demos use, not the colour backdrop
   tags: string[]
   featured?: boolean // Show in hero with special treatment
   showGitHubActivity?: boolean // Show GitHub activity visualization in card
@@ -328,6 +336,315 @@ export const projects: Project[] = [
     }
   },
   {
+    id: 'wallbounce-dev-tools',
+    title: 'Three tools before the game',
+    // The game in the page is a copy, built from the Wallbounce repo (conductor-playground) into
+    // public/essays/wallbounce-dev-tools/game. Rebuild it there when the game changes:
+    // vite build --base=/essays/wallbounce-dev-tools/game/
+    description: 'Sliders for the feel, a frame strip for your own mistakes, and recorded players of four skill levels: the tools Wallbounce was built with, and what each one told us.',
+    category: 'Article',
+    year: '2026',
+    heroImage: '/essays/wallbounce-dev-tools/cover.jpg',
+    heroVideo: '/essays/wallbounce-dev-tools/reel.mp4',
+    heroFrame: 'grid',
+    tags: ['Game Design', 'Tooling', 'Prototyping', 'Essay'],
+    content: [
+      {
+        type: 'heading',
+        level: 2,
+        content: 'TLDR'
+      },
+      {
+        type: 'list',
+        items: [
+          'Wallbounce is a top-down ode to one move from Gears of War, and it is two days old',
+          'a good share of what has been built is not the game. It is the tools for finding out whether the game is any good',
+          'sliders answer "does it feel right?", a frame strip answers "why do I keep missing it?", recorded players answer "is it worth doing?"',
+          'the players found a level that doesn\'t ask for the move, and a scoring rule the fastest player was right to ignore',
+        ]
+      },
+      {
+        type: 'text',
+        content: 'Wallbounce is a top-down ode to one move from Gears of War. You slide toward a piece of cover, and just before you hit it, you point at another wall and slide to that one instead. Chain a few and you cross a room faster than you could run it. Get the timing wrong and you crunch into the wall and stand there.'
+      },
+      {
+        type: 'text',
+        content: 'The whole game rests on that move, so three questions had to be answered before anything else was worth building. Does it feel right? Can a person tell why they keep missing it? Is it actually worth doing? Each one got a tool, and all three were working within a day of the move itself.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'Tool one: sliders for the feel'
+      },
+      {
+        type: 'text',
+        content: 'Every number that shapes how the character moves lives in one place: how far away a wall will grab you, how fast a slide gets, how long you are stuck after a crunch, how many pixels from the wall the bounce window opens. There are 58 of them now.'
+      },
+      {
+        type: 'text',
+        content: 'The panel builds itself from that list. Each value gets a slider that runs from zero to three times its default, under a label written for a person rather than for the code: "Bounce window: how close to the wall before A or a flick works". A value added to the code turns up in the panel on its own, under Other, so nothing new is ever missing a slider.'
+      },
+      {
+        type: 'component',
+        componentId: 'demo-canvas',
+        props: {
+          src: '/essays/wallbounce-dev-tools/game/index.html',
+          title: 'Wallbounce running with its tuning sliders open',
+          width: 812,
+          height: 460,
+          passive: true,
+          modes: [{ label: 'Restart', query: 'level=1&dev' }],
+        },
+        caption: 'This is the game, not a picture of it. Click it, move with WASD and Space, and drag a slider while you do',
+      },
+      {
+        type: 'text',
+        content: 'Two small things made it a tool people use rather than a debug menu:'
+      },
+      {
+        type: 'list',
+        items: [
+          'A changed value lights up, so you can see at a glance what you have touched',
+          '"Copy changes" puts only the values you moved on the clipboard, ready to paste back into the file, or to the agent that is editing it',
+        ]
+      },
+      {
+        type: 'text',
+        content: 'What it changed is the conversation. "Make the bounce more forgiving" is an opinion. "Bounce window from 20 to 26" is something you can try in ten seconds and then argue about.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'Tool two: a frame strip for your own mistakes'
+      },
+      {
+        type: 'text',
+        content: 'A move that depends on timing fails in a familiar way. You hit the wall, over and over, with no idea whether you were early, late, or pointing the wrong way. That is the point where a hard move either becomes learnable or gets cut.'
+      },
+      {
+        type: 'text',
+        content: 'The fix is borrowed from UnclePunch\'s Training Mode for Super Smash Bros. Melee, which shows you your own inputs frame by frame. After every slide, Wallbounce draws it back as a strip of frames at 60 a second:'
+      },
+      {
+        type: 'list',
+        items: [
+          'The top row is the wall: dim on the way in, bright while the bounce window is open, marked once you have hit',
+          'Under it, the frames the button was down, and the frames the stick was pulled back',
+          'The input that decided it is boxed, with a verdict above: 2 FRAMES EARLY, 1 FRAME LATE, RIGHT TIME WRONG AIM, or BOUNCE · FRAME 4 OF 5',
+        ]
+      },
+      {
+        type: 'component',
+        componentId: 'demo-canvas',
+        props: {
+          src: '/essays/wallbounce-dev-tools/game/index.html',
+          title: 'A scripted player pressing too late, then too early, then on time, with the frame strip judging each',
+          width: 960,
+          height: 540,
+          passive: true,
+          modes: [{ label: 'Replay', query: 'examples=timing&dev=0' }],
+        },
+        caption: 'A scripted player in slow motion: too late, then too early, then on time. The strip at the bottom says by how many frames each time',
+      },
+      {
+        type: 'text',
+        content: 'Around the strip sit the cheaper cues: a dotted ring on the wall that turns white when the window opens, a word that floats up to name how each slide ended, the stick and button drawn on screen, and an easy mode that runs the whole game at half speed.'
+      },
+      {
+        type: 'text',
+        content: 'It was built for learning, and it turned out to be a design tool as well. The strip says how wide the window is in frames, which the pixel value on the slider never did. At a full slide it is five frames. Drag the window slider down and you can watch it become three.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'Tool three: players who are not us'
+      },
+      {
+        type: 'text',
+        content: 'Feel and feedback still leave the real question open: is bouncing worth it? Playing it ourselves cannot settle that: nobody is consistent enough to compare two ways through a level by hand. So something else plays it.'
+      },
+      {
+        type: 'heading',
+        level: 3,
+        content: 'The perfect player'
+      },
+      {
+        type: 'text',
+        content: 'The first is a tool-assisted run, the kind speedrunners build by hand. Ours is searched for. The search tries controller inputs, a stick direction and a button for each step, and simulates each one with the real movement code, keeping whatever gets to the goal soonest. Because the game advances in fixed steps and nothing in it is left to chance, a run is stored as nothing but its inputs and plays back exactly.'
+      },
+      {
+        type: 'text',
+        content: 'It finds two runs for every level, one that may only run and one that may bounce, and races them.'
+      },
+      {
+        type: 'component',
+        componentId: 'demo-canvas',
+        props: {
+          src: '/essays/wallbounce-dev-tools/game/index.html',
+          title: 'The running-only and wall-bouncing recordings racing through a level',
+          width: 960,
+          height: 540,
+          passive: true,
+          modes: [
+            { label: 'Gauntlet', query: 'watch&level=5&dev=0' },
+            { label: 'Switchback', query: 'watch&level=1&dev=0' },
+            { label: 'Pillar Hall', query: 'watch&level=2&dev=0' },
+            { label: 'Baffles', query: 'watch&level=3&dev=0' },
+            { label: 'Courtyard', query: 'watch&level=4&dev=0' },
+          ],
+        },
+        caption: 'The dim figure may only run. Marcus may bounce',
+      },
+      {
+        type: 'table',
+        headers: ['Level', 'Running', 'Bouncing', 'Faster by'],
+        rows: [
+          ['Switchback', '6.41s', '4.92s', '1.30×'],
+          ['Pillar Hall', '2.69s', '1.63s', '1.65×'],
+          ['Baffles', '5.73s', '4.49s', '1.28×'],
+          ['Courtyard', '2.55s', '2.52s', '1.01×'],
+          ['Gauntlet', '4.16s', '2.72s', '1.53×'],
+        ],
+        highlight: 3,
+      },
+      {
+        type: 'text',
+        content: 'Four levels answer the question: bouncing is a quarter to two thirds faster. Courtyard answers a different one. A perfect bouncer beats a perfect runner there by three hundredths of a second, which means the level does not ask for the move at all. Nobody would have found that by playing it.'
+      },
+      {
+        type: 'text',
+        content: 'The runs are also tests. The suite replays every one and fails if it no longer reaches the goal on the same step, so a change to the movement code that shifts anything by a single frame gets caught. One test is a statement about the design rather than the code: bouncing must never come out slower than running.'
+      },
+      {
+        type: 'heading',
+        level: 3,
+        content: 'The good players'
+      },
+      {
+        type: 'text',
+        content: 'A perfect run gives you the ceiling. It says nothing about what the game is like for someone good, and once enemies that shoot back went into the levels, that was the thing we needed to see.'
+      },
+      {
+        type: 'text',
+        content: 'It turns out the same search makes a decent stand-in for skill if you give it less time to think. Cut its effort and it still finds a line with bounces in it, just a plainer and slower one:'
+      },
+      {
+        type: 'table',
+        headers: ['Positions searched', 'Pillar Hall', 'Courtyard', 'Gauntlet'],
+        rows: [
+          ['300', '2.17s', '3.77s', '3.10s'],
+          ['1,500', '2.11s', '2.82s', '3.07s'],
+          ['20,000', '1.89s', '2.64s', '2.90s'],
+          ['Up to 200,000', '1.63s', '2.52s', '2.72s'],
+        ],
+      },
+      {
+        type: 'text',
+        content: 'Then it needs hands. Each stand-in player gets a reaction time before its first shot at a new enemy, an amount its aim wanders, a way of handling the reload, and a patience: how long it will stand and trade with one enemy before moving on. Four of them play every level:'
+      },
+      {
+        type: 'list',
+        items: [
+          'Steady Hand hunts down every enemy. Plain lines, a quarter-second reaction, aim that drifts',
+          'Rusher heads for the goal and fights only what is in the way',
+          'Ace clears every level too, on a far better line, with perfect aim and perfect reloads',
+          'Speedrunner takes the tool-assisted line exactly and shoots without ever slowing down',
+        ]
+      },
+      {
+        type: 'component',
+        componentId: 'demo-canvas',
+        props: {
+          src: '/essays/wallbounce-dev-tools/game/index.html',
+          title: 'A recorded player clearing the five levels',
+          width: 960,
+          height: 540,
+          passive: true,
+          modes: [
+            { label: 'Ace', query: 'demo=3&dev=0' },
+            { label: 'Steady Hand', query: 'demo=1&dev=0' },
+            { label: 'Rusher', query: 'demo=2&dev=0' },
+            { label: 'Speedrunner', query: 'demo=4&dev=0' },
+          ],
+        },
+        caption: 'A recorded player going through all five levels. The frame strip from tool two is judging its bounces as it goes',
+      },
+      {
+        type: 'table',
+        headers: ['Level', 'Steady Hand', 'Rusher', 'Ace', 'Speedrunner'],
+        rows: [
+          ['Switchback', '8.49s · 2/2', '6.30s · 2/2', '6.33s · 2/2', '4.92s · 2/2'],
+          ['Pillar Hall', '6.87s · 3/3', '2.11s · 1/3', '3.37s · 3/3', '1.63s · 0/3'],
+          ['Baffles', '9.41s · 3/3', '6.94s · 3/3', '5.51s · 3/3', '4.49s · 2/3'],
+          ['Courtyard', '6.13s · 3/3', '6.30s · 2/3', '4.36s · 3/3', '2.52s · 1/3'],
+          ['Gauntlet', '7.29s · 4/4', '3.07s · 1/4', '4.34s · 4/4', '2.72s · 1/4'],
+        ],
+        highlight: 1,
+        caption: 'Time to finish, and enemies killed out of those in the level',
+      },
+      {
+        type: 'text',
+        content: 'Two things fell out of that table the day it was made.'
+      },
+      {
+        type: 'list',
+        items: [
+          'Killing does not pay. A level\'s result is its time, less half a second for every kill. On Pillar Hall the Ace kills all three enemies and finishes in 3.37 seconds, for a result of 1.87. The Speedrunner kills nobody, finishes in 1.63, and beats it. We had written a rule to reward fighting, and the fastest player was right to ignore it',
+          'The enemies are too gentle. None of the four is put down on any level, including the one that stops and trades shots for up to three seconds at a time',
+        ]
+      },
+      {
+        type: 'text',
+        content: 'Both are a slider away from being fixed, which is where the tools meet.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'Together: a change you can read in a table'
+      },
+      {
+        type: 'text',
+        content: 'The three tools turn into one loop:'
+      },
+      {
+        type: 'list',
+        ordered: true,
+        items: [
+          'Move a slider until something feels better',
+          'The game notices the recordings were made with different numbers and says so',
+          'Re-record them. Two commands and a few minutes',
+          'Read the tables again, and watch the four players again',
+        ]
+      },
+      {
+        type: 'text',
+        content: 'A change to the feel shows up as a change in the numbers: whether bouncing is still faster than running, whether a good player now finishes Courtyard differently from a great one, whether anyone bothers to shoot. And when one of us cannot land the move after a change, the frame strip says whether the game got harder or we did.'
+      },
+      {
+        type: 'text',
+        content: 'None of this is the game. But two days in, we know which level is not pulling its weight and which rule nobody follows, and we found out from players who never get tired of running the same room.'
+      },
+      {
+        type: 'text',
+        content: 'It is online to play at wallbounce.vercel.app. Press V to watch the four players, and O for settings, where dev mode turns the sliders on.'
+      },
+    ],
+    chatContext: {
+      description: 'Essay from the Wallbounce dev log, dated 13 October 2026. Wallbounce is a small top-down game Gareth is building as an ode to the wall bounce from Gears of War: slide toward cover, and just before hitting it, point at another wall and slide there instead. Two days in, much of what was built is tooling. Tool one is a panel of 58 tuning sliders that builds itself from the list of movement values, with changed values lit and a "Copy changes" button. Tool two is a frame strip, borrowed from UnclePunch\'s Training Mode for Super Smash Bros. Melee, that replays each slide at 60 frames a second and says how many frames early or late the input was; the bounce window is five frames at a full slide. Tool three is recorded players: a searched tool-assisted run of each level with and without bouncing (bouncing is 1.28× to 1.65× faster on four levels, and only 1.01× on Courtyard), and four stand-in players (Steady Hand, Rusher, Ace, Speedrunner) made by giving the search less effort plus reaction time, aim wander and patience. Those showed that killing does not pay under the scoring rule and that the enemies are too gentle. The essay embeds the live game.',
+      suggestedQuestions: [
+        'What is Wallbounce?',
+        'What are the three tools?',
+        'What did the recorded players find?',
+      ],
+      followUpQuestions: [
+        'How does the frame strip work?',
+        'Why is Courtyard the odd level out?',
+        'How are the four stand-in players made?',
+        'Why build the tools before the game?',
+      ]
+    }
+  },
+  {
     id: 'balatro-opportunity-sizing',
     title: 'Opportunity sizing, but Balatro',
     description: 'Sizing a product bet like a hand of cards: people are chips, dollars are mult, and a growth loop is a joker.',
@@ -552,270 +869,6 @@ export const projects: Project[] = [
         'What are the blinds?',
         'What is still mock in the prototype?',
         'What is Thesis?',
-      ]
-    }
-  },
-  {
-    id: 'wallbounce-dev-tools',
-    title: 'Three tools before the game',
-    // A draft: it only opens on the dev server until Gareth has read and edited it.
-    status: 'Coming soon',
-    description: 'Sliders for the feel, a frame strip for my own mistakes, and recorded players of four skill levels: what I built first in a two-day-old game.',
-    category: 'Article',
-    year: '2026',
-    heroImage: '/essays/wallbounce-dev-tools/cover.jpg',
-    heroVideo: '/essays/wallbounce-dev-tools/reel.mp4',
-    tags: ['AI', 'Game Design', 'Prototyping', 'Essay'],
-    content: [
-      {
-        type: 'heading',
-        level: 2,
-        content: 'TLDR'
-      },
-      {
-        type: 'list',
-        items: [
-          'Wallbounce is a top-down ode to the Gears of War wall bounce, drawn in four colours like Downwell. It is two days old',
-          'a slider for every number in the movement, so the feel is something to try rather than argue about',
-          'a frame strip after every slide, borrowed from UnclePunch, that says how many frames early or late I was',
-          'a tool-assisted run of every level, with and without bouncing, to check the move is worth doing',
-          'the same search with less time to think makes players of different skill. They found two problems the day they were made',
-        ]
-      },
-      {
-        type: 'text',
-        content: 'The game is one move from Gears of War. You slide toward a piece of cover, and just before you hit it you point at another wall and slide to that one instead. Chain a few and you cross a room faster than you could run it. Get the timing wrong and you crunch into the wall and stand there.'
-      },
-      {
-        type: 'text',
-        content: 'Everything rests on that move, so three questions came before anything else. Does it feel right? Can I tell why I keep missing it? Is it actually worth doing? Each one got a tool, and all three were working within a day of the move itself.'
-      },
-      {
-        type: 'heading',
-        level: 2,
-        content: 'Sliders for the feel'
-      },
-      {
-        type: 'text',
-        content: 'Every number that shapes the movement lives in one list: how far away a wall grabs you, how fast a slide gets, how long you are stuck after a crunch, how many pixels from the wall the bounce window opens. There are 58 of them now.'
-      },
-      {
-        type: 'text',
-        content: 'The panel builds itself from that list. Each value gets a slider from zero to three times its default, under a label written for a person: "Bounce window: how close to the wall before A or a flick works". A value added to the code turns up in the panel on its own.'
-      },
-      {
-        type: 'image',
-        src: '/essays/wallbounce-dev-tools/sliders.png',
-        alt: 'The game running beside a panel of sliders. Two of them, the reach and the bounce window, have been moved, and their values are shown in red',
-        caption: 'Reach and bounce window moved while playing. Changed values turn red',
-        aspectRatio: '13/6',
-      },
-      {
-        type: 'list',
-        items: [
-          'A changed value lights up, so I can see what I have touched',
-          '"Copy changes" puts only the moved values on the clipboard, to paste back into the file or to the agent editing it',
-        ]
-      },
-      {
-        type: 'text',
-        content: '"Make the bounce more forgiving" is an opinion. "Bounce window from 20 to 26" is something to try in ten seconds and then argue about.'
-      },
-      {
-        type: 'heading',
-        level: 2,
-        content: 'A frame strip for my own mistakes'
-      },
-      {
-        type: 'text',
-        content: 'A move that depends on timing fails in a familiar way. You hit the wall, over and over, with no idea whether you were early, late or pointing the wrong way.'
-      },
-      {
-        type: 'text',
-        content: 'The fix is borrowed from UnclePunch\'s Training Mode for Super Smash Bros. Melee, which shows you your own inputs frame by frame. After every slide the game draws it back as a strip of frames at 60 a second:'
-      },
-      {
-        type: 'list',
-        items: [
-          'The top row is the wall: dim on the way in, bright while the bounce window is open, marked once you have hit',
-          'Under it, the frames the button was down and the frames the stick was pulled back',
-          'The input that decided it is boxed, with a verdict: 2 FRAMES EARLY, 1 FRAME LATE, RIGHT TIME WRONG AIM',
-        ]
-      },
-      {
-        type: 'video',
-        src: '/essays/wallbounce-dev-tools/strip.mp4',
-        alt: 'A recording of a scripted character sliding toward a wall in slow motion three times. First it presses after hitting and the strip of frames underneath reads 3 frames late. Then it presses too soon and the strip reads 5 frames early. Then it presses inside the window and bounces from wall to wall',
-        caption: 'A scripted player in slow motion: too late, too early, then on time. The strip says by how many frames',
-        aspectRatio: '16/9',
-      },
-      {
-        type: 'text',
-        content: 'Around the strip sit the cheaper cues: a dotted ring on the wall that turns white when the window opens, a word that floats up to name how each slide ended, and an easy mode that runs the whole game at half speed. Wall bouncing is much easier to learn slowed down.'
-      },
-      {
-        type: 'text',
-        content: 'It was built for learning and turned out to be a design tool too. The strip says how wide the window is in frames, which the pixel value on the slider never did. At a full slide it is five.'
-      },
-      {
-        type: 'heading',
-        level: 2,
-        content: 'Players who are not me'
-      },
-      {
-        type: 'text',
-        content: 'Feel and feedback still leave the real question open: is bouncing worth it? Playing it myself cannot settle that. Nobody is consistent enough to compare two ways through a level by hand. So something else plays it.'
-      },
-      {
-        type: 'heading',
-        level: 3,
-        content: 'The perfect player'
-      },
-      {
-        type: 'text',
-        content: 'The first is a tool-assisted run, the kind speedrunners build by hand. This one is searched for. The search tries controller inputs, a stick direction and a button for each step, and simulates each one with the real movement code, keeping whatever reaches the goal soonest. The game advances in fixed steps and leaves nothing to chance, so a run is stored as nothing but its inputs and plays back exactly.'
-      },
-      {
-        type: 'text',
-        content: 'It finds two runs for every level, one that may only run and one that may bounce, and races them.'
-      },
-      {
-        type: 'video',
-        src: '/essays/wallbounce-dev-tools/race.mp4',
-        alt: 'A recording of two characters racing through a room of walls, each leaving a dotted trail. The one that bounces between walls reaches the goal well ahead of the one that only runs',
-        caption: 'Gauntlet. The dim figure may only run. The other may bounce',
-        aspectRatio: '16/9',
-      },
-      {
-        type: 'stats',
-        items: [
-          { value: '1.30×', label: 'Switchback', note: 'Running 6.41s, bouncing 4.92s' },
-          { value: '1.65×', label: 'Pillar Hall', note: 'Running 2.69s, bouncing 1.63s' },
-          { value: '1.28×', label: 'Baffles', note: 'Running 5.73s, bouncing 4.49s' },
-          { value: '1.01×', label: 'Courtyard', note: 'Running 2.55s, bouncing 2.52s' },
-          { value: '1.53×', label: 'Gauntlet', note: 'Running 4.16s, bouncing 2.72s' },
-        ]
-      },
-      {
-        type: 'text',
-        content: 'Four levels answer the question: bouncing is a quarter to two thirds faster. Courtyard answers a different one. A perfect bouncer beats a perfect runner there by three hundredths of a second, so the level does not ask for the move at all. I would not have found that by playing it.'
-      },
-      {
-        type: 'text',
-        content: 'The runs are also tests. The suite replays every one and fails if it no longer reaches the goal on the same step. One test is about the design rather than the code: bouncing must never come out slower than running.'
-      },
-      {
-        type: 'heading',
-        level: 3,
-        content: 'The good players'
-      },
-      {
-        type: 'text',
-        content: 'A perfect run is the ceiling. It says nothing about what the game is like for someone good, and once enemies that shoot back went into the levels, that was what I needed to see.'
-      },
-      {
-        type: 'text',
-        content: 'The same search makes a decent stand-in for skill if it gets less time to think. It still finds a line with bounces in it, just a plainer and slower one:'
-      },
-      {
-        type: 'list',
-        items: [
-          'Gauntlet: 3.10s after searching 300 positions, 2.90s after 20,000, 2.72s with the full search',
-          'Courtyard: 3.77s, then 2.64s, then 2.52s',
-          'Pillar Hall: 2.17s, then 1.89s, then 1.63s',
-        ]
-      },
-      {
-        type: 'text',
-        content: 'Then it needs hands. Each player gets a reaction time before its first shot at a new enemy, an amount its aim wanders, a way of handling the reload, and a patience: how long it will stand and trade with one enemy before moving on.'
-      },
-      {
-        type: 'list',
-        items: [
-          'Steady Hand hunts down every enemy. Plain lines, a quarter-second reaction, aim that drifts',
-          'Rusher heads for the goal and fights only what is in the way',
-          'Ace clears every level too, on a far better line, with perfect aim and perfect reloads',
-          'Speedrunner takes the tool-assisted line exactly and shoots without slowing down',
-        ]
-      },
-      {
-        type: 'video',
-        src: '/essays/wallbounce-dev-tools/ace.mp4',
-        alt: 'A recording of the Ace playing the first level: it bounces from wall to wall, shoots two enemies on the way, reaches the goal in 6.33 seconds and is graded S',
-        caption: 'The Ace on the first level. The frame strip is judging its bounces as it goes',
-        aspectRatio: '16/9',
-      },
-      {
-        type: 'video',
-        src: '/essays/wallbounce-dev-tools/steady.mp4',
-        alt: 'A recording of Steady Hand playing the same level more slowly: it takes shorter chains of bounces and stops to trade shots with each enemy',
-        caption: 'Steady Hand on the same level: plainer lines, and it stops to fight',
-        aspectRatio: '16/9',
-      },
-      {
-        type: 'text',
-        content: 'Two things fell out the day they were made.'
-      },
-      {
-        type: 'list',
-        items: [
-          'Killing does not pay. A result is the time, less half a second a kill. On Pillar Hall the Ace kills all three enemies in 3.37s, for a result of 1.87. The Speedrunner kills nobody, finishes in 1.63, and beats it. I had written a rule to reward fighting, and the fastest player was right to ignore it',
-          'The enemies are too gentle. None of the four is put down on any level, including the one that stops and trades shots for up to three seconds at a time',
-        ]
-      },
-      {
-        type: 'heading',
-        level: 2,
-        content: 'A change I can read'
-      },
-      {
-        type: 'list',
-        ordered: true,
-        items: [
-          'Move a slider until something feels better',
-          'The game notices the recordings were made with different numbers, and says so',
-          'Re-record them: two commands and a few minutes',
-          'Read the numbers again, and watch the four players again',
-        ]
-      },
-      {
-        type: 'text',
-        content: 'A change to the feel shows up as a change in the numbers: whether bouncing is still faster than running, whether a good player finishes differently from a great one, whether anyone bothers to shoot. And when I cannot land the move after a change, the frame strip says whether the game got harder or I did.'
-      },
-      {
-        type: 'heading',
-        level: 2,
-        content: 'What\'s still rough'
-      },
-      {
-        type: 'list',
-        items: [
-          'The kill bonus and the enemies both need the fixes above',
-          'The stand-in players never get rattled. Their mistakes are slow reactions and drifting aim, not panic',
-          'Five levels, each one screen',
-        ]
-      },
-      {
-        type: 'text',
-        content: 'None of this is the game. But two days in I know which level is not pulling its weight and which rule nobody follows, and I found out from players who never get tired of running the same room.'
-      },
-      {
-        type: 'text',
-        content: 'It is online to play at wallbounce.vercel.app. Press V to watch the four players, and O for settings, where dev mode turns the sliders on.'
-      },
-    ],
-    chatContext: {
-      description: 'Essay about the development tools Gareth built first for Wallbounce, a two-day-old top-down game that is an ode to the Gears of War wall bounce, drawn in four colours in the manner of Downwell. Tool one: a self-building panel of sliders for all 58 movement tuning values, with changed values highlighted and a copy-changes button. Tool two: a training overlay inspired by UnclePunch Training Mode for Melee, which draws each slide back as a strip of frames at 60 a second and says how many frames early or late the input was, alongside a half-speed easy mode. Tool three: recorded players. A tool-assisted run of every level is found by searching controller input with the real movement code, once running only and once wall bouncing; bouncing is 1.28 to 1.65 times faster on four levels and 1.01 times on Courtyard. Giving the same search less effort, plus a reaction time, aim wander, reload skill and patience, makes four stand-in players: Steady Hand, Rusher, Ace and Speedrunner. They showed that killing does not pay at half a second a kill and that the enemies are too gentle. Built with Claude Code. The game is online to play at https://wallbounce.vercel.app, where V watches the recorded players and dev mode in settings shows the sliders.',
-      suggestedQuestions: [
-        'What are the three tools?',
-        'How do you fake a player of a given skill?',
-        'What did the recorded players find?',
-      ],
-      followUpQuestions: [
-        'What is the frame strip borrowed from?',
-        'Why does Courtyard not reward wall bouncing?',
-        'What is still rough?',
-        'What is Wallbounce?',
       ]
     }
   },

@@ -80,6 +80,23 @@ export function MediaFrame({ bar, url, children }: { bar?: boolean; url?: string
   )
 }
 
+// The dotted canvas the live demos sit on, for a picture or clip that is dark and has a look of
+// its own, which the colour washes would fight with
+export function GridFrame({ children }: { children: ReactNode }) {
+  return (
+    <div
+      className="rounded-xl border border-border p-3 sm:p-6"
+      style={{
+        backgroundColor: 'var(--card)',
+        backgroundImage: 'radial-gradient(color-mix(in srgb, var(--foreground) 14%, transparent) 1px, transparent 1px)',
+        backgroundSize: '16px 16px',
+      }}
+    >
+      <div className="overflow-hidden rounded-lg border border-border bg-background shadow-xl">{children}</div>
+    </div>
+  )
+}
+
 // A cropped clip in the frame, keeping the shape of its crop
 export function ClipFrame({ src, crop, url }: { src: string; crop: ClipCrop; url?: string }) {
   const { aspectRatio, video } = clipGeometry(crop)
