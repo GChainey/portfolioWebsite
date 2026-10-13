@@ -31,6 +31,25 @@ export interface ParkedItem {
 
 export const PARKED: ParkedItem[] = [
   {
+    id: 'wallbounce-dev-tools-essay',
+    name: 'Essay: Three tools before the game (draft)',
+    status: 'local',
+    since: '2026-10-13',
+    summary: 'A drafted essay about the dev tools behind Wallbounce: the tuning sliders, the UnclePunch-style frame strip, and the tool-assisted and skill-level recorded players. It has a 45 second reel as its hero, four clips and a still, all recorded from the game. The words are a first draft built from the build session, not yet read by Gareth.',
+    links: [
+      { label: 'Essay draft', href: '/projects/wallbounce-dev-tools' },
+      { label: 'The game', href: 'https://wallbounce.vercel.app' },
+      { label: 'The same piece on the game\'s dev log', href: 'https://wallbounce.vercel.app/log/dev-tools/' },
+    ],
+    gate: "`status: 'Coming soon'` on the wallbounce-dev-tools project in src/content/projects.ts",
+    todo: [
+      'Gareth to read and rewrite it in his own words',
+      'Check the claims: two days old, built with Claude Code, and the times and kill counts in the tables',
+      'The reel and clips are silent; the reel carries captions in the top-left corner. Re-record if either should change',
+      'Then remove the Coming soon status, set featured if wanted, and add a changelog entry',
+    ],
+  },
+  {
     id: 'demos',
     name: 'Demos',
     status: 'local',
