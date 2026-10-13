@@ -66,7 +66,8 @@ function changelogToFeedItem(entry: ChangelogEntry): FeedItem {
 
 export function buildFeedItems(): FeedItem[] {
   const items: FeedItem[] = [
-    ...projects.map(projectToFeedItem),
+    // A study marked Coming soon is a draft with no page on the live site, so it isn't listed
+    ...projects.filter((p) => p.status !== 'Coming soon' || p.kind === 'product').map(projectToFeedItem),
     ...thinkers.map(thinkerToFeedItem),
     ...CHANGELOG.map(changelogToFeedItem),
   ]
