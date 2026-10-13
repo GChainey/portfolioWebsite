@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.30.1',
+    date: '2026-10-12',
+    title: 'Case Studies Build as You Read',
+    description:
+      'Case study pages used to animate everything at once when they opened, including the parts far below the screen. Now each block comes in the first time you scroll to it.',
+    changes: [
+      'Headings, paragraphs, clips and cards fade up as they are reached, so each card arrives after the paragraph that sets it up',
+      'In a Before and Now block the old way lands first, then the new way answers it',
+      'Visitors who ask for reduced motion get the fades without the movement',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.30.0',
     date: '2026-10-10',
     title: 'Clips on a Backdrop, and Before / Now as a Diff',
