@@ -624,6 +624,10 @@ export const projects: Project[] = [
         type: 'text',
         content: 'None of this is the game. But two days in, we know which level is not pulling its weight and which rule nobody follows, and we found out from players who never get tired of running the same room.'
       },
+      {
+        type: 'text',
+        content: 'It is online to play at wallbounce.vercel.app. Press V to watch the four players, and O for settings, where dev mode turns the sliders on.'
+      },
     ],
     chatContext: {
       description: 'Essay from the Wallbounce dev log, dated 13 October 2026. Wallbounce is a small top-down game Gareth is building as an ode to the wall bounce from Gears of War: slide toward cover, and just before hitting it, point at another wall and slide there instead. Two days in, much of what was built is tooling. Tool one is a panel of 58 tuning sliders that builds itself from the list of movement values, with changed values lit and a "Copy changes" button. Tool two is a frame strip, borrowed from UnclePunch\'s Training Mode for Super Smash Bros. Melee, that replays each slide at 60 frames a second and says how many frames early or late the input was; the bounce window is five frames at a full slide. Tool three is recorded players: a searched tool-assisted run of each level with and without bouncing (bouncing is 1.28× to 1.65× faster on four levels, and only 1.01× on Courtyard), and four stand-in players (Steady Hand, Rusher, Ace, Speedrunner) made by giving the search less effort plus reaction time, aim wander and patience. Those showed that killing does not pay under the scoring rule and that the enemies are too gentle. The essay embeds the live game.',
