@@ -1631,57 +1631,230 @@ export const projects: Project[] = [
   },
   {
     id: 'configurator',
-    title: 'Configurator',
-    description: 'A no-code LLM workflow tool, prototyped with real LLM data so people get a genuine feel for the product.',
+    title: 'Testing Whether It Works, Not Just How It Looks',
+    description: 'Configurator turns a description of how work gets done into a working app. I prototyped it on live models, so I could test feasibility and viability along with usability.',
     category: 'No-Code AI',
-    year: '2025',
+    year: '2025–26',
     companyId: 'enterpriseai',
-    tags: ['LLM', 'No-Code', 'Workflows', 'Enterprise'],
+    tags: ['AI', 'No-Code', 'Prototyping', 'LLM', 'Claude Code'],
     content: [
+      {
+        type: 'video',
+        src: '/case-studies/configurator/overview.mp4',
+        crop: 'browser-window',
+        url: 'enterpriseai.com/configurator',
+        alt: 'From a process to an app',
+        caption: 'A description of today\'s process becomes a four-step app, on live models',
+      },
+      { type: 'heading', level: 2, content: 'The short version' },
+      { type: 'text', content: 'Configurator is a no-code builder: describe how a job gets done today and get a working app. A Figma mock-up could tell me if people wanted it and could use it. It could not tell me if it would work. So I built the prototype in code with Claude Code and connected it to real models, and tested desirability, usability, feasibility and viability together.' },
+
+      { type: 'heading', level: 2, content: 'The setup' },
+      {
+        type: 'list',
+        items: [
+          'The idea: a business user describes a process and gets an app, with no code',
+          'The risk: every part of it depends on what a model can really do',
+          'A mock-up fakes the model\'s answers, so it hides that risk',
+          'Two generations of prototype: the first Configurator in late 2025, then a smart blocks version in 2026',
+          'I am a designer, not an engineer. I could still use the real technology to see if the idea felt right',
+        ]
+      },
+
+      { type: 'heading', level: 2, content: 'Seven things a mock-up couldn\'t test' },
+      { type: 'text', content: 'Each one is a question about the idea, answered by running it.' },
+
+      { type: 'heading', level: 3, content: '1. Can it understand a business?' },
+      {
+        type: 'video',
+        src: '/case-studies/configurator/process-card.mp4',
+        crop: 'browser-window',
+        url: 'enterpriseai.com/configurator',
+        alt: 'A messy description becomes a business process card',
+        caption: 'A messy description in. Goal, who and outcome back, from a live model',
+      },
+      {
+        type: 'comparison',
+        before: 'A card with wording I wrote myself. It always reads well, because I wrote it.',
+        after: 'A live model reads the description, or an attached procedure, and writes the goal, the audience and the outcome. The person confirms it or corrects it before anything is built.',
+      },
+
+      { type: 'heading', level: 3, content: '2. Can it make the process simpler?' },
+      {
+        type: 'video',
+        src: '/case-studies/configurator/four-steps.mp4',
+        crop: 'browser-window',
+        url: 'enterpriseai.com/configurator',
+        alt: 'Today\'s steps mapped onto four',
+        caption: 'Seven steps today, mapped onto four',
+      },
+      {
+        type: 'comparison',
+        before: 'A tidy "after" flow, drawn by hand for one example process.',
+        after: 'The model maps every step of today\'s process onto four, says which ones each new step replaces, and flags what it left out. Type in a different process and see if it still holds.',
+      },
+
+      { type: 'heading', level: 3, content: '3. Which model is good enough?' },
+      {
+        type: 'video',
+        src: '/case-studies/configurator/models.mp4',
+        crop: 'browser-window',
+        url: 'enterpriseai.com/configurator',
+        alt: 'Switching the model with a feature flag',
+        caption: 'The first version: a flag swaps the model behind every call',
+      },
+      {
+        type: 'comparison',
+        before: 'Not a question a mock-up can ask.',
+        after: 'A flag switches the model behind every call. Timing a four-step app on each: about 6 seconds on GPT-4.1, 21 on GPT-5 mini. Newer was slower, and too slow when someone is watching a spinner.',
+      },
+
+      { type: 'heading', level: 3, content: '4. What did it actually ask the model?' },
+      {
+        type: 'video',
+        src: '/case-studies/configurator/show-prompt.mp4',
+        crop: 'browser-window',
+        url: 'enterpriseai.com/configurator',
+        alt: 'Reading a prompt, changing it and running it again',
+        caption: 'Show prompt: read the request, change it, run it again',
+      },
       {
         type: 'video',
         src: '/case-studies/configurator/real-data.mp4',
         crop: 'browser-window',
         url: 'enterpriseai.com/configurator',
-        alt: 'Real LLM output in the prototype',
-        caption: 'The prototype running on real LLM data',
-      },
-      { type: 'text', content: 'The prototype uses real LLM data, so people get a genuine feel for the product, with the flexibility that comes from that.' },
-      {
-        type: 'heading',
-        level: 2,
-        content: 'Democratizing AI Workflows'
+        alt: 'Real LLM output in the first version, and the prompt behind it',
+        caption: 'The first version had it too: real output, and the prompt behind it',
       },
       {
-        type: 'text',
-        content: 'Most business users can\'t write code, but they have valuable domain knowledge about their processes. The Configurator lets them build AI workflows visually.'
+        type: 'comparison',
+        before: 'The prompt lives in a document, apart from the design. Nobody sees what a change to it does.',
+        after: 'Every AI output has a Show prompt button: the system prompt, the user prompt, the raw response, the model, the time and the tokens. Edit the prompt, run it again, and the screen updates. A demo mode hides it all for stakeholders.',
+      },
+
+      { type: 'heading', level: 3, content: '5. Structure, not code' },
+      {
+        type: 'video',
+        src: '/case-studies/configurator/edit.mp4',
+        crop: 'browser-window',
+        url: 'enterpriseai.com/configurator',
+        alt: 'A chat message changes the app',
+        caption: 'Ask for a change. The settings change, and the app follows',
       },
       {
-        type: 'heading',
-        level: 2,
-        content: 'Core Concepts'
+        type: 'comparison',
+        before: 'Every generated screen is drawn by hand, one state at a time.',
+        after: 'The model never writes code. It returns a small piece of JSON, and blocks that are already built draw the app from it. Nothing is generated to build or debug, a chat message changes the app in place, and a malformed answer is repaired before it reaches the screen.',
+      },
+
+      { type: 'heading', level: 3, content: '6. Their brand, from one name' },
+      {
+        type: 'video',
+        src: '/case-studies/configurator/brand.mp4',
+        crop: 'browser-window',
+        url: 'enterpriseai.com/configurator',
+        alt: 'The same app in three companies\' brands',
+        caption: 'One app, three clients. Each in its own logo, colours and tone of voice',
+      },
+      {
+        type: 'comparison',
+        before: 'One mock-up per brand, recoloured by hand.',
+        after: 'Type a company name. The prototype reads the logo, colours and tone of voice from the public site, and the app is in that brand. Add the next client and it is in theirs.',
+      },
+
+      { type: 'heading', level: 3, content: '7. On a real phone' },
+      {
+        type: 'video',
+        src: '/case-studies/configurator/qr.mp4',
+        crop: 'browser-window',
+        url: 'enterpriseai.com/configurator',
+        alt: 'A QR code to open the app on a phone',
+        caption: 'A private link and a QR code, straight from the builder',
+      },
+      {
+        type: 'comparison',
+        before: 'A phone-sized frame on a desktop screen.',
+        after: 'A QR code opens the generated app on the phone in your hand, before anything is published.',
+      },
+
+      { type: 'heading', level: 2, content: 'Where it led: select, don\'t generate' },
+      { type: 'text', content: 'Running it on real models showed the weak points. Generating a whole app took seconds, and the model\'s choice of blocks was the part that went wrong. So the idea changed.' },
+      {
+        type: 'video',
+        src: '/case-studies/configurator/jev-match.mp4',
+        crop: 'browser-window',
+        url: 'enterpriseai.com/configurator',
+        alt: 'A classifier matches a process to a template',
+        caption: 'Jev picks from 20 templates and says how sure it is',
       },
       {
         type: 'list',
         items: [
-          'Visual workflow builder',
-          'Pre-built LLM components',
-          'Data transformation nodes',
-          'Integration with existing tools'
+          'Every app is four steps, one smart block each: Form, Upload, Compose or Approval',
+          'That turns a generation problem into a selection problem',
+          'A classifier, Jev, makes the selections. It answers typed questions with probabilities, in a fraction of a second',
+          'It checks a described process against 20 templates. A clear match is offered, and a close call is shown as a close call',
+          'When it isn\'t sure it says so, names the runner-up, and leaves the call to the person',
+          'The language model still writes the words',
+        ]
+      },
+
+      { type: 'heading', level: 2, content: 'What running it showed' },
+      {
+        type: 'list',
+        items: [
+          'Newer models were slower for this job',
+          'Letting the model choose the blocks was the weak part, until rules and a classifier took that over',
+          'Without connections to other systems, an app can only go so far. The prototype now says what it left out and why',
+          'A writing step invents details unless its rules are firm',
+        ]
+      },
+
+      { type: 'heading', level: 2, content: 'What each one tests' },
+      {
+        type: 'comparison',
+        beforeLabel: 'In Figma',
+        afterLabel: 'In code, with AI',
+        before: [
+          'Whether people want it and can use it',
+          'Model answers written by the designer',
+          'One happy path per mock-up',
+          'Feasibility left for engineering to find out later',
+          'Speed and accuracy unknown until it is built',
+        ],
+        after: [
+          'Whether it works, too',
+          'Real answers from real models, good and bad',
+          'Any process and any company, typed in on the spot',
+          'Feasibility found while designing, not after',
+          'Model speed measured, then designed around',
+        ],
+      },
+
+      { type: 'heading', level: 2, content: 'Tools' },
+      {
+        type: 'list',
+        items: [
+          'Claude Code for building both prototypes',
+          'React, Vite and Tailwind CSS for the first version; plain HTML and JavaScript for the second',
+          'Azure OpenAI for the language models',
+          'TypeSafe\'s Jev for classification',
+          'Feature flags and URL settings to switch models and modes',
         ]
       },
     ],
     chatContext: {
-      description: 'Case study about building a no-code LLM workflow configurator',
+      description: 'Case study about Configurator, a no-code builder at Enterprise AI that turns a description of a business process into a working four-step app. Gareth prototyped it in code with Claude Code on live language models, in two generations (the first Configurator in late 2025, then a smart blocks version in 2026), so he could test feasibility and viability as well as desirability and usability: whether a model can understand a business, simplify a process, which model is fast enough, what the prompts say, JSON-driven blocks instead of generated code, branding read from a company\'s site, a QR preview on a phone, and finally a classifier (Jev) that selects from templates instead of generating',
       suggestedQuestions: [
-        'What problems does this solve?',
-        'Who is the target user?',
-        'How does it work?',
+        'What could you test that a Figma mock-up couldn\'t?',
+        'Why select instead of generate?',
+        'What did running it on real models show?',
       ],
       followUpQuestions: [
-        'What LLMs does it support?',
-        'How do you handle errors?',
-        'Can workflows be shared?',
+        'What is a smart block?',
+        'How did you compare models?',
+        'What does the Show prompt button do?',
+        'How does the branding work?',
       ]
     }
   },

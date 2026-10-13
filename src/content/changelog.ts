@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.32.0',
+    date: '2026-10-12',
+    title: 'The Configurator Case Study',
+    description:
+      'The Configurator case study was two paragraphs and a clip. It is now the full story: what a prototype on live models let me test that a Figma mock-up could not.',
+    changes: [
+      'Retitled "Testing Whether It Works, Not Just How It Looks", on the page and on the homepage card',
+      'Seven questions, each with a clip and a Before and Now: understanding a business, simplifying a process, choosing a model, reading the prompt, structure in place of code, branding from a name, and a phone preview by QR code',
+      'A closing section on where it led: four smart blocks and a classifier that selects from templates',
+      'Nine new clips, recorded from the prototypes running on live models',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.31.0',
     date: '2026-10-12',
     title: 'New Essay: Opportunity Sizing, but Balatro',
