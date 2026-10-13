@@ -14,7 +14,7 @@ import { FixedTableOfContents } from '@/components/FixedTableOfContents'
 import { ShimmeringText } from '@/components/ui/shimmering-text'
 import { getProjectById, projects, type Project, type ContentBlock } from '@/content/projects'
 import { GitHubContributions } from '@/components/GitHubContributions'
-import { ClipFrame } from '@/components/ClipFrame'
+import { Backdrop, FramedMedia, MediaFrame } from '@/components/ClipFrame'
 
 // Calculate read time from content blocks
 function calculateReadTime(content: Project['content']): number {
@@ -98,7 +98,6 @@ function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
 
         // Media blocks
         const mediaBlock = block as ContentBlock & { type: 'image' | 'gif' | 'video' | 'embed' }
-        const aspectRatio = mediaBlock.aspectRatio || '16/9'
 
         return (
           <motion.div
@@ -112,38 +111,7 @@ function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
                 {heading}
               </p>
             )}
-            {mediaBlock.type === 'video' && mediaBlock.crop ? (
-              <ClipFrame src={mediaBlock.src} crop={mediaBlock.crop} url={mediaBlock.url} />
-            ) : (
-            <div
-              className={`relative w-full bg-secondary rounded-lg overflow-hidden ${mediaBlock.frame === 'phone' ? 'flex items-center justify-center' : ''}`}
-              style={{ aspectRatio }}
-            >
-              {mediaBlock.type === 'video' ? (
-                <video
-                  src={mediaBlock.src}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className={mediaBlock.frame === 'phone' ? 'h-[88%] w-auto rounded-[14.6%/7.1%]' : 'w-full h-full object-cover'}
-                />
-              ) : mediaBlock.type === 'embed' ? (
-                <iframe
-                  src={mediaBlock.src}
-                  className="w-full h-full border-0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              ) : (
-                <img
-                  src={mediaBlock.src}
-                  alt={(mediaBlock as unknown as { alt?: string }).alt || ''}
-                  className="w-full h-full object-cover"
-                />
-              )}
-            </div>
-            )}
+            <FramedMedia block={mediaBlock} />
             {mediaBlock.caption && (
               <p className="mt-2 text-sm text-muted text-center">
                 {mediaBlock.caption}
@@ -336,23 +304,31 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
                 {/* Hero Image for non-GitHub articles */}
                 {!project.showGitHubActivity && project.heroImage && (
                   <div className="w-full mb-8">
-                    {project.heroVideo ? (
-                      <video
-                        src={project.heroVideo}
-                        poster={project.heroImage}
-                        aria-label={project.title}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="w-full h-auto rounded-lg"
-                      />
+                    {project.heroFrame === 'device' ? (
+                      <Backdrop className="overflow-hidden">
+                        <img src={project.heroImage} alt={project.title} className="block w-full h-auto" />
+                      </Backdrop>
                     ) : (
-                      <img
-                        src={project.heroImage}
-                        alt={project.title}
-                        className="w-full h-auto rounded-lg bg-secondary"
-                      />
+                    <MediaFrame bar={!!project.heroVideo}>
+                      {project.heroVideo ? (
+                        <video
+                          src={project.heroVideo}
+                          poster={project.heroImage}
+                          aria-label={project.title}
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          className="block w-full h-auto"
+                        />
+                      ) : (
+                        <img
+                          src={project.heroImage}
+                          alt={project.title}
+                          className="block w-full h-auto"
+                        />
+                      )}
+                    </MediaFrame>
                     )}
                   </div>
                 )}

@@ -438,7 +438,7 @@ const CASES = [
   { id: 'shipped', title: 'Three products. <em>Shipped solo.</em>', short: 'Dispatch, Shader Wall & Thesis', org: 'Independent · Products', year: '2026',
     problem: 'Proving an AI-native designer can own a product from blank page to production.',
     did: 'Designed, built and deployed all three myself. No handoff, no waiting.',
-    result: 'Dispatch is live and Shader Wall is taking a waitlist. Thesis is coming soon.',
+    result: 'Dispatch is live. Shader Wall and Thesis are taking waitlists.',
     tags: ['Product', 'Built solo', 'Live'], panel: 'prod' },
   { id: 'seek', title: 'SEEK Learning: <em>iterating to impact.</em>', short: 'SEEK Learning', org: 'SEEK · Growth', year: '2022–24',
     problem: 'The course-discovery MVP launched and missed its targets.',
@@ -456,7 +456,7 @@ const PANELS = {
   prod: `<div class="panel prod">
     <a class="prodcard" href="https://www.dispatchmac.com" target="_blank" rel="noopener" style="background:radial-gradient(120% 90% at 20% 0%, #FF8A3D 0%, #FF3D7F 45%, #3A0CA3 100%)"><span class="live">LIVE</span><img class="logo" src="/products/dispatch.png" alt="Dispatch logo" /><div class="ui"><i style="width:40%"></i><i></i><i style="width:70%"></i><i style="width:55%;height:34px;border-radius:8px;background:rgba(255,255,255,.6);margin-top:14px"></i></div><span class="nm serif">Dispatch</span></a>
     <a class="prodcard" href="https://www.shaderwall.com" target="_blank" rel="noopener" style="background:radial-gradient(120% 90% at 50% 0%, #F5A623 0%, #D77BE8 38%, #6A1BFF 72%, #12062B 100%)"><span class="live">WAITLIST</span><img class="logo" src="/products/shader-wall.png" alt="Shader Wall logo" /><div class="ui"><i style="width:50%"></i><i></i><i style="width:65%"></i><i style="width:35%"></i></div><span class="nm serif">Shader Wall</span></a>
-    <div class="prodcard" style="background:radial-gradient(120% 90% at 80% 0%, #6EE7F9 0%, #3B82F6 40%, #0B1026 100%)"><span class="live soon">COMING SOON</span><div class="ui"><i style="width:30%"></i><i></i><i></i><i style="width:60%"></i></div><span class="nm serif">Thesis</span></div></div>`,
+    <a class="prodcard" href="https://thesis-phi-self.vercel.app" target="_blank" rel="noopener" style="background:radial-gradient(120% 90% at 80% 0%, #6EE7F9 0%, #3B82F6 40%, #0B1026 100%)"><span class="live">WAITLIST</span><img class="logo" src="/products/thesis.svg" alt="Thesis logo" /><div class="ui"><i style="width:30%"></i><i></i><i></i><i style="width:60%"></i></div><span class="nm serif">Thesis</span></a></div>`,
   funnel: `<div class="panel funnel" id="funnel"><div><div class="num">+75%</div><div style="color:#C9D4EE;margin-top:10px">course conversion, after the MVP missed its targets</div>
     <div class="kpis"><div><b>+$500K</b><span>annual revenue</span></div><div><b>+25.9%</b><span>organic visits in a year</span></div></div></div>
     <div class="stages">${[['Find a course', 100, 'hypothesis → test'], ['Select a course', 80, 'hypothesis → test'], ['Submit a lead', 60, 'hypothesis → test']].map(([l, w, h]) => `<div class="stage" style="--w:${w}%"><b>${l}</b><span>${h}</span></div>`).join('')}</div></div>`,
