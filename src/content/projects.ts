@@ -326,6 +326,236 @@ export const projects: Project[] = [
     }
   },
   {
+    id: 'balatro-opportunity-sizing',
+    title: 'Opportunity sizing, but Balatro',
+    // A draft: it only opens on the dev server until Gareth has read and edited it.
+    status: 'Coming soon',
+    description: 'Sizing a product bet like a hand of cards: people are chips, dollars are mult, and a growth loop is a joker.',
+    category: 'Article',
+    year: '2026',
+    heroImage: '/essays/balatro-opportunity-sizing/cover.jpg',
+    heroVideo: '/essays/balatro-opportunity-sizing/reel.mp4',
+    tags: ['AI', 'Product Strategy', 'Prototyping', 'Essay'],
+    content: [
+      {
+        type: 'heading',
+        level: 2,
+        content: 'TLDR'
+      },
+      {
+        type: 'list',
+        items: [
+          'an opportunity size is a multiplication, and so is a hand of Balatro: chips × mult',
+          'people are chips, dollars each are mult, reality cuts the mult, and loops and compounding are the jokers',
+          'the thesis is a page you read, and every number in it is a card',
+          'evidence never makes the number bigger. It sets the range, and names the claim to test first',
+          'I tried this in August with an older model and it wasn\'t very good. Same idea in October, one sitting, and it works',
+        ]
+      },
+      {
+        type: 'text',
+        content: 'I\'m building Thesis, a tool for mapping the assumptions behind a product bet. Sizing the bet is the part everyone skips to and nobody enjoys: a few guesses multiplied together in a spreadsheet, and then an argument about the number at the bottom.'
+      },
+      {
+        type: 'text',
+        content: 'Balatro is a poker roguelike where every hand is chips × mult, and the fun is watching it stack up. That is the same sum. So this was for fun, and to see whether a game could make the sum easier to read.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'A hand is a multiplication'
+      },
+      {
+        type: 'text',
+        content: 'Chips × mult = dollars a year. Four suits, and each one does one thing to the size:'
+      },
+      {
+        type: 'list',
+        items: [
+          '♠ Who: how many people. Adds chips',
+          '♥ Worth: dollars each, a year. Adds mult',
+          '♣ Reality: the share that survives. Cuts mult',
+          '♦ Engine: a loop or compounding. The jokers. A loop retriggers Who, compounding multiplies mult',
+        ]
+      },
+      {
+        type: 'video',
+        src: '/essays/balatro-opportunity-sizing/play.mp4',
+        alt: 'A recording of a thesis being played: six cards lift onto a green felt table and score left to right, a loop card replays the first two, and the size settles at $1.19M a year with the blinds it cleared lit up',
+        caption: 'Who, worth, reality, then the loop fires and Who scores again',
+        aspectRatio: '16/10',
+      },
+      {
+        type: 'text',
+        content: 'The blinds are the bars a bet has to clear: worth a sprint, worth a quarter, worth a team.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'The page is the bet'
+      },
+      {
+        type: 'text',
+        content: 'The cards alone didn\'t make sense to me. What I wanted was to read the thesis like a doc and see where each multiplier comes from.'
+      },
+      {
+        type: 'list',
+        items: [
+          'The thesis is written out, one paragraph per suit',
+          'Every number sits in the sentence that claims it, and deals one card',
+          'Most numbers are variables, so they carry options to pick from',
+          'There is no hand to choose from. Why would I ever not play all of them? Everything on the page is in play',
+        ]
+      },
+      {
+        type: 'video',
+        src: '/essays/balatro-opportunity-sizing/read.mp4',
+        alt: 'A recording of a thesis writing itself onto a page, paragraph by paragraph. As each number lands it deals a matching card into a row along the bottom of the page',
+        caption: 'The thesis writes itself in, and each number deals its card',
+        aspectRatio: '16/10',
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'Evidence sets the range'
+      },
+      {
+        type: 'text',
+        content: 'Each card is a guess, a signal or measured. That never changes the size. It changes how wide the range around it is:'
+      },
+      {
+        type: 'list',
+        items: [
+          'Guess: nobody has checked. ±50%',
+          'Signal: some evidence points here. ±25%',
+          'Measured: we have the number. ±10%',
+        ]
+      },
+      {
+        type: 'text',
+        content: 'The card carrying the most doubt is the swing card. That is the claim to test first.'
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'We don\'t know the answer'
+      },
+      {
+        type: 'text',
+        content: 'That is the honest thing about sizing. So the result isn\'t where it ends. After a hand is scored, the table says how far it is from the next blind and what would get it there:'
+      },
+      {
+        type: 'list',
+        items: [
+          'Which variables could swing it, and by how much',
+          '"Try it" changes the variable and replays the hand',
+          'Which card to test to cut the risk',
+        ]
+      },
+      {
+        type: 'video',
+        src: '/essays/balatro-opportunity-sizing/next.mp4',
+        alt: 'A recording of a scored bet at $709k a year with a list of next best moves beside it. Pressing Try it on the first move replays the hand, and the size becomes $3.54M',
+        caption: 'Next best move: swing one variable and replay',
+        aspectRatio: '16/10',
+      },
+      {
+        type: 'text',
+        content: 'Testing a claim is five questions from an agent, and it reads the test back. Record the result and the card takes that number and becomes measured.'
+      },
+      {
+        type: 'video',
+        src: '/essays/balatro-opportunity-sizing/test.mp4',
+        alt: 'A recording of an agent asking five questions about one claim, then reading back a written assumption test with what is believed, how it will be tested and what result would prove it wrong',
+        caption: 'Writing the test for the riskiest claim',
+        aspectRatio: '16/10',
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'Compare'
+      },
+      {
+        type: 'text',
+        content: 'Banked bets sit on one dollar axis. The bar is the size, the pale band is floor to ceiling. When the top two overlap, it says so: too close to call, and here is the card to test.'
+      },
+      {
+        type: 'video',
+        src: '/essays/balatro-opportunity-sizing/compare.mp4',
+        alt: 'A recording of five banked bets as horizontal bars on one dollar axis with range bands and three dashed blind lines, under a verdict that reads too close to call',
+        caption: 'Every bet on one axis, with a verdict',
+        aspectRatio: '16/10',
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'Same idea, two models'
+      },
+      {
+        type: 'text',
+        content: 'I first prototyped this in August with an older model. It looked like Balatro, but you only watched it play. In October I pointed a new model at that work and asked for another riff.'
+      },
+      {
+        type: 'comparison',
+        beforeLabel: 'August',
+        afterLabel: 'October',
+        before: [
+          'Pre-written bets you watch play',
+          'Invented chip values',
+          'Sound from downloaded audio files',
+        ],
+        after: [
+          'You build the size yourself',
+          'Real units: people, dollars, a share',
+          'Sound synthesised in the browser, no files',
+          'Walkthrough, next best move, assumption tests and compare',
+        ],
+      },
+      {
+        type: 'text',
+        content: 'The October version was one sitting, about five hours. Most of that was me saying what didn\'t make sense: it\'s not clear how it works, the audio sounds like pachinko, why are there cards under the page.'
+      },
+      {
+        type: 'video',
+        src: '/essays/balatro-opportunity-sizing/create.mp4',
+        alt: 'A recording of creating a new bet: an agent asks eight questions, each answer deals a card, and the finished thesis is written onto the table',
+        caption: 'Creating a bet: eight questions, and the agent writes the thesis',
+        aspectRatio: '16/10',
+      },
+      {
+        type: 'heading',
+        level: 2,
+        content: 'What\'s still mock'
+      },
+      {
+        type: 'list',
+        items: [
+          'The two agents are scripted. Their questions are built from the card and the hand, not from a model',
+          'The "From Dovetail / Notion / Granola" suggestions are invented. Nothing is connected',
+          'The numbers on the sample bets are invented',
+        ]
+      },
+      {
+        type: 'text',
+        content: 'It\'s a playground inside Thesis for now. What I want next is the agents asking real questions, and the suggestions coming from real research.'
+      },
+    ],
+    chatContext: {
+      description: 'Essay about a prototype inside Thesis that sizes a product opportunity like a hand of Balatro. Chips × mult = dollars a year: Who cards add chips (people), Worth cards add mult (dollars each a year), Reality cards cut mult (the share that survives), and Engine cards are jokers (a loop retriggers Who, compounding multiplies mult). The thesis is a page of prose where every number is a card. Evidence (guess, signal, measured) sets the range rather than the size and names the swing card to test first. After a hand is scored it suggests next best moves, an agent helps write an assumption test, and banked bets are compared on one dollar axis. First tried in August 2026 with an older model, rebuilt in October 2026 in one sitting. The agents are scripted and the sample numbers are invented.',
+      suggestedQuestions: [
+        'How does a Balatro hand map to an opportunity size?',
+        'Why doesn\'t better evidence make the number bigger?',
+        'What changed between the August and October versions?',
+      ],
+      followUpQuestions: [
+        'What is a swing card?',
+        'What are the blinds?',
+        'What is still mock in the prototype?',
+        'What is Thesis?',
+      ]
+    }
+  },
+  {
     id: 'creative-tooling',
     title: 'You Can Conjure Your Own Tools Now',
     description: 'In Figma, you waited for someone to ship the feature. With AI code tools, you build the creative tool you need in the moment you need it.',
