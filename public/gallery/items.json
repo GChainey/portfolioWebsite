@@ -1,6 +1,16 @@
 {
   "items": [
     {
+      "id": "wallbounce-title",
+      "title": "Wallbounce: the main menu, on an arcade screen",
+      "group": "Product",
+      "project": "Wallbounce",
+      "kind": "website",
+      "type": "html",
+      "thumb": "/gallery/shots/wallbounce-title.jpg",
+      "src": "/essays/wallbounce-dev-tools/game/arcade.html"
+    },
+    {
       "id": "sizing-table",
       "title": "Opportunity sizing, but Balatro",
       "group": "Product",
