@@ -7,7 +7,7 @@ export interface MediaBlock {
   alt?: string
   caption?: string
   aspectRatio?: string // e.g., '16/9', '4/3', '1/1'
-  frame?: 'phone' // A portrait screen recording: shown as a phone on the panel instead of filling it
+  frame?: 'phone' | 'device' // phone: a portrait screen recording, shown as a phone on the backdrop. device: a still of a device on a transparent background, which needs no window
   crop?: 'browser-window' // The recording has its own window and backdrop baked in: crop to the app (see ClipFrame)
   url?: string // For a cropped clip: the address shown in the browser bar the site draws around it
   pending?: boolean // Not made yet: a labelled slot on the dev server, nothing on the live site. Remove once the file is in.
@@ -62,6 +62,7 @@ export interface Project {
   year: string
   heroImage?: string
   heroVideo?: string // Plays in place of the hero image, which becomes its poster
+  heroFrame?: 'device' // The hero image is a device on a transparent background: it stands on the backdrop with no window
   tags: string[]
   featured?: boolean // Show in hero with special treatment
   showGitHubActivity?: boolean // Show GitHub activity visualization in card
@@ -144,8 +145,9 @@ export const projects: Project[] = [
     category: 'Product',
     year: '2026',
     kind: 'product',
-    status: 'Coming soon',
-    // liveUrl: 'https://thesis-phi-self.vercel.app', // Not ready to share yet — restore with status: 'Live'
+    status: 'Waitlist',
+    liveUrl: 'https://thesis-phi-self.vercel.app',
+    logo: '/products/thesis.svg',
     productVisual: 'thesis',
     tags: ['Product', 'AI', 'Built solo'],
     content: [
@@ -153,7 +155,7 @@ export const projects: Project[] = [
       { type: 'text', content: 'This case study is currently being written. Check back soon.' },
     ],
     chatContext: {
-      description: 'Thesis — a product Gareth designed and built. Case study details are still being written.',
+      description: 'Thesis — a product Gareth designed and built for mapping and testing the assumptions behind a product bet. The marketing site at thesis-phi-self.vercel.app is live with a waitlist for early access. Case study details are still being written.',
       suggestedQuestions: [
         'What is Thesis?',
         'What problem does Thesis solve?',
@@ -1961,6 +1963,7 @@ export const projects: Project[] = [
     category: 'Product Design',
     year: '2024',
     heroImage: '/case-studies/seek-learning/hero.webp',
+    heroFrame: 'device',
     companyId: 'seek',
     tags: ['Product Design', 'Experimentation', 'Conversion', 'B2C'],
     content: [
@@ -2005,6 +2008,7 @@ export const projects: Project[] = [
       {
         type: 'image',
         src: '/case-studies/seek-learning/find-a-course.webp',
+        frame: 'device',
         alt: 'The MVP on a phone, showing category tabs with no way to see every course at once',
         caption: 'Before: one category at a time',
         aspectRatio: '3/2',
@@ -2023,6 +2027,7 @@ export const projects: Project[] = [
       {
         type: 'image',
         src: '/case-studies/seek-learning/select-a-course.webp',
+        frame: 'device',
         alt: 'The original course card next to the improved card, which adds the provider logo and the course name',
         caption: 'Left: the original card. Right: the improved one',
         aspectRatio: '3/2',

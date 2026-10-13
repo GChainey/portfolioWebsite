@@ -14,6 +14,33 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.33.0',
+    date: '2026-10-13',
+    title: 'One Frame for Every Picture and Clip',
+    description:
+      'The backdrop and browser window that the RFP and Configurator clips sit in is now on every case study and essay, so pictures and recordings look the same wherever you are on the site.',
+    changes: [
+      'Screen recordings sit in a browser window on the backdrop, in the settings, SEEK, Best Practice and Balatro pieces',
+      'Stills and the embedded talk get the window without the browser bar',
+      'Phones and device mock-ups stand on the backdrop with no window around them',
+      'The picture or reel at the top of each page is framed the same way',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
+    version: '1.32.1',
+    date: '2026-10-13',
+    title: 'Thesis Has a Site and a Waitlist',
+    description:
+      'Thesis now has a marketing site taking a waitlist, so its card in the products section shows the logo and clicks out to it.',
+    changes: [
+      'The Thesis card shows its app icon and links to the site, the same as Dispatch and Shader Wall',
+      'Both homepage variants link to it too, marked as a waitlist',
+      'The chat knows the site is live and that early access is by waitlist',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.32.0',
     date: '2026-10-12',
     title: 'The Configurator Case Study',

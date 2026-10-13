@@ -7,7 +7,7 @@ import { slugify } from '@/components/TableOfContents'
 import { FunnelDiagram } from '@/components/FunnelDiagram'
 import { DemoCanvas } from '@/components/DemoCanvas'
 import { IterationTimelapse } from '@/components/IterationTimelapse'
-import { ClipFrame, clipGeometry } from '@/components/ClipFrame'
+import { FramedMedia, clipGeometry } from '@/components/ClipFrame'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const componentRegistry: Record<string, React.ComponentType<any>> = {
@@ -76,79 +76,15 @@ function PendingSlot({ block, aspectRatio }: { block: Media; aspectRatio: string
 }
 
 function MediaBlock({ block }: { block: Media }) {
-  const aspectRatio = block.aspectRatio || '16/9'
-
   // Not ready for the live site, which skips it. The dev server shows where it goes.
   if (block.pending) {
     if (process.env.NODE_ENV !== 'development') return null
-    return <PendingSlot block={block} aspectRatio={aspectRatio} />
+    return <PendingSlot block={block} aspectRatio={block.aspectRatio || '16/9'} />
   }
 
-  if (block.type === 'video') {
-    return (
-      <figure className="my-8">
-        {block.crop ? (
-          <ClipFrame src={block.src} crop={block.crop} url={block.url} />
-        ) : (
-          <div
-            className={`relative w-full bg-secondary rounded-lg overflow-hidden ${block.frame === 'phone' ? 'flex items-center justify-center' : ''}`}
-            style={{ aspectRatio }}
-          >
-            <video
-              src={block.src}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className={block.frame === 'phone' ? 'h-[88%] w-auto rounded-[14.6%/7.1%]' : 'w-full h-full object-cover'}
-            />
-          </div>
-        )}
-        {block.caption && (
-          <figcaption className="mt-2 text-sm text-muted text-center">
-            {block.caption}
-          </figcaption>
-        )}
-      </figure>
-    )
-  }
-
-  if (block.type === 'embed') {
-    return (
-      <figure className="my-8">
-        <div
-          className="relative w-full bg-border/30 rounded-lg overflow-hidden"
-          style={{ aspectRatio }}
-        >
-          <iframe
-            src={block.src}
-            className="w-full h-full border-0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        </div>
-        {block.caption && (
-          <figcaption className="mt-2 text-sm text-muted text-center">
-            {block.caption}
-          </figcaption>
-        )}
-      </figure>
-    )
-  }
-
-  // Image or GIF
   return (
     <figure className="my-8">
-      <div
-        className="relative w-full bg-secondary rounded-lg overflow-hidden"
-        style={{ aspectRatio }}
-      >
-        <img
-          src={block.src}
-          alt={block.alt || ''}
-          className="w-full h-full object-cover"
-        />
-      </div>
+      <FramedMedia block={block} />
       {block.caption && (
         <figcaption className="mt-2 text-sm text-muted text-center">
           {block.caption}
