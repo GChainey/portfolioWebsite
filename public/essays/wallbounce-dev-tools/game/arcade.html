@@ -1,0 +1,22 @@
+<!doctype html>
+<!-- The game with its ARCADE screen on, for the gallery. The game keeps its CRT look in
+     localStorage and takes no link for it, so this page answers ARCADE for that one key and
+     then loads index.html into itself. Nothing is saved, so the essay's embeds keep their look. -->
+<meta charset="UTF-8" />
+<title>Wallbounce</title>
+<style>
+  html { background: #0a0808; }
+</style>
+<script>
+  const read = Storage.prototype.getItem
+  Storage.prototype.getItem = function (key) {
+    return key === 'wallbounce.crt' ? 'ARCADE' : read.call(this, key)
+  }
+  fetch('index.html')
+    .then((page) => page.text())
+    .then((html) => {
+      document.open()
+      document.write(html)
+      document.close()
+    })
+</script>
