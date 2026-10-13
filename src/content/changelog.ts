@@ -14,6 +14,21 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.34.0',
+    date: '2026-10-13',
+    title: 'New Essay: Three Tools Before the Game',
+    description:
+      'Published the first post from the dev log of Wallbounce, a small game about one move from Gears of War, with the game itself running in the page.',
+    changes: [
+      'The essay is in the Essays list on the homepage, with the dev log reel at the top on a dotted canvas',
+      'Four places where the game runs live: the tuning sliders, the frame strip, two recorded runs racing, and four recorded players',
+      'Each one runs only while it is near the screen, and takes the keyboard once it is clicked',
+      'Essays and case studies can now hold a table, with one row picked out',
+      'Captions under live demos no longer sit against the next paragraph',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.33.0',
     date: '2026-10-13',
     title: 'One Frame for Every Picture and Clip',

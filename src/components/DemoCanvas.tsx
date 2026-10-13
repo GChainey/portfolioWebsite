@@ -16,10 +16,13 @@ interface DemoCanvasProps {
   // The prototype is designed for a desktop window; render it at this size and scale to fit.
   width?: number
   height?: number
+  // For a page with several live frames: each runs only while it is near the screen, and
+  // takes the keyboard and scroll wheel once it is clicked (see ScaledFrame)
+  passive?: boolean
 }
 
 // A live HTML prototype on a dotted canvas, scaled down to fit the column.
-export function DemoCanvas({ src, title, modes = [], width = 1280, height = 900 }: DemoCanvasProps) {
+export function DemoCanvas({ src, title, modes = [], width = 1280, height = 900, passive }: DemoCanvasProps) {
   const [mode, setMode] = useState(0)
   // Bumping the key reloads the iframe so a demo replays from the start.
   const [run, setRun] = useState(0)
@@ -67,7 +70,7 @@ export function DemoCanvas({ src, title, modes = [], width = 1280, height = 900 
             </a>
           </div>
         )}
-        <ScaledFrame src={url} title={title} width={width} height={height} run={run} />
+        <ScaledFrame src={url} title={title} width={width} height={height} run={run} passive={passive} />
       </div>
     </figure>
   )

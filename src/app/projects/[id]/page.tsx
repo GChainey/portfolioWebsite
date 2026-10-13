@@ -14,7 +14,7 @@ import { FixedTableOfContents } from '@/components/FixedTableOfContents'
 import { ShimmeringText } from '@/components/ui/shimmering-text'
 import { getProjectById, projects, type Project, type ContentBlock } from '@/content/projects'
 import { GitHubContributions } from '@/components/GitHubContributions'
-import { Backdrop, FramedMedia, MediaFrame } from '@/components/ClipFrame'
+import { Backdrop, FramedMedia, GridFrame, MediaFrame } from '@/components/ClipFrame'
 
 // Calculate read time from content blocks
 function calculateReadTime(content: Project['content']): number {
@@ -50,6 +50,12 @@ const TLDR_OPTIONS = [
 // Media and artifacts (like FunnelDiagram) that exist. A pending slot has nothing to show yet.
 const isVisual = (b: ContentBlock) =>
   b.type === 'component' || ((b.type === 'image' || b.type === 'gif' || b.type === 'video' || b.type === 'embed') && !b.pending)
+
+// What the picture or reel at the top of the page sits in: the colour backdrop and window, or
+// the dotted canvas for a hero that asks for it
+function HeroFrame({ grid, bar, children }: { grid: boolean; bar: boolean; children: React.ReactNode }) {
+  return grid ? <GridFrame>{children}</GridFrame> : <MediaFrame bar={bar}>{children}</MediaFrame>
+}
 
 function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
   const visualBlocks = blocks.filter(isVisual)
@@ -309,7 +315,7 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
                         <img src={project.heroImage} alt={project.title} className="block w-full h-auto" />
                       </Backdrop>
                     ) : (
-                    <MediaFrame bar={!!project.heroVideo}>
+                    <HeroFrame grid={project.heroFrame === 'grid'} bar={!!project.heroVideo}>
                       {project.heroVideo ? (
                         <video
                           src={project.heroVideo}
@@ -328,7 +334,7 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
                           className="block w-full h-auto"
                         />
                       )}
-                    </MediaFrame>
+                    </HeroFrame>
                     )}
                   </div>
                 )}

@@ -218,6 +218,41 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
           )
         }
 
+        if (block.type === 'table') {
+          return (
+            <motion.figure key={index} className="my-8" {...reveal(index)}>
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse font-mono text-sm tabular-nums">
+                  <thead>
+                    <tr>
+                      {block.headers.map((header, i) => (
+                        <th
+                          key={header}
+                          className={`py-2 pr-4 last:pr-0 border-b border-border text-xs font-normal uppercase tracking-widest text-muted whitespace-nowrap ${i === 0 ? 'text-left' : 'text-right'}`}
+                        >
+                          {header}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {block.rows.map((row, r) => (
+                      <tr key={row[0]} className={r === block.highlight ? 'text-accent' : 'text-foreground'}>
+                        {row.map((cell, i) => (
+                          <td key={i} className={`py-2 pr-4 last:pr-0 border-b border-border whitespace-nowrap ${i === 0 ? 'text-left' : 'text-right'}`}>
+                            {cell}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {block.caption && <figcaption className="mt-2 text-sm text-muted text-center">{block.caption}</figcaption>}
+            </motion.figure>
+          )
+        }
+
         if (block.type === 'component') {
           const Component = componentRegistry[block.componentId]
           if (!Component) return null
@@ -228,7 +263,8 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
             >
               <Component {...(block.props || {})} />
               {block.caption && (
-                <p className="mt-2 text-sm text-muted text-center">{block.caption}</p>
+                // The component brings its own margin, so the caption is pulled up under it
+                <p className="-mt-5 mb-8 text-sm text-muted text-center">{block.caption}</p>
               )}
             </motion.div>
           )
