@@ -1458,7 +1458,7 @@ export const projects: Project[] = [
         crop: 'browser-window',
         url: 'enterpriseai.com/configurator',
         alt: 'Today\'s steps mapped onto four',
-        caption: 'Nine steps today, mapped onto four',
+        caption: 'Seven steps today, mapped onto four',
       },
       {
         type: 'comparison',
@@ -1525,8 +1525,8 @@ export const projects: Project[] = [
         src: '/case-studies/configurator/brand.mp4',
         crop: 'browser-window',
         url: 'enterpriseai.com/configurator',
-        alt: 'The same app in two companies\' brands',
-        caption: 'Type any company name. The logo, colours and tone are read from its public website',
+        alt: 'The same app in three companies\' brands',
+        caption: 'One app, three clients. Each in its own logo, colours and tone of voice',
       },
       {
         type: 'comparison',
