@@ -219,7 +219,7 @@ Reader context: ${roleOption?.label} - they care about: ${roleOption?.descriptio
 ${rolePrompts[tldrLength] || ''}
 ${tldrFocus ? `Also specifically address: ${tldrFocus}` : ''}
 
-Write 2-3 short paragraphs (under 150 words in total) tailored to what a ${tldrLength} would want to know. Only use facts from the article. Be direct, specific, and compelling. Write in plain text: no markdown, headings, bold or bullet points.
+Write 2-3 short paragraphs (under 150 words in total) tailored to what a ${tldrLength} would want to know. Write in the first person, as Gareth ("I built..."), the way the article does. Only use facts from the article. Be direct, specific, and compelling. Start straight in with the first paragraph: no title. Write in plain text: no markdown, headings, bold or bullet points.
 
 <article>
 ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
@@ -229,7 +229,8 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
 
       if (response.ok) {
         const data = await response.json()
-        setTldrContent(data.content)
+        // The summary renders as plain text, so drop any markdown the model adds anyway
+        setTldrContent(data.content.replace(/\*\*|__/g, '').replace(/^#+\s*/gm, '').trim())
         setTldrOpen(false) // Close dialog and show inline
       }
     } catch (error) {

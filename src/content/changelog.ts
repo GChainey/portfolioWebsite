@@ -21,6 +21,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     changes: [
       'The TLDR prompt includes the case study as plain text: headings, paragraphs, lists, stats, comparisons and tables',
       'The model is told to use only facts from the article, stay under 150 words, and write without markdown, which showed up as raw asterisks',
+      'The summary is written in the first person, as Gareth, with no title line, and any markdown that slips through is stripped before it shows',
     ],
     aiTools: ['Claude Code'],
   },
