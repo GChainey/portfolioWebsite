@@ -68,13 +68,18 @@ export const PARKED: ParkedItem[] = [
     name: 'Gallery',
     status: 'local',
     since: '2026-10-07',
-    summary: 'A bento grid of real screens and prototypes that open in a dialog. On the homepage it is a Page / Visuals switch under the hero, not a section; there is also a header link.',
+    summary: 'A full-width column of real work that opens in a dialog: clips of the big pieces being used, live prototypes, and phone work in a drawn phone. On the homepage it is a Page / Visuals switch under the hero, not a section; there is also a header link.',
     links: [
       { label: 'Gallery', href: '/gallery' },
       { label: 'Edit mode', href: '/gallery?edit' },
     ],
     gate: 'GALLERY_LIVE in src/components/Gallery.tsx and LIVE in public/gallery/gallery.js (flip both)',
-    todo: ['Decide what goes in it: edit mode hides tiles, content is public/gallery/items.json'],
+    todo: [
+      'The header does not fit on a phone: it needs a mobile menu (or fewer links) before Gallery goes in it for real',
+      'More small feature clips: AI writing, Document Validation, the chatbot with sources',
+      'Recordings are video; every recording on the site is moving to rrweb replays',
+      'Content is public/gallery/items.json; edit mode hides tiles. Clip scripts are in the indianapolis-v2 workspace, .context/reel2 (gitignored)',
+    ],
   },
   {
     id: 'variants',
