@@ -1,0 +1,130 @@
+/* Remix 13 — Gofer as one chat (gofer.js): you paste a messy process in,
+   it hands back four steps. Copy on the left, the chat on the right, in the
+   same grey-edged window as the builder. Gofer is EAI-neutral (navy); only
+   the four-step app card wears the client's brand. */
+
+.gf-wrap { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 56px; align-items: center; }
+.gf-kicker { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px !important; color: var(--navy); font-size: 14px; font-weight: 600; }
+.gf-mark {
+  display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+  width: 24px; height: 24px; border-radius: 7px;
+  background: var(--navy); color: #fff; font-size: 12px; font-weight: 700;
+}
+.ps .gf-copy .sg-h + .sg-sub { margin-top: 16px; }
+.gf-try-k { margin-top: 32px !important; color: #71717A; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.gf-picks { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.gf-picks button {
+  padding: 8px 14px; border: 1px solid var(--line); border-radius: 99px;
+  background: #fff; color: #3F3F46; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer;
+  transition: border-color .15s, background .15s, color .15s;
+}
+.gf-picks button:hover { border-color: #A1A1AA; }
+.gf-picks button[aria-pressed="true"] { border-color: var(--navy); background: #F2F7FA; color: var(--navy); font-weight: 600; }
+.gf-picks button:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+
+/* ---------- the chat window ---------- */
+.gf-frame {
+  padding: 8px;
+  border: 1px solid #E4E4E7;
+  border-radius: 16px;
+  background: #F4F4F5;
+  box-shadow: 0 40px 80px -48px rgba(13, 56, 87, .28), 0 2px 6px rgba(0, 0, 0, .03);
+}
+.gf-chat {
+  display: flex; flex-direction: column; height: 640px;
+  border: 1px solid #E4E4E7; border-radius: 10px; background: #fff; color: #171717; overflow: hidden;
+}
+.gf-chat-hd { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #EDEDEF; }
+.gf-chat-hd b { display: block; font-size: 14px; font-weight: 600; }
+.gf-chat-hd small { display: block; color: #71717A; font-size: 12px; }
+.gf-replay { display: inline-flex; margin-left: auto; padding: 8px; border: 0; border-radius: 8px; background: none; color: #71717A; cursor: pointer; }
+.gf-replay svg { width: 16px; height: 16px; }
+.gf-replay:hover { background: #F4F4F5; color: #171717; }
+
+.gf-thread { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding: 16px; scroll-behavior: smooth; }
+.gm { display: flex; gap: 12px; font-size: 14px; line-height: 20px; }
+.gm.pop { animation: gmIn .35s cubic-bezier(.2, .8, .2, 1); }
+@keyframes gmIn { from { opacity: 0; transform: translateY(8px); } }
+
+/* you: the messy process, pasted in */
+.gm-you { justify-content: flex-end; }
+.gm-bubble { max-width: 88%; padding: 12px 16px; border-radius: 12px 12px 4px 12px; background: #F4F4F5; }
+.ps .gm-old { list-style: none; margin: 8px 0 0; padding: 0; counter-reset: old; display: grid; gap: 4px; }
+.gm-old li { counter-increment: old; display: flex; align-items: baseline; gap: 8px; color: #3F3F46; font-size: 13px; line-height: 18px; }
+.gm-old li::before { content: counter(old) "."; min-width: 20px; color: #A1A1AA; font-variant-numeric: tabular-nums; }
+.gm-old span { flex: 1; }
+.gm-old i { color: #A1A1AA; font-size: 11px; font-style: normal; font-weight: 600; }
+
+/* Gofer: four steps back */
+.gm-gofer .gf-mark { margin-top: 2px; }
+.gm-body { flex: 1; min-width: 0; display: grid; gap: 12px; }
+.gm-dots { display: inline-flex; gap: 4px; padding: 8px 0; }
+.gm-dots i { width: 6px; height: 6px; border-radius: 50%; background: #A1A1AA; animation: gmDot 1s infinite ease-in-out; }
+.gm-dots i:nth-child(2) { animation-delay: .15s; }
+.gm-dots i:nth-child(3) { animation-delay: .3s; }
+@keyframes gmDot { 50% { opacity: .3; transform: translateY(-2px); } }
+
+.gm-app { border: 1px solid #E4E4E7; border-radius: 10px; overflow: hidden; }
+.gm-app-hd { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 12px; background: var(--gb); color: var(--gb-on); }
+.gm-app-hd b { font-size: 14px; font-weight: 600; }
+.gm-app-hd span:not(.app-logo) { margin-left: auto; opacity: .85; font-size: 12px; font-weight: 500; }
+.gm-app-hd .app-logo svg { width: 34px; height: 18px; }
+.gm-app-hd .app-logo .img-mark { width: 22px; height: 22px; }
+.gm-app-hd .app-logo .mono { width: 22px; height: 22px; font-size: 12px; }
+.ps .gm-steps { list-style: none; margin: 0; padding: 8px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; background: #FAFAFA; }
+.gm-steps li {
+  display: flex; flex-direction: column; gap: 4px; padding: 12px; border: 1px solid #E4E4E7; border-radius: 8px; background: #fff;
+  opacity: 0; transform: translateY(6px); transition: opacity .3s, transform .3s;
+}
+.gm-steps li.in { opacity: 1; transform: none; }
+.gs-n {
+  display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; margin-bottom: 4px;
+  border-radius: 50%; background: var(--gb-step); color: var(--gb-step-on); font-size: 12px; font-weight: 600;
+}
+.gm-steps b { font-size: 14px; font-weight: 600; }
+.gm-steps small { color: #71717A; font-size: 12px; }
+.gm-steps em { margin-top: 4px; color: #A1A1AA; font-size: 12px; font-style: normal; }
+
+.gm-stats { display: flex; flex-wrap: wrap; gap: 8px; animation: gmIn .35s ease; }
+.gm-stats span { padding: 4px 12px; border-radius: 99px; background: #F2F7FA; color: #3F3F46; font-size: 13px; }
+.gm-stats s { color: #A1A1AA; }
+.gm-stats b { color: var(--navy); font-weight: 600; }
+.ps .gm-why { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; animation: gmIn .35s ease; }
+.gm-why li { position: relative; padding-left: 16px; color: #3F3F46; }
+.gm-why li::before { content: ""; position: absolute; left: 2px; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: var(--navy); }
+.gm-acts { display: flex; align-items: center; gap: 12px; animation: gmIn .35s ease; }
+.gm-acts span { color: #71717A; font-size: 13px; }
+.gm-build { padding: 8px 16px; border: 0; border-radius: 8px; background: var(--navy); color: #fff; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+.gm-build:hover { background: #0f4368; }
+
+/* the composer, where the process gets "pasted" */
+.gf-composer { display: flex; align-items: center; gap: 8px; margin: 0 16px 16px; padding: 8px 8px 8px 16px; border: 1px solid #E4E4E7; border-radius: 12px; }
+.gf-draft { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #A3A3A3; font-size: 14px; }
+.gf-draft.typing { color: #171717; }
+.gf-send { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; background: #F4F4F5; color: #A1A1AA; }
+.gf-send svg { width: 16px; height: 16px; }
+.gf-draft.typing + .gf-send { background: var(--navy); color: #fff; }
+
+@media (max-width: 900px) {
+  .gf-wrap { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .gf-chat { height: 600px; }
+  .ps .gm-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gm.pop, .gm-stats, .gm-why, .gm-acts { animation: none; }
+  .gm-steps li { transition: none; }
+  .gf-thread { scroll-behavior: auto; }
+}
+
+/* ---------- shader theme (remix 14): glass edge, light window ---------- */
+[data-theme="shader"] .gf-kicker { color: var(--sh-cyan); }
+[data-theme="shader"] .gf-copy .gf-mark { background: var(--sh-cyan); color: #0A180D; }
+[data-theme="shader"] .gf-try-k { color: var(--sh-faint); }
+[data-theme="shader"] .gf-picks button { border-color: var(--sh-line); background: rgba(255, 255, 255, .05); color: var(--sh-ink-2); }
+[data-theme="shader"] .gf-picks button[aria-pressed="true"] { border-color: var(--sh-cyan); background: rgba(142, 223, 249, .12); color: var(--sh-ink); }
+[data-theme="shader"] .gf-frame {
+  border-color: var(--sh-line); border-radius: 18px; background: rgba(255, 255, 255, .06);
+  -webkit-backdrop-filter: var(--sh-blur); backdrop-filter: var(--sh-blur);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06), 0 40px 90px -40px rgba(0, 0, 0, .7);
+}
+[data-theme="shader"] .gf-chat { color-scheme: light; border-color: transparent; }

@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Remix 12 — Shell intro · Build once. Sell to many.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet" />
+<!-- The live demo's own styles, loaded as-is from the current site -->
+<link rel="stylesheet" href="../../../assets/proto.css" />
+<link rel="stylesheet" href="../../../assets/mkt-site.css" />
+<link rel="stylesheet" href="../../app.css" />
+<link rel="stylesheet" href="../../sell.css" />
+<!-- The shell (Paper "Home — Abstracted fill v3"), loaded last so it wins -->
+<link rel="stylesheet" href="paper-shell.css" />
+<link rel="stylesheet" href="intro.css" />
+<link rel="stylesheet" href="sugar.css" />
+<script>
+  /* Decide before first paint whether the intro plays, so nothing flashes. */
+  (function () {
+    var q = new URLSearchParams(location.search);
+    var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduced && q.get('intro') !== '0') document.documentElement.classList.add('intro-pending');
+  })();
+</script>
+<!-- Portfolio copy: the link back to the remix hub is hidden. -->
+<style>a[href="../index.html"] { display: none !important; }</style>
+</head>
+<body class="ps">
+
+<!-- Intro: the Warp shader fills the screen, the wordmark rises in, then the
+     whole panel folds into the nav bar. -->
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="intro-shader" id="introShader"></div>
+  <div class="intro-vignette"></div>
+  <div class="intro-mark" id="introMark"><div class="intro-sweep"></div></div>
+  <button type="button" class="intro-skip" id="introSkip" tabindex="-1">Skip</button>
+</div>
+
+<div class="ps-page">
+
+  <!-- ============ Hero stack ============ -->
+  <section class="ps-hero-stack">
+    <header class="ps-col ps-nav">
+      <div class="ps-warp" aria-hidden="true"></div>
+      <div class="ps-warp ps-warp-live" id="psNavShader" aria-hidden="true"></div>
+      <a class="ps-nav-brand" href="#top" aria-label="Enterprise AI"><img src="wordmark-light.svg" alt="Enterprise AI" width="200" height="15" /></a>
+      <nav class="ps-nav-links" aria-label="Primary">
+        <a href="#product" data-reveal style="--i:0">Product</a>
+        <a href="#pricing" data-reveal style="--i:1">Pricing</a>
+        <a href="#faq" data-reveal style="--i:2">FAQ</a>
+      </nav>
+      <div class="ps-nav-actions">
+        <a class="ps-nav-signin" href="#" data-reveal style="--i:3">Sign in</a>
+        <a class="ps-nav-cta" href="#pricing" data-reveal style="--i:4">Get started</a>
+      </div>
+    </header>
+
+    <div class="ps-col ps-hero" id="top">
+      <div class="ps-hero-copy">
+        <h1 class="ps-h1-big"><span class="w" style="--i:0">Build</span> <span class="w" style="--i:1">once.</span><br /><span class="w w2" style="--i:2">Sell</span> <span class="w w2" style="--i:3">to</span> <span class="w w2" style="--i:4">many.</span></h1>
+        <p data-reveal style="--i:6">Build a four-step app for one client. Then make it right for the next one in a sentence — their logo, their colours, their voice. Same wiring underneath.</p>
+      </div>
+      <form class="ps-chat" id="psChat" autocomplete="off" data-reveal style="--i:7">
+        <label class="sr-only" for="psChatInput">Describe the app you want to build</label>
+        <input id="psChatInput" type="text" placeholder="e.g. Build a campaign email app for Nike…" />
+        <button type="submit">Build</button>
+      </form>
+      <div class="ps-hero-actions" data-reveal style="--i:8">
+        <a class="ps-btn ps-btn-primary" href="#pricing">Get started</a>
+        <a class="ps-btn ps-btn-outline" href="#pricing">Talk to sales</a>
+      </div>
+    </div>
+
+    <div class="ps-col ps-product-copy" id="product" data-reveal style="--i:9">
+      <h2>One app. Every client&rsquo;s brand.</h2>
+      <p class="ps-product-sub">Watch it build a campaign email app for Nike. Then name the next client and the same four steps re-skin in seconds.</p>
+    </div>
+
+    <!-- Warp-bordered media frame. The white plate holds the live builder demo. -->
+    <div class="ps-col ps-media" id="psMedia" data-reveal="rise" style="--i:10">
+      <div class="ps-warp" aria-hidden="true"></div>
+      <div class="ps-plate ps-plate-hero">
+        <section class="stm-stage" aria-label="Demo: one app, rebranded for a second client">
+          <div class="stm-fit" id="stmFit">
+            <div class="stm-app" id="stmApp">
+              <div class="stm-cursor" id="stmCursor" hidden aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M5.5 3.5 18 14.5l-5.2.8 3.2 6.3-2.2 1.1-3.2-6.3-5.1 3.1z" fill="#fff" stroke="#111" stroke-width="1.2" stroke-linejoin="round"/></svg>
+              </div>
+
+              <div class="b-top">
+                <span class="b-ico"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6" fill="none" stroke="#252525" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="b-ico b-ico-home" hidden aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="none" stroke="#252525" stroke-width="1.7" stroke-linejoin="round"/></svg></span>
+                <span class="b-title">Campaign email</span>
+                <span class="b-pill" id="bStatus">Draft</span>
+                <div class="b-clients" id="bClients" aria-label="Clients using this app"></div>
+                <div class="b-top-end">
+                  <div class="b-preview-tools">
+                    <div class="b-seg"><span>Editor</span><span class="on">Preview</span></div>
+                    <div class="b-devices" role="group" aria-label="Preview size">
+                      <button type="button" class="on" data-device="desktop" aria-label="Desktop"><svg viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                      <button type="button" data-device="tablet" aria-label="Tablet"><svg viewBox="0 0 24 24"><rect width="16" height="20" x="4" y="2" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                      <button type="button" data-device="mobile" aria-label="Mobile"><svg viewBox="0 0 24 24"><rect width="12" height="20" x="6" y="2" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                    </div>
+                  </div>
+                  <span class="b-top-sep"></span>
+                  <span class="b-saved" id="bSaved">Draft — not saved</span>
+                  <div class="b-share-wrap">
+                    <button type="button" class="b-share" id="bShare" hidden><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 3h3v3h-3v-3zm3-3h3v3h-3v-3zM14 14h3v3h-3v-3z" stroke="currentColor" stroke-width="1.5"/></svg>Share</button>
+                    <div class="b-share-pop" id="bSharePop" hidden>
+                      <div class="bs-t">Open <span id="bShareName">Nike</span>’s app on your phone</div>
+                      <div class="bs-s">Scan with your camera — or click the code to preview it here.</div>
+                      <button type="button" class="bs-qr" id="bQrOpen" aria-label="Preview on a phone"><canvas id="bQr" width="168" height="168"></canvas></button>
+                      <div class="bs-url"><span id="bShareUrl"></span><button type="button" id="bCopy">Copy</button></div>
+                      <button type="button" class="bs-open" id="bOpenPhone">Preview on a phone</button>
+                    </div>
+                  </div>
+                  <span class="b-publish" id="bPublish">Publish</span>
+                </div>
+              </div>
+
+              <div class="b-body">
+                <aside class="b-chat">
+                  <div class="b-thread" id="bThread"></div>
+                  <form class="b-composer" id="bComposer" autocomplete="off">
+                    <label class="sr-only" for="bInput">Message the assistant</label>
+                    <input id="bInput" type="text" placeholder="Ask the assistant…" disabled />
+                    <button type="submit" aria-label="Send" id="bSend" disabled>
+                      <svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                  </form>
+                </aside>
+
+                <div class="b-preview">
+                  <div class="b-canvas">
+                   <div class="b-device" id="bDevice" data-mode="desktop">
+                    <div class="p-app" id="pApp" data-state="empty">
+                      <div class="p-head">
+                        <span class="p-logo" id="pLogo"></span>
+                        <span class="p-name" id="pName"></span>
+                      </div>
+                      <div class="p-body">
+                      <div class="p-main">
+                        <div class="p-title">Campaign email</div>
+                        <div class="p-steps" id="pSteps">
+                          <span class="p-step" data-i="0">Brief</span>
+                          <span class="p-step" data-i="1">Assets</span>
+                          <span class="p-step" data-i="2">Compose</span>
+                          <span class="p-step" data-i="3">Review</span>
+                        </div>
+                        <div class="p-card">
+                          <div class="p-card-hd">
+                            <div class="p-card-title">Tell us about the campaign</div>
+                            <div class="p-card-sub">Four fields. The rest is written for you.</div>
+                          </div>
+                          <div class="p-field">
+                            <span class="p-label">Campaign goal</span>
+                            <span class="p-input" id="pGoal" data-f="goal"></span>
+                          </div>
+                          <div class="p-row">
+                            <div class="p-field">
+                              <span class="p-label">Audience</span>
+                              <span class="p-input" id="pAudience" data-f="audience"></span>
+                            </div>
+                            <div class="p-field">
+                              <span class="p-label">Send date</span>
+                              <span class="p-input" id="pDate" data-f="date"></span>
+                            </div>
+                          </div>
+                          <span class="p-cta">Next: assets</span>
+                        </div>
+                      </div>
+                      <aside class="p-assist" aria-label="Assistant">
+                        <div class="pa-hd"><span class="pa-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Assistant<button type="button" class="pa-close" aria-label="Close">&times;</button></div>
+                        <div class="pa-thread" id="paThread"></div>
+                        <div class="pa-input"><span>Ask about this campaign…</span><span class="pa-send"><svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+                      </aside>
+                      </div>
+                      <button type="button" class="p-fab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Ask AI</button>
+                      <div class="p-reading" id="pReading" aria-hidden="true">
+                        <div class="p-reading-card">
+                          <span class="p-spinner"></span>
+                          <div>
+                            <div class="p-reading-t" id="pReadingT">Reading the site…</div>
+                            <div class="p-reading-s">Colours, logo and tone of voice</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                   </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+      </div>
+      <button type="button" class="ps-replay" id="stmReplay" aria-label="Replay the builder demo">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 3v6h-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Replay
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ Sugar hit: on their phone ============ -->
+  <section class="ps-col sg-phone" id="phone" aria-label="Preview and share">
+    <div class="sg-phone-copy">
+      <h2 class="sg-h">On their phone before the meeting ends.</h2>
+      <p class="sg-sub">Flip the preview to a phone, then hit Share. Your client scans the code and has their app &mdash; same four steps, already wearing their brand.</p>
+      <ul class="sg-ticks">
+        <li>One click to a phone frame in Preview</li>
+        <li>Share hands them a link or a QR code</li>
+        <li>What you preview is what they get</li>
+      </ul>
+      <div class="sg-seg" id="sgSeg" role="tablist" aria-label="Client">
+        <button type="button" role="tab" data-c="nike" class="on" aria-selected="true">Nike</button>
+        <button type="button" role="tab" data-c="apple" aria-selected="false">Apple</button>
+        <button type="button" role="tab" data-c="commbank" aria-selected="false">CommBank</button>
+      </div>
+    </div>
+    <div class="sg-phone-stage" id="sgStage">
+      <div class="sg-device" id="sgDevice">
+        <div class="sg-island"></div>
+        <div class="sg-status"><span>9:41</span><svg class="sg-signal" viewBox="0 0 17 12" width="17" height="12" aria-hidden="true"><rect x="0" y="7" width="3" height="5" rx="1" fill="currentColor"/><rect x="5" y="4.5" width="3" height="7.5" rx="1" fill="currentColor"/><rect x="10" y="2" width="3" height="10" rx="1" fill="currentColor"/></svg></div>
+        <iframe id="sgFrame" title="The client&rsquo;s app on a phone" src="../../app.html?c=nike" loading="lazy"></iframe>
+      </div>
+      <div class="sg-qr">
+        <a class="sg-qr-code" id="sgQrLink" href="../../app.html?c=nike" target="_blank" rel="noopener" aria-label="Open the client&rsquo;s app"><canvas id="sgQr" width="148" height="148"></canvas></a>
+        <div class="sg-qr-t">Scan to open <span id="sgQrName">Nike</span>&rsquo;s app</div>
+        <div class="sg-qr-u"><span id="sgQrUrl">eai.app/nike/campaign-email</span><button type="button" id="sgCopy">Copy</button></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ Trusted by ============ -->
+  <section class="ps-col ps-logos" aria-label="Trusted by">
+    <h2 class="ps-h2">Trusted by enterprise teams</h2>
+    <div class="ps-logos-box">
+      <div class="ps-logos-row">
+        <div class="ps-logo"><span>Logo</span></div>
+        <div class="ps-logo"><span>Logo</span></div>
+        <div class="ps-logo"><span>Logo</span></div>
+        <div class="ps-logo"><span>Logo</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ The maths ============ -->
+  <section class="ps-col sg-calc" id="maths" aria-label="What one build earns">
+    <div class="sg-calc-head">
+      <h2 class="sg-h">You build it once. They pay for it every time.</h2>
+      <p class="sg-sub">Move the sliders. Each new client takes about an hour: name them, check it, share it.</p>
+    </div>
+    <div class="sg-calc-box">
+      <div class="sg-calc-inputs">
+        <label class="sg-range"><span class="sg-range-top"><span>Hours to build it once</span><b id="cvHours">60 hrs</b></span><input type="range" id="ciHours" min="10" max="200" step="5" value="60" /></label>
+        <label class="sg-range"><span class="sg-range-top"><span>Clients you sell it to</span><b id="cvClients">12</b></span><input type="range" id="ciClients" min="1" max="60" step="1" value="12" /></label>
+        <label class="sg-range"><span class="sg-range-top"><span>Price per client</span><b id="cvPrice">$6,000</b></span><input type="range" id="ciPrice" min="500" max="25000" step="500" value="6000" /></label>
+        <p class="sg-calc-note">Assumes your time is worth $150 an hour.</p>
+      </div>
+      <div class="sg-calc-out">
+        <p class="sg-out-k">Revenue from one build</p>
+        <p class="sg-out-big" id="coRevenue">$72,000</p>
+        <div class="sg-bars">
+          <div class="sg-bar-row"><span>Build each from scratch</span><div class="sg-bar"><i id="cbScratch"></i></div><b id="coScratch">720 hrs</b></div>
+          <div class="sg-bar-row"><span>Build once, sell to many</span><div class="sg-bar sg-bar-once"><i id="cbOnce"></i></div><b id="coOnce">72 hrs</b></div>
+        </div>
+        <div class="sg-tiles">
+          <div class="sg-tile sg-tile-dark"><b id="coSaved">648</b><span>hours back</span></div>
+          <div class="sg-tile"><b id="coProfit">$61,200</b><span>profit after your time</span></div>
+          <div class="sg-tile"><b id="coRate">$1,000</b><span>earned per hour you put in</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ Feature grid ============ -->
+  <section class="ps-col ps-features" aria-label="Four pillars">
+    <div>
+      <h2 class="ps-h2">Built for how enterprises actually adopt AI</h2>
+      <p class="ps-lede">Four pillars that keep pilots from stalling and keep security in the loop.</p>
+    </div>
+    <div class="ps-grid">
+      <div class="ps-card"><span class="ps-card-n">01</span><h3>One front door</h3><p>A single login and catalog so teams find the right AI without shadow tools.</p></div>
+      <div class="ps-card"><span class="ps-card-n">02</span><h3>Governed by default</h3><p>Policies, audit, and access that travel with every workspace you enable.</p></div>
+      <div class="ps-card ps-card-light"><span class="ps-card-n">03</span><h3>Go deeper with +</h3><p>Start with Configurator. Add Configurator+ when you need deeper customization.</p></div>
+      <div class="ps-card"><span class="ps-card-n">04</span><h3>IT and security first</h3><p>Roll out with the controls your security and platform teams already require.</p></div>
+    </div>
+  </section>
+
+
+  <!-- ============ CTA banner ============ -->
+  <section class="ps-col ps-cta" aria-label="Get started">
+    <div class="ps-warp" aria-hidden="true"></div>
+    <div class="ps-cta-copy">
+      <h2>Ready to bring AI under one roof?</h2>
+      <p>Start with Configurator. Add Configurator+ when your teams need more.</p>
+    </div>
+    <a class="ps-cta-btn" href="#pricing">Get started</a>
+  </section>
+
+  <!-- ============ Pricing ============ -->
+  <section class="ps-col ps-pricing" id="pricing" aria-label="Pricing">
+    <div>
+      <h2 class="ps-h2">Simple packaging</h2>
+      <p class="ps-lede">Start with Configurator. Upgrade to Configurator+ when you need deeper control.</p>
+    </div>
+    <div class="ps-plans">
+      <div class="ps-plan ps-plan-card">
+        <div><h3>Configurator</h3><p>Unified login and governed AI catalog for the enterprise.</p></div>
+        <div class="ps-plan-price">Talk to us</div>
+        <ul><li>• Single sign-on catalog</li><li>• Policy and audit basics</li><li>• Supported enterprise harnesses</li></ul>
+        <a class="ps-plan-btn" href="#">Talk to sales</a>
+      </div>
+      <div class="ps-plan">
+        <div><h3>Configurator+</h3><p>Deeper customization when your program is ready.</p></div>
+        <div class="ps-plan-price">Talk to us</div>
+        <ul><li>• Everything in Configurator</li><li>• Deeper customization paths</li><li>• Priority onboarding support</li></ul>
+        <a class="ps-plan-btn" href="#">Talk to sales</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="ps-col ps-faq" id="faq" aria-label="FAQ">
+    <div class="ps-faq-box">
+      <div class="ps-faq-head">
+        <h2>FAQ</h2>
+        <p>Search listed questions first. If nothing matches, we retrieve an answer from the knowledge base.</p>
+        <form class="ps-faq-search" id="psFaqSearch" autocomplete="off" role="search">
+          <span class="ps-faq-ring" aria-hidden="true"></span>
+          <label class="sr-only" for="psFaqInput">Ask a question</label>
+          <input id="psFaqInput" type="search" placeholder="Ask a question…" />
+          <button type="submit">Search</button>
+        </form>
+        <div class="ps-faq-pills"><span>1 · Match listed Q</span><span>2 · Else retrieve answer</span></div>
+      </div>
+      <ul class="ps-faq-list" id="psFaqList">
+        <li><button type="button">Who is Configurator for?<i aria-hidden="true">›</i></button></li>
+        <li><button type="button">What problem does it solve?<i aria-hidden="true">›</i></button></li>
+        <li><button type="button">How is it different from buying AI tools one by one?<i aria-hidden="true">›</i></button></li>
+        <li><button type="button">How does security and compliance work?<i aria-hidden="true">›</i></button></li>
+        <li><button type="button">What proof or ROI should we expect?<i aria-hidden="true">›</i></button></li>
+        <li><button type="button">What does rollout look like for IT?<i aria-hidden="true">›</i></button></li>
+        <li><button type="button">What does it integrate with?<i aria-hidden="true">›</i></button></li>
+        <li><button type="button">What happens when something fails?<i aria-hidden="true">›</i></button></li>
+        <li><button type="button">How are Configurator and Configurator+ packaged?<i aria-hidden="true">›</i></button></li>
+        <li><button type="button">How do we get started?<i aria-hidden="true">›</i></button></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ Footer ============ -->
+  <footer class="ps-footer">
+    <div class="ps-footer-inner">
+      <div class="ps-footer-bg" id="psFooterWarp" aria-hidden="true"></div>
+      <div class="ps-footer-col">
+        <img class="ps-footer-mark" src="wordmark-light.svg" alt="Enterprise AI" width="200" height="15" />
+        <div class="ps-footer-cols">
+          <div class="ps-footer-about">
+            <span class="ps-footer-k">Stay up to date</span>
+            <p class="ps-footer-lead">Enterprise AI — one login for every AI workspace.</p>
+            <p class="ps-footer-sub">Configurator and Configurator+ for secure, governed enterprise AI.</p>
+          </div>
+          <div class="ps-footer-links">
+            <div class="ps-footer-group" style="min-width:120px">
+              <span class="ps-footer-k ps-footer-k-sm">Product</span>
+              <a href="#product">Configurator</a><a href="#product">Configurator+</a><a href="#pricing">Pricing</a>
+            </div>
+            <div class="ps-footer-group" style="min-width:160px">
+              <span class="ps-footer-k ps-footer-k-sm">Contact</span>
+              <a href="mailto:growth@enterpriseaigroup.com">growth@enterpriseaigroup.com</a>
+              <span class="ps-footer-addr">Level 12, 50 Carrington St<br />Sydney, NSW 2000<br />Australia</span>
+            </div>
+            <div class="ps-footer-group" style="min-width:140px">
+              <span class="ps-footer-k ps-footer-k-sm">Business</span>
+              <span>ABN 71 677 246 409</span><span>ACN 677 246 409</span><span>DUNS 893114053</span>
+            </div>
+          </div>
+        </div>
+        <div class="ps-footer-base"><span>© 2026 Enterprise AI Group</span><span>Privacy · Terms</span></div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- Phone preview dialog (opened from the builder's Share popover) -->
+<div class="stm-phone" id="stmPhone" hidden role="dialog" aria-modal="true" aria-label="Phone preview">
+  <div class="stm-phone-col">
+    <div class="stm-phone-device">
+      <div class="stm-phone-notch"></div>
+      <iframe id="stmPhoneFrame" title="The app on a phone" src="about:blank"></iframe>
+    </div>
+    <div class="stm-phone-cap"><b id="stmPhoneName">Nike</b> on a phone — same app, same four steps.</div>
+    <button type="button" class="stm-phone-close" id="stmPhoneClose">Close</button>
+  </div>
+</div>
+
+<a class="ps-back" href="../index.html">← All remixes</a>
+<button type="button" class="ps-replay-intro" id="psReplayIntro">Replay intro</button>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+<script src="paper-shell.js"></script>
+<script src="../../app-view.js"></script>
+<script src="../../sell.js"></script>
+<script type="module" src="footer-warp.js"></script>
+<script type="module" src="intro.js"></script>
+<script src="sugar.js"></script>
+</body>
+</html>

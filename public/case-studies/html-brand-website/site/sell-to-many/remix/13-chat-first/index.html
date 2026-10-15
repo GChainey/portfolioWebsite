@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Remix 13 — Chat first · Build once. Sell to many.</title>
+<!-- One page, three themes (so they can't drift apart):
+       light (default)  remix 13 — a plain header, no shader anywhere
+       ?theme=shader    remix 14 — a live Warp shader behind the whole page,
+                        the wordmark intro, glass surfaces (14-dark-shader/
+                        redirects here with ?theme=shader).
+       ?theme=shape     remix 17 — remix 04's shapeshifter house style: paper,
+                        black rules, hard shadows, acid accent, wide uppercase
+                        type (17-shapeshifter/ redirects here with
+                        ?theme=shape&layout=mvp).
+       &ss=brand        remix 18 — the shapeshifter theme in EAI's colours,
+                        with the Paper Warp shaders behind the big slabs
+                        (18-shapeshifter-brand/ redirects here).
+       &ss=cyan         remix 19 — remix 17 with EAI cyan (#8EDFF9) in place
+                        of the acid green (19-shapeshifter-cyan/).
+       ?theme=cfg       remix 20 — the Configurator brand (Brand Book v3), on white
+       ?theme=refined   remix 21 — remix 01's Refined style
+       Remix 22 is remix 19 with ?layout=mvp-multi (the multiplier wall).
+       Remix 23 is remix 19 with ?layout=mvp2 (V2 user testing: the retest page).
+       ?theme=brand     remix 24 — the V2 page in brand book v4 (bright grey,
+                        navy marks, cyan underline), as in socials/BRAND.md
+       Remix 25 is remix 24 with ?layout=mvp3 (V3: the V2 page plus app settings
+                        you can click through and "Build in your CLI. Manage in
+                        EAI."). mvp3 runs as mvp2 with data-v="3" on <html>, so
+                        23 and 24 don't change.
+       Remix 26 is remix 25 with &site=1: this page as the home page of the
+                        V3 site (../26-site/), with the site's menu and footer
+                        in place of the section links.
+       &lp=<key>        27 — remix 25 as a landing page for one of brand book
+                        v5's five taglines (landing.js; ../27-taglines/). -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&family=Inter+Tight:wght@400;500;600;700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>/* Which wordmark shows, decided before any stylesheet loads */ .wm-light{display:none} [data-theme="shader"] .wm-light{display:block} [data-theme="shader"] .wm-dark{display:none}</style>
+<link rel="stylesheet" href="paper-shell.css" />
+<link rel="stylesheet" href="sugar.css" />
+<link rel="stylesheet" href="app-core.css" />
+<link rel="stylesheet" href="chat-first.css" />
+<link rel="stylesheet" href="gofer.css" />
+<link rel="stylesheet" href="multiplier.css" />
+<link rel="stylesheet" href="theme-shader.css" />
+<link rel="stylesheet" href="theme-shape.css" />
+<link rel="stylesheet" href="theme-shape-brand.css" />
+<link rel="stylesheet" href="theme-shape-cyan.css" />
+<link rel="stylesheet" href="theme-cfg.css" />
+<link rel="stylesheet" href="theme-refined.css" />
+<link rel="stylesheet" href="v2.css" />
+<link rel="stylesheet" href="v3.css" />
+<link rel="stylesheet" href="theme-brand.css" />
+<link rel="stylesheet" href="landing.css" />
+<script>
+  /* Before first paint: which theme, and (shader theme only) whether the
+     intro plays, so nothing flashes. */
+  (function () {
+    var q = new URLSearchParams(location.search);
+    var d = document.documentElement;
+    var theme = q.get('theme');
+    var shader = theme === 'shader';
+    d.setAttribute('data-theme', /^(shader|shape|cfg|refined|brand)$/.test(theme || '') ? theme : 'light');
+    if (theme === 'cfg') {
+      document.title = 'Remix 20 — Configurator brand · Build once. Sell to many.';
+      document.write('<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />');
+    }
+    if (theme === 'brand') {
+      document.title = 'Remix 24 — V2 in the new brand · Build once. Sell to many.';
+      document.write('<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />');
+    }
+    if (q.get('layout') === 'mvp3' || q.get('layout') === 'mvp4') d.setAttribute('data-v', '3');
+    if (theme === 'brand' && q.get('layout') === 'mvp3') document.title = 'Remix 25 — V3 · Build once. Sell to many.';
+    if (theme === 'brand' && q.get('layout') === 'mvp4') document.title = 'V4 · Build once. Sell to many.';
+    /* Remix 26 (?site=1): the V3 page as the home page of the site in ../26-site/.
+       The tagline pages (?lp=) show its pricing section too, so they take the same styles. */
+    if (q.get('site') === '1' || q.has('lp')) document.write('<link rel="stylesheet" href="../26-site/site.css" />');
+    if (theme === 'refined') {
+      document.title = 'Remix 21 — Refined · Build once. Sell to many.';
+      document.write('<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />');
+    }
+    if (theme === 'shape') {
+      var ss = q.get('ss');
+      if (ss === 'brand' || ss === 'cyan') d.setAttribute('data-ss', ss);
+      var multi = q.get('layout') === 'mvp-multi';
+      document.title = (multi ? 'Remix 22 — Shapeshifter + multiplier' : ss === 'brand' ? 'Remix 18 — Shapeshifter, EAI brand' : ss === 'cyan' ? 'Remix 19 — Shapeshifter, cyan' : 'Remix 17 — Shapeshifter') + ' · Build once. Sell to many.';
+      document.write('<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400..700&display=swap" rel="stylesheet" />');
+    }
+    if (!shader) return;
+    document.title = 'Remix 14 — Dark shader · Build once. Sell to many.';
+    var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduced && q.get('intro') !== '0') d.classList.add('intro-pending', 'intro-brand');
+  })();
+</script>
+<!-- Portfolio copy: the prototype's own chrome (All remixes, Arrange) is hidden, and scroll
+     anchoring is off so the page doesn't jump when Gofer resets its demo to replay it. -->
+<style>.ps-back, .ps-arrange, .ar-panel { display: none !important; } html { overflow-anchor: none; }</style>
+</head>
+<body class="ps">
+
+<!-- Shader theme only: one fixed, full-viewport live Warp shader behind the
+     whole page, and the intro that plays on it. Hidden in the light theme. -->
+<div class="bg" aria-hidden="true">
+  <div class="bg-shader" id="bgShader"></div>
+  <div class="bg-scrim"></div>
+</div>
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="intro-vignette" id="introVignette"></div>
+  <div class="intro-mark" id="introMark"><div class="intro-sweep"></div></div>
+  <button type="button" class="intro-skip" id="introSkip" tabindex="-1">Skip</button>
+</div>
+
+<!-- Header: a plain white bar in the light theme, a floating glass bar in the shader theme -->
+<header class="nav" id="nav">
+  <div class="ps-col nav-in">
+    <div class="nav-glass" id="navGlass" aria-hidden="true"></div>
+    <a class="nav-brand" href="#" aria-label="Enterprise AI, back to the top">
+      <img class="wm-dark" src="../../../assets/logos/eai-wordmark.svg" alt="Enterprise AI" width="180" height="13" />
+      <img class="wm-light" src="wordmark-light.svg" alt="" width="180" height="13" />
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#build" data-reveal style="--i:0">Build</a>
+      <a href="#calculator" data-reveal style="--i:1">Calculator</a>
+      <a href="#gofer" data-reveal style="--i:2">Gofer</a>
+      <a href="#agents" data-reveal style="--i:3">Agents</a>
+      <a href="#enterprise" data-reveal style="--i:4">Enterprise</a>
+      <a href="#features" data-reveal style="--i:5">AI features</a>
+      <a href="#control" data-reveal style="--i:5">Control</a>
+      <a href="#cms" data-reveal style="--i:6">CMS</a>
+    </nav>
+    <div class="nav-actions">
+      <button type="button" class="nav-signin" data-action="signin" data-reveal style="--i:7">Sign in</button>
+      <button type="button" class="nav-cta" data-action="start" data-reveal style="--i:8">Start building</button>
+    </div>
+  </div>
+</header>
+
+<div class="ps-page">
+
+  <!-- Every top-level section below carries data-section (its key in
+       ?order= / ?hide=) and data-label (its name in the Arrange tool). None
+       depends on its position: arrange.js can put any of them first. The
+       closing CTA and the footer stay put. -->
+
+  <!-- ============ Chat: what do you want to build? ============ -->
+  <section class="ps-col hx" id="chat" data-section="chat" data-label="Chat: what do you want to build?">
+      <div class="hx-prompt" id="hxPrompt">
+        <h1 class="hx-h1"><span class="w" style="--i:0">What</span> <span class="w" style="--i:1">do</span> <span class="w" style="--i:2">you</span> <span class="w" style="--i:3">want</span> <span class="w" style="--i:4">to</span> <span class="w w2" style="--i:5">build</span> <span class="w w2" style="--i:6">today?</span></h1>
+        <p class="hx-sub" data-reveal style="--i:7">Describe it in a sentence. Enterprise AI builds it as a four-step app, in your client’s brand, with AI built in.</p>
+
+        <form class="hx-box" id="hxForm" autocomplete="off" data-reveal style="--i:8">
+          <div class="hx-who">
+            <span class="who-you" aria-hidden="true">You</span>
+            <b>You, building</b>
+            <span class="hx-tag">Builder chat</span>
+          </div>
+          <label class="sr-only" for="hxInput">Describe the app you want to build</label>
+          <textarea id="hxInput" rows="2" placeholder="Describe the app you want to build, and who it’s for…"></textarea>
+          <div class="hx-foot">
+            <span class="hx-hint">Every app is four steps. Name a client and we’ll use their brand.</span>
+            <button type="submit" class="hx-go">Build it
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-7-7 7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </form>
+
+        <div class="hx-chips" data-reveal style="--i:9" aria-label="Suggestions">
+          <button type="button" data-prompt="A campaign email app for Nike">A campaign email app for Nike</button>
+          <button type="button" data-prompt="A client onboarding app">A client onboarding app</button>
+          <button type="button" data-prompt="An insurance claims app">An insurance claims app</button>
+          <button type="button" data-prompt="A document review app for a law firm">A document review app for a law firm</button>
+        </div>
+      </div>
+  </section>
+
+  <!-- ============ The builder demo (always on the page; auto-plays in view) ============ -->
+  <section class="ps-col bstage" id="build" data-section="builder" data-label="Builder demo">
+        <div class="hx-stage-head">
+          <div>
+            <h2 class="slogan" aria-live="polite"><span class="sl-a" id="slA" data-reveal style="--i:0">Build once.</span> <span class="sl-b" id="slB" data-reveal style="--i:2">Sell to many.</span></h2>
+            <p class="bstage-sub" data-reveal style="--i:4">Watch it build an app for Nike, then re-skin the same app for the next client. Or describe your own.</p>
+          </div>
+          <p class="hx-count" id="hxCount" data-reveal style="--i:5">One build</p>
+        </div>
+
+        <div class="bx-frame" data-reveal style="--i:6">
+          <div class="bx" id="bx">
+            <!-- builder top bar -->
+            <div class="bx-top">
+              <div class="bx-app-id">
+                <span class="bx-mark" aria-hidden="true"><img src="../../../assets/logos/eai-mark-dark.svg" alt="" /></span>
+                <b id="bxTitle">New app</b>
+                <span class="bx-pill" id="bxStatus">Draft</span>
+              </div>
+              <div class="bx-clients" id="bxClients" aria-label="Clients this build serves"></div>
+              <div class="bx-actions">
+                <button type="button" class="bx-btn bx-ghost" id="bxNew" title="Start a new app">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>New app</span>
+                </button>
+                <button type="button" class="bx-btn bx-outline" id="bxPhone" disabled>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M11 18.5h2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Preview on phone</span>
+                </button>
+                <button type="button" class="bx-btn bx-primary" id="bxPublish" disabled><span>Publish</span></button>
+              </div>
+            </div>
+
+            <div class="bx-body">
+              <!-- 1. The builder chat: the maker, EAI-neutral, on the left -->
+              <aside class="bx-chat" aria-label="Builder chat">
+                <div class="bx-chat-hd">
+                  <span class="bx-av" aria-hidden="true"><img src="../../../assets/logos/eai-mark-dark.svg" alt="" /></span>
+                  <div><b>EAI builder</b><small>You, building this app</small></div>
+                </div>
+                <div class="bx-thread" id="bxThread" aria-live="polite"></div>
+                <div class="bx-suggest" id="bxSuggest"></div>
+                <form class="bx-composer" id="bxComposer" autocomplete="off">
+                  <label class="sr-only" for="bxInput">Message the builder</label>
+                  <input id="bxInput" type="text" placeholder="Tell the builder what to change…" />
+                  <button type="submit" id="bxSend" aria-label="Send to the builder">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-7-7 7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
+                  <button type="button" id="bxSkip" class="bx-skip" hidden>Skip</button>
+                </form>
+              </aside>
+
+              <!-- 2. The client's app, with its own client-branded assistant, on the right -->
+              <div class="bx-canvas">
+                <div class="bx-canvas-label" id="bxCanvasLabel"><i></i><span>The app your client’s team will use</span></div>
+                <div class="bx-app-wrap">
+                  <div id="bxApp"></div>
+                  <div class="bx-reading" id="bxReading" hidden>
+                    <span class="bx-spin" aria-hidden="true"></span>
+                    <div><b id="bxReadingT">Reading the site…</b><small>Colours, logo and tone of voice</small></div>
+                  </div>
+                  <div class="bx-toast" id="bxToast" hidden></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  </section>
+
+  <!-- ============ The multiplier (from remix 03): one build, sold again and again.
+       Only shown by layouts that ask for it (?layout=mvp-multi, remix 22). ============ -->
+  <section class="ps-col sec mx" id="multiplier" data-section="multiplier" data-label="The multiplier" aria-labelledby="mxH">
+    <div class="mx-head">
+      <div>
+        <h2 class="sg-h" id="mxH">One build. Every client.</h2>
+        <p class="sg-sub">Each time you sell it again, the same four-step app goes out in the next client’s brand. Nothing gets rebuilt.</p>
+      </div>
+      <button type="button" class="mx-go" id="mxGo">Sell it again <b id="mxGoN">×2</b></button>
+    </div>
+    <div class="mx-wall" id="mxWall"></div>
+    <!-- When the calculator section is hidden (remix 22), its sliders move in here and drive the wall -->
+    <div class="mx-calc" id="mxCalc"></div>
+    <div class="mx-ticker" aria-live="polite">
+      <div><span>Built</span><p><b>1</b> app</p></div>
+      <div><span>Sold to</span><p><b id="mxClients">1</b> <em id="mxClientsK">client</em></p></div>
+      <div><span>Earned from one build</span><p><b id="mxEarned">$6,000</b> <em>at $6,000 each</em></p></div>
+      <div><span>Build hours</span><p><s id="mxScratch">60</s> <b id="mxHours">60</b> <em>vs from scratch</em></p></div>
+    </div>
+  </section>
+
+  <!-- ============ Sugar hit 2: on their phone (12's section, following the build) ============ -->
+  <section class="ps-col sg-phone" id="phone" data-section="phone" data-label="Phone preview" aria-labelledby="phoneH">
+    <div class="sg-phone-copy">
+      <h2 class="sg-h" id="phoneH">On their phone before the meeting ends.</h2>
+      <p class="sg-sub">One click from the builder puts the app on a phone. Your client scans the code and has their app: <b id="pbApp">Campaign email</b>, same four steps, already in their brand.</p>
+      <ul class="sg-ticks">
+        <li>One click to a phone preview in the builder</li>
+        <li>Share with a link or a QR code</li>
+        <li>What you preview is what they get</li>
+      </ul>
+      <div class="sg-seg" id="sgSeg" role="tablist" aria-label="Client"></div>
+    </div>
+    <div class="sg-phone-stage" id="sgStage">
+      <div class="sg-device" id="sgDevice">
+        <div class="sg-island"></div>
+        <div class="sg-status"><span>9:41</span><svg class="sg-signal" viewBox="0 0 17 12" width="17" height="12" aria-hidden="true"><rect x="0" y="7" width="3" height="5" rx="1" fill="currentColor"/><rect x="5" y="4.5" width="3" height="7.5" rx="1" fill="currentColor"/><rect x="10" y="2" width="3" height="10" rx="1" fill="currentColor"/></svg></div>
+        <iframe id="sgFrame" title="The client&rsquo;s app on a phone" src="about:blank"></iframe>
+      </div>
+      <div class="sg-qr">
+        <a class="sg-qr-code" id="sgQrLink" href="phone.html" target="_blank" rel="noopener" aria-label="Open the client&rsquo;s app in a new tab"><canvas id="sgQr" width="148" height="148"></canvas></a>
+        <span class="qr-fallback" hidden>QR unavailable — use the link</span>
+        <div class="sg-qr-t">Scan to open <span id="sgQrName">Nike</span>&rsquo;s app</div>
+        <div class="sg-qr-u"><span id="sgQrUrl">eai.app/nike/campaign-email</span><button type="button" id="sgCopy">Copy</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ The maths (12's calculator) ============ -->
+  <section class="ps-col sg-calc" id="calculator" data-section="maths" data-label="Calculator" aria-labelledby="calcH">
+    <div class="sg-calc-head">
+      <h2 class="sg-h" id="calcH">You build it once. They pay for it every time.</h2>
+      <p class="sg-sub">Move the sliders. Each new client takes about an hour: name them, check it, share it.</p>
+    </div>
+    <div class="sg-calc-box">
+      <div class="sg-calc-inputs">
+        <label class="sg-range"><span class="sg-range-top"><span>Hours to build it once</span><b id="cvHours">60 hrs</b></span><input type="range" id="ciHours" min="10" max="200" step="5" value="60" /></label>
+        <label class="sg-range"><span class="sg-range-top"><span>Clients you sell it to</span><b id="cvClients">12</b></span><input type="range" id="ciClients" min="1" max="60" step="1" value="12" /></label>
+        <label class="sg-range"><span class="sg-range-top"><span>Price per client</span><b id="cvPrice">$6,000</b></span><input type="range" id="ciPrice" min="500" max="25000" step="500" value="6000" /></label>
+        <p class="sg-calc-note">Assumes your time is worth $150 an hour, and about an hour for each new client.</p>
+      </div>
+      <div class="sg-calc-out" aria-live="polite">
+        <p class="sg-out-k">Revenue from one build</p>
+        <p class="sg-out-big" id="coRevenue">$72,000</p>
+        <div class="sg-bars">
+          <div class="sg-bar-row"><span>Build each from scratch</span><div class="sg-bar"><i id="cbScratch"></i></div><b id="coScratch">720 hrs</b></div>
+          <div class="sg-bar-row"><span>Build once, sell to many</span><div class="sg-bar sg-bar-once"><i id="cbOnce"></i></div><b id="coOnce">72 hrs</b></div>
+        </div>
+        <div class="sg-tiles">
+          <div class="sg-tile sg-tile-dark"><b id="coSaved">648</b><span>hours back</span></div>
+          <div class="sg-tile"><b id="coProfit">$61,200</b><span>profit after your time</span></div>
+          <div class="sg-tile"><b id="coRate">$1,000</b><span>earned per hour you put in</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Gofer: we don't just build the process, we improve it ============ -->
+  <section class="ps-col sec gf" id="gofer" data-section="gofer" data-label="Gofer: distil it to four steps" aria-labelledby="gofH">
+    <div class="gf-wrap">
+      <div class="gf-copy">
+        <p class="gf-kicker"><span class="gf-mark" aria-hidden="true">G</span>Gofer, the process agent</p>
+        <h2 class="sg-h" id="gofH">We don’t just build the process. We make it better.</h2>
+        <p class="sg-sub">Tell Gofer how the work gets done today, however messy. It hands back the same job in four steps, ready to build.</p>
+        <p class="gf-try-k">Try it with</p>
+        <div class="gf-picks" id="gfPicks"></div>
+      </div>
+      <div class="gf-frame">
+        <div class="gf-chat" id="gfChat">
+          <div class="gf-chat-hd">
+            <span class="gf-mark" aria-hidden="true">G</span>
+            <div><b>Gofer</b><small>Turns any process into four steps</small></div>
+            <button type="button" class="gf-replay" id="gfReplay" aria-label="Play it again">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 3v6h-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <div class="gf-thread" id="gfThread" aria-live="polite"></div>
+          <div class="gf-composer" aria-hidden="true">
+            <span class="gf-draft" id="gfDraft">Paste how the work gets done today…</span>
+            <span class="gf-send"><svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Build with your external agent ============ -->
+  <section class="ps-col sec" id="agents" data-section="agents" data-label="Build with your agent" aria-labelledby="agentsH">
+    <div class="ag">
+      <div class="ag-copy">
+        <p class="ag-kicker">For developers</p>
+        <h2 class="sg-h" id="agentsH">Start in Claude Code, Codex or Cursor</h2>
+        <p class="sg-sub">Already building with an AI agent? Connect it to Enterprise AI through our MCP server or CLI, type <code>/eai</code> and describe the app. It appears in EAI, four steps, ready to sell.</p>
+        <div class="ag-install">
+          <code id="agCmd">npx install eai</code>
+          <button type="button" id="agCopy">Copy</button>
+        </div>
+        <ul class="ag-points">
+          <li>Same builder, same four steps, from your own editor</li>
+          <li>Data, auth, tenancy and hosting come with it</li>
+          <li>Switch between your editor and EAI any time</li>
+        </ul>
+      </div>
+      <div class="ag-demo">
+        <div class="term" id="term">
+          <div class="term-bar">
+            <span class="term-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <div class="term-tabs" role="tablist" aria-label="Choose your agent">
+              <button type="button" role="tab" aria-selected="true" data-agent="claude">Claude Code</button>
+              <button type="button" role="tab" aria-selected="false" data-agent="codex">Codex</button>
+              <button type="button" role="tab" aria-selected="false" data-agent="cursor">Cursor</button>
+            </div>
+            <button type="button" class="term-replay" id="termReplay" aria-label="Replay the terminal">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 3v6h-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <div class="term-body" id="termBody" aria-live="polite"></div>
+        </div>
+        <div class="ag-arrive" id="agArrive" hidden>
+          <span class="bx-mark" aria-hidden="true"><img src="../../../assets/logos/eai-mark-dark.svg" alt="" /></span>
+          <div><b>Campaign email · Nike</b><small>Appeared in your EAI workspace · 4 steps</small></div>
+          <button type="button" id="agOpen">Open in EAI</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Enterprise grade ============ -->
+  <section class="ps-col sec" id="enterprise" data-section="enterprise" data-label="Built for the apps you create" aria-labelledby="entH">
+    <div class="sec-head">
+      <h2 class="sg-h" id="entH">Your apps. Your controls.</h2>
+    </div>
+    <div class="ent">
+      <div class="ent-card">
+        <div class="ent-viz ent-sso">
+          <button type="button" class="sso-btn" data-sso><span class="ms" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>Continue with your organisation</span></button>
+          <span class="sso-state" id="ssoState">Try it</span>
+        </div>
+        <h3>Use your own sign-in</h3><p>Your team accesses your apps with the identity provider they already use.</p>
+      </div>
+      <div class="ent-card">
+        <div class="ent-viz ent-perm">
+          <div class="perm-row"><span><b>Editor</b> · update content</span><i aria-hidden="true">✓</i></div>
+          <div class="perm-row"><span><b>Viewer</b> · read only</span><i aria-hidden="true">✓</i></div>
+        </div>
+        <h3>Decide who can do what</h3><p>Give each person the right access for their role and workspace.</p>
+      </div>
+      <div class="ent-card">
+        <div class="ent-viz ent-tenants">
+          <div class="tenant"><i aria-hidden="true">◆</i><span>Client A</span></div>
+          <div class="tenant"><i aria-hidden="true">◆</i><span>Client B</span></div>
+        </div>
+        <h3>Keep clients separate</h3><p>Workspace-scoped access keeps each client’s work in its own space.</p>
+      </div>
+      <div class="ent-card">
+        <div class="ent-viz ent-home">
+          <div class="region-chips" role="radiogroup" aria-label="Home region">
+            <button type="button" role="radio" aria-checked="true" data-region="Australia">AU</button>
+            <button type="button" role="radio" aria-checked="false" data-region="Canada">CA</button>
+            <button type="button" role="radio" aria-checked="false" data-region="the EU">EU</button>
+          </div>
+        </div>
+        <h3>Know your home region</h3><p>Each workspace is assigned a region that guides where its app traffic goes.</p>
+      </div>
+      <div class="ent-card">
+        <div class="ent-viz ent-audit" id="auditLog">
+          <div class="audit-row"><span class="audit-av" aria-hidden="true">M</span><span class="audit-txt"><b>Mia approved request</b><small>Today · 10:42 · Client A</small></span><i aria-hidden="true">✓</i></div>
+        </div>
+        <h3>See who did what</h3><p>Review recorded actions with the person, time and affected resource.</p>
+      </div>
+      <div class="ent-card">
+        <div class="ent-viz ent-release">
+          <div class="rel-flow">
+            <span class="rel-step">Change</span><span class="rel-arrow" aria-hidden="true">→</span><span class="rel-step on">Tested ✓</span><span class="rel-arrow" aria-hidden="true">→</span><span class="rel-step">Live</span>
+          </div>
+        </div>
+        <h3>Release with confidence</h3><p>Approve a tested version before it reaches your users.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AI features ============ -->
+  <section class="ps-col sec" id="features" data-section="features" data-label="AI features" aria-labelledby="featH">
+    <div class="sec-head">
+      <h2 class="sg-h" id="featH">Switch on AI. Watch the app get smarter.</h2>
+      <p class="sg-sub">Each one is a switch, not a project. Here’s what each does inside the app, for every client this build serves.</p>
+    </div>
+    <div class="feat">
+      <div class="feat-list" role="tablist" aria-label="AI features">
+        <button type="button" class="feat-item" role="tab" data-feature="chatbot" aria-selected="false">
+          <span class="feat-txt"><b>AI Chatbot</b><small>Answers from your documents.</small><span class="feat-more"><span>Upload the handbook and the assistant answers from it, with the page it found each answer on. Every client’s copy answers from their own documents.</span></span></span>
+          <span class="feat-bar" aria-hidden="true"><i></i></span>
+        </button>
+        <button type="button" class="feat-item" role="tab" data-feature="checklist" aria-selected="false">
+          <span class="feat-txt"><b>Document Checklist</b><small>Tracks what’s missing.</small><span class="feat-more"><span>It lists every document a step needs, ticks off what’s in and flags what’s missing, so nobody submits half a file.</span></span></span>
+          <span class="feat-bar" aria-hidden="true"><i></i></span>
+        </button>
+        <button type="button" class="feat-item" role="tab" data-feature="validation" aria-selected="false">
+          <span class="feat-txt"><b>Document Validation</b><small>Checks every document.</small><span class="feat-more"><span>Each upload is read against your rules (name matches, not expired, signed) and the ones that fail are flagged before a person looks.</span></span></span>
+          <span class="feat-bar" aria-hidden="true"><i></i></span>
+        </button>
+        <button type="button" class="feat-item" role="tab" data-feature="creation" aria-selected="false">
+          <span class="feat-txt"><b>Document Creation</b><small>Fills in the contract.</small><span class="feat-more"><span>It drafts the contract from answers already in the app, ready to sign and send for approval.</span></span></span>
+          <span class="feat-bar" aria-hidden="true"><i></i></span>
+        </button>
+        <p class="feat-note" id="featNote" aria-live="polite"></p>
+      </div>
+      <div class="feat-demo">
+        <div class="feat-plate">
+          <div class="feat-label" id="featLabel"></div>
+          <div class="feat-app-wrap"><div id="featApp"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Control: EAI Curate + Workflows (V2 user testing only) ============ -->
+  <section class="ps-col sec ct" id="control" data-section="control" data-label="Control: your workflows, data and clients" aria-labelledby="ctH">
+    <div class="sec-head">
+      <h2 class="sg-h" id="ctH">Don’t get lost in the vibes.</h2>
+      <p class="sg-sub">AI builds fast. EAI Curate keeps you in control: one view of every workflow, the data behind it and the clients it serves, so you can see how it all connects.</p>
+    </div>
+    <div class="ct-app" id="ctApp" aria-label="EAI Curate: an example of the workflow view"></div>
+    <ul class="ct-points">
+      <li><b>See how it’s wired</b><p>Every step, and the AI and data it uses, on one map. Nothing hidden inside a prompt.</p></li>
+      <li><b>Know where the data lives</b><p>Tables, records and files in one place, with a search layer your AI reads from.</p></li>
+      <li><b>Every client in their own space</b><p>Each client has their own data, users and brand. Change the workflow once and every client gets it.</p></li>
+    </ul>
+  </section>
+
+  <!-- ============ Build in your CLI, manage in EAI (V3, manage.js) ============ -->
+  <section class="ps-col sec mg" id="manage" data-section="manage" data-label="Build in the CLI, manage in EAI" aria-labelledby="mgH">
+    <div class="sec-head">
+      <h2 class="sg-h" id="mgH">Build in your CLI. Manage in EAI.</h2>
+      <p class="sg-sub">Your CLI is the fastest place to build, and it runs on the AI your company already pays for. Everything it builds lands in the EAI web app as four steps you can see, configure and hand to a client. However fast the AI goes, you keep the view from above.</p>
+    </div>
+    <div class="mg-demo" id="mgDemo" aria-label="Changes typed in Claude Code, landing in the EAI web app"></div>
+    <ul class="mg-points">
+      <li><b>Build where it’s powerful</b><p>Claude Code, Codex or Cursor, on the subscription you already have. Not just for developers: anyone can type <code>/eai</code> and describe the change.</p></li>
+      <li><b>Manage where it’s clear</b><p>Every change lands in EAI as steps, AI features and data you can see, switch on and off, and hand to a client.</p></li>
+      <li><b>Never lose the plot</b><p>One view of every app, every client and every change, whoever made it and wherever they made it from.</p></li>
+    </ul>
+  </section>
+
+  <!-- ============ CMS ============ -->
+  <section class="ps-col sec" id="cms" data-section="cms" data-label="CMS view" aria-labelledby="cmsH">
+    <div class="sec-head">
+      <h2 class="sg-h" id="cmsH">Every workflow, document and submission, in one place</h2>
+      <p class="sg-sub">Behind every app is a simple admin view: how it’s wired, what the AI is reading, and where the work is up to, for every client.</p>
+    </div>
+    <div class="cms">
+      <aside class="cms-nav" role="tablist" aria-label="CMS sections">
+        <div class="cms-app"><span class="bx-mark" aria-hidden="true"><img src="../../../assets/logos/eai-mark-dark.svg" alt="" /></span><b id="cmsTitle">Campaign email</b></div>
+        <button type="button" role="tab" aria-selected="true" data-cms="workflows"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h6M5 12h10M5 18h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Workflows<span id="cmsCountW">4</span></button>
+        <button type="button" role="tab" aria-selected="false" data-cms="knowledge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z M14 3v5h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Knowledge<span id="cmsCountK">0</span></button>
+        <button type="button" role="tab" aria-selected="false" data-cms="submissions"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13h4l2 3h4l2-3h4M5 5h14l1 8v6H4v-6z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>Submissions<span id="cmsCountS">0</span></button>
+        <div class="cms-clients" id="cmsClients"></div>
+      </aside>
+      <div class="cms-main" id="cmsMain" role="tabpanel"></div>
+    </div>
+  </section>
+
+  <!-- ============ Who it's for (remix 29, the lean site) ============
+       Hidden unless ?site=1&ia=2, when ../26-site/site.js shows it. The
+       lean site has no "who we help" or examples pages: this is where
+       they went. No data-section, so the Arrange tool and every other
+       remix never see it. The copy is those pages' own. "See use cases"
+       opens the AI features' use-case list (use-cases.js). -->
+  <section class="ps-col sec" id="who" aria-labelledby="whoH" hidden>
+    <div class="sec-head pr-home-head">
+      <div>
+        <h2 class="sg-h" id="whoH">Built for the people who <span class="hl">deliver the work</span></h2>
+        <p class="sg-sub">Three kinds of team build on Enterprise AI. Each starts with one workflow.</p>
+      </div>
+      <button type="button" class="st-btn" data-uc-all>See use cases</button>
+    </div>
+    <div class="st-grid" data-cols="3">
+      <div class="st-card">
+        <h3>Consulting delivery firms</h3>
+        <p>Give client one a tailored result, keep an authorised delivery foundation, then adapt it for client two while confidential material stays contained.</p>
+        <p><b>For example:</b> turn an authorised delivery method into a reusable foundation, with each client’s data kept separate.</p>
+      </div>
+      <div class="st-card">
+        <h3>Enterprise operations</h3>
+        <p>Help teams find missing evidence, focus review effort and take the next authorised action from one case flow.</p>
+        <p><b>For example:</b> move supplier evidence from intake to a review-ready case, with final approval kept with a named reviewer.</p>
+      </div>
+      <div class="st-card">
+        <h3>Software vendors</h3>
+        <p>Combine reusable workflow capability with your product context, customer relationships and market expertise.</p>
+        <p><b>For example:</b> add a controlled workflow to a customer journey, with integration, product and support responsibilities agreed before release.</p>
+      </div>
+    </div>
+    <p class="st-note"><span class="st-tag st-tag-navy">Note</span><span><b>These are illustrative workflows, not customer results.</b> Named stories are published once their evidence, wording and customer permission are approved.</span></p>
+  </section>
+
+  <!-- ============ Pricing (remix 26, and the tagline pages) ============
+       Hidden unless ?site=1, when ../26-site/site.js shows it, or ?lp=, when
+       landing.js shows it with a sign-up button on each plan; no
+       data-section, so the Arrange tool and 23, 24 and 25 never see it.
+       The four plans from the signed-in workspace (PLANS in
+       workspace-ai-demo/assets/admin-app-tier.js), as on
+       ../26-site/pricing.html: keep the three in step. -->
+  <section class="ps-col sec pr-home" id="pricing" aria-labelledby="prH" hidden>
+    <div class="sec-head pr-home-head">
+      <div>
+        <h2 class="sg-h" id="prH">Choose <span class="hl">a plan</span></h2>
+        <p class="sg-sub">Pick a plan and how many credits you need each month.</p>
+      </div>
+      <a class="st-btn" href="../26-site/pricing.html">See full pricing</a>
+    </div>
+    <div class="pr-tiers">
+      <article class="pr-tier">
+        <h3>Experiment</h3>
+        <div class="pr-price"><b>$0</b><small>/ month</small></div>
+        <div class="pr-usage"><span class="pr-label">Usage per month</span><b>300 credits</b></div>
+        <div class="pr-inc"><span class="pr-label">Included</span><ul class="pr-list"><li>Gofer build agent</li><li>Database</li><li>App preview</li></ul></div>
+      </article>
+      <article class="pr-tier">
+        <h3>Pro</h3>
+        <div class="pr-price"><b>$9</b><small>/ month</small></div>
+        <div class="pr-usage"><span class="pr-label">Usage per month</span><b>1,000 to 15,000 credits</b></div>
+        <div class="pr-inc"><span class="pr-label">Included</span><p>Everything in Experiment, plus</p><ul class="pr-list"><li>Authentication and authorization</li><li>AI chatbot</li><li>AI document creation</li><li>AI document checking</li><li>EAI Curate database</li><li>Community support</li></ul></div>
+      </article>
+      <article class="pr-tier is-featured">
+        <h3>Team</h3>
+        <div class="pr-price"><b>$49</b><small>/ month</small></div>
+        <div class="pr-usage"><span class="pr-label">Usage per month</span><b>3,000 to 30,000 credits</b></div>
+        <div class="pr-inc"><span class="pr-label">Included</span><p>Everything in Pro, plus</p><ul class="pr-list"><li>Cheaper credits</li><li>Support</li></ul></div>
+      </article>
+      <article class="pr-tier">
+        <h3>Enterprise</h3>
+        <div class="pr-price"><b>Custom</b><small>talk to sales</small></div>
+        <div class="pr-usage"><span class="pr-label">Usage per month</span><b>Custom</b></div>
+        <div class="pr-inc"><span class="pr-label">Included</span><p>Everything in Team, plus</p><ul class="pr-list"><li>Testing suite</li><li>Evaluation suite</li><li>Custom terms and support</li></ul></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ CTA banner ============ -->
+  <section class="ps-col ps-cta" id="cta" aria-label="Start building">
+    <div class="ps-cta-copy">
+      <h2>What would you sell twice?</h2>
+      <p>Build it once for one client. Make it right for the next one in a sentence.</p>
+    </div>
+    <button type="button" class="ps-cta-btn" data-action="start">Start building</button>
+  </section>
+
+  <!-- ============ Footer ============ -->
+  <footer class="ps-footer">
+    <div class="ps-footer-inner">
+      <div class="ps-footer-col">
+        <img class="ps-footer-mark" src="wordmark-light.svg" alt="Enterprise AI" width="200" height="15" />
+        <div class="ps-footer-cols">
+          <div class="ps-footer-about">
+            <span class="ps-footer-k">Build once. Sell to many.</span>
+            <p class="ps-footer-lead">Enterprise AI — build an app for one client, sell it to the next.</p>
+            <p class="ps-footer-sub">Four steps, their brand, AI built in. Enterprise grade from day one.</p>
+          </div>
+          <div class="ps-footer-links">
+            <div class="ps-footer-group" style="min-width:120px">
+              <span class="ps-footer-k ps-footer-k-sm">Product</span>
+              <a href="#build">Builder</a><a href="#calculator">Calculator</a><a href="#gofer">Gofer</a><a href="#agents">Agents</a><a href="#features">AI features</a><a href="#cms">CMS</a>
+            </div>
+            <div class="ps-footer-group" style="min-width:160px">
+              <span class="ps-footer-k ps-footer-k-sm">Contact</span>
+              <a href="mailto:growth@enterpriseaigroup.com">growth@enterpriseaigroup.com</a>
+              <span class="ps-footer-addr">Level 12, 50 Carrington St<br />Sydney, NSW 2000<br />Australia</span>
+            </div>
+            <div class="ps-footer-group" style="min-width:140px">
+              <span class="ps-footer-k ps-footer-k-sm">Business</span>
+              <span>ABN 71 677 246 409</span><span>ACN 677 246 409</span><span>DUNS 893114053</span>
+            </div>
+          </div>
+        </div>
+        <div class="ps-footer-base"><span>© 2026 Enterprise AI Group</span><span>Privacy · Terms</span></div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- Phone preview: slides in from the right -->
+<div class="drawer" id="phoneDrawer" hidden>
+  <div class="drawer-scrim" data-close></div>
+  <div class="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="dwTitle">
+    <header class="dw-hd">
+      <div><p class="dw-k">Preview on mobile</p><h2 id="dwTitle"><span id="dwName">Nike</span>’s app, on a phone</h2></div>
+      <button type="button" class="dw-close" data-close aria-label="Close the phone preview">&times;</button>
+    </header>
+    <div class="dw-body">
+      <div class="dw-phone">
+        <div class="phone"><div class="phone-notch"></div><iframe id="dwFrame" title="The client’s app on a phone" src="about:blank"></iframe></div>
+        <p class="dw-cap">This is live. Tap through the steps, or ask the assistant.</p>
+      </div>
+      <div class="dw-side">
+        <div class="qr-tile qr-lg"><canvas id="dwQr" width="176" height="176" aria-label="QR code for the client’s app"></canvas><span class="qr-fallback" hidden>QR unavailable — use the link</span></div>
+        <h3>Scan it on your phone now.</h3>
+        <p>Point your camera at the code. You’ll get <b id="dwName2">Nike</b>’s app: the same four steps their team will use, in their brand.</p>
+        <div class="dw-url"><code id="dwUrl"></code><button type="button" id="dwCopy">Copy link</button></div>
+        <a class="dw-open" id="dwOpen" href="phone.html" target="_blank" rel="noopener">Open in a new tab ↗</a>
+        <div class="dw-clients-wrap">
+          <p class="dw-k">Switch client</p>
+          <div class="dw-clients" id="dwClients"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Small modal for everything else (sign in, publish, security pack) -->
+<div class="modal" id="modal" hidden>
+  <div class="modal-scrim" data-close></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalT">
+    <h2 id="modalT"></h2>
+    <div class="modal-body" id="modalB"></div>
+    <div class="modal-acts" id="modalA"></div>
+  </div>
+</div>
+
+<a class="ps-back" href="../index.html">← All remixes</a>
+<button type="button" class="ps-replay-intro" id="psReplayIntro">Replay intro</button>
+<button type="button" class="ps-arrange" id="arrangeBtn" aria-pressed="false" aria-controls="arPanel">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5h.01M15 5h.01M9 12h.01M15 12h.01M9 19h.01M15 19h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>Arrange
+</button>
+
+<!-- Prototype-only: rearrange the page (arrange.js) -->
+<aside class="ar-panel" id="arPanel" hidden aria-label="Arrange sections">
+  <header class="ar-hd">
+    <div><b>Arrange sections</b><small>Drag on the page or here. The link keeps the order.</small></div>
+    <button type="button" class="ar-close" id="arClose" aria-label="Close arrange mode">&times;</button>
+  </header>
+  <ol class="ar-list" id="arList"></ol>
+  <div class="ar-presets">
+    <span>Presets</span>
+    <button type="button" data-preset="default">Chat first</button>
+    <button type="button" data-preset="value-first">Value first</button>
+    <button type="button" data-preset="ut-light">UT light</button>
+    <button type="button" data-preset="mvp">MVP</button>
+    <button type="button" data-preset="mvp-multi">MVP + multiplier</button>
+    <button type="button" data-preset="mvp2">V2 user testing</button>
+    <button type="button" data-preset="mvp3">V3</button>
+    <button type="button" data-preset="mvp4">V4</button>
+  </div>
+  <div class="ar-foot">
+    <button type="button" class="ar-reset" id="arReset">Reset</button>
+    <button type="button" class="ar-copy" id="arCopy">Copy link</button>
+  </div>
+</aside>
+<div class="ar-drop" id="arDrop" hidden aria-hidden="true"></div>
+
+<script src="../../ut/mkt-ut-boot.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+<script src="../../app-view.js"></script>
+<script src="app-core.js"></script>
+<script src="compose.js"></script>
+<script src="landing.js"></script>
+<script src="arrange.js"></script>
+<script src="control.js"></script>
+<script src="manage.js"></script>
+<script src="use-cases.js"></script>
+<script src="chat-first.js"></script>
+<script src="gofer.js"></script>
+<script src="multiplier.js"></script>
+<script type="module" src="theme-shader.js"></script>
+<script src="theme-shape.js"></script>
+<script src="theme-cfg.js"></script>
+<script src="theme-brand.js"></script>
+<!-- Remix 26 (?site=1): the site menu and footer shared with ../26-site/. Nothing loads without the flag. -->
+<script>if (new URLSearchParams(location.search).get('site') === '1') document.write('<script src="../26-site/site.js"><\/script>');</script>
+</body>
+</html>

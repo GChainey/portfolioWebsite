@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Enterprise AI website (V2, brand book v4)</title>
+<!-- A copy of remix 24 from the EAI prototypes repo: the V2 home page in the new brand, with
+     the EAI builder inside the page. Keeps any params (?auto=0) and the hash. -->
+<script>
+  (function () {
+    var q = new URLSearchParams(location.search);
+    q.set('theme', 'brand');
+    if (!q.has('layout')) q.set('layout', 'mvp2');
+    location.replace('sell-to-many/remix/13-chat-first/index.html?' + q.toString() + location.hash);
+  })();
+</script>
+</head>
+<body></body>
+</html>

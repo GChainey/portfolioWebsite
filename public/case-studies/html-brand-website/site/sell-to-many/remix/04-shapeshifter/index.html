@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en" data-theme="house">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#F2F2EC" />
+<link rel="icon" href="data:," />
+<title>Build once. Sell to many. — Shapeshifter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wdth,wght@62..125,400..900&family=Fraunces:opsz,wght@9..144,500..900&family=Inter:wght@400..700&family=JetBrains+Mono:wght@400..700&family=Plus+Jakarta+Sans:wght@400..800&family=Space+Grotesk:wght@400..700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="shape.css" />
+<!-- Portfolio copy: the link back to the remix hub is hidden. -->
+<style>a[href="../index.html"] { display: none !important; }</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav" id="nav">
+  <a class="nav-logo" id="navLogo" href="#top" aria-label="Home"></a>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="#read">Rebrand</a>
+    <a href="#steps">Four steps</a>
+    <a href="#voice">Voice</a>
+    <a href="#ai">Assistant</a>
+    <a href="#phone">Share</a>
+  </nav>
+  <div class="nav-end">
+    <div class="wearing" id="wearing" hidden>
+      <span class="wearing-dot" id="wearingDot"></span>
+      <span class="wearing-k">Now wearing</span>
+      <b id="wearingName">Nike</b>
+      <button type="button" class="wearing-x" id="wearingX" aria-label="Take it off — back to house style">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <a class="btn btn-sm" href="#cta" data-copy="navCta">Start building</a>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- 01 — The hero is a prompt. Name a client and the whole site becomes theirs. -->
+  <section class="hero" id="top">
+    <div class="hero-grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="hero-meta label">
+      <span data-copy="kicker">Enterprise AI — for agencies, consultants and builders</span>
+      <span class="hero-meta-r" id="heroMetaR">House style · 01</span>
+    </div>
+    <h1 class="h1" id="h1">
+      <span class="h1-line" data-copy="h1a" data-fit="h1">Build once.</span>
+      <span class="h1-line"><span class="mark" data-copy="h1b" data-fit="h1">Sell to many.</span></span>
+    </h1>
+    <div class="hero-foot">
+      <p class="hero-sub" data-copy="sub">Build a four-step app for one client. Name the next one and it wears their logo, their colours and their voice. Same wiring underneath.</p>
+      <!-- The maker's chat with the EAI builder. Always EAI house style, whatever the page is wearing. -->
+      <form class="prompt builder" id="prompt" autocomplete="off" aria-label="EAI builder — you, building the app">
+        <div class="bld-hd">
+          <span class="bld-mark" aria-hidden="true">EAI</span>
+          <span class="bld-t"><b>Builder</b><small>Campaign email app · 4 steps</small></span>
+          <span class="bld-who">You, building</span>
+        </div>
+        <div class="bld-msg">
+          <span class="bld-av bld-av-eai" aria-hidden="true">✦</span>
+          <p><span class="bld-k">EAI builder</span><span id="bldSay">Who’s your next client? I’ll read their site and re-skin this app — and this whole page. Same four steps underneath.</span></p>
+        </div>
+        <div class="prompt-row">
+          <span class="bld-av bld-av-you" aria-hidden="true">You</span>
+          <label class="sr-only" for="who">Your next client</label>
+          <input id="who" name="who" type="text" placeholder="Make it for…" spellcheck="false" />
+          <button type="submit" class="prompt-go" id="whoGo" aria-label="Send to the builder">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-7 7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square"/></svg>
+          </button>
+        </div>
+        <div class="chips" id="chips">
+          <span class="chips-k">Try</span>
+          <button type="button" class="chip" data-wear="nike"><i style="--c:#FA5400"></i>Nike</button>
+          <button type="button" class="chip" data-wear="apple"><i style="--c:#1D1D1F"></i>Apple</button>
+          <button type="button" class="chip" data-wear="commbank"><i style="--c:#FFCC00"></i>CommBank</button>
+          <span class="chips-k chips-hint">Watch the whole page change.</span>
+        </div>
+        <div class="prompt-status" id="status" aria-live="polite"></div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Marquee: every name is clickable -->
+  <div class="marquee" id="marquee" aria-label="Clients you could sell to next">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
+
+  <!-- 02 — Rebrand in a sentence: what was read -->
+  <section class="sec read" id="read">
+    <div class="sec-head">
+      <div class="label sec-n">02 — Rebrand in a sentence</div>
+      <h2 class="h2 reveal" data-copy="readTitle">One sentence. Their whole brand.</h2>
+      <p class="sec-sub reveal" data-copy="readSub"></p>
+    </div>
+    <div class="sentence reveal" id="sentence">
+      <span class="sentence-caret" aria-hidden="true">&gt;</span>
+      <span id="sentenceText">Make it right for ______.</span>
+    </div>
+    <div class="read-grid">
+      <div class="cell cell-logo"><div class="label cell-k">Logo <span class="cell-src" data-src></span></div><div class="cell-logo-v" id="readLogo"></div></div>
+      <div class="cell cell-colour"><div class="label cell-k">Colour <span class="cell-src" data-src></span></div><div class="swatches" id="readSwatches"></div></div>
+      <div class="cell cell-voice"><div class="label cell-k">Tone of voice <span class="cell-src" data-src></span></div><div class="cell-voice-v" id="readTone"></div></div>
+      <div class="cell cell-type"><div class="label cell-k">Type feel</div><div class="cell-type-v"><span class="aa">Aa</span><span class="type-name" id="readType"></span></div></div>
+    </div>
+  </section>
+
+  <!-- 03 — The four steps, pinned and scrolled sideways -->
+  <section class="steps" id="steps">
+    <div class="steps-pin" id="stepsPin">
+      <div class="steps-head">
+        <div>
+          <div class="label sec-n">03 — Four steps</div>
+          <h2 class="h2 h2-sm" data-copy="stepsTitle">Four steps. Always four.</h2>
+        </div>
+        <div class="steps-side">
+          <p class="steps-sub" data-copy="stepsSub"></p>
+          <div class="steps-meter" id="stepsMeter" aria-hidden="true"><span class="on">01</span><span>02</span><span>03</span><span>04</span></div>
+        </div>
+      </div>
+      <div class="steps-track" id="stepsTrack">
+        <article class="panel panel-0">
+          <div class="panel-text">
+            <div class="panel-n">01</div>
+            <h3 class="panel-t">Brief</h3>
+            <div class="label panel-k">Form</div>
+            <p class="panel-d" data-copy="step0"></p>
+          </div>
+          <div class="panel-app" data-app="0"></div>
+        </article>
+        <article class="panel panel-1">
+          <div class="panel-text">
+            <div class="panel-n">02</div>
+            <h3 class="panel-t">Assets</h3>
+            <div class="label panel-k">Data source</div>
+            <p class="panel-d" data-copy="step1"></p>
+          </div>
+          <div class="panel-app" data-app="1"></div>
+        </article>
+        <article class="panel panel-2">
+          <div class="panel-text">
+            <div class="panel-n">03</div>
+            <h3 class="panel-t">Compose</h3>
+            <div class="label panel-k">AI writer</div>
+            <p class="panel-d" data-copy="step2"></p>
+          </div>
+          <div class="panel-app" data-app="2"></div>
+        </article>
+        <article class="panel panel-3">
+          <div class="panel-text">
+            <div class="panel-n">04</div>
+            <h3 class="panel-t">Review</h3>
+            <div class="label panel-k">Approval</div>
+            <p class="panel-d" data-copy="step3"></p>
+          </div>
+          <div class="panel-app" data-app="3"></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 — Tone of voice dial -->
+  <section class="sec voice" id="voice">
+    <div class="voice-l">
+      <div class="label sec-n">04 — Tone of voice</div>
+      <h2 class="h2 reveal" data-copy="voiceTitle">It talks like them.</h2>
+      <p class="sec-sub reveal" data-copy="voiceSub"></p>
+      <div class="dial">
+        <div class="dial-top label" id="dialTop"><span data-z="0">Calm</span><span data-z="1">Balanced</span><span data-z="2">Urgent</span></div>
+        <input type="range" id="dial" min="0" max="100" value="50" aria-label="Tone: calm to urgent" />
+        <div class="dial-ticks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="dial-read label" id="dialRead"></div>
+      </div>
+    </div>
+    <div class="voice-r">
+      <div class="mail" id="mail">
+        <div class="mail-bar"><span class="mail-logo" id="mailLogo"></span><span class="label mail-from" id="mailFrom"></span></div>
+        <div class="mail-body">
+          <div class="label mail-k">Subject</div>
+          <div class="mail-subj" id="mailSubj"></div>
+          <p class="mail-p" id="mailBody"></p>
+          <span class="mail-cta" id="mailCta"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 — AI in every app: the END USER's assistant, inside the client's app -->
+  <section class="sec ai" id="ai">
+    <div class="ai-l">
+      <div class="label sec-n">05 — AI in every app</div>
+      <div class="ai-who" id="aiWho">What your client’s team gets inside the app</div>
+      <h2 class="h2 reveal" data-copy="aiTitle">Every app has its own assistant.</h2>
+      <p class="sec-sub reveal" data-copy="aiSub"></p>
+      <ol class="ai-list">
+        <li><span class="label">A</span><span data-copy="ai1"></span></li>
+        <li><span class="label">B</span><span data-copy="ai2"></span></li>
+        <li><span class="label">C</span><span data-copy="ai3"></span></li>
+      </ol>
+      <div class="two-chats">
+        <div><span class="tc-av tc-you">You</span><p><b>You, building</b> talk to the EAI builder (top of this page). It makes and changes the app.</p></div>
+        <div><span class="tc-av tc-them" id="tcThem">JL</span><p><b id="tcThemT">Their team, using the app</b> talk to this assistant. It helps with the work — it never changes the app.</p></div>
+      </div>
+    </div>
+    <div class="ai-r">
+      <div class="inapp" id="inapp">
+        <div class="am-head inapp-head">
+          <span class="am-logo" id="iaLogo"></span><span class="am-name" id="iaName"></span><span class="am-app">Campaign email</span>
+          <span class="inapp-user" id="iaUser"></span>
+        </div>
+        <div class="inapp-body">
+          <div class="inapp-main" id="iaMain"></div>
+          <aside class="inapp-ai" aria-label="In-app assistant">
+            <div class="ia-hd"><span class="ia-spark" aria-hidden="true">✦</span><b id="iaTitle">Assistant</b><small>in this app</small></div>
+            <div class="ia-thread" id="iaThread" aria-live="polite"></div>
+            <div class="ia-sugs" id="iaSugs"></div>
+            <form class="ia-in" id="iaForm" autocomplete="off">
+              <input id="iaInput" type="text" placeholder="Ask about this campaign…" aria-label="Message the in-app assistant" />
+              <button type="submit" aria-label="Send"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-7 7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4"/></svg></button>
+            </form>
+          </aside>
+        </div>
+      </div>
+      <div class="inapp-cap label" id="iaCap">Inside the published app · the assistant sits on the right</div>
+    </div>
+  </section>
+
+  <!-- 06 — Phone and share -->
+  <section class="sec phone" id="phone">
+    <div class="phone-l">
+      <div class="label sec-n">06 — On their phone</div>
+      <h2 class="h2 reveal" data-copy="phoneTitle">On their phone in one scan.</h2>
+      <p class="sec-sub reveal" data-copy="phoneSub"></p>
+      <div class="share">
+        <div class="share-qr"><canvas id="qr" width="168" height="168" aria-label="QR code for the client's app"></canvas></div>
+        <div class="share-r">
+          <div class="label share-k">Share · <span id="shareName">Your client</span>’s app</div>
+          <div class="share-url" id="shareUrl"></div>
+          <div class="share-acts">
+            <button type="button" class="btn btn-sm" id="shareCopy">Copy link</button>
+            <a class="btn btn-sm btn-ghost" id="shareOpen" href="#" target="_blank" rel="noopener">Open it</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-r">
+      <div class="device">
+        <div class="device-notch" aria-hidden="true"></div>
+        <iframe id="phoneFrame" title="The client's app on a phone" loading="lazy"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- Closing CTA -->
+  <section class="cta" id="cta">
+    <h2 class="cta-t" data-copy="ctaTitle" data-fit="cta">What would you sell twice?</h2>
+    <div class="cta-foot">
+      <p class="cta-sub" data-copy="ctaSub"></p>
+      <div class="cta-acts">
+        <a class="btn btn-cta" href="#top" data-copy="ctaBtn">Start building</a>
+        <button type="button" class="cta-again" id="ctaAgain">Try another client ↑</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-big" id="footBig" data-fit="foot">ENTERPRISE AI</div>
+  <div class="foot-row">
+    <span class="label">© 2026 Enterprise AI Group</span>
+    <span class="label foot-links"><a href="#read">Rebrand</a><a href="#steps">Four steps</a><a href="#ai">Assistant</a><a href="#phone">Share</a></span>
+    <span class="label foot-note">Prototype. Client marks belong to their owners — used here to show the idea.</span>
+  </div>
+</footer>
+
+<!-- The wipe that re-skins the page -->
+<div class="curtain" id="curtain" aria-hidden="true">
+  <div class="curtain-in" id="curtainIn">
+    <div class="curtain-logo" id="curtainLogo"></div>
+    <div class="curtain-name" id="curtainName"></div>
+    <div class="curtain-read" id="curtainRead"></div>
+  </div>
+</div>
+
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+<a class="remixes" href="../index.html">← All remixes</a>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+<script src="../../app-view.js"></script>
+<script src="shape.js"></script>
+</body>
+</html>

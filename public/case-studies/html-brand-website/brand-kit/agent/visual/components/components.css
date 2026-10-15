@@ -1,0 +1,134 @@
+/* EAI UI primitives. Built only from ../colors_and_type.css, ../tokens/tokens.css and ../motion/motion.css.
+   Rendered in index.html. Copy these classes; don't restyle them per page. */
+
+/* ── Atoms ─────────────────────────────────────────────────────── */
+
+.eai-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--eai-space-2);
+  padding: var(--eai-space-2) var(--eai-space-4);
+  font: var(--eai-weight-medium) var(--eai-text-sm)/1.4 var(--eai-font-sans);
+  border: 1px solid transparent; border-radius: var(--eai-radius-md);
+  text-decoration: none; cursor: pointer;
+  transition: background-color var(--eai-dur-fast) var(--eai-ease-move),
+              border-color var(--eai-dur-fast) var(--eai-ease-move);
+}
+.eai-btn:focus-visible { outline: 2px solid var(--eai-navy); outline-offset: 2px; }
+.eai-btn--primary { background: var(--eai-cta-bg); color: var(--eai-cta-text); }
+.eai-btn--primary:hover { background: color-mix(in srgb, var(--eai-cta-bg) 85%, var(--eai-bg)); }
+.eai-btn--secondary { background: var(--eai-bg); color: var(--eai-text); border-color: var(--eai-border); }
+.eai-btn--secondary:hover { background: var(--eai-surface); border-color: var(--eai-text-muted); }
+.eai-btn--link { background: none; color: var(--eai-text); padding-inline: 0; }
+.eai-btn--link:hover { color: var(--eai-navy); }
+
+.eai-pill {
+  display: inline-flex; align-items: center; gap: var(--eai-space-1);
+  padding: var(--eai-space-1) var(--eai-space-3);
+  font: var(--eai-weight-medium) var(--eai-text-xs)/1.3 var(--eai-font-sans);
+  color: var(--eai-text-muted); background: var(--eai-surface);
+  border: 1px solid var(--eai-border); border-radius: var(--eai-radius-full);
+}
+
+.eai-chip {
+  display: inline-flex; align-items: center;
+  padding: var(--eai-space-1) var(--eai-space-3);
+  font: var(--eai-weight-regular) var(--eai-text-sm)/1.4 var(--eai-font-sans);
+  color: var(--eai-text); background: var(--eai-bg);
+  border: 1px solid var(--eai-border); border-radius: var(--eai-radius-full);
+  cursor: pointer;
+  transition: border-color var(--eai-dur-fast) var(--eai-ease-move);
+}
+.eai-chip:hover { border-color: var(--eai-text-muted); }
+
+.eai-input {
+  width: 100%;
+  padding: var(--eai-space-3) var(--eai-space-4);
+  font: var(--eai-weight-regular) var(--eai-text-base)/1.4 var(--eai-font-sans);
+  color: var(--eai-text); background: var(--eai-bg);
+  border: 1px solid var(--eai-border); border-radius: var(--eai-radius-md);
+  transition: border-color var(--eai-dur-fast) var(--eai-ease-move),
+              box-shadow var(--eai-dur-fast) var(--eai-ease-move);
+}
+.eai-input::placeholder { color: var(--eai-text-muted); }
+.eai-input:focus {
+  outline: none; border-color: var(--eai-navy);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--eai-navy) 15%, transparent);
+}
+
+.eai-eyebrow {
+  font: var(--eai-weight-medium) var(--eai-text-xs)/1.3 var(--eai-font-sans);
+  letter-spacing: var(--eai-tracking-eyebrow); text-transform: uppercase;
+  color: var(--eai-text-muted);
+}
+
+/* ── Molecules ─────────────────────────────────────────────────── */
+
+.eai-prompt {
+  display: flex; flex-direction: column; gap: var(--eai-space-3);
+  padding: var(--eai-space-4);
+  background: var(--eai-bg);
+  border: 1px solid var(--eai-border); border-radius: var(--eai-radius-xl);
+  box-shadow: var(--eai-shadow-md);
+  text-align: left;
+}
+.eai-prompt textarea {
+  border: 0; resize: none; background: none; color: var(--eai-text);
+  font: var(--eai-weight-regular) var(--eai-text-lg)/1.5 var(--eai-font-sans);
+}
+.eai-prompt textarea:focus { outline: none; }
+.eai-prompt textarea::placeholder { color: var(--eai-text-muted); }
+.eai-prompt__row { display: flex; align-items: center; justify-content: space-between; gap: var(--eai-space-3); flex-wrap: wrap; }
+.eai-prompt__chips { display: flex; gap: var(--eai-space-2); flex-wrap: wrap; }
+
+.eai-card {
+  display: flex; flex-direction: column; gap: var(--eai-space-2);
+  padding: var(--eai-space-6);
+  background: var(--eai-surface);
+  border: 1px solid var(--eai-border); border-radius: var(--eai-radius-lg);
+}
+.eai-card h3 {
+  margin: 0; font: var(--eai-weight-semibold) var(--eai-text-lg)/1.3 var(--eai-font-display);
+  letter-spacing: var(--eai-tracking-heading);
+}
+.eai-card p { margin: 0; font-size: var(--eai-text-sm); line-height: 1.5; color: var(--eai-text-muted); }
+.eai-card__pills { display: flex; gap: var(--eai-space-2); flex-wrap: wrap; margin-top: var(--eai-space-2); }
+
+.eai-stat { display: flex; flex-direction: column; gap: var(--eai-space-1); }
+.eai-stat__value {
+  font: var(--eai-weight-semibold) var(--eai-text-3xl)/1 var(--eai-font-display);
+  letter-spacing: var(--eai-tracking-display); color: var(--eai-navy);
+}
+.eai-stat__label { font-size: var(--eai-text-sm); color: var(--eai-text-muted); }
+
+.eai-template { gap: var(--eai-space-3); background: var(--eai-bg); box-shadow: var(--eai-shadow-sm); }
+.eai-template__foot {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: var(--eai-space-3); border-top: 1px solid var(--eai-border);
+  font-size: var(--eai-text-xs); color: var(--eai-text-muted);
+}
+/* Four steps, always four. Fixed by the grid, not by the content. */
+.eai-steps { display: grid; grid-template-columns: repeat(4, var(--eai-space-2)); gap: var(--eai-space-1); align-items: center; }
+.eai-steps span { height: var(--eai-space-2); border-radius: var(--eai-radius-full); background: var(--eai-navy); }
+.eai-steps-label { display: inline-flex; align-items: center; gap: var(--eai-space-2); }
+
+/* ── Organisms ─────────────────────────────────────────────────── */
+
+.eai-nav { display: flex; align-items: center; gap: var(--eai-space-8); padding: var(--eai-space-4) 0; }
+.eai-nav__logo { height: var(--eai-space-4); display: block; }
+.eai-nav__links { display: flex; gap: var(--eai-space-6); flex: 1; }
+.eai-nav__links a { font-size: var(--eai-text-sm); color: var(--eai-text-muted); text-decoration: none; white-space: nowrap; }
+.eai-nav__links a:hover { color: var(--eai-text); }
+.eai-nav__actions { display: flex; align-items: center; gap: var(--eai-space-4); }
+
+.eai-hero {
+  display: flex; flex-direction: column; align-items: center; gap: var(--eai-space-6);
+  padding: var(--eai-space-16) 0; text-align: center;
+}
+.eai-hero__inner { width: 100%; max-width: 44rem; display: flex; flex-direction: column; gap: var(--eai-space-4); }
+.eai-hero h1 {
+  margin: 0; font: var(--eai-weight-semibold) var(--eai-text-display)/1.05 var(--eai-font-display);
+  letter-spacing: var(--eai-tracking-display); color: var(--eai-text);
+}
+.eai-hero__sub { margin: 0; font-size: var(--eai-text-lg); line-height: 1.5; color: var(--eai-text-muted); }
+.eai-hero__fine { margin: 0; font-size: var(--eai-text-sm); color: var(--eai-text-muted); }
+
+@media (max-width: 720px) { .eai-nav__links { display: none; } }

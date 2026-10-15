@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Build once. Sell to many. — Enterprise AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<!-- Portfolio copy: the link back to the remix hub is hidden. -->
+<style>a[href="../index.html"] { display: none !important; }</style>
+</head>
+<body>
+
+<!-- ============ Nav ============ -->
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="nav-brand" href="#top" aria-label="Enterprise AI — home"><img src="../../../assets/logos/eai-wordmark.svg" alt="Enterprise AI" /></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#how">How it works</a>
+      <a href="#next">Re-skin</a>
+      <a href="#ai">AI in every app</a>
+      <a href="#phone">Share</a>
+      <a href="#cta">Pricing</a>
+    </nav>
+    <div class="nav-act">
+      <a class="nav-signin" href="#cta">Sign in</a>
+      <a class="btn btn-dark btn-sm magnetic" href="#cta"><span>Get started</span></a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ Hero ============ -->
+  <section class="hero" id="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="wrap hero-copy">
+      <a class="eyebrow rise" href="#next" style="--d:0">
+        <span class="eyebrow-tag">New</span>
+        <span class="eb-long">Re-skin an app for the next client in one sentence</span><span class="eb-short">Re-skin for any client in a sentence</span>
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <h1 class="hero-h">
+        <span class="line rise" style="--d:1">Build once.</span>
+        <span class="line rise" style="--d:2">Sell to <span class="swap" id="swap" aria-live="polite"><span class="swap-w is-on">many</span></span>.</span>
+      </h1>
+      <p class="hero-sub rise" style="--d:3">Build a four-step app for one client. Name the next client and it wears their brand — logo, colours and voice. Same wiring underneath.</p>
+      <div class="hero-cta rise" style="--d:4">
+        <a class="btn btn-dark btn-lg magnetic" href="#cta"><span>Start building</span></a>
+        <a class="btn btn-ghost btn-lg" href="#how"><span>See how it works</span>
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M4 9l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="wrap hero-stage rise" style="--d:5">
+      <div class="tilt" id="heroTilt">
+        <div class="fit" data-w="1120" data-h="620" data-sw="560" data-sh="560">
+          <div class="frame frame-hero">
+            <div class="chrome">
+              <span class="dots"><i></i><i></i><i></i></span>
+              <span class="url"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 7V5a3 3 0 0 1 6 0v2M4 7h8v6H4z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg><span>eai.app/<b data-t="slug">nike</b>/campaign-email</span></span>
+              <span class="chrome-live"><i></i><span>Live · <span data-t="name">Nike</span>’s team is using it</span></span>
+            </div>
+            <div class="app" data-variant="hero" id="heroApp" data-step="2"></div>
+          </div>
+        </div>
+      </div>
+      <div class="picker" id="heroPicker" role="tablist" aria-label="Choose a client">
+        <button type="button" role="tab" data-k="nike"><span class="pk-dot"></span>Nike<i class="pk-bar"></i></button>
+        <button type="button" role="tab" data-k="apple"><span class="pk-dot"></span>Apple<i class="pk-bar"></i></button>
+        <button type="button" role="tab" data-k="commbank"><span class="pk-dot"></span>CommBank<i class="pk-bar"></i></button>
+        <a class="pk-next" href="#next">Who’s next?</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Story (pinned, scroll-driven) ============ -->
+  <section class="story" id="how" aria-label="How it works: build one app, then sell it to many clients">
+    <div class="story-pin" id="storyPin">
+      <div class="wrap story-grid">
+        <div class="story-side">
+          <p class="kicker">How it works</p>
+          <h2 class="story-h">Four steps.<br />Every client.</h2>
+          <div class="story-copy" id="storyCopy" aria-live="polite">
+            <p class="sc-k" id="scK">Step 1 · Form</p>
+            <h3 class="sc-t" id="scT">Start with the brief.</h3>
+            <p class="sc-p" id="scP">Step one collects the brief — goal, audience, send date. Four fields, nothing more.</p>
+          </div>
+          <ol class="rail" id="rail" aria-label="Story chapters">
+            <li class="rail-grp">Build</li>
+            <li><button type="button" data-p="0"><i></i>Brief</button></li>
+            <li><button type="button" data-p="1"><i></i>Assets</button></li>
+            <li><button type="button" data-p="2"><i></i>Compose</button></li>
+            <li><button type="button" data-p="3"><i></i>Review</button></li>
+            <li class="rail-grp">Sell</li>
+            <li><button type="button" data-p="4"><i></i>Nike</button></li>
+            <li><button type="button" data-p="5"><i></i>Apple</button></li>
+            <li><button type="button" data-p="6"><i></i>CommBank</button></li>
+          </ol>
+        </div>
+
+        <div class="story-stage">
+          <div class="fit" data-w="840" data-h="580">
+            <div class="frame builder" id="builder" data-phase="0">
+              <div class="bd-top">
+                <span class="bd-ico"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="bd-title">Campaign email</span>
+                <span class="bd-pill" id="bdStatus">Draft</span>
+                <span class="bd-sp"></span>
+                <div class="bd-clients" id="bdClients" aria-label="Clients using this app">
+                  <button type="button" data-p="4" data-k="nike" aria-label="Nike"></button>
+                  <button type="button" data-p="5" data-k="apple" aria-label="Apple"></button>
+                  <button type="button" data-p="6" data-k="commbank" aria-label="CommBank"></button>
+                </div>
+                <span class="bd-share">Share</span>
+                <span class="bd-pub" id="bdPub">Publish</span>
+              </div>
+              <div class="bd-body">
+                <aside class="bd-chat" aria-label="Builder chat — you, building the app">
+                  <div class="bc-hd"><span class="eai-av" aria-hidden="true"><img src="../../../assets/logos/eai-mark-dark.svg" alt="" /></span><div class="bc-tt"><b>Builder</b><small>You, building</small></div><span class="bd-count" id="bdCount">0 of 4</span></div>
+                  <div class="bc-thread">
+                    <div class="bc-me"><span class="bc-who">You</span>Build a campaign email app in four steps</div>
+                    <div class="bc-bot">
+                      <p>Done. Four steps, wired end to end:</p>
+                      <ol class="flow" id="flow">
+                        <li data-i="0"><span class="fl-n">1</span><span class="fl-t">Brief</span><span class="fl-w"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="3" width="10" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 6.5h5M5.5 9.5h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Form</span></li>
+                        <li data-i="1"><span class="fl-n">2</span><span class="fl-t">Assets</span><span class="fl-w"><svg viewBox="0 0 16 16" aria-hidden="true"><ellipse cx="8" cy="4.5" rx="4.5" ry="1.8" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M3.5 4.5v7c0 1 2 1.8 4.5 1.8s4.5-.8 4.5-1.8v-7M3.5 8c0 1 2 1.8 4.5 1.8s4.5-.8 4.5-1.8" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>Data source</span></li>
+                        <li data-i="2"><span class="fl-n">3</span><span class="fl-t">Compose</span><span class="fl-w"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5l1.2 3.3L12.5 7 9.2 8.2 8 11.5 6.8 8.2 3.5 7l3.3-1.2z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>AI writer</span></li>
+                        <li data-i="3"><span class="fl-n">4</span><span class="fl-t">Review</span><span class="fl-w"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="m5.8 8.2 1.6 1.6 3-3.2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Approval</span></li>
+                      </ol>
+                    </div>
+                    <div class="bc-me bc-me-brand" id="bdSayMsg"><span class="bc-who">You</span><span id="bdSayT"></span><span class="caret"></span></div>
+                    <div class="bc-bot bd-brand" id="bdBrand">
+                      <p>Read <b id="bbDomain">nike.com</b>. Brand applied:</p>
+                      <div class="bb-sw" id="bbSw"><i></i><i></i><i></i><i></i></div>
+                      <div class="bb-row"><span>Tone</span><b id="bbTone">Direct, urgent, athlete-first</b></div>
+                    </div>
+                  </div>
+                  <div class="bd-say"><span class="bd-say-t">Tell the builder what to change…</span>
+                    <span class="bd-say-go"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  </div>
+                </aside>
+                <div class="bd-prev">
+                  <span class="bd-prev-k">Preview · what <b id="prevWho">your client</b>’s team will use</span>
+                  <div class="app" data-variant="story" id="storyApp" data-step="0" data-built="0"></div>
+                  <div class="reading" id="reading"><span class="spin"></span><span>Reading <b id="readingD">nike.com</b> — colours, logo, tone</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Numbers ============ -->
+  <section class="nums wrap" aria-label="At a glance">
+    <div class="num"><span class="odo" data-n="4">4</span><p><b>steps in every app.</b> Brief, assets, compose, review. Legible at a glance.</p></div>
+    <div class="num"><span class="odo" data-n="1">1</span><p><b>sentence to re-skin it.</b> Name the client. We read the rest from their site.</p></div>
+    <div class="num"><span class="odo" data-n="0">0</span><p><b>changes to the wiring.</b> Every client runs the same app underneath.</p></div>
+  </section>
+
+  <!-- ============ Who's next ============ -->
+  <section class="next" id="next">
+    <div class="wrap">
+      <div class="sec-hd">
+        <p class="kicker">Re-skin in a sentence</p>
+        <h2>Who’s next?</h2>
+        <p class="sec-sub">Type any company. We read their site for colours, logo and tone of voice, and the same app wears their brand.</p>
+      </div>
+
+      <form class="say" id="sayForm" autocomplete="off" aria-label="Builder chat">
+        <span class="eai-av" aria-hidden="true"><img src="../../../assets/logos/eai-mark-dark.svg" alt="" /></span>
+        <label class="say-pre" for="sayInput">Make it for</label>
+        <input id="sayInput" type="text" maxlength="40" placeholder="Qantas" spellcheck="false" />
+        <button type="submit" class="btn btn-dark magnetic" id="sayGo"><span>Re-skin</span></button>
+      </form>
+      <div class="say-chips" id="sayChips">
+        <span>Try</span>
+        <button type="button">Apple</button>
+        <button type="button">CommBank</button>
+        <button type="button">Qantas</button>
+        <button type="button">Canva</button>
+        <button type="button">Atlassian</button>
+      </div>
+
+      <div class="legend" aria-label="Who is talking to what">
+        <span class="lg-item"><span class="eai-av" aria-hidden="true"><img src="../../../assets/logos/eai-mark-dark.svg" alt="" /></span><span><b>Builder chat</b> · you, building. The box above changes the app.</span></span>
+        <span class="lg-item lg-app" id="legendApp"><span class="as-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0L14.06 8.5a2 2 0 0 0 1.44 1.44l6.14 1.58a.5.5 0 0 1 0 .96L15.5 14.06a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span><b><span data-lg-name>Nike</span> assistant</b> · <span data-lg-name>Nike</span>’s team, using the app. Inside the app, on the right.</span></span>
+      </div>
+
+      <div class="next-grid">
+        <div class="readout glow" id="readout">
+          <div class="ro-hd">
+            <span class="ro-logo" id="roLogo"></span>
+            <div><b id="roName">Nike</b><small id="roDomain">nike.com</small></div>
+            <span class="ro-badge" id="roBadge">Hand-checked</span>
+          </div>
+          <ol class="ro-steps" id="roSteps">
+            <li class="done"><i></i><span>Found their site</span></li>
+            <li class="done"><i></i><span>Read colours and logo</span></li>
+            <li class="done"><i></i><span>Matched their tone of voice</span></li>
+            <li class="done"><i></i><span>Re-skinned all four steps</span></li>
+          </ol>
+          <div class="ro-sec">
+            <span class="ro-k">Palette</span>
+            <div class="ro-sw" id="roSw"></div>
+          </div>
+          <div class="ro-sec">
+            <span class="ro-k">Tone of voice</span>
+            <p class="ro-tone" id="roTone">Direct, urgent, athlete-first</p>
+          </div>
+          <p class="ro-foot">Same four steps. Same wiring. Nothing rebuilt.</p>
+        </div>
+        <div class="next-stage">
+          <div class="fit" data-w="760" data-h="560" data-sw="560" data-sh="540">
+            <div class="frame">
+              <div class="chrome">
+                <span class="dots"><i></i><i></i><i></i></span>
+                <span class="url"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 7V5a3 3 0 0 1 6 0v2M4 7h8v6H4z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg><span>eai.app/<b data-t="slug">nike</b>/campaign-email</span></span>
+              </div>
+              <div class="app" data-variant="next" id="nextApp" data-step="2"></div>
+              <div class="reading" id="nextReading"><span class="spin"></span><span>Reading <b id="nextReadingD">their site</b> — colours, logo, tone</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AI in every app ============ -->
+  <section class="ai" id="ai">
+    <div class="wrap">
+      <div class="sec-hd">
+        <p class="kicker">AI in every app</p>
+        <h2>Your client’s team gets an assistant, too.</h2>
+        <p class="sec-sub">Every app you publish ships with its own assistant for the people who use it. It wears the client’s brand, knows their campaign and writes in their voice.</p>
+      </div>
+      <div class="bento">
+        <article class="card glow c-chat">
+          <div class="card-hd">
+            <h3>In their brand, for their team</h3>
+            <p>Someone on the client’s marketing team opens the app and asks for help with the email in front of them.</p>
+          </div>
+          <div class="chat-tabs" id="chatTabs" role="tablist" aria-label="Client">
+            <button type="button" data-k="nike" class="on">Nike</button>
+            <button type="button" data-k="apple">Apple</button>
+            <button type="button" data-k="commbank">CommBank</button>
+          </div>
+          <div class="chat app-skin" id="chat">
+            <div class="chat-hd"><span class="chat-av" data-logo></span><div class="chat-tt"><b><span data-t="name">Nike</span> assistant</b><small>Inside the Campaign email app</small></div><span class="chat-on">Online</span></div>
+            <div class="chat-thread">
+              <div class="m m-ai" data-t="greet">Hi — I’m the Nike campaign assistant. Ask me anything about this email.</div>
+              <div class="m-meta"><span class="mm-av">JL</span><span>Jordan · <span data-t="name">Nike</span>’s team</span></div>
+              <div class="m m-me" data-t="prompt">Suggest three subject lines for Nike Run Club members</div>
+              <div class="m m-ai">Here are three, in <span data-t="name">Nike</span>’s voice:
+                <ol><li data-t="s0">Pegasus 41 is here. Go.</li><li data-t="s1">Your next PB starts now</li><li data-t="s2">Run Club members get first access</li></ol>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card glow c-voices">
+          <div class="card-hd">
+            <h3>Same prompt. Three voices.</h3>
+            <p>“Write the subject line.” One app, sold three times.</p>
+          </div>
+          <ul class="voices" id="voices"></ul>
+        </article>
+
+        <article class="card glow c-build">
+          <div class="card-hd">
+            <h3>Helps with the work</h3>
+            <p>It drafts, shortens and checks copy. It never changes the app’s steps — that’s your job, in the builder.</p>
+          </div>
+          <div class="mini-say app-skin" id="miniSay">
+            <span class="ms-me"><small>Jordan · Nike’s team</small>Make the intro shorter</span>
+            <span class="ms-ai"><i class="as-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0L14.06 8.5a2 2 0 0 0 1.44 1.44l6.14 1.58a.5.5 0 0 1 0 .96L15.5 14.06a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></i><span><small>Nike assistant</small>Done — 18 words, same offer.</span></span>
+          </div>
+        </article>
+
+        <article class="card glow c-ground">
+          <div class="card-hd">
+            <h3>Grounded in the app</h3>
+            <p>It reads the brief, the synced assets and the draft — and knows who signs off.</p>
+          </div>
+          <div class="ground">
+            <span><i>1</i>Brief</span><span><i>2</i>Assets</span><span><i>3</i>Draft</span><span><i>4</i>Approver</span>
+          </div>
+        </article>
+
+        <article class="card glow c-live">
+          <div class="card-hd">
+            <h3>One per client</h3>
+            <p>Nike’s team gets a Nike assistant, Apple’s team an Apple one. Each knows its own brand guide and tone.</p>
+          </div>
+          <div class="fabs" id="fabs">
+            <span class="fab" data-k="nike"><i></i>Ask AI</span>
+            <span class="fab" data-k="apple"><i></i>Ask AI</span>
+            <span class="fab" data-k="commbank"><i></i>Ask AI</span>
+          </div>
+        </article>
+      </div>
+
+      <div class="two">
+        <div class="two-col">
+          <div class="two-hd"><span class="eai-av" aria-hidden="true"><img src="../../../assets/logos/eai-mark-dark.svg" alt="" /></span><div><b>Builder chat</b><small>For you, the maker</small></div></div>
+          <p>Lives on the left of the EAI builder. You use it to build and change the app.</p>
+          <div class="two-eg"><span>“Add an approval step”</span><span>“Make it for Apple”</span></div>
+        </div>
+        <div class="two-col two-app app-skin" id="twoApp">
+          <div class="two-hd"><span class="as-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0L14.06 8.5a2 2 0 0 0 1.44 1.44l6.14 1.58a.5.5 0 0 1 0 .96L15.5 14.06a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><div><b>Nike assistant</b><small>For Nike’s team, using the app</small></div></div>
+          <p>Lives inside the published app, on the right, in the client’s brand. Their team uses it to get the work done.</p>
+          <div class="two-eg"><span>“Suggest three subject lines”</span><span>“Make the intro shorter”</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Phone + share ============ -->
+  <section class="phone-sec" id="phone">
+    <div class="wrap phone-grid">
+      <div class="phone-copy">
+        <p class="kicker">Preview and share</p>
+        <h2>On their phone before the meeting ends.</h2>
+        <p class="sec-sub">Flip the preview to a phone, then hit Share. Your client scans the code and has their app — same four steps, already wearing their brand.</p>
+        <ul class="ticks">
+          <li>One click to a phone frame in Preview</li>
+          <li>Share hands them a link or a QR code</li>
+          <li>What you preview is what they get</li>
+        </ul>
+        <div class="seg" id="phoneSeg" role="tablist" aria-label="Client">
+          <button type="button" data-k="nike" class="on">Nike</button>
+          <button type="button" data-k="apple">Apple</button>
+          <button type="button" data-k="commbank">CommBank</button>
+        </div>
+      </div>
+      <div class="phone-stage" id="phoneStage">
+        <div class="phone" id="phone3d">
+          <div class="phone-scr app-skin">
+            <div class="phone-bar"><span>9:41</span><span class="phone-isl"></span><span class="phone-ic"><i></i><i></i><i></i></span></div>
+            <div class="app" data-variant="phone" id="phoneApp" data-step="0"></div>
+          </div>
+        </div>
+        <div class="qr glow">
+          <a class="qr-code" id="qrLink" href="../../app.html?c=nike" target="_blank" rel="noopener" aria-label="Open the client’s app">
+            <canvas id="qr" width="132" height="132"></canvas>
+          </a>
+          <div class="qr-t">Scan to open <span data-qr-name>Nike</span>’s app</div>
+          <div class="qr-u"><span id="qrUrl">eai.app/nike/campaign-email</span><button type="button" id="qrCopy">Copy</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="cta" id="cta">
+    <div class="cta-glow" aria-hidden="true"></div>
+    <div class="wrap cta-in">
+      <h2>What would you sell twice?</h2>
+      <p class="sec-sub">Build the app once. Every client after that is a sentence.</p>
+      <div class="hero-cta">
+        <a class="btn btn-dark btn-lg magnetic" href="#top"><span>Start building</span></a>
+        <a class="btn btn-ghost btn-lg" href="#top"><span>Talk to sales</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <div class="foot-brand">
+      <img src="../../../assets/logos/eai-wordmark.svg" alt="Enterprise AI" />
+      <p>Build once. Sell to many.</p>
+    </div>
+    <div class="foot-cols">
+      <div><b>Product</b><a href="#how">How it works</a><a href="#next">Re-skin</a><a href="#ai">Assistant</a><a href="#phone">Share</a></div>
+      <div><b>Company</b><a href="#top">About us</a><a href="#top">Customers</a><a href="#top">Careers</a></div>
+      <div><b>Support</b><a href="#top">Docs</a><a href="#top">Contact</a><a href="#top">Status</a></div>
+    </div>
+  </div>
+  <div class="wrap foot-base"><span>© 2026 Enterprise AI Group</span><span>Made in Australia</span></div>
+</footer>
+
+<a class="back" href="../index.html">← All remixes</a>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+<script src="../../app-view.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

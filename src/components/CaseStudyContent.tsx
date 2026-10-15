@@ -7,13 +7,19 @@ import { slugify } from '@/components/TableOfContents'
 import { FunnelDiagram } from '@/components/FunnelDiagram'
 import { DemoCanvas } from '@/components/DemoCanvas'
 import { IterationTimelapse } from '@/components/IterationTimelapse'
+import { BrandBook } from '@/components/BrandBook'
+import { ImageGrid } from '@/components/ImageGrid'
 import { FramedMedia, clipGeometry } from '@/components/ClipFrame'
+import { FrameDialog } from '@/components/FrameDialog'
+import { ArrowUpRight } from 'lucide-react'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const componentRegistry: Record<string, React.ComponentType<any>> = {
   'funnel-diagram': FunnelDiagram,
   'demo-canvas': DemoCanvas,
   'iteration-timelapse': IterationTimelapse,
+  'brand-book': BrandBook,
+  'image-grid': ImageGrid,
 }
 
 interface CaseStudyContentProps {
@@ -90,7 +96,31 @@ function MediaBlock({ block }: { block: Media }) {
           {block.caption}
         </figcaption>
       )}
+      {block.live && <OpenLive src={block.live} title={block.alt || 'The page, running'} />}
     </figure>
+  )
+}
+
+// Under a clip of a page: the page itself, opened in a dialog to scroll and use
+function OpenLive({ src, title }: { src: string; title: string }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="mt-3 flex justify-center">
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="group inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 text-sm text-foreground hover:border-accent hover:text-accent transition-colors"
+      >
+        Open the page and use it
+        <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+      </button>
+      <FrameDialog
+        src={open ? src : null}
+        title={title}
+        hint="It’s the real page. Scroll it, click it, type into it."
+        onClose={() => setOpen(false)}
+      />
+    </div>
   )
 }
 

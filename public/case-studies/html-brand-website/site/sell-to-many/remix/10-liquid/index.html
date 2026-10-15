@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Liquid brand — Build once. Sell to many. · Enterprise AI</title>
+<meta name="description" content="Build a four-step app once. Name the next client and their brand pours in — colours, logo and voice. Every app ships with its own AI assistant." />
+<meta name="theme-color" content="#000000" />
+<link rel="icon" href="data:," />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="liquid.css" />
+<!-- Portfolio copy: the link back to the remix hub is hidden. -->
+<style>a[href="../index.html"] { display: none !important; }</style>
+</head>
+<body>
+
+<!-- The page is a liquid: EAI's mercury, stirred by your cursor and your scroll. -->
+<canvas id="pageFluid" class="page-fluid" aria-hidden="true"></canvas>
+<div class="page-fallback" aria-hidden="true"></div>
+
+<header class="nav">
+  <a class="brand" href="#top" aria-label="Enterprise AI">
+    <img src="../../../assets/logos/eai-wordmark.svg" alt="Enterprise AI" />
+  </a>
+  <nav class="links" aria-label="Main">
+    <a href="#shape">Four steps</a>
+    <a href="#rebrand">Rebrand</a>
+    <a href="#many">Sell to many</a>
+    <a href="#ai">AI in every app</a>
+    <a href="#share">Share</a>
+  </nav>
+  <div class="nav-end">
+    <a class="ghost" href="#">Sign in</a>
+    <a class="pill" href="#cta">Start building</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO: the builder chat + the vessel ============ -->
+  <section class="hero" aria-label="Build once. Sell to many.">
+    <div class="hero-head">
+      <h1><span class="h-a">Build once.</span> <em class="h-b">Sell to many.</em></h1>
+      <p class="lede">Build a four-step app for one client. Name the next one and their brand pours in — colours, logo, voice. Same wiring underneath.</p>
+    </div>
+
+    <div class="stage" id="stage">
+      <!-- 1. The builder chat: the maker's chat, EAI's own mercury styling -->
+      <aside class="builder" id="builder" aria-label="Builder chat — you, building the app">
+        <header class="b-head">
+          <span class="drop mercury" aria-hidden="true"></span>
+          <div>
+            <b>EAI Builder</b>
+            <small>You, building the app</small>
+          </div>
+          <span class="tag">Builder chat</span>
+        </header>
+        <div class="b-thread" id="bThread" role="log" aria-live="polite"></div>
+        <div class="b-chips" id="bChips">
+          <button type="button" data-say="Make it for Qantas">Make it for Qantas</button>
+          <button type="button" data-say="Make Review need two approvers">Make Review need two approvers</button>
+          <button type="button" data-say="Make the tone warmer">Make the tone warmer</button>
+        </div>
+        <form class="b-compose" id="bForm" autocomplete="off">
+          <input id="bInput" type="text" placeholder="Tell the builder… “Make it for Qantas”" aria-label="Message the builder" />
+          <button type="button" class="mic" id="bMic" hidden aria-label="Speak to the builder" title="Say “Make it for Qantas”">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
+          </button>
+          <button type="submit" class="send" aria-label="Send to the builder">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </form>
+      </aside>
+
+      <!-- The glass vessel: the client's app. Brand ink lives in here only. -->
+      <div class="vessel empty" id="vessel">
+        <canvas class="v-fluid" id="vFluid" aria-hidden="true"></canvas>
+        <div class="v-fallback" aria-hidden="true"></div>
+        <div class="v-glass" aria-hidden="true"></div>
+        <div class="logo-drop" id="logoDrop" aria-hidden="true"></div>
+
+        <div class="app" id="app">
+          <header class="app-bar">
+            <span class="a-logo" id="aLogo"></span>
+            <div class="a-title">
+              <b id="aName">Campaign email</b>
+              <small id="aFor">An empty vessel</small>
+            </div>
+            <span class="a-badge" id="aBadge">Published app</span>
+          </header>
+          <div class="app-body">
+            <div class="app-main">
+              <ol class="steps" id="steps" aria-label="The app’s four steps">
+                <li data-i="0"><b><i>1</i><span>Brief</span></b><small>Form</small></li>
+                <li data-i="1"><b><i>2</i><span>Assets</span></b><small>Data source</small></li>
+                <li data-i="2"><b><i>3</i><span>Compose</span></b><small>AI writer</small></li>
+                <li data-i="3"><b><i>4</i><span>Review</span></b><small>Approval</small></li>
+              </ol>
+              <div class="view" id="view">
+                <div class="v-empty">
+                  <p class="serif">An empty vessel.</p>
+                  <p>Four steps, waiting for a shape. Tell the builder what to make.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. The in-app assistant: the end user's chat, in the client's brand -->
+            <aside class="assist" id="assist" aria-label="In-app assistant — the client’s team, using the app">
+              <header class="as-head">
+                <span class="as-logo" id="asLogo"></span>
+                <div>
+                  <b id="asName">Assistant</b>
+                  <small id="asFor">Arrives with the app</small>
+                </div>
+                <span class="tag">In-app</span>
+              </header>
+              <div class="as-thread" id="asThread" role="log" aria-live="polite"></div>
+              <div class="as-chips" id="asChips">
+                <button type="button" data-ask="Suggest three subject lines">Suggest three subject lines</button>
+                <button type="button" data-ask="Make the intro shorter">Make the intro shorter</button>
+              </div>
+              <form class="as-compose" id="asForm" autocomplete="off">
+                <input id="asInput" type="text" placeholder="Ask the assistant…" aria-label="Ask the in-app assistant" disabled />
+                <button type="submit" aria-label="Send to the assistant" disabled>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </form>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="legend" aria-hidden="true">
+      <span><i class="drop mercury"></i><b>Mercury</b> — your instructions. They shape the vessel.</span>
+      <span><i class="drop ink" id="legendInk"></i><b>Brand ink</b> — your client’s team. It stays inside.</span>
+    </div>
+  </section>
+
+  <!-- ============ FOUR STEPS ============ -->
+  <section class="sec steps-sec" id="shape">
+    <div class="sec-head">
+      <p class="kicker">01 · The shape</p>
+      <h2 class="serif">Four steps. <em>Always four.</em></h2>
+      <p class="sub">Every app has the same shape: a form, a data source, an AI writer, an approval. It’s why one build fits every client.</p>
+    </div>
+    <ol class="four">
+      <li class="glass"><span class="n serif">1</span><b>Brief</b><code>Form</code><p>Goal, audience, date and tone — the client fills in what they need.</p></li>
+      <li class="glass"><span class="n serif">2</span><b>Assets</b><code>Data source</code><p>Brand guides, product shots, offers. Their files, not yours.</p></li>
+      <li class="glass"><span class="n serif">3</span><b>Compose</b><code>AI writer</code><p>Writes the email in the client’s tone of voice, from their brief.</p></li>
+      <li class="glass"><span class="n serif">4</span><b>Review</b><code>Approval</code><p>Routes to the right person to approve before anything is sent.</p></li>
+    </ol>
+  </section>
+
+  <!-- ============ REBRAND IN A SENTENCE ============ -->
+  <section class="sec rebrand-sec" id="rebrand">
+    <div class="sec-head">
+      <p class="kicker">02 · Rebrand in a sentence</p>
+      <h2 class="serif sentence">Make it for <span class="liquid-word" id="rbWord">Nike</span>.</h2>
+      <p class="sub">Name the next client. EAI reads their website for colours, logo and tone of voice — and the same app wears their brand and writes in their voice.</p>
+    </div>
+    <div class="rb-chips" id="rbChips" role="group" aria-label="Try a client">
+      <button type="button" data-rb="nike" class="on">Nike</button>
+      <button type="button" data-rb="apple">Apple</button>
+      <button type="button" data-rb="commbank">CommBank</button>
+    </div>
+    <div class="reads">
+      <div class="glass read"><small>Colours</small><div class="sw" id="rbSw"></div></div>
+      <div class="glass read"><small>Logo</small><div class="rb-logo" id="rbLogo"></div></div>
+      <div class="glass read"><small>Tone of voice</small><p class="serif" id="rbTone"></p></div>
+      <div class="glass read"><small>Writes like</small><p id="rbLine"></p></div>
+    </div>
+  </section>
+
+  <!-- ============ SELL TO MANY: the vessel divides ============ -->
+  <section class="many" id="many">
+    <div class="many-sticky">
+      <canvas class="many-fluid" id="manyFluid" aria-hidden="true"></canvas>
+      <div class="many-fallback" aria-hidden="true"></div>
+      <div class="many-labels" id="manyLabels" aria-hidden="true"></div>
+      <div class="many-copy">
+        <p class="kicker">03 · Sell to many</p>
+        <h2 class="serif">One vessel.<br /><em>Then many.</em></h2>
+        <p class="sub">The app you built for one client divides, again and again. Every copy keeps the same four steps and fills with its own client’s brand.</p>
+        <p class="count"><span class="serif" id="manyN">1</span><small id="manyL">build · 1 client</small></p>
+      </div>
+      <p class="many-hint" id="manyHint">Scroll to divide · move to stir</p>
+    </div>
+  </section>
+
+  <!-- ============ AI IN EVERY APP: the two chats ============ -->
+  <section class="sec assist-sec" id="ai">
+    <div class="sec-head">
+      <p class="kicker">04 · AI in every app</p>
+      <h2 class="serif">Two chats. <em>Two liquids.</em> Never mixed.</h2>
+      <p class="sub">You build with one. Your client’s team works with the other. Every app ships with its own assistant, in the client’s brand.</p>
+    </div>
+    <div class="two">
+      <article class="glass chat-card maker">
+        <header><span class="drop mercury"></span><div><b>Builder chat</b><small>You, building · EAI Builder</small></div><span class="where">Left of the builder</span></header>
+        <div class="cc-thread">
+          <p class="who r">You, building <span class="av me">Y</span></p><div class="bub me">Make Review need two approvers</div>
+          <p class="who"><span class="av eai"></span>EAI Builder</p><div class="bub eai">Still four steps. Review now needs two approvers before anything sends.</div>
+          <p class="who r">You, building <span class="av me">Y</span></p><div class="bub me">Make it for Apple</div>
+          <p class="who"><span class="av eai"></span>EAI Builder</p><div class="bub eai">Reading apple.com — colours, logo, tone. Done.</div>
+        </div>
+        <footer><b>Changes the app.</b> Steps, brand, wiring.</footer>
+      </article>
+      <div class="wall" aria-hidden="true"><span>glass</span></div>
+      <article class="glass chat-card client" id="ccClient">
+        <header><span class="as-logo" id="ccLogo"></span><div><b id="ccName">Nike assistant</b><small id="ccFor">Nike’s team, using the app</small></div><span class="where">Inside the app</span></header>
+        <div class="cc-thread" id="ccThread"></div>
+        <footer><b>Helps with the work.</b> In their voice. It never changes the app.</footer>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ PHONE / SHARE ============ -->
+  <section class="sec share-sec" id="share">
+    <div class="share-copy">
+      <p class="kicker">05 · Preview on a phone</p>
+      <h2 class="serif">Pour it into <em>their pocket.</em></h2>
+      <p class="sub">Share gives you a QR code and a link. Your client opens the same four steps — in their brand, with their assistant — on their phone.</p>
+      <div class="rb-chips" id="phChips" role="group" aria-label="Client on the phone">
+        <button type="button" data-ph="nike" class="on">Nike</button>
+        <button type="button" data-ph="apple">Apple</button>
+        <button type="button" data-ph="commbank">CommBank</button>
+      </div>
+      <div class="qr-row">
+        <a class="qr glass" id="qrLink" href="../../app.html?c=nike" target="_blank" rel="noopener">
+          <canvas id="qr" width="132" height="132" aria-label="QR code for the client’s app"></canvas>
+        </a>
+        <div>
+          <small class="mono">Scan, or open the link</small>
+          <a class="share-url" id="shareUrl" href="../../app.html?c=nike" target="_blank" rel="noopener">…/app.html?c=nike</a>
+        </div>
+      </div>
+    </div>
+    <div class="phone" id="phone">
+      <div class="ph-screen">
+        <canvas class="ph-fluid" id="phFluid" aria-hidden="true"></canvas>
+        <div class="v-fallback ph-fb" aria-hidden="true"></div>
+        <div class="ph-notch" aria-hidden="true"></div>
+        <div class="ph-app">
+          <header class="ph-bar"><span class="a-logo" id="phLogo"></span><b id="phName">Nike</b><small>Campaign email</small></header>
+          <div class="ph-dots"><i class="on">1</i><i class="on">2</i><i class="on cur">3</i><i>4</i></div>
+          <div class="ph-card">
+            <small>Subject</small>
+            <p class="ph-subj" id="phSubj"></p>
+            <small>Body</small>
+            <p id="phBody"></p>
+            <span class="ph-cta" id="phCta">Shop now</span>
+          </div>
+          <div class="ph-ask"><span class="as-logo" id="phAsLogo"></span><span id="phAsk">Ask the Nike assistant…</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="cta" id="cta">
+    <h2 class="serif">What would you <em>sell twice?</em></h2>
+    <form class="cta-form glass" id="ctaForm" autocomplete="off">
+      <input id="ctaInput" type="text" placeholder="A campaign email app for retail brands" aria-label="What would you sell twice?" />
+      <button type="submit" class="pill">Start building</button>
+    </form>
+    <p class="cta-note" id="ctaNote">Four steps. One build. Every client after that is a sentence.</p>
+  </section>
+</main>
+
+<footer class="foot">
+  <img src="../../../assets/logos/eai-wordmark.svg" alt="Enterprise AI" />
+  <nav aria-label="Footer"><a href="#">Business types</a><a href="#">Products</a><a href="#">Pricing</a><a href="#">Support</a></nav>
+  <small>© 2026 Enterprise AI</small>
+</footer>
+
+<a class="back" href="../index.html">← All remixes</a>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+<script type="module" src="liquid.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Opening the app…</title>
+<link rel="stylesheet" href="app-core.css" />
+<style>
+  html, body { margin: 0; height: 100%; background: #fff; }
+  body { -webkit-font-smoothing: antialiased; }
+  #app { height: 100%; border: 0; border-radius: 0; }
+  /* Room for the status bar / notch */
+  #app .app-head { height: auto; min-height: 48px; padding-top: max(10px, env(safe-area-inset-top)); padding-bottom: 10px; }
+  body.framed #app .app-head { padding-top: 40px; }
+  body.framed #app.assist-open .app-assist { top: 78px; }
+  .made { padding: 14px 0 4px; text-align: center; font: 500 11px/1.4 system-ui, sans-serif; color: #9aa4ad; }
+</style>
+</head>
+<body>
+  <!-- The client's app on a phone: opened from the QR code, or inside the
+       phone frame on the marketing page. ?t=template&c=client (or n/d/p/l
+       for a looked-up brand), &u=B to show them as Client B, &a=2 for two approvers, &f=rag,checklist,extract,
+       &q=the prompt, for an app compose.js put together -->
+  <div id="app"></div>
+  <script src="../../app-view.js"></script>
+  <script src="app-core.js"></script>
+  <script src="compose.js"></script>
+  <script>
+    (function () {
+      if (window.self !== window.top) document.body.classList.add('framed');
+      const model = EAIApp.fromQuery(location.search);
+      const root = document.getElementById('app');
+      EAIApp.mount(root, { mode: 'published' });
+      EAIApp.update(root, model);
+      const made = document.createElement('div');
+      made.className = 'made';
+      made.textContent = 'Built with Enterprise AI';
+      root.querySelector('.app-main').appendChild(made);
+      document.title = model.brand.name + ' — ' + EAIApp.TEMPLATES[model.tpl].name;
+      const meta = document.createElement('meta');
+      meta.name = 'theme-color';
+      meta.content = model.brand.head;
+      document.head.appendChild(meta);
+    })();
+  </script>
+</body>
+</html>

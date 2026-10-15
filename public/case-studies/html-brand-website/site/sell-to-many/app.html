@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Campaign email</title>
+<link rel="stylesheet" href="app.css" />
+<style>
+  html, body { margin: 0; height: 100%; background: #fff; }
+  body { -webkit-font-smoothing: antialiased; }
+  .p-app {
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  /* Room for the status bar / notch */
+  .p-head { padding-top: max(14px, env(safe-area-inset-top)); }
+  body.framed .p-head { padding-top: 54px; }
+  .p-main { overflow-y: auto; }
+  .made {
+    padding: 6px 0 2px;
+    text-align: center;
+    font-size: 11px;
+    color: #9aa4ad;
+  }
+</style>
+</head>
+<body>
+  <div class="p-app" id="pApp" data-state="built">
+    <div class="p-head">
+      <span class="p-logo"></span>
+      <span class="p-name"></span>
+    </div>
+    <div class="p-body">
+      <div class="p-main">
+        <div class="p-title">Campaign email</div>
+        <div class="p-steps">
+          <span class="p-step on">Brief</span>
+          <span class="p-step">Assets</span>
+          <span class="p-step">Compose</span>
+          <span class="p-step">Review</span>
+        </div>
+        <div class="p-card">
+          <div class="p-card-hd">
+            <div class="p-card-title">Tell us about the campaign</div>
+            <div class="p-card-sub">Four fields. The rest is written for you.</div>
+          </div>
+          <div class="p-field">
+            <span class="p-label">Campaign goal</span>
+            <span class="p-input" data-f="goal"></span>
+          </div>
+          <div class="p-row">
+            <div class="p-field">
+              <span class="p-label">Audience</span>
+              <span class="p-input" data-f="audience"></span>
+            </div>
+            <div class="p-field">
+              <span class="p-label">Send date</span>
+              <span class="p-input" data-f="date"></span>
+            </div>
+          </div>
+          <span class="p-cta">Next: assets</span>
+        </div>
+        <div class="made">Built with Enterprise AI</div>
+      </div>
+      <aside class="p-assist" aria-label="Assistant">
+        <div class="pa-hd"><span class="pa-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Assistant<button type="button" class="pa-close" aria-label="Close">&times;</button></div>
+        <div class="pa-thread"></div>
+        <div class="pa-input"><span>Ask about this campaign…</span><span class="pa-send"><svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+      </aside>
+    </div>
+    <button type="button" class="p-fab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Ask AI</button>
+  </div>
+
+<script src="app-view.js"></script>
+<script>
+  (function () {
+    // Opened on a real phone from the QR, or inside the phone frame on the marketing page.
+    if (window.self !== window.top) document.body.classList.add('framed');
+    const app = document.getElementById('pApp');
+    const br = STM.fromParams(location.search);
+    STM.bindSteps(app);
+    STM.paint(app, br);
+    document.title = br.name + ' — Campaign email';
+    const meta = document.createElement('meta');
+    meta.name = 'theme-color';
+    meta.content = br.head;
+    document.head.appendChild(meta);
+    app.querySelector('.p-fab').addEventListener('click', () => app.classList.add('chat-open'));
+    app.querySelector('.pa-close').addEventListener('click', () => app.classList.remove('chat-open'));
+  })();
+</script>
+</body>
+</html>

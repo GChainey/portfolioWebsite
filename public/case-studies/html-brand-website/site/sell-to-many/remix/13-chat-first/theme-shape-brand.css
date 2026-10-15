@@ -1,0 +1,75 @@
+/* Remix 18 — the shapeshifter theme in EAI's own colours
+   (?theme=shape&ss=brand). Same rules as theme-shape.css; this file swaps
+   the tokens and adds the Paper Warp shaders (theme-shape.js mounts them).
+
+   Palette from the Paper shader exports: navy #0D3856 / #0E3755, forest
+   #0A180D, cyan #8EDFF9, greys #D1D1D1 / #ECECEC. Navy takes black's job
+   (rules, shadows, text, blocks), cyan takes the acid's (highlights,
+   buttons), and the three Warp presets sit behind the big slabs:
+     dark  (#0D3856 #0E3755 #0A180D)  the hero and the footer
+     light (#0D3856 #D1D1D1 #ECECEC)  the band behind the builder
+     cyan  (#0D3856 #8EDFF9 #0E3756)  the closing CTA */
+
+[data-theme="shape"][data-ss="brand"] {
+  --ss-bg: #ECECEC;
+  --ss-ink: #0D3856;
+  --ss-edge: #0D3856;
+  --ss-muted: #4B6072;
+  --ss-acid: #8EDFF9;
+  --ss-soft: #A9B6C1;
+  --ss-hair: #D1D1D1;
+  --ss-dim: #8FA3B4;
+  --ss-dark-line: #2A5474;
+  --ss-dark-hover: #0A2B43;
+  --ss-track: #D1D1D1;
+  --ss-bar: #E3E6E8;
+  --ss-lit: #EAF8FE;
+  --ss-forest: #0A180D;
+}
+[data-theme="shape"][data-ss="brand"] .ps-cta-btn:hover { box-shadow: 6px 6px 0 rgba(10, 24, 13, .45); }
+
+/* ---------- shader slabs ---------- */
+[data-theme="shape"][data-ss="brand"] .ss-sh { position: absolute; z-index: -1; overflow: hidden; pointer-events: none; }
+[data-theme="shape"][data-ss="brand"] .ss-sh canvas { display: block; }
+[data-theme="shape"][data-ss="brand"] .ss-sh[data-preset="dark"] { background: #0A180D url(warp-bg.jpg) 50% 40% / cover no-repeat; }
+[data-theme="shape"][data-ss="brand"] .ss-sh[data-preset="cyan"] { background: linear-gradient(120deg, #0D3856, #2B7EA6 55%, #0E3756); }
+[data-theme="shape"][data-ss="brand"] .ss-sh[data-preset="light"] { background: linear-gradient(160deg, #ECECEC, #D1D1D1 60%, #ECECEC); }
+
+/* Hero: a full-bleed dark Warp slab, white type, cyan mark */
+[data-theme="shape"][data-ss="brand"] .hx { isolation: isolate; padding-top: 64px; }
+[data-theme="shape"][data-ss="brand"] .ps-page > .hx.is-first { margin-top: 0; }
+[data-theme="shape"][data-ss="brand"] .hx > .ss-sh { top: 0; bottom: 0; left: calc(50% - 50vw); width: 100vw; }
+[data-theme="shape"][data-ss="brand"] .ps-page > [data-section="chat"]::before { color: #fff; border-top-color: rgba(255, 255, 255, .5); }
+[data-theme="shape"][data-ss="brand"] .hx-h1 { color: #fff; }
+[data-theme="shape"][data-ss="brand"] .hx-h1 .w2 { color: var(--ss-ink); }
+[data-theme="shape"][data-ss="brand"] .hx-sub { color: rgba(255, 255, 255, .8); }
+[data-theme="shape"][data-ss="brand"] .hx-box { border-color: #fff; box-shadow: 8px 8px 0 var(--ss-acid); }
+[data-theme="shape"][data-ss="brand"] .hx-chips button { border-color: #fff; box-shadow: 4px 4px 0 var(--ss-acid); }
+[data-theme="shape"][data-ss="brand"] .hx-chips button:hover { border-color: #fff; background: var(--ss-acid); color: var(--ss-ink); }
+[data-theme="shape"][data-ss="brand"] .ss-marquee { margin-top: 96px; border-color: var(--ss-ink); background: var(--ss-ink); }
+[data-theme="shape"][data-ss="brand"] .ss-track span { color: #fff; }
+
+/* The builder follows the slab with a normal gap (no tuck-up) */
+[data-theme="shape"][data-ss="brand"] .ps-page > [data-section="chat"]:not([hidden]) + [data-section="builder"] { margin-top: 0; }
+
+/* Builder: the window sits on a light Warp band */
+[data-theme="shape"][data-ss="brand"] .bstage { position: relative; isolation: isolate; }
+[data-theme="shape"][data-ss="brand"] .bstage > .ss-sh { left: calc(50% - 50vw); width: 100vw; bottom: -64px; border-block: var(--ss-line); }
+[data-theme="shape"][data-ss="brand"] .slogan .sl-b.on { background: var(--ss-acid); color: var(--ss-ink); }
+
+/* Closing CTA: the cyan Warp slab, white type */
+[data-theme="shape"][data-ss="brand"] .ps-cta { isolation: isolate; background: var(--ss-ink); }
+[data-theme="shape"][data-ss="brand"] .ps-cta > .ss-sh { inset: 0; }
+[data-theme="shape"][data-ss="brand"] .ps-cta h2, [data-theme="shape"][data-ss="brand"] .ps-cta p { color: #fff; }
+[data-theme="shape"][data-ss="brand"] .ps-cta-btn { border-color: #fff; background: #fff; color: var(--ss-ink); }
+[data-theme="shape"][data-ss="brand"] .ps-cta-btn:hover { background: #fff; }
+
+/* Footer: the dark Warp slab again, the wordmark in white */
+[data-theme="shape"][data-ss="brand"] .ps-footer-inner { position: relative; isolation: isolate; background: var(--ss-forest); }
+[data-theme="shape"][data-ss="brand"] .ps-footer-inner > .ss-sh { inset: 0; }
+[data-theme="shape"][data-ss="brand"] .ps-footer-inner::before { color: #fff; }
+
+@media (max-width: 900px) {
+  [data-theme="shape"][data-ss="brand"] .hx { padding-top: 40px; }
+  [data-theme="shape"][data-ss="brand"] .ss-marquee { margin-top: 64px; }
+}
