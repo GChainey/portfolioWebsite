@@ -35,9 +35,6 @@ export function Header({ showBack }: HeaderProps) {
           <Link href="/cv" className="text-sm text-muted hover:text-foreground transition-colors">
             CV
           </Link>
-          <Link href="/projects" className="text-sm text-muted hover:text-foreground transition-colors">
-            Projects
-          </Link>
           {GALLERY_LIVE && (
             <Link href="/gallery" className="text-sm text-muted hover:text-foreground transition-colors">
               Gallery
