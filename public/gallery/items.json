@@ -5,26 +5,65 @@
       "title": "Wallbounce: the main menu, on an arcade screen",
       "group": "Product",
       "project": "Wallbounce",
+      "date": "2026-10-13",
       "kind": "website",
       "type": "html",
       "thumb": "/gallery/shots/wallbounce-title.jpg",
       "src": "/essays/wallbounce-dev-tools/game/arcade.html"
     },
     {
+      "id": "shapeshifter-phone",
+      "title": "Shapeshifter, in Enterprise AI cyan, on a phone",
+      "group": "Marketing",
+      "project": "Enterprise AI",
+      "date": "2026-09-27",
+      "kind": "website",
+      "type": "html",
+      "device": "phone",
+      "thumb": "/gallery/shots/shapeshifter-cyan.jpg",
+      "mobile": "/gallery/shots/shapeshifter-cyan-mobile.jpg",
+      "screen": "#f2f2ec",
+      "src": "/case-studies/html-brand-website/site/sell-to-many/remix/13-chat-first/index.html?theme=shape&ss=cyan&layout=mvp"
+    },
+    {
       "id": "sizing-table",
       "title": "Opportunity sizing, but Balatro",
       "group": "Product",
       "project": "Thesis",
+      "date": "2026-10-12",
       "kind": "website",
       "type": "video",
       "preview": "/essays/balatro-opportunity-sizing/reel.mp4",
       "src": "/essays/balatro-opportunity-sizing/reel-60.mp4"
     },
     {
+      "id": "eai-website",
+      "title": "Enterprise AI website: build an app, brand it per client, share it to a phone",
+      "group": "Marketing",
+      "project": "Enterprise AI",
+      "date": "2026-09-29",
+      "kind": "website",
+      "type": "html",
+      "thumb": "/gallery/shots/eai-website.jpg",
+      "src": "/case-studies/html-brand-website/site/index.html",
+      "clip": "/gallery/clips/eai-website-build.mp4"
+    },
+    {
+      "id": "eai-setup",
+      "title": "EAI Setup: from sign-in to building in Claude Code",
+      "group": "Onboarding",
+      "project": "Enterprise AI",
+      "date": "2026-09-17",
+      "kind": "feature",
+      "type": "video",
+      "src": "/gallery/clips/eai-setup.mp4"
+    },
+    {
       "id": "shader-wall-site",
       "title": "Shader Wall: the whole app, running in the browser",
       "group": "Marketing",
       "project": "Shader Wall",
+      "date": "2026-10-14",
       "kind": "website",
       "type": "html",
       "focus": "left top",
@@ -36,153 +75,144 @@
       "title": "Signed-in workspace",
       "group": "Product",
       "project": "Enterprise AI",
+      "date": "2026-10-14",
       "kind": "feature",
       "type": "html",
       "thumb": "/variants/shots/workspace.jpg",
-      "src": "https://eai-website.github.io/prototypes/workspace-ai-demo/build-web/ws-home.html?tenancy=seeded&workflowOption=1"
+      "src": "https://eai-website.github.io/prototypes/workspace-ai-demo/build-web/ws-home.html?tenancy=seeded&workflowOption=1",
+      "hidden": true
     },
     {
       "id": "template-flow",
       "title": "Template library: 50 living templates",
       "group": "Product",
       "project": "Enterprise AI",
+      "date": "2026-09-07",
       "kind": "feature",
       "type": "html",
       "thumb": "/variants/shots/template-flow.jpg",
-      "src": "https://eai-website.github.io/prototypes/smart-blocks-config/template-flow/index.html"
+      "src": "https://eai-website.github.io/prototypes/smart-blocks-config/template-flow/index.html",
+      "hidden": true
     },
     {
       "id": "billing",
       "title": "Plans, credits and billing",
       "group": "Product",
       "project": "Enterprise AI",
+      "date": "2026-09-25",
       "kind": "feature",
       "type": "html",
       "thumb": "/variants/shots/billing.jpg",
-      "src": "https://eai-website.github.io/prototypes/workspace-ai-demo-pricing/build-web/ws-home.html?settings=billing-plans&tenancy=seeded&workflowOption=1"
+      "src": "https://eai-website.github.io/prototypes/workspace-ai-demo-pricing/build-web/ws-home.html?settings=billing-plans&tenancy=seeded&workflowOption=1",
+      "hidden": true
     },
     {
       "id": "app-editor",
       "title": "Choose how you edit: no-code or your own AI",
       "group": "Product",
       "project": "Enterprise AI",
+      "date": "2026-09-25",
       "kind": "feature",
       "type": "html",
       "thumb": "/variants/shots/app-editor.jpg",
-      "src": "https://eai-website.github.io/prototypes/workspace-ai-demo-pricing/build-web/app-editor.html?app=kyc-onboarding&tenancy=seeded&workflowOption=1"
-    },
-    {
-      "id": "eai-website",
-      "title": "Enterprise AI website, with pricing",
-      "group": "Marketing",
-      "project": "Enterprise AI",
-      "kind": "website",
-      "type": "html",
-      "thumb": "/gallery/shots/eai-website.jpg",
-      "src": "https://eai-website.github.io/prototypes/sell-to-many/remix/27-taglines/after-the-build/index.html?site=1"
-    },
-    {
-      "id": "shapeshifter",
-      "title": "Shapeshifter: the page wears your client",
-      "group": "Marketing",
-      "project": "Enterprise AI",
-      "kind": "website",
-      "type": "html",
-      "focus": "left top",
-      "thumb": "/variants/shots/shapeshifter.jpg",
-      "src": "https://eai-website.github.io/prototypes/sell-to-many/remix/04-shapeshifter/?wear=nike"
+      "src": "https://eai-website.github.io/prototypes/workspace-ai-demo-pricing/build-web/app-editor.html?app=kyc-onboarding&tenancy=seeded&workflowOption=1",
+      "hidden": true
     },
     {
       "id": "build",
       "title": "One prompt, from homepage to product",
       "group": "Onboarding",
       "project": "Enterprise AI",
+      "date": "2026-09-06",
       "kind": "feature",
-      "size": "wide",
       "type": "html",
       "thumb": "/variants/shots/build.jpg",
-      "src": "https://eai-website.github.io/prototypes/build/"
-    },
-    {
-      "id": "statemachine",
-      "title": "Installer statemachine: every screen and failure",
-      "group": "States",
-      "project": "Enterprise AI",
-      "kind": "feature",
-      "size": "wide",
-      "type": "html",
-      "thumb": "/variants/shots/statemachine.jpg",
-      "src": "https://eai-website.github.io/prototypes/setup-states/index.html"
+      "src": "https://eai-website.github.io/prototypes/build/",
+      "hidden": true
     },
     {
       "id": "app-builder",
       "title": "App builder with smart blocks",
       "group": "Product",
       "project": "Enterprise AI",
+      "date": "2026-09-06",
       "kind": "feature",
       "type": "html",
       "thumb": "/variants/shots/app-builder.jpg",
-      "src": "https://eai-website.github.io/prototypes/app-states/index.html?blocks=1"
+      "src": "https://eai-website.github.io/prototypes/app-states/index.html?blocks=1",
+      "hidden": true
     },
     {
       "id": "cli",
       "title": "EAI Setup: native installer + CLI",
       "group": "Onboarding",
       "project": "Enterprise AI",
+      "date": "2026-09-06",
       "kind": "feature",
       "type": "html",
       "thumb": "/variants/shots/cli.jpg",
-      "src": "https://eai-website.github.io/prototypes/cli/"
+      "src": "https://eai-website.github.io/prototypes/cli/",
+      "hidden": true
     },
     {
       "id": "dark-shader",
       "title": "Chat-first on a live shader (user tested)",
       "group": "Marketing",
       "project": "Enterprise AI",
+      "date": "2026-09-23",
       "kind": "website",
       "type": "html",
       "thumb": "/variants/shots/dark-shader.jpg",
-      "src": "https://eai-website.github.io/prototypes/sell-to-many/remix/14-dark-shader/index.html"
+      "src": "https://eai-website.github.io/prototypes/sell-to-many/remix/14-dark-shader/index.html",
+      "hidden": true
     },
     {
       "id": "surface",
       "title": "App shell: every state on one page",
       "group": "States",
       "project": "Enterprise AI",
+      "date": "2026-09-16",
       "kind": "feature",
       "type": "html",
       "thumb": "/variants/shots/surface.jpg",
-      "src": "https://eai-website.github.io/prototypes/surface-states/index.html"
+      "src": "https://eai-website.github.io/prototypes/surface-states/index.html",
+      "hidden": true
     },
     {
       "id": "ut-chatbot",
       "title": "User test: AI chatbot in a vending app",
       "group": "Research",
       "project": "Enterprise AI",
+      "date": "2026-10-06",
       "kind": "feature",
       "type": "html",
       "thumb": "/variants/shots/ut-chatbot.jpg",
-      "src": "https://eai-website.github.io/prototypes/workspace-ai-demo/build-web/ut-ai-features.html"
+      "src": "https://eai-website.github.io/prototypes/workspace-ai-demo/build-web/ut-ai-features.html",
+      "hidden": true
     },
     {
       "id": "sell-to-many",
       "title": "Build once. Sell to many.",
       "group": "Marketing",
       "project": "Enterprise AI",
+      "date": "2026-09-23",
       "kind": "website",
       "type": "html",
       "thumb": "/variants/shots/sell-to-many.jpg",
-      "src": "https://eai-website.github.io/prototypes/sell-to-many/index.html"
+      "src": "https://eai-website.github.io/prototypes/sell-to-many/index.html",
+      "hidden": true
     },
     {
       "id": "builder-web",
       "title": "Describe a process, get an app",
       "group": "Marketing",
       "project": "Enterprise AI",
+      "date": "2026-09-09",
       "kind": "website",
       "type": "html",
       "thumb": "/variants/shots/builder-web.jpg",
-      "src": "https://eai-website.github.io/prototypes/build-web/index.html"
+      "src": "https://eai-website.github.io/prototypes/build-web/index.html",
+      "hidden": true
     }
   ]
 }

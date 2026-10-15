@@ -1,4 +1,4 @@
-/* Shared gallery: bento grid + artefact dialog.
+/* Shared gallery: a full-width column of work + artefact dialog.
    Used by the Next site and the static homepage variants, so it reads its look from
    --gal-* variables that each host maps onto its own tokens. */
 gc-gallery {
@@ -8,12 +8,8 @@ gc-gallery {
   --_card: var(--gal-card, #fff);
   --_accent: var(--gal-accent, #ff5a1f);
   --_radius: var(--gal-radius, 12px);
-  --_gap: var(--gal-gap, 16px);
-  --_cols: 4;
-  /* Rows follow the column width, so a 1x1 tile keeps roughly the shape of a screenshot at any size */
-  --_row: calc((100cqw - (var(--_cols) - 1) * var(--_gap)) / var(--_cols) * .68);
+  --_gap: var(--gal-gap, 24px);
   display: block;
-  container-type: inline-size;
   color: var(--_fg);
 }
 
@@ -27,49 +23,75 @@ gc-gallery {
 .gal-filters button:hover { color: var(--_fg); }
 .gal-filters button[aria-pressed="true"] { background: var(--_fg); color: var(--_card); box-shadow: none; }
 
-/* ------------------------------------------------------------ bento */
-.gal-grid {
-  display: grid; grid-template-columns: repeat(var(--_cols), minmax(0, 1fr));
-  grid-auto-rows: var(--_row); grid-auto-flow: dense; gap: var(--_gap);
-}
+/* ------------------------------------------------------------ tiles */
+.gal-grid { display: grid; gap: var(--_gap); }
 .gal-tile {
   position: relative; overflow: hidden;
   border-radius: var(--_radius); background: var(--_card); box-shadow: 0 0 0 1px var(--_line);
 }
 .gal-open {
-  position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: 0; background: none;
+  display: block; width: 100%; padding: 0; border: 0; background: none;
   cursor: zoom-in; text-align: left; font: inherit; color: inherit;
 }
-.gal-tile[data-size="wide"] { grid-column: span 2; }
-.gal-tile[data-size="lg"] { grid-column: span 2; grid-row: span 2; }
-.gal-tile img, .gal-tile video {
+/* Every tile is the shape of a laptop screen, so a long scroll reads as one even rhythm */
+.gal-media { position: relative; display: block; aspect-ratio: 16 / 10; overflow: hidden; }
+.gal-media > img, .gal-media > video {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; display: block;
   transition: transform 1.2s cubic-bezier(.16, 1, .3, 1);
 }
-.gal-tile:hover img, .gal-tile:hover video { transform: scale(1.04); }
+.gal-tile:hover .gal-media > img, .gal-tile:hover .gal-media > video { transform: scale(1.03); }
+/* A phone item: the phone screenshot in a phone frame, centred on the desktop shot blurred,
+   the same look as its dialog */
+.gal-on-phone > img { filter: blur(14px) brightness(.6); transform: scale(1.06); }
+.gal-tile:hover .gal-on-phone > img { transform: scale(1.06); }
+/* The phone (see phone() in gallery.js). Everything inside is sized in cqw of the screen's width,
+   from an iPhone's 390pt: a 47pt status bar, a 34pt home indicator, a 55pt screen corner. */
+.gal-device {
+  container-type: inline-size; display: block; box-sizing: content-box;
+  border: 8px solid #1c1c1a; border-radius: 16% / 7.4%; background: #1c1c1a;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .08), 0 30px 80px rgba(0, 0, 0, .5);
+}
+.gal-device-screen {
+  display: flex; flex-direction: column; width: 100%; height: 100%; overflow: hidden;
+  border-radius: 14cqw; background: var(--screen); color: #0b0b0b;
+}
+.gal-device-status {
+  position: relative; flex: none; height: 12.05cqw; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 7.5cqw 0 10cqw; font: 600 4.36cqw/1 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+}
+.gal-device-status i { position: absolute; left: 50%; top: 2.8cqw; width: 32.3cqw; height: 9.5cqw; translate: -50%; border-radius: 9cqw; background: #000; }
+.gal-device-status svg { width: 18cqw; height: 3.4cqw; fill: currentColor; }
+.gal-device-view { flex: 1; min-height: 0; display: block; width: 100%; border: 0; object-fit: cover; object-position: top; }
+.gal-device-home { position: relative; flex: none; height: 8.7cqw; }
+.gal-device-home::after { content: ''; position: absolute; left: 50%; bottom: 2.05cqw; width: 34.6cqw; height: 1.3cqw; translate: -50%; border-radius: 1cqw; background: currentColor; }
+
+/* In a tile: standing in the middle, the screen exactly the phone's proportions */
+.gal-media > .gal-device {
+  position: absolute; left: 50%; top: 50%; height: calc(88% - 16px); aspect-ratio: 390 / 844; translate: -50% -50%;
+  transition: transform 1.2s cubic-bezier(.16, 1, .3, 1);
+}
+.gal-tile:hover .gal-media > .gal-device { transform: scale(1.02); }
 .gal-open:focus-visible { outline: none; }
 .gal-tile:has(.gal-open:focus-visible) { outline: 2px solid var(--_accent); outline-offset: 2px; }
+/* Always shown, on a solid strip: unnamed screens read as noise, and white screenshots
+   swallow text laid over them */
 .gal-cap {
-  position: absolute; inset: auto 0 0 0; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px;
-  padding: 36px 14px 12px; color: #fff; font-size: 13px; line-height: 1.3;
-  background: linear-gradient(to top, rgba(0, 0, 0, .78), transparent);
-  opacity: 0; transform: translateY(6px); transition: opacity .3s, transform .3s;
+  display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+  padding: 14px 18px; border-top: 1px solid var(--_line);
+  color: var(--_fg); font-size: 15px; line-height: 1.3;
 }
-.gal-tile:hover .gal-cap, .gal-open:focus-visible .gal-cap { opacity: 1; transform: none; }
-.gal-cap b { font-weight: 500; }
-.gal-cap span { flex: none; opacity: .7; }
+.gal-cap b { min-width: 0; font-weight: 500; }
+.gal-cap span { flex: none; font-size: 13px; color: var(--_muted); }
 .gal-kind {
-  position: absolute; top: 10px; left: 10px; height: 22px; padding: 0 8px; border-radius: 999px;
+  position: absolute; top: 14px; left: 14px; height: 24px; padding: 0 9px; border-radius: 999px;
   display: inline-flex; align-items: center; gap: 5px;
   background: rgba(10, 10, 9, .7); color: #fff; backdrop-filter: blur(6px);
   font-size: 10px; letter-spacing: .06em; text-transform: uppercase;
 }
 .gal-kind::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--_accent); }
-@media (hover: none) { .gal-cap { opacity: 1; transform: none; } }
-@media (max-width: 960px) { gc-gallery { --_cols: 2; } }
 @media (max-width: 560px) {
-  gc-gallery { --_cols: 1; }
-  .gal-tile[data-size] { grid-column: auto; grid-row: auto; }
+  .gal-media > .gal-device { border-width: 4px; height: calc(88% - 8px); }
+  .gal-cap { flex-direction: column; gap: 2px; padding: 12px 14px; font-size: 14px; }
 }
 
 /* ------------------------------------------------------------ edit mode (?edit, local only) */
@@ -110,8 +132,11 @@ gc-gallery {
 .gal-bar button:hover, .gal-bar a:hover { background: #3a3a36; }
 .gal-bar button:focus-visible, .gal-bar a:focus-visible { outline: 2px solid var(--_accent); outline-offset: 2px; }
 .gal-bar [hidden] { display: none; }
-.gal-stage { position: relative; flex: 1; min-height: 0; display: grid; place-items: center; background: #0a0a09; }
+.gal-stage { position: relative; flex: 1; min-height: 0; display: grid; place-items: center; overflow: hidden; background: #0a0a09; }
 .gal-stage iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+/* Phone view: the live page at a phone's width, in the same phone as the tile */
+.gal-stage.gal-phone-view .gal-device { position: relative; width: 390px; height: min(844px, calc(100% - 64px)); border-width: 10px; }
+.gal-stage.gal-phone-view iframe { position: static; flex: 1; min-height: 0; width: 100%; height: auto; background: var(--screen); }
 .gal-stage img, .gal-stage video { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
 /* The thumbnail sits behind the frame so a slow prototype never shows as a blank box */
 .gal-stage .gal-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; filter: blur(14px) brightness(.6); transform: scale(1.05); }
@@ -121,5 +146,5 @@ gc-gallery {
 }
 @media (prefers-reduced-motion: reduce) {
   .gal-dialog[open] { animation: none; }
-  .gal-tile img, .gal-tile video, .gal-cap { transition: none; }
+  .gal-media img, .gal-media video { transition: none; }
 }

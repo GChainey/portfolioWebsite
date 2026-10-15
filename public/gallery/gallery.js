@@ -1,8 +1,12 @@
-/* <gc-gallery> — bento grid of work; click a tile to open the artefact (live HTML, video or image)
-   in a large dialog. Framework-free so the Next site and the static homepage variants share it.
+/* <gc-gallery> — a full-width column of work; click a tile to open the artefact (live HTML, video
+   or image) in a large dialog. "device": "phone" frames "mobile" (a 390x763 phone screenshot) over
+   "thumb" blurred, and the dialog then shows the live page in the same phone; "screen" is the page's
+   ground, which the status bar and home indicator sit on. A live item can have a
+   "clip" (a video of it being used) that plays in its tile, with "thumb" as the poster.
+   Framework-free so the Next site and the static homepage variants share it.
    A video with no thumb plays in its tile; "preview" is a shorter cut to play there.
 
-   Attributes: src (items JSON, default /gallery/items.json) · filters (show group filters)
+   Attributes: src (items JSON, default /gallery/items.json) · filters (show the sort switch)
                limit (cap the number of tiles) · deeplink (keep the open item in the URL hash)
 
    Add ?edit to the URL on localhost for a Share checkbox on every tile. Unticking one sets
@@ -21,12 +25,21 @@ document.querySelectorAll('[data-gallery]').forEach(el => { el.hidden = false })
 document.querySelectorAll('[data-gallery-fallback]').forEach(el => { el.hidden = true })
 
 const CSS = '/gallery/gallery.css'
-const KIND = { html: 'Live', video: 'Video' }
-// The bento rule: a website gets a large tile, a feature or interaction a small one
-const SIZE = { website: 'lg' }
+// Only an interactive tile needs a badge: a video already plays in its tile
+const KIND = { html: 'Interactive' }
+// items.json is in curated order, best first. "Featured" keeps it; "Newest" goes by date.
+const SORTS = ['Featured', 'Newest']
+const MONTH = new Intl.DateTimeFormat('en', { month: 'short', year: 'numeric' })
+const when = d => d ? MONTH.format(new Date(`${d}T12:00`)) : ''
 // Curating writes to the content file, which only the local dev server can do
 const EDIT = LOCAL && new URLSearchParams(location.search).has('edit')
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`)
+// A phone drawn the way the device draws it: the status bar (under the Dynamic Island) and the
+// home indicator belong to the phone, so the page only gets the safe area between them, 390x763
+// of the 390x844 screen. Without them a page's corner buttons run into the rounded screen edge.
+const STATUS_ICONS = '<svg viewBox="0 0 70 13" aria-hidden="true"><path d="M1 9h3v3H1zM6 7h3v5H6zM11 4h3v8h-3zM16 1h3v11h-3z"/><path d="M31 3.5a9 9 0 0 1 12 0l-1.4 1.5a7 7 0 0 0-9.2 0zM33.6 6.3a5.2 5.2 0 0 1 6.8 0L39 7.8a3.2 3.2 0 0 0-4 0zM37 11.5l-1.6-1.8a2.3 2.3 0 0 1 3.2 0z"/><rect x="47.5" y=".5" width="19" height="11" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="49" y="2" width="16" height="8" rx="1.8"/><path d="M68 4v4c.8-.3 1.3-1 1.3-2s-.5-1.7-1.3-2z" opacity=".4"/></svg>'
+const phone = (i, view) => `<span class="gal-device" style="--screen:${esc(i.screen || '#fff')}"><span class="gal-device-screen">
+  <span class="gal-device-status"><b>9:41</b><i></i>${STATUS_ICONS}</span>${view}<span class="gal-device-home"></span></span></span>`
 
 const styles = new Promise(done => {
   if (document.querySelector(`link[href="${CSS}"]`)) return done()
@@ -43,7 +56,7 @@ class Gallery extends HTMLElement {
       const [items] = await Promise.all([load(this.getAttribute('src') || '/gallery/items.json'), styles])
       this.items = EDIT ? items : items.filter(i => !i.hidden)
     } catch { return }
-    this.group = 'All'
+    this.sort = 'Featured'
     this.render()
     if (this.hasAttribute('deeplink') && location.hash) this.open(decodeURIComponent(location.hash.slice(1)))
   }
@@ -51,15 +64,14 @@ class Gallery extends HTMLElement {
   disconnectedCallback() { document.documentElement.style.overflow = '' }
 
   get visible() {
-    const list = this.group === 'All' ? this.items : this.items.filter(i => i.group === this.group)
+    const list = this.sort === 'Newest' ? [...this.items].sort((a, b) => (b.date || '').localeCompare(a.date || '')) : this.items
     const limit = +this.getAttribute('limit')
     return limit ? list.slice(0, limit) : list
   }
 
   render() {
-    const groups = ['All', ...new Set(this.items.map(i => i.group))]
     this.innerHTML = `
-      ${this.hasAttribute('filters') ? `<div class="gal-filters">${groups.map(g => `<button type="button" data-g="${esc(g)}" aria-pressed="${g === this.group}">${esc(g)}${g === 'All' ? ` · ${this.items.length}` : ''}</button>`).join('')}</div>` : ''}
+      ${this.hasAttribute('filters') ? `<div class="gal-filters" role="group" aria-label="Sort">${SORTS.map(s => `<button type="button" data-sort="${s}" aria-pressed="${s === this.sort}">${s}</button>`).join('')}</div>` : ''}
       ${EDIT ? '<p class="gal-editbar"></p>' : ''}
       <div class="gal-grid"></div>
       <dialog class="gal-dialog" aria-label="Artefact viewer">
@@ -82,15 +94,15 @@ class Gallery extends HTMLElement {
   }
 
   renderGrid() {
-    // An item's own size is a hand-tuned exception that makes the full set pack without holes,
-    // so it only applies when nothing is filtered out
-    const size = i => (this.group === 'All' && i.size) || SIZE[i.kind]
     this.querySelector('.gal-grid').innerHTML = this.visible.map(i => `
-      <div class="gal-tile${i.hidden ? ' gal-off' : ''}" data-id="${esc(i.id)}"${size(i) ? ` data-size="${esc(size(i))}"` : ''}>
+      <div class="gal-tile${i.hidden ? ' gal-off' : ''}" data-id="${esc(i.id)}">
         <button type="button" class="gal-open" aria-label="${esc(i.title)}">
-        ${i.thumb ? `<img src="${esc(i.thumb)}" alt="" loading="lazy"${i.focus ? ` style="object-position:${esc(i.focus)}"` : ''} />` : i.type === 'video' ? `<video src="${esc(i.preview || i.src)}" autoplay loop muted playsinline></video>` : `<img src="${esc(i.src)}" alt="" loading="lazy" />`}
+        <span class="gal-media${i.device === 'phone' ? ' gal-on-phone' : ''}">
+        ${i.clip ? `<video src="${esc(i.clip)}"${i.thumb ? ` poster="${esc(i.thumb)}"` : ''} autoplay loop muted playsinline></video>` : i.thumb ? `<img src="${esc(i.thumb)}" alt="" loading="lazy"${i.focus ? ` style="object-position:${esc(i.focus)}"` : ''} />` : i.type === 'video' ? `<video src="${esc(i.preview || i.src)}" autoplay loop muted playsinline></video>` : `<img src="${esc(i.src)}" alt="" loading="lazy" />`}
+        ${i.device === 'phone' ? phone(i, `<img class="gal-device-view" src="${esc(i.mobile)}" alt="" loading="lazy" />`) : ''}
         ${KIND[i.type] ? `<span class="gal-kind">${KIND[i.type]}</span>` : ''}
-        <span class="gal-cap"><b>${esc(i.title)}</b><span>${esc(i.project || i.group)}</span></span>
+        </span>
+        <span class="gal-cap"><b>${esc(i.title)}</b><span>${esc([i.project || i.group, when(i.date)].filter(Boolean).join(' · '))}</span></span>
         </button>
         ${EDIT ? `<label class="gal-share"><input type="checkbox"${i.hidden ? '' : ' checked'} />Share</label>` : ''}
       </div>`).join('')
@@ -131,10 +143,10 @@ class Gallery extends HTMLElement {
       if (e.key === 'ArrowLeft') this.step(-1)
       return
     }
-    const filter = e.target.closest('.gal-filters button')
-    if (filter) {
-      this.group = filter.dataset.g
-      this.querySelectorAll('.gal-filters button').forEach(b => b.setAttribute('aria-pressed', b === filter))
+    const sort = e.target.closest('.gal-filters button')
+    if (sort) {
+      this.sort = sort.dataset.sort
+      this.querySelectorAll('.gal-filters button').forEach(b => b.setAttribute('aria-pressed', b === sort))
       return this.renderGrid()
     }
     const tile = e.target.closest('.gal-open')
@@ -163,12 +175,13 @@ class Gallery extends HTMLElement {
   show() {
     const i = this.list[this.index]
     const q = s => this.dialog.querySelector(s)
-    q('.gal-title').innerHTML = `${esc(i.title)}<span>${esc([i.project, i.group].filter(Boolean).join(' · '))}</span>`
+    q('.gal-title').innerHTML = `${esc(i.title)}<span>${esc([i.project, when(i.date)].filter(Boolean).join(' · '))}</span>`
     q('.gal-count').textContent = `${this.index + 1} / ${this.list.length}`
     q('[data-act="live"]').hidden = i.type !== 'html'
     q('[data-act="live"]').href = i.src
+    q('.gal-stage').classList.toggle('gal-phone-view', i.device === 'phone')
     q('.gal-stage').innerHTML =
-      i.type === 'html' ? `${i.thumb ? `<img class="gal-poster" src="${esc(i.thumb)}" alt="" />` : ''}<iframe src="${esc(i.src)}" title="${esc(i.title)}" allow="fullscreen"></iframe>`
+      i.type === 'html' ? `${i.thumb ? `<img class="gal-poster" src="${esc(i.thumb)}" alt="" />` : ''}${(f => i.device === 'phone' ? phone(i, f) : f)(`<iframe src="${esc(i.src)}" title="${esc(i.title)}" allow="fullscreen"></iframe>`)}`
       : i.type === 'video' ? `<video src="${esc(i.src)}"${i.thumb ? ` poster="${esc(i.thumb)}"` : ''} controls autoplay playsinline></video>`
       : `<img src="${esc(i.src)}" alt="${esc(i.title)}" />`
     if (this.hasAttribute('deeplink')) history.replaceState(null, '', `#${encodeURIComponent(i.id)}`)

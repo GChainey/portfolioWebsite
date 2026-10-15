@@ -14,6 +14,22 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.37.0',
+    date: '2026-10-15',
+    title: 'Gallery: One Column, Real Use, Real Phones',
+    description: 'The gallery (still on the dev server only) is cut down to the strongest work and laid out as one full-width column. The big pieces now show being used rather than sitting as screenshots, and phone work sits in a phone drawn the way the device draws it.',
+    changes: [
+      'One full-width column instead of a bento grid, with titles always shown under each tile',
+      'Featured and Newest sorting in place of the group filters; every item has a date',
+      'The Enterprise AI website plays the builder making an app, re-skinning it for Qantas, then the phone section with its QR code',
+      'EAI Setup plays the installer start to finish, from sign-in to handing off to Claude Code',
+      'Shapeshifter in Enterprise AI cyan, on a phone with a real status bar and home indicator, so the page keeps clear of the screen edges',
+      'Shader Wall shown with the shader running as the desktop wallpaper',
+      'Clips recorded from lossless frames at 2560x1600 and 60fps with the site\'s colour fix',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.36.1',
     date: '2026-10-15',
     title: 'Sharper, True-Colour Video',
