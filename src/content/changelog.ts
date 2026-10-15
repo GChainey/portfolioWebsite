@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.39.0',
+    date: '2026-10-15',
+    title: 'The Chat Answers in My Own Words',
+    description: 'I recorded myself answering interview questions about design, AI and my career. The chat now searches those answers for each question it gets and uses the closest few as background, so it answers with my opinions in its own short words, not a script.',
+    changes: [
+      'A list of about 110 interview questions drawn from every case study, essay and product on the site',
+      'The first recording transcribed on-device with Whisper: 14 answers, from who I am to what taste means',
+      'Keyword search (BM25) over the answers picks the one to three that match the visitor\'s last two messages, and adds only those to the prompt',
+      'Each answer carries extra topic words, so "will AI replace designers?" finds the answer about where designers are heading',
+      'Local dev chat moved to gpt-oss-120b on Groq, after Llama 3.3 70B was retired',
+    ],
+    aiTools: ['Claude Code', 'Whisper'],
+  },
+  {
     version: '1.38.0',
     date: '2026-10-15',
     title: 'Replays Instead of Video',
