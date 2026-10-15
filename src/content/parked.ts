@@ -93,6 +93,16 @@ export const PARKED: ParkedItem[] = [
     todo: ['Pick a direction to take into the real homepage, or delete public/variants and the rewrites'],
   },
   {
+    id: 'projects-page',
+    name: 'Projects page',
+    status: 'unlisted',
+    since: '2026-10-15',
+    summary: 'The list of every project. It left the top nav when the homepage started leading with the three case studies.',
+    links: [{ label: 'Projects', href: '/projects' }],
+    gate: 'Not in the header (src/components/Header.tsx). The homepage still links to it from the case studies section',
+    todo: ['Decide whether the homepage link stays, or the page goes too'],
+  },
+  {
     id: 'playground',
     name: 'Playground',
     status: 'unlisted',

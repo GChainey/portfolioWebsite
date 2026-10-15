@@ -14,6 +14,17 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.35.1',
+    date: '2026-10-15',
+    title: 'Projects Leaves the Top Nav',
+    description: 'The header no longer links to the projects page. The homepage leads with the three case studies, so the nav is CV, Changelog and Contact.',
+    changes: [
+      'Removed Projects from the header',
+      'The projects page still works at its URL, and the homepage still links to it',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.35.0',
     date: '2026-10-14',
     title: 'New Case Study: Making a Marketing Site in 2026',
