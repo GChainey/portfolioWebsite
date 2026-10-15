@@ -39,6 +39,25 @@ function calculateReadTime(content: Project['content']): number {
 }
 
 
+// The article as plain text, for the model to summarise. Media and live components are left out.
+function articleText(content: Project['content']): string {
+  const asLines = (v: string | string[]) => [v].flat().join('; ')
+  return content.map(block => {
+    switch (block.type) {
+      case 'heading': return `\n## ${block.content}`
+      case 'text': return block.content
+      case 'list': return block.items.map(item => `- ${item}`).join('\n')
+      case 'stats': return block.items.map(i => `- ${i.value} ${i.label}${i.note ? ` (${i.note})` : ''}`).join('\n')
+      case 'comparison': return `${block.beforeLabel ?? 'Before'}: ${asLines(block.before)}\n${block.afterLabel ?? 'Now'}: ${asLines(block.after)}`
+      case 'table': return [block.headers, ...block.rows].map(row => row.join(' | ')).join('\n')
+      default: return ''
+    }
+  }).filter(Boolean).join('\n\n')
+}
+
+// Leaves room in the chat API's context cap for the instructions around the article
+const TLDR_ARTICLE_CHARS = 9500
+
 // TLDR role options - who is reading
 const TLDR_OPTIONS = [
   { id: 'recruiter', label: "I'm a recruiter", description: 'Skills, experience, impact' },
@@ -192,7 +211,7 @@ export default function ProjectPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: [{ role: 'user', content: `Summarize this article for me` }],
-          context: `You are summarizing "${project.title}" for a ${tldrLength}.
+          context: `You are summarizing Gareth Chainey's case study "${project.title}" for a ${tldrLength}. The full article is below.
 
 Original description: ${project.description}
 
@@ -200,7 +219,11 @@ Reader context: ${roleOption?.label} - they care about: ${roleOption?.descriptio
 ${rolePrompts[tldrLength] || ''}
 ${tldrFocus ? `Also specifically address: ${tldrFocus}` : ''}
 
-Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. Be direct, specific, and compelling.`
+Write 2-3 short paragraphs (under 150 words in total) tailored to what a ${tldrLength} would want to know. Only use facts from the article. Be direct, specific, and compelling. Write in plain text: no markdown, headings, bold or bullet points.
+
+<article>
+${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
+</article>`
         })
       })
 

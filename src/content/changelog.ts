@@ -14,6 +14,17 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.35.2',
+    date: '2026-10-15',
+    title: 'TLDR Reads the Article',
+    description: 'The persona TLDR on case studies was only given the title and one-line description, so the model asked for the article instead of summarising it. It now gets the full text.',
+    changes: [
+      'The TLDR prompt includes the case study as plain text: headings, paragraphs, lists, stats, comparisons and tables',
+      'The model is told to use only facts from the article, stay under 150 words, and write without markdown, which showed up as raw asterisks',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.35.1',
     date: '2026-10-15',
     title: 'Projects Leaves the Top Nav',
