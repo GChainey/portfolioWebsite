@@ -15,6 +15,7 @@ import { ShimmeringText } from '@/components/ui/shimmering-text'
 import { getProjectById, projects, type Project, type ContentBlock } from '@/content/projects'
 import { GitHubContributions } from '@/components/GitHubContributions'
 import { Backdrop, FramedMedia, GridFrame, MediaFrame } from '@/components/ClipFrame'
+import { ReplayReel } from '@/components/replay/ReplayReel'
 
 // Calculate read time from content blocks
 function calculateReadTime(content: Project['content']): number {
@@ -68,7 +69,7 @@ const TLDR_OPTIONS = [
 
 // Media and artifacts (like FunnelDiagram) that exist. A pending slot has nothing to show yet.
 const isVisual = (b: ContentBlock) =>
-  b.type === 'component' || ((b.type === 'image' || b.type === 'gif' || b.type === 'video' || b.type === 'embed') && !b.pending)
+  (b.type === 'component' && !b.pending) || ((b.type === 'image' || b.type === 'gif' || b.type === 'video' || b.type === 'embed') && !b.pending)
 
 // What the picture or reel at the top of the page sits in: the colour backdrop and window, or
 // the dotted canvas for a hero that asks for it
@@ -331,8 +332,17 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
                   </motion.div>
                 )}
 
+                {/* A reel of replays, drawn by the page */}
+                {project.heroReel && (
+                  <div className="w-full mb-8">
+                    <MediaFrame>
+                      <ReplayReel scenes={project.heroReel} />
+                    </MediaFrame>
+                  </div>
+                )}
+
                 {/* Hero Image for non-GitHub articles */}
-                {!project.showGitHubActivity && project.heroImage && (
+                {!project.showGitHubActivity && !project.heroReel && project.heroImage && (
                   <div className="w-full mb-8">
                     {project.heroFrame === 'device' ? (
                       <Backdrop className="overflow-hidden">

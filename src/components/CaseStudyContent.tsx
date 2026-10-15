@@ -9,6 +9,9 @@ import { DemoCanvas } from '@/components/DemoCanvas'
 import { IterationTimelapse } from '@/components/IterationTimelapse'
 import { BrandBook } from '@/components/BrandBook'
 import { ImageGrid } from '@/components/ImageGrid'
+import { RewriteReplay } from '@/components/replay/RewriteReplay'
+import { AskReplay } from '@/components/replay/AskReplay'
+import { RecordingReplay } from '@/components/replay/RecordingReplay'
 import { FramedMedia, clipGeometry } from '@/components/ClipFrame'
 import { FrameDialog } from '@/components/FrameDialog'
 import { ArrowUpRight } from 'lucide-react'
@@ -20,6 +23,9 @@ export const componentRegistry: Record<string, React.ComponentType<any>> = {
   'iteration-timelapse': IterationTimelapse,
   'brand-book': BrandBook,
   'image-grid': ImageGrid,
+  'rewrite-replay': RewriteReplay,
+  'ask-replay': AskReplay,
+  'recording-replay': RecordingReplay,
 }
 
 interface CaseStudyContentProps {
@@ -286,6 +292,7 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
         if (block.type === 'component') {
           const Component = componentRegistry[block.componentId]
           if (!Component) return null
+          if (block.pending && process.env.NODE_ENV !== 'development') return null
           return (
             <motion.div
               key={index}

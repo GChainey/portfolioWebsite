@@ -59,9 +59,12 @@ export interface ComponentBlock {
   componentId: string
   props?: Record<string, unknown>
   caption?: string
+  pending?: boolean // Dev server only, like a pending media slot
 }
 
 export type ContentBlock = MediaBlock | TextBlock | HeadingBlock | ListBlock | StatsBlock | ComparisonBlock | TableBlock | ComponentBlock
+
+import type { ReelScene } from '@/components/replay/ReplayReel'
 
 export interface Project {
   id: string
@@ -73,6 +76,7 @@ export interface Project {
   heroVideo?: string // Plays in place of the hero image, which becomes its poster
   heroFrame?: 'device' | 'grid' | 'reel' // device: the hero image is a device on a transparent background, and stands on the backdrop with no window. grid: the hero sits on the dotted canvas the live demos use, not the colour backdrop. reel: a sizzle reel with its own stage, in the window without a browser bar
   heroUrl?: string // For a hero reel: the address shown in the browser bar around it
+  heroReel?: ReelScene[] // A sizzle reel of replays in place of the hero picture: sharp, drawn by the page
   tags: string[]
   featured?: boolean // Show in hero with special treatment
   showGitHubActivity?: boolean // Show GitHub activity visualization in card
@@ -1464,11 +1468,10 @@ export const projects: Project[] = [
       },
       { type: 'text', content: 'Nobody arrives wanting a model profile. They want a chatbot on their form.' },
       {
-        type: 'video',
-        src: '/case-studies/eai-settings/before-parts.mp4',
-        alt: 'A recording of the earlier workspace settings: a long list including Knowledge, Documents, Model profiles, Prompt configuration, Workflow templates and Services, each opening its own page',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/eai-settings/before-parts.json' },
         caption: 'Before: settings organised by how the system is built',
-        aspectRatio: '16/10',
       },
 
       { type: 'heading', level: 2, content: 'Group the parts by the job' },
@@ -1484,11 +1487,10 @@ export const projects: Project[] = [
       },
       { type: 'text', content: 'Each one lives in the app\'s own settings, not in workspace settings.' },
       {
-        type: 'video',
-        src: '/case-studies/eai-settings/features.mp4',
-        alt: 'A recording of opening an app and clicking through its four features in the app settings sidebar: AI Document Review, AI Chatbot, AI Document Creation and Document Checklist',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/eai-settings/features.json' },
         caption: 'After: four features, inside the app\'s own settings',
-        aspectRatio: '16/10',
       },
 
       { type: 'heading', level: 2, content: 'Two sets of settings that looked the same' },
@@ -1503,11 +1505,10 @@ export const projects: Project[] = [
       },
       { type: 'text', content: 'Give someone a task and they lost track of which one they were in.' },
       {
-        type: 'video',
-        src: '/case-studies/eai-settings/before-levels.mp4',
-        alt: 'A recording of the earlier design: a feature page in app settings links to workspace settings, which shows the same feature list and the same page title, and closing it lands on the workspace home',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/eai-settings/before-levels.json' },
         caption: 'Before: the same list and the same page in app settings and in workspace settings',
-        aspectRatio: '16/10',
       },
 
       { type: 'heading', level: 2, content: 'Swap the colours' },
@@ -1521,11 +1522,10 @@ export const projects: Project[] = [
       },
       { type: 'text', content: 'You can tell which level you\'re on before you read a word.' },
       {
-        type: 'video',
-        src: '/case-studies/eai-settings/nested.mp4',
-        alt: 'A recording of opening an app from the workspace: its settings appear as a card with a white sidebar and grey page, then switching to a second app and going back to the workspace',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/eai-settings/nested.json' },
         caption: 'After: into an app, across to another, and back out',
-        aspectRatio: '16/10',
       },
 
       { type: 'heading', level: 2, content: 'Make workspace settings a dialog' },
@@ -1538,11 +1538,10 @@ export const projects: Project[] = [
         ],
       },
       {
-        type: 'video',
-        src: '/case-studies/eai-settings/dialog.mp4',
-        alt: 'A recording of workspace settings opening as a dialog over the workspace home, then over an app\'s settings, and closing back to the same page each time',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/eai-settings/dialog.json' },
         caption: 'After: the same dialog over the workspace and over an app',
-        aspectRatio: '16/10',
       },
 
       { type: 'heading', level: 2, content: 'Did it work?' },
@@ -1648,9 +1647,16 @@ export const projects: Project[] = [
     description: 'A state government tender and a three-person team. How I would have designed the response before AI, and how I actually did it.',
     category: 'Enterprise AI',
     year: '2025',
-    heroImage: '/case-studies/rfp/sizzle-poster.jpg',
-    heroVideo: '/case-studies/rfp/sizzle.mp4',
-    heroFrame: 'reel',
+    heroImage: '/case-studies/rfp/sizzle-poster.jpg', // a still for cards elsewhere; the page plays the reel
+    heroReel: [
+      { src: '/replays/rfp/overview.json', from: 0.4, to: 3.6, kicker: 'Daisy Assess, built for a state tender', title: 'A working product, not mock-ups' },
+      { src: '/replays/rfp/spot-rewrite.json', region: { x: 802, y: 117, width: 555, height: 336 }, from: 1.4, to: 16, rate: 1.75, live: true, kicker: 'Live model', title: 'Rough notes in. Council wording out.' },
+      { src: '/replays/rfp/spot-ask.json', region: { x: 800, y: 91, width: 558, height: 718 }, from: 0.5, to: 13.4, rate: 1.55, layout: 'side', live: true, kicker: 'Live model', title: 'Answers from the applicant\u2019s own documents' },
+      { src: '/replays/rfp/spot-rfi.json', region: { x: 216, y: 153, width: 1080, height: 644 }, from: 1, to: 10, rate: 1.45, kicker: 'Workflow', title: 'Every officer\u2019s issues, one letter' },
+      { src: '/replays/rfp/spot-scenario.json', region: { x: 44, y: 253, width: 960, height: 323 }, from: 0.9, to: 8.8, rate: 1.35, kicker: 'Seed data', title: 'Switch the case. Every screen follows.' },
+      { src: '/replays/rfp/workflow-determination.json', region: { x: 195, y: 43, width: 890, height: 714 }, from: 1.8, to: 13, rate: 1.9, layout: 'side', kicker: 'Workflow', title: 'A determination, written from the case' },
+      { layout: 'center', hold: 3.6, title: 'One designer. Claude Code.', sub: 'Days, not weeks, for each part of the tender response' },
+    ],
     tags: ['AI', 'Enterprise', 'Prototyping', 'Claude Code', 'RFP'],
     content: [
       { type: 'heading', level: 2, content: 'The short version' },
@@ -1680,36 +1686,31 @@ export const projects: Project[] = [
         ]
       },
       {
-        type: 'video',
-        src: '/case-studies/rfp/overview.mp4',
-        aspectRatio: '16/10',
-        url: 'enterpriseai.com/daisy-assess',
-        alt: 'The prototype in thirty seconds',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/rfp/overview.json', url: 'enterpriseai.com/daisy-assess' },
         caption: 'The working prototype we answered with',
       },
 
       { type: 'heading', level: 2, content: 'Five things that changed' },
       { type: 'text', content: 'I started in Figma and hit its limits quickly. Each of these is something the RFP asked for that a mock-up couldn\'t do.' },
 
-      // Each example leads with a spotlight: the one interaction that matters, cropped out of the
-      // app. The clip under it shows where it sits in the product. Scale and iteration are still to
+      // Each example leads with a spotlight: the one interaction that matters, either cropped out
+      // of a recording or, for Rewrite and Ask, rebuilt in the page as a replay (components/replay).
+      // The clip under it shows where it sits in the product. Scale and iteration are still to
       // come, so those two slots are pending: drop the file into public/case-studies/rfp and delete
       // `pending` and `brief`.
       { type: 'heading', level: 3, content: '1. Data that stays consistent' },
       {
-        type: 'video',
-        src: '/case-studies/rfp/spot-scenario.mp4',
-        frame: 'spotlight',
-        aspectRatio: '2/1',
-        alt: 'Pick a case, and its details follow',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/rfp/spot-scenario.json', region: { x: 44, y: 253, width: 960, height: 323 } },
         caption: 'Three cases from one set of seed data',
       },
       {
-        type: 'video',
-        src: '/case-studies/rfp/seed-data.mp4',
-        aspectRatio: '16/10',
-        url: 'enterpriseai.com/daisy-assess',
-        alt: 'Two cases, the same screens',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/rfp/seed-data.json', url: 'enterpriseai.com/daisy-assess' },
         caption: 'In the app: the assessment and the letter follow whichever case is open',
       },
       {
@@ -1720,27 +1721,19 @@ export const projects: Project[] = [
 
       { type: 'heading', level: 3, content: '2. AI features that really answer' },
       {
-        type: 'video',
-        src: '/case-studies/rfp/spot-rewrite.mp4',
-        frame: 'spotlight',
-        aspectRatio: '16/10',
-        alt: 'Rough notes in, council wording out',
+        type: 'component',
+        componentId: 'rewrite-replay',
         caption: 'Rewrite: a live model turns rough notes into the council\'s report standard',
       },
       {
-        type: 'video',
-        src: '/case-studies/rfp/spot-ask.mp4',
-        frame: 'spotlight',
-        aspectRatio: '1/1',
-        alt: 'Questions answered from the applicant\'s statement',
+        type: 'component',
+        componentId: 'ask-replay',
         caption: 'Ask: answers come from the applicant\'s own statement, not a script',
       },
       {
-        type: 'video',
-        src: '/case-studies/rfp/llm-chat.mp4',
-        aspectRatio: '16/10',
-        url: 'enterpriseai.com/daisy-assess',
-        alt: 'The assistant beside the assessment form',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/rfp/llm-chat.json', url: 'enterpriseai.com/daisy-assess' },
         caption: 'In the app: the assistant sits beside the assessment form, and edits the field you are on',
       },
       {
@@ -1785,27 +1778,21 @@ export const projects: Project[] = [
 
       { type: 'heading', level: 3, content: '5. Workflows that end somewhere real' },
       {
-        type: 'video',
-        src: '/case-studies/rfp/spot-rfi.mp4',
-        frame: 'spotlight',
-        aspectRatio: '16/10',
-        alt: 'Issues ticked in or out, and the letter redrafts',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/rfp/spot-rfi.json', region: { x: 216, y: 153, width: 1080, height: 644 } },
         caption: 'Issues raised by different officers, ticked in or out, and the letter follows',
       },
       {
-        type: 'video',
-        src: '/case-studies/rfp/workflow-rfi.mp4',
-        aspectRatio: '16/10',
-        url: 'enterpriseai.com/daisy-assess',
-        alt: 'A request for information, compiled from the issues raised',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/rfp/workflow-rfi.json', url: 'enterpriseai.com/daisy-assess' },
         caption: 'In the app: one path ends in a request for information, compiled from every issue flagged along the way',
       },
       {
-        type: 'video',
-        src: '/case-studies/rfp/workflow-determination.mp4',
-        aspectRatio: '16/10',
-        url: 'enterpriseai.com/daisy-assess',
-        alt: 'A determination letter, written from the assessment',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/rfp/workflow-determination.json', url: 'enterpriseai.com/daisy-assess' },
         caption: 'Another ends in a determination letter, written to the council\'s standard from the work already done',
       },
       {
@@ -2099,11 +2086,9 @@ export const projects: Project[] = [
     tags: ['AI', 'No-Code', 'Prototyping', 'LLM', 'Claude Code'],
     content: [
       {
-        type: 'video',
-        src: '/case-studies/configurator/overview.mp4',
-        crop: 'browser-window',
-        url: 'enterpriseai.com/configurator',
-        alt: 'From a process to an app',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/configurator/overview.json', url: 'enterpriseai.com/configurator' },
         caption: 'A description of today\'s process becomes a four-step app, on live models',
       },
       { type: 'heading', level: 2, content: 'The short version' },
@@ -2126,11 +2111,9 @@ export const projects: Project[] = [
 
       { type: 'heading', level: 3, content: '1. Can it understand a business?' },
       {
-        type: 'video',
-        src: '/case-studies/configurator/process-card.mp4',
-        crop: 'browser-window',
-        url: 'enterpriseai.com/configurator',
-        alt: 'A messy description becomes a business process card',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/configurator/process-card.json', url: 'enterpriseai.com/configurator' },
         caption: 'A messy description in. Goal, who and outcome back, from a live model',
       },
       {
@@ -2141,11 +2124,9 @@ export const projects: Project[] = [
 
       { type: 'heading', level: 3, content: '2. Can it make the process simpler?' },
       {
-        type: 'video',
-        src: '/case-studies/configurator/four-steps.mp4',
-        crop: 'browser-window',
-        url: 'enterpriseai.com/configurator',
-        alt: 'Today\'s steps mapped onto four',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/configurator/four-steps.json', url: 'enterpriseai.com/configurator' },
         caption: 'Seven steps today, mapped onto four',
       },
       {
@@ -2156,11 +2137,9 @@ export const projects: Project[] = [
 
       { type: 'heading', level: 3, content: '3. Which model is good enough?' },
       {
-        type: 'video',
-        src: '/case-studies/configurator/models.mp4',
-        crop: 'browser-window',
-        url: 'enterpriseai.com/configurator',
-        alt: 'Switching the model with a feature flag',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/configurator/models.json', url: 'enterpriseai.com/configurator' },
         caption: 'The first version: a flag swaps the model behind every call',
       },
       {
@@ -2171,19 +2150,15 @@ export const projects: Project[] = [
 
       { type: 'heading', level: 3, content: '4. What did it actually ask the model?' },
       {
-        type: 'video',
-        src: '/case-studies/configurator/show-prompt.mp4',
-        crop: 'browser-window',
-        url: 'enterpriseai.com/configurator',
-        alt: 'Reading a prompt, changing it and running it again',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/configurator/show-prompt.json', url: 'enterpriseai.com/configurator' },
         caption: 'Show prompt: read the request, change it, run it again',
       },
       {
-        type: 'video',
-        src: '/case-studies/configurator/real-data.mp4',
-        crop: 'browser-window',
-        url: 'enterpriseai.com/configurator',
-        alt: 'Real LLM output in the first version, and the prompt behind it',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/configurator/real-data.json', url: 'enterpriseai.com/configurator' },
         caption: 'The first version had it too: real output, and the prompt behind it',
       },
       {
@@ -2194,11 +2169,9 @@ export const projects: Project[] = [
 
       { type: 'heading', level: 3, content: '5. Structure, not code' },
       {
-        type: 'video',
-        src: '/case-studies/configurator/edit.mp4',
-        crop: 'browser-window',
-        url: 'enterpriseai.com/configurator',
-        alt: 'A chat message changes the app',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/configurator/edit.json', url: 'enterpriseai.com/configurator' },
         caption: 'Ask for a change. The settings change, and the app follows',
       },
       {
@@ -2209,11 +2182,9 @@ export const projects: Project[] = [
 
       { type: 'heading', level: 3, content: '6. Their brand, from one name' },
       {
-        type: 'video',
-        src: '/case-studies/configurator/brand.mp4',
-        crop: 'browser-window',
-        url: 'enterpriseai.com/configurator',
-        alt: 'The same app in three companies\' brands',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/configurator/brand.json', url: 'enterpriseai.com/configurator' },
         caption: 'One app, three clients. Each in its own logo, colours and tone of voice',
       },
       {
@@ -2224,11 +2195,9 @@ export const projects: Project[] = [
 
       { type: 'heading', level: 3, content: '7. On a real phone' },
       {
-        type: 'video',
-        src: '/case-studies/configurator/qr.mp4',
-        crop: 'browser-window',
-        url: 'enterpriseai.com/configurator',
-        alt: 'A QR code to open the app on a phone',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/configurator/qr.json', url: 'enterpriseai.com/configurator' },
         caption: 'A private link and a QR code, straight from the builder',
       },
       {
@@ -2240,11 +2209,9 @@ export const projects: Project[] = [
       { type: 'heading', level: 2, content: 'Where it led: select, don\'t generate' },
       { type: 'text', content: 'Running it on real models showed the weak points. Generating a whole app took seconds, and the model\'s choice of blocks was the part that went wrong. So the idea changed.' },
       {
-        type: 'video',
-        src: '/case-studies/configurator/jev-match.mp4',
-        crop: 'browser-window',
-        url: 'enterpriseai.com/configurator',
-        alt: 'A classifier matches a process to a template',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/configurator/jev-match.json', url: 'enterpriseai.com/configurator' },
         caption: 'Jev picks from 20 templates and says how sure it is',
       },
       {
