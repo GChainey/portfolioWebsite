@@ -14,6 +14,23 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.38.0',
+    date: '2026-10-15',
+    title: 'Replays Instead of Video',
+    description: 'The RFP, EAI settings and Configurator case studies no longer use video. Every recording plays as the real interface, drawn by the page, so it is as sharp as the text around it and its colours are exact. The hero reel is built the same way.',
+    changes: [
+      'Prototype recordings captured as rrweb data (the page, its CSS and every change) and replayed in the page, sharp at any size',
+      'Spotlights are crops of the same recordings, zoomed in the browser rather than in pixels',
+      'Rewrite and Ask rebuilt as components that play a real run with a cursor',
+      'The hero sizzle reel is now a live sequence of replays with captions, not a 12 MB video',
+      'Replays load when they come near the screen, pause off screen, and show their last frame for people who prefer less motion',
+      'About 20 MB of RFP video replaced by under 5 MB of replay data',
+      'EAI settings (5 clips) and Configurator (10 clips) converted too, re-recorded from the tested prototype builds and on live models',
+      'The cursor in a replay is drawn above everything, including modal dialogs',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.37.0',
     date: '2026-10-15',
     title: 'Gallery: One Column, Real Use, Real Phones',
