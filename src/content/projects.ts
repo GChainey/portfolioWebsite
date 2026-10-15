@@ -7,7 +7,7 @@ export interface MediaBlock {
   alt?: string
   caption?: string
   aspectRatio?: string // e.g., '16/9', '4/3', '1/1'
-  frame?: 'phone' | 'device' // phone: a portrait screen recording, shown as a phone on the backdrop. device: a still of a device on a transparent background, which needs no window
+  frame?: 'phone' | 'device' | 'spotlight' // phone: a portrait screen recording, shown as a phone on the backdrop. device: a still of a device on a transparent background, which needs no window. spotlight: one component cropped out of the app, floated on the backdrop with no window
   crop?: 'browser-window' // The recording has its own window and backdrop baked in: crop to the app (see ClipFrame)
   url?: string // For a cropped clip: the address shown in the browser bar the site draws around it
   live?: string // A live copy of what the clip shows: a button under it opens the page in a dialog to use
@@ -71,7 +71,7 @@ export interface Project {
   year: string
   heroImage?: string
   heroVideo?: string // Plays in place of the hero image, which becomes its poster
-  heroFrame?: 'device' | 'grid' // device: the hero image is a device on a transparent background, and stands on the backdrop with no window. grid: the hero sits on the dotted canvas the live demos use, not the colour backdrop
+  heroFrame?: 'device' | 'grid' | 'reel' // device: the hero image is a device on a transparent background, and stands on the backdrop with no window. grid: the hero sits on the dotted canvas the live demos use, not the colour backdrop. reel: a sizzle reel with its own stage, in the window without a browser bar
   heroUrl?: string // For a hero reel: the address shown in the browser bar around it
   tags: string[]
   featured?: boolean // Show in hero with special treatment
@@ -1648,16 +1648,11 @@ export const projects: Project[] = [
     description: 'A state government tender and a three-person team. How I would have designed the response before AI, and how I actually did it.',
     category: 'Enterprise AI',
     year: '2025',
+    heroImage: '/case-studies/rfp/sizzle-poster.jpg',
+    heroVideo: '/case-studies/rfp/sizzle.mp4',
+    heroFrame: 'reel',
     tags: ['AI', 'Enterprise', 'Prototyping', 'Claude Code', 'RFP'],
     content: [
-      {
-        type: 'video',
-        src: '/case-studies/rfp/overview.mp4',
-        crop: 'browser-window',
-        url: 'enterpriseai.com/daisy-assess',
-        alt: 'The prototype in thirty seconds',
-        caption: 'The working prototype we answered with',
-      },
       { type: 'heading', level: 2, content: 'The short version' },
       { type: 'text', content: 'I was the only designer on a small startup\'s response to a state government tender, up against vendors with whole teams. Before AI, I would have answered it with Figma mock-ups and a lot of help. This time I built a working prototype with Claude Code. This is the difference, example by example.' },
 
@@ -1684,20 +1679,38 @@ export const projects: Project[] = [
           'It became the reference for engineering too. They worked from it, not from tickets or other artefacts',
         ]
       },
+      {
+        type: 'video',
+        src: '/case-studies/rfp/overview.mp4',
+        aspectRatio: '16/10',
+        url: 'enterpriseai.com/daisy-assess',
+        alt: 'The prototype in thirty seconds',
+        caption: 'The working prototype we answered with',
+      },
 
       { type: 'heading', level: 2, content: 'Five things that changed' },
       { type: 'text', content: 'I started in Figma and hit its limits quickly. Each of these is something the RFP asked for that a mock-up couldn\'t do.' },
 
-      // Each example leads with a clip. Scale and iteration are still to come, so those two
-      // slots are pending: drop the file into public/case-studies/rfp and delete `pending` and `brief`.
+      // Each example leads with a spotlight: the one interaction that matters, cropped out of the
+      // app. The clip under it shows where it sits in the product. Scale and iteration are still to
+      // come, so those two slots are pending: drop the file into public/case-studies/rfp and delete
+      // `pending` and `brief`.
       { type: 'heading', level: 3, content: '1. Data that stays consistent' },
       {
         type: 'video',
+        src: '/case-studies/rfp/spot-scenario.mp4',
+        frame: 'spotlight',
+        aspectRatio: '2/1',
+        alt: 'Pick a case, and its details follow',
+        caption: 'Three cases from one set of seed data',
+      },
+      {
+        type: 'video',
         src: '/case-studies/rfp/seed-data.mp4',
-        crop: 'browser-window',
+        aspectRatio: '16/10',
         url: 'enterpriseai.com/daisy-assess',
-        alt: 'Pick a scenario, everything follows',
-        caption: 'One set of seed data behind every screen',
+        alt: 'Two cases, the same screens',
+        caption: 'In the app: the assessment and the letter follow whichever case is open',
       },
       {
         type: 'comparison',
@@ -1708,11 +1721,27 @@ export const projects: Project[] = [
       { type: 'heading', level: 3, content: '2. AI features that really answer' },
       {
         type: 'video',
-        src: '/case-studies/rfp/llm-chat.mp4',
-        crop: 'browser-window',
-        url: 'enterpriseai.com/daisy-assess',
+        src: '/case-studies/rfp/spot-rewrite.mp4',
+        frame: 'spotlight',
+        aspectRatio: '16/10',
         alt: 'Rough notes in, council wording out',
-        caption: 'A real LLM rewriting notes into the council\'s own standard',
+        caption: 'Rewrite: a live model turns rough notes into the council\'s report standard',
+      },
+      {
+        type: 'video',
+        src: '/case-studies/rfp/spot-ask.mp4',
+        frame: 'spotlight',
+        aspectRatio: '1/1',
+        alt: 'Questions answered from the applicant\'s statement',
+        caption: 'Ask: answers come from the applicant\'s own statement, not a script',
+      },
+      {
+        type: 'video',
+        src: '/case-studies/rfp/llm-chat.mp4',
+        aspectRatio: '16/10',
+        url: 'enterpriseai.com/daisy-assess',
+        alt: 'The assistant beside the assessment form',
+        caption: 'In the app: the assistant sits beside the assessment form, and edits the field you are on',
       },
       {
         type: 'comparison',
@@ -1724,7 +1753,7 @@ export const projects: Project[] = [
       {
         type: 'video',
         src: '/case-studies/rfp/scale.mp4',
-        crop: 'browser-window',
+        aspectRatio: '16/10',
         url: 'enterpriseai.com/daisy-assess',
         alt: 'One council, then the whole state',
         caption: 'The same product restructured for a state',
@@ -1741,7 +1770,7 @@ export const projects: Project[] = [
       {
         type: 'video',
         src: '/case-studies/rfp/iteration.mp4',
-        crop: 'browser-window',
+        aspectRatio: '16/10',
         url: 'enterpriseai.com/daisy-assess',
         alt: 'A requirement lands, the prototype changes',
         caption: 'A requirement change, across the whole prototype',
@@ -1757,16 +1786,24 @@ export const projects: Project[] = [
       { type: 'heading', level: 3, content: '5. Workflows that end somewhere real' },
       {
         type: 'video',
+        src: '/case-studies/rfp/spot-rfi.mp4',
+        frame: 'spotlight',
+        aspectRatio: '16/10',
+        alt: 'Issues ticked in or out, and the letter redrafts',
+        caption: 'Issues raised by different officers, ticked in or out, and the letter follows',
+      },
+      {
+        type: 'video',
         src: '/case-studies/rfp/workflow-rfi.mp4',
-        crop: 'browser-window',
+        aspectRatio: '16/10',
         url: 'enterpriseai.com/daisy-assess',
         alt: 'A request for information, compiled from the issues raised',
-        caption: 'One path ends in a request for information, compiled from every issue flagged along the way',
+        caption: 'In the app: one path ends in a request for information, compiled from every issue flagged along the way',
       },
       {
         type: 'video',
         src: '/case-studies/rfp/workflow-determination.mp4',
-        crop: 'browser-window',
+        aspectRatio: '16/10',
         url: 'enterpriseai.com/daisy-assess',
         alt: 'A determination letter, written from the assessment',
         caption: 'Another ends in a determination letter, written to the council\'s standard from the work already done',

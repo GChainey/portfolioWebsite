@@ -128,6 +128,24 @@ export function FramedMedia({ block }: { block: MediaBlock }) {
     )
   }
 
+  // One component lifted out of the app: the clip is the component itself, so it floats on the
+  // backdrop as a card, at its own shape, with room around it
+  if (block.type === 'video' && block.frame === 'spotlight') {
+    return (
+      <Backdrop className="flex items-center justify-center p-6 sm:p-12" style={{ aspectRatio }}>
+        <video
+          src={block.src}
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-label={block.alt}
+          className="block max-h-full max-w-full w-auto h-auto rounded-xl bg-white shadow-2xl ring-1 ring-black/10"
+        />
+      </Backdrop>
+    )
+  }
+
   // A device mock-up on a transparent background stands on the backdrop the same way
   if (block.type === 'image' && block.frame === 'device') {
     return (
