@@ -14,6 +14,36 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.36.1',
+    date: '2026-10-15',
+    title: 'Sharper, True-Colour Video',
+    description: 'Every clip on the site looked washed out and soft. Browsers on the Mac lift the mid-tones of video, so greys and text read lighter than the screens they came from, and the clips were small and lightly encoded. Video is now graded to land on the original colours, and the RFP clips are recorded at twice the resolution.',
+    changes: [
+      'Every video on the site re-encoded with the colour fix: mid-greys and text now match the app, measured within one level in Chrome and Safari',
+      'Higher quality settings for every clip, so text edges stay crisp',
+      'RFP clips re-recorded from lossless frames at 2560x1600 and 60fps, with the app at a 1280 wide layout so the UI reads larger',
+      'RFP spotlights recorded at 3x, since they show the biggest',
+      'RFP clips sit in the site\'s own browser window instead of one baked into the recording',
+      'The sizzle reel re-rendered from the new clips at 1920x1200',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
+    version: '1.36.0',
+    date: '2026-10-15',
+    title: 'RFP Case Study: Spotlights and a Sizzle Reel',
+    description: 'The RFP study is re-recorded on the redesigned Daisy prototype. Each example now opens on the one interaction that matters, lifted out of the app, then shows where it sits in the product. The page opens on a sizzle reel of those moments.',
+    changes: [
+      'A sizzle reel in the hero: the rewrite, the questions, the RFI letter, the case switch and the determination, each captioned, ending on one designer and Claude Code',
+      'Four spotlight clips, each one component cropped out of the running app at full resolution: Rewrite, Ask, the RFI issue list, and the case picker',
+      'The Rewrite and Ask spotlights run on the live model, and Ask answers from the applicant\'s own statement',
+      'Every in-app clip re-recorded on the new Daisy design language',
+      'A spotlight frame for case study media: the component floats on the backdrop as a card, with no browser window',
+      'A reel hero frame: a sizzle reel with its own stage, in the window without a browser bar',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.35.2',
     date: '2026-10-15',
     title: 'TLDR Reads the Article',

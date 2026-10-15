@@ -339,7 +339,7 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
                         <img src={project.heroImage} alt={project.title} className="block w-full h-auto" />
                       </Backdrop>
                     ) : (
-                    <HeroFrame grid={project.heroFrame === 'grid'} bar={!!project.heroVideo} url={project.heroUrl}>
+                    <HeroFrame grid={project.heroFrame === 'grid'} bar={!!project.heroVideo && project.heroFrame !== 'reel'} url={project.heroUrl}>
                       {project.heroVideo ? (
                         <video
                           src={project.heroVideo}
