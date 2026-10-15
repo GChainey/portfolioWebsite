@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Build once. Sell to many. — Enterprise AI (Night)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="night.css" />
+<!-- Portfolio copy: the link back to the remix hub is hidden. -->
+<style>a[href="../index.html"] { display: none !important; }</style>
+</head>
+<body>
+
+<div class="fx-spot" aria-hidden="true"></div>
+<div class="fx-glow" aria-hidden="true"></div>
+<div class="fx-grain" aria-hidden="true"></div>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="nav-brand" href="#top" aria-label="Enterprise AI"><img src="../../../assets/logos/eai-wordmark.svg" alt="Enterprise AI" /></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#scan">Builder</a>
+      <a href="#deck">Clients</a>
+      <a href="#steps">Four steps</a>
+      <a href="#ai">Assistant</a>
+      <a href="#share">Share</a>
+    </nav>
+    <div class="nav-end">
+      <a class="nav-sign" href="#">Sign in</a>
+      <a class="btn btn-sm btn-glow" href="#cta">Start building</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO + the signature moment: the brand scan -->
+  <section class="hero" id="scan">
+    <p class="eyebrow rv"><span class="ln"><span><i class="dot"></i><span class="pre">Enterprise AI · </span>the app builder for agencies</span></span></p>
+    <h1 class="hero-h rv">
+      <span class="ln"><span>Build once.</span></span>
+      <span class="ln"><span class="lum">Sell to <em>many.</em></span></span>
+    </h1>
+    <p class="hero-sub rv"><span class="ln"><span>Build a four-step app for one client. Tell the builder the next one and the same app wears their brand — logo, colours, voice. Same wiring underneath.</span></span></p>
+
+    <div class="stage rv-fade" id="stage">
+      <!-- 1. The builder chat: used by YOU, the maker. Left of the builder, EAI-neutral. Edits the app. -->
+      <div class="col col-you">
+        <div class="cap"><span class="av av-you"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6" fill="currentColor"/><path d="M4.8 20c.9-3.6 3.8-5.6 7.2-5.6s6.3 2 7.2 5.6" fill="currentColor"/></svg></span><b>You, building</b><span class="cap-s">Builder chat · changes the app</span></div>
+        <div class="win bchat" id="bchat">
+          <div class="win-bar">
+            <span class="lights"><i></i><i></i><i></i></span>
+            <span class="bc-title"><span class="av av-eai av-xs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" fill="currentColor"/></svg></span>EAI Builder</span>
+            <span class="win-tag">Campaign email</span>
+          </div>
+          <div class="bc-thread" id="bcThread" aria-live="polite"></div>
+          <form class="bc-compose" id="cmd" autocomplete="off">
+            <input id="cmdIn" type="text" placeholder="Tell the builder what to change…" spellcheck="false" aria-label="Message the builder" />
+            <button class="cmd-go" type="submit" aria-label="Send to the builder"><kbd>↵</kbd></button>
+          </form>
+          <div class="bc-chips" id="cmdChips" aria-label="Try">
+            <button type="button" data-say="Make it right for Apple">Make it for Apple</button>
+            <button type="button" data-say="Make it right for CommBank">…for CommBank</button>
+            <button type="button" data-say="Add an approval step">Add an approval step</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- The conduit -->
+      <div class="conduit" aria-hidden="true">
+        <span class="conduit-line"></span>
+        <span class="core" id="core"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" fill="currentColor"/></svg></span>
+      </div>
+
+      <!-- 2. The published app, used by the CLIENT'S TEAM. Their assistant lives inside it, on the right. -->
+      <div class="col col-them">
+        <div class="cap"><span class="av av-them" id="capAv">N</span><b id="capWho">Nike’s team, using the app</b><span class="cap-s" id="capS">Published app · assistant on the right</span></div>
+        <div class="win app-win">
+          <div class="win-bar">
+            <span class="lights"><i></i><i></i><i></i></span>
+            <span class="url"><span>Campaign email</span><span class="dim">· 4 steps</span></span>
+            <span class="win-tag">Published app</span>
+          </div>
+          <div class="app" id="app"></div>
+          <div class="tone" id="tone"><span class="tone-k">Tone of voice</span><span id="toneV">Direct, urgent, athlete-first</span></div>
+        </div>
+      </div>
+
+      <div class="readout" id="readout">
+        <span class="ro-l"><i class="ro-dot"></i><span id="roText">Ready — Campaign email is live for Nike</span></span>
+        <span class="ro-sw" id="roSw"></span>
+        <span class="ro-clients" id="roClients"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ONE APP, MANY CLIENTS: the deck -->
+  <section class="sec deck-sec" id="deck">
+    <div class="sec-head">
+      <p class="kicker rv"><span class="ln"><span>01 — One app, many clients</span></span></p>
+      <h2 class="rv"><span class="ln"><span>Same app. A different</span></span><span class="ln"><span>client on top <em>every time.</em></span></span></h2>
+      <p class="lede rv"><span class="ln"><span>Every client you name in the builder joins the deck. Hover to fan them out, drag the top card away to shuffle, click any card to bring it forward.</span></span></p>
+    </div>
+    <div class="deck-wrap rv-fade">
+      <div class="deck" id="deckEl" aria-label="The same app in several brands"></div>
+      <div class="deck-meta">
+        <span class="deck-now" id="deckNow">Nike</span>
+        <span class="deck-tone" id="deckTone">Direct, urgent, athlete-first</span>
+        <span class="deck-count mono" id="deckCount">3 clients · 1 app · 0 rebuilds</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOUR STEPS: the wire -->
+  <section class="sec steps-sec" id="steps">
+    <div class="sec-head">
+      <p class="kicker rv"><span class="ln"><span>02 — Always four steps</span></span></p>
+      <h2 class="rv"><span class="ln"><span>Four steps. Not a default —</span></span><span class="ln"><span><em>the reason it resells.</em></span></span></h2>
+      <p class="lede rv"><span class="ln"><span>Every app is a form, a data source, an AI writer and an approval. A shape small enough to sell twice, and to rebrand in a sentence.</span></span></p>
+    </div>
+    <div class="wire rv-fade" id="wire">
+      <svg class="wire-svg" id="wireSvg" aria-hidden="true">
+        <defs>
+          <linearGradient id="pulseGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="var(--glow)" stop-opacity="0" />
+            <stop offset="1" stop-color="#fff" stop-opacity="1" />
+          </linearGradient>
+        </defs>
+        <path class="wire-base" id="wireBase" />
+        <path class="wire-pulse" id="wirePulse" />
+        <circle class="wire-head" id="wireHead" r="4" />
+      </svg>
+      <button type="button" class="node" data-i="0"><span class="node-orb"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span><span class="node-n mono">01 · Form</span><span class="node-t">Brief</span></button>
+      <button type="button" class="node" data-i="1"><span class="node-orb"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg></span><span class="node-n mono">02 · Data source</span><span class="node-t">Assets</span></button>
+      <button type="button" class="node" data-i="2"><span class="node-orb"><svg viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></svg></span><span class="node-n mono">03 · AI writer</span><span class="node-t">Compose</span></button>
+      <button type="button" class="node" data-i="3"><span class="node-orb"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg></span><span class="node-n mono">04 · Approval</span><span class="node-t">Review</span></button>
+    </div>
+    <div class="step-detail rv-fade" id="stepDetail">
+      <div class="sd-copy">
+        <span class="mono sd-k" id="sdK">Step 01 · Form</span>
+        <h3 id="sdH">The brief</h3>
+        <p id="sdP">Four fields the client fills in. Everything after this is written for them.</p>
+      </div>
+      <div class="sd-view"><div class="app app-solo" id="sdApp"></div></div>
+    </div>
+  </section>
+
+  <!-- AI IN EVERY APP -->
+  <section class="sec ai-sec" id="ai">
+    <div class="split">
+      <div class="split-copy">
+        <p class="kicker rv"><span class="ln"><span>03 — AI in every app · what their team gets</span></span></p>
+        <h2 class="rv"><span class="ln"><span>An assistant that</span></span><span class="ln"><span><em>sounds like them.</em></span></span></h2>
+        <p class="lede rv"><span class="ln"><span>Every app you publish ships with its own assistant for the client’s team — the people using the app day to day. It wears their brand, writes in their voice and helps with the work. It never changes the app; that’s your builder chat.</span></span></p>
+        <div class="brand-pick rv-fade" id="aiPick" role="group" aria-label="Pick a client"></div>
+        <div class="who rv-fade">
+          <div class="who-row"><span class="av av-you"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6" fill="currentColor"/><path d="M4.8 20c.9-3.6 3.8-5.6 7.2-5.6s6.3 2 7.2 5.6" fill="currentColor"/></svg></span><div><b>Builder chat — you, building</b><span>Left of the EAI builder. Neutral. “Make it for Apple”, “add an approval step”. Changes the app.</span></div></div>
+          <div class="who-row"><span class="av av-them" id="whoAv">N</span><div><b id="whoName">Nike assistant — Nike’s team, using the app</b><span>Inside the app, on the right. In their brand. “Suggest three subject lines”. Helps with the work.</span></div></div>
+        </div>
+      </div>
+      <div class="ai-panel-wrap rv-fade">
+        <div class="ai-panel" id="aiPanel">
+          <div class="aip-h"><span class="aip-logo" id="aipLogo"></span><span class="aip-t"><b><span id="aipName">Nike</span> assistant</b><small>Inside the app · for <span id="aipTeam">Nike</span>’s team</small></span><span class="aip-voice" id="aipVoice">Direct, urgent, athlete-first</span></div>
+          <div class="aip-thread" id="aipThread"></div>
+          <div class="aip-prompts" id="aipPrompts">
+            <button type="button" data-p="0">Suggest three subject lines</button>
+            <button type="button" data-p="1">Make the intro shorter</button>
+            <button type="button" data-p="2">Write the SMS version</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHONE / SHARE -->
+  <section class="sec share-sec" id="share">
+    <div class="split split-rev">
+      <div class="phone-stage rv-fade" id="phoneStage">
+        <div class="cap ph-cap"><span class="av av-them" id="phAv">N</span><b id="phWho">Nike’s team, on their phone</b></div>
+        <div class="phone" id="phone">
+          <div class="ph-notch"></div>
+          <div class="ph-screen" id="phScreen"></div>
+        </div>
+        <button type="button" class="qr-card" id="qrCard" aria-label="Open the client app on a phone view">
+          <canvas id="qr" width="112" height="112"></canvas>
+          <span class="qr-t">Scan to open <b id="qrName">Nike</b>’s app</span>
+          <span class="qr-u mono" id="qrUrl">app.html?c=nike</span>
+        </button>
+      </div>
+      <div class="split-copy">
+        <p class="kicker rv"><span class="ln"><span>04 — Preview on a phone</span></span></p>
+        <h2 class="rv"><span class="ln"><span>Share. Scan.</span></span><span class="ln"><span><em>It’s on their phone.</em></span></span></h2>
+        <p class="lede rv"><span class="ln"><span>Hit Share and hand the client a QR code or a link. Their team opens the app on their phone — the same four steps and their own assistant, already in their brand. No separate mobile build.</span></span></p>
+        <ol class="flow rv-fade">
+          <li><span class="mono">01</span>Share from the builder</li>
+          <li><span class="mono">02</span>QR code or link</li>
+          <li><span class="mono">03</span>Their app, on their phone</li>
+        </ol>
+        <div class="brand-pick rv-fade" id="phPick" role="group" aria-label="Pick a client"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING CTA -->
+  <section class="cta" id="cta">
+    <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+    <h2 class="cta-h rv"><span class="ln"><span>What would you</span></span><span class="ln"><span><em>sell twice?</em></span></span></h2>
+    <p class="lede rv"><span class="ln"><span>Build it once for the client in front of you. The next one is a sentence away.</span></span></p>
+    <div class="cta-acts rv-fade">
+      <a class="btn btn-xl btn-glow" href="#" id="ctaBtn"><span>Start building</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a class="btn btn-xl btn-ghost" href="#">Talk to sales</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="foot-in">
+    <img src="../../../assets/logos/eai-wordmark.svg" alt="Enterprise AI" class="foot-mark" />
+    <nav aria-label="Footer"><a href="#">Business types</a><a href="#">Products</a><a href="#">Pricing</a><a href="#">Support</a><a href="#">About us</a></nav>
+    <span class="foot-c">© 2026 Enterprise AI Group</span>
+  </div>
+</footer>
+
+<a class="all-remixes" href="../index.html">← All remixes</a>
+
+<script src="../../app-view.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+<script src="night.js"></script>
+</body>
+</html>

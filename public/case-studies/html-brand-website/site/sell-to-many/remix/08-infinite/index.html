@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Infinite — Build once. Sell to many. · Enterprise AI</title>
+<meta name="description" content="Scroll to zoom. You build a four-step app for one client; inside it, their team is using it; inside that, the next client's app is being built. Forever." />
+<meta name="theme-color" content="#0A0A0B" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="infinite.css" />
+<!-- Portfolio copy: the link back to the remix hub is hidden. -->
+<style>a[href="../index.html"] { display: none !important; }</style>
+</head>
+<body>
+
+<a class="skip" href="#outside" data-exit>Skip the loop</a>
+
+<header class="nav">
+  <a class="nav-brand" href="#" data-home aria-label="Enterprise AI — back to level 0">
+    <img src="../../../assets/logos/eai-wordmark.svg" alt="Enterprise AI" />
+  </a>
+  <nav class="nav-links" aria-label="Main">
+    <button type="button" data-jump="app:0">How it works</button>
+    <button type="button" data-jump="invite">Try it</button>
+    <button type="button" data-exit>Pricing</button>
+  </nav>
+  <div class="nav-acts">
+    <button type="button" class="nav-exit" data-exit>Exit<span class="nav-long"> the loop</span> <span aria-hidden="true">↓</span></button>
+    <a class="nav-cta" href="#outside" data-exit data-cta>Start building</a>
+  </div>
+</header>
+
+<main class="loop" id="loop">
+  <h1 class="sr-only">Build once. Sell to many. An infinite zoom through the apps you build and the teams that use them.</h1>
+
+  <div class="stage" id="stage" aria-roledescription="infinite zoom" aria-label="The loop. Scroll, swipe or use the arrow keys to zoom between levels.">
+    <div class="wash" id="wash" aria-hidden="true"></div>
+    <div class="hero-t" id="heroT" aria-hidden="true" hidden><span>Build once.</span><span>Sell to many.</span><small>Scroll to zoom in. It doesn&rsquo;t end.</small></div>
+    <div class="transit" id="transit" aria-hidden="true">
+      <span class="t-kick" id="tKick"></span>
+      <span class="t-big" id="tBig"></span>
+      <span class="t-sub" id="tSub"></span>
+    </div>
+    <div class="finale" id="finale" hidden>
+      <div class="fin-card" role="dialog" aria-modal="false" aria-labelledby="finT">
+        <span class="fin-k" id="finK">Loop complete · one build, four clients</span>
+        <h2 id="finT">What would you<br />sell twice?</h2>
+        <p>You just zoomed through one app, sold again and again. Four steps, re-skinned in a sentence, with an assistant inside for every client&rsquo;s team. Name the next one and it joins the loop.</p>
+        <form class="fin-form" id="finForm">
+          <input type="text" id="finInput" autocomplete="off" placeholder="Name a client — e.g. Qantas" aria-label="Name a client to add to the loop" />
+          <button type="submit">Add to the loop</button>
+        </form>
+        <div class="fin-acts">
+          <a class="fin-cta" href="#outside" data-exit data-cta>Start building</a>
+          <button type="button" class="fin-ghost" id="finKeep">Keep zooming</button>
+          <button type="button" class="fin-ghost" data-exit>Exit the loop</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <aside class="gauge" id="gauge" aria-label="Depth gauge">
+    <div class="g-head">
+      <span class="g-k">Depth</span>
+      <b class="g-zoom" id="gZoom">×1</b>
+      <span class="g-label" id="gLabel">Level 0 · Nike · Maker</span>
+      <span class="g-loop" id="gLoop">Loop 1</span>
+    </div>
+    <div class="g-track">
+      <ol class="g-list" id="gList"></ol>
+      <span class="g-marker" id="gMarker" aria-hidden="true"></span>
+    </div>
+    <div class="g-foot"><span aria-hidden="true">↺</span> Loops back to the start</div>
+  </aside>
+
+  <div class="caption" id="caption">
+    <div class="c-text" aria-live="polite">
+      <span class="c-kick" id="cKick"></span>
+      <b class="c-title" id="cTitle"></b>
+      <span class="c-body" id="cBody"></span>
+    </div>
+    <div class="c-side">
+      <div class="c-hint" id="cHint"><kbd>Scroll</kbd> to zoom <span class="c-sep">·</span> <kbd>↑</kbd><kbd>↓</kbd> <span class="c-sep">·</span> click the preview</div>
+      <div class="c-steps" id="cSteps" hidden>
+        <button type="button" data-step="-1" aria-label="Zoom out a level">↑ Out</button>
+        <button type="button" data-step="1" aria-label="Zoom in a level">In ↓</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- The normal page, for anyone who wants out of the loop. -->
+<section class="outside" id="outside" tabindex="-1" aria-label="Enterprise AI — the plain version" hidden>
+  <div class="out-top">
+    <img src="../../../assets/logos/eai-wordmark.svg" alt="Enterprise AI" />
+    <button type="button" class="out-back" id="outBack">↑ Back into the loop</button>
+  </div>
+  <div class="out-hero">
+    <span class="out-k">Build once. Sell to many.</span>
+    <h2>One app. Every client.<br />No end to it.</h2>
+    <p>Build a four-step app for one client. Make it right for the next one in a sentence — their logo, their colours, their voice. Same wiring underneath, and an assistant inside for everyone who uses it.</p>
+  </div>
+  <ol class="out-points">
+    <li><span>01</span><b>Exactly four steps</b><p>Brief → Assets → Compose → Review, wired as Form → Data source → AI writer → Approval. The shape is the product.</p></li>
+    <li><span>02</span><b>Rebrand in a sentence</b><p>&ldquo;Make it for Apple.&rdquo; EAI reads their site for colours, logo and tone of voice. The same app wears their brand.</p></li>
+    <li><span>03</span><b>AI in every app</b><p>Every app ships with its own assistant, in the client&rsquo;s brand, for the team using it. It helps with the work — it never changes the app.</p></li>
+    <li><span>04</span><b>On their phone in a scan</b><p>Share → QR code → the client&rsquo;s app on their phone. Same four steps, in their pocket.</p></li>
+  </ol>
+  <div class="out-chats">
+    <div class="oc oc-b"><span class="oc-k">Builder chat · you, building</span><p>Left of the EAI builder, in EAI&rsquo;s own styling. You use it to make and change the app: &ldquo;Make it for CommBank.&rdquo;</p></div>
+    <div class="oc oc-a"><span class="oc-k">In-app assistant · their team, using it</span><p>Right of the published app, in the client&rsquo;s brand. Their team uses it to do the work: &ldquo;Suggest three subject lines.&rdquo;</p></div>
+  </div>
+  <div class="out-cta">
+    <h3>What would you sell twice?</h3>
+    <div class="out-cta-acts">
+      <a class="out-btn" href="#" data-cta>Start building</a>
+      <a class="out-ghost" href="#">Talk to sales</a>
+    </div>
+  </div>
+  <footer class="out-foot">
+    <div class="of-col"><img src="../../../assets/logos/eai-wordmark.svg" alt="Enterprise AI" /><p>Apps you build once and sell to many.</p></div>
+    <div class="of-col"><b>Product</b><a href="#">Builder</a><a href="#">In-app assistant</a><a href="#">Share &amp; phone</a><a href="#">Pricing</a></div>
+    <div class="of-col"><b>Who it&rsquo;s for</b><a href="#">Agencies</a><a href="#">Consultants</a><a href="#">Builders</a></div>
+    <div class="of-col"><b>Company</b><a href="#">About us</a><a href="#">Support</a><a href="#">Contact sales</a></div>
+    <p class="of-legal">© 2026 Enterprise AI Group. Made in Australia.</p>
+  </footer>
+</section>
+
+<a class="all-remixes" href="../index.html">← All remixes</a>
+
+<script src="infinite.js"></script>
+</body>
+</html>

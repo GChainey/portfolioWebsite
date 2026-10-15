@@ -1,0 +1,196 @@
+/* Remix 24 — the V2 retest page in the new brand (?theme=brand).
+   From brand book v4, as the socials settled on it (socials/BRAND.md, PR #140):
+   "bright grey with navy marks".
+     ground     bright grey #F3F7FA, one grey per surface
+     panels     pure white, edged with a see-through navy ring outside the box
+     type       Inter Tight 700 headlines, Inter body, IBM Plex Mono labels;
+                sentence case everywhere (the book rules out all caps)
+     colour     navy #0D3857 for type, buttons and every mark (checks, badges,
+                dots, progress); cyan #8EDFF9 only as the headline underline
+     buttons    navy pills; secondary is a white pill with the ring
+   theme-brand.js puts the underline on each headline's key phrase. The
+   client's app inside the builder, the phone and the example apps keep
+   their own look. */
+
+[data-theme="brand"] {
+  --br-navy: #0D3857;
+  --br-cyan: #8EDFF9;
+  --br-ground: #F3F7FA;
+  --br-text: #3C5468;
+  --br-muted: #6B7F90;
+  --br-ring: 0 0 0 1px rgba(13, 56, 87, .06);
+  --br-lift: 0 0 0 1px rgba(13, 56, 87, .06), 0 2px 8px rgba(13, 56, 87, .05);
+  --br-float: 0 0 0 1px rgba(13, 56, 87, .06), 0 2px 8px rgba(13, 56, 87, .04), 0 32px 64px -32px rgba(13, 56, 87, .28);
+  --br-chip: 0 0 0 1px rgba(13, 56, 87, .12);
+  --br-divider: inset 0 -1px 0 rgba(13, 56, 87, .06);
+  --br-hl: linear-gradient(transparent 66%, #8EDFF9 66%, #8EDFF9 88%, transparent 88%);
+  --br-head: 'Inter Tight', system-ui, sans-serif;
+  --br-body: 'Inter', system-ui, sans-serif;
+  --br-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  background: var(--br-ground);
+}
+[data-theme="brand"] body.ps {
+  --navy: #0D3857;
+  --ink: #0D3857;
+  --muted: #6B7F90;
+  --line: #DDE5EC;
+  --bg: #F3F7FA;
+  background: var(--br-ground);
+  color: var(--br-navy);
+  font-family: var(--br-body);
+}
+[data-theme="brand"] :is(.hx-box textarea, .bm-next input, .bx-composer input, .ent-region select, .dw-hd h2, .dw-side h3, .modal-card h2, .sg-seg button, .ps-footer-inner) { font-family: var(--br-body); }
+[data-theme="brand"] .hl { background: var(--br-hl); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+
+/* ---------- headlines: Inter Tight 700, navy, sentence case ---------- */
+[data-theme="brand"] :is(.hx-h1, .slogan, .sg-h, .ps-cta h2, .ent-card h3) { font-family: var(--br-head); font-weight: 700; color: var(--br-navy); letter-spacing: -0.025em; text-wrap: balance; }
+[data-theme="brand"] .sg-h { font-size: 52px; line-height: 1.04; }
+[data-theme="brand"] .sec .sg-h { font-size: 48px; }
+[data-theme="brand"] :is(.sg-sub, .hx-sub, .bstage-sub) { color: var(--br-text); font-weight: 400; line-height: 1.6; }
+[data-theme="brand"] :is(.sg-sub, .hx-sub) b { color: var(--br-navy); }
+[data-theme="brand"] .ps .sg-h + .sg-sub { margin-top: 16px; }
+
+/* ---------- buttons: navy pills; secondary white pills with the ring. No cyan buttons ---------- */
+[data-theme="brand"] :is(.hx-go, .nav-cta, .gm-build, .mx-go, .sec-btn, .bx-primary:not(:disabled), .ps-cta-btn) {
+  border: 0; border-radius: 999px; background: var(--br-navy); color: #fff; font-weight: 600;
+}
+[data-theme="brand"] :is(.hx-go, .nav-cta, .gm-build, .mx-go, .sec-btn, .bx-primary:not(:disabled), .ps-cta-btn):hover { background: #0F4368; }
+[data-theme="brand"] .nav-cta { padding: 8px 16px; }
+[data-theme="brand"] .ps :focus-visible { outline: 2px solid var(--br-navy); outline-offset: 2px; }
+[data-theme="brand"] :is(.hx-chips button, .gf-picks button, .sg-seg button) { border: 0; border-radius: 999px; background: #fff; color: var(--br-navy); box-shadow: var(--br-chip); }
+[data-theme="brand"] :is(.hx-chips button:hover, .hx-chips button.is-hint, .gf-picks button[aria-pressed="true"], .sg-seg button.on) { background: var(--br-navy); color: #fff; box-shadow: none; }
+[data-theme="brand"] .sg-seg { background: #fff; box-shadow: var(--br-ring); border-radius: 999px; }
+
+/* ---------- header: bright grey, the dark wordmark ---------- */
+[data-theme="brand"] .nav { background: rgba(243, 247, 250, .88); border-bottom-color: rgba(13, 56, 87, .06); -webkit-backdrop-filter: saturate(160%) blur(12px); backdrop-filter: saturate(160%) blur(12px); }
+[data-theme="brand"] .nav-links a, [data-theme="brand"] .nav-signin { color: var(--br-text); }
+[data-theme="brand"] .nav-links a:hover, [data-theme="brand"] .nav-signin:hover { color: var(--br-navy); background: none; }
+
+/* ---------- no section eyebrows: the headline carries each section ---------- */
+[data-theme="brand"] .ps-page > [data-section]::before { content: none; display: none; }
+[data-theme="brand"] .ps-page > .is-first { margin-top: 64px; }
+
+/* ---------- hero ---------- */
+[data-theme="brand"] .hx-h1 { font-size: clamp(44px, 6vw, 80px); line-height: 1.04; }
+[data-theme="brand"] .hx-h1 .w2 { color: var(--br-navy); background: var(--br-hl); }
+[data-theme="brand"] .hx-box { border: 0; border-radius: 16px; background: #fff; box-shadow: var(--br-float); }
+[data-theme="brand"] :is(.who-you, .hx-tag) { border: 0; background: #fff; color: var(--br-text); box-shadow: var(--br-chip); }
+[data-theme="brand"] .hx-tag { font-family: var(--br-mono); font-weight: 500; text-transform: none; letter-spacing: 0; }
+[data-theme="brand"] .hx-hint { color: var(--br-muted); }
+
+/* ---------- windows: white panels on the ring, no grey frame ---------- */
+[data-theme="brand"] :is(.bx-frame, .feat-demo, .gf-frame) { padding: 0; border: 0; border-radius: 16px; background: #fff; box-shadow: var(--br-float); }
+[data-theme="brand"] :is(.bx, .gf-chat, .feat-plate) { border: 0; border-radius: 16px; }
+[data-theme="brand"] .slogan .sl-a { color: var(--br-navy); }
+[data-theme="brand"] .hx-count { border: 0; border-radius: 999px; background: #fff; color: var(--br-text); box-shadow: var(--br-chip); font-family: var(--br-mono); }
+[data-theme="brand"] .bx-client.on { border-color: var(--br-navy); background: #fff; }
+[data-theme="brand"] :is(.bx-mark, .bx-av) { background: #fff; border-color: transparent; box-shadow: var(--br-chip); }
+
+/* ---------- phone, calculator ---------- */
+[data-theme="brand"] .sg-ticks li::before { background: #0D3857 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='%23fff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat; }
+[data-theme="brand"] .sg-calc-box { border: 0; border-radius: 16px; background: #fff; box-shadow: var(--br-float); }
+[data-theme="brand"] .sg-calc-inputs { background: #fff; border-right-color: rgba(13, 56, 87, .08); }
+[data-theme="brand"] .sg-out-big { color: var(--br-navy); font-family: var(--br-head); font-weight: 700; letter-spacing: -0.03em; }
+[data-theme="brand"] .sg-range input { background: linear-gradient(90deg, var(--br-navy) var(--p, 50%), #DDE5EC var(--p, 50%)); }
+[data-theme="brand"] .sg-range input::-webkit-slider-thumb { border-color: var(--br-navy); }
+[data-theme="brand"] .sg-bar-once i { background: var(--br-navy); }
+[data-theme="brand"] .sg-bar i { background: rgba(13, 56, 87, .35); }
+[data-theme="brand"] .sg-tile { border: 0; border-radius: 12px; background: #fff; box-shadow: var(--br-chip); }
+[data-theme="brand"] .sg-tile-dark { background: var(--br-navy); box-shadow: none; }
+[data-theme="brand"] .sg-qr { border: 0; border-radius: 16px; background: #fff; box-shadow: var(--br-float); }
+
+/* ---------- Gofer, multiplier ---------- */
+[data-theme="brand"] .gf-kicker { font-family: var(--br-mono); font-weight: 500; font-size: 13px; color: var(--br-text); }
+[data-theme="brand"] .gf-mark { border-radius: 50%; background: var(--br-navy); color: #fff; }
+[data-theme="brand"] .gm-bubble { background: var(--br-ground); }
+[data-theme="brand"] .gm-stats span { background: #fff; box-shadow: var(--br-chip); }
+[data-theme="brand"] .gm-why li::before { background: var(--br-navy); }
+[data-theme="brand"] :is(.gf-try-k, .mx-ticker span) { font-family: var(--br-mono); text-transform: none; letter-spacing: 0; font-weight: 500; color: var(--br-text); }
+[data-theme="brand"] .mx-ticker > div { border: 0; background: #fff; box-shadow: var(--br-chip); }
+
+/* ---------- enterprise: white cards on the ring ---------- */
+[data-theme="brand"] .ent { gap: 16px; border: 0; background: transparent; overflow: visible; }
+[data-theme="brand"] .ent-card { border-radius: 16px; background: #fff; box-shadow: var(--br-lift); }
+[data-theme="brand"] .ent-card h3 { font-size: 20px; }
+[data-theme="brand"] .ent-card p { color: var(--br-text); font-weight: 400; }
+[data-theme="brand"] .ent-viz { border: 0; border-radius: 12px; background: var(--br-ground); }
+
+/* ---------- CLI ---------- */
+[data-theme="brand"] .term { border-radius: 16px; background: var(--br-navy); box-shadow: var(--br-float); }
+[data-theme="brand"] .term-bar { background: #0A2E48; border-bottom-color: rgba(255, 255, 255, .08); }
+[data-theme="brand"] .term-tabs button[aria-selected="true"] { background: var(--br-navy); color: #fff; }
+[data-theme="brand"] .ag-install { border: 0; border-radius: 999px; background: #fff; box-shadow: var(--br-chip); }
+[data-theme="brand"] .ag-install code { padding-left: 20px; font-family: var(--br-mono); }
+[data-theme="brand"] .ag-install button { border-left: 0; background: var(--br-navy); color: #fff; }
+[data-theme="brand"] .ag-points li::before { background: var(--br-navy); color: #fff; }
+[data-theme="brand"] .ps .sec .sg-sub code { background: #fff; color: var(--br-navy); box-shadow: var(--br-chip); font-family: var(--br-mono); }
+[data-theme="brand"] .ag-kicker { border: 0; border-radius: 999px; background: #fff; box-shadow: var(--br-chip); color: var(--br-navy); font-family: var(--br-mono); text-transform: none; letter-spacing: 0; }
+
+/* ---------- AI features: white cards, the chosen one ringed in navy ---------- */
+[data-theme="brand"] .feat-item { border: 0; border-radius: 16px; background: #fff; box-shadow: var(--br-lift); }
+[data-theme="brand"] .feat-item:hover { box-shadow: 0 0 0 1px rgba(13, 56, 87, .2), 0 2px 8px rgba(13, 56, 87, .05); }
+[data-theme="brand"] .feat-item.on { background: #fff; box-shadow: 0 0 0 2px var(--br-navy), 0 12px 32px -16px rgba(13, 56, 87, .35); }
+[data-theme="brand"] .feat-item.on .feat-bar { background: rgba(13, 56, 87, .08); }
+[data-theme="brand"] .feat-txt b { font-family: var(--br-head); font-weight: 700; color: var(--br-navy); }
+[data-theme="brand"] .feat-txt small { color: var(--br-text); }
+[data-theme="brand"] .feat-label { color: var(--br-text); font-family: var(--br-mono); padding: 12px 16px 0; }
+[data-theme="brand"] .ob[data-focus="chatbot"] .ob-pop,
+[data-theme="brand"] .ob[data-focus="checklist"] [data-ob-zone="checklist"],
+[data-theme="brand"] .ob[data-focus="validation"] [data-ob-zone="validation"],
+[data-theme="brand"] .ob[data-focus="validation"] .ob-modal,
+[data-theme="brand"] .ob[data-focus="creation"] [data-ob-zone="creation"] { outline: 2px solid var(--br-navy); }
+
+/* ---------- Control (EAI Curate): the product mock keeps the product's look; only the frame is on-brand ---------- */
+[data-theme="brand"] .ct-app { border: 0; border-radius: 16px; box-shadow: var(--br-float); }
+[data-theme="brand"] .ct-points b { font-family: var(--br-head); font-weight: 700; }
+[data-theme="brand"] .ct-points p { color: var(--br-text); }
+
+/* ---------- CMS ---------- */
+[data-theme="brand"] .cms { border: 0; border-radius: 16px; box-shadow: var(--br-float); }
+[data-theme="brand"] .cms-nav { background: #fff; }
+
+/* ---------- closing CTA: a white panel, navy headline with the underline ---------- */
+[data-theme="brand"] .ps-cta { position: relative; overflow: hidden; border-radius: 24px; background: #fff; box-shadow: var(--br-float); padding: 64px; }
+[data-theme="brand"] .ps-cta > .ps-warp { display: none; }
+[data-theme="brand"] .ps-cta h2 { color: var(--br-navy); font-size: clamp(36px, 4.4vw, 56px); line-height: 1.04; }
+[data-theme="brand"] .ps-cta p { color: var(--br-text); font-weight: 400; }
+
+/* ---------- footer: navy panel, white type ---------- */
+[data-theme="brand"] .ps-footer-inner { background: var(--br-navy); }
+[data-theme="brand"] .ps-footer-k { color: rgba(255, 255, 255, .7); font-family: var(--br-mono); text-transform: none; letter-spacing: 0; }
+
+@media (max-width: 900px) {
+  [data-theme="brand"] .sg-h, [data-theme="brand"] .sec .sg-h { font-size: 36px; }
+  [data-theme="brand"] .ps-cta { padding: 32px 24px; }
+}
+/* ---------- footer: EAI's dark Warp shader behind it (theme-brand.js), the only place it's used ---------- */
+[data-theme="brand"] .ps-footer-inner { position: relative; isolation: isolate; overflow: hidden; background: #0A180D; }
+[data-theme="brand"] .br-sh { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; background: #0A180D url(warp-bg.jpg) 50% 40% / cover no-repeat; }
+[data-theme="brand"] .br-sh canvas { display: block; }
+
+/* "Sell to many." stays navy and always carries the brand underline, like every other headline */
+[data-theme="brand"] .slogan .sl-b,
+[data-theme="brand"] .slogan .sl-b.on { color: var(--br-navy); background: var(--br-hl); }
+
+/* ---------- one button shape everywhere: the full pill, like "Ask Qantas" ---------- */
+[data-theme="brand"] :is(.bx-btn, .bx-primary, .ob-btn, .ac-cta, .cms-btn, .m-ghost, .m-primary, .sso-btn, .bm-next form button, .bm-next-chips button, .pa-asks button, .pa-form button, .ob-asks button, .gf-send, .term-tabs button, .ag-install button, .bx-composer button, .uc-x, .ob-x) { border-radius: 999px; }
+[data-theme="brand"] :is(.bm-next form, .pa-form, .bx-composer) { border-radius: 999px; }
+
+/* sections sat on their eyebrows; keep the old rhythm now the eyebrows are gone */
+[data-theme="brand"] .ps-page > [data-section]:not(.is-first) { padding-top: 32px; }
+
+/* ---------- Use cases: the band and its button on-brand; the dialog keeps the product look, in a soft frame ---------- */
+[data-theme="brand"] .uc-cta { border: 0; border-radius: 16px; box-shadow: var(--br-lift); }
+[data-theme="brand"] .uc-cta b { font-family: var(--br-head); font-weight: 700; font-size: 20px; }
+[data-theme="brand"] .ps .uc-cta p { color: var(--br-text); }
+[data-theme="brand"] .uc-open { border: 0; border-radius: 999px; background: var(--br-navy); color: #fff; }
+[data-theme="brand"] .uc-dialog { border: 0; border-radius: 24px; box-shadow: var(--br-float); }
+[data-theme="brand"] .uc-dialog::backdrop { background: rgba(13, 56, 87, .35); }
+[data-theme="brand"] :is(.uc-go, .uc-x) { border-radius: 999px; }
+/* sentence case for the CLI kicker (the book rules out all caps) */
+html[data-theme="brand"][data-layout="mvp2"] .ag-kicker { text-transform: none; letter-spacing: 0; font-size: 13px; }
+
+/* Text boxes focus like shadcn: the ring goes round the whole field, not the text area inside it */
+[data-theme="brand"] .ps :is(#hxInput, .bx-composer input, .bm-next input, .pa-form input):focus-visible { outline: none; }
+[data-theme="brand"] .hx-box:focus-within { box-shadow: 0 0 0 1px var(--br-navy), 0 0 0 4px rgba(13, 56, 87, .14), var(--br-float); }
+[data-theme="brand"] :is(.bx-composer, .bm-next form, .pa-form):focus-within { border-color: var(--br-navy); box-shadow: 0 0 0 3px rgba(13, 56, 87, .14); }

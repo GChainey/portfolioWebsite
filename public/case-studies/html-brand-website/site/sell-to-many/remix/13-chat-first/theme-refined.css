@@ -1,0 +1,149 @@
+/* Remix 21 — the page in remix 01's "Refined" style (?theme=refined).
+   Lifted from 01-refined/style.css: white, Geist, near-black ink, tight
+   negative tracking, black pill buttons with an inset highlight, a faint
+   grid fading out behind the hero, windows that float on a long soft
+   shadow with no grey edge, and small mono eyebrows. The client brands
+   supply the only colour. */
+
+[data-theme="refined"] {
+  --rf-ink: #0A0A0A;
+  --rf-ink-2: #3F3F46;
+  --rf-mut: #62626C;
+  --rf-faint: #A1A1AA;
+  --rf-line: #EBEBEE;
+  --rf-bg-2: #FAFAFA;
+  --rf-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --rf-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --rf-float: 0 0 0 1px rgba(10, 10, 10, .075), 0 1px 1px rgba(0, 0, 0, .03), 0 10px 20px -10px rgba(0, 0, 0, .1), 0 48px 96px -28px rgba(0, 0, 0, .24);
+  --rf-btn: inset 0 1px 0 rgba(255, 255, 255, .16), 0 1px 2px rgba(0, 0, 0, .18), 0 6px 16px -6px rgba(0, 0, 0, .35);
+  background: #fff;
+}
+[data-theme="refined"] body.ps {
+  --navy: #0A0A0A;
+  --ink: #0A0A0A;
+  --muted: #62626C;
+  --line: #EBEBEE;
+  background: #fff;
+  color: var(--rf-ink);
+  font-family: var(--rf-sans);
+  text-rendering: optimizeLegibility;
+}
+[data-theme="refined"] :is(.hx-box textarea, .bm-next input, .bx-composer input, .ent-card h3, .ent-region select, .cms-hd h3, .dw-hd h2, .dw-side h3, .modal-card h2, .sg-seg button, .ps-cta h2, .ps-footer-inner) { font-family: var(--rf-sans); }
+
+/* type: 600, very tight */
+[data-theme="refined"] :is(.hx-h1, .slogan, .sg-h, .ps-cta h2) { font-family: var(--rf-sans); font-weight: 600; letter-spacing: -0.045em; color: var(--rf-ink); }
+[data-theme="refined"] :is(.sg-sub, .hx-sub, .bstage-sub) { color: #55555E; font-weight: 400; letter-spacing: -0.008em; line-height: 1.6; }
+[data-theme="refined"] .sg-h { font-size: 52px; line-height: 1.04; }
+[data-theme="refined"] .sec .sg-h { font-size: 48px; }
+
+/* black pills */
+[data-theme="refined"] :is(.hx-go, .nav-cta, .gm-build, .mx-go, .sec-btn, .bx-primary:not(:disabled), .ps-cta-btn) {
+  border: 0; border-radius: 999px; background: var(--rf-ink); color: #fff; font-weight: 500; letter-spacing: -0.01em; box-shadow: var(--rf-btn);
+}
+[data-theme="refined"] :is(.hx-go, .nav-cta, .gm-build, .mx-go, .sec-btn, .bx-primary:not(:disabled), .ps-cta-btn):hover { background: #26262B; }
+[data-theme="refined"] .ps :focus-visible { outline: 2px solid var(--rf-ink); outline-offset: 3px; }
+[data-theme="refined"] :is(.hx-chips button, .gf-picks button) { border-color: #E4E4E7; color: var(--rf-ink-2); box-shadow: 0 1px 2px rgba(0, 0, 0, .04); }
+[data-theme="refined"] :is(.hx-chips button:hover, .hx-chips button.is-hint, .gf-picks button[aria-pressed="true"]) { border-color: #D4D4D8; background: #fff; color: var(--rf-ink); box-shadow: 0 0 0 1px #E7E7EA, 0 1px 3px rgba(0, 0, 0, .06); }
+[data-theme="refined"] .sg-seg button.on { color: var(--rf-ink); }
+
+/* header: translucent white, grey links, black pill */
+[data-theme="refined"] .nav { background: rgba(255, 255, 255, .72); border-bottom-color: transparent; -webkit-backdrop-filter: saturate(180%) blur(14px); backdrop-filter: saturate(180%) blur(14px); }
+[data-theme="refined"] .nav-links a, [data-theme="refined"] .nav-signin { color: #55555E; }
+[data-theme="refined"] .nav-links a:hover, [data-theme="refined"] .nav-signin:hover { color: var(--rf-ink); background: none; }
+[data-theme="refined"] .nav-cta { padding: 8px 16px; }
+
+/* eyebrows: small mono labels, like 01's "HOW IT WORKS" */
+[data-theme="refined"] .ps-page > [data-section]::before {
+  display: block; margin-bottom: 16px;
+  color: var(--rf-faint); font: 500 12px/16px var(--rf-mono); letter-spacing: .08em; text-transform: uppercase;
+}
+[data-theme="refined"] .ps-page > [data-section="builder"]::before { content: "Brand your apps"; }
+[data-theme="refined"] .ps-page > [data-section="multiplier"]::before { content: "Sell it again"; }
+[data-theme="refined"] .ps-page > [data-section="phone"]::before { content: "Preview on mobile"; grid-column: 1 / -1; margin-bottom: -24px; }
+[data-theme="refined"] .ps-page > [data-section="maths"]::before { content: "The maths"; }
+[data-theme="refined"] .ps-page > [data-section="gofer"]::before { content: "Gofer"; }
+[data-theme="refined"] .ps-page > [data-section="features"]::before { content: "Add AI features"; }
+[data-theme="refined"] .ps-page > [data-section="enterprise"]::before { content: "Built for the apps you create"; }
+[data-theme="refined"] .ps-page > [data-section="agents"]::before { content: "Extend with the CLI"; }
+[data-theme="refined"] .ps-page > [data-section="cms"]::before { content: "Behind every app"; }
+
+/* hero: the faint grid fading out, 01's headline scale */
+[data-theme="refined"] .ps-page > .is-first { margin-top: 72px; }
+[data-theme="refined"] .hx { position: relative; isolation: isolate; }
+[data-theme="refined"] .hx::after {
+  content: ""; position: absolute; z-index: -1; left: 50%; top: -136px; width: 100vw; height: 760px; transform: translateX(-50%); pointer-events: none;
+  background-image: linear-gradient(to right, rgba(10, 10, 10, .045) 1px, transparent 1px), linear-gradient(to bottom, rgba(10, 10, 10, .045) 1px, transparent 1px);
+  background-size: 64px 64px; background-position: center top;
+  -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 0%, #000 20%, transparent 75%);
+          mask-image: radial-gradient(ellipse 60% 60% at 50% 0%, #000 20%, transparent 75%);
+}
+[data-theme="refined"] .hx-h1 { font-size: clamp(46px, 6.4vw, 88px); line-height: 1.02; letter-spacing: -0.052em; }
+[data-theme="refined"] .hx-h1 .w2 { color: var(--rf-ink); }
+[data-theme="refined"] .hx-sub { font-size: 18.5px; }
+[data-theme="refined"] .hx-box { border: 0; border-radius: 20px; background: #fff; box-shadow: var(--rf-float); }
+[data-theme="refined"] :is(.who-you, .hx-tag) { background: var(--rf-bg-2); border-color: var(--rf-line); color: var(--rf-mut); }
+[data-theme="refined"] .hx-tag { font-family: var(--rf-mono); font-weight: 500; }
+[data-theme="refined"] .hx-go { padding: 11px 20px; }
+
+/* windows float on a long soft shadow, no grey edge */
+[data-theme="refined"] :is(.bx-frame, .feat-demo, .gf-frame) { padding: 0; border: 0; border-radius: 16px; background: transparent; box-shadow: var(--rf-float); }
+[data-theme="refined"] :is(.bx, .gf-chat, .feat-plate) { border: 0; border-radius: 16px; }
+[data-theme="refined"] .slogan .sl-b { color: #D4D4D8; }
+[data-theme="refined"] .slogan .sl-b.on { color: var(--rf-ink); }
+[data-theme="refined"] .hx-count { border-color: var(--rf-line); color: var(--rf-mut); }
+[data-theme="refined"] .bx-client.on { border-color: var(--rf-ink); background: var(--rf-bg-2); color: var(--rf-ink); }
+
+/* phone and calculator */
+[data-theme="refined"] .sg-calc-box { border: 0; border-radius: 16px; background: #fff; box-shadow: var(--rf-float); }
+[data-theme="refined"] .sg-calc-inputs { border-right-color: var(--rf-line); }
+[data-theme="refined"] .sg-range-top b, [data-theme="refined"] .sg-out-big { color: var(--rf-ink); }
+[data-theme="refined"] .sg-out-big { font-weight: 600; letter-spacing: -0.05em; }
+[data-theme="refined"] .sg-range input { background: linear-gradient(90deg, var(--rf-ink) var(--p, 50%), #E4E4E7 var(--p, 50%)); }
+[data-theme="refined"] .sg-range input::-webkit-slider-thumb { border-color: var(--rf-ink); }
+[data-theme="refined"] .sg-bar-once i { background: var(--rf-ink); }
+[data-theme="refined"] .sg-tile { border-color: var(--rf-line); }
+[data-theme="refined"] .sg-tile-dark { border-color: var(--rf-ink); background: var(--rf-ink); }
+[data-theme="refined"] .sg-tile-dark span { color: var(--rf-faint); }
+[data-theme="refined"] .sg-qr { border-color: var(--rf-line); box-shadow: var(--rf-float); }
+
+/* Gofer and the multiplier */
+[data-theme="refined"] .gf-kicker { display: none; }
+[data-theme="refined"] .gf-mark { background: var(--rf-ink); }
+[data-theme="refined"] .gm-bubble { background: #F4F4F5; }
+[data-theme="refined"] .gm-stats span { background: var(--rf-bg-2); box-shadow: inset 0 0 0 1px var(--rf-line); }
+[data-theme="refined"] .gm-why li::before { background: var(--rf-ink); }
+[data-theme="refined"] .gf-try-k, [data-theme="refined"] .mx-ticker span { font-family: var(--rf-mono); color: var(--rf-faint); font-weight: 500; }
+[data-theme="refined"] .mx-ticker > div { border-color: var(--rf-line); background: #fff; }
+[data-theme="refined"] .mx-ticker b { font-weight: 600; letter-spacing: -0.04em; }
+[data-theme="refined"] .mx-many .mx-ticker > div:nth-child(3) { border-color: var(--rf-ink); background: var(--rf-ink); }
+[data-theme="refined"] .mx-many .mx-ticker > div:nth-child(3) :is(span, em) { color: var(--rf-faint); }
+
+/* enterprise, agents, features, CMS */
+[data-theme="refined"] .ent { border: 0; border-radius: 16px; background: var(--rf-line); box-shadow: 0 0 0 1px var(--rf-line); }
+[data-theme="refined"] .ent-card { background: #fff; }
+[data-theme="refined"] .ent-card h3 { font-weight: 600; letter-spacing: -0.02em; }
+[data-theme="refined"] .ent-viz { border-color: var(--rf-line); background: var(--rf-bg-2); }
+[data-theme="refined"] .term { border-radius: 16px; background: #0A0A0A; box-shadow: var(--rf-float); }
+[data-theme="refined"] .term-bar { background: #141416; border-bottom-color: #232327; }
+[data-theme="refined"] .term-tabs button[aria-selected="true"] { background: #0A0A0A; }
+[data-theme="refined"] .ag-install { border-color: var(--rf-line); border-radius: 999px; box-shadow: 0 1px 2px rgba(0, 0, 0, .04); }
+[data-theme="refined"] .ag-install code { padding-left: 20px; }
+[data-theme="refined"] .ag-install button { background: var(--rf-ink); color: #fff; border-left: 0; }
+[data-theme="refined"] .feat-item { border-color: var(--rf-line); border-radius: 12px; }
+[data-theme="refined"] .feat-item.on { border-color: var(--rf-ink); background: var(--rf-bg-2); }
+[data-theme="refined"] .cms { border: 0; border-radius: 16px; box-shadow: var(--rf-float); }
+[data-theme="refined"] .cms-nav { background: var(--rf-bg-2); }
+
+/* closing CTA: centred on white, like 01 */
+[data-theme="refined"] .ps-cta { flex-direction: column; justify-content: center; gap: 24px; padding: 96px 24px; border-radius: 0; background: transparent; text-align: center; }
+[data-theme="refined"] .ps-cta-copy { align-items: center; max-width: 720px; }
+[data-theme="refined"] .ps-cta h2 { font-size: clamp(40px, 5vw, 64px); line-height: 1.04; letter-spacing: -0.05em; color: var(--rf-ink); }
+[data-theme="refined"] .ps-cta p { color: #55555E; font-size: 18px; font-weight: 400; }
+[data-theme="refined"] .ps-cta-btn { padding: 12px 24px; }
+
+/* footer: white, minimal, the dark wordmark */
+[data-theme="refined"] .ps-footer-inner { min-height: 0; border-top: 1px solid var(--rf-line); border-radius: 0; background: #fff; color: var(--rf-ink); }
+[data-theme="refined"] .ps-footer-mark { content: url(../../../assets/logos/eai-wordmark.svg); width: 180px; height: auto; }
+[data-theme="refined"] .ps-footer-k { color: var(--rf-faint); font-family: var(--rf-mono); }
+[data-theme="refined"] :is(.ps-footer-sub, .ps-footer-group, .ps-footer-base) { color: #55555E; opacity: 1; }
+[data-theme="refined"] .ps-footer-base { border-top-color: var(--rf-line); }

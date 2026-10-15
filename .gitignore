@@ -44,3 +44,6 @@ next-env.d.ts
 # Local agent skills installed by marketplace integrations
 .agents/
 skills-lock.json
+
+# Playwright MCP session logs
+.playwright-mcp/

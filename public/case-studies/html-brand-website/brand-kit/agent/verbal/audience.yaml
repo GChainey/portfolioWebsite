@@ -1,0 +1,29 @@
+# Who EAI talks to. Owner: marketing.
+# DECIDE (Decision #4, see readme.md): which audience leads. Until then, lead with the audience of the page being built.
+
+lead: TODO
+
+audiences:
+  - id: operator
+    who: Ops and business users who own a process   # (from site)
+    job: Improve a process they run every day without waiting on engineering
+    pain: "Can't change a step without a ticket and a sprint"   # (from site)
+    hears: TODO   # the one thing they need to hear
+    entry: Home page prompt box → no-code builder (Configurator Builder)
+    proof: [free to start, four-step templates, see it take shape today]
+
+  - id: developer
+    who: Developers who already work in an AI harness (Claude Code, Cursor, Copilot)   # (from site)
+    job: Ship a governed workflow from their own terminal
+    pain: TODO
+    hears: "Build in TypeScript. Ship to production."   # (from site)
+    entry: CLI page → npx install eai
+    proof: [git-native, same runtime as the builder, works in your harness]
+
+  - id: buyer
+    who: IT, security and compliance leads who sign off   # (from site: SSO, audit, approvals)
+    job: Say yes to AI without taking on new risk
+    pain: TODO
+    hears: "The controls your organisation already asks for."   # (from site)
+    entry: TODO   # sales page? security page?
+    proof: [SSO, audit trail, approval gates, deployed into your tenancy, data not used for training]

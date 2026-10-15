@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="data:," />
+<title>EAI OS — Build once. Sell to many.</title>
+<meta name="description" content="Enterprise AI: build an app once for one client, then sell it to many. Exactly four steps, rebranded in a sentence, with AI in every app." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Doto:ROND,wght@0..100,500..900&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="os.css" />
+<!-- Portfolio copy: the link back to the remix hub is hidden. -->
+<style>a[href="../index.html"] { display: none !important; }</style>
+</head>
+<body>
+<a class="skip-a11y" href="#classic">Skip to the classic page</a>
+
+<div id="os" class="os" data-wall="putty">
+  <!-- Menubar (the site nav, in OS form) -->
+  <nav class="menubar" aria-label="EAI OS menubar">
+    <button type="button" class="mb-logo" data-menu="eai" aria-haspopup="menu"><span class="mb-mark" data-mark></span><b>EAI&nbsp;OS</b></button>
+    <button type="button" class="mb-item" data-menu="file" aria-haspopup="menu">File</button>
+    <button type="button" class="mb-item" data-menu="window" aria-haspopup="menu">Window</button>
+    <button type="button" class="mb-item" data-menu="help" aria-haspopup="menu">Help</button>
+    <div class="mb-center">
+      <span class="mb-auto" id="mbAuto"><i></i><span id="mbAutoText">Autoplay · click anywhere to take over</span></span>
+    </div>
+    <div class="mb-right">
+      <a class="mb-classic" href="#classic">Skip to classic page <span aria-hidden="true">↓</span></a>
+      <button type="button" class="mb-btn" id="mbSound" aria-pressed="false" title="Sound effects (off)">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 8v4h3l4 3.5v-11L6 8Z" fill="currentColor"/><path class="snd-on" d="M13 7.2a4 4 0 0 1 0 5.6M15.2 5a7 7 0 0 1 0 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path class="snd-off" d="m13 8 4 4m0-4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span class="sr">Sound</span>
+      </button>
+      <button type="button" class="mb-btn mb-spot" id="mbSpot" title="Spotlight (⌘K)">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m12.5 12.5 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <kbd>⌘K</kbd>
+      </button>
+      <span class="mb-clock" id="mbClock" aria-label="Clock"></span>
+    </div>
+  </nav>
+
+  <div class="desk" id="desk">
+    <!-- Wallpaper: the hero line, printed on the desktop itself -->
+    <div class="wall" aria-hidden="true">
+      <div class="wall-grid"></div>
+      <div class="wall-type"><span>Build once.</span><span>Sell to many.</span></div>
+      <div class="wall-meta"><span>EAI OS 4.4 “Four Steps”</span><span>One build · every client</span></div>
+    </div>
+    <h1 class="sr">Build once. Sell to many. Enterprise AI lets you build an app for one client and sell it to many.</h1>
+
+    <!-- Desktop / home-screen icons -->
+    <div class="icons" id="icons" role="list">
+      <button type="button" class="dicon m-only" data-open="builder" role="listitem"><span class="dicon-img" data-icon="builder"></span><span class="dicon-l">Builder</span></button>
+      <button type="button" class="dicon" data-open="readme" role="listitem"><span class="dicon-img" data-icon="readme"></span><span class="dicon-l">Read me.txt</span></button>
+      <button type="button" class="dicon" data-open="clients" role="listitem"><span class="dicon-img" data-icon="clients"></span><span class="dicon-l">Clients</span></button>
+      <button type="button" class="dicon" data-open="notes" role="listitem"><span class="dicon-img" data-icon="notes"></span><span class="dicon-l">Four steps.note</span></button>
+      <button type="button" class="dicon m-only" data-open="phone" role="listitem"><span class="dicon-img" data-icon="phone"></span><span class="dicon-l">Phone</span></button>
+      <button type="button" class="dicon m-only" data-open="calc" role="listitem"><span class="dicon-img" data-icon="calc"></span><span class="dicon-l">Calculator</span></button>
+      <button type="button" class="dicon" data-open="trash" role="listitem"><span class="dicon-img" data-icon="trash"></span><span class="dicon-l">Trash</span></button>
+    </div>
+
+    <!-- Sticky notes: draggable, editable -->
+    <div class="stickies" id="stickies">
+      <div class="sticky s-rule" data-sticky>
+        <span class="tape" aria-hidden="true"></span>
+        <div class="sticky-t" contenteditable="true" spellcheck="false"><b>Rule Nº 4</b>Every app is exactly four steps. Not three. Not five.<small>Brief → Assets → Compose → Review</small></div>
+      </div>
+      <div class="sticky s-ask" data-sticky>
+        <span class="tape" aria-hidden="true"></span>
+        <div class="sticky-t" contenteditable="true" spellcheck="false"><b>What would you sell twice?</b>Press ⌘K and type a client. Any company works.<small>Try Qantas, Aesop, Spotify</small></div>
+      </div>
+    </div>
+
+    <svg class="cables" id="cables" aria-hidden="true"></svg>
+    <div class="wins" id="wins"></div>
+    <div class="ripple-layer" id="ripples" aria-hidden="true"></div>
+    <div class="toasts" id="toasts" aria-live="polite"></div>
+
+    <!-- Dock -->
+    <div class="dock" id="dock" role="toolbar" aria-label="Dock">
+      <button type="button" class="dk" data-open="builder" aria-label="Builder"><span class="dk-img" data-icon="builder"></span><span class="dk-tip">Builder</span><i class="dk-run"></i></button>
+      <button type="button" class="dk" data-open="clients" aria-label="Clients"><span class="dk-img" data-icon="clients"></span><span class="dk-tip">Clients</span><i class="dk-run"></i><b class="dk-badge" id="clientBadge" hidden>0</b></button>
+      <button type="button" class="dk" data-open="phone" aria-label="Phone"><span class="dk-img" data-icon="phone"></span><span class="dk-tip">Phone</span><i class="dk-run"></i></button>
+      <button type="button" class="dk" data-open="calc" aria-label="Calculator"><span class="dk-img" data-icon="calc"></span><span class="dk-tip">Calculator</span><i class="dk-run"></i></button>
+      <button type="button" class="dk" data-open="notes" aria-label="Notes"><span class="dk-img" data-icon="notes"></span><span class="dk-tip">Notes</span><i class="dk-run"></i></button>
+      <span class="dk-sep" aria-hidden="true"></span>
+      <div class="dk-tray" id="tray"></div>
+      <button type="button" class="dk dk-trash" data-open="trash" aria-label="Trash"><span class="dk-img" data-icon="trash"></span><span class="dk-tip">Trash</span><i class="dk-run"></i></button>
+    </div>
+
+    <button type="button" class="m-home" id="mHome" aria-label="Home"><span></span></button>
+
+    <!-- Boot -->
+    <div class="boot" id="boot" aria-hidden="true">
+      <div class="boot-in">
+        <div class="boot-mark"><i></i><i></i><i></i><i></i></div>
+        <div class="boot-name">EAI&nbsp;OS</div>
+        <ol class="boot-log" id="bootLog"></ol>
+        <div class="boot-bar"><span id="bootBar"></span></div>
+        <div class="boot-skip">click or press any key to skip</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Spotlight -->
+  <div class="spot" id="spot" hidden>
+    <div class="spot-box" role="dialog" aria-label="Spotlight">
+      <div class="spot-in">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m12.5 12.5 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input id="spotInput" type="text" autocomplete="off" spellcheck="false" placeholder="Type a client — Nike, Apple, CommBank or any company" aria-label="Spotlight search" />
+        <kbd>esc</kbd>
+      </div>
+      <ul class="spot-list" id="spotList" role="listbox"></ul>
+      <div class="spot-foot"><span>↵ open</span><span>↑↓ choose</span><span>Publishing re-skins the same app. Same four steps.</span></div>
+    </div>
+  </div>
+
+  <div class="ctx" id="ctx" role="menu" hidden></div>
+</div>
+
+<!-- The classic page -->
+<main id="classic" class="classic">
+  <div class="c-wrap">
+    <div class="c-top">
+      <img src="../../../assets/logos/eai-wordmark.svg" alt="Enterprise AI" class="c-logo" />
+      <nav class="c-nav" aria-label="Classic"><a href="#c-how">How it works</a><a href="#c-two">Two chats</a><a href="#c-cta">Pricing</a><a href="#c-cta" class="c-btn-sm">Start building</a></nav>
+    </div>
+    <p class="c-eyebrow">The classic page · for people who like scrolling</p>
+    <h2 class="c-h">Build once.<br />Sell to many.</h2>
+    <p class="c-lede">Build an app for one client. EAI re-skins it for the next in a sentence — their colours, their logo, their tone of voice. Same four steps, same wiring underneath. And every app ships with its own assistant.</p>
+    <div class="c-ctas"><a class="c-btn" href="#c-cta">Start building</a><a class="c-btn ghost" href="#os" data-to-desk>Back to the desktop ↑</a></div>
+
+    <div class="c-grid" id="c-how">
+      <article class="c-card">
+        <span class="c-n">01</span><h3>Exactly four steps</h3>
+        <p>Brief → Assets → Compose → Review. Wired as form, data source, AI writer, approval. It’s the shape of the product, not a default — so every client learns it in a minute.</p>
+        <div class="c-pads" aria-hidden="true"><i>Brief</i><i>Assets</i><i>Compose</i><i>Review</i></div>
+      </article>
+      <article class="c-card">
+        <span class="c-n">02</span><h3>Rebrand in a sentence</h3>
+        <p>“Make it for Apple.” EAI reads apple.com for colours, logo and tone of voice. The same app wears their brand and writes in their voice.</p>
+        <div class="c-sw" aria-hidden="true"><i style="--c:#FA5400"></i><i style="--c:#1D1D1F"></i><i style="--c:#0071E3"></i><i style="--c:#FFCC00"></i></div>
+      </article>
+      <article class="c-card">
+        <span class="c-n">03</span><h3>AI in every app</h3>
+        <p>Every published app has its own assistant, in the client’s brand, for the people who use it — subject lines, shorter intros, tone checks.</p>
+      </article>
+      <article class="c-card">
+        <span class="c-n">04</span><h3>On their phone</h3>
+        <p>Share a link or a QR code. Your client opens their app on their phone — same four steps, their brand.</p>
+      </article>
+    </div>
+
+    <section class="c-two" id="c-two" aria-label="Two chats">
+      <div class="c-chat c-builder">
+        <span class="c-tag">Builder chat · you, building</span>
+        <p>Lives on the left of the EAI Builder, in EAI’s own colours. You use it to make and change the app: <q>Build a campaign email app for Nike</q>, <q>add an approval step</q>, <q>make it for Apple</q>.</p>
+      </div>
+      <div class="c-chat c-assist">
+        <span class="c-tag">In-app assistant · your client’s team, using the app</span>
+        <p>Lives on the right of every published app, in the client’s brand. Their team uses it to do the work: <q>Suggest three subject lines</q>, <q>make the intro shorter</q>. It never changes how the app is built.</p>
+      </div>
+    </section>
+
+    <section class="c-cta" id="c-cta">
+      <h2>What would you sell twice?</h2>
+      <form class="c-form" id="classicForm">
+        <input type="text" id="classicInput" placeholder="Name a client — e.g. Qantas" aria-label="Client name" autocomplete="off" />
+        <button type="submit">Publish it on the desktop</button>
+      </form>
+      <a class="c-btn" href="#">Start building</a>
+    </section>
+  </div>
+  <footer class="c-foot">
+    <img src="../../../assets/logos/eai-wordmark.svg" alt="Enterprise AI" class="c-logo" />
+    <nav aria-label="Footer"><a href="#">Product</a><a href="#">Pricing</a><a href="#">Sign in</a><a href="#">Contact</a></nav>
+    <small>© 2026 Enterprise AI. Made on EAI OS 4.4.</small>
+  </footer>
+</main>
+
+<a class="back" href="../index.html">← All remixes</a>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+<script type="module" src="os.js"></script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+/* EAI motion. The same values as motion.json; change both together.
+   DECIDE #10: see "Open decisions" in ../../../readme.md. */
+
+:root {
+  --eai-ease-enter: cubic-bezier(0.22, 1, 0.36, 1);        /* things appearing */
+  --eai-ease-move: cubic-bezier(0.32, 0.72, 0, 1);         /* things changing place */
+  --eai-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);    /* success moments only */
+  --eai-ease-shake: cubic-bezier(0.36, 0.07, 0.19, 0.97);  /* invalid input only */
+
+  --eai-dur-fast: 120ms;  /* hover and press */
+  --eai-dur-base: 200ms;  /* most transitions */
+  --eai-dur-slow: 300ms;  /* drawers and full panels */
+}
+
+/* Things appearing */
+@keyframes eai-enter {
+  from { opacity: 0; transform: translateY(var(--eai-space-2, 8px)); }
+}
+.eai-enter { animation: eai-enter var(--eai-dur-base) var(--eai-ease-enter) both; }
+
+/* Invalid input */
+@keyframes eai-shake {
+  20%, 60% { transform: translateX(calc(var(--eai-space-1, 4px) * -1)); }
+  40%, 80% { transform: translateX(var(--eai-space-1, 4px)); }
+}
+.eai-shake { animation: eai-shake var(--eai-dur-slow) var(--eai-ease-shake); }
+
+/* With reduced motion, every movement becomes a short fade. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: opacity var(--eai-dur-fast) linear !important;
+  }
+}

@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>EAI components</title>
+  <link rel="stylesheet" href="../colors_and_type.css">
+  <link rel="stylesheet" href="../tokens/tokens.css">
+  <link rel="stylesheet" href="../motion/motion.css">
+  <link rel="stylesheet" href="components.css">
+
+  <!-- Specimen page chrome. Not part of the brand. Don't copy. -->
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--eai-font-sans); font-size: var(--eai-text-base); line-height: 1.5; color: var(--eai-text); background: var(--eai-bg); }
+    .kit { max-width: var(--eai-max-width); margin: 0 auto; padding: var(--eai-space-16) var(--eai-space-6) var(--eai-space-24); }
+    .kit-title { margin: 0 0 var(--eai-space-2); font: var(--eai-weight-semibold) var(--eai-text-3xl)/1.1 var(--eai-font-display); letter-spacing: var(--eai-tracking-display); }
+    .kit-lede { margin: 0; max-width: 60ch; color: var(--eai-text-muted); }
+    .kit-lede a { color: var(--eai-navy); }
+    .kit-legend { display: flex; gap: var(--eai-space-4); flex-wrap: wrap; margin-top: var(--eai-space-6); font-size: var(--eai-text-xs); color: var(--eai-text-muted); }
+    .kit-level { margin-top: var(--eai-space-16); }
+    .kit-level > h2 { margin: 0 0 var(--eai-space-2); font: var(--eai-weight-semibold) var(--eai-text-2xl)/1.2 var(--eai-font-display); letter-spacing: var(--eai-tracking-heading); }
+    .kit-level > p { margin: 0 0 var(--eai-space-6); color: var(--eai-text-muted); font-size: var(--eai-text-sm); }
+    .kit-spec { display: grid; grid-template-columns: 13rem 1fr; gap: var(--eai-space-6); padding: var(--eai-space-6) 0; border-top: 1px solid var(--eai-border); align-items: start; }
+    .kit-spec__name b { display: block; font-size: var(--eai-text-sm); font-weight: var(--eai-weight-medium); }
+    .kit-spec__name code { display: block; margin-top: var(--eai-space-1); font: var(--eai-text-xs)/1.4 var(--eai-font-mono); color: var(--eai-text-muted); }
+    .kit-row { display: flex; gap: var(--eai-space-3); flex-wrap: wrap; align-items: center; }
+    .kit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: var(--eai-space-4); }
+    .kit-tag { display: inline-block; margin-top: var(--eai-space-2); padding: 0 var(--eai-space-2); font: var(--eai-weight-medium) var(--eai-text-xs)/1.6 var(--eai-font-mono); border-radius: var(--eai-radius-sm); }
+    .kit-tag[data-s="site"]     { background: var(--eai-surface); color: var(--eai-text-muted); border: 1px solid var(--eai-border); }
+    .kit-tag[data-s="decide"]   { background: color-mix(in srgb, var(--eai-cyan) 35%, var(--eai-bg)); color: var(--eai-navy); }
+    .kit-tag[data-s="todo"]     { background: var(--eai-cta-bg); color: var(--eai-cta-text); }
+    .kit-tag[data-s="proposed"] { background: var(--eai-bg); color: var(--eai-text-muted); border: 1px dashed var(--eai-text-muted); }
+    .kit-todo { padding: var(--eai-space-6); border: 1px dashed var(--eai-text-muted); border-radius: var(--eai-radius-lg); color: var(--eai-text-muted); font-size: var(--eai-text-sm); }
+    .kit-frame { border: 1px solid var(--eai-border); border-radius: var(--eai-radius-lg); padding: 0 var(--eai-space-6); }
+    @media (max-width: 720px) { .kit-spec { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<main class="kit">
+
+  <header>
+    <div class="eai-eyebrow">agent/visual/components/</div>
+    <h1 class="kit-title">Components</h1>
+    <p class="kit-lede">
+      UI primitives, from atoms up to whole sections, built only from the kit's CSS. Copy the
+      <code>eai-*</code> classes from <code>components.css</code>. Colour, type and the other tokens are on
+      the <a href="../tokens/index.html">token specimens</a> page; motion is on the <a href="../motion/index.html">motion</a> page.
+    </p>
+    <div class="kit-legend">
+      <span><span class="kit-tag" data-s="site">from site</span> real value, not agreed</span>
+      <span><span class="kit-tag" data-s="decide">DECIDE</span> open decision</span>
+      <span><span class="kit-tag" data-s="proposed">proposed</span> new, for discussion</span>
+      <span><span class="kit-tag" data-s="todo">TODO</span> not written yet</span>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════ ATOMS ═══════════════════════════ -->
+  <section class="kit-level">
+    <h2>Atoms</h2>
+    <p>The smallest parts. Everything else is built from these.</p>
+
+    <div class="kit-spec">
+      <div class="kit-spec__name"><b>Button</b><code>.eai-btn--primary / --secondary / --link</code><span class="kit-tag" data-s="site">from site</span></div>
+      <div class="kit-row">
+        <a class="eai-btn eai-btn--primary" href="#">Get started</a>
+        <a class="eai-btn eai-btn--secondary" href="#">Contact sales</a>
+        <a class="eai-btn eai-btn--link" href="#">Sign in</a>
+      </div>
+    </div>
+
+    <div class="kit-spec">
+      <div class="kit-spec__name"><b>Pill</b><code>.eai-pill</code><span class="kit-tag" data-s="site">from site</span></div>
+      <div class="kit-row">
+        <span class="eai-pill">SSO</span>
+        <span class="eai-pill">Audit trail</span>
+        <span class="eai-pill">Approvals</span>
+      </div>
+    </div>
+
+    <div class="kit-spec">
+      <div class="kit-spec__name"><b>Chip</b><code>.eai-chip</code><span class="kit-tag" data-s="site">from site</span></div>
+      <div class="kit-row">
+        <button class="eai-chip">Client onboarding</button>
+        <button class="eai-chip">Invoice approvals</button>
+        <button class="eai-chip">Candidate screening</button>
+      </div>
+    </div>
+
+    <div class="kit-spec">
+      <div class="kit-spec__name"><b>Input</b><code>.eai-input · .eai-shake</code><span class="kit-tag" data-s="proposed">proposed</span></div>
+      <div class="kit-row" style="flex-wrap: nowrap; max-width: 32rem">
+        <input class="eai-input" id="shake-input" placeholder="Work email">
+        <button class="eai-btn eai-btn--secondary" id="shake-btn">Invalid</button>
+      </div>
+    </div>
+
+    <div class="kit-spec">
+      <div class="kit-spec__name"><b>Eyebrow</b><code>.eai-eyebrow</code><span class="kit-tag" data-s="site">from site</span></div>
+      <div class="eai-eyebrow">Compliance</div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ MOLECULES ═══════════════════════════ -->
+  <section class="kit-level">
+    <h2>Molecules</h2>
+    <p>Atoms combined into one job each.</p>
+
+    <div class="kit-spec">
+      <div class="kit-spec__name"><b>Prompt box</b><code>.eai-prompt</code><span class="kit-tag" data-s="site">from site</span></div>
+      <div class="eai-prompt">
+        <textarea rows="3" placeholder="Describe the process you want to improve"></textarea>
+        <div class="eai-prompt__row">
+          <div class="eai-prompt__chips">
+            <button class="eai-chip">Client onboarding</button>
+            <button class="eai-chip">Invoice approvals</button>
+            <button class="eai-chip">Candidate screening</button>
+          </div>
+          <button class="eai-btn eai-btn--primary">Start building</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="kit-spec">
+      <div class="kit-spec__name"><b>Feature card</b><code>.eai-card</code><span class="kit-tag" data-s="site">from site</span></div>
+      <div class="kit-grid">
+        <article class="eai-card">
+          <h3>Governed by default</h3>
+          <p>Every run is logged, attributable and reviewable.</p>
+          <div class="eai-card__pills"><span class="eai-pill">SSO</span><span class="eai-pill">Audit trail</span><span class="eai-pill">Approvals</span></div>
+        </article>
+        <article class="eai-card">
+          <h3>Your data stays yours</h3>
+          <p>Nothing you build here is used to train anybody's model, ours included.</p>
+        </article>
+      </div>
+    </div>
+
+    <div class="kit-spec">
+      <div class="kit-spec__name"><b>Stat</b><code>.eai-stat</code><span class="kit-tag" data-s="decide">DECIDE #3</span></div>
+      <div class="kit-row" style="gap: var(--eai-space-16)">
+        <div class="eai-stat"><span class="eai-stat__value">6–8 wks</span><span class="eai-stat__label">In production, not pilots</span></div>
+        <div class="eai-stat"><span class="eai-stat__value">100</span><span class="eai-stat__label">Free credits, no credit card</span></div>
+      </div>
+    </div>
+
+    <div class="kit-spec">
+      <div class="kit-spec__name"><b>Template card</b><code>.eai-card.eai-template</code><span class="kit-tag" data-s="decide">DECIDE #5</span></div>
+      <div class="kit-grid">
+        <article class="eai-card eai-template">
+          <span class="eai-eyebrow">Procurement</span>
+          <h3>RFI screener</h3>
+          <p>Score incoming RFIs against your criteria and route the right ones forward.</p>
+          <div class="eai-template__foot">
+            <span class="eai-steps-label"><span class="eai-steps"><span></span><span></span><span></span><span></span></span>4 steps</span>
+            <a class="eai-btn eai-btn--link" href="#">Preview</a>
+          </div>
+        </article>
+        <article class="eai-card eai-template">
+          <span class="eai-eyebrow">Compliance</span>
+          <h3>KYC onboarding</h3>
+          <p>Collect documents, verify identity, and log compliance checks.</p>
+          <div class="eai-template__foot">
+            <span class="eai-steps-label"><span class="eai-steps"><span></span><span></span><span></span><span></span></span>4 steps</span>
+            <a class="eai-btn eai-btn--link" href="#">Preview</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ ORGANISMS ═══════════════════════════ -->
+  <section class="kit-level">
+    <h2>Organisms</h2>
+    <p>Whole sections of a page.</p>
+
+    <div class="kit-spec">
+      <div class="kit-spec__name"><b>Nav</b><code>.eai-nav</code><span class="kit-tag" data-s="site">from site</span></div>
+      <div class="kit-frame">
+        <nav class="eai-nav">
+          <img class="eai-nav__logo" src="../assets/eai-wordmark.svg" alt="Enterprise AI">
+          <div class="eai-nav__links">
+            <a href="#">Business types</a><a href="#">Products</a><a href="#">About us</a><a href="#">Pricing</a><a href="#">Support</a>
+          </div>
+          <div class="eai-nav__actions">
+            <a class="eai-btn eai-btn--link" href="#">Sign in</a>
+            <a class="eai-btn eai-btn--primary" href="#">Get started</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <div class="kit-spec">
+      <div class="kit-spec__name"><b>Hero</b><code>.eai-hero</code><span class="kit-tag" data-s="decide">DECIDE #2 #3</span></div>
+      <div class="kit-frame">
+        <section class="eai-hero">
+          <div class="eai-hero__inner">
+            <span class="eai-eyebrow">Enterprise AI</span>
+            <h1>Describe. Design. Deploy.</h1>
+            <p class="eai-hero__sub">Enterprise AI brings agents, governance, and workflow automation into production in 6–8 weeks.</p>
+            <div class="eai-prompt">
+              <textarea rows="2" placeholder="Describe the process you want to improve"></textarea>
+              <div class="eai-prompt__row">
+                <div class="eai-prompt__chips">
+                  <button class="eai-chip">Client onboarding</button>
+                  <button class="eai-chip">Invoice approvals</button>
+                </div>
+                <button class="eai-btn eai-btn--primary">Start building</button>
+              </div>
+            </div>
+            <p class="eai-hero__fine">Free to start — 100 credits, no credit card.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="kit-spec">
+      <div class="kit-spec__name"><b>Problem section</b><code>.eai-problem</code><span class="kit-tag" data-s="todo">TODO</span></div>
+      <div class="kit-todo">"Shipping enterprise AI is broken." Three problem cards: pilots stall out, every workflow is bespoke, business users wait on engineering. The copy is in <code>verbal/positioning.md</code>; the layout isn't designed yet.</div>
+    </div>
+
+    <div class="kit-spec">
+      <div class="kit-spec__name"><b>Pillars</b><code>.eai-pillars</code><span class="kit-tag" data-s="todo">TODO</span></div>
+      <div class="kit-todo">Three to five feature cards from the pillars table in <code>verbal/messaging.md</code>. Waiting on which pillars survive.</div>
+    </div>
+
+    <div class="kit-spec">
+      <div class="kit-spec__name"><b>Footer</b><code>.eai-footer</code><span class="kit-tag" data-s="todo">TODO</span></div>
+      <div class="kit-todo">Products · Enterprise AI · Resources · Comparisons · Company, then the address, ABN/ACN/DUNS and the legal line. The content exists on <code>marketing/pages/home.html</code>; it isn't built from tokens yet.</div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  const input = document.getElementById('shake-input');
+  document.getElementById('shake-btn').addEventListener('click', () => {
+    input.classList.remove('eai-shake');
+    void input.offsetWidth; // restart the animation
+    input.classList.add('eai-shake');
+  });
+</script>
+</body>
+</html>

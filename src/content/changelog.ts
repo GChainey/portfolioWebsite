@@ -14,6 +14,27 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.35.0',
+    date: '2026-10-14',
+    title: 'New Case Study: Making a Marketing Site in 2026',
+    description:
+      'The website case study now tells how the Enterprise AI site was made, from one tagline to ten wild variations to two rounds of message testing. It opens on the winning site, played top to bottom, and shows the brand in its two formats: a PDF for people and a folder for agents, which opens in a Finder window.',
+    changes: [
+      'It opens on the winning version: a reel of the whole V2 home page, the EAI builder inside it, played top to bottom',
+      'The same page runs live further down: click in, type an app idea, and it builds',
+      'The first prototype plays in focus: built for Nike, then re-skinned for Apple and CommBank',
+      'A hero reel can now show its address in the browser bar',
+      'A brand book block: the PDF beside the agent kit, and either one opens the kit in a Finder window',
+      'The Finder is an HTML prototype in column view over the real files, with Markdown, YAML, CSS and JSON readable in place, the kit\'s own specimen pages live, Quick Look on Space, and light and dark',
+      'A grid of screens with names and notes, for the ten variations and the few that were kept. Each one opens in a dialog as the real page, to scroll and use',
+      'The page tested in round 1 plays top to bottom, with a button that opens it to use',
+      'Fixed in the copy of the site: the client\'s logo in the Gofer demo sat in the middle of its bar instead of on the left',
+      'The two user test rounds side by side in a table, with the one that got worse picked out',
+      'Published: the card on the homepage now opens it',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.34.0',
     date: '2026-10-13',
     title: 'New Essay: Three Tools Before the Game',

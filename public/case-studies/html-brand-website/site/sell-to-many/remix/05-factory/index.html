@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The brand factory — Build once. Sell to many. · Enterprise AI</title>
+<meta name="description" content="Build a four-step app once. Stamp it with the next client's brand in a sentence. Every copy ships with its own AI assistant." />
+<meta name="theme-color" content="#0B0518" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="factory.css" />
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+} }
+</script>
+<!-- Portfolio copy: the link back to the remix hub is hidden. -->
+<style>a[href="../index.html"] { display: none !important; }</style>
+</head>
+<body>
+
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="ld-inner">
+    <span class="ld-k">EAI · The brand factory</span>
+    <span class="ld-n" id="ldN">00</span>
+    <span class="ld-s">Warming up the presses</span>
+  </div>
+</div>
+
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<!-- Giant type sits behind the 3D canvas so phones float in front of it. -->
+<div class="giant" aria-hidden="true">
+  <div class="gw" data-g="1"><span>4</span></div>
+  <div class="gw" data-g="2"><span>STAMP</span></div>
+  <div class="gw" data-g="4"><span>NEXT?</span></div>
+  <div class="gw" data-g="6"><span>TWICE?</span></div>
+</div>
+
+<canvas id="gl" aria-hidden="true"></canvas>
+
+<div class="scrim" aria-hidden="true"></div>
+
+<!-- Labels pinned to things in the 3D scene -->
+<div class="labels" aria-hidden="true">
+  <div class="pl" id="pl0"><b>01 Brief</b><span>Form</span></div>
+  <div class="pl" id="pl1"><b>02 Assets</b><span>Data source</span></div>
+  <div class="pl" id="pl2"><b>03 Compose</b><span>AI writer</span></div>
+  <div class="pl" id="pl3"><b>04 Review</b><span>Approval</span></div>
+  <div class="bubble" id="bubble">
+    <div class="bb-who"><i></i><span class="bb-team">The client’s team, using the app</span></div>
+    <div class="bb-card">
+      <div class="bb-head"><canvas class="bb-av" width="56" height="56"></canvas><div><b class="bb-name">Assistant</b><small>In-app assistant · inside the app</small></div></div>
+      <div class="bb-q"><span class="bb-u"></span><span class="bb-qt"></span></div>
+      <ol class="bb-a"></ol>
+      <div class="bb-voice"></div>
+    </div>
+  </div>
+  <div class="tip" id="tip"><b></b><span></span></div>
+</div>
+
+<header class="nav">
+  <a class="nav-logo" href="#top" aria-label="Enterprise AI — home"><img src="../../../assets/logos/eai-wordmark.svg" alt="Enterprise AI" /></a>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="#ch1">How it works</a>
+    <a href="#ch4">Try it</a>
+    <a href="#">Pricing</a>
+    <a href="#">Sign in</a>
+  </nav>
+  <div class="nav-right">
+    <button type="button" class="snd" id="snd" aria-pressed="false" title="Sound">
+      <span class="snd-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="snd-t">Sound off</span>
+    </button>
+    <a class="btn btn-lime" href="#">Start building</a>
+  </div>
+</header>
+
+<nav class="rail" aria-label="Chapters">
+  <button type="button" data-go="0"><i></i><span>Built once</span></button>
+  <button type="button" data-go="1"><i></i><span>Four steps</span></button>
+  <button type="button" data-go="2"><i></i><span>The line</span></button>
+  <button type="button" data-go="3"><i></i><span>AI in every app</span></button>
+  <button type="button" data-go="4"><i></i><span>Your client</span></button>
+  <button type="button" data-go="5"><i></i><span>Share</span></button>
+  <button type="button" data-go="6"><i></i><span>Sell to many</span></button>
+</nav>
+<div class="progress" aria-hidden="true"><i id="prog"></i></div>
+
+<main id="story">
+
+  <section class="ch" id="top" data-ch="0">
+    <div class="chap chap-hero">
+      <p class="kicker"><span class="dot"></span>Enterprise AI · The brand factory</p>
+      <h1 class="hero-h"><span class="ln"><span>Build once.</span></span><span class="ln"><span>Sell to <em>many.</em></span></span></h1>
+      <p class="lead">Build a four-step app for one client. Then stamp it for the next — their logo, their colours, their voice. Same wiring underneath.</p>
+      <div class="cta-row chap-ui">
+        <a class="btn btn-lime btn-lg" href="#">Start building</a>
+        <button type="button" class="btn btn-ghost btn-lg" id="playLine"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>Run the line</button>
+      </div>
+      <p class="scroll-cue"><i></i>Scroll to start the line</p>
+    </div>
+    <div class="static-fig" data-fig="hero"></div>
+  </section>
+
+  <section class="ch" id="ch1" data-ch="1">
+    <div class="chap">
+      <p class="kicker"><span class="num">01</span>Built once</p>
+      <h2>Four steps.<br />Exactly four.</h2>
+      <p>Every app is a Brief, Assets, Compose and Review — wired as a form, a data source, an AI writer and an approval.</p>
+      <p class="muted">The shape never changes. That’s what makes it sellable.</p>
+      <ol class="steps">
+        <li><b>Brief</b><span>Form</span></li>
+        <li><b>Assets</b><span>Data source</span></li>
+        <li><b>Compose</b><span>AI writer</span></li>
+        <li><b>Review</b><span>Approval</span></li>
+      </ol>
+    </div>
+    <div class="static-fig" data-fig="steps"></div>
+  </section>
+
+  <section class="ch" id="ch2" data-ch="2">
+    <div class="chap">
+      <p class="kicker"><span class="num">02</span>Rebrand in a sentence</p>
+      <h2>Name the client.<br />Stamp the brand.</h2>
+      <p>Tell the builder “make it for Nike”. EAI reads their website for colours, logo and tone of voice — the same app comes off the line in their brand, writing in their voice.</p>
+      <ul class="stamps" id="stamps">
+        <li data-k="0" style="--c:#FA5400"><i></i><b>Nike</b><span>Direct, urgent, athlete-first</span></li>
+        <li data-k="1" style="--c:#0071E3"><i></i><b>Apple</b><span>Simple, confident, understated</span></li>
+        <li data-k="2" style="--c:#FFCC00"><i></i><b>CommBank</b><span>Clear, helpful, reassuring</span></li>
+      </ul>
+    </div>
+    <div class="static-fig" data-fig="line"></div>
+  </section>
+
+  <section class="ch" id="ch3" data-ch="3">
+    <div class="chap">
+      <p class="kicker"><span class="num">03</span>AI in every app</p>
+      <h2>Every copy ships with its own assistant.</h2>
+      <p>Inside the published app, on the right, for the client’s own team — wearing their brand and speaking in their voice.</p>
+      <p class="muted">Their team asks it for three subject lines. It helps them write — it never changes the app.</p>
+    </div>
+    <div class="static-fig" data-fig="ai"></div>
+  </section>
+
+  <section class="ch" id="ch4" data-ch="4">
+    <div class="chap">
+      <p class="kicker"><span class="num">04</span>Your turn</p>
+      <h2>Feed the press.</h2>
+      <p>You’re the builder here. Tell EAI who’s next and it stamps the same four-step app for them.</p>
+      <div class="bchat chap-ui">
+        <div class="bc-head"><span class="bc-av"><img src="../../../assets/logos/eai-mark-dark.svg" alt="" /></span><div><b>Builder</b><small>You, building · Campaign email</small></div></div>
+        <div class="bc-thread" id="bcThread" aria-live="polite">
+          <div class="bc-m bc-ai">Campaign email is built — four steps. Who’s it for next? Name a client and I’ll read their site.</div>
+        </div>
+        <form class="bc-form" id="feed" autocomplete="off">
+          <label class="sr" for="feedIn">Client name</label>
+          <span class="bc-pre" aria-hidden="true">Make it for</span>
+          <input id="feedIn" name="client" type="text" maxlength="40" placeholder="Qantas, Canva…" />
+          <button type="submit" aria-label="Send to builder"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </form>
+        <div class="chips" id="chips"><span>Try</span><button type="button">Qantas</button><button type="button">Canva</button><button type="button">Atlassian</button><button type="button">Bunnings</button></div>
+      </div>
+    </div>
+    <div class="static-fig" data-fig="yours"></div>
+  </section>
+
+  <section class="ch" id="ch5" data-ch="5">
+    <div class="chap">
+      <p class="kicker"><span class="num">05</span>Preview &amp; share</p>
+      <h2>On their phone before the meeting ends.</h2>
+      <p>Share gives you a link and a QR code. The client opens their app on their own phone — the same four steps.</p>
+      <div class="share chap-ui">
+        <div class="qr"><canvas id="qr" width="132" height="132"></canvas></div>
+        <div class="share-t">
+          <b id="shareName">CommBank</b>
+          <span>Scan with your phone camera</span>
+          <div class="share-acts">
+            <button type="button" class="btn btn-lime btn-sm" id="shareOpen">Open preview</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="shareCopy">Copy link</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="static-fig" data-fig="share"></div>
+  </section>
+
+  <section class="ch" id="ch6" data-ch="6">
+    <div class="chap chap-final">
+      <p class="kicker"><span class="num">06</span>One build. Every client.</p>
+      <h2 class="final-h">What would you<br />sell <em>twice?</em></h2>
+      <div class="cta-row chap-ui">
+        <a class="btn btn-lime btn-lg" href="#">Start building</a>
+        <a class="btn btn-ghost btn-lg" href="#">Talk to sales</a>
+      </div>
+      <p class="hint"><i></i>Click any phone to preview it</p>
+    </div>
+    <div class="static-fig" data-fig="final"></div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="foot-top">
+    <div class="foot-brand">
+      <img src="../../../assets/logos/eai-wordmark.svg" alt="Enterprise AI" />
+      <p>Build once. Sell to many. Four-step apps for agencies, consultants and builders — rebranded in a sentence, with AI in every one.</p>
+    </div>
+    <div class="foot-cols">
+      <div><b>Product</b><a href="#ch1">How it works</a><a href="#ch4">Try it</a><a href="#">Pricing</a></div>
+      <div><b>For</b><a href="#">Agencies</a><a href="#">Consultants</a><a href="#">Builders</a></div>
+      <div><b>Company</b><a href="#">About</a><a href="#">Support</a><a href="#">Contact sales</a></div>
+    </div>
+  </div>
+  <div class="foot-bot"><span>© 2026 Enterprise AI</span><span>Brand names shown to demonstrate re-skinning. Other clients are fictional.</span></div>
+</footer>
+
+<a class="back" href="../index.html">← All remixes</a>
+
+<div class="modal" id="modal" hidden>
+  <div class="modal-scrim" data-close></div>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <button type="button" class="modal-x" data-close aria-label="Close">×</button>
+    <div class="m-phone"><iframe id="mFrame" title="Client app preview" loading="lazy"></iframe></div>
+    <div class="m-side">
+      <p class="kicker"><span class="dot"></span>Preview on a phone</p>
+      <h3 id="mTitle">Nike</h3>
+      <p class="m-tone" id="mTone"></p>
+      <p class="muted">The same four steps, in their brand. Tap through it here, or scan to open it on your phone.</p>
+      <div class="m-qr"><canvas id="mQr" width="140" height="140"></canvas><span>Scan to open<br />on your phone</span></div>
+      <div class="share-acts"><a class="btn btn-lime btn-sm" id="mOpen" target="_blank" rel="noopener">Open in a new tab</a><button type="button" class="btn btn-ghost btn-sm" id="mCopy">Copy link</button></div>
+    </div>
+  </div>
+</div>
+
+<noscript><style>.loader{display:none}</style></noscript>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+<script type="module" src="main.js"></script>
+</body>
+</html>

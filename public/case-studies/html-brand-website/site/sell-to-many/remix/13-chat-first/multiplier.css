@@ -1,0 +1,77 @@
+/* Remix 13/22 — the multiplier wall (multiplier.js). 32 slots, 8 across;
+   each fills with a client's copy of the same app as the count doubles. */
+
+.mx-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; margin-bottom: 32px; }
+.mx-go {
+  display: inline-flex; align-items: center; gap: 12px; flex-shrink: 0;
+  padding: 12px 16px 12px 20px; border: 0; border-radius: 10px;
+  background: var(--navy); color: #fff; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer;
+}
+.mx-go b { padding: 2px 8px; border-radius: 99px; background: rgba(255, 255, 255, .18); font-size: 14px; }
+.mx-go:hover { background: #0f4368; }
+
+.mx-wall { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 8px; }
+.mx-card {
+  display: flex; flex-direction: column; min-height: 104px;
+  border: 1px dashed #E4E4E7; border-radius: 8px; background: transparent; overflow: hidden;
+  font-size: 12px; line-height: 16px;
+}
+.mx-card > * { opacity: 0; transition: opacity .3s var(--d, 0ms); }
+.mx-card.in { border-style: solid; background: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, .04); animation: mxIn .4s cubic-bezier(.2, .8, .2, 1) var(--d, 0ms) both; }
+.mx-card.in > * { opacity: 1; }
+@keyframes mxIn { from { transform: scale(.85); opacity: 0; } }
+.mx-hd { display: flex; align-items: center; gap: 4px; height: 28px; padding: 0 8px; background: var(--c); color: var(--c-on); }
+.mx-hd b { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 12px; font-weight: 600; }
+.mx-hd em { margin-left: auto; padding: 0 4px; border-radius: 4px; background: rgba(255, 255, 255, .25); font-size: 10px; font-style: normal; font-weight: 600; }
+.mx-mk { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: 16px; height: 16px; border-radius: 4px; background: rgba(255, 255, 255, .22); font-size: 8px; font-weight: 700; }
+.mx-card p { flex: 1; margin: 0; padding: 8px; color: #3F3F46; }
+.mx-steps { display: flex; gap: 4px; padding: 0 8px 8px; }
+.mx-steps i { flex: 1; height: 4px; border-radius: 2px; background: #E4E4E7; }
+.mx-steps i.on { background: var(--c); }
+.mx-card[data-i="0"].in { box-shadow: 0 0 0 2px var(--c); }
+
+.mx-calc { margin-top: 32px; }
+.mx-ticker { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 24px; }
+.mx-ticker > div { padding: 16px; border: 1px solid #EDEDEF; border-radius: 10px; background: #FCFCFC; }
+.mx-ticker span { display: block; color: #71717A; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.mx-ticker p { margin: 4px 0 0; color: #3F3F46; font-size: 14px; }
+.mx-ticker b { color: #171717; font-size: 32px; font-weight: 700; letter-spacing: -1px; font-variant-numeric: tabular-nums; }
+.mx-ticker em { color: #71717A; font-style: normal; }
+.mx-ticker s { margin-right: 8px; color: #A1A1AA; font-size: 18px; }
+.mx-many .mx-ticker > div:nth-child(3) { border-color: var(--navy); background: var(--navy); }
+.mx-many .mx-ticker > div:nth-child(3) :is(span, em) { color: #B9CCDC; }
+.mx-many .mx-ticker > div:nth-child(3) b { color: #fff; }
+
+@media (max-width: 900px) {
+  .mx-head { flex-direction: column; align-items: stretch; }
+  .mx-wall { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .mx-ticker { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mx-card.in { animation: none; }
+}
+
+/* ---------- shapeshifter (remixes 17–19, 22) ---------- */
+[data-theme="shape"] .mx-go {
+  border: var(--ss-line); border-radius: 0; background: var(--ss-acid); color: var(--ss-acid-ink);
+  box-shadow: var(--ss-shadow-sm); font-family: var(--ss-mono); text-transform: uppercase; letter-spacing: .02em;
+}
+[data-theme="shape"] .mx-go:hover { background: var(--ss-acid); transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ss-edge); }
+[data-theme="shape"] .mx-go b { border-radius: 0; background: var(--ss-ink); color: var(--ss-acid-text); }
+[data-theme="shape"] .mx-card { border-radius: 0; border-color: var(--ss-hair); }
+[data-theme="shape"] .mx-card.in { border: var(--ss-line); box-shadow: 4px 4px 0 var(--ss-edge); }
+[data-theme="shape"] .mx-card[data-i="0"].in { box-shadow: 4px 4px 0 var(--ss-edge), 0 0 0 4px var(--ss-acid); }
+[data-theme="shape"] :is(.mx-mk, .mx-hd em, .mx-steps i) { border-radius: 0; }
+[data-theme="shape"] .mx-hd b { font-family: var(--ss-mono); text-transform: uppercase; font-size: 11px; }
+[data-theme="shape"] .mx-ticker > div { border: var(--ss-line); border-radius: 0; background: #fff; }
+[data-theme="shape"] .mx-ticker span { color: var(--ss-ink); font-family: var(--ss-mono); font-weight: 500; }
+[data-theme="shape"] .mx-ticker b { color: var(--ss-ink); font-family: var(--ss-display); font-stretch: 125%; font-weight: 900; font-size: 28px; }
+[data-theme="shape"] .mx-ticker em { display: block; font-family: var(--ss-mono); font-size: 11px; text-transform: uppercase; }
+[data-theme="shape"] .mx-many .mx-ticker > div:nth-child(3) { border-color: var(--ss-edge); background: var(--ss-acid); }
+[data-theme="shape"] .mx-many .mx-ticker > div:nth-child(3) :is(span, em, b) { color: var(--ss-acid-ink); }
+
+/* ---------- shader theme (remix 14) ---------- */
+[data-theme="shader"] .mx-go { background: var(--sh-cyan); color: #0A180D; }
+[data-theme="shader"] .mx-card:not(.in) { border-color: var(--sh-line); }
+[data-theme="shader"] .mx-ticker > div { border-color: var(--sh-line); background: rgba(9, 22, 33, .42); }
+[data-theme="shader"] .mx-ticker :is(b, p) { color: var(--sh-ink); }

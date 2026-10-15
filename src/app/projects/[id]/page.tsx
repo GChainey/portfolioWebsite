@@ -53,8 +53,8 @@ const isVisual = (b: ContentBlock) =>
 
 // What the picture or reel at the top of the page sits in: the colour backdrop and window, or
 // the dotted canvas for a hero that asks for it
-function HeroFrame({ grid, bar, children }: { grid: boolean; bar: boolean; children: React.ReactNode }) {
-  return grid ? <GridFrame>{children}</GridFrame> : <MediaFrame bar={bar}>{children}</MediaFrame>
+function HeroFrame({ grid, bar, url, children }: { grid: boolean; bar: boolean; url?: string; children: React.ReactNode }) {
+  return grid ? <GridFrame>{children}</GridFrame> : <MediaFrame bar={bar} url={url}>{children}</MediaFrame>
 }
 
 function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
@@ -315,7 +315,7 @@ Write 2-3 short paragraphs tailored to what a ${tldrLength} would want to know. 
                         <img src={project.heroImage} alt={project.title} className="block w-full h-auto" />
                       </Backdrop>
                     ) : (
-                    <HeroFrame grid={project.heroFrame === 'grid'} bar={!!project.heroVideo}>
+                    <HeroFrame grid={project.heroFrame === 'grid'} bar={!!project.heroVideo} url={project.heroUrl}>
                       {project.heroVideo ? (
                         <video
                           src={project.heroVideo}

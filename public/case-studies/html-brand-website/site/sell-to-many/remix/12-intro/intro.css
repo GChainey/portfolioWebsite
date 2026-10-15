@@ -1,0 +1,128 @@
+/* Remix 12 — the intro that folds into the nav, and the hero it reveals. */
+
+/* ---------- the intro panel ---------- */
+.intro { display: none; }
+.intro-pending .intro {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  background: #0A180D url(warp-bg.jpg) 50% 40% / cover no-repeat;
+  clip-path: inset(0 0 0 0 round 0px);
+  cursor: pointer;
+}
+.intro-pending, .intro-pending body { overflow: hidden; }
+
+.intro-shader { position: absolute; inset: 0; opacity: 0; transition: opacity .6s ease; }
+.intro-shader.on { opacity: 1; }
+.intro-shader canvas { display: block; }
+
+/* Soft darkening at the edges so the wordmark sits in a pool of light */
+.intro-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 50%, transparent 0%, rgba(4, 12, 20, .55) 100%);
+  pointer-events: none;
+}
+
+.intro-mark {
+  position: fixed;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  will-change: transform, filter;
+}
+.intro-mark svg { display: block; width: 100%; height: auto; overflow: visible; }
+.intro-mark svg * { transform-box: fill-box; transform-origin: center; }
+
+/* A band of light that runs through the letters once they have landed */
+.intro-sweep {
+  position: absolute;
+  inset: -20% 0;
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent 0%, transparent 38%, rgba(255, 255, 255, .95) 50%, transparent 62%, transparent 100%) no-repeat;
+  background-size: 250% 100%;
+  background-position: 130% 0;
+  -webkit-mask: url(wordmark-light.svg) center / 100% auto no-repeat;
+          mask: url(wordmark-light.svg) center / 100% auto no-repeat;
+  opacity: 0;
+}
+
+.intro-skip {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .06);
+  color: rgba(255, 255, 255, .7);
+  font: 500 12px/16px Inter, system-ui, sans-serif;
+  cursor: pointer;
+  opacity: 0;
+  animation: introFade .4s .5s ease forwards;
+  backdrop-filter: blur(6px);
+}
+.intro-skip:hover { color: #fff; border-color: rgba(255, 255, 255, .4); }
+@keyframes introFade { to { opacity: 1; } }
+
+/* ---------- the live shader behind the real nav ---------- */
+.ps-warp-live { overflow: hidden; }
+.ps-warp-live canvas { display: block; border-radius: 16px; }
+
+/* ---------- hero ---------- */
+.ps-hero h1.ps-h1-big {
+  font-size: 64px;
+  line-height: 64px;
+  letter-spacing: -2.8px;
+}
+.ps-h1-big .w { display: inline-block; }
+.ps-h1-big .w2 { color: #0D3857; }
+
+/* Everything the intro reveals, in order (--i) */
+.w, [data-reveal] {
+  transition:
+    opacity .55s cubic-bezier(.2, .8, .2, 1),
+    transform .6s cubic-bezier(.2, .8, .2, 1),
+    filter .55s cubic-bezier(.2, .8, .2, 1);
+  transition-delay: calc(var(--i, 0) * 40ms);
+}
+.intro-pending .w {
+  opacity: 0;
+  transform: translateY(.32em);
+  filter: blur(14px);
+}
+.intro-pending [data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  filter: blur(6px);
+}
+.intro-pending [data-reveal="rise"] {
+  transform: translateY(120px) scale(.97);
+  filter: none;
+}
+.intro-pending .ps-nav-links [data-reveal],
+.intro-pending .ps-nav-actions [data-reveal] { transform: translateY(-6px); }
+/* Once the shell is revealed, drop the delays so hovers stay snappy */
+.intro-settled .w, .intro-settled [data-reveal] { transition-delay: 0s; }
+
+.ps-replay-intro {
+  position: fixed;
+  z-index: 60;
+  left: 132px;
+  bottom: 16px;
+  padding: 6px 12px;
+  border: 1px solid #E4E4E7;
+  border-radius: 999px;
+  background: #ffffffe6;
+  color: #737373;
+  font: 500 12px/16px Inter, system-ui, sans-serif;
+  cursor: pointer;
+}
+.ps-replay-intro:hover { color: #171717; }
+
+@media (max-width: 760px) {
+  .ps-hero h1.ps-h1-big { font-size: 42px; line-height: 44px; letter-spacing: -1.6px; }
+  .ps-replay-intro { left: auto; right: 16px; }
+}

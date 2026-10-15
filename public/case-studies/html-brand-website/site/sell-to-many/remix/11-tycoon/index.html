@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="data:," />
+<title>Sell to many: the game — Enterprise AI</title>
+<meta name="description" content="Build one app. Sell it to a whole city of clients. A two-minute game about building once and selling to many." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../app.css" />
+<link rel="stylesheet" href="tycoon.css" />
+<!-- Portfolio copy: the link back to the remix hub is hidden. -->
+<style>a[href="../index.html"] { display: none !important; }</style>
+</head>
+<body>
+
+<!-- ============ Top bar: brand, HUD, controls ============ -->
+<header class="bar" id="bar">
+  <a class="brand" href="#top" aria-label="Enterprise AI">
+    <img src="../../../assets/logos/eai-wordmark.svg" alt="Enterprise AI" />
+    <span class="brand-tag">Sell to many <i>·</i> the game</span>
+  </a>
+
+  <div class="hud" id="hud" aria-live="polite">
+    <div class="stat stat-builds" title="Builds never go past one. That's the point."><span>Builds</span><b id="hBuilds">0</b></div>
+    <div class="stat"><span>Clients</span><b id="hClients">0</b></div>
+    <div class="stat stat-rev"><span>Revenue</span><b id="hRev">$0</b></div>
+    <div class="stat stat-hours"><span>Hours saved</span><b id="hHours">0</b></div>
+    <div class="clock" id="hClock" aria-hidden="true"><i class="sun"></i><span>09:00</span></div>
+  </div>
+
+  <div class="acts">
+    <button type="button" class="btn-ghost" id="bSound" aria-pressed="false" title="Sound">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor"/><path class="wave-on" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="wave-off" d="m16 9 6 6m0-6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span class="lbl">Sound off</span>
+    </button>
+    <button type="button" class="btn-auto" id="bAuto"><span class="dot"></span><span class="lbl">Just show me</span></button>
+    <a class="btn-link" href="#summary" id="bSkip">Skip the game</a>
+    <a class="btn-cta" href="#cta">Start building</a>
+  </div>
+</header>
+
+<!-- ============ The game ============ -->
+<main class="game" id="top">
+  <canvas id="city" aria-label="An isometric city. Your studio is at the centre; empty plots around it are clients you can sell your app to."></canvas>
+
+  <div class="hero" id="hero">
+    <p class="kicker">Enterprise AI <span>—</span> the game</p>
+    <h1>Build once. <em>Sell to many.</em></h1>
+    <p class="sub">Build one app in your studio. Sell it to the whole city. Every client's team gets it in their brand, with their own assistant.</p>
+  </div>
+
+  <div class="bubbles" id="bubbles" aria-hidden="true"></div>
+
+  <!-- The builder chat: the maker's chat, EAI-neutral, on the left -->
+  <aside class="builder" id="builder" aria-label="Builder chat — you, building the app">
+    <div class="bd-hd">
+      <span class="av av-eai" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h9M4 12h7M4 19h9M4 5v14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><circle cx="18.5" cy="12" r="2.6" fill="currentColor"/></svg></span>
+      <div class="bd-title"><b>EAI Builder</b><small>You, building the app</small></div>
+      <span class="bd-tag">Builder chat</span>
+      <button type="button" class="bd-min" id="bdMin" aria-label="Collapse builder">
+        <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <div class="bp" id="bp">
+      <div class="bp-hd">
+        <span class="bp-name">Campaign email</span>
+        <span class="bp-count" id="bpCount">0 of 4 steps</span>
+      </div>
+      <ol class="bp-slots" id="bpSlots"></ol>
+      <div class="tray" id="tray" aria-label="Blocks"></div>
+      <p class="bp-rule" id="bpRule">Four steps. That's the rule.</p>
+    </div>
+
+    <div class="bd-thread" id="bThread" role="log" aria-live="polite"></div>
+    <div class="bd-chips" id="bChips"></div>
+    <form class="bd-input" id="bForm" autocomplete="off">
+      <input id="bInput" type="text" placeholder="Tell the builder what to make or change…" aria-label="Message the builder" />
+      <button type="submit" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </form>
+  </aside>
+
+  <!-- A client's storefront, opened: the published app, in their brand, with its in-app assistant on the right -->
+  <aside class="apppanel" id="appPanel" aria-label="The client's app" hidden>
+    <div class="ap-bar">
+      <span class="ap-who"><span class="ap-av" id="apAv">N</span><span><b id="apTeam">Nike's team</b>, using the app</span></span>
+      <span class="ap-meta">Your build #1 · same four steps</span>
+      <button type="button" class="ap-x" id="apClose" aria-label="Close the app">&times;</button>
+    </div>
+    <div class="p-app" id="pApp" data-state="built">
+      <div class="p-head">
+        <span class="p-logo"></span>
+        <span class="p-name"></span>
+        <span class="ph-app">Campaign email</span>
+        <span class="ph-upd" id="phUpd" hidden>Updated just now</span>
+      </div>
+      <div class="p-body">
+        <div class="p-main">
+          <div class="p-title">Campaign email</div>
+          <div class="p-steps">
+            <span class="p-step on">Brief</span>
+            <span class="p-step">Assets</span>
+            <span class="p-step">Compose</span>
+            <span class="p-step">Review</span>
+          </div>
+          <div class="p-card"></div>
+        </div>
+        <aside class="p-assist" aria-label="In-app assistant">
+          <div class="pa-hd">
+            <span class="pa-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="pa-names"><b id="paName">Nike assistant</b><small id="paFor">for Nike's team</small></span>
+            <button type="button" class="pa-close" aria-label="Close">&times;</button>
+          </div>
+          <div class="pa-thread" id="paThread"></div>
+          <div class="pa-chips" id="paChips"></div>
+          <form class="pa-input" id="paForm" autocomplete="off">
+            <input id="paInput" type="text" placeholder="Ask the assistant…" aria-label="Message the in-app assistant" />
+            <button type="submit" class="pa-send" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </form>
+        </aside>
+      </div>
+      <button type="button" class="p-fab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Ask AI</button>
+    </div>
+  </aside>
+
+  <!-- Sell a plot -->
+  <div class="sellpop" id="sellPop" hidden role="dialog" aria-label="Sell your app to a client">
+    <p class="sp-k">Sell your app here</p>
+    <p class="sp-t">Who's the client?</p>
+    <form id="sellForm" autocomplete="off">
+      <input id="sellInput" type="text" placeholder="Any company, e.g. Qantas" aria-label="Client name" />
+      <button type="submit">Sell</button>
+    </form>
+    <div class="sp-picks" id="sellPicks"></div>
+    <p class="sp-note" id="sellNote">EAI reads their website for colours, logo and tone of voice.</p>
+  </div>
+
+  <div class="quest" id="quest" aria-label="Goals"></div>
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <div class="zoom" id="zoomCtl">
+    <button type="button" data-z="in" aria-label="Zoom in">+</button>
+    <button type="button" data-z="out" aria-label="Zoom out">&minus;</button>
+    <button type="button" data-z="home" aria-label="Recentre"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="currentColor"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+  </div>
+
+  <div class="apbanner" id="apBanner" hidden>
+    <span class="rec"></span><span>Playing it for you. Click anywhere to take over.</span>
+    <button type="button" id="apTake">Take control</button>
+  </div>
+</main>
+
+<!-- ============ Skip the game: the conventional summary ============ -->
+<section class="summary" id="summary">
+  <div class="sum-wrap">
+    <p class="sum-k">Skipped the game? Fair.</p>
+    <h2>Build once. Sell to many.</h2>
+    <p class="sum-lede">Build an app for one client, then sell the same app to every client after them. Each one gets it in their own brand, writing in their own voice, with their own assistant.</p>
+
+    <ol class="points">
+      <li>
+        <span class="pt-n">01</span>
+        <div class="pt-steps"><i style="--c:#FF7A59">Brief</i><i style="--c:#20B08D">Assets</i><i style="--c:#7B6CF6">Compose</i><i style="--c:#F2AE2E">Review</i></div>
+        <h3>Four steps, exactly</h3>
+        <p>Every app is four steps: form, data source, AI writer, approval. It's the shape that makes it resellable, not a default.</p>
+      </li>
+      <li>
+        <span class="pt-n">02</span>
+        <div class="pt-brands"><i style="--c:#FA5400">Nike</i><i style="--c:#0071E3">Apple</i><i style="--c:#FFCC00;--o:#000">CommBank</i></div>
+        <h3>Rebrand in a sentence</h3>
+        <p>Name the next client. EAI reads their website for colours, logo and tone of voice. Same wiring underneath.</p>
+      </li>
+      <li>
+        <span class="pt-n">03</span>
+        <div class="pt-chat"><i class="u">Suggest three subject lines</i><i class="a">Pegasus 41 is here. Go.</i></div>
+        <h3>AI in every app</h3>
+        <p>Each app ships with its own in-app assistant, in the client's brand, helping their team do the work.</p>
+      </li>
+      <li>
+        <span class="pt-n">04</span>
+        <div class="pt-phone"><i></i></div>
+        <h3>On their phone in one tap</h3>
+        <p>Share a link or a QR code. The client opens their app on their phone: same four steps, their brand.</p>
+      </li>
+    </ol>
+
+    <div class="share">
+      <div class="sh-copy">
+        <p class="sum-k">Try it on your phone</p>
+        <h3>Scan to open the <span id="shName">Nike</span> app.</h3>
+        <p>The same build, wearing a different brand. Pick one:</p>
+        <div class="sh-picks" id="shPicks">
+          <button type="button" data-c="nike" class="on">Nike</button>
+          <button type="button" data-c="apple">Apple</button>
+          <button type="button" data-c="commbank">CommBank</button>
+        </div>
+        <a class="sh-open" id="shOpen" href="../../app.html?c=nike" target="_blank" rel="noopener">Open it here instead &rarr;</a>
+      </div>
+      <div class="sh-qr"><canvas id="shQr" width="168" height="168" aria-label="QR code for the client's app"></canvas></div>
+    </div>
+
+    <div class="cta" id="cta">
+      <h2>What would you sell twice?</h2>
+      <p>Build it once in Enterprise AI. Then name your next client.</p>
+      <div class="cta-acts">
+        <a class="btn-cta big" href="#top">Start building</a>
+        <a class="btn-link" href="#top" id="bBack">Back to the game</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <img src="../../../assets/logos/eai-wordmark.svg" alt="Enterprise AI" />
+    <nav><a href="#summary">How it works</a><a href="#cta">Pricing</a><a href="#cta">Sign in</a><a href="../../index.html">Current site</a></nav>
+    <small>&copy; 2026 Enterprise AI. Made in Australia.</small>
+  </footer>
+</section>
+
+<a class="allremix" href="../index.html">&larr; All remixes</a>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+<script src="../../app-view.js"></script>
+<script src="tycoon.js"></script>
+</body>
+</html>

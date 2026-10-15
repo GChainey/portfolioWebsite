@@ -1,0 +1,49 @@
+/* EAI colour and type. Build with these variables only, never with raw values.
+   Space, radius and shadow are in tokens/tokens.css. Easing and duration are in motion/motion.css.
+   tokens/tokens.json holds every value; change both together.
+   DECIDE items use their default. The alternatives are in comments; see "Open decisions" in ../../readme.md. */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* Brand (DECIDE #7) */
+  --eai-navy: #0d3857;
+  --eai-cyan: #8edff9;
+  /* --eai-blue: #1c84e0;   alternative from mkt-site.css, dropped by default */
+
+  /* Neutrals (DECIDE #8). Default is cool zinc.
+     Warm alternative: ink #26251e, surface #f7f7f3, tile #f1f0ee, muted #696c74, border #ebebeb */
+  --eai-bg: #ffffff;
+  --eai-surface: #fcfcfc;
+  --eai-border: #e4e4e7;
+  --eai-text: #202020;
+  --eai-text-muted: #646464;
+
+  /* Action */
+  --eai-cta-bg: #18181b;
+  --eai-cta-text: #fafafa;
+  --eai-accent: var(--eai-navy);
+
+  /* Type families (DECIDE #9). Alternative: 'Geist' for sans and display, 'Geist Mono' for mono. See fonts/. */
+  --eai-font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --eai-font-display: 'Inter Tight', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --eai-font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Type scale */
+  --eai-text-xs: 12px;
+  --eai-text-sm: 14px;
+  --eai-text-base: 16px;
+  --eai-text-lg: 18px;
+  --eai-text-xl: 24px;
+  --eai-text-2xl: 32px;     /* TODO */
+  --eai-text-3xl: 48px;     /* TODO */
+  --eai-text-display: 64px; /* TODO */
+
+  --eai-weight-regular: 400;
+  --eai-weight-medium: 500;
+  --eai-weight-semibold: 600;
+
+  --eai-tracking-display: -0.03em;
+  --eai-tracking-heading: -0.02em;
+  --eai-tracking-eyebrow: 0.08em;
+}

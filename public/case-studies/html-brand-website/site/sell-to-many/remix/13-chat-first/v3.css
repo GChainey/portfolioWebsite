@@ -1,0 +1,214 @@
+/* Remix 25 (V3): only applies with ?layout=mvp3, which runs as mvp2 with
+   data-v="3" on <html>, so remixes 23 and 24 stay as they were tested.
+   Inside the app frames: the product's look (Geist, zinc, 1px #e4e4e7),
+   as in v2.css's Control. Only the frames and cards follow the page's theme. */
+
+/* ================================================================
+   Builder demo: Claude Code beside the app, not one joined builder
+   (chat-first.js swaps the chat's header and moves the client switch)
+   ================================================================ */
+html[data-v="3"] #build .bx-frame { padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
+html[data-v="3"] #build .bx { border: 0; border-radius: 0; background: none; overflow: visible; }
+html[data-v="3"] #build .bx-top { display: none; }
+html[data-v="3"] #build .bx-body { grid-template-columns: 340px minmax(0, 1fr); gap: 24px; }
+/* the chat: a light Claude Code window */
+html[data-v="3"] #build .bx-chat {
+  border: 1px solid #e4e4e7; border-radius: 12px; background: #fff; overflow: hidden;
+  box-shadow: 0 32px 64px -32px rgba(13, 56, 87, .3), 0 2px 8px rgba(13, 56, 87, .05);
+}
+html[data-v="3"] #build .bx-chat-hd { gap: 12px; padding: 0 12px; height: 40px; background: #fafafa; border-bottom: 1px solid #e4e4e7; }
+html[data-v="3"] #build .bx-chat-hd b { font-size: 12px; font-weight: 500; }
+html[data-v="3"] #build .bx-chat-hd small { margin-left: auto; color: #a1a1aa; font: 400 12px/1 'Geist Mono', ui-monospace, monospace; }
+html[data-v="3"] #build .bx-thread { gap: 8px; padding: 12px 16px; font: 400 12px/1.6 'Geist Mono', ui-monospace, monospace; color: #52525b; }
+html[data-v="3"] #build .bm-you { align-self: stretch; max-width: none; }
+html[data-v="3"] #build .bm-bubble { padding: 0; border-radius: 0; background: none; color: #09090b; }
+html[data-v="3"] #build .bm-bubble::before { content: '> '; color: #2563eb; }
+html[data-v="3"] #build .bm-eai { padding: 0; }
+html[data-v="3"] #build .bm-eai b { color: #09090b; font-weight: 500; }
+html[data-v="3"] #build .bm-prog { gap: 4px; padding: 0; border: 0; background: none; }
+html[data-v="3"] #build .bp { font-size: 12px; color: #15803d; }
+html[data-v="3"] #build .bp[data-s="wait"] { color: #a1a1aa; }
+html[data-v="3"] #build .bm-next { border: 1px solid #e4e4e7; border-radius: 8px; background: #fafafa; box-shadow: none; font-family: 'Geist', Inter, system-ui, sans-serif; }
+html[data-v="3"] #build .bm-next b { color: #09090b; }
+html[data-v="3"] #build :is(.bm-next form, .bx-composer) { border-radius: 8px; }
+html[data-v="3"] #build .bx-composer { margin: 0 12px 12px; font-family: 'Geist Mono', ui-monospace, monospace; }
+html[data-v="3"] #build .bx-composer input { font: 400 12px/1.4 'Geist Mono', ui-monospace, monospace; }
+/* the app on its own, the client switch above it */
+html[data-v="3"] #build .bx-canvas { padding: 0; background: none; }
+html[data-v="3"] #build .bx-canvas-label { position: static; margin-bottom: 8px; }
+html[data-v="3"] #build .bx-clients { flex: 0 0 auto; margin-bottom: 12px; }
+html[data-v="3"] #build .bx-app-wrap { flex: 1; min-height: 0; }
+html[data-v="3"] #build .app { box-shadow: 0 32px 64px -32px rgba(13, 56, 87, .3), 0 2px 8px rgba(13, 56, 87, .05); }
+/* no step categories (Form, Data source…): that's a smart-blocks story for later */
+html[data-v="3"] #build .app-step .as-w { display: none; }
+/* With that second line gone the label sits level with its number, not above the middle. */
+html[data-v="3"] #build .app-step .as-l { grid-row: span 2; }
+html[data-v="3"] #build .bx-chat-hd { display: flex; }
+html[data-v="3"][data-theme="shape"] #build .bx-chat { border: var(--ss-line); border-radius: 0; box-shadow: var(--ss-shadow-sm); }
+html[data-v="3"][data-theme="brand"] #build .bx-chat { border: 0; border-radius: 16px; box-shadow: var(--br-float); }
+@media (max-width: 900px) {
+  html[data-v="3"] #build .bx-body { grid-template-columns: minmax(0, 1fr); }
+  html[data-v="3"] #build .bx-chat { border-bottom: 1px solid #e4e4e7; }
+}
+
+/* ================================================================
+   Control (control.js): Overview and Submissions, and a simpler bar
+   ================================================================ */
+html[data-v="3"] .ct-bar { grid-template-columns: 1fr auto; }
+html[data-v="3"] .ct-app { --p-amber: #b45309; --p-amber-wash: #fef3c7; --p-red: #b91c1c; --p-red-wash: #fee2e2; }
+.ct-view > .ct-card + .ct-card, .ct-view > .ct-card + .ct-pair, .ct-view > .ct-pair + .ct-card { margin-top: 16px; }
+/* overview */
+.ct-sect { padding: 24px; }
+.ct-sect-t { display: block; font-size: 16px; line-height: 24px; font-weight: 600; }
+.ps .ct-sect p, .ct-sect p { margin: 4px 0 16px; color: var(--p-mute); }
+.ct-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 56px; padding: 8px 16px; border: 1px solid var(--p-line); border-radius: 8px; }
+.ct-row > span:first-child { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+.ct-row code { flex: 1; min-width: 0; padding: 4px 12px; border: 1px solid var(--p-line); border-radius: 6px; background: var(--p-wash); color: var(--p-ink-4); font: 400 12px/24px 'Geist Mono', ui-monospace, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ct-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.ct-stats > div { padding: 12px 16px; border: 1px solid var(--p-line); border-radius: 8px; }
+.ct-stats small { display: block; color: var(--p-ink-4); font-size: 12px; line-height: 16px; }
+.ct-stats b { display: block; margin-top: 8px; font-size: 16px; line-height: 24px; font-weight: 500; }
+.ct-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.ct-pair .ct-card + .ct-card { margin-top: 0; }
+.ct-select, .ct-btn { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; height: 32px; padding: 0 12px; border: 1px solid var(--p-line); border-radius: 8px; background: #fff; color: var(--p-ink); font-weight: 500; white-space: nowrap; }
+.ct-select svg, .ct-btn svg { width: 12px; height: 12px; color: var(--p-mute); }
+/* submissions */
+.ct-subs { overflow: hidden; }
+.ct-filters { display: flex; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--p-line); }
+.ct-input { flex: 1; display: flex; align-items: center; gap: 8px; min-width: 0; height: 32px; padding: 0 12px; border: 1px solid var(--p-line); border-radius: 8px; color: var(--p-faint); white-space: nowrap; overflow: hidden; }
+.ct-table { width: 100%; border-collapse: collapse; }
+.ct-table th { padding: 8px 16px; border-bottom: 1px solid var(--p-line); color: var(--p-ink-4); font-size: 12px; line-height: 16px; font-weight: 400; text-align: left; }
+.ct-table td { padding: 8px 16px; border-bottom: 1px solid var(--p-line-2); vertical-align: middle; white-space: nowrap; }
+.ct-table td b { display: block; font-weight: 500; }
+.ct-table td small { display: block; color: var(--p-mute); font-size: 12px; line-height: 16px; }
+.ct-ref { color: var(--p-ink-4); font-family: 'Geist Mono', ui-monospace, monospace; }
+.ct-pill { display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; border-radius: 999px; font-size: 12px; line-height: 20px; font-weight: 500; }
+.ct-pill::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.ct-pill-ok { background: var(--p-green-wash); color: var(--p-green); }
+.ct-pill-warn { background: var(--p-amber-wash); color: var(--p-amber); }
+.ct-pill-bad { background: var(--p-red-wash); color: var(--p-red); }
+.ps .ct-foot, .ct-foot { padding: 12px 16px; color: var(--p-mute); font-size: 12px; line-height: 16px; }
+
+/* The three points under Control (and under the new section) are cards */
+html[data-v="3"] .ct-points, .mg-points { gap: 16px; }
+html[data-v="3"] .ct-points li, .mg-points li { padding: 24px; background: #fff; border: var(--ss-line, 1px solid var(--line)); box-shadow: var(--ss-shadow-sm, none); }
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-v="3"] .ct-enter :is(.ct-sect, .ct-stats, .ct-pair, .ct-subs) { animation: v2In .5s cubic-bezier(.2, .9, .3, 1) backwards; }
+  html[data-v="3"] .ct-enter .ct-stats { animation-delay: .1s; }
+  html[data-v="3"] .ct-enter .ct-pair { animation-delay: .2s; }
+  html[data-v="3"] .ct-swap :is(.ct-table tbody, .ct-stats b, .ct-row code, .ct-select) { animation: v2In .4s ease backwards; }
+}
+
+/* ================================================================
+   Build in your CLI. Manage in EAI. (manage.js)
+   ================================================================ */
+/* The web app fills the width; a small light terminal floats over its left
+   side (z-index). The terminal is the page's own .term
+   (as in "Build with the AI you already pay for"), recoloured light. */
+.mg-demo {
+  --p-ink: #09090b; --p-ink-4: #52525b; --p-mute: #71717a; --p-faint: #a1a1aa;
+  --p-line: #e4e4e7; --p-line-2: #f4f4f5; --p-wash: #fafafa;
+  --p-blue: #2563eb; --p-blue-wash: #eff6ff; --p-green: #15803d; --p-green-wash: #dcfce7; --p-amber: #b45309; --p-amber-wash: #fef3c7;
+}
+.mg-web svg { width: 12px; height: 12px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.mg-stage { position: relative; }
+
+/* the CLI, light */
+.mg-stage .term.mg-term {
+  position: absolute; z-index: 2; left: 32px; top: 128px; width: 360px; height: 400px;
+  display: flex; flex-direction: column;
+  background: #fff; border: 1px solid var(--p-line); border-radius: 12px;
+  box-shadow: 0 32px 64px -24px rgba(13, 56, 87, .35), 0 2px 8px rgba(13, 56, 87, .06);
+}
+.mg-stage .mg-term .term-bar { background: var(--p-wash); border-bottom: 1px solid var(--p-line); }
+.mg-stage .mg-term .term-tabs button { cursor: default; }
+.mg-stage .mg-term .term-tabs button[aria-selected="true"] { background: #fff; color: var(--p-ink); box-shadow: inset 0 0 0 1px var(--p-line); }
+.mg-stage .mg-term .term-replay { color: var(--p-mute); }
+.mg-stage .mg-term .term-replay:hover { background: var(--p-line-2); color: var(--p-ink); }
+.mg-term .term-body { flex: 1; height: auto; padding: 12px 16px; color: var(--p-ink-4); font-size: 12px; line-height: 1.6; }
+.mg-term .tl:not(.is-new) { animation: none; }
+.mg-term .tl-cmd + .tl-head, .mg-term .tl-head + .tl-head, .mg-term .tl-head + .tl-link { margin-top: 0; }
+.mg-term .tl-dim { color: var(--p-faint); }
+.mg-term .tl-ok { color: var(--p-green); }
+.mg-term .tl-head, .mg-term .tl-p { color: var(--p-blue); }
+.mg-term .tl-cmd, .mg-term .tl-link { color: var(--p-ink); }
+.mg-term .tl-link { font-weight: 500; }
+.mg-term .tl-cur { background: var(--p-ink); }
+
+/* the EAI web app */
+.mg-web {
+  flex: 1; display: flex; flex-direction: column; gap: 8px; padding: 8px 16px 16px;
+  background: var(--p-wash); color: var(--p-ink);
+  font: 400 14px/20px 'Geist', Inter, system-ui, sans-serif; letter-spacing: 0;
+  border: var(--ss-line, 1px solid var(--p-line)); box-shadow: var(--ss-shadow, 0 24px 60px -32px rgba(13, 56, 87, .35));
+}
+.mg-web .ct-ws b { font-weight: 600; }
+.mg-sync { display: inline-flex; align-items: center; gap: 8px; margin-left: auto; padding: 0 12px; border-radius: 999px; background: #fff; border: 1px solid var(--p-line); color: var(--p-ink-4); font-size: 12px; line-height: 26px; font-weight: 500; white-space: nowrap; }
+.mg-sync i { width: 6px; height: 6px; border-radius: 50%; background: var(--p-faint); }
+.mg-sync.is-busy { color: var(--p-blue); border-color: #bfdbfe; background: var(--p-blue-wash); }
+.mg-sync.is-busy i { background: var(--p-blue); animation: blink .8s steps(1) infinite; }
+.mg-sync.is-done i { background: var(--p-green); }
+.mg-panel { flex: 1; display: flex; flex-direction: column; border: 1px solid var(--p-line); border-radius: 10px; background: #fff; overflow: hidden; }
+.mg-bar { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border-bottom: 1px solid var(--p-line); color: var(--p-ink-4); }
+.mg-bar b { color: var(--p-ink); font-weight: 600; }
+.mg-body { flex: 1; display: grid; grid-template-columns: 200px minmax(0, 1fr); }
+.mg-rail { display: flex; flex-direction: column; gap: 4px; padding: 12px; border-right: 1px solid var(--p-line); }
+.mg-tab { display: flex; align-items: center; gap: 12px; height: 40px; padding: 0 12px; border-radius: 8px; color: var(--p-ink); }
+.mg-tab.on { background: var(--p-line-2); font-weight: 500; }
+.mg-web .mg-tab .mg-ic { width: 16px; height: 16px; stroke-width: 1.5; color: var(--p-ink-4); }
+/* the page column starts right of the floating terminal */
+.mg-main { padding: 32px 32px 32px 200px; background: var(--p-wash); }
+.mg-main .ct-page-hd h3 { font-size: 20px; line-height: 28px; }
+.mg-steps { list-style: none; display: flex; flex-direction: column; margin: 0; padding: 0; border: 1px solid var(--p-line); border-radius: 10px; background: #fff; overflow: hidden; }
+.mg-step { display: grid; grid-template-columns: 24px 120px minmax(0, 1fr); align-items: center; gap: 12px; padding: 12px 16px; transition: background .4s ease; }
+.mg-step + .mg-step { border-top: 1px solid var(--p-line-2); }
+.mg-step.is-hot { background: var(--p-blue-wash); }
+.mg-num { width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: var(--p-line-2); color: var(--p-ink-4); font-size: 12px; font-weight: 500; }
+.mg-step.is-hot .mg-num { background: var(--p-ink); color: #fff; }
+.mg-nt b { display: block; font-weight: 500; }
+.mg-nt small { display: block; color: var(--p-mute); font-size: 12px; line-height: 16px; }
+.mg-chips { list-style: none; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px; margin: 0; padding: 0; }
+.mg-chip { display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; border-radius: 999px; font-size: 12px; line-height: 20px; font-weight: 500; white-space: nowrap; }
+.mg-chip-ai { background: var(--p-blue-wash); color: var(--p-blue); }
+.mg-chip-data { background: var(--p-line-2); color: var(--p-ink-4); }
+.mg-chip-rule { background: var(--p-amber-wash); color: var(--p-amber); }
+.mg-chip-code { background: #fff; color: var(--p-ink); box-shadow: inset 0 0 0 1px var(--p-line); }
+.mg-log { margin-top: 16px; padding: 12px 16px; border: 1px solid var(--p-line); border-radius: 10px; background: #fff; }
+.mg-log > b { display: block; margin-bottom: 4px; font-weight: 600; }
+.mg-log ul { list-style: none; margin: 0; padding: 0; }
+.mg-log li { display: flex; justify-content: space-between; gap: 16px; padding: 8px 0; }
+.mg-log li + li { border-top: 1px solid var(--p-line-2); }
+.mg-log li small { flex-shrink: 0; color: var(--p-mute); font-size: 12px; }
+.mg-log-empty span { color: var(--p-faint); }
+
+.ps .mg .mg-points { margin: 48px 0 0; }
+.mg-points { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 0; }
+.mg-points b { display: block; margin-bottom: 8px; font-size: 18px; font-weight: 600; }
+.mg-points p { margin: 0; color: var(--ss-muted, var(--muted)); line-height: 1.5; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .mg-chip.is-new { animation: mgPop .5s cubic-bezier(.2, .9, .3, 1.4) backwards; }
+  .mg-log li.is-new { animation: v2In .35s ease backwards; }
+  @keyframes mgPop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+}
+@media (max-width: 900px) {
+  .mg-stage .term.mg-term { position: static; width: auto; height: 320px; margin-top: 16px; }
+  .mg-body { grid-template-columns: 1fr; }
+  .mg-rail { display: none; }
+  .mg-main { padding: 16px; }
+  .mg-step { grid-template-columns: 24px 1fr; }
+  .mg-chips { grid-column: 2; justify-content: flex-start; }
+  .mg-points, .ct-stats, .ct-pair { grid-template-columns: 1fr; }
+  .ct-table th:nth-child(3), .ct-table td:nth-child(3), .ct-filters .ct-btn { display: none; }
+}
+
+/* Themes: frames and cards only */
+[data-theme="brand"] .mg-web { border: 0; border-radius: 16px; box-shadow: var(--br-float); }
+[data-theme="brand"] .mg-stage .term.mg-term { border: 0; border-radius: 16px; box-shadow: var(--br-float); }
+[data-theme="shape"] .mg-stage .term.mg-term { border: var(--ss-line); border-radius: 0; box-shadow: var(--ss-shadow-sm); }
+[data-theme="brand"] :is(html[data-v="3"] .ct-points li, .mg-points li) { border: 0; border-radius: 16px; box-shadow: var(--br-lift); }
+[data-theme="brand"] .mg-points b { font-family: var(--br-head); font-weight: 700; }
+[data-theme="brand"] .mg-points p { color: var(--br-text); }
+[data-theme="shape"] .mg-points b { font-family: var(--ss-display); font-stretch: 125%; font-weight: 800; text-transform: uppercase; font-size: 16px; }
+[data-theme="shape"] .ps-page > [data-section="manage"]::before { content: counter(ss, decimal-leading-zero) " — Build in the CLI, manage in EAI"; }

@@ -10,6 +10,7 @@ export interface MediaBlock {
   frame?: 'phone' | 'device' // phone: a portrait screen recording, shown as a phone on the backdrop. device: a still of a device on a transparent background, which needs no window
   crop?: 'browser-window' // The recording has its own window and backdrop baked in: crop to the app (see ClipFrame)
   url?: string // For a cropped clip: the address shown in the browser bar the site draws around it
+  live?: string // A live copy of what the clip shows: a button under it opens the page in a dialog to use
   pending?: boolean // Not made yet: a labelled slot on the dev server, nothing on the live site. Remove once the file is in.
   brief?: string // For a pending slot: what the clip should show
 }
@@ -71,6 +72,7 @@ export interface Project {
   heroImage?: string
   heroVideo?: string // Plays in place of the hero image, which becomes its poster
   heroFrame?: 'device' | 'grid' // device: the hero image is a device on a transparent background, and stands on the backdrop with no window. grid: the hero sits on the dotted canvas the live demos use, not the colour backdrop
+  heroUrl?: string // For a hero reel: the address shown in the browser bar around it
   tags: string[]
   featured?: boolean // Show in hero with special treatment
   showGitHubActivity?: boolean // Show GitHub activity visualization in card
@@ -1836,68 +1838,170 @@ export const projects: Project[] = [
   {
     id: 'html-brand-website',
     title: 'A Website Built from an HTML Brand',
-    status: 'Coming soon',
-    description: 'A website built from a brand that lives as HTML, then given its information architecture and styled page by page so it all looks consistent.',
+    description: 'A marketing site in 2026: one tagline, ten wild variations, the brand as files an agent reads, and two rounds of testing whether the message landed.',
     category: 'Brand & Web',
     year: '2026',
+    // The hero reel is remix 24 (V2, the EAI builder inside the page) from the EAI prototypes
+    // repo, played top to bottom. A copy of that page runs live further down, from
+    // public/case-studies/html-brand-website/site, with its study tracker stubbed out. The brand kit beside it is brand_atomic_system/ from the same repo, opened
+    // in a Finder prototype (finder/index.html); brand-book/ is the human PDF as page images.
+    heroImage: '/case-studies/html-brand-website/site-hero.webp',
+    heroVideo: '/case-studies/html-brand-website/site.mp4',
+    heroUrl: 'enterpriseaigroup.com',
     tags: ['AI', 'Brand', 'Website', 'HTML'],
     content: [
-      // A stub: the framing is in, the detail and every visual are still to come.
-      {
-        type: 'image',
-        src: '/case-studies/html-brand-website/overview.webp',
-        alt: 'The finished site',
-        caption: 'The site, built from the brand files',
-        brief: 'The homepage and two inner pages side by side, to show they belong together.',
-        pending: true,
-      },
       { type: 'heading', level: 2, content: 'The short version' },
-      { type: 'text', content: 'I built this site using the approach Emmett Shine of Little Plains describes in "The HTML Brand: The Rise of Input-Based Outcomes": the brand is delivered as structured files an AI agent can read and build from, not as a PDF of guidelines. Then I worked out the information architecture and styled every page so the whole site looks consistent.' },
-      { type: 'heading', level: 2, content: 'How it went' },
       {
         type: 'list',
-        ordered: true,
         items: [
-          'Start from the brand as HTML, using the Little Plains approach',
-          'Work out the information architecture: which pages exist and what each one is for',
-          'Style every page so it all looks consistent',
-        ]
+          'A marketing site in 2026: I wrote the inputs, and agents built the outputs',
+          'One tagline became a working prototype. Opus 5.5 turned it into ten more, each crazier than the last',
+          'I kept the best idea from a few, put the page in the brand, and tested whether people could say the message back',
+          'The brand book went into HTML too, the site was rebuilt in it, and the second test read better than the first',
+          'The site at the top is that version, running. Click in and type an app idea',
+        ],
       },
+      { type: 'heading', level: 2, content: 'Inputs, not outputs' },
+      { type: 'text', content: 'Emmett Shine of Little Plains calls it input-based outcomes. People do the thinking at the start and the judgement at the end, and agents fill in the middle. So the brand stops being a PDF you read and becomes files an agent builds from: the same brand in two formats.' },
       {
-        type: 'image',
-        src: '/case-studies/html-brand-website/brand-files.webp',
-        alt: 'The brand as files',
-        caption: 'The brand, as something an agent can build from',
-        brief: 'The brand files open beside a page generated from them.',
-        pending: true,
+        type: 'component',
+        componentId: 'brand-book',
+        props: {
+          finder: '/case-studies/html-brand-website/finder/index.html',
+          cover: '/case-studies/html-brand-website/brand-book/01.webp',
+          pages: 54,
+          files: 24,
+        },
       },
-      {
-        type: 'image',
-        src: '/case-studies/html-brand-website/architecture.webp',
-        alt: 'The information architecture',
-        caption: 'Every page and its job',
-        brief: 'The site map: every page and what it is for.',
-        pending: true,
-      },
+      { type: 'text', content: 'The folder has its own test for when it is done: the page that comes back needs no brand corrections, only a magic trick. That last file, magic_trick.md, holds the one original idea the kit can’t produce on its own. A person has to write it.' },
+      { type: 'heading', level: 2, content: 'A prototype from one line' },
+      { type: 'text', content: 'The first input was a tagline: “Build once. Sell to many.” It became a working page the same day. A four-step app gets built for Nike, then re-skinned for any client you name, with their logo and colours looked up live, and a QR code puts it on your phone.' },
       {
         type: 'video',
-        src: '/case-studies/html-brand-website/consistency.mp4',
-        alt: 'Every page, one system',
-        caption: 'The same system on every page',
-        brief: 'Scroll through each page in turn so the shared type, colour and spacing are obvious.',
-        pending: true,
+        src: '/case-studies/html-brand-website/first-prototype.mp4',
+        aspectRatio: '1880/1134',
+        alt: 'The first prototype building an app for Nike, then re-skinning it for Apple and CommBank',
+        caption: 'The first prototype, 21 September: built for Nike, then re-skinned for Apple and CommBank',
+      },
+      { type: 'heading', level: 2, content: 'Ten versions, each crazier than the last' },
+      { type: 'text', content: 'The day Opus 5.5 came out, I asked it for ten versions of the page, each louder than the one before. The hub that holds them is titled “Same story. Ten levels louder.” One rule held across all of them: every app is still exactly four steps.' },
+      {
+        type: 'component',
+        componentId: 'image-grid',
+        props: {
+          columns: 5,
+          items: [
+            { src: '/case-studies/html-brand-website/remixes/01.webp', live: '/case-studies/html-brand-website/site/sell-to-many/remix/01-refined/index.html', title: 'Refined', note: 'The next thing to ship' },
+            { src: '/case-studies/html-brand-website/remixes/02.webp', live: '/case-studies/html-brand-website/site/sell-to-many/remix/02-night/index.html', title: 'Night', note: 'A beam repaints the app' },
+            { src: '/case-studies/html-brand-website/remixes/03.webp', live: '/case-studies/html-brand-website/site/sell-to-many/remix/03-multiplier/index.html', title: 'Multiplier', note: 'The maths as a spectacle' },
+            { src: '/case-studies/html-brand-website/remixes/04.webp', live: '/case-studies/html-brand-website/site/sell-to-many/remix/04-shapeshifter/index.html', title: 'Shapeshifter', note: 'The site is the demo' },
+            { src: '/case-studies/html-brand-website/remixes/05.webp', live: '/case-studies/html-brand-website/site/sell-to-many/remix/05-factory/index.html', title: 'Factory', note: 'Full 3D brand presses' },
+            { src: '/case-studies/html-brand-website/remixes/07.webp', live: '/case-studies/html-brand-website/site/sell-to-many/remix/07-split/index.html', title: 'Split brain', note: 'Maker and client, side by side' },
+            { src: '/case-studies/html-brand-website/remixes/08.webp', live: '/case-studies/html-brand-website/site/sell-to-many/remix/08-infinite/index.html', title: 'Infinite zoom', note: 'Scrolling is zooming' },
+            { src: '/case-studies/html-brand-website/remixes/09.webp', live: '/case-studies/html-brand-website/site/sell-to-many/remix/09-desktop/index.html', title: 'EAI OS', note: 'The site is an operating system' },
+            { src: '/case-studies/html-brand-website/remixes/10.webp', live: '/case-studies/html-brand-website/site/sell-to-many/remix/10-liquid/index.html', title: 'Liquid brand', note: 'Two liquids that never mix' },
+            { src: '/case-studies/html-brand-website/remixes/11.webp', live: '/case-studies/html-brand-website/site/sell-to-many/remix/11-tycoon/index.html', title: 'Tycoon', note: 'The pitch as a game' },
+          ],
+        },
+        caption: 'Two rounds of five, 23 September. Heat rises left to right. Click any of them to use it',
+      },
+      { type: 'heading', level: 2, content: 'Inspired by a few' },
+      { type: 'text', content: 'Most were too much to ship, which was the point. A few had one idea worth keeping.' },
+      {
+        type: 'component',
+        componentId: 'image-grid',
+        props: {
+          columns: 4,
+          items: [
+            { src: '/case-studies/html-brand-website/remixes/01.webp', live: '/case-studies/html-brand-website/site/sell-to-many/remix/01-refined/index.html', title: 'Refined', note: 'The calm layout' },
+            { src: '/case-studies/html-brand-website/remixes/03.webp', live: '/case-studies/html-brand-website/site/sell-to-many/remix/03-multiplier/index.html', title: 'Multiplier', note: 'A calculator for what one build earns' },
+            { src: '/case-studies/html-brand-website/remixes/04.webp', live: '/case-studies/html-brand-website/site/sell-to-many/remix/04-shapeshifter/index.html', title: 'Shapeshifter', note: 'The house style' },
+            { src: '/case-studies/html-brand-website/remixes/12.webp', live: '/case-studies/html-brand-website/site/sell-to-many/remix/12-intro/index.html', title: 'Shell intro', note: 'The prompt box comes first' },
+          ],
+        },
+      },
+      { type: 'text', content: 'Those ideas went into one page. From then on every version was that same page in a different style, so the content couldn’t drift between them.' },
+      { type: 'heading', level: 2, content: 'Rebrand it, then test it' },
+      { type: 'text', content: 'I put the page in Enterprise AI’s navy and cyan, tidied it, and showed it to five people on Lyssna. They looked at the top of the page, scrolled the rest, then told us from memory what it said.' },
+      {
+        type: 'video',
+        src: '/case-studies/html-brand-website/round-1.mp4',
+        aspectRatio: '16/10',
+        alt: 'The page tested in round 1, running',
+        caption: 'Round 1: the Shapeshifter style in Enterprise AI cyan, top to bottom',
+        live: '/case-studies/html-brand-website/site/sell-to-many/remix/13-chat-first/index.html?theme=shape&ss=cyan&layout=mvp',
+      },
+      {
+        type: 'list',
+        items: [
+          'Everyone got “an AI tool that builds apps”',
+          'Nobody fully got the offer: build once, in the client’s brand, sell to many',
+          '“Enterprise AI builds it” read as a service: “an outsourced way”',
+          'The demo’s Nike campaign app got taken for the product',
+        ],
+      },
+      { type: 'heading', level: 2, content: 'The brand book, in HTML' },
+      { type: 'text', content: 'The brand book was moving too. With Opus, I redrew its marketing pages in HTML at real pixel sizes, in the style we settled on: a bright grey ground, white panels, navy type and marks, and cyan for the headline underline and nothing else. That went back into the next version of the book.' },
+      {
+        type: 'component',
+        componentId: 'image-grid',
+        props: {
+          columns: 2,
+          fit: 'natural',
+          items: [
+            { src: '/case-studies/html-brand-website/book-ads.webp', title: 'The brand book', note: 'Page 46, the paid display ads' },
+            { src: '/case-studies/html-brand-website/html-ads.webp', title: 'Redrawn in HTML', note: 'Bright grey, navy marks, cyan underline only' },
+          ],
+        },
+      },
+      { type: 'heading', level: 2, content: 'The site, in the new brand' },
+      { type: 'text', content: 'Then the site was rebuilt in it, with round 1’s fixes: Gofer says what it is, AI features say what they’re for, and the CLI section says who it’s for. That’s the page in the reel at the top, and here it is running.' },
+      {
+        type: 'component',
+        componentId: 'demo-canvas',
+        props: {
+          src: '/case-studies/html-brand-website/site/index.html',
+          title: 'The Enterprise AI site, running',
+          width: 1280,
+          height: 800,
+          passive: true,
+          modes: [{ label: 'Start again' }],
+        },
+        caption: 'This is the page, not a picture of it. Click in, type an app idea, then name the next client',
+      },
+      { type: 'heading', level: 2, content: 'Did the message land?' },
+      { type: 'text', content: 'Same test, seven new people, on the rebuilt page.' },
+      {
+        type: 'table',
+        headers: ['', 'Round 1', 'Round 2'],
+        rows: [
+          ['Testers', '5', '7'],
+          ['Got the offer, fully or partly', '2', '5'],
+          ['Explained Gofer', '0', '4'],
+          ['Explained the CLI section', '0', '3'],
+          ['Said who it’s for', '2', '0'],
+          ['Median interest, out of 5', '3', '4'],
+        ],
+        highlight: 4,
+        caption: 'Scored against the message we meant, from what people said and wrote',
+      },
+      { type: 'text', content: 'Better where it mattered. People who scrolled could now explain selling the same app to the next client: it “can be reused multiple times via customizations tailor-made for each client”. But nobody in round 2 said who it’s for. That’s the next input to fix: put the buyer in the headline.' },
+      {
+        type: 'comparison',
+        before: ['A brand PDF, read and rebuilt by hand', 'One homepage design, argued over in review', 'Copy judged by opinion'],
+        after: ['The brand as files an agent builds from', 'Ten variations in a day, and the best ideas kept', 'Copy judged by whether people can say it back'],
       },
     ],
     chatContext: {
-      description: 'Case study about building a website from a brand delivered as HTML, following the Little Plains approach described in Emmett Shine\'s "The HTML Brand: The Rise of Input-Based Outcomes", then doing the information architecture and styling every page consistently',
+      description: 'Case study about making the Enterprise AI marketing site in 2026 with input-based outcomes (Emmett Shine, Little Plains, "The HTML Brand"): people do the thinking at the start and the judgement at the end, agents fill the middle. Beats: a first prototype from the tagline "Build once. Sell to many." (21 Sep 2026); Opus 5.5 asked for ten versions each crazier than the last (23 Sep: Refined, Night, Multiplier, Shapeshifter, Factory, Split brain, Infinite zoom, EAI OS, Liquid brand, Tycoon); ideas kept from Refined, Multiplier, Shapeshifter and the shell intro; the page put in EAI navy and cyan and message-tested with 5 Lyssna testers (everyone got "AI app builder", nobody fully got build once / client\'s brand / sell to many, "Enterprise AI builds it" read as a service, the Nike demo app was taken for the product); the brand book\'s marketing pages redrawn in HTML with Opus (bright grey ground, navy marks, cyan underline only), fed back into the book; the site rebuilt in the new brand (remix 24, V2, the EAI builder inside the page, live in the hero); round 2 with 7 testers: offer understood fully or partly 5 of 7 (was 2 of 5), Gofer explained 4 of 7 (was 0), CLI 3 of 7 (was 0), but nobody said who it is for (agencies, consultants and builders), so the next fix is the buyer in the headline. The brand also exists as an agent kit, brand_atomic_system/ (verbal Markdown and YAML, visual CSS and JSON tokens, magic_trick.md), beside a 54-page PDF brand book.',
       suggestedQuestions: [
         'What is an HTML brand?',
-        'How did AI help build the site?',
-        'What did you do by hand?',
+        'Why ask for ten crazier versions?',
+        'What did the user tests change?',
       ],
       followUpQuestions: [
-        'How did you keep the pages consistent?',
-        'How did you approach the information architecture?',
+        'What is the magic trick file for?',
+        'What would you fix next?',
       ]
     }
   },

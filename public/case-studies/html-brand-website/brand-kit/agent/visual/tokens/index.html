@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>EAI token specimens</title>
+  <link rel="stylesheet" href="../colors_and_type.css">
+  <link rel="stylesheet" href="tokens.css">
+
+  <!-- Specimen page chrome. Not part of the brand. Don't copy. -->
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--eai-font-sans); font-size: var(--eai-text-base); line-height: 1.5; color: var(--eai-text); background: var(--eai-bg); }
+    .kit { max-width: var(--eai-max-width); margin: 0 auto; padding: var(--eai-space-16) var(--eai-space-6) var(--eai-space-24); }
+    .kit-eyebrow { font: var(--eai-weight-medium) var(--eai-text-xs)/1.3 var(--eai-font-sans); letter-spacing: var(--eai-tracking-eyebrow); text-transform: uppercase; color: var(--eai-text-muted); }
+    .kit-title { margin: 0 0 var(--eai-space-2); font: var(--eai-weight-semibold) var(--eai-text-3xl)/1.1 var(--eai-font-display); letter-spacing: var(--eai-tracking-display); }
+    .kit-lede { margin: 0; max-width: 62ch; color: var(--eai-text-muted); }
+    .kit-spec { display: grid; grid-template-columns: 13rem 1fr; gap: var(--eai-space-6); padding: var(--eai-space-8) 0; border-top: 1px solid var(--eai-border); align-items: start; margin-top: var(--eai-space-8); }
+    .kit-spec__name b { display: block; font-size: var(--eai-text-sm); font-weight: var(--eai-weight-medium); }
+    .kit-spec__name code { display: block; margin-top: var(--eai-space-1); font: var(--eai-text-xs)/1.4 var(--eai-font-mono); color: var(--eai-text-muted); }
+    .kit-tag { display: inline-block; margin-top: var(--eai-space-2); padding: 0 var(--eai-space-2); font: var(--eai-weight-medium) var(--eai-text-xs)/1.6 var(--eai-font-mono); border-radius: var(--eai-radius-sm); }
+    .kit-tag[data-s="decide"]   { background: color-mix(in srgb, var(--eai-cyan) 35%, var(--eai-bg)); color: var(--eai-navy); }
+    .kit-tag[data-s="todo"]     { background: var(--eai-cta-bg); color: var(--eai-cta-text); }
+    .kit-tag[data-s="proposed"] { background: var(--eai-bg); color: var(--eai-text-muted); border: 1px dashed var(--eai-text-muted); }
+    .kit-var { font: var(--eai-text-xs)/1.4 var(--eai-font-mono); color: var(--eai-text-muted); }
+
+    .kit-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr)); gap: var(--eai-space-4); }
+    .kit-swatch { display: flex; flex-direction: column; gap: var(--eai-space-1); font-size: var(--eai-text-xs); }
+    .kit-swatch i { display: block; height: var(--eai-space-16); margin-bottom: var(--eai-space-1); border-radius: var(--eai-radius-md); border: 1px solid var(--eai-border); }
+    .kit-swatch--struck { opacity: 0.45; }
+    .kit-swatch--struck b { text-decoration: line-through; }
+
+    .kit-type { display: flex; flex-direction: column; gap: var(--eai-space-4); }
+    .kit-type p { margin: 0; }
+
+    .kit-boxes { display: flex; flex-wrap: wrap; gap: var(--eai-space-6); align-items: flex-end; }
+    .kit-box { display: flex; flex-direction: column; gap: var(--eai-space-2); }
+    .kit-box i { display: block; width: var(--eai-space-24); height: var(--eai-space-16); background: var(--eai-surface); border: 1px solid var(--eai-border); }
+
+    .kit-space { display: flex; flex-direction: column; gap: var(--eai-space-2); }
+    .kit-space div { display: grid; grid-template-columns: 10rem 1fr; align-items: center; gap: var(--eai-space-4); }
+    .kit-space i { display: block; height: var(--eai-space-3); background: var(--eai-navy); border-radius: var(--eai-radius-sm); }
+
+    .kit-layout { position: relative; height: var(--eai-space-12); border: 1px dashed var(--eai-text-muted); border-radius: var(--eai-radius-md); display: grid; place-items: center; font-size: var(--eai-text-sm); color: var(--eai-text-muted); }
+    @media (max-width: 720px) { .kit-spec { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<main class="kit">
+
+  <header>
+    <div class="kit-eyebrow">agent/visual/tokens/</div>
+    <h1 class="kit-title">Token specimens</h1>
+    <p class="kit-lede">
+      Every token, rendered. Colour and type come from <code>../colors_and_type.css</code>; space, radius,
+      shadow and layout from <code>tokens.css</code>. <code>tokens.json</code> holds all of them.
+    </p>
+  </header>
+
+  <section class="kit-spec">
+    <div class="kit-spec__name"><b>Colour</b><code>--eai-*</code><span class="kit-tag" data-s="decide">DECIDE #7 #8</span></div>
+    <div class="kit-swatches">
+      <div class="kit-swatch"><i style="background: var(--eai-navy)"></i><b>navy</b><span class="kit-var">--eai-navy · #0d3857</span></div>
+      <div class="kit-swatch"><i style="background: var(--eai-cyan)"></i><b>cyan</b><span class="kit-var">--eai-cyan · #8edff9</span></div>
+      <div class="kit-swatch"><i style="background: var(--eai-cta-bg)"></i><b>cta-bg</b><span class="kit-var">--eai-cta-bg · #18181b</span></div>
+      <div class="kit-swatch"><i style="background: var(--eai-text)"></i><b>text</b><span class="kit-var">--eai-text · #202020</span></div>
+      <div class="kit-swatch"><i style="background: var(--eai-text-muted)"></i><b>text-muted</b><span class="kit-var">--eai-text-muted · #646464</span></div>
+      <div class="kit-swatch"><i style="background: var(--eai-border)"></i><b>border</b><span class="kit-var">--eai-border · #e4e4e7</span></div>
+      <div class="kit-swatch"><i style="background: var(--eai-surface)"></i><b>surface</b><span class="kit-var">--eai-surface · #fcfcfc</span></div>
+      <div class="kit-swatch"><i style="background: var(--eai-bg)"></i><b>bg</b><span class="kit-var">--eai-bg · #ffffff</span></div>
+      <div class="kit-swatch kit-swatch--struck" title="Dropped by default. DECIDE #7"><i style="background: #1c84e0"></i><b>blue</b><span class="kit-var">dropped · #1c84e0</span></div>
+    </div>
+  </section>
+
+  <section class="kit-spec">
+    <div class="kit-spec__name"><b>Type</b><code>--eai-font-* · --eai-text-*</code><span class="kit-tag" data-s="decide">DECIDE #9</span><br><span class="kit-tag" data-s="todo">TODO 32px+</span></div>
+    <div class="kit-type">
+      <p style="font: var(--eai-weight-semibold) var(--eai-text-display)/1.05 var(--eai-font-display); letter-spacing: var(--eai-tracking-display)">Describe. Design. Deploy.</p>
+      <span class="kit-var">display · 64 · Inter Tight semibold</span>
+      <p style="font: var(--eai-weight-semibold) var(--eai-text-3xl)/1.1 var(--eai-font-display); letter-spacing: var(--eai-tracking-display)">Shipping enterprise AI is broken.</p>
+      <span class="kit-var">3xl · 48</span>
+      <p style="font: var(--eai-weight-semibold) var(--eai-text-2xl)/1.2 var(--eai-font-display); letter-spacing: var(--eai-tracking-heading)">In production, not pilots</p>
+      <span class="kit-var">2xl · 32</span>
+      <p style="font: var(--eai-weight-semibold) var(--eai-text-xl)/1.3 var(--eai-font-display); letter-spacing: var(--eai-tracking-heading)">Governed by default</p>
+      <span class="kit-var">xl · 24</span>
+      <p style="font-size: var(--eai-text-lg)">Start in the browser, or bring your own AI harness on your machine.</p>
+      <span class="kit-var">lg · 18 · Inter</span>
+      <p>Every run is logged, attributable and reviewable.</p>
+      <span class="kit-var">base · 16</span>
+      <p style="font-size: var(--eai-text-sm)">Free to start — 100 credits, no credit card.</p>
+      <span class="kit-var">sm · 14</span>
+      <p style="font: var(--eai-weight-medium) var(--eai-text-xs)/1.3 var(--eai-font-sans); letter-spacing: var(--eai-tracking-eyebrow); text-transform: uppercase">Procurement</p>
+      <span class="kit-var">xs · 12 · eyebrow tracking</span>
+      <p style="font: var(--eai-text-sm)/1.5 var(--eai-font-mono)">$ npx install eai</p>
+      <span class="kit-var">mono · JetBrains Mono</span>
+    </div>
+  </section>
+
+  <section class="kit-spec">
+    <div class="kit-spec__name"><b>Radius</b><code>--eai-radius-*</code></div>
+    <div class="kit-boxes">
+      <div class="kit-box"><i style="border-radius: var(--eai-radius-sm)"></i><span class="kit-var">sm · 6</span></div>
+      <div class="kit-box"><i style="border-radius: var(--eai-radius-md)"></i><span class="kit-var">md · 8</span></div>
+      <div class="kit-box"><i style="border-radius: var(--eai-radius-lg)"></i><span class="kit-var">lg · 12</span></div>
+      <div class="kit-box"><i style="border-radius: var(--eai-radius-xl)"></i><span class="kit-var">xl · 16</span></div>
+      <div class="kit-box"><i style="border-radius: var(--eai-radius-full)"></i><span class="kit-var">full · 999</span></div>
+    </div>
+  </section>
+
+  <section class="kit-spec">
+    <div class="kit-spec__name"><b>Shadow</b><code>--eai-shadow-*</code></div>
+    <div class="kit-boxes" style="gap: var(--eai-space-12)">
+      <div class="kit-box"><i style="background: var(--eai-bg); border-radius: var(--eai-radius-lg); box-shadow: var(--eai-shadow-sm)"></i><span class="kit-var">sm</span></div>
+      <div class="kit-box"><i style="background: var(--eai-bg); border-radius: var(--eai-radius-lg); box-shadow: var(--eai-shadow-md)"></i><span class="kit-var">md</span></div>
+      <div class="kit-box"><i style="background: var(--eai-bg); border-radius: var(--eai-radius-lg); box-shadow: var(--eai-shadow-lg)"></i><span class="kit-var">lg</span></div>
+    </div>
+  </section>
+
+  <section class="kit-spec">
+    <div class="kit-spec__name"><b>Space</b><code>--eai-space-*</code><span class="kit-tag" data-s="proposed">proposed</span></div>
+    <div class="kit-space">
+      <div><span class="kit-var">space-1 · 4</span><i style="width: var(--eai-space-1)"></i></div>
+      <div><span class="kit-var">space-2 · 8</span><i style="width: var(--eai-space-2)"></i></div>
+      <div><span class="kit-var">space-3 · 12</span><i style="width: var(--eai-space-3)"></i></div>
+      <div><span class="kit-var">space-4 · 16</span><i style="width: var(--eai-space-4)"></i></div>
+      <div><span class="kit-var">space-6 · 24</span><i style="width: var(--eai-space-6)"></i></div>
+      <div><span class="kit-var">space-8 · 32</span><i style="width: var(--eai-space-8)"></i></div>
+      <div><span class="kit-var">space-12 · 48</span><i style="width: var(--eai-space-12)"></i></div>
+      <div><span class="kit-var">space-16 · 64</span><i style="width: var(--eai-space-16)"></i></div>
+      <div><span class="kit-var">space-24 · 96</span><i style="width: var(--eai-space-24)"></i></div>
+    </div>
+  </section>
+
+  <section class="kit-spec">
+    <div class="kit-spec__name"><b>Layout</b><code>--eai-max-width</code></div>
+    <div class="kit-layout">Content max width · 1160</div>
+  </section>
+
+</main>
+</body>
+</html>

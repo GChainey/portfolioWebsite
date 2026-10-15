@@ -1,0 +1,8 @@
+/* Remix 19 — remix 17's shapeshifter theme with EAI cyan (#8EDFF9) in
+   place of the acid green (?theme=shape&ss=cyan). Paper, black rules and
+   hard shadows stay; only the accent changes. Cyan is light, like the
+   acid, so text on it stays black and it reads as text on black blocks. */
+[data-theme="shape"][data-ss="cyan"] {
+  --ss-acid: #8EDFF9;
+  --ss-lit: #EAF8FE;
+}

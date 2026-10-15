@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Build once. Sell to many. — Enterprise AI</title>
+<meta name="description" content="Build a four-step app for one client, then sell it to many. Their logo, their colours, their voice. Same wiring underneath." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Fraunces:ital,opsz,wght@0,9..144,500..800;1,9..144,500..700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="multiplier.css" />
+<!-- Portfolio copy: the link back to the remix hub is hidden. -->
+<style>a[href="../index.html"] { display: none !important; }</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <a class="nav-logo" href="#top" aria-label="Enterprise AI home"><img src="../../../assets/logos/eai-wordmark.svg" alt="Enterprise AI" /></a>
+  <nav class="nav-links" aria-label="Sections">
+    <a href="#maths">The maths</a>
+    <a href="#rebrand">Rebrand</a>
+    <a href="#steps">Four steps</a>
+    <a href="#ai">AI</a>
+    <a href="#share">Share</a>
+  </nav>
+  <div class="nav-cta">
+    <a class="nav-signin" href="#">Sign in</a>
+    <a class="btn btn-ink" href="#start">Start building</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- 1. HERO: one app card mitoses into a wall of client copies -->
+  <section class="hero" id="hero" aria-label="Build once. Sell to many.">
+    <div class="wall-vp" id="wallVp" aria-label="A wall of client copies of one app. Drag to pan.">
+      <div class="wall-par" id="wallPar"><div class="wall" id="wall"></div></div>
+    </div>
+    <div class="veil" aria-hidden="true"></div>
+
+    <div class="hero-copy">
+      <p class="kicker mono"><span class="dot"></span> One app &rarr; every client</p>
+      <h1 class="h-display">Build once.<br /><span class="h-many">Sell to <em>many.</em></span></h1>
+      <p class="lede">Build a four-step app for one client. Name the next one and it&rsquo;s theirs &mdash; their logo, their colours, their voice. Same wiring underneath.</p>
+      <div class="hero-ctas">
+        <button type="button" class="btn btn-volt btn-lg" id="againBtn">Sell it again <span class="x mono" id="againX">&times;2</span></button>
+        <a class="btn btn-line btn-lg" href="#maths">Do the maths</a>
+      </div>
+    </div>
+
+    <div class="wall-tools" role="group" aria-label="Wall zoom">
+      <button type="button" id="zoomOut" aria-label="Zoom out">&minus;</button>
+      <button type="button" id="zoomFit" class="mono" aria-label="Fit all">FIT</button>
+      <button type="button" id="zoomIn" aria-label="Zoom in">+</button>
+    </div>
+
+    <div class="ticker" aria-live="polite">
+      <div class="tk">
+        <span class="tk-l mono">Built</span>
+        <span class="tk-v"><b>1</b> <small>app</small></span>
+      </div>
+      <div class="tk-arrow" aria-hidden="true">&rarr;</div>
+      <div class="tk">
+        <span class="tk-l mono">Sold to</span>
+        <span class="tk-v"><b class="odo" id="odoClients" data-pad="3">001</b> <small>clients</small></span>
+      </div>
+      <div class="tk tk-money">
+        <span class="tk-l mono">Earned from one build <span class="tk-at" id="tkAt">at $6,000 each</span></span>
+        <span class="tk-v"><b class="odo" id="odoMoney" data-prefix="$">$6,000</b></span>
+      </div>
+      <div class="tk tk-hours">
+        <span class="tk-l mono">Build hours, from scratch</span>
+        <span class="tk-v"><s class="odo" id="odoScratch">60</s> <small class="vs">vs</small> <b id="tkOnce">60</b></span>
+      </div>
+      <p class="tk-hint mono">Drag to pan &middot; pinch or &#8984;/Ctrl + scroll to zoom &middot; hover a card</p>
+    </div>
+  </section>
+
+  <!-- 2. THE MATHS -->
+  <section class="sec maths" id="maths">
+    <div class="sec-head">
+      <p class="eyebrow mono">01 &mdash; The maths</p>
+      <h2 class="h2">You build it <em>once.</em><br />They pay for it <em>every time.</em></h2>
+    </div>
+
+    <div class="calc">
+      <div class="calc-in">
+        <label class="sl">
+          <span class="sl-top"><span>Hours to build it once</span><b class="mono" id="vHours">60 hrs</b></span>
+          <input type="range" id="sHours" min="10" max="200" step="5" value="60" />
+        </label>
+        <label class="sl">
+          <span class="sl-top"><span>Clients you sell it to</span><b class="mono" id="vClients">24</b></span>
+          <input type="range" id="sClients" min="1" max="200" step="1" value="24" />
+        </label>
+        <label class="sl">
+          <span class="sl-top"><span>Price per client</span><b class="mono" id="vPrice">$6,000</b></span>
+          <input type="range" id="sPrice" min="500" max="20000" step="250" value="6000" />
+        </label>
+        <p class="calc-note">Assumes your time costs $150 an hour, and each new client takes about an hour: name them, check it, share it. Building each one from scratch would cost you the full build every time.</p>
+      </div>
+
+      <div class="calc-out">
+        <p class="big-l mono">Revenue from one build</p>
+        <p class="big"><span class="odo" id="odoRev" data-prefix="$">$144,000</span></p>
+
+        <div class="bars">
+          <div class="bar-row">
+            <span class="bar-l">Build each from scratch</span>
+            <div class="bar"><i class="bar-fill scratch" id="barScratch"></i></div>
+            <b class="mono bar-v" id="vScratch">1,440 hrs</b>
+          </div>
+          <div class="bar-row">
+            <span class="bar-l">Build once, sell to many</span>
+            <div class="bar"><i class="bar-fill once" id="barOnce"></i></div>
+            <b class="mono bar-v" id="vOnce">84 hrs</b>
+          </div>
+        </div>
+
+        <div class="deltas">
+          <div class="delta">
+            <span class="odo delta-v" id="odoSaved">1,356</span>
+            <span class="delta-l">hours back</span>
+          </div>
+          <div class="delta">
+            <span class="odo delta-v" id="odoMargin" data-prefix="$">$131,550</span>
+            <span class="delta-l">profit, after your time</span>
+          </div>
+          <div class="delta">
+            <span class="odo delta-v" id="odoPct" data-suffix="%">94%</span>
+            <span class="delta-l">margin</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mini-wall" id="miniWall" aria-label="One tile per client"></div>
+    </div>
+  </section>
+
+  <!-- 3. REBRAND IN A SENTENCE -->
+  <section class="sec rebrand" id="rebrand">
+    <div class="sec-head">
+      <p class="eyebrow mono">02 &mdash; Rebrand in a sentence</p>
+      <h2 class="h2">Name the next client.<br /><em>Watch it land.</em></h2>
+      <p class="sec-lede">This is your builder chat &mdash; where you, the maker, change the app. Name a client and EAI reads their website for colours, logo and tone of voice. Same app, same wiring, their brand. Try any company.</p>
+    </div>
+
+    <div class="rb">
+      <div class="rb-left">
+        <div class="bchat" aria-label="EAI builder chat">
+          <div class="bchat-h">
+            <span class="bchat-av"><img src="../../../assets/logos/eai-mark-dark.svg" alt="" /></span>
+            <div class="bchat-who"><b>EAI Builder</b><small class="mono">You, building &middot; Campaign email</small></div>
+            <span class="bchat-tag mono">Edits the app</span>
+          </div>
+          <div class="bchat-thread" id="rbThread" aria-live="polite"></div>
+          <div class="rb-chips" id="rbChips" aria-label="Suggestions">
+            <button type="button" data-n="Apple">Make it for Apple</button>
+            <button type="button" data-n="CommBank">CommBank</button>
+            <button type="button" data-n="Canva">Canva</button>
+            <button type="button" data-n="Atlassian">Atlassian</button>
+            <button type="button" data-n="Qantas">Qantas</button>
+          </div>
+          <form class="rb-form" id="rbForm" autocomplete="off">
+            <span class="rb-pre">Make it for</span>
+            <input type="text" id="rbInput" placeholder="Qantas" aria-label="Company name" maxlength="40" />
+            <button type="submit" class="rb-send" id="rbGo" aria-label="Send to the builder">&uarr;</button>
+          </form>
+        </div>
+        <div class="rb-sold">
+          <p class="mono rb-sold-l">Clients named so far <b id="rbCount">1</b></p>
+          <div class="rb-shelf" id="rbShelf"></div>
+        </div>
+      </div>
+
+      <div class="rb-stage" id="rbStage">
+        <p class="rb-label mono"><span>The client&rsquo;s app</span> &middot; what <b id="rbWho">Nike</b>&rsquo;s team will use</p>
+        <div class="rb-floor" aria-hidden="true"></div>
+        <div class="rb-ghost" id="rbGhost" aria-hidden="true"><span class="mono">Re-skinning&hellip;</span></div>
+        <p class="rb-tip mono" id="rbTip">Hover the card to flip it</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. FOUR STEPS, IDENTICAL -->
+  <section class="sec steps" id="steps">
+    <div class="sec-head">
+      <p class="eyebrow mono">03 &mdash; Exactly four steps</p>
+      <h2 class="h2">Every copy. Same four steps.<br /><em>Same wiring.</em></h2>
+      <p class="sec-lede">Four steps is the shape, not a starting point. It&rsquo;s why it resells: a client learns it in a minute, and you only wire it once.</p>
+    </div>
+    <div class="st">
+      <ol class="st-list" id="stList">
+        <li data-i="0"><span class="st-n mono">01</span><span class="st-t">Brief</span><span class="st-w mono">Form</span><span class="st-d">Four fields. The rest is written for them.</span></li>
+        <li data-i="1"><span class="st-n mono">02</span><span class="st-t">Assets</span><span class="st-w mono">Data source</span><span class="st-d">Their brand guide, synced from SharePoint.</span></li>
+        <li data-i="2"><span class="st-n mono">03</span><span class="st-t">Compose</span><span class="st-w mono">AI writer</span><span class="st-d">Drafted in their voice, from their assets.</span></li>
+        <li data-i="3"><span class="st-n mono">04</span><span class="st-t">Review</span><span class="st-w mono">Approval</span><span class="st-d">One approver. Then it sends.</span></li>
+      </ol>
+      <div class="st-wall" id="stWall" aria-label="Forty-eight client copies, each with the same four steps"></div>
+    </div>
+  </section>
+
+  <!-- 5. AI IN EVERY APP -->
+  <section class="sec ai" id="ai">
+    <div class="sec-head">
+      <p class="eyebrow mono">04 &mdash; AI in every app</p>
+      <h2 class="h2">Their team asks.<br /><em>In their voice.</em></h2>
+      <p class="sec-lede">Every app ships with its own assistant, inside the app on the right, in the client&rsquo;s brand. It&rsquo;s for the client&rsquo;s team using the app &mdash; it helps them do the work. It doesn&rsquo;t change the app; that&rsquo;s you, in the builder.</p>
+    </div>
+    <p class="ai-asks-l mono">Ask all three, as the client&rsquo;s team</p>
+    <div class="ai-asks" id="aiAsks" role="tablist" aria-label="Ask the assistants">
+      <button type="button" class="on" data-q="0" role="tab" aria-selected="true">Suggest three subject lines</button>
+      <button type="button" data-q="1" role="tab" aria-selected="false">Make the intro shorter</button>
+      <button type="button" data-q="2" role="tab" aria-selected="false">Who is this for?</button>
+    </div>
+    <div class="ai-grid" id="aiGrid"></div>
+  </section>
+
+  <!-- 6. SHARE / PHONE -->
+  <section class="sec share" id="share">
+    <div class="sh">
+      <div class="sh-copy">
+        <p class="eyebrow mono">05 &mdash; Share it</p>
+        <h2 class="h2">Share.<br />Scan.<br /><em>It&rsquo;s on their phone.</em></h2>
+        <p class="sec-lede">Hit Share and hand them a link or a QR code. Their app opens on their phone &mdash; same four steps, their brand, ready to use.</p>
+        <div class="sh-pick" id="shPick" role="tablist" aria-label="Which client"></div>
+        <div class="sh-qr">
+          <canvas id="shQr" width="148" height="148" aria-label="QR code for the client app"></canvas>
+          <div>
+            <p class="mono sh-qr-l">Scan with your camera</p>
+            <p class="sh-qr-t">or <a id="shLink" href="../../app.html?c=nike" target="_blank" rel="noopener">open the <span id="shLinkName">Nike</span> app</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="sh-phone-wrap">
+        <div class="phone" id="phone">
+          <div class="ph-notch"></div>
+          <div class="ph-screen" id="phScreen"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. CLOSE -->
+  <section class="close" id="start">
+    <div class="marquee" aria-hidden="true"><div class="mq-track" id="mq"></div></div>
+    <div class="close-in">
+      <p class="eyebrow mono">Your turn</p>
+      <h2 class="close-h">What would you sell <em>twice?</em></h2>
+      <form class="close-form" id="closeForm" autocomplete="off">
+        <input type="text" id="closeInput" placeholder="e.g. Campaign email, onboarding, quote builder" aria-label="An app you would sell twice" maxlength="60" />
+        <button type="submit" class="btn btn-volt btn-lg">Start building</button>
+      </form>
+      <p class="close-note mono" id="closeNote">Free to start. Your first four-step app in an afternoon.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <img src="../../../assets/logos/eai-wordmark.svg" alt="Enterprise AI" class="foot-logo" />
+  <nav class="foot-links" aria-label="Footer">
+    <a href="#">Business types</a><a href="#">Products</a><a href="#">Pricing</a><a href="#">Support</a><a href="#">About us</a>
+  </nav>
+  <p class="foot-c mono">&copy; 2026 Enterprise AI. Made in Australia.</p>
+</footer>
+
+<a class="remix-back mono" href="../index.html">&larr; All remixes</a>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+<script src="multiplier.js"></script>
+</body>
+</html>

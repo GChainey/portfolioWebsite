@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>EAI motion</title>
+  <link rel="stylesheet" href="../colors_and_type.css">
+  <link rel="stylesheet" href="../tokens/tokens.css">
+  <link rel="stylesheet" href="motion.css">
+  <link rel="stylesheet" href="../components/components.css">
+
+  <!-- Specimen page chrome. Not part of the brand. Don't copy. -->
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--eai-font-sans); font-size: var(--eai-text-base); line-height: 1.5; color: var(--eai-text); background: var(--eai-bg); }
+    .kit { max-width: var(--eai-max-width); margin: 0 auto; padding: var(--eai-space-16) var(--eai-space-6) var(--eai-space-24); }
+    .kit-title { margin: 0 0 var(--eai-space-2); font: var(--eai-weight-semibold) var(--eai-text-3xl)/1.1 var(--eai-font-display); letter-spacing: var(--eai-tracking-display); }
+    .kit-lede { margin: 0; max-width: 62ch; color: var(--eai-text-muted); }
+    .kit-spec { display: grid; grid-template-columns: 13rem 1fr; gap: var(--eai-space-6); padding: var(--eai-space-8) 0; border-top: 1px solid var(--eai-border); align-items: start; margin-top: var(--eai-space-8); }
+    .kit-spec__name b { display: block; font-size: var(--eai-text-sm); font-weight: var(--eai-weight-medium); }
+    .kit-spec__name code { display: block; margin-top: var(--eai-space-1); font: var(--eai-text-xs)/1.4 var(--eai-font-mono); color: var(--eai-text-muted); }
+    .kit-tag { display: inline-block; margin-top: var(--eai-space-2); padding: 0 var(--eai-space-2); font: var(--eai-weight-medium) var(--eai-text-xs)/1.6 var(--eai-font-mono); border-radius: var(--eai-radius-sm); background: color-mix(in srgb, var(--eai-cyan) 35%, var(--eai-bg)); color: var(--eai-navy); }
+    .kit-note { font-size: var(--eai-text-xs); color: var(--eai-text-muted); }
+
+    .kit-motion { display: flex; flex-direction: column; gap: var(--eai-space-4); }
+    .kit-track { position: relative; height: var(--eai-space-8); background: var(--eai-surface); border: 1px solid var(--eai-border); border-radius: var(--eai-radius-full); }
+    .kit-track i { position: absolute; top: var(--eai-space-1); left: var(--eai-space-1); width: var(--eai-space-6); height: var(--eai-space-6); border-radius: var(--eai-radius-full); background: var(--eai-navy);
+      transition: left calc(var(--eai-dur-slow) * 3) var(--ease); }
+    .kit-motion.is-on .kit-track i { left: calc(100% - var(--eai-space-6) - var(--eai-space-1)); }
+    .kit-track-label { display: flex; justify-content: space-between; margin-bottom: var(--eai-space-1); font-size: var(--eai-text-xs); color: var(--eai-text-muted); }
+    .kit-track-label code { font-family: var(--eai-font-mono); }
+
+    .kit-table { width: 100%; border-collapse: collapse; font-size: var(--eai-text-sm); }
+    .kit-table th, .kit-table td { padding: var(--eai-space-2) var(--eai-space-3); text-align: left; border-bottom: 1px solid var(--eai-border); }
+    .kit-table th { font-weight: var(--eai-weight-medium); color: var(--eai-text-muted); }
+    .kit-table code { font: var(--eai-text-xs)/1.4 var(--eai-font-mono); }
+    .kit-dur { display: block; height: var(--eai-space-2); background: var(--eai-navy); border-radius: var(--eai-radius-full); }
+    @media (max-width: 720px) { .kit-spec { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<main class="kit">
+
+  <header>
+    <div class="eai-eyebrow">agent/visual/motion/</div>
+    <h1 class="kit-title">Motion</h1>
+    <p class="kit-lede">
+      The full motion system. <code>motion.json</code> is the spec; <code>motion.css</code> is the same values as
+      CSS variables and keyframes. Six curves are in use across the prototypes today, and the kit collapses them to
+      three, plus shake for errors.
+    </p>
+  </header>
+
+  <section class="kit-spec">
+    <div class="kit-spec__name"><b>Easing</b><code>--eai-ease-*</code><span class="kit-tag">DECIDE #10</span></div>
+    <div>
+      <div class="kit-motion" id="motion">
+        <div><div class="kit-track-label"><span><b>enter</b>: things appearing</span><code>0.22, 1, 0.36, 1</code></div><div class="kit-track"><i style="--ease: var(--eai-ease-enter)"></i></div></div>
+        <div><div class="kit-track-label"><span><b>move</b>: things changing place</span><code>0.32, 0.72, 0, 1</code></div><div class="kit-track"><i style="--ease: var(--eai-ease-move)"></i></div></div>
+        <div><div class="kit-track-label"><span><b>spring</b>: success moments only</span><code>0.34, 1.56, 0.64, 1</code></div><div class="kit-track"><i style="--ease: var(--eai-ease-spring)"></i></div></div>
+      </div>
+      <p style="display: flex; gap: var(--eai-space-3); align-items: center; margin: var(--eai-space-4) 0 0">
+        <button class="eai-btn eai-btn--secondary" id="motion-play">Play</button>
+        <span class="kit-note">Slowed 3× so the curve is visible.</span>
+      </p>
+    </div>
+  </section>
+
+  <section class="kit-spec">
+    <div class="kit-spec__name"><b>Shake</b><code>.eai-shake</code></div>
+    <div style="display: flex; gap: var(--eai-space-3); max-width: 32rem">
+      <input class="eai-input" id="shake-input" placeholder="Work email">
+      <button class="eai-btn eai-btn--secondary" id="shake-btn">Invalid</button>
+    </div>
+  </section>
+
+  <section class="kit-spec">
+    <div class="kit-spec__name"><b>Duration</b><code>--eai-dur-*</code></div>
+    <table class="kit-table">
+      <thead><tr><th>Token</th><th>Value</th><th>Use</th><th style="width: 30%"></th></tr></thead>
+      <tbody>
+        <tr><td><code>--eai-dur-fast</code></td><td>120ms</td><td>Hover and press (proposed)</td><td><span class="kit-dur" style="width: 40%"></span></td></tr>
+        <tr><td><code>--eai-dur-base</code></td><td>200ms</td><td>Most transitions</td><td><span class="kit-dur" style="width: 66%"></span></td></tr>
+        <tr><td><code>--eai-dur-slow</code></td><td>300ms</td><td>Drawers and full panels</td><td><span class="kit-dur" style="width: 100%"></span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="kit-spec">
+    <div class="kit-spec__name"><b>Reduced motion</b><code>prefers-reduced-motion</code></div>
+    <p style="margin: 0">Every movement becomes a 120ms fade. It's built into <code>motion.css</code>, so nothing needs doing per component.</p>
+  </section>
+
+  <section class="kit-spec">
+    <div class="kit-spec__name"><b>transitions.dev</b><code>transitions-dev.md</code></div>
+    <div>
+      <p style="margin: 0 0 var(--eai-space-3)">An agent skill with 32 ready-made UI transitions and commands that audit the motion already in a codebase. Already installed in this repo at <code>.agents/skills/transitions-dev/</code>, and used by the workspace prototype. Its duration scale disagrees with ours — part of Decision #10.</p>
+      <p style="margin: 0; display: flex; gap: var(--eai-space-3); align-items: center; flex-wrap: wrap">
+        <code style="padding: var(--eai-space-1) var(--eai-space-2); font: var(--eai-text-xs)/1.6 var(--eai-font-mono); background: var(--eai-surface); border: 1px solid var(--eai-border); border-radius: var(--eai-radius-sm)">.agents/skills/transitions-dev/</code>
+        <a href="https://transitions.dev/skill.html" target="_blank" rel="noopener" style="color: var(--eai-navy); font-size: var(--eai-text-sm)">transitions.dev/skill.html &nearr;</a>
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  document.getElementById('motion-play').addEventListener('click', () => {
+    document.getElementById('motion').classList.toggle('is-on');
+  });
+  const input = document.getElementById('shake-input');
+  document.getElementById('shake-btn').addEventListener('click', () => {
+    input.classList.remove('eai-shake');
+    void input.offsetWidth; // restart the animation
+    input.classList.add('eai-shake');
+  });
+</script>
+</body>
+</html>

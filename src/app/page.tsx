@@ -76,11 +76,10 @@ const MAIN_PROJECTS: ProjectCard[] = [
     id: 'html-brand-website',
     number: '02',
     title: 'A Website Built from an HTML Brand',
-    description: 'Built with the Little Plains approach, then structured and styled page by page so it all looks consistent.',
+    description: 'One tagline, ten wild variations, the brand as files an agent reads, and two rounds of testing the message.',
     category: 'Brand & Web',
     href: '/projects/html-brand-website',
     icon: 'sparkle',
-    comingSoon: true,
   },
   {
     id: 'configurator',
