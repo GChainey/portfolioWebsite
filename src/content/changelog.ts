@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.47.0',
+    date: '2026-10-16',
+    title: 'Replay vs video: big by default, sizes up front, examples on scroll',
+    description: 'The comparison opens on one large window at a time, where the difference shows most, leads with the file sizes, and lays the four examples down the page.',
+    changes: [
+      'One at a time is the default view, sized to fill the screen; scrubber and side by side are still there',
+      'Each example leads with how many times smaller the replay is, and the two sizes as bars to the same scale',
+      'Video or replay, and its size, in the window\'s title bar instead of over the app',
+      'The examples follow each other down the page, and each loads only as it scrolls near',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.46.0',
     date: '2026-10-16',
     title: 'Replay vs video: three views, four examples',
