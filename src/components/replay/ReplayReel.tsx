@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { REPLAY_CSS } from './replayStyles'
+import { Subtitle, type Note } from './Subtitle'
 
 // A sizzle reel made of replays instead of video: scenes cut one after another, each a stretch
 // of a recording (or a crop of one), on a dotted canvas. Everything on screen is drawn by the
@@ -24,7 +25,7 @@ export interface ReelScene {
   title: string
   // What is happening, as a subtitle. Several lines take turns: each starts `at` seconds into
   // the scene.
-  notes?: { at: number; text: string }[]
+  notes?: Note[]
   // A camera: at `at` seconds into the scene, ease the view to `region` (in recording pixels,
   // inside the scene's region), and optionally swipe a highlighter over `mark` once it arrives. The card keeps the
   // shape of the scene's region; only what is inside it zooms.
@@ -132,8 +133,8 @@ function SceneMedia({ scene, playing }: { scene: ReelScene; playing: boolean }) 
   )
 }
 
-// The subtitle: the scene's lines in turn, each fading in over the last
-function Notes({ notes, shown }: { notes: NonNullable<ReelScene['notes']>; shown: boolean }) {
+// The subtitle: the scene's lines in turn, on timers from when the scene comes up
+function Notes({ notes, shown }: { notes: Note[]; shown: boolean }) {
   const [line, setLine] = useState(0)
   useEffect(() => {
     if (!shown) return
@@ -144,17 +145,7 @@ function Notes({ notes, shown }: { notes: NonNullable<ReelScene['notes']>; shown
 
   return (
     <div className="absolute inset-x-0 flex justify-center" style={{ top: 878 }}>
-      <div className="relative grid rounded-full bg-white px-9 py-4 shadow-[0_0_0_1px_rgba(9,9,11,.08),0_12px_32px_-12px_rgba(9,9,11,.22)]" style={rise(shown, 0.5)}>
-        {notes.map((n, i) => (
-          <div
-            key={i}
-            className="col-start-1 row-start-1 whitespace-nowrap text-center text-[30px] tracking-[-0.015em] text-zinc-700"
-            style={{ opacity: i === line ? 1 : 0, transform: `translateY(${i === line ? 0 : i < line ? -10 : 10}px)`, transition: 'opacity 400ms ease, transform 500ms cubic-bezier(.2,.8,.2,1)' }}
-          >
-            {n.text}
-          </div>
-        ))}
-      </div>
+      <Subtitle notes={notes} line={line} className="px-9 py-4 text-[30px]" style={rise(shown, 0.5)} />
     </div>
   )
 }

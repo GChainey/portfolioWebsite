@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.44.0',
+    date: '2026-10-16',
+    title: 'Narrated app recordings',
+    description: 'The RFP case study\'s app recordings carry the same narration as the hero reel: a line under each clip that says what is happening, timed to the recording.',
+    changes: [
+      'Subtitles on recording replays, following the replay\'s own clock, under the window so they never cover the app',
+      'All seven RFP recordings narrated, timed to their clicks and screen changes',
+      'Narrated clips hold on their last frame for a beat before they loop, so the last line can be read',
+      'One subtitle component shared by the reel and the case study clips',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.43.1',
     date: '2026-10-16',
     title: 'Daisy clips with the sidebar collapsed',
