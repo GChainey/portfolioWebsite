@@ -1596,14 +1596,44 @@ export const projects: Project[] = [
     category: 'Enterprise AI',
     year: '2025',
     heroImage: '/case-studies/rfp/sizzle-poster.jpg', // a still for cards elsewhere; the page plays the reel
+    // Titles say what each feature does in plain words; the notes narrate the clip, timed to it
     heroReel: [
-      { src: '/replays/rfp/overview.json', from: 0.4, to: 3.6, kicker: 'Daisy Assess, built for a state tender', title: 'A working product, not mock-ups' },
-      { src: '/replays/rfp/spot-rewrite.json', region: { x: 802, y: 117, width: 555, height: 336 }, from: 1.4, to: 16, rate: 1.75, live: true, kicker: 'Live model', title: 'Rough notes in. Council wording out.' },
-      { src: '/replays/rfp/spot-ask.json', region: { x: 800, y: 91, width: 558, height: 718 }, from: 0.5, to: 13.4, rate: 1.55, layout: 'side', live: true, kicker: 'Live model', title: 'Answers from the applicant\u2019s own documents' },
-      { src: '/replays/rfp/spot-rfi.json', region: { x: 216, y: 153, width: 1080, height: 644 }, from: 1, to: 10, rate: 1.45, kicker: 'Workflow', title: 'Every officer\u2019s issues, one letter' },
-      { src: '/replays/rfp/spot-scenario.json', region: { x: 44, y: 253, width: 960, height: 323 }, from: 0.9, to: 8.8, rate: 1.35, kicker: 'Seed data', title: 'Switch the case. Every screen follows.' },
-      { src: '/replays/rfp/workflow-determination.json', region: { x: 195, y: 43, width: 890, height: 714 }, from: 1.8, to: 13, rate: 1.9, layout: 'side', kicker: 'Workflow', title: 'A determination, written from the case' },
-      { layout: 'center', hold: 3.6, title: 'One designer. Claude Code.', sub: 'Days, not weeks, for each part of the tender response' },
+      {
+        // Cropped past the app's 256px sidebar, so the work fills the frame
+        src: '/replays/rfp/overview.json', region: { x: 256, y: 0, width: 1024, height: 800 }, from: 0.4, to: 7, rate: 1.1,
+        title: 'A working product, not mock-ups',
+        notes: [{ at: 0, text: 'Software councils use to assess building applications' }, { at: 4.3, text: 'Built for a state tender, and clickable end to end' }],
+      },
+      {
+        src: '/replays/rfp/spot-rewrite.json', region: { x: 802, y: 117, width: 555, height: 336 }, from: 2.2, to: 16, rate: 1.75,
+        title: 'Rough notes become a finished report',
+        notes: [{ at: 0, text: 'An officer jots down rough notes' }, { at: 4.4, text: 'Rewrite puts them in the council\u2019s report style' }],
+      },
+      {
+        src: '/replays/rfp/spot-ask.json', region: { x: 800, y: 91, width: 558, height: 718 }, from: 0.5, to: 13.4, rate: 1.55,
+        title: 'Ask the application a question',
+        notes: [{ at: 0, text: 'Ask anything about the application' }, { at: 3, text: 'Answers come from the applicant\u2019s own documents' }],
+      },
+      {
+        src: '/replays/rfp/spot-rfi.json', region: { x: 216, y: 153, width: 1080, height: 644 }, from: 1, to: 10, rate: 1.45,
+        title: 'Every reviewer\u2019s questions, in one letter',
+        notes: [{ at: 0, text: 'Issues flagged by different officers' }, { at: 3, text: 'Tick them in or out, and the letter follows' }],
+      },
+      {
+        src: '/replays/rfp/spot-scenario.json', region: { x: 44, y: 253, width: 960, height: 323 }, from: 0.9, to: 8.8, rate: 1.35,
+        title: 'Switch the application. Every screen follows.',
+        notes: [{ at: 0, text: 'Three cases from one set of data' }, { at: 2.8, text: 'Names, numbers and dates change on every screen' }],
+      },
+      {
+        src: '/replays/rfp/workflow-determination.json', region: { x: 195, y: 43, width: 890, height: 714 }, from: 1.8, to: 13, rate: 1.9,
+        title: 'The approval letter, drafted from the assessment',
+        notes: [{ at: 0, text: 'The council\u2019s decision on the application' }, { at: 2.8, text: 'Written from the work already done on the case' }],
+      },
+      {
+        hold: 5.5,
+        title: 'A designer\u2019s judgement, built for real',
+        sub: 'Three of us answered a state tender with a working product, against vendors with whole teams.',
+      },
     ],
     tags: ['AI', 'Enterprise', 'Prototyping', 'Claude Code', 'RFP'],
     content: [
