@@ -9,7 +9,6 @@ export interface MediaBlock {
   aspectRatio?: string // e.g., '16/9', '4/3', '1/1'
   frame?: 'phone' | 'device' | 'spotlight' // phone: a portrait screen recording, shown as a phone on the backdrop. device: a still of a device on a transparent background, which needs no window. spotlight: one component cropped out of the app, floated on the backdrop with no window
   crop?: 'browser-window' // The recording has its own window and backdrop baked in: crop to the app (see ClipFrame)
-  url?: string // For a cropped clip: the address shown in the browser bar the site draws around it
   live?: string // A live copy of what the clip shows: a button under it opens the page in a dialog to use
   pending?: boolean // Not made yet: a labelled slot on the dev server, nothing on the live site. Remove once the file is in.
   brief?: string // For a pending slot: what the clip should show
@@ -95,6 +94,9 @@ export interface Project {
     followUpQuestions: string[]
   }
 }
+
+// Daisy's 256px sidebar, trimmed off full-app clips: it isn't what they are about
+const DAISY_NO_SIDEBAR = { x: 256, y: 0, width: 1024, height: 800 }
 
 export const projects: Project[] = [
   // --- Products I've built ---
@@ -1615,6 +1617,11 @@ export const projects: Project[] = [
         notes: [{ at: 0, text: 'Ask anything about the application' }, { at: 3, text: 'Answers come from the applicant\u2019s own documents' }],
       },
       {
+        src: '/replays/rfp/spot-suggest.json', region: { x: 201, y: 51, width: 1038, height: 798 }, from: 1.6, to: 14.2, rate: 1.45,
+        title: 'Suggestions from the application, applied in one click',
+        notes: [{ at: 0, text: 'Suggestions drawn from what the application says' }, { at: 2.9, text: 'One click puts each one into the assessment' }],
+      },
+      {
         src: '/replays/rfp/spot-rfi.json', region: { x: 216, y: 153, width: 1080, height: 644 }, from: 1, to: 10, rate: 1.45,
         title: 'Every reviewer\u2019s questions, in one letter',
         notes: [{ at: 0, text: 'Issues flagged by different officers' }, { at: 3, text: 'Tick them in or out, and the letter follows' }],
@@ -1623,6 +1630,11 @@ export const projects: Project[] = [
         src: '/replays/rfp/spot-scenario.json', region: { x: 44, y: 253, width: 960, height: 323 }, from: 0.9, to: 8.8, rate: 1.35,
         title: 'Switch the application. Every screen follows.',
         notes: [{ at: 0, text: 'Three cases from one set of data' }, { at: 2.8, text: 'Names, numbers and dates change on every screen' }],
+      },
+      {
+        src: '/replays/rfp/spot-warsaw.json', region: { x: 171, y: 51, width: 1098, height: 798 }, from: 0.4, to: 9, rate: 1.1,
+        title: 'Set up for Warsaw, down to the law it cites',
+        notes: [{ at: 0, text: 'A second opportunity: the same product in Polish' }, { at: 3.4, text: 'Warsaw addresses, plot numbers and planning law' }],
       },
       {
         src: '/replays/rfp/workflow-determination.json', region: { x: 195, y: 43, width: 890, height: 714 }, from: 1.8, to: 13, rate: 1.9,
@@ -1666,7 +1678,7 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/rfp/overview.json', url: 'enterpriseai.com/daisy-assess' },
+        props: { src: '/replays/rfp/overview.json', crop: DAISY_NO_SIDEBAR },
         caption: 'The working prototype we answered with',
       },
 
@@ -1688,7 +1700,7 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/rfp/seed-data.json', url: 'enterpriseai.com/daisy-assess' },
+        props: { src: '/replays/rfp/seed-data.json', crop: DAISY_NO_SIDEBAR },
         caption: 'In the app: the assessment and the letter follow whichever case is open',
       },
       {
@@ -1711,7 +1723,7 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/rfp/llm-chat.json', url: 'enterpriseai.com/daisy-assess' },
+        props: { src: '/replays/rfp/llm-chat.json', crop: DAISY_NO_SIDEBAR },
         caption: 'In the app: the assistant sits beside the assessment form, and edits the field you are on',
       },
       {
@@ -1725,7 +1737,6 @@ export const projects: Project[] = [
         type: 'video',
         src: '/case-studies/rfp/scale.mp4',
         aspectRatio: '16/10',
-        url: 'enterpriseai.com/daisy-assess',
         alt: 'One council, then the whole state',
         caption: 'The same product restructured for a state',
         brief: 'Start on a single council, switch to the state view, and show regions, roles and reporting rolling up.',
@@ -1742,7 +1753,6 @@ export const projects: Project[] = [
         type: 'video',
         src: '/case-studies/rfp/iteration.mp4',
         aspectRatio: '16/10',
-        url: 'enterpriseai.com/daisy-assess',
         alt: 'A requirement lands, the prototype changes',
         caption: 'A requirement change, across the whole prototype',
         brief: 'Describe a new field to Claude Code, then cut to it on the form, in the list and in the report.',
@@ -1764,13 +1774,13 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/rfp/workflow-rfi.json', url: 'enterpriseai.com/daisy-assess' },
+        props: { src: '/replays/rfp/workflow-rfi.json', crop: DAISY_NO_SIDEBAR },
         caption: 'In the app: one path ends in a request for information, compiled from every issue flagged along the way',
       },
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/rfp/workflow-determination.json', url: 'enterpriseai.com/daisy-assess' },
+        props: { src: '/replays/rfp/workflow-determination.json', crop: DAISY_NO_SIDEBAR },
         caption: 'Another ends in a determination letter, written to the council\'s standard from the work already done',
       },
       {
@@ -1793,7 +1803,6 @@ export const projects: Project[] = [
         ],
         after: [
           'One designer with Claude Code',
-          'A product manager for direction',
           'The founder for RFP expertise',
           'Days instead of weeks for a major feature',
           'A prototype stakeholders can use, changed the same day',
@@ -2066,7 +2075,7 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/configurator/overview.json', url: 'enterpriseai.com/configurator' },
+        props: { src: '/replays/configurator/overview.json' },
         caption: 'A description of today\'s process becomes a four-step app, on live models',
       },
       { type: 'heading', level: 2, content: 'The short version' },
@@ -2091,7 +2100,7 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/configurator/process-card.json', url: 'enterpriseai.com/configurator' },
+        props: { src: '/replays/configurator/process-card.json' },
         caption: 'A messy description in. Goal, who and outcome back, from a live model',
       },
       {
@@ -2104,7 +2113,7 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/configurator/four-steps.json', url: 'enterpriseai.com/configurator' },
+        props: { src: '/replays/configurator/four-steps.json' },
         caption: 'Seven steps today, mapped onto four',
       },
       {
@@ -2117,7 +2126,7 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/configurator/models.json', url: 'enterpriseai.com/configurator' },
+        props: { src: '/replays/configurator/models.json' },
         caption: 'The first version: a flag swaps the model behind every call',
       },
       {
@@ -2130,13 +2139,13 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/configurator/show-prompt.json', url: 'enterpriseai.com/configurator' },
+        props: { src: '/replays/configurator/show-prompt.json' },
         caption: 'Show prompt: read the request, change it, run it again',
       },
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/configurator/real-data.json', url: 'enterpriseai.com/configurator' },
+        props: { src: '/replays/configurator/real-data.json' },
         caption: 'The first version had it too: real output, and the prompt behind it',
       },
       {
@@ -2149,7 +2158,7 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/configurator/edit.json', url: 'enterpriseai.com/configurator' },
+        props: { src: '/replays/configurator/edit.json' },
         caption: 'Ask for a change. The settings change, and the app follows',
       },
       {
@@ -2162,7 +2171,7 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/configurator/brand.json', url: 'enterpriseai.com/configurator' },
+        props: { src: '/replays/configurator/brand.json' },
         caption: 'One app, three clients. Each in its own logo, colours and tone of voice',
       },
       {
@@ -2175,7 +2184,7 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/configurator/qr.json', url: 'enterpriseai.com/configurator' },
+        props: { src: '/replays/configurator/qr.json' },
         caption: 'A private link and a QR code, straight from the builder',
       },
       {
@@ -2189,7 +2198,7 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/configurator/jev-match.json', url: 'enterpriseai.com/configurator' },
+        props: { src: '/replays/configurator/jev-match.json' },
         caption: 'Jev picks from 20 templates and says how sure it is',
       },
       {

@@ -12,6 +12,7 @@ interface FeatureFlags {
   signatureVariant: SignatureVariant
   signatureSize: number
   warmth: boolean
+  colourLights: boolean
 }
 
 interface FeatureFlagContextType {
@@ -29,6 +30,7 @@ const defaultFlags: FeatureFlags = {
   signatureVariant: 'off',
   signatureSize: 36,
   warmth: false,
+  colourLights: false,
 }
 
 const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(undefined)
@@ -36,6 +38,7 @@ const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(und
 export function FeatureFlagProvider({ children }: { children: ReactNode }) {
   const [flags, setFlags] = useState<FeatureFlags>(defaultFlags)
   const [isDrawerOpen, setDrawerOpen] = useState(false)
+  const [loaded, setLoaded] = useState(false)
 
   // Load flags from localStorage on mount
   useEffect(() => {
@@ -47,12 +50,19 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
         // ignore parse errors
       }
     }
+    setLoaded(true)
   }, [])
 
-  // Save flags to localStorage when they change
+  // Save flags to localStorage when they change, once the stored ones are in (saving before that
+  // would write the defaults over them)
   useEffect(() => {
-    localStorage.setItem('featureFlags', JSON.stringify(flags))
-  }, [flags])
+    if (loaded) localStorage.setItem('featureFlags', JSON.stringify(flags))
+  }, [flags, loaded])
+
+  // Window buttons in colour, styled in globals.css
+  useEffect(() => {
+    document.documentElement.classList.toggle('colour-lights', flags.colourLights)
+  }, [flags.colourLights])
 
   // Listen for Cmd+K
   useEffect(() => {

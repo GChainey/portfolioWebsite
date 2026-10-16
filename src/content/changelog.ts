@@ -14,6 +14,21 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.42.0',
+    date: '2026-10-16',
+    title: 'RFP: suggestions and Warsaw in the reel, cleaner app windows',
+    description: 'Two new scenes in the RFP hero reel, the full-app clips trimmed to the work, and the windows around clips without a made-up address.',
+    changes: [
+      'Reel: suggestions drawn from the application, each applied to the assessment in one click',
+      'Reel: the same product set up for a Warsaw opportunity, in Polish, with Warsaw addresses, plot numbers and the Polish planning law it cites',
+      'Full-app Daisy clips have the sidebar trimmed off, so the work fills the window',
+      'No address bar on clip windows: just the window buttons. Red, amber and green buttons are behind a flag (Cmd+K, "Colour window buttons")',
+      'Feature flags now survive a reload on the dev server (the defaults were being saved over them)',
+      'The before-and-after list no longer has a product manager "for direction"',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.41.0',
     date: '2026-10-16',
     title: 'RFP hero reel: bigger, plainer, and narrated',

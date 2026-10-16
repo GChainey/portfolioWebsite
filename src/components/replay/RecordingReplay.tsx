@@ -16,15 +16,16 @@ type Region = { x: number; y: number; width: number; height: number }
 
 interface RecordingReplayProps {
   src: string // /replays/... JSON from the recorder
-  url?: string // the address in the browser bar
   // Spotlight: show only this part of the screen, as a card on the backdrop, with no window
   region?: Region
+  // Show only this part of the screen, still in the window (e.g. trimming an app's sidebar)
+  crop?: Region
   aspectRatio?: string
 }
 
 type Recording = { meta: { width: number; height: number; duration: number; mouse?: boolean }; events: unknown[] }
 
-export function RecordingReplay({ src, url, region, aspectRatio }: RecordingReplayProps) {
+export function RecordingReplay({ src, region, crop, aspectRatio }: RecordingReplayProps) {
   const box = useRef<HTMLDivElement>(null)
   const root = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState({ width: 1280, height: 800 })
@@ -33,7 +34,7 @@ export function RecordingReplay({ src, url, region, aspectRatio }: RecordingRepl
   const player = useRef<{ play: (t?: number) => void; pause: (t?: number) => void; destroy: () => void } | null>(null)
   const visible = useRef(false)
 
-  const view = region ?? { x: 0, y: 0, width: size.width, height: size.height }
+  const view = region ?? crop ?? { x: 0, y: 0, width: size.width, height: size.height }
 
   // Fit the recording (or its region) to the box
   useEffect(() => {
@@ -84,7 +85,7 @@ export function RecordingReplay({ src, url, region, aspectRatio }: RecordingRepl
 
   const stage = (
     <div ref={box} className="relative w-full overflow-hidden bg-white" style={{ aspectRatio: aspectRatio ?? `${view.width} / ${view.height}` }}>
-      <style>{REPLAY_CSS}</style>
+      <style dangerouslySetInnerHTML={{ __html: REPLAY_CSS }} />
       <div
         ref={root}
         className={`rr-stage ${mouse ? 'rr-mouse' : ''} absolute left-0 top-0 origin-top-left`}
@@ -100,7 +101,7 @@ export function RecordingReplay({ src, url, region, aspectRatio }: RecordingRepl
           <div className="w-full overflow-hidden rounded-xl shadow-2xl ring-1 ring-black/10">{stage}</div>
         </Backdrop>
       ) : (
-        <MediaFrame bar url={url}>{stage}</MediaFrame>
+        <MediaFrame bar>{stage}</MediaFrame>
       )}
     </figure>
   )
