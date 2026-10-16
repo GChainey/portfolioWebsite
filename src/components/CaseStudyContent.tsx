@@ -12,6 +12,7 @@ import { ImageGrid } from '@/components/ImageGrid'
 import { RewriteReplay } from '@/components/replay/RewriteReplay'
 import { AskReplay } from '@/components/replay/AskReplay'
 import { RecordingReplay } from '@/components/replay/RecordingReplay'
+import { ReplayVsVideo } from '@/components/replay/ReplayVsVideo'
 import { FrameStripReplay } from '@/components/replay/FrameStripReplay'
 import { FramedMedia, clipGeometry } from '@/components/ClipFrame'
 import { FrameDialog } from '@/components/FrameDialog'
@@ -28,6 +29,7 @@ export const componentRegistry: Record<string, React.ComponentType<any>> = {
   'ask-replay': AskReplay,
   'recording-replay': RecordingReplay,
   'frame-strip': FrameStripReplay,
+  'replay-vs-video': ReplayVsVideo,
 }
 
 interface CaseStudyContentProps {

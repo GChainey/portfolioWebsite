@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.45.0',
+    date: '2026-10-16',
+    title: 'Replay vs video, side by side',
+    description: 'A page comparing the same screen recording as a replay and as video, for a post about why the site\'s recordings are replays.',
+    changes: [
+      'The determination letter clip both ways: the video is rendered from the replay frame by frame at 2x and encoded the way the site encoded its videos, so it is the same take and a good encode',
+      'Zoom to 2x, 4x or 8x at the spot under the cursor, in both at once; pause freezes both on the same frame',
+      'Sizes: the video file, and what the visitor\'s own browser downloaded for the replay (157x smaller)',
+      'At /replay-vs-video, unlisted, and embeddable in a post as the replay-vs-video component',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.44.0',
     date: '2026-10-16',
     title: 'Narrated app recordings',
