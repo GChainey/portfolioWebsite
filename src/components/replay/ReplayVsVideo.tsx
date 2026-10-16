@@ -9,20 +9,20 @@ import { Backdrop } from '@/components/ClipFrame'
 // encoded the way the site encoded its videos (60fps, x264 CRF 16, graded for Mac browsers), so the
 // two are the same take, frame for frame, and the video is a good encode, not a straw man.
 //
-// Three ways to look: a scrubber (one frame, video left of the divider, replay right), side by
-// side, or one at a time, large or full screen. Zoom magnifies both at the spot under the cursor
+// Three ways to look: one at a time (the default: large, or full screen, where the difference
+// shows most), a scrubber (one frame, video left of the divider, replay right), or side by side. Zoom magnifies both at the spot under the cursor
 // and pause freezes both on the same frame. One example runs a camera, the reel's zoom and
 // highlighter, over both. The sizes are the video file and what this browser downloaded for the
 // replay.
 
 type Region = { x: number; y: number; width: number; height: number }
 type Shot = { at: number; region?: Region; mark?: Region } // recording seconds; no region: the whole view
-type Example = { id: string; name: string; replay: string; video: string; width: number; height: number; region?: Region; camera?: Shot[] }
+type Example = { id: string; name: string; note: string; replay: string; video: string; width: number; height: number; region?: Region; camera?: Shot[] }
 
 const EXAMPLES: Example[] = [
-  { id: 'letter', name: 'A letter', replay: '/replays/compare/determination.json', video: '/replays/compare/determination.mp4', width: 1280, height: 800 },
+  { id: 'letter', name: 'A letter', note: 'Text, scrolling: the screen changes all the time, and video pays for every frame of it.', replay: '/replays/compare/determination.json', video: '/replays/compare/determination.mp4', width: 1280, height: 800 },
   {
-    id: 'camera', name: 'Zoom and highlight', replay: '/replays/compare/rfi.json', video: '/replays/compare/rfi.mp4', width: 1440, height: 900,
+    id: 'camera', name: 'Zoom and highlight', note: 'The camera moves in on the issue being ticked, then on the line it adds to the letter. Watch the video blur as it gets close.', replay: '/replays/compare/rfi.json', video: '/replays/compare/rfi.mp4', width: 1440, height: 900,
     region: { x: 216, y: 153, width: 1080, height: 644 },
     camera: [
       { at: 0 },
@@ -31,14 +31,14 @@ const EXAMPLES: Example[] = [
       { at: 13.4 },
     ],
   },
-  { id: 'chat', name: 'AI chat', replay: '/replays/compare/chat.json', video: '/replays/compare/chat.mp4', width: 1280, height: 800 },
-  { id: 'configurator', name: 'A busy screen', replay: '/replays/compare/configurator.json', video: '/replays/compare/configurator.mp4', width: 1600, height: 1000 },
+  { id: 'chat', name: 'AI chat', note: 'Typing, and a live model\u2019s answer. Mostly still, so the video stays small, and the replay is smaller still.', replay: '/replays/compare/chat.json', video: '/replays/compare/chat.mp4', width: 1280, height: 800 },
+  { id: 'configurator', name: 'A busy screen', note: 'A two-panel app with a lot on screen at once.', replay: '/replays/compare/configurator.json', video: '/replays/compare/configurator.mp4', width: 1600, height: 1000 },
 ]
 const ZOOMS = [1, 2, 4, 8]
 const MODES = [
+  { id: 'single', label: 'One at a time' },
   { id: 'scrub', label: 'Scrubber' },
   { id: 'side', label: 'Side by side' },
-  { id: 'single', label: 'One at a time' },
 ] as const
 type Mode = (typeof MODES)[number]['id']
 type Kind = 'video' | 'replay'
@@ -76,11 +76,13 @@ function Segments<T extends string | number>({ items, value, onChange, label }: 
 }
 
 // A window, as the site draws them, around one or both layers
-function Window({ aspect, children, style, onMouseMove, frameRef }: { aspect: string; children: ReactNode; style?: CSSProperties; onMouseMove?: (e: React.MouseEvent<HTMLDivElement>) => void; frameRef?: React.Ref<HTMLDivElement> }) {
+// `bar` labels the title bar: what is showing, and its size
+function Window({ aspect, bar, children, style, onMouseMove, frameRef }: { aspect: string; bar?: ReactNode; children: ReactNode; style?: CSSProperties; onMouseMove?: (e: React.MouseEvent<HTMLDivElement>) => void; frameRef?: React.Ref<HTMLDivElement> }) {
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow-2xl ring-1 ring-black/10" style={style}>
-      <div className="flex h-7 items-center gap-1.5 border-b border-[#e4e4e7] bg-[#f4f4f5] px-3" aria-hidden>
-        {[0, 1, 2].map((dot) => <span key={dot} className="window-light h-2 w-2 rounded-full" />)}
+      <div className="relative flex h-8 items-center gap-1.5 border-b border-[#e4e4e7] bg-[#f4f4f5] px-3">
+        {[0, 1, 2].map((dot) => <span key={dot} className="window-light h-2.5 w-2.5 rounded-full" aria-hidden />)}
+        {bar && <div className="absolute inset-x-16 flex items-center justify-center gap-2 text-xs text-zinc-600">{bar}</div>}
       </div>
       <div ref={frameRef} className="relative w-full select-none overflow-hidden bg-white" style={{ aspectRatio: aspect }} onMouseMove={onMouseMove}>
         {children}
@@ -89,9 +91,50 @@ function Window({ aspect, children, style, onMouseMove, frameRef }: { aspect: st
   )
 }
 
-export function ReplayVsVideo() {
-  const [example, setExample] = useState(EXAMPLES[0])
-  const [mode, setMode] = useState<Mode>('scrub')
+// Every example, one after another down the page; or one, by id, for a post to embed
+export function ReplayVsVideo({ example }: { example?: string }) {
+  const one = EXAMPLES.find((e) => e.id === example)
+  if (one) return <Comparison example={one} />
+  return (
+    <div>
+      {EXAMPLES.map((e) => (
+        <section key={e.id} className="border-t border-border pb-8 pt-14">
+          <h2 className="text-3xl font-medium text-foreground">{e.name}</h2>
+          <p className="mt-2 max-w-2xl text-lg text-muted">{e.note}</p>
+          <Comparison example={e} />
+        </section>
+      ))}
+    </div>
+  )
+}
+
+// How much each one downloads, as bars to the same scale
+function Sizes({ video, replay }: { video: number | null; replay: number | null }) {
+  const ratio = video && replay ? Math.round(video / replay) : null
+  const bar = (n: number | null) => (video && n ? `max(3px, ${(n / video) * 100}%)` : '0')
+  return (
+    <div className="mb-6 grid items-center gap-x-10 gap-y-4 sm:grid-cols-[auto_1fr]">
+      <div>
+        <div className="text-6xl font-semibold leading-none tracking-[-0.04em] text-foreground tabular-nums">{ratio ? `${ratio}×` : '…'}</div>
+        <div className="mt-2 text-sm text-muted">smaller as a replay</div>
+      </div>
+      <div className="space-y-3">
+        {([['Video', video, 'color-mix(in srgb, var(--foreground) 28%, transparent)'], ['Replay', replay, 'var(--accent)']] as const).map(([label, n, tone]) => (
+          <div key={label} className="grid grid-cols-[4.5rem_1fr_5rem] items-center gap-3 text-sm">
+            <span className="text-muted">{label}</span>
+            <div className="h-3 overflow-hidden rounded-full bg-border/40">
+              <div className="h-full rounded-full transition-[width] duration-700" style={{ width: bar(n), background: tone }} />
+            </div>
+            <span className="text-right text-lg font-medium tabular-nums text-foreground">{size(n)}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function Comparison({ example }: { example: Example }) {
+  const [mode, setMode] = useState<Mode>('single')
   const [show, setShow] = useState<Kind>('replay') // one at a time
   const [zoom, setZoom] = useState(1)
   const [origin, setOrigin] = useState({ x: 50, y: 50 }) // percent of the frame, where zoom points
@@ -100,6 +143,7 @@ export function ReplayVsVideo() {
   const [time, setTime] = useState(0) // seconds, for the camera
   const [bytes, setBytes] = useState<{ video: number | null; replay: number | null }>({ video: null, replay: null })
   const [full, setFull] = useState(false)
+  const [near, setNear] = useState(false) // nothing loads until it scrolls near
 
   const figure = useRef<HTMLElement>(null)
   const video = useRef<HTMLVideoElement | null>(null)
@@ -132,24 +176,26 @@ export function ReplayVsVideo() {
     if (!el) return
     const io = new IntersectionObserver(([e]) => {
       visible.current = e.isIntersecting
+      if (e.isIntersecting) setNear(true)
       const v = video.current
       if (!v) return
       if (e.isIntersecting && !clock.current.paused) v.play().catch(() => {})
       else v.pause()
       syncReplay()
-    }, { rootMargin: '100px 0px' })
+    }, { rootMargin: '300px 0px' })
     io.observe(el)
     return () => io.disconnect()
   }, [syncReplay])
 
   // Sizes: the video file, and the replay as downloaded
   useEffect(() => {
+    if (!near) return
     setBytes({ video: null, replay: null })
     let gone = false
     fetch(example.video, { method: 'HEAD' }).then((r) => { if (!gone) setBytes((b) => ({ ...b, video: Number(r.headers.get('content-length')) || null })) }).catch(() => {})
     loadReplay(example.replay).then(() => { if (!gone) setBytes((b) => ({ ...b, replay: downloaded(example.replay) })) })
     return () => { gone = true }
-  }, [example])
+  }, [example, near])
 
   useEffect(() => {
     const on = () => setFull(document.fullscreenElement === figure.current)
@@ -189,9 +235,8 @@ export function ReplayVsVideo() {
     if (v) { v.currentTime = 0; if (!clock.current.paused) v.play().catch(() => {}) }
     syncReplay()
   }, [syncReplay])
-  const pick = (id: string) => { clock.current.t = 0; setTime(0); setExample(EXAMPLES.find((e) => e.id === id)!) }
 
-  const layer = (kind: Kind, style?: CSSProperties) => (
+  const layer = (kind: Kind, style?: CSSProperties) => near && (
     <Layer
       key={`${example.id}-${kind}`}
       kind={kind} example={example} base={base} view={shot?.region} mark={shot?.mark}
@@ -199,15 +244,13 @@ export function ReplayVsVideo() {
     />
   )
 
-  const chip = 'pointer-events-none absolute top-2 z-10 rounded-full bg-white/90 px-2.5 py-0.5 text-xs font-medium text-zinc-700 shadow ring-1 ring-black/5'
-  const ratio = bytes.video && bytes.replay ? Math.round(bytes.video / bytes.replay) : null
-  const wide = full ? { width: `min(100%, calc((100vh - 9rem) * ${base.width / base.height}))`, margin: '0 auto' } : undefined
+  const label = (kind: Kind) => <><span className="font-medium text-zinc-900">{kind === 'video' ? 'Video' : 'Replay'}</span><span className="tabular-nums">{size(bytes[kind])}</span></>
+  // As big as the screen allows, leaving room for the controls (and on the page, the sizes)
+  const wide = { width: `min(100%, calc((100vh - ${full ? 9 : 13}rem) * ${base.width / base.height}))`, margin: '0 auto' }
 
   return (
-    <figure ref={figure} className={`not-prose my-8 ${full ? 'flex flex-col justify-center overflow-auto bg-background p-6' : ''}`}>
-      <div className="mb-4 flex flex-wrap items-center gap-3">
-        <Segments label="Example" items={EXAMPLES.map((e) => ({ id: e.id, label: e.name }))} value={example.id} onChange={pick} />
-      </div>
+    <figure ref={figure} className={`not-prose mt-8 ${full ? 'flex flex-col justify-center overflow-auto bg-background p-6' : ''}`}>
+      <Sizes video={bytes.video} replay={bytes.replay} />
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3">
           <Segments label="View" items={MODES.map((m) => ({ id: m.id, label: m.label }))} value={mode} onChange={setMode} />
@@ -230,32 +273,25 @@ export function ReplayVsVideo() {
           <div className="grid gap-6 md:grid-cols-2">
             {(['video', 'replay'] as Kind[]).map((kind) => (
               <div key={kind} className="min-w-0">
-                <Window aspect={aspect} onMouseMove={aim}>{layer(kind)}</Window>
-                <div className="mt-3 flex justify-between px-1 text-sm">
-                  <span className="font-medium text-foreground">{kind === 'video' ? 'Video' : 'Replay'}</span>
-                  <span className="font-medium tabular-nums text-foreground">{size(bytes[kind])}</span>
-                </div>
+                <Window aspect={aspect} bar={label(kind)} onMouseMove={aim}>{layer(kind)}</Window>
               </div>
             ))}
           </div>
         ) : mode === 'scrub' ? (
-          <Scrubber aspect={aspect} split={split} onSplit={setSplit} onMouseMove={aim} style={wide}>
+          <Scrubber aspect={aspect} bar={<>{label('video')}<span className="mx-2 text-zinc-400">← →</span>{label('replay')}</>} split={split} onSplit={setSplit} onMouseMove={aim} style={wide}>
             {layer('video')}
             {layer('replay', { clipPath: `inset(0 0 0 ${split}%)` })}
-            <span className={`${chip} left-2`}>Video</span>
-            <span className={`${chip} right-2`}>Replay</span>
           </Scrubber>
         ) : (
-          <Window aspect={aspect} onMouseMove={aim} style={wide}>
+          <Window aspect={aspect} bar={label(show)} onMouseMove={aim} style={wide}>
             {layer('video', { visibility: show === 'video' ? 'visible' : 'hidden' })}
             {layer('replay', { visibility: show === 'replay' ? 'visible' : 'hidden' })}
-            <span className={`${chip} left-2`}>{show === 'video' ? 'Video' : 'Replay'}</span>
           </Window>
         )}
       </Backdrop>
 
       <figcaption className="mt-3 text-center text-sm text-muted">
-        Video {size(bytes.video)}, replay {size(bytes.replay)}{ratio ? `: ${ratio}× smaller` : ''}. The same take: each video is made from its replay, frame for frame.
+        The same take: the video is made from the replay, frame for frame, and encoded at 2x and 60fps.
       </figcaption>
     </figure>
   )
@@ -331,8 +367,8 @@ function Layer({ kind, example, base, view, mark, zoom, origin, style, onVideo, 
 }
 
 // One frame with a divider: drag it, or use the arrow keys
-function Scrubber({ aspect, split, onSplit, onMouseMove, style, children }: {
-  aspect: string; split: number; onSplit: (v: number) => void; onMouseMove: (e: React.MouseEvent<HTMLDivElement>) => void; style?: CSSProperties; children: ReactNode
+function Scrubber({ aspect, bar, split, onSplit, onMouseMove, style, children }: {
+  aspect: string; bar?: ReactNode; split: number; onSplit: (v: number) => void; onMouseMove: (e: React.MouseEvent<HTMLDivElement>) => void; style?: CSSProperties; children: ReactNode
 }) {
   const frame = useRef<HTMLDivElement>(null)
   const drag = (e: React.PointerEvent) => {
@@ -342,7 +378,7 @@ function Scrubber({ aspect, split, onSplit, onMouseMove, style, children }: {
     onSplit(Math.min(100, Math.max(0, ((e.clientX - r.left) / r.width) * 100)))
   }
   return (
-    <Window aspect={aspect} onMouseMove={onMouseMove} style={style} frameRef={frame}>
+    <Window aspect={aspect} bar={bar} onMouseMove={onMouseMove} style={style} frameRef={frame}>
       {children}
       <div className="absolute inset-y-0 z-20 w-0" style={{ left: `${split}%` }}>
         <div className="absolute inset-y-0 -left-px w-0.5 bg-white shadow-[0_0_0_1px_rgba(0,0,0,.15)]" />

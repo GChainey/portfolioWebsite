@@ -9,13 +9,13 @@ export default function ReplayVsVideoPage() {
   return (
     <div className="min-h-screen bg-background transition-colors duration-700">
       <Header showBack />
-      <main className="mx-auto max-w-5xl px-6 pb-24 pt-14">
+      <main className="mx-auto max-w-6xl px-6 pb-24 pt-14">
         <div className="max-w-2xl py-14">
           <h1 className="mb-5 text-5xl font-medium text-foreground">Screen recordings as replays, not video</h1>
           <p className="text-xl leading-relaxed text-muted">
             The recordings on this site aren&apos;t videos. They&apos;re replays of the real page: its HTML and CSS,
-            and every change to it. Here are four of them both ways: drag the divider, zoom in, and pause to
-            compare the same frame.
+            and every change to it. Here are four of them both ways. Flip between video and replay, zoom in,
+            or go full screen, where the difference shows most.
           </p>
         </div>
 
