@@ -14,6 +14,17 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.43.1',
+    date: '2026-10-16',
+    title: 'Daisy clips with the sidebar collapsed',
+    description: 'The full-app Daisy recordings are re-recorded with the sidebar collapsed to its icon rail, instead of cropped away.',
+    changes: [
+      'Overview, seed data, chat, RFI and determination clips re-recorded with the collapsed sidebar; the reel\'s opening scene shows the whole app again',
+      'Field values the replayer used to drop (set after typing) are replayed, so the chat clip\'s editor keeps up',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.43.0',
     date: '2026-10-16',
     title: 'Reel camera: zoom to the action, highlight the result',
