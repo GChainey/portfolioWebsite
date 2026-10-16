@@ -52,8 +52,9 @@ export function Backdrop({ className = '', style, children }: { className?: stri
 }
 
 // How a product site would show it: a padded backdrop, then a window, then the picture or clip.
-// A screen recording gets a browser bar with its address; a still or an embed gets the window
-// alone. The window is always light, like the apps in it.
+// A screen recording gets a bar with the window buttons (and an address only where it is the
+// real one); a still or an embed gets the window alone. The window is always light, like the apps
+// in it. The buttons are grey, or the Mac's red, amber and green with the colour-lights flag.
 export function MediaFrame({ bar, url, children }: { bar?: boolean; url?: string; children: ReactNode }) {
   return (
     <Backdrop className="p-4 sm:p-8">
@@ -62,7 +63,7 @@ export function MediaFrame({ bar, url, children }: { bar?: boolean; url?: string
           <div className="flex items-center gap-3 h-8 sm:h-9 px-3 bg-[#f4f4f5] border-b border-[#e4e4e7]">
             <span className="flex shrink-0 gap-1.5" aria-hidden>
               {[0, 1, 2].map((dot) => (
-                <span key={dot} className="w-2.5 h-2.5 rounded-full bg-[#d4d4d8]" />
+                <span key={dot} className="window-light w-2.5 h-2.5 rounded-full" />
               ))}
             </span>
             {url && (
@@ -98,11 +99,11 @@ export function GridFrame({ children }: { children: ReactNode }) {
 }
 
 // A cropped clip in the frame, keeping the shape of its crop
-export function ClipFrame({ src, crop, url }: { src: string; crop: ClipCrop; url?: string }) {
+export function ClipFrame({ src, crop }: { src: string; crop: ClipCrop }) {
   const { aspectRatio, video } = clipGeometry(crop)
 
   return (
-    <MediaFrame bar url={url}>
+    <MediaFrame bar>
       <div className="relative w-full overflow-hidden" style={{ aspectRatio }}>
         <video src={src} autoPlay loop muted playsInline style={video} />
       </div>
@@ -116,7 +117,7 @@ export function FramedMedia({ block }: { block: MediaBlock }) {
   const fill = 'block w-full h-full object-cover'
 
   if (block.type === 'video' && block.crop) {
-    return <ClipFrame src={block.src} crop={block.crop} url={block.url} />
+    return <ClipFrame src={block.src} crop={block.crop} />
   }
 
   // A portrait screen recording: the phone stands on the backdrop, with no window around it
@@ -157,7 +158,7 @@ export function FramedMedia({ block }: { block: MediaBlock }) {
   }
 
   return (
-    <MediaFrame bar={block.type === 'video'} url={block.url}>
+    <MediaFrame bar={block.type === 'video'}>
       <div className="relative w-full" style={{ aspectRatio }}>
         {block.type === 'video' ? (
           <video src={block.src} autoPlay loop muted playsInline className={fill} />
