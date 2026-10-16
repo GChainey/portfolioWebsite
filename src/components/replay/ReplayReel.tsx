@@ -25,6 +25,10 @@ export interface ReelScene {
   // What is happening, as a subtitle. Several lines take turns: each starts `at` seconds into
   // the scene.
   notes?: { at: number; text: string }[]
+  // A camera: at `at` seconds into the scene, ease the view to `region` (in recording pixels,
+  // inside the scene's region), and optionally swipe a highlighter over `mark` once it arrives. The card keeps the
+  // shape of the scene's region; only what is inside it zooms.
+  camera?: { at: number; region: Region; mark?: Region }[]
   sub?: string // the closing scene's line under the title
 }
 
@@ -82,9 +86,23 @@ function SceneMedia({ scene, playing }: { scene: ReelScene; playing: boolean }) 
     return () => clearTimeout(stop)
   }, [playing, meta, scene])
 
+  // Where the camera is: the whole region until a camera move says otherwise
+  const [shot, setShot] = useState<{ region?: Region; mark?: Region }>({})
+  useEffect(() => {
+    setShot({})
+    if (!playing || !scene.camera) return
+    const timers = scene.camera.map((c) => setTimeout(() => setShot({ region: c.region, mark: c.mark }), c.at * 1000))
+    return () => timers.forEach(clearTimeout)
+  }, [playing, scene])
+
   const region = scene.region ?? (meta ? { x: 0, y: 0, width: meta.width, height: meta.height } : { x: 0, y: 0, width: 1280, height: 800 })
-  const k = Math.min(MEDIA.w / region.width, MEDIA.h / region.height)
-  const w = region.width * k, h = region.height * k
+  const fit = Math.min(MEDIA.w / region.width, MEDIA.h / region.height)
+  const w = region.width * fit, h = region.height * fit
+  // Fit the view into the card, centred
+  const view = shot.region ?? region
+  const k = Math.min(w / view.width, h / view.height)
+  const ox = (w - view.width * k) / 2 - view.x * k, oy = (h - view.height * k) / 2 - view.y * k
+  const move = 'cubic-bezier(.65,0,.35,1)'
   return (
     <div
       className="absolute overflow-hidden rounded-2xl bg-white"
@@ -96,8 +114,20 @@ function SceneMedia({ scene, playing }: { scene: ReelScene; playing: boolean }) 
       <div
         ref={root}
         className={`rr-stage ${meta?.mouse ? 'rr-mouse' : ''} absolute left-0 top-0 origin-top-left`}
-        style={{ width: meta?.width ?? 1280, height: meta?.height ?? 800, transform: `scale(${k}) translate(${-region.x}px, ${-region.y}px)` }}
+        style={{ width: meta?.width ?? 1280, height: meta?.height ?? 800, transform: `translate(${ox}px, ${oy}px) scale(${k})`, transition: scene.camera ? `transform 1100ms ${move}` : undefined }}
       />
+      {/* A highlighter swipe: the accent, multiplied over the text like ink, slightly uneven */}
+      {shot.mark && (
+        <i
+          key={`${shot.mark.x},${shot.mark.y}`}
+          className="pointer-events-none absolute origin-left mix-blend-multiply"
+          style={{
+            left: ox + (shot.mark.x - 3) * k, top: oy + (shot.mark.y - 1) * k, width: (shot.mark.width + 6) * k, height: (shot.mark.height + 2) * k,
+            background: 'color-mix(in srgb, var(--accent) 50%, #fff)', borderRadius: '3px 9px 4px 10px / 7px 4px 9px 5px',
+            animation: `reel-mark 550ms cubic-bezier(.3,.7,.4,1) 1150ms both`,
+          }}
+        />
+      )}
     </div>
   )
 }
@@ -175,7 +205,7 @@ export function ReplayReel({ scenes }: { scenes: ReelScene[] }) {
   const scene = scenes[index]
   return (
     <div ref={box} className="relative w-full overflow-hidden" style={{ aspectRatio: `${W} / ${H}` }}>
-      <style dangerouslySetInnerHTML={{ __html: REPLAY_CSS }} />
+      <style dangerouslySetInnerHTML={{ __html: REPLAY_CSS + '@keyframes reel-mark { from { transform: scaleX(0) rotate(-.6deg) } to { transform: scaleX(1) rotate(-.6deg) } }' }} />
       <div
         className="absolute left-0 top-0 origin-top-left font-sans text-zinc-950 antialiased"
         style={{

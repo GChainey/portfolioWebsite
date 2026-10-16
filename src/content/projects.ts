@@ -1622,9 +1622,17 @@ export const projects: Project[] = [
         notes: [{ at: 0, text: 'Suggestions drawn from what the application says' }, { at: 2.9, text: 'One click puts each one into the assessment' }],
       },
       {
-        src: '/replays/rfp/spot-rfi.json', region: { x: 216, y: 153, width: 1080, height: 644 }, from: 1, to: 10, rate: 1.45,
+        // Opens on the whole screen, follows the cursor to the issue it ticks, then cuts to the
+        // letter, where that issue is now the first condition
+        src: '/replays/rfp/spot-rfi.json', region: { x: 216, y: 153, width: 1080, height: 644 }, from: 7, to: 12.4, rate: 1,
         title: 'Every reviewer\u2019s questions, in one letter',
-        notes: [{ at: 0, text: 'Issues flagged by different officers' }, { at: 3, text: 'Tick them in or out, and the letter follows' }],
+        notes: [{ at: 0, text: 'Issues flagged by different officers' }, { at: 1.8, text: 'Tick one in' }, { at: 4, text: 'and it\u2019s written into the letter' }],
+        camera: [
+          { at: 1.6, region: { x: 912, y: 466, width: 372, height: 222 } }, // the issues, around the cursor
+          // The letter's new line (its measured text box), centred: as wide as the view can be while
+          // staying on the letter
+          { at: 3.7, region: { x: 216.2, y: 163.6, width: 398, height: 237.2 }, mark: { x: 250, y: 274.5, width: 330.4, height: 15.3 } },
+        ],
       },
       {
         src: '/replays/rfp/spot-scenario.json', region: { x: 44, y: 253, width: 960, height: 323 }, from: 0.9, to: 8.8, rate: 1.35,
