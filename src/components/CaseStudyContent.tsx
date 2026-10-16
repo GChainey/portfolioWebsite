@@ -12,6 +12,7 @@ import { ImageGrid } from '@/components/ImageGrid'
 import { RewriteReplay } from '@/components/replay/RewriteReplay'
 import { AskReplay } from '@/components/replay/AskReplay'
 import { RecordingReplay } from '@/components/replay/RecordingReplay'
+import { FrameStripReplay } from '@/components/replay/FrameStripReplay'
 import { FramedMedia, clipGeometry } from '@/components/ClipFrame'
 import { FrameDialog } from '@/components/FrameDialog'
 import { ArrowUpRight } from 'lucide-react'
@@ -26,6 +27,7 @@ export const componentRegistry: Record<string, React.ComponentType<any>> = {
   'rewrite-replay': RewriteReplay,
   'ask-replay': AskReplay,
   'recording-replay': RecordingReplay,
+  'frame-strip': FrameStripReplay,
 }
 
 interface CaseStudyContentProps {
@@ -130,6 +132,22 @@ function OpenLive({ src, title }: { src: string; title: string }) {
   )
 }
 
+// [label](url) in a paragraph becomes a link
+function withLinks(text: string): React.ReactNode {
+  const parts = text.split(/(\[[^\]]+\]\([^)\s]+\))/g)
+  if (parts.length === 1) return text
+  return parts.map((part, i) => {
+    const m = /^\[([^\]]+)\]\(([^)\s]+)\)$/.exec(part)
+    if (!m) return part
+    const external = /^https?:/.test(m[2])
+    return (
+      <a key={i} href={m[2]} {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})} className="text-foreground underline decoration-border underline-offset-4 transition-colors hover:text-accent hover:decoration-accent">
+        {m[1]}
+      </a>
+    )
+  })
+}
+
 const ease = [0.25, 0.1, 0.25, 1] as const
 
 // Each block comes in the first time it is scrolled to, so the page builds as it is read:
@@ -175,7 +193,7 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
               className="text-muted leading-relaxed mb-4"
               {...reveal(index)}
             >
-              {block.content}
+              {withLinks(block.content)}
             </motion.p>
           )
         }

@@ -87,6 +87,7 @@ export interface Project {
   logo?: string // Product logo, shown in the card instead of the animated visual
   status?: 'Live' | 'Waitlist' | 'Beta' | 'In development' | 'Coming soon' // 'Coming soon' cards don't link anywhere, and a case study marked it has no page on the live site
   productVisual?: 'dispatch' | 'thesis' // Which animated card visual to render
+  hideDescription?: boolean // The description is for cards and search only; the page shows no subtitle
   content: ContentBlock[]
   chatContext: {
     description: string
@@ -343,30 +344,30 @@ export const projects: Project[] = [
   },
   {
     id: 'wallbounce-dev-tools',
-    title: 'Three tools before the game',
+    title: 'Using AI to Build the Tools That Make the Thing',
     // The game in the page is a copy, built from the Wallbounce repo (conductor-playground) into
     // public/essays/wallbounce-dev-tools/game. Rebuild it there when the game changes:
     // vite build --base=/essays/wallbounce-dev-tools/game/
-    description: 'Sliders for the feel, a frame strip for your own mistakes, and recorded players of four skill levels: the tools Wallbounce was built with, and what each one told us.',
+    description: 'When an AI agent can build a tool in an afternoon, build the tools first. Three I built for a game, what each one told us, and why the same works for an app or a product.',
     category: 'Article',
     year: '2026',
     heroImage: '/essays/wallbounce-dev-tools/cover.jpg',
     heroVideo: '/essays/wallbounce-dev-tools/reel.mp4',
     heroFrame: 'grid',
-    tags: ['Game Design', 'Tooling', 'Prototyping', 'Essay'],
+    hideDescription: true,
+    tags: ['AI', 'Creative Tools', 'Tooling', 'Prototyping', 'Essay'],
     content: [
       {
         type: 'heading',
         level: 2,
-        content: 'TLDR'
+        content: "TLDR"
       },
       {
         type: 'list',
         items: [
-          'Wallbounce is a top-down ode to one move from Gears of War, and it is two days old',
-          'a good share of what has been built is not the game. It is the tools for finding out whether the game is any good',
-          'sliders answer "does it feel right?", a frame strip answers "why do I keep missing it?", recorded players answer "is it worth doing?"',
-          'the players found a level that doesn\'t ask for the move, and a scoring rule the fastest player was right to ignore',
+          "AI makes a custom tool quick to build, so build the tools that make the thing",
+          "For a game, that was three: sliders for the feel, a frame strip to learn the timing, and bots that play it",
+          "The same works for anything you make",
         ]
       },
       {
@@ -375,20 +376,34 @@ export const projects: Project[] = [
       },
       {
         type: 'text',
-        content: 'The whole game rests on that move, so three questions had to be answered before anything else was worth building. Does it feel right? Can a person tell why they keep missing it? Is it actually worth doing? Each one got a tool, and all three were working within a day of the move itself.'
+        content: "Three things were hard to judge by hand: how it feels, whether you are pressing at the right moment, and whether it is fun once you are good at it. Instead of guessing, or getting good first, I had AI build a tool for each."
       },
       {
         type: 'heading',
         level: 2,
-        content: 'Tool one: sliders for the feel'
+        content: "Sliders: feel it instead of reading it"
       },
       {
         type: 'text',
-        content: 'Every number that shapes how the character moves lives in one place: how far away a wall will grab you, how fast a slide gets, how long you are stuck after a crunch, how many pixels from the wall the bounce window opens. There are 58 of them now.'
+        content: "Chat isn't always the best way to understand something, and neither is code. \"bounceWindow: 20\" says nothing about how a bounce feels. A slider does. It is an input device for the material itself: drag it while you play and you feel the change."
       },
       {
         type: 'text',
-        content: 'The panel builds itself from that list. Each value gets a slider that runs from zero to three times its default, under a label written for a person rather than for the code: "Bounce window: how close to the wall before A or a flick works". A value added to the code turns up in the panel on its own, under Other, so nothing new is ever missing a slider.'
+        content: "So every number that shapes the movement became a slider instead of a value in code. There are 58 of them, each with a plain label."
+      },
+      {
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/wallbounce/tuning.json', region: { x: 950, y: 0, width: 330, height: 218 } },
+        caption: 'Bounce window from 20 to 26, reach from 64 to 80. Each changed value lights up, and copy changes takes only those',
+      },
+      {
+        type: 'list',
+        items: [
+          "A changed value lights up, so you can see what you have touched",
+          "\"Copy changes\" copies only the values you moved, ready to paste back to the agent editing the code",
+          "\"Make the bounce more forgiving\" became \"bounce window from 20 to 26\": something to try in ten seconds, then argue about",
+        ]
       },
       {
         type: 'component',
@@ -405,38 +420,33 @@ export const projects: Project[] = [
       },
       {
         type: 'text',
-        content: 'Two small things made it a tool people use rather than a debug menu:'
-      },
-      {
-        type: 'list',
-        items: [
-          'A changed value lights up, so you can see at a glance what you have touched',
-          '"Copy changes" puts only the values you moved on the clipboard, ready to paste back into the file, or to the agent that is editing it',
-        ]
-      },
-      {
-        type: 'text',
-        content: 'What it changed is the conversation. "Make the bounce more forgiving" is an opinion. "Bounce window from 20 to 26" is something you can try in ten seconds and then argue about.'
+        content: "It works for anything with a feel: type sizes, padding, colour, timing, the model behind an AI feature. [Shader Wall](https://www.shaderwall.com) does it for shaders: through its MCP, an agent adds sliders to a shader as it writes it."
       },
       {
         type: 'heading',
         level: 2,
-        content: 'Tool two: a frame strip for your own mistakes'
+        content: "A frame strip: see what your input is doing"
       },
       {
         type: 'text',
-        content: 'A move that depends on timing fails in a familiar way. You hit the wall, over and over, with no idea whether you were early, late, or pointing the wrong way. That is the point where a hard move either becomes learnable or gets cut.'
+        content: "The move is technical. There is one right input and plenty of wrong ones, and going on feel alone you hit the wall over and over without knowing whether you were early, late or aimed wrong."
       },
       {
         type: 'text',
-        content: 'The fix is borrowed from UnclePunch\'s Training Mode for Super Smash Bros. Melee, which shows you your own inputs frame by frame. After every slide, Wallbounce draws it back as a strip of frames at 60 a second:'
+        content: "So I built a tool that shows it. After every slide it draws the attempt back frame by frame, borrowed from UnclePunch's Training Mode for Super Smash Bros. Melee, and says what happened:"
+      },
+      {
+        type: 'component',
+        componentId: 'frame-strip',
+        caption: 'Three real slides from the game\'s own movement code: two frames late, four frames early, then a bounce on frame four of five',
       },
       {
         type: 'list',
         items: [
-          'The top row is the wall: dim on the way in, bright while the bounce window is open, marked once you have hit',
-          'Under it, the frames the button was down, and the frames the stick was pulled back',
-          'The input that decided it is boxed, with a verdict above: 2 FRAMES EARLY, 1 FRAME LATE, RIGHT TIME WRONG AIM, or BOUNCE · FRAME 4 OF 5',
+          "The verdict says by how much: 2 FRAMES EARLY, 1 FRAME LATE, or BOUNCE · FRAME 4 OF 5",
+          "A slow mode runs the game at half speed, so the timing can be learned before it is played at full speed",
+          "Together they work like a tutorial: you see what good looks like, then practise until you hit it",
+          "It turned into a design tool too: it shows the window is five frames wide, and drag a slider and you watch it become three",
         ]
       },
       {
@@ -454,33 +464,25 @@ export const projects: Project[] = [
       },
       {
         type: 'text',
-        content: 'Around the strip sit the cheaper cues: a dotted ring on the wall that turns white when the window opens, a word that floats up to name how each slide ended, the stick and button drawn on screen, and an easy mode that runs the whole game at half speed.'
-      },
-      {
-        type: 'text',
-        content: 'It was built for learning, and it turned out to be a design tool as well. The strip says how wide the window is in frames, which the pixel value on the slider never did. At a full slide it is five frames. Drag the window slider down and you can watch it become three.'
+        content: "Any product where people can get something wrong needs the same: show what they did, what was expected and how close they were, such as which field failed, which rule it broke, or the step where they gave up."
       },
       {
         type: 'heading',
         level: 2,
-        content: 'Tool three: players who are not us'
+        content: "Players: see it played well before you can play it"
       },
       {
         type: 'text',
-        content: 'Feel and feedback still leave the real question open: is bouncing worth it? Playing it ourselves cannot settle that: nobody is consistent enough to compare two ways through a level by hand. So something else plays it.'
+        content: "I'm not very good at Wallbounce yet, but I have a picture of what it should look like played well. Learning the skill first would take weeks. So a tool plays it instead: run every level as different kinds of player, from beginner to perfect, and let me watch."
       },
       {
-        type: 'heading',
-        level: 3,
-        content: 'The perfect player'
-      },
-      {
-        type: 'text',
-        content: 'The first is a tool-assisted run, the kind speedrunners build by hand. Ours is searched for. The search tries controller inputs, a stick direction and a button for each step, and simulates each one with the real movement code, keeping whatever gets to the goal soonest. Because the game advances in fixed steps and nothing in it is left to chance, a run is stored as nothing but its inputs and plays back exactly.'
-      },
-      {
-        type: 'text',
-        content: 'It finds two runs for every level, one that may only run and one that may bounce, and races them.'
+        type: 'list',
+        items: [
+          'Steady Hand hunts down every enemy. Plain lines, a quarter-second reaction, aim that drifts',
+          'Rusher heads for the goal and fights only what is in the way',
+          'Ace clears every level too, on a far better line, with perfect aim and perfect reloads',
+          'Speedrunner takes the tool-assisted line exactly and shoots without ever slowing down',
+        ]
       },
       {
         type: 'component',
@@ -516,46 +518,6 @@ export const projects: Project[] = [
       {
         type: 'text',
         content: 'Four levels answer the question: bouncing is a quarter to two thirds faster. Courtyard answers a different one. A perfect bouncer beats a perfect runner there by three hundredths of a second, which means the level does not ask for the move at all. Nobody would have found that by playing it.'
-      },
-      {
-        type: 'text',
-        content: 'The runs are also tests. The suite replays every one and fails if it no longer reaches the goal on the same step, so a change to the movement code that shifts anything by a single frame gets caught. One test is a statement about the design rather than the code: bouncing must never come out slower than running.'
-      },
-      {
-        type: 'heading',
-        level: 3,
-        content: 'The good players'
-      },
-      {
-        type: 'text',
-        content: 'A perfect run gives you the ceiling. It says nothing about what the game is like for someone good, and once enemies that shoot back went into the levels, that was the thing we needed to see.'
-      },
-      {
-        type: 'text',
-        content: 'It turns out the same search makes a decent stand-in for skill if you give it less time to think. Cut its effort and it still finds a line with bounces in it, just a plainer and slower one:'
-      },
-      {
-        type: 'table',
-        headers: ['Positions searched', 'Pillar Hall', 'Courtyard', 'Gauntlet'],
-        rows: [
-          ['300', '2.17s', '3.77s', '3.10s'],
-          ['1,500', '2.11s', '2.82s', '3.07s'],
-          ['20,000', '1.89s', '2.64s', '2.90s'],
-          ['Up to 200,000', '1.63s', '2.52s', '2.72s'],
-        ],
-      },
-      {
-        type: 'text',
-        content: 'Then it needs hands. Each stand-in player gets a reaction time before its first shot at a new enemy, an amount its aim wanders, a way of handling the reload, and a patience: how long it will stand and trade with one enemy before moving on. Four of them play every level:'
-      },
-      {
-        type: 'list',
-        items: [
-          'Steady Hand hunts down every enemy. Plain lines, a quarter-second reaction, aim that drifts',
-          'Rusher heads for the goal and fights only what is in the way',
-          'Ace clears every level too, on a far better line, with perfect aim and perfect reloads',
-          'Speedrunner takes the tool-assisted line exactly and shoots without ever slowing down',
-        ]
       },
       {
         type: 'component',
@@ -601,34 +563,20 @@ export const projects: Project[] = [
       },
       {
         type: 'text',
-        content: 'Both are a slider away from being fixed, which is where the tools meet.'
+        content: "Each answer is a slider or a rethink rather than weeks of practice: whether the idea is worth carrying on with, or whether the numbers, or the idea itself, need to change."
+      },
+      {
+        type: 'text',
+        content: "In a product, the players are AI agents using it as different kinds of people: a first-timer, an expert, someone in a hurry. That is what [agentic user testing](/projects/agentic-user-testing) does."
       },
       {
         type: 'heading',
         level: 2,
-        content: 'Together: a change you can read in a table'
+        content: "Not just for games"
       },
       {
         type: 'text',
-        content: 'The three tools turn into one loop:'
-      },
-      {
-        type: 'list',
-        ordered: true,
-        items: [
-          'Move a slider until something feels better',
-          'The game notices the recordings were made with different numbers and says so',
-          'Re-record them. Two commands and a few minutes',
-          'Read the tables again, and watch the four players again',
-        ]
-      },
-      {
-        type: 'text',
-        content: 'A change to the feel shows up as a change in the numbers: whether bouncing is still faster than running, whether a good player now finishes Courtyard differently from a great one, whether anyone bothers to shoot. And when one of us cannot land the move after a change, the frame strip says whether the game got harder or we did.'
-      },
-      {
-        type: 'text',
-        content: 'None of this is the game. But two days in, we know which level is not pulling its weight and which rule nobody follows, and we found out from players who never get tired of running the same room.'
+        content: "The game is the example, not the point. Making anything has the same three problems: how it feels, why people get it wrong, and whether it is worth doing at all. With AI, the tools that answer them take an afternoon each, so build them first and make the thing with them."
       },
       {
         type: 'text',
@@ -636,17 +584,17 @@ export const projects: Project[] = [
       },
     ],
     chatContext: {
-      description: 'Essay from the Wallbounce dev log, dated 13 October 2026. Wallbounce is a small top-down game Gareth is building as an ode to the wall bounce from Gears of War: slide toward cover, and just before hitting it, point at another wall and slide there instead. Two days in, much of what was built is tooling. Tool one is a panel of 58 tuning sliders that builds itself from the list of movement values, with changed values lit and a "Copy changes" button. Tool two is a frame strip, borrowed from UnclePunch\'s Training Mode for Super Smash Bros. Melee, that replays each slide at 60 frames a second and says how many frames early or late the input was; the bounce window is five frames at a full slide. Tool three is recorded players: a searched tool-assisted run of each level with and without bouncing (bouncing is 1.28× to 1.65× faster on four levels, and only 1.01× on Courtyard), and four stand-in players (Steady Hand, Rusher, Ace, Speedrunner) made by giving the search less effort plus reaction time, aim wander and patience. Those showed that killing does not pay under the scoring rule and that the enemies are too gentle. The essay embeds the live game.',
+      description: 'Essay: using AI to build the tools that make the thing. The worked example is Wallbounce, a game. Three tools: sliders, because chat and code are poor ways to judge feel (58 tuning values; Shader Wall does the same for shaders through its MCP); a frame strip plus a half-speed mode that show whether an input was early, late or right, like a tutorial; and bots at four skill levels that play the levels, so Gareth could see the game played well before he could play it. They found a level that does not need the core move and a scoring rule the fastest player ignored. The point is that it is discipline agnostic: the same tools work for any app or product',
       suggestedQuestions: [
-        'What is Wallbounce?',
-        'What are the three tools?',
+        'Why build the tools before the thing?',
+        'What would these tools look like for an app?',
         'What did the recorded players find?',
       ],
       followUpQuestions: [
-        'How does the frame strip work?',
-        'Why is Courtyard the odd level out?',
-        'How are the four stand-in players made?',
-        'Why build the tools before the game?',
+        'How long did each tool take to build?',
+        'How do you know when a tool is worth building?',
+        'How does this connect to agentic user testing?',
+        'What did the frame strip change about the design?',
       ]
     }
   },
