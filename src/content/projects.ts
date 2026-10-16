@@ -1682,7 +1682,17 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/rfp/overview.json' },
+        props: {
+          src: '/replays/rfp/overview.json',
+          notes: [
+            { at: 0, text: 'Every application, against the council\u2019s targets' },
+            { at: 5.2, text: 'Open one and follow it through the workflow' },
+            { at: 9.6, text: 'The assessment, with the assistant beside it' },
+            { at: 12.5, text: 'Ask about the application' },
+            { at: 16.8, text: 'Answered from the applicant\u2019s own documents' },
+            { at: 19.2, text: 'Then the approval letter, drafted from the case' },
+          ],
+        },
         caption: 'The working prototype we answered with',
       },
 
@@ -1698,13 +1708,25 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/rfp/spot-scenario.json', region: { x: 44, y: 253, width: 960, height: 323 } },
+        props: {
+          src: '/replays/rfp/spot-scenario.json', region: { x: 44, y: 253, width: 960, height: 323 },
+          notes: [{ at: 0, text: 'Three cases from one set of seed data' }, { at: 3.1, text: 'Pick one, and every detail follows' }],
+        },
         caption: 'Three cases from one set of seed data',
       },
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/rfp/seed-data.json' },
+        props: {
+          src: '/replays/rfp/seed-data.json',
+          notes: [
+            { at: 0, text: 'A case, from the dashboard' },
+            { at: 2.4, text: 'Its assessment: the same applicant, address and numbers' },
+            { at: 12.2, text: 'Its request for information, too' },
+            { at: 18.3, text: 'A second case, from the same seed data' },
+            { at: 21.6, text: 'Every screen follows it' },
+          ],
+        },
         caption: 'In the app: the assessment and the letter follow whichever case is open',
       },
       {
@@ -1727,7 +1749,16 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/rfp/llm-chat.json' },
+        props: {
+          src: '/replays/rfp/llm-chat.json',
+          notes: [
+            { at: 0, text: 'The assistant sits beside the assessment' },
+            { at: 4.9, text: 'Rough notes in a field' },
+            { at: 11.2, text: 'Rewrite puts them in the council\u2019s report style' },
+            { at: 18.4, text: 'Then a question about the application' },
+            { at: 20.6, text: 'Answered from the applicant\u2019s statement' },
+          ],
+        },
         caption: 'In the app: the assistant sits beside the assessment form, and edits the field you are on',
       },
       {
@@ -1772,19 +1803,43 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/rfp/spot-rfi.json', region: { x: 216, y: 153, width: 1080, height: 644 } },
+        props: {
+          src: '/replays/rfp/spot-rfi.json', region: { x: 216, y: 153, width: 1080, height: 644 },
+          notes: [
+            { at: 0, text: 'Issues raised by different officers' },
+            { at: 3.5, text: 'Tick one out, and the letter drops it' },
+            { at: 10, text: 'Tick it back in, and it returns' },
+          ],
+        },
         caption: 'Issues raised by different officers, ticked in or out, and the letter follows',
       },
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/rfp/workflow-rfi.json' },
+        props: {
+          src: '/replays/rfp/workflow-rfi.json',
+          notes: [
+            { at: 0, text: 'The case, part way through its assessment' },
+            { at: 3.1, text: 'Every issue raised so far, in one letter' },
+            { at: 8.2, text: 'Leave one out, and the letter redrafts' },
+            { at: 10.9, text: 'Issues from forms and referrals, too' },
+            { at: 18.5, text: 'Sent to the applicant' },
+          ],
+        },
         caption: 'In the app: one path ends in a request for information, compiled from every issue flagged along the way',
       },
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/rfp/workflow-determination.json' },
+        props: {
+          src: '/replays/rfp/workflow-determination.json',
+          notes: [
+            { at: 0, text: 'The case, ready for a decision' },
+            { at: 3.3, text: 'The approval letter, written from the work already done' },
+            { at: 7.2, text: 'Its conditions, to the council\u2019s standard' },
+            { at: 18.8, text: 'Downloaded, and the case is complete' },
+          ],
+        },
         caption: 'Another ends in a determination letter, written to the council\'s standard from the work already done',
       },
       {

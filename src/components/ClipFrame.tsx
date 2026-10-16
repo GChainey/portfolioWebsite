@@ -55,7 +55,7 @@ export function Backdrop({ className = '', style, children }: { className?: stri
 // A screen recording gets a bar with the window buttons (and an address only where it is the
 // real one); a still or an embed gets the window alone. The window is always light, like the apps
 // in it. The buttons are grey, or the Mac's red, amber and green with the colour-lights flag.
-export function MediaFrame({ bar, url, children }: { bar?: boolean; url?: string; children: ReactNode }) {
+export function MediaFrame({ bar, url, after, children }: { bar?: boolean; url?: string; after?: ReactNode; children: ReactNode }) {
   return (
     <Backdrop className="p-4 sm:p-8">
       <div className="overflow-hidden rounded-lg bg-white shadow-2xl ring-1 ring-black/10">
@@ -77,6 +77,8 @@ export function MediaFrame({ bar, url, children }: { bar?: boolean; url?: string
         )}
         {children}
       </div>
+      {/* Below the window, on the backdrop: a clip's subtitle */}
+      {after}
     </Backdrop>
   )
 }
