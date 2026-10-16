@@ -14,6 +14,18 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.43.0',
+    date: '2026-10-16',
+    title: 'Reel camera: zoom to the action, highlight the result',
+    description: 'Reel scenes can now move a camera: open on the whole screen, follow the cursor in to where the action is, then cut to the result and highlight it. The RFI scene is the first to use it.',
+    changes: [
+      'Camera keyframes on reel scenes: each eases the view to a region of the recording at a set time, inside the same card',
+      'A highlighter swipe over a marked line, in the accent colour, once the camera arrives',
+      'RFI: the whole letter and issue list, then in on the issue being ticked, then the letter centred on the line it adds',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.42.0',
     date: '2026-10-16',
     title: 'RFP: suggestions and Warsaw in the reel, cleaner app windows',
