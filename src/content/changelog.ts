@@ -14,6 +14,21 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.40.0',
+    date: '2026-10-16',
+    title: 'Essay: Using AI to Build the Tools That Make the Thing',
+    description: 'The Wallbounce essay is rewritten around its point: AI makes a custom tool quick to build, so build the tools that make the thing. The game is the example, and each tool says what it is, how it helped, and what it looks like in any app or product.',
+    changes: [
+      'New title, a three-line TLDR, and no subtitle on the page (the description stays for cards)',
+      'Sliders: chat and code are poor ways to judge feel, so every movement value became a slider; the same for type, padding, colour or an AI model, and Shader Wall does it for shaders through its MCP',
+      'Frame strip: see what your input is doing, with a half-speed mode, so the timing can be learned like a tutorial; rebuilt in the page in the game\'s palette and pixel font, playing three real slides',
+      'Players: bots at four skill levels show the game played well before it can be, and agentic user testing is the same idea for products',
+      'Tuning panel as a sharp replay: bounce window and reach dragged, then copy changes',
+      'Text in articles can now carry links',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.39.0',
     date: '2026-10-15',
     title: 'The Chat Answers in My Own Words',

@@ -291,9 +291,11 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
                   {project.title}
                 </h1>
 
-                <p className="text-xl text-muted max-w-2xl mb-6">
-                  {project.description}
-                </p>
+                {!project.hideDescription && (
+                  <p className="text-xl text-muted max-w-2xl mb-6">
+                    {project.description}
+                  </p>
+                )}
 
                 {/* Live product CTA */}
                 {project.liveUrl && (
