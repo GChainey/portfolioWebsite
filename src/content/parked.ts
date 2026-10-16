@@ -31,6 +31,16 @@ export interface ParkedItem {
 
 export const PARKED: ParkedItem[] = [
   {
+    id: 'replay-vs-video',
+    name: 'Replay vs video',
+    status: 'unlisted',
+    since: '2026-10-16',
+    summary: 'The same 21-second recording as an rrweb replay and as a 2x, 60fps MP4 made from it, side by side, with zoom, pause and the real download sizes. For a post about recording UI as replays.',
+    links: [{ label: 'Comparison', href: '/replay-vs-video' }],
+    gate: 'Nothing links to /replay-vs-video. Posts can embed it with componentId: \'replay-vs-video\'',
+    todo: ['Link it from the post once it is written, then delete this entry'],
+  },
+  {
     id: 'demos',
     name: 'Demos',
     status: 'local',
