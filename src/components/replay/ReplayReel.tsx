@@ -1,27 +1,31 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { REPLAY_CSS } from './replayStyles'
 
 // A sizzle reel made of replays instead of video: scenes cut one after another, each a stretch
-// of a recording (or a crop of one) with a caption, on a dotted canvas. Everything on screen is
-// drawn by the page, so it is as sharp as the site itself. It is laid out on a 1600x1000 stage
-// and scaled to fit.
+// of a recording (or a crop of one), on a dotted canvas. Everything on screen is drawn by the
+// page, so it is as sharp as the site itself. It is laid out on a 1600x1000 stage and scaled
+// to fit.
+//
+// Each scene is a title on the left, centred on the product, the product large on the right,
+// and a line at the bottom centre that narrates what is happening, like a subtitle. The last
+// scene, with no recording, closes on a title and a line under it.
 
 type Region = { x: number; y: number; width: number; height: number }
 
 export interface ReelScene {
-  src?: string // /replays/... JSON; leave out for a text-only scene
+  src?: string // /replays/... JSON; leave out for the closing scene
   region?: Region // the part of the recording to show
   from?: number // seconds into the recording
   to?: number
   rate?: number // playback speed
-  hold?: number // seconds, for a text-only scene
-  layout?: 'stack' | 'side' | 'center'
-  kicker?: string
+  hold?: number // seconds, for the closing scene
   title: string
-  sub?: string
-  live?: boolean // a green dot on the kicker: the model is real
+  // What is happening, as a subtitle. Several lines take turns: each starts `at` seconds into
+  // the scene.
+  notes?: { at: number; text: string }[]
+  sub?: string // the closing scene's line under the title
 }
 
 type Recording = { meta: { width: number; height: number; mouse?: boolean }; events: unknown[] }
@@ -30,17 +34,24 @@ type Player = { play: (t?: number) => void; pause: (t?: number) => void; destroy
 const W = 1600
 const H = 1000
 const FADE = 450
-const BOX = { stack: { x: 96, y: 250, w: 1408, h: 690 }, side: { x: 720, y: 70, w: 800, h: 860 } }
+const MEDIA = { x: 560, y: 48, w: 992, h: 790 } // everything right of the title
+const LINGER = 1.2 // seconds to hold each recording's last frame, so the last line can be read
 
 const cache = new Map<string, Promise<Recording>>()
 const load = (src: string) => {
   if (!cache.has(src)) cache.set(src, fetch(src).then((r) => r.json()))
   return cache.get(src)!
 }
-const duration = (s: ReelScene) => (s.src ? ((s.to ?? 0) - (s.from ?? 0)) / (s.rate ?? 1) : s.hold ?? 3)
+const duration = (s: ReelScene) => (s.src ? ((s.to ?? 0) - (s.from ?? 0)) / (s.rate ?? 1) + LINGER : s.hold ?? 3)
 
-// One scene's recording, cropped to its region and fitted to its box
-function SceneMedia({ scene, playing, box }: { scene: ReelScene; playing: boolean; box: { x: number; y: number; w: number; h: number } }) {
+// Rises and fades in after `delay` seconds, once the scene is up
+const rise = (shown: boolean, delay: number): CSSProperties => ({
+  opacity: shown ? 1 : 0, transform: `translateY(${shown ? 0 : 14}px)`,
+  transition: `opacity 600ms ease ${delay}s, transform 700ms cubic-bezier(.2,.8,.2,1) ${delay}s`,
+})
+
+// One scene's recording, cropped to its region and fitted to the media box
+function SceneMedia({ scene, playing }: { scene: ReelScene; playing: boolean }) {
   const root = useRef<HTMLDivElement>(null)
   const player = useRef<Player | null>(null)
   const [meta, setMeta] = useState<Recording['meta'] | null>(null)
@@ -60,21 +71,25 @@ function SceneMedia({ scene, playing, box }: { scene: ReelScene; playing: boolea
     return () => { gone = true; player.current?.destroy(); player.current = null }
   }, [scene])
 
+  // Play from `from`, and hold on `to` while the scene lingers
   useEffect(() => {
     const r = player.current
     if (!r) return
-    if (playing) r.play((scene.from ?? 0) * 1000)
-    else r.pause((scene.from ?? 0) * 1000)
-  }, [playing, meta, scene.from])
+    const from = (scene.from ?? 0) * 1000, to = (scene.to ?? 0) * 1000
+    if (!playing) { r.pause(from); return }
+    r.play(from)
+    const stop = setTimeout(() => r.pause(to), (to - from) / (scene.rate ?? 1))
+    return () => clearTimeout(stop)
+  }, [playing, meta, scene])
 
   const region = scene.region ?? (meta ? { x: 0, y: 0, width: meta.width, height: meta.height } : { x: 0, y: 0, width: 1280, height: 800 })
-  const k = Math.min(box.w / region.width, box.h / region.height)
+  const k = Math.min(MEDIA.w / region.width, MEDIA.h / region.height)
   const w = region.width * k, h = region.height * k
   return (
     <div
       className="absolute overflow-hidden rounded-2xl bg-white"
       style={{
-        left: box.x + (box.w - w) / 2, top: box.y + (box.h - h) / 2, width: w, height: h,
+        left: MEDIA.x + (MEDIA.w - w) / 2, top: MEDIA.y + (MEDIA.h - h) / 2, width: w, height: h,
         boxShadow: '0 0 0 1px rgba(9,9,11,.08), 0 2px 4px rgba(9,9,11,.04), 0 40px 80px -24px rgba(9,9,11,.28)',
       }}
     >
@@ -83,6 +98,33 @@ function SceneMedia({ scene, playing, box }: { scene: ReelScene; playing: boolea
         className={`rr-stage ${meta?.mouse ? 'rr-mouse' : ''} absolute left-0 top-0 origin-top-left`}
         style={{ width: meta?.width ?? 1280, height: meta?.height ?? 800, transform: `scale(${k}) translate(${-region.x}px, ${-region.y}px)` }}
       />
+    </div>
+  )
+}
+
+// The subtitle: the scene's lines in turn, each fading in over the last
+function Notes({ notes, shown }: { notes: NonNullable<ReelScene['notes']>; shown: boolean }) {
+  const [line, setLine] = useState(0)
+  useEffect(() => {
+    if (!shown) return
+    setLine(0)
+    const timers = notes.map((n, i) => setTimeout(() => setLine(i), n.at * 1000))
+    return () => timers.forEach(clearTimeout)
+  }, [notes, shown])
+
+  return (
+    <div className="absolute inset-x-0 flex justify-center" style={{ top: 878 }}>
+      <div className="relative grid rounded-full bg-white px-9 py-4 shadow-[0_0_0_1px_rgba(9,9,11,.08),0_12px_32px_-12px_rgba(9,9,11,.22)]" style={rise(shown, 0.5)}>
+        {notes.map((n, i) => (
+          <div
+            key={i}
+            className="col-start-1 row-start-1 whitespace-nowrap text-center text-[30px] tracking-[-0.015em] text-zinc-700"
+            style={{ opacity: i === line ? 1 : 0, transform: `translateY(${i === line ? 0 : i < line ? -10 : 10}px)`, transition: 'opacity 400ms ease, transform 500ms cubic-bezier(.2,.8,.2,1)' }}
+          >
+            {n.text}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -112,9 +154,11 @@ export function ReplayReel({ scenes }: { scenes: ReelScene[] }) {
     if (next.src) load(next.src)
   }, [index, scenes])
 
-  // Fade in, play for the scene's length, fade out, next
+  // Fade in, play for the scene's length, fade out, next. With reduced motion, the first scene
+  // stays up and still.
   useEffect(() => {
-    if (!visible || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (!visible) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setShown(true); return }
     const scene = scenes[index]
     const ready = scene.src ? load(scene.src) : Promise.resolve(null)
     let t1: ReturnType<typeof setTimeout>, t2: ReturnType<typeof setTimeout>
@@ -129,10 +173,9 @@ export function ReplayReel({ scenes }: { scenes: ReelScene[] }) {
   }, [index, visible, scenes])
 
   const scene = scenes[index]
-  const layout = scene.layout ?? 'stack'
   return (
     <div ref={box} className="relative w-full overflow-hidden" style={{ aspectRatio: `${W} / ${H}` }}>
-      <style>{REPLAY_CSS}</style>
+      <style dangerouslySetInnerHTML={{ __html: REPLAY_CSS }} />
       <div
         className="absolute left-0 top-0 origin-top-left font-sans text-zinc-950 antialiased"
         style={{
@@ -141,24 +184,18 @@ export function ReplayReel({ scenes }: { scenes: ReelScene[] }) {
         }}
       >
         <div key={index} className="absolute inset-0" style={{ opacity: shown ? 1 : 0, transform: `translateY(${shown ? 0 : 18}px)`, transition: `opacity ${FADE}ms ease, transform ${FADE}ms cubic-bezier(.2,.8,.2,1)` }}>
-          {layout === 'center' ? (
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-              <div className="text-[72px] font-semibold leading-none tracking-[-0.035em]">{scene.title}</div>
-              {scene.sub && <div className="mt-6 text-[26px] tracking-[-0.01em] text-zinc-600">{scene.sub}</div>}
-            </div>
-          ) : (
+          {scene.src ? (
             <>
-              <div className="absolute" style={layout === 'side' ? { left: 96, top: '50%', width: 560, transform: 'translateY(-50%)' } : { left: 96, top: 76 }}>
-                {scene.kicker && (
-                  <div className="mb-3 flex items-center gap-2.5 text-[20px] font-medium tracking-[-0.01em] text-zinc-500">
-                    <i className={`inline-block h-2 w-2 rounded-full ${scene.live ? 'bg-green-500 shadow-[0_0_0_4px_rgba(34,197,94,.18)]' : 'bg-zinc-900'}`} />
-                    {scene.kicker}
-                  </div>
-                )}
-                <div className={`${layout === 'side' ? 'text-[58px]' : 'text-[54px]'} font-semibold leading-[1.06] tracking-[-0.035em]`}>{scene.title}</div>
-              </div>
-              {scene.src && <SceneMedia scene={scene} playing={shown && visible} box={BOX[layout]} />}
+              {/* Centred on the product, which is centred in its box */}
+              <div className="absolute -translate-y-1/2 text-[66px] font-semibold leading-[1.02] tracking-[-0.04em] [text-wrap:balance]" style={{ left: 72, width: 440, top: MEDIA.y + MEDIA.h / 2 }}>{scene.title}</div>
+              <SceneMedia scene={scene} playing={shown && visible} />
+              {scene.notes && <Notes notes={scene.notes} shown={shown} />}
             </>
+          ) : (
+            <div className="absolute inset-0 flex flex-col items-center justify-center px-40 text-center">
+              <div className="text-[88px] font-semibold leading-[1.02] tracking-[-0.04em] [text-wrap:balance]" style={rise(shown, 0)}>{scene.title}</div>
+              {scene.sub && <div className="mt-8 max-w-[1100px] text-[38px] leading-[1.3] tracking-[-0.015em] text-zinc-500" style={rise(shown, 0.3)}>{scene.sub}</div>}
+            </div>
           )}
         </div>
       </div>

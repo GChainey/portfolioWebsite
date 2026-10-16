@@ -14,6 +14,22 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.41.0',
+    date: '2026-10-16',
+    title: 'RFP hero reel: bigger, plainer, and narrated',
+    description: 'The RFP case study\'s hero reel is redesigned so the product is the hero and it reads without the case study around it: a plain title on the left, the product large on the right, and a subtitle at the bottom that says what is happening.',
+    changes: [
+      'Full-bleed across the article column, with no backdrop or frame, so the product shows much larger',
+      'Plain-language titles anyone can follow: "A determination, written from the case" is now "The approval letter, drafted from the assessment"',
+      'A subtitle at the bottom centre narrates each clip, timed to the action, in place of the "Live model" kicker',
+      'The title sits on the left, centred on the product, and the opening clip is cropped past the app\'s sidebar so the work fills the frame',
+      'Ends on "A designer\'s judgement, built for real" and the three-person team against vendors with whole teams, in place of "One designer. Claude Code."',
+      'The Rewrite clip now shows the rewritten report: the recording\'s later editor changes are replayed as input, and each clip holds on its last frame instead of running on',
+      'Fixed a hydration error from the reel\'s styles, and the reel no longer goes blank with reduced motion',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.40.0',
     date: '2026-10-16',
     title: 'Essay: Using AI to Build the Tools That Make the Thing',

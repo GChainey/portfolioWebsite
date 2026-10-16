@@ -255,6 +255,32 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
     ...project.chatContext
   }
 
+  // Read time and TLDR button
+  const readTime = (
+    <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 text-sm text-muted">
+        <Clock className="w-4 h-4" />
+        <span>{tldrContent ? 'TLDR' : `${calculateReadTime(project.content)} min read`}</span>
+      </div>
+      {tldrContent ? (
+        <button
+          onClick={() => setTldrContent(null)}
+          className="flex items-center gap-2 px-3 py-1.5 text-sm text-accent border border-accent/50 rounded-full hover:bg-accent/10 transition-colors"
+        >
+          <RotateCcw className="w-4 h-4" />
+          Show full article
+        </button>
+      ) : (
+        <button
+          onClick={() => setTldrOpen(true)}
+          className="px-3 py-1.5 text-sm text-muted hover:text-accent border border-border hover:border-accent/50 rounded-full transition-colors"
+        >
+          Too long?
+        </button>
+      )}
+    </div>
+  )
+
   return (
     <div className="min-h-screen bg-background transition-colors duration-700">
       <Header showBack />
@@ -334,14 +360,6 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
                   </motion.div>
                 )}
 
-                {/* A reel of replays, drawn by the page */}
-                {project.heroReel && (
-                  <div className="w-full mb-8">
-                    <MediaFrame>
-                      <ReplayReel scenes={project.heroReel} />
-                    </MediaFrame>
-                  </div>
-                )}
 
                 {/* Hero Image for non-GitHub articles */}
                 {!project.showGitHubActivity && !project.heroReel && project.heroImage && (
@@ -375,30 +393,18 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
                   </div>
                 )}
 
-                {/* Read time and TLDR button */}
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2 text-sm text-muted">
-                    <Clock className="w-4 h-4" />
-                    <span>{tldrContent ? 'TLDR' : `${calculateReadTime(project.content)} min read`}</span>
-                  </div>
-                  {tldrContent ? (
-                    <button
-                      onClick={() => setTldrContent(null)}
-                      className="flex items-center gap-2 px-3 py-1.5 text-sm text-accent border border-accent/50 rounded-full hover:bg-accent/10 transition-colors"
-                    >
-                      <RotateCcw className="w-4 h-4" />
-                      Show full article
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => setTldrOpen(true)}
-                      className="px-3 py-1.5 text-sm text-muted hover:text-accent border border-border hover:border-accent/50 rounded-full transition-colors"
-                    >
-                      Too long?
-                    </button>
-                  )}
-                </div>
+                {!project.heroReel && readTime}
               </motion.div>
+
+              {/* A reel of replays, full-bleed across the column: the product is the hero */}
+              {project.heroReel && (
+                <>
+                  <div className="-mx-8 mt-10 mb-8 border-y border-border">
+                    <ReplayReel scenes={project.heroReel} />
+                  </div>
+                  <div className="flex justify-center">{readTime}</div>
+                </>
+              )}
             </header>
 
             {/* View Mode Tabs - only show if project has media */}
