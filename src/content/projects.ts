@@ -95,9 +95,6 @@ export interface Project {
   }
 }
 
-// Daisy's 256px sidebar, trimmed off full-app clips: it isn't what they are about
-const DAISY_NO_SIDEBAR = { x: 256, y: 0, width: 1024, height: 800 }
-
 export const projects: Project[] = [
   // --- Products I've built ---
   {
@@ -1601,8 +1598,7 @@ export const projects: Project[] = [
     // Titles say what each feature does in plain words; the notes narrate the clip, timed to it
     heroReel: [
       {
-        // Cropped past the app's 256px sidebar, so the work fills the frame
-        src: '/replays/rfp/overview.json', region: { x: 256, y: 0, width: 1024, height: 800 }, from: 0.4, to: 7, rate: 1.1,
+        src: '/replays/rfp/overview.json', from: 0.4, to: 7, rate: 1.1,
         title: 'A working product, not mock-ups',
         notes: [{ at: 0, text: 'Software councils use to assess building applications' }, { at: 4.3, text: 'Built for a state tender, and clickable end to end' }],
       },
@@ -1686,7 +1682,7 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/rfp/overview.json', crop: DAISY_NO_SIDEBAR },
+        props: { src: '/replays/rfp/overview.json' },
         caption: 'The working prototype we answered with',
       },
 
@@ -1708,7 +1704,7 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/rfp/seed-data.json', crop: DAISY_NO_SIDEBAR },
+        props: { src: '/replays/rfp/seed-data.json' },
         caption: 'In the app: the assessment and the letter follow whichever case is open',
       },
       {
@@ -1731,7 +1727,7 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/rfp/llm-chat.json', crop: DAISY_NO_SIDEBAR },
+        props: { src: '/replays/rfp/llm-chat.json' },
         caption: 'In the app: the assistant sits beside the assessment form, and edits the field you are on',
       },
       {
@@ -1782,13 +1778,13 @@ export const projects: Project[] = [
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/rfp/workflow-rfi.json', crop: DAISY_NO_SIDEBAR },
+        props: { src: '/replays/rfp/workflow-rfi.json' },
         caption: 'In the app: one path ends in a request for information, compiled from every issue flagged along the way',
       },
       {
         type: 'component',
         componentId: 'recording-replay',
-        props: { src: '/replays/rfp/workflow-determination.json', crop: DAISY_NO_SIDEBAR },
+        props: { src: '/replays/rfp/workflow-determination.json' },
         caption: 'Another ends in a determination letter, written to the council\'s standard from the work already done',
       },
       {

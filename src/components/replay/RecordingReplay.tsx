@@ -18,14 +18,12 @@ interface RecordingReplayProps {
   src: string // /replays/... JSON from the recorder
   // Spotlight: show only this part of the screen, as a card on the backdrop, with no window
   region?: Region
-  // Show only this part of the screen, still in the window (e.g. trimming an app's sidebar)
-  crop?: Region
   aspectRatio?: string
 }
 
 type Recording = { meta: { width: number; height: number; duration: number; mouse?: boolean }; events: unknown[] }
 
-export function RecordingReplay({ src, region, crop, aspectRatio }: RecordingReplayProps) {
+export function RecordingReplay({ src, region, aspectRatio }: RecordingReplayProps) {
   const box = useRef<HTMLDivElement>(null)
   const root = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState({ width: 1280, height: 800 })
@@ -34,7 +32,7 @@ export function RecordingReplay({ src, region, crop, aspectRatio }: RecordingRep
   const player = useRef<{ play: (t?: number) => void; pause: (t?: number) => void; destroy: () => void } | null>(null)
   const visible = useRef(false)
 
-  const view = region ?? crop ?? { x: 0, y: 0, width: size.width, height: size.height }
+  const view = region ?? { x: 0, y: 0, width: size.width, height: size.height }
 
   // Fit the recording (or its region) to the box
   useEffect(() => {
