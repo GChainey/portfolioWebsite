@@ -14,7 +14,8 @@ export default function ReplayVsVideoPage() {
           <h1 className="mb-5 text-5xl font-medium text-foreground">Screen recordings as replays, not video</h1>
           <p className="text-xl leading-relaxed text-muted">
             The recordings on this site aren&apos;t videos. They&apos;re replays of the real page: its HTML and CSS,
-            and every change to it. Here is the same clip both ways.
+            and every change to it. Here are four of them both ways: drag the divider, zoom in, and pause to
+            compare the same frame.
           </p>
         </div>
 

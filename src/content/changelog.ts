@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.46.0',
+    date: '2026-10-16',
+    title: 'Replay vs video: three views, four examples',
+    description: 'The replay-vs-video comparison gets a scrubber, a one-at-a-time view with full screen, and three more examples, one running the reel\'s camera over both.',
+    changes: [
+      'Scrubber: one frame, video left of a draggable divider and replay right (arrow keys move it too)',
+      'Side by side, or one at a time, large or full screen, flipping between video and replay',
+      'Examples: a letter, zoom and highlight (the RFI camera move over both), AI chat, and a busy Configurator screen; each video rendered from its replay',
+      'The video is the clock and the replay follows it; pause freezes both on the same frame, and changing view keeps the place',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.45.0',
     date: '2026-10-16',
     title: 'Replay vs video, side by side',
