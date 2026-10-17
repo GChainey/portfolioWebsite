@@ -7,7 +7,7 @@ export interface MediaBlock {
   alt?: string
   caption?: string
   aspectRatio?: string // e.g., '16/9', '4/3', '1/1'
-  frame?: 'phone' | 'device' | 'spotlight' // phone: a portrait screen recording, shown as a phone on the backdrop. device: a still of a device on a transparent background, which needs no window. spotlight: one component cropped out of the app, floated on the backdrop with no window
+  frame?: 'phone' | 'device' | 'spotlight' | 'window' // phone: a portrait screen recording, shown as a phone on the backdrop. device: a still of a device on a transparent background, which needs no window. spotlight: one component cropped out of the app, floated on the backdrop with no window. window: a clip with its own stage, in the window without a browser bar
   crop?: 'browser-window' // The recording has its own window and backdrop baked in: crop to the app (see ClipFrame)
   live?: string // A live copy of what the clip shows: a button under it opens the page in a dialog to use
   pending?: boolean // Not made yet: a labelled slot on the dev server, nothing on the live site. Remove once the file is in.
@@ -632,6 +632,7 @@ export const projects: Project[] = [
     year: '2026',
     heroImage: '/essays/balatro-opportunity-sizing/cover.jpg',
     heroVideo: '/essays/balatro-opportunity-sizing/reel.mp4',
+    heroFrame: 'reel',
     tags: ['AI', 'Product Strategy', 'Prototyping', 'Essay'],
     content: [
       {
@@ -678,6 +679,7 @@ export const projects: Project[] = [
       {
         type: 'video',
         src: '/essays/balatro-opportunity-sizing/play.mp4',
+        frame: 'window',
         alt: 'A recording of a thesis being played: six cards lift onto a green felt table and score left to right, a loop card replays the first two, and the size settles at $1.19M a year with the blinds it cleared lit up',
         caption: 'Who, worth, reality, then the loop fires and Who scores again',
         aspectRatio: '16/10',
@@ -707,6 +709,7 @@ export const projects: Project[] = [
       {
         type: 'video',
         src: '/essays/balatro-opportunity-sizing/read.mp4',
+        frame: 'window',
         alt: 'A recording of a thesis writing itself onto a page, paragraph by paragraph. As each number lands it deals a matching card into a row along the bottom of the page',
         caption: 'The thesis writes itself in, and each number deals its card',
         aspectRatio: '16/10',
@@ -752,6 +755,7 @@ export const projects: Project[] = [
       {
         type: 'video',
         src: '/essays/balatro-opportunity-sizing/next.mp4',
+        frame: 'window',
         alt: 'A recording of a scored bet at $709k a year with a list of next best moves beside it. Pressing Try it on the first move replays the hand, and the size becomes $3.54M',
         caption: 'Next best move: swing one variable and replay',
         aspectRatio: '16/10',
@@ -763,6 +767,7 @@ export const projects: Project[] = [
       {
         type: 'video',
         src: '/essays/balatro-opportunity-sizing/test.mp4',
+        frame: 'window',
         alt: 'A recording of an agent asking five questions about one claim, then reading back a written assumption test with what is believed, how it will be tested and what result would prove it wrong',
         caption: 'Writing the test for the riskiest claim',
         aspectRatio: '16/10',
@@ -779,6 +784,7 @@ export const projects: Project[] = [
       {
         type: 'video',
         src: '/essays/balatro-opportunity-sizing/compare.mp4',
+        frame: 'window',
         alt: 'A recording of five banked bets as horizontal bars on one dollar axis with range bands and three dashed blind lines, under a verdict that reads too close to call',
         caption: 'Every bet on one axis, with a verdict',
         aspectRatio: '16/10',
@@ -815,6 +821,7 @@ export const projects: Project[] = [
       {
         type: 'video',
         src: '/essays/balatro-opportunity-sizing/create.mp4',
+        frame: 'window',
         alt: 'A recording of creating a new bet: an agent asks eight questions, each answer deals a card, and the finished thesis is written onto the table',
         caption: 'Creating a bet: eight questions, and the agent writes the thesis',
         aspectRatio: '16/10',
