@@ -323,6 +323,7 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
                 // The component brings its own margin, so the caption is pulled up under it
                 <p className="-mt-5 mb-8 text-sm text-muted text-center">{block.caption}</p>
               )}
+              {block.live && <div className="-mt-5 mb-8"><OpenLive src={block.live} title={block.caption || 'The page, running'} /></div>}
             </motion.div>
           )
         }

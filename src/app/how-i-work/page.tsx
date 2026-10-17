@@ -90,7 +90,7 @@ ${TRANSCRIPT_FOR_LLM}`,
 }
 
 export default function HowIWorkPage() {
-  const [chatOpen, setChatOpen] = useState(true)
+  const [chatOpen, setChatOpen] = useState(false) // Closed until asked for: the page reads better wide
   const { flags } = useFeatureFlags()
 
   // Scroll to top on mount

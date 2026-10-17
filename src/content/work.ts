@@ -41,7 +41,7 @@ export function fromHeroReel(scenes: ReelScene[]): ShowcaseScene[] {
 }
 const website = getProjectById('html-brand-website')!
 
-const SITE_VIDEO = website.heroVideo!
+const SITE = website.heroReplay!
 
 export const WORK: WorkItem[] = [
   {
@@ -149,10 +149,10 @@ export const WORK: WorkItem[] = [
     accent: '#0891b2',
     poster: '/showcase/html-brand-website.webp',
     reel: [
-      { video: SITE_VIDEO, from: 0.5, to: 9, layout: 'full', kicker: 'Enterprise AI', title: 'One line in. A four-step app out.' },
-      { video: SITE_VIDEO, from: 10, to: 19, layout: 'full', kicker: 'Build once. Sell to many.', title: 'Build it for Nike. Sell it to Qantas.' },
-      { video: SITE_VIDEO, from: 30, to: 35.5, layout: 'full', kicker: 'The maths', title: 'You build it once. They pay every time.' },
-      { video: SITE_VIDEO, from: 40, to: 48, layout: 'full', kicker: 'Gofer', title: 'Messy work, mapped onto four steps' },
+      { src: SITE, from: 0.5, to: 12, layout: 'full', kicker: 'Enterprise AI', title: 'One line in. A four-step app out.' },
+      { src: SITE, from: 12, to: 18.5, layout: 'full', kicker: 'Build once. Sell to many.', title: 'Build it for Nike. Sell it to Qantas.' },
+      { src: SITE, from: 25, to: 31, layout: 'full', kicker: 'The maths', title: 'You build it once. They pay every time.' },
+      { src: SITE, from: 31.5, to: 37.5, layout: 'full', kicker: 'Gofer', title: 'Messy work, mapped onto four steps' },
     ],
     features: [
       'The brand as files an agent builds from, not a PDF',

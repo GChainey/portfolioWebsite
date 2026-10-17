@@ -14,6 +14,25 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.51.0',
+    date: '2026-10-17',
+    title: 'Visuals, One Piece at a Time, and Every Recording as HTML',
+    description: 'The Visuals tab (dev only for now) shows the work one piece after another: title, a line, the impact, then the piece playing as a replay. The website study and the configurator are now recorded as HTML, the chat waits to be opened, and the hero loses its button.',
+    changes: [
+      'Visuals: 19 pieces in order, Shader Wall first, each a replay, video or live site with a title, one line and its impact',
+      'Two layouts to compare: full width (the piece across the column) or side by side; the last one picked sticks',
+      'Open any piece as big as the window allows, with arrows to step through the rest',
+      'The same view on the homepage Visuals tab and the gallery page',
+      'Website study: the hero, the first prototype (21 September) and the round 1 page are replays, not video; the hero has no browser bar',
+      'Configurator: six clips re-recorded from the prototype after its new brand picker ("Whose brand is it in?")',
+      'The showcase and sizzle reels use the website replay instead of the video',
+      'The chat starts closed on the homepage, case studies, CV, How I Work and Thinkers, so pages read wider',
+      'No "Read how" button in the homepage hero',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/2tzy8',
+  },
+  {
     version: '1.50.0',
     date: '2026-10-17',
     title: 'Five Ways to Show the Work, and a Sizzle Reel (parked)',

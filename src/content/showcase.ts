@@ -31,6 +31,13 @@ const CONFIGURATOR_REEL: ReelScene[] = [
 
 const rfp = getProjectById('rfp')!
 const website = getProjectById('html-brand-website')!
+
+// The site study's hero replay, cut into the moments that tell it
+const WEBSITE_REEL: ReelScene[] = [
+  { src: website.heroReplay!, from: 0.5, to: 12, title: 'One line in. A four-step app out.', notes: [{ at: 0, text: 'Describe the app; the builder inside the page makes it' }] },
+  { src: website.heroReplay!, from: 12, to: 18.5, title: 'Build it for Nike. Sell it to Qantas.', notes: [{ at: 0, text: 'Same four steps, the next client\'s brand' }] },
+  { src: website.heroReplay!, from: 25, to: 31, title: 'You build it once. They pay every time.', notes: [{ at: 0, text: 'The maths, on sliders' }] },
+]
 const configurator = getProjectById('configurator')!
 
 export const AI_SLIDES: ShowcaseSlide[] = [
@@ -52,7 +59,7 @@ export const AI_SLIDES: ShowcaseSlide[] = [
     description: 'One tagline, ten wild variations, the brand as files an agent reads, and two rounds of testing the message.',
     href: '/projects/html-brand-website',
     cta: 'Read the case study',
-    media: { type: 'video', src: website.heroVideo!, poster: website.heroImage },
+    media: { type: 'reel', scenes: WEBSITE_REEL },
   },
   {
     id: configurator.id,

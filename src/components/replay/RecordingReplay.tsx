@@ -23,11 +23,12 @@ interface RecordingReplayProps {
   // Narration, as a subtitle over the bottom of the clip: each line starts `at` seconds into the
   // recording
   notes?: Note[]
+  bar?: boolean // the window's bar of dots. Off for a hero, which reads better without it
 }
 
 type Recording = { meta: { width: number; height: number; duration: number; mouse?: boolean }; events: unknown[] }
 
-export function RecordingReplay({ src, region, aspectRatio, notes }: RecordingReplayProps) {
+export function RecordingReplay({ src, region, aspectRatio, notes, bar = true }: RecordingReplayProps) {
   const box = useRef<HTMLDivElement>(null)
   const root = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState({ width: 1280, height: 800 })
@@ -120,7 +121,7 @@ export function RecordingReplay({ src, region, aspectRatio, notes }: RecordingRe
           {subtitle}
         </Backdrop>
       ) : (
-        <MediaFrame bar after={subtitle}>{stage}</MediaFrame>
+        <MediaFrame bar={bar} after={subtitle}>{stage}</MediaFrame>
       )}
     </figure>
   )

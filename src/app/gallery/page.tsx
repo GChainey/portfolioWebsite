@@ -3,7 +3,8 @@
 import { notFound } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Header } from '@/components/Header'
-import { Gallery, GALLERY_LIVE } from '@/components/Gallery'
+import { GALLERY_LIVE } from '@/components/Gallery'
+import { Visuals } from '@/components/Visuals'
 
 export default function GalleryPage() {
   if (!GALLERY_LIVE) notFound()
@@ -19,14 +20,14 @@ export default function GalleryPage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
               <h1 className="text-4xl font-medium text-foreground mb-4">Gallery</h1>
               <p className="text-lg text-muted max-w-2xl">
-                Screens, prototypes and sites I&apos;ve designed by building them. Click one to open
-                the real thing and use it.
+                Screens, prototypes and sites I&apos;ve designed by building them, playing as the
+                real thing. Click one to open it large.
               </p>
             </motion.div>
           </section>
 
-          <section className="p-8">
-            <Gallery filters deeplink />
+          <section>
+            <Visuals />
           </section>
         </main>
       </div>
