@@ -14,6 +14,18 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.48.0',
+    date: '2026-10-17',
+    title: 'Published: Screen recordings as HTML, not video',
+    description: 'The HTML-vs-video comparison is published as an essay, listed with the others, with a link preview for sharing.',
+    changes: [
+      'An essay entry (html-not-video) that opens the full-width comparison page, so it shows under Essays and in the feed',
+      'Title, description and a large link-preview card (the scrubber at 4x on the letter, and 158x)',
+      'No longer parked',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.47.1',
     date: '2026-10-17',
     title: 'Screen recordings as HTML, not video',
