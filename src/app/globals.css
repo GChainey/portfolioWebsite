@@ -164,6 +164,40 @@ html.dark.warm {
   --ring: #ccc5ba;
 }
 
+/* CRT effects (theme menu → Effects): a sheet of glass fixed over the whole
+   page, dialogs included. Ported from Wallbounce's #stage.glass and the
+   Balatro sizing table's .sz-crt. Clicks and selection pass straight through. */
+html.crt-glass body::after,
+html.crt-scanlines body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  pointer-events: none;
+}
+
+/* Glass: fine scanlines and a vignette. */
+html.crt-glass body::after {
+  background:
+    repeating-linear-gradient(0deg, rgb(0 0 0 / 0.07) 0 1px, transparent 1px 3px),
+    radial-gradient(120% 90% at 50% 45%, transparent 55%, rgb(0 0 0 / 0.5) 100%);
+}
+
+/* Scanlines: Wallbounce's SCANLINES look (scan 0.3, vignette 0.15) as an
+   overlay: darker lines, a lighter vignette. */
+html.crt-scanlines body::after {
+  background:
+    repeating-linear-gradient(0deg, rgb(0 0 0 / 0.3) 0 1px, transparent 1px 3px),
+    radial-gradient(120% 90% at 50% 45%, transparent 40%, rgb(0 0 0 / 0.15) 100%);
+}
+
+@media print {
+  html.crt-glass body::after,
+  html.crt-scanlines body::after {
+    display: none;
+  }
+}
+
 /* Text selection highlight with accent color */
 ::selection {
   background-color: var(--selection-bg);

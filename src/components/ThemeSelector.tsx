@@ -1,7 +1,7 @@
 'use client'
 
-import { Sun, Moon, Monitor, Check, Flame } from 'lucide-react'
-import { useTheme, ACCENT_COLORS } from '@/context/ThemeContext'
+import { Sun, Moon, Monitor, Check, Flame, CircleOff, Tv, Rows3 } from 'lucide-react'
+import { useTheme, ACCENT_COLORS, EFFECTS } from '@/context/ThemeContext'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import {
   DropdownMenu,
@@ -11,8 +11,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
+const EFFECT_ICONS = { off: CircleOff, glass: Tv, scanlines: Rows3 }
+
 export function ThemeSelector() {
-  const { mode, resolvedMode, accent, warm, setMode, setAccent, toggleWarm } = useTheme()
+  const { mode, resolvedMode, accent, warm, effect, setMode, setAccent, setEffect, toggleWarm } = useTheme()
   const { flags } = useFeatureFlags()
 
   // Icon for the trigger button based on current resolved mode
@@ -85,6 +87,20 @@ export function ThemeSelector() {
             </button>
           ))}
         </div>
+
+        <DropdownMenuLabel className="text-xs text-muted-foreground mt-2">Effects</DropdownMenuLabel>
+        {EFFECTS.map(({ id, label }) => {
+          const Icon = EFFECT_ICONS[id]
+          return (
+            <DropdownMenuItem key={id} onSelect={(e) => { e.preventDefault(); setEffect(id) }} className="flex items-center justify-between">
+              <span className="flex items-center gap-2">
+                <Icon className="w-4 h-4" />
+                {label}
+              </span>
+              {effect === id && <Check className="w-4 h-4" />}
+            </DropdownMenuItem>
+          )
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   )
