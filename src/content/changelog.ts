@@ -14,6 +14,15 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.52.2',
+    date: '2026-10-17',
+    title: 'Visuals Back to Dev Only',
+    description: 'The homepage Page / Visuals switch is dev only again until the Visuals list hangs together.',
+    changes: ['The switch only shows on the local dev server, like the gallery'],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/visuals-off',
+  },
+  {
     version: '1.52.1',
     date: '2026-10-17',
     title: 'Visuals on the Homepage',
