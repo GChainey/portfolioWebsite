@@ -107,6 +107,7 @@ export function FeatureFlagDrawer() {
                     { value: 'mosaic', label: 'C · Assemble' },
                     { value: 'canvas', label: 'D · Canvas' },
                     { value: 'flipbook', label: 'E · Flipbook' },
+                    { value: 'products', label: 'F · Products' },
                   ] as const).map(({ value, label }) => (
                     <button
                       key={value}

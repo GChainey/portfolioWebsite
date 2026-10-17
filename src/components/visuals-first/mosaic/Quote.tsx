@@ -14,7 +14,7 @@ import { Highlighted } from '../shared'
 
 const tint = (colour: string, pct: number, base = 'var(--background)') => `color-mix(in srgb, ${colour} ${pct}%, ${base})`
 
-export function QuoteCell({ t, colour, w, h, size, anchor, locked, delay = 0, popWidth = 400, font, pop = true }: {
+export function QuoteCell({ t, colour, w, h, size, anchor, locked, delay = 0, popWidth = 400, font, pop = true, detail = false, pad }: {
   t: Testimonial
   colour: string
   w: number
@@ -26,6 +26,8 @@ export function QuoteCell({ t, colour, w, h, size, anchor, locked, delay = 0, po
   popWidth?: number
   font?: number
   pop?: boolean // the little overshoot when the mosaic locks
+  detail?: boolean // a bigger callout: avatar, name and role under the line
+  pad?: number
 }) {
   const [open, setOpen] = useState(false)
   const root = useRef<HTMLDivElement>(null)
@@ -68,14 +70,14 @@ export function QuoteCell({ t, colour, w, h, size, anchor, locked, delay = 0, po
         style={{
           background: tint(colour, 13),
           boxShadow: `inset 0 0 0 1px ${tint(colour, 28)}`,
-          padding: lg ? Math.round(Math.min(22, h * 0.12)) : Math.round(Math.min(16, h * 0.09)),
+          padding: pad ?? (lg ? Math.round(Math.min(22, h * 0.12)) : Math.round(Math.min(16, h * 0.09))),
           ['--tw-ring-color' as string]: colour,
           ['--tw-ring-offset-color' as string]: 'var(--background)',
         }}
         animate={locked && pop ? { scale: [1, 1.045, 0.99, 1] } : { scale: 1 }}
         transition={locked ? { duration: 0.75, times: [0, 0.35, 0.7, 1], ease: 'easeOut', delay } : { duration: 0.2 }}
       >
-        <span aria-hidden className="block leading-none font-serif" style={{ color: colour, fontSize: lg ? 30 : 24, height: lg ? 14 : 11 }}>“</span>
+        <span aria-hidden className="block leading-none font-serif" style={{ color: colour, fontSize: detail ? 48 : lg ? 30 : 24, height: detail ? 22 : lg ? 14 : 11 }}>“</span>
         <span
           className="block text-foreground tracking-tight text-balance"
           style={{ fontSize: font ?? (lg ? Math.round(Math.min(21, Math.max(15, w / 17))) : Math.round(Math.min(16, Math.max(13, w / 10.5)))), lineHeight: 1.25, fontWeight: 500 }}
@@ -84,10 +86,21 @@ export function QuoteCell({ t, colour, w, h, size, anchor, locked, delay = 0, po
             <span className="mz-mark" style={{ ['--mark' as string]: tint(colour, 42, 'transparent'), ['--d' as string]: `${delay + 0.25 + i * 0.15}s` }}>{text}</span>
           )} />
         </span>
-        <span className="flex items-center justify-between gap-2 text-muted" style={{ fontSize: 12 }}>
-          <span className="truncate">{t.name}</span>
-          {t.logo && lg && <CompanyLogo id={t.logo} className="opacity-70 scale-[0.8] origin-right" />}
-        </span>
+        {detail ? (
+          <span className="flex items-center gap-3">
+            <Facehash name={t.name} size={32} showInitial interactive={false} intensity3d="subtle" style={{ backgroundColor: tint(colour, 55), borderRadius: '9999px', flexShrink: 0 }} />
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-medium text-foreground">{t.name}</span>
+              <span className="block truncate text-xs text-muted">{t.role}</span>
+            </span>
+            {t.logo && <CompanyLogo id={t.logo} className="shrink-0 text-muted opacity-80" />}
+          </span>
+        ) : (
+          <span className="flex items-center justify-between gap-2 text-muted" style={{ fontSize: 12 }}>
+            <span className="truncate">{t.name}</span>
+            {t.logo && lg && <CompanyLogo id={t.logo} className="opacity-70 scale-[0.8] origin-right" />}
+          </span>
+        )}
       </motion.button>
 
       {/* The whole quote, grown out of the tile */}

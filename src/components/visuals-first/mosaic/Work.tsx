@@ -14,7 +14,7 @@ import { useInView } from '../shared'
 const line = 'var(--border)'
 
 // A number that counts up the first time it's seen. Words and arrows stay as written.
-function Count({ value, className, style }: { value: string; className?: string; style?: React.CSSProperties }) {
+export function Count({ value, className, style }: { value: string; className?: string; style?: React.CSSProperties }) {
   const [ref, inView] = useInView<HTMLSpanElement>('-15% 0px', true)
   const parts = value.split(/(\d+(?:\.\d+)?)/)
   const nums = useRef<(HTMLSpanElement | null)[]>([])

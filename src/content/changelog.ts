@@ -16,7 +16,7 @@ export const CHANGELOG: ChangelogEntry[] = [
   {
     version: '1.53.0',
     date: '2026-10-17',
-    title: 'Five Visuals-First Homepages (Parked)',
+    title: 'Six Visuals-First Homepages (Parked)',
     description: 'Five whole pages under the hero that put the visuals first: lots of screens for the eye test, then the work that mattered most, then colleagues\' words with the good parts pulled out. Parked behind the homepage flag; the live page is unchanged.',
     changes: [
       'Dive in: a tilted, drifting wall of screens that the camera dives into',
@@ -24,6 +24,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       'Assemble: scattered screens lock into a mosaic as you scroll, with quotes as tiles in it',
       'Canvas: a draggable design canvas of every project, with quotes as comment pins',
       'Flipbook: scroll flips through every screen, then the work as magazine spreads',
+      'Products and kind words: the products lead with their app icons, colleagues\' words called out between them',
       '96 screens and clips built from the site\'s own images and stills from the Daisy Assess and Configurator replays (scripts/build-screens.py)',
       'Testimonials moved to content/testimonials.ts, each with a pull line and highlights',
       'On the /showcase launchpad and the /parked list',

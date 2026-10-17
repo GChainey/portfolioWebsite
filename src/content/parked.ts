@@ -86,7 +86,7 @@ export const PARKED: ParkedItem[] = [
     name: 'Visuals-first homepages',
     status: 'flag',
     since: '2026-10-17',
-    summary: 'Five whole pages under the hero: a mass of screens for the eye test, then the work that mattered most, then colleagues\' words with the good parts pulled out. Built because the live page is late to the visuals and the Visuals list shows one piece at a time.',
+    summary: 'Six whole pages under the hero: a mass of screens for the eye test, then the work that mattered most, then colleagues\' words with the good parts pulled out. Built because the live page is late to the visuals and the Visuals list shows one piece at a time.',
     links: [
       { label: 'Launchpad', href: '/showcase' },
       { label: 'Dive in', href: '/?home=dive' },
@@ -94,6 +94,7 @@ export const PARKED: ParkedItem[] = [
       { label: 'Assemble', href: '/?home=mosaic' },
       { label: 'Canvas', href: '/?home=canvas' },
       { label: 'Flipbook', href: '/?home=flipbook' },
+      { label: 'Products and kind words', href: '/?home=products' },
     ],
     gate: 'Homepage work in the flag drawer (Cmd+K), or ?home=; code in components/visuals-first, screens in content/screens.ts (built by a script from the site\'s own images), quotes in content/testimonials.ts',
     todo: [

@@ -6,7 +6,7 @@ type SignatureVariant = 'off' | 'clippath' | 'penflow'
 // How the homepage shows the products and case studies. tiles is live; the carousels and the
 // five showcase variants (components/showcase) are parked here to compare. The last five are
 // whole pages under the hero, visuals first (components/visuals-first)
-export const HOME_LAYOUTS = ['carousel', 'tiles', 'autoplay', 'coverflow', 'scrolly', 'billboard', 'wall', 'dive', 'contact', 'mosaic', 'canvas', 'flipbook'] as const
+export const HOME_LAYOUTS = ['carousel', 'tiles', 'autoplay', 'coverflow', 'scrolly', 'billboard', 'wall', 'dive', 'contact', 'mosaic', 'canvas', 'flipbook', 'products'] as const
 export type HomeLayout = (typeof HOME_LAYOUTS)[number]
 
 interface FeatureFlags {
