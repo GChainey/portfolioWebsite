@@ -14,7 +14,7 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: '1.51.1',
+    version: '1.52.1',
     date: '2026-10-17',
     title: 'Visuals on the Homepage',
     description: 'The Page / Visuals switch under the homepage hero is live: Visuals shows the work one piece at a time, each playing.',
@@ -24,6 +24,19 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
     aiTools: ['Claude Code'],
     branch: 'GChainey/visuals-live',
+  },
+  {
+    version: '1.52.0',
+    date: '2026-10-17',
+    title: 'A CRT Over the Whole Page',
+    description: 'The theme menu has an Effects section: Off, Glass or Scanlines, a sheet of CRT glass over the whole site, ported from Wallbounce and the Balatro sizing table. Clicks and text selection pass straight through it.',
+    changes: [
+      'Effects, under Accent Color: Off, Glass (fine scanlines and a vignette) or Scanlines (darker lines, a lighter vignette)',
+      'One fixed overlay over everything, menus and dialogs included, with pointer-events: none',
+      'Remembered like mode and accent, and set before the first paint so it never flashes',
+      'CSS overlays only: Wallbounce\'s Tube and Arcade bow the picture through WebGL, and warping a page would break clicks and selection',
+    ],
+    aiTools: ['Claude Code'],
   },
   {
     version: '1.51.0',

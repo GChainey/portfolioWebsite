@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 
 type Mode = 'system' | 'light' | 'dark'
 type ResolvedMode = 'light' | 'dark'
+type Effect = 'off' | 'glass' | 'scanlines'
 type AccentColor = 'amber' | 'orange' | 'red' | 'rose' | 'pink' | 'fuchsia' | 'purple' | 'violet' | 'indigo' | 'blue' | 'cyan' | 'teal' | 'emerald' | 'green' | 'lime' | 'yellow'
 
 export const ACCENT_COLORS: { id: AccentColor; label: string; hex: string }[] = [
@@ -25,14 +26,32 @@ export const ACCENT_COLORS: { id: AccentColor; label: string; hex: string }[] = 
   { id: 'yellow', label: 'Yellow', hex: '#ca8a04' },
 ]
 
+// CSS overlays only, ported from Wallbounce's CRT looks. Its TUBE and ARCADE
+// bow the picture by redrawing a canvas through WebGL; a page has no canvas to
+// redraw, and warping it would break clicks and text selection.
+export const EFFECTS: { id: Effect; label: string }[] = [
+  { id: 'off', label: 'Off' },
+  { id: 'glass', label: 'Glass' },
+  { id: 'scanlines', label: 'Scanlines' },
+]
+
+// Swap the html crt-* class for the chosen effect; the layout's head script does the same before first paint.
+function applyEffect(effect: Effect) {
+  const root = document.documentElement
+  root.classList.remove('crt-glass', 'crt-scanlines')
+  if (effect !== 'off') root.classList.add(`crt-${effect}`)
+}
+
 interface ThemeContextType {
   mode: Mode
   resolvedMode: ResolvedMode
   accent: AccentColor
   warm: boolean
+  effect: Effect
   setMode: (mode: Mode) => void
   setAccent: (accent: AccentColor) => void
   setWarm: (warm: boolean) => void
+  setEffect: (effect: Effect) => void
   toggleMode: () => void
   toggleWarm: () => void
   mounted: boolean
@@ -48,6 +67,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [systemPreference, setSystemPreference] = useState<ResolvedMode>('dark')
   const [accent, setAccentState] = useState<AccentColor>('amber')
   const [warm, setWarmState] = useState(false)
+  const [effect, setEffectState] = useState<Effect>('off')
   const [mounted, setMounted] = useState(false)
 
   // Get resolved mode based on mode setting and system preference
@@ -58,17 +78,20 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const storedMode = localStorage.getItem('theme-mode') as Mode | null
     const storedAccent = localStorage.getItem('theme-accent') as AccentColor | null
     const storedWarm = localStorage.getItem('theme-warm')
+    const storedEffect = localStorage.getItem('theme-effect')
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
 
     // Default to 'dark' if no stored preference (portfolio looks best in dark)
     const initialMode = storedMode || 'dark'
     const initialAccent = storedAccent || 'amber'
     const initialWarm = storedWarm === 'true'
+    const initialEffect = EFFECTS.find(e => e.id === storedEffect)?.id ?? 'off'
     const initialSystemPref = prefersDark ? 'dark' : 'light'
 
     setModeState(initialMode)
     setAccentState(initialAccent)
     setWarmState(initialWarm)
+    setEffectState(initialEffect)
     setSystemPreference(initialSystemPref)
 
     // Apply classes based on resolved mode
@@ -80,6 +103,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       .filter(c => !c.startsWith('accent-'))
       .join(' ')
     document.documentElement.classList.add(`accent-${initialAccent}`)
+    applyEffect(initialEffect)
 
     // Listen for system preference changes
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
@@ -114,6 +138,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (mounted) {
+      applyEffect(effect)
+      localStorage.setItem('theme-effect', effect)
+    }
+  }, [effect, mounted])
+
+  useEffect(() => {
+    if (mounted) {
       // Remove old accent class and add new one
       document.documentElement.className = document.documentElement.className
         .split(' ')
@@ -127,6 +158,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const setMode = (newMode: Mode) => setModeState(newMode)
   const setAccent = (newAccent: AccentColor) => setAccentState(newAccent)
   const setWarm = (newWarm: boolean) => setWarmState(newWarm)
+  const setEffect = (newEffect: Effect) => setEffectState(newEffect)
   const toggleWarm = () => setWarmState(prev => !prev)
   const toggleMode = () => setModeState(prev => {
     if (prev === 'system') return 'light'
@@ -140,9 +172,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       resolvedMode,
       accent,
       warm,
+      effect,
       setMode,
       setAccent,
       setWarm,
+      setEffect,
       toggleMode,
       toggleWarm,
       mounted,
