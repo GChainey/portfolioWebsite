@@ -205,6 +205,33 @@ export const projects: Project[] = [
     }
   },
   {
+    id: 'html-not-video',
+    title: 'Screen recordings as HTML, not video',
+    description: 'The recordings on this site are the real page, recorded as HTML. The same clips both ways: up to 158 times smaller, and sharp at any zoom.',
+    category: 'Article',
+    year: '2026',
+    // The comparison needs the full width, so the essay is its own page
+    externalUrl: '/replay-vs-video',
+    tags: ['Prototyping', 'Tooling', 'Web', 'Essay'],
+    content: [
+      { type: 'text', content: 'The recordings on this site aren\'t videos. They\'re the real page, recorded as HTML: its HTML and CSS once, then every change to it, played back by the browser. A video stores every pixel of every frame; the HTML stores only what changes, so it is up to 158 times smaller, and it stays sharp at any zoom because the browser draws the text.' },
+      { type: 'component', componentId: 'replay-vs-video' },
+    ],
+    chatContext: {
+      description: 'Essay comparing screen recordings made as HTML (rrweb: the page\'s HTML and CSS plus every DOM change, replayed by the browser) with the same recordings as video. Each video is rendered from its HTML recording frame by frame at 2x and encoded at 60fps with x264 CRF 16, so they are the same take. Sizes: a scrolling letter 9.6 MB as video against 62 KB as HTML (158x), a mostly still RFI clip 1.3 MB against 57 KB (23x), an AI chat clip 1.2 MB against 62 KB (20x), a busy Configurator screen 3.8 MB against 78 KB (50x). HTML stays sharp when zoomed and keeps exact colours; it only works for web UIs (not canvas), records hidden values in the page, and is not a file you can post to social media. Gareth uses it for every recording in his case studies, and edits recordings after the fact: timed captions, camera zooms and highlights.',
+      suggestedQuestions: [
+        'Why record as HTML instead of video?',
+        'How much smaller is it?',
+        'Where does it not work?',
+      ],
+      followUpQuestions: [
+        'How is the video made for the comparison?',
+        'Can you edit a recording afterwards?',
+        'What tool records it?',
+      ],
+    },
+  },
+  {
     id: 'agentic-user-testing',
     title: 'Agentic user testing',
     description: 'Removing the friction of setting up user tests, and getting results you can trust when you design in HTML, not Figma.',

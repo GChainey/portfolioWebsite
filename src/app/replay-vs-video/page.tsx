@@ -3,8 +3,9 @@
 import { Header } from '@/components/Header'
 import { ReplayVsVideo } from '@/components/replay/ReplayVsVideo'
 
-// The replay-vs-video comparison on a page of its own, to link to from a post. Unlisted: the
-// site doesn't link here. The comparison is also a component posts can embed ('replay-vs-video').
+// The essay 'Screen recordings as HTML, not video' (html-not-video in projects.ts links here): the
+// comparison needs the full width, so it is a page of its own. The comparison is also a component
+// posts can embed ('replay-vs-video').
 export default function ReplayVsVideoPage() {
   return (
     <div className="min-h-screen bg-background transition-colors duration-700">
