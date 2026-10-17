@@ -31,7 +31,7 @@ const EXAMPLES: Example[] = [
       { at: 13.4 },
     ],
   },
-  { id: 'chat', name: 'AI chat', note: 'Typing, and a live model\u2019s answer. Mostly still, so the video stays small, and the replay is smaller still.', replay: '/replays/compare/chat.json', video: '/replays/compare/chat.mp4', width: 1280, height: 800 },
+  { id: 'chat', name: 'AI chat', note: 'Typing, and a live model\u2019s answer. Mostly still, so the video stays small, and the HTML is smaller still.', replay: '/replays/compare/chat.json', video: '/replays/compare/chat.mp4', width: 1280, height: 800 },
   { id: 'configurator', name: 'A busy screen', note: 'A two-panel app with a lot on screen at once.', replay: '/replays/compare/configurator.json', video: '/replays/compare/configurator.mp4', width: 1600, height: 1000 },
 ]
 const ZOOMS = [1, 2, 4, 8]
@@ -116,11 +116,11 @@ function Sizes({ video, replay }: { video: number | null; replay: number | null 
     <div className="mb-6 grid items-center gap-x-10 gap-y-4 sm:grid-cols-[auto_1fr]">
       <div>
         <div className="text-6xl font-semibold leading-none tracking-[-0.04em] text-foreground tabular-nums">{ratio ? `${ratio}×` : '…'}</div>
-        <div className="mt-2 text-sm text-muted">smaller as a replay</div>
+        <div className="mt-2 text-sm text-muted">smaller as HTML</div>
       </div>
       <div className="space-y-3">
-        {([['Video', video, 'color-mix(in srgb, var(--foreground) 28%, transparent)'], ['Replay', replay, 'var(--accent)']] as const).map(([label, n, tone]) => (
-          <div key={label} className="grid grid-cols-[4.5rem_1fr_5rem] items-center gap-3 text-sm">
+        {([['Video', video, 'color-mix(in srgb, var(--foreground) 28%, transparent)'], ['HTML', replay, 'var(--accent)']] as const).map(([label, n, tone]) => (
+          <div key={label} className="grid grid-cols-[3.5rem_1fr_5rem] items-center gap-3 text-sm">
             <span className="text-muted">{label}</span>
             <div className="h-3 overflow-hidden rounded-full bg-border/40">
               <div className="h-full rounded-full transition-[width] duration-700" style={{ width: bar(n), background: tone }} />
@@ -244,7 +244,7 @@ function Comparison({ example }: { example: Example }) {
     />
   )
 
-  const label = (kind: Kind) => <><span className="font-medium text-zinc-900">{kind === 'video' ? 'Video' : 'Replay'}</span><span className="tabular-nums">{size(bytes[kind])}</span></>
+  const label = (kind: Kind) => <><span className="font-medium text-zinc-900">{kind === 'video' ? 'Video' : 'HTML'}</span><span className="tabular-nums">{size(bytes[kind])}</span></>
   // As big as the screen allows, leaving room for the controls (and on the page, the sizes)
   const wide = { width: `min(100%, calc((100vh - ${full ? 9 : 13}rem) * ${base.width / base.height}))`, margin: '0 auto' }
 
@@ -254,7 +254,7 @@ function Comparison({ example }: { example: Example }) {
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3">
           <Segments label="View" items={MODES.map((m) => ({ id: m.id, label: m.label }))} value={mode} onChange={setMode} />
-          {mode === 'single' && <Segments label="Show" items={[{ id: 'video' as Kind, label: 'Video' }, { id: 'replay' as Kind, label: 'Replay' }]} value={show} onChange={setShow} />}
+          {mode === 'single' && <Segments label="Show" items={[{ id: 'video' as Kind, label: 'Video' }, { id: 'replay' as Kind, label: 'HTML' }]} value={show} onChange={setShow} />}
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <Segments label="Zoom" items={ZOOMS.map((z) => ({ id: z, label: `${z}×` }))} value={zoom} onChange={setZoom} />
@@ -291,7 +291,7 @@ function Comparison({ example }: { example: Example }) {
       </Backdrop>
 
       <figcaption className="mt-3 text-center text-sm text-muted">
-        The same take: the video is made from the replay, frame for frame, and encoded at 2x and 60fps.
+        The same take: the video is made from the HTML recording, frame for frame, and encoded at 2x and 60fps.
       </figcaption>
     </figure>
   )

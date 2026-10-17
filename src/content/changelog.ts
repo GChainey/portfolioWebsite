@@ -14,6 +14,17 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.47.1',
+    date: '2026-10-17',
+    title: 'Screen recordings as HTML, not video',
+    description: 'The comparison page is retitled and says HTML rather than replay, and the letter example is re-recorded with the sidebar collapsed.',
+    changes: [
+      'Title: "Screen recordings as HTML, not video"; the labels, sizes and copy say HTML',
+      'The letter example uses the recording with Daisy\'s sidebar collapsed, and its video is rendered again from it',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.47.0',
     date: '2026-10-16',
     title: 'Replay vs video: big by default, sizes up front, examples on scroll',
