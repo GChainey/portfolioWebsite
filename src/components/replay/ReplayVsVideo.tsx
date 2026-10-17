@@ -203,6 +203,17 @@ function Comparison({ example }: { example: Example }) {
     return () => document.removeEventListener('fullscreenchange', on)
   }, [])
 
+  // 1, 2, 4 or 8 zooms the comparison under the cursor
+  const hovered = useRef(false)
+  useEffect(() => {
+    const key = (e: KeyboardEvent) => {
+      const z = Number(e.key)
+      if (hovered.current && ZOOMS.includes(z) && !(e.target instanceof HTMLInputElement)) setZoom(z)
+    }
+    window.addEventListener('keydown', key)
+    return () => window.removeEventListener('keydown', key)
+  }, [])
+
   const toggle = () => {
     const v = video.current
     clock.current.paused = !paused
@@ -211,8 +222,9 @@ function Comparison({ example }: { example: Example }) {
     syncReplay()
   }
 
+  // Not while a button is down: dragging the divider shouldn't pan the zoom
   const aim = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (zoom === 1) return
+    if (zoom === 1 || e.buttons) return
     const r = e.currentTarget.getBoundingClientRect()
     setOrigin({ x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100 })
   }
@@ -249,7 +261,10 @@ function Comparison({ example }: { example: Example }) {
   const wide = { width: `min(100%, calc((100vh - ${full ? 9 : 13}rem) * ${base.width / base.height}))`, margin: '0 auto' }
 
   return (
-    <figure ref={figure} className={`not-prose mt-8 ${full ? 'flex flex-col justify-center overflow-auto bg-background p-6' : ''}`}>
+    <figure
+      ref={figure} onMouseEnter={() => { hovered.current = true }} onMouseLeave={() => { hovered.current = false }}
+      className={`not-prose mt-8 ${full ? 'flex flex-col justify-center overflow-auto bg-background p-6' : ''}`}
+    >
       <Sizes video={bytes.video} replay={bytes.replay} />
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3">
