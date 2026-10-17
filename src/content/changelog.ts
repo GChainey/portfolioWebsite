@@ -14,6 +14,18 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.51.1',
+    date: '2026-10-17',
+    title: 'Visuals on the Homepage',
+    description: 'The Page / Visuals switch under the homepage hero is live: Visuals shows the work one piece at a time, each playing.',
+    changes: [
+      'The homepage switch is no longer dev only',
+      'The /gallery page and its header link stay local for now',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/visuals-live',
+  },
+  {
     version: '1.51.0',
     date: '2026-10-17',
     title: 'Visuals, One Piece at a Time, and Every Recording as HTML',
