@@ -14,6 +14,21 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.52.0',
+    date: '2026-10-17',
+    title: 'A CRT in the Theme Selector',
+    description: 'The CRT effect from Wallbounce and the Balatro sizing table, as a hidden option in the theme selector: switch it on from the feature flags drawer (Cmd+K).',
+    changes: [
+      'New CRT flag in the feature flags drawer shows a CRT section in the theme selector',
+      'Glass: the fine scanlines and vignette from Wallbounce and the Balatro sizing table, over the whole page',
+      'Tube: darker scanlines, colour fringing, a rounded edge and a slight flicker (none under reduced motion)',
+      'Clicks and text selection go straight through the glass',
+      'The choice persists via localStorage and applies before hydration to prevent flash; turning the flag off turns the effect off',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/crt-effect',
+  },
+  {
     version: '1.51.0',
     date: '2026-10-17',
     title: 'Visuals, One Piece at a Time, and Every Recording as HTML',

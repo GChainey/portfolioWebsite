@@ -3,9 +3,11 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
+import { useTheme } from '@/context/ThemeContext'
 
 export function FeatureFlagDrawer() {
   const { flags, setFlag, isDrawerOpen, setDrawerOpen } = useFeatureFlags()
+  const { setCrt } = useTheme()
 
   // Only show in development
   if (process.env.NODE_ENV !== 'development') {
@@ -181,6 +183,32 @@ export function FeatureFlagDrawer() {
                 </div>
                 <p className="text-xs text-muted">
                   Show warmth toggle in theme selector
+                </p>
+              </div>
+
+              {/* CRT Toggle */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-foreground">CRT</p>
+                  <button
+                    onClick={() => {
+                      // Hiding the setting turns the effect off too, or there'd be no way back
+                      if (flags.crt) setCrt('off')
+                      setFlag('crt', !flags.crt)
+                    }}
+                    className={`relative w-11 h-6 rounded-full transition-colors ${
+                      flags.crt ? 'bg-accent' : 'bg-border'
+                    }`}
+                  >
+                    <motion.div
+                      className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow"
+                      animate={{ x: flags.crt ? 20 : 0 }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                    />
+                  </button>
+                </div>
+                <p className="text-xs text-muted">
+                  Show the CRT effect (from Wallbounce and the Balatro sizing table) in theme selector
                 </p>
               </div>
 

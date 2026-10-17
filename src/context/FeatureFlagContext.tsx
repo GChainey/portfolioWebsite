@@ -16,6 +16,7 @@ interface FeatureFlags {
   signatureVariant: SignatureVariant
   signatureSize: number
   warmth: boolean
+  crt: boolean
   colourLights: boolean
   homeLayout: HomeLayout
 }
@@ -35,6 +36,7 @@ const defaultFlags: FeatureFlags = {
   signatureVariant: 'off',
   signatureSize: 36,
   warmth: false,
+  crt: false,
   colourLights: false,
   homeLayout: 'tiles',
 }

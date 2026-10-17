@@ -4,6 +4,21 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 
 type Mode = 'system' | 'light' | 'dark'
 type ResolvedMode = 'light' | 'dark'
+// A CRT in front of the page, from Wallbounce and the Balatro sizing table. Glass is the
+// sheet of scanlines and vignette both use; tube is heavier, with a bowed edge and flicker.
+export type CrtLook = 'off' | 'glass' | 'tube'
+export const CRT_LOOKS: { id: CrtLook; label: string }[] = [
+  { id: 'off', label: 'Off' },
+  { id: 'glass', label: 'Glass' },
+  { id: 'tube', label: 'Tube' },
+]
+
+function applyCrt(look: CrtLook) {
+  const root = document.documentElement
+  root.classList.toggle('crt-glass', look === 'glass')
+  root.classList.toggle('crt-tube', look === 'tube')
+}
+
 type AccentColor = 'amber' | 'orange' | 'red' | 'rose' | 'pink' | 'fuchsia' | 'purple' | 'violet' | 'indigo' | 'blue' | 'cyan' | 'teal' | 'emerald' | 'green' | 'lime' | 'yellow'
 
 export const ACCENT_COLORS: { id: AccentColor; label: string; hex: string }[] = [
@@ -30,9 +45,11 @@ interface ThemeContextType {
   resolvedMode: ResolvedMode
   accent: AccentColor
   warm: boolean
+  crt: CrtLook
   setMode: (mode: Mode) => void
   setAccent: (accent: AccentColor) => void
   setWarm: (warm: boolean) => void
+  setCrt: (crt: CrtLook) => void
   toggleMode: () => void
   toggleWarm: () => void
   mounted: boolean
@@ -48,6 +65,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [systemPreference, setSystemPreference] = useState<ResolvedMode>('dark')
   const [accent, setAccentState] = useState<AccentColor>('amber')
   const [warm, setWarmState] = useState(false)
+  const [crt, setCrtState] = useState<CrtLook>('off')
   const [mounted, setMounted] = useState(false)
 
   // Get resolved mode based on mode setting and system preference
@@ -58,23 +76,27 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const storedMode = localStorage.getItem('theme-mode') as Mode | null
     const storedAccent = localStorage.getItem('theme-accent') as AccentColor | null
     const storedWarm = localStorage.getItem('theme-warm')
+    const storedCrt = localStorage.getItem('theme-crt')
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
 
     // Default to 'dark' if no stored preference (portfolio looks best in dark)
     const initialMode = storedMode || 'dark'
     const initialAccent = storedAccent || 'amber'
     const initialWarm = storedWarm === 'true'
+    const initialCrt = CRT_LOOKS.find((look) => look.id === storedCrt)?.id ?? 'off'
     const initialSystemPref = prefersDark ? 'dark' : 'light'
 
     setModeState(initialMode)
     setAccentState(initialAccent)
     setWarmState(initialWarm)
+    setCrtState(initialCrt)
     setSystemPreference(initialSystemPref)
 
     // Apply classes based on resolved mode
     const resolved = initialMode === 'system' ? initialSystemPref : initialMode
     document.documentElement.classList.toggle('dark', resolved === 'dark')
     document.documentElement.classList.toggle('warm', initialWarm)
+    applyCrt(initialCrt)
     document.documentElement.className = document.documentElement.className
       .split(' ')
       .filter(c => !c.startsWith('accent-'))
@@ -112,6 +134,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
   }, [warm, mounted])
 
+  // Apply the CRT look when it changes
+  useEffect(() => {
+    if (mounted) {
+      applyCrt(crt)
+      localStorage.setItem('theme-crt', crt)
+    }
+  }, [crt, mounted])
+
   useEffect(() => {
     if (mounted) {
       // Remove old accent class and add new one
@@ -127,6 +157,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const setMode = (newMode: Mode) => setModeState(newMode)
   const setAccent = (newAccent: AccentColor) => setAccentState(newAccent)
   const setWarm = (newWarm: boolean) => setWarmState(newWarm)
+  const setCrt = (newCrt: CrtLook) => setCrtState(newCrt)
   const toggleWarm = () => setWarmState(prev => !prev)
   const toggleMode = () => setModeState(prev => {
     if (prev === 'system') return 'light'
@@ -140,9 +171,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       resolvedMode,
       accent,
       warm,
+      crt,
       setMode,
       setAccent,
       setWarm,
+      setCrt,
       toggleMode,
       toggleWarm,
       mounted,

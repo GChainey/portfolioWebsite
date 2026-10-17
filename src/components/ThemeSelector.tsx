@@ -1,7 +1,7 @@
 'use client'
 
-import { Sun, Moon, Monitor, Check, Flame } from 'lucide-react'
-import { useTheme, ACCENT_COLORS } from '@/context/ThemeContext'
+import { Sun, Moon, Monitor, Check, Flame, Tv } from 'lucide-react'
+import { useTheme, ACCENT_COLORS, CRT_LOOKS } from '@/context/ThemeContext'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import {
   DropdownMenu,
@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 export function ThemeSelector() {
-  const { mode, resolvedMode, accent, warm, setMode, setAccent, toggleWarm } = useTheme()
+  const { mode, resolvedMode, accent, warm, crt, setMode, setAccent, toggleWarm, setCrt } = useTheme()
   const { flags } = useFeatureFlags()
 
   // Icon for the trigger button based on current resolved mode
@@ -66,6 +66,21 @@ export function ThemeSelector() {
               </span>
               {warm && <Check className="w-4 h-4" />}
             </DropdownMenuItem>
+          </>
+        )}
+
+        {flags.crt && (
+          <>
+            <DropdownMenuLabel className="text-xs text-muted-foreground mt-2">CRT</DropdownMenuLabel>
+            {CRT_LOOKS.map((look) => (
+              <DropdownMenuItem key={look.id} onSelect={(e) => { e.preventDefault(); setCrt(look.id) }} className="flex items-center justify-between">
+                <span className="flex items-center gap-2">
+                  <Tv className="w-4 h-4" />
+                  {look.label}
+                </span>
+                {crt === look.id && <Check className="w-4 h-4" />}
+              </DropdownMenuItem>
+            ))}
           </>
         )}
 
