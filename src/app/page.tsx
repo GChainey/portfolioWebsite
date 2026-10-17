@@ -21,6 +21,8 @@ import { WallShowcase } from '@/components/showcase/Wall'
 import { PRODUCT_SLIDES, AI_SLIDES } from '@/content/showcase'
 import { writing, getProjectById } from '@/content/projects'
 import { TestimonialCarousel } from '@/components/TestimonialCarousel'
+import { TESTIMONIALS } from '@/content/testimonials'
+import { VisualsFirstHome, VISUALS_FIRST_IDS, type VisualsFirstId } from '@/components/visuals-first'
 import { useFeatureFlags, HOME_LAYOUTS, type HomeLayout } from '@/context/FeatureFlagContext'
 import { thinkers } from '@/content/thinkers'
 import { ParticleField } from '@/components/ParticleField'
@@ -127,49 +129,6 @@ const EXPERIENCE = [
   },
 ]
 
-// Testimonials data
-const TESTIMONIALS = [
-  {
-    name: 'Winnie Bamra',
-    role: 'Senior Product Manager',
-    company: 'Ex-SpaceX · SEEK',
-    logo: 'spacex' as const,
-    linkedIn: 'https://www.linkedin.com/in/wbamra/',
-    content: 'Gareth is a pleasure to work with and an asset to any team. He is diligent in discovery, passionate about the end user, empathetic, and collaborative in his approach. He is excellent at leading user interviews, enabling the team to collect and extract actionable insights.',
-  },
-  {
-    name: 'Richard Simms',
-    role: 'Principal Product Designer',
-    company: 'SEEK',
-    logo: 'seek' as const,
-    linkedIn: 'https://www.linkedin.com/in/richardsimms/',
-    content: 'A talented senior UX designer who can independently drive projects forward. His designs reflected a deep understanding of our users, combined with a mastery of UX principles. Meticulous attention to detail and craft are evident in everything he produces.',
-  },
-  {
-    name: 'Ahmed Hakeem',
-    role: 'Staff Engineer',
-    company: 'SEEK',
-    logo: 'seek' as const,
-    linkedIn: 'https://www.linkedin.com/in/meds/',
-    content: "A developer's best friend. I have many fond memories bouncing ideas around and jamming out features end to end from fake door tests to deployment. At every step Gareth was inquisitive, collaborative and open to thinking on their feet.",
-  },
-  {
-    name: 'David Deville',
-    role: 'Senior Content Designer',
-    company: 'SEEK',
-    logo: 'seek' as const,
-    linkedIn: 'https://www.linkedin.com/in/david-deville-98b287b8/',
-    content: "Gareth goes above and beyond designing for customer needs. Fast experimentation, elegant designs and constant iteration resulted in products like an AI-powered resume generator that genuinely helped candidates. A positive, creative and likeable teammate.",
-  },
-  {
-    name: 'Henry Vesander',
-    role: 'Chief Product Officer',
-    company: 'Best Practice Software',
-    logo: 'bestpractice' as const,
-    linkedIn: 'https://www.linkedin.com/in/henrikvesander/',
-    content: 'An outstanding UX/product designer. I hired him to build a cloud-based practice management SaaS. He is a driven individual that can be trusted in getting the job done once given guidance and a brief. I definitely recommend Gareth!',
-  },
-]
 
 
 export default function Home() {
@@ -187,6 +146,8 @@ export default function Home() {
   // ?home=<layout> overrides the flag, so a variant can be linked to
   const [homeOverride, setHomeOverride] = useState<HomeLayout | null>(null)
   const homeLayout = homeOverride ?? flags.homeLayout
+  // The visuals-first variants are whole pages under the hero: they bring their own work and kind words
+  const visualsFirst = VISUALS_FIRST_IDS.includes(homeLayout)
 
   useEffect(() => {
     const home = new URLSearchParams(window.location.search).get('home') as HomeLayout | null
@@ -366,7 +327,7 @@ export default function Home() {
 
           {/* Main content */}
           {/* The scroll story runs out of this column to the window's edges, so it can't be clipped */}
-          <main className={`flex-1 min-w-0 border-x border-border ${homeLayout === 'scrolly' ? '' : 'overflow-clip'}`}>
+          <main className={`flex-1 min-w-0 border-x border-border ${homeLayout === 'scrolly' || visualsFirst ? '' : 'overflow-clip'}`}>
 
             {/* Hero Section - Centered */}
             <section className="relative py-24 px-8 border-b border-border overflow-hidden">
@@ -440,7 +401,7 @@ export default function Home() {
             </section>
 
             {/* Page or visuals - the same switch the case studies have. Dev only until Visuals hangs together */}
-            {GALLERY_LIVE && (
+            {GALLERY_LIVE && !visualsFirst && (
               <div className="flex justify-center py-4 border-b border-border">
                 <div className="flex bg-border/40 rounded-full p-0.5">
                   {([
@@ -463,7 +424,16 @@ export default function Home() {
               </div>
             )}
 
-            {view === 'visuals' ? (
+            {visualsFirst ? (
+              <>
+                <VisualsFirstHome id={homeLayout as VisualsFirstId} />
+                {experienceSection}
+                {thinkersSection}
+                <WorkList label="Earlier work" note="SEEK and Best Practice" ids={EARLIER_WORK} titleBorders={flags.sectionTitleBorders} />
+                <WorkList label="Essays" ids={ESSAYS} titleBorders={flags.sectionTitleBorders} />
+                <WorkList label="Small studies" note="For the curious" ids={SMALL_STUDIES} titleBorders={flags.sectionTitleBorders} />
+              </>
+            ) : view === 'visuals' ? (
               <section className="border-b border-border">
                 <Visuals />
               </section>

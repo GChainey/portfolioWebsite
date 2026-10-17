@@ -102,6 +102,12 @@ export function FeatureFlagDrawer() {
                     { value: 'scrolly', label: '3 · Scroll story' },
                     { value: 'billboard', label: '4 · Billboard' },
                     { value: 'wall', label: '5 · The wall' },
+                    { value: 'dive', label: 'A · Dive in' },
+                    { value: 'contact', label: 'B · Contact sheet' },
+                    { value: 'mosaic', label: 'C · Assemble' },
+                    { value: 'canvas', label: 'D · Canvas' },
+                    { value: 'flipbook', label: 'E · Flipbook' },
+                    { value: 'products', label: 'F · Products' },
                   ] as const).map(({ value, label }) => (
                     <button
                       key={value}

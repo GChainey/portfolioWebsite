@@ -82,6 +82,28 @@ export const PARKED: ParkedItem[] = [
     ],
   },
   {
+    id: 'home-visuals-first',
+    name: 'Visuals-first homepages',
+    status: 'flag',
+    since: '2026-10-17',
+    summary: 'Six whole pages under the hero: a mass of screens for the eye test, then the work that mattered most, then colleagues\' words with the good parts pulled out. Built because the live page is late to the visuals and the Visuals list shows one piece at a time.',
+    links: [
+      { label: 'Launchpad', href: '/showcase' },
+      { label: 'Dive in', href: '/?home=dive' },
+      { label: 'Contact sheet', href: '/?home=contact' },
+      { label: 'Assemble', href: '/?home=mosaic' },
+      { label: 'Canvas', href: '/?home=canvas' },
+      { label: 'Flipbook', href: '/?home=flipbook' },
+      { label: 'Products and kind words', href: '/?home=products' },
+    ],
+    gate: 'Homepage work in the flag drawer (Cmd+K), or ?home=; code in components/visuals-first, screens in content/screens.ts (built by a script from the site\'s own images), quotes in content/testimonials.ts',
+    todo: [
+      'Pick one (or parts of several), make it the default, delete the rest',
+      'Highlights on the testimonials are my picks of their words; check them',
+      'public/screens is built from existing images; re-run the script when new work lands',
+    ],
+  },
+  {
     id: 'home-showcase-variants',
     name: 'Homepage showcase variants',
     status: 'flag',

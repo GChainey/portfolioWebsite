@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { ArrowRight, Play } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { sizzleSeconds } from '@/content/sizzle'
+import { VISUALS_FIRST } from '@/components/visuals-first'
 
 // Launchpad for comparing the homepage showcase variants and the sizzle reels. Each card opens
 // the homepage in that variant, scrolled to the work (?home=<variant>#work). Nothing links here.
@@ -32,7 +33,38 @@ export default function ShowcaseLaunchpad() {
             <p className="text-muted max-w-2xl">Each opens the homepage in that variant, scrolled to the work. It only changes this one visit; the flag drawer (⌘K) keeps a choice.</p>
           </div>
 
+          {/* Whole pages under the hero: screens first, then the work, then kind words */}
+          <div className="px-8 pt-10 pb-4 border-b border-border">
+            <p className="text-xs text-muted uppercase tracking-widest mb-2">Visuals first</p>
+            <p className="text-muted max-w-2xl">The hero stays. Then lots of screens for the eye test, the work that mattered most, and colleagues&rsquo; words with the good parts pulled out. Each opens at the top of the homepage.</p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3">
+            {VISUALS_FIRST.map((v, i) => (
+              <Link
+                key={v.id}
+                href={`/?home=${v.id}`}
+                className={`group block p-6 border-b border-border ${i % 3 !== 2 ? 'lg:border-r' : ''} ${i % 2 === 0 ? 'sm:max-lg:border-r' : ''}`}
+              >
+                <div className="relative overflow-hidden rounded-xl border border-border bg-black" style={{ aspectRatio: '16 / 10' }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={`/showcase/variants/${v.id}.webp`} alt="" className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]" />
+                  <span className="absolute left-3 top-3 rounded-full bg-black/70 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur">{v.tag}</span>
+                </div>
+                <div className="mt-4 flex items-start justify-between gap-3">
+                  <div>
+                    <h2 className="font-medium text-foreground group-hover:text-accent transition-colors">{v.name}</h2>
+                    <p className="mt-1 text-sm text-muted">{v.note}</p>
+                  </div>
+                  <ArrowRight className="mt-1 w-4 h-4 shrink-0 text-muted group-hover:text-accent group-hover:translate-x-1 transition-all" />
+                </div>
+              </Link>
+            ))}
+          </div>
+
           {/* The variants */}
+          <div className="px-8 pt-10 pb-4 border-b border-border">
+            <p className="text-xs text-muted uppercase tracking-widest">Ways to show the work</p>
+          </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3">
             {VARIANTS.map((v, i) => (
               <Link
