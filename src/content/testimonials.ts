@@ -23,7 +23,7 @@ export const TESTIMONIALS: Testimonial[] = [
     logo: 'spacex',
     linkedIn: 'https://www.linkedin.com/in/wbamra/',
     content: 'Gareth is a pleasure to work with and an asset to any team. He is diligent in discovery, passionate about the end user, empathetic, and collaborative in his approach. He is excellent at leading user interviews, enabling the team to collect and extract actionable insights.',
-    pull: 'a pleasure to work with and an asset to any team',
+    pull: 'Gareth is a pleasure to work with and an asset to any team.',
     highlights: ['an asset to any team', 'excellent at leading user interviews', 'diligent in discovery'],
   },
   {
