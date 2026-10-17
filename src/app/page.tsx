@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { X, ArrowRight, FileText, LayoutGrid } from 'lucide-react'
 import { Header } from '@/components/Header'
+import { GALLERY_LIVE } from '@/components/Gallery'
 import { Visuals } from '@/components/Visuals'
 import { ChatInterface } from '@/components/ChatInterface'
 import { Facehash } from 'facehash'
@@ -438,27 +439,29 @@ export default function Home() {
               </div>
             </section>
 
-            {/* Page or visuals - the same switch the case studies have */}
-            <div className="flex justify-center py-4 border-b border-border">
-              <div className="flex bg-border/40 rounded-full p-0.5">
-                {([
-                  { id: 'page', label: 'Page', icon: FileText },
-                  { id: 'visuals', label: 'Visuals', icon: LayoutGrid },
-                ] as const).map(({ id, label, icon: Icon }) => (
-                  <button
-                    key={id}
-                    onClick={() => setView(id)}
-                    aria-pressed={view === id}
-                    className={`flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-full transition-all ${
-                      view === id ? 'bg-foreground text-background font-medium' : 'text-muted hover:text-foreground'
-                    }`}
-                  >
-                    <Icon className="w-3.5 h-3.5" />
-                    {label}
-                  </button>
-                ))}
+            {/* Page or visuals - the same switch the case studies have. Dev only until Visuals hangs together */}
+            {GALLERY_LIVE && (
+              <div className="flex justify-center py-4 border-b border-border">
+                <div className="flex bg-border/40 rounded-full p-0.5">
+                  {([
+                    { id: 'page', label: 'Page', icon: FileText },
+                    { id: 'visuals', label: 'Visuals', icon: LayoutGrid },
+                  ] as const).map(({ id, label, icon: Icon }) => (
+                    <button
+                      key={id}
+                      onClick={() => setView(id)}
+                      aria-pressed={view === id}
+                      className={`flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-full transition-all ${
+                        view === id ? 'bg-foreground text-background font-medium' : 'text-muted hover:text-foreground'
+                      }`}
+                    >
+                      <Icon className="w-3.5 h-3.5" />
+                      {label}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {view === 'visuals' ? (
               <section className="border-b border-border">
