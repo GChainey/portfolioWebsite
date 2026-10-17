@@ -53,7 +53,7 @@ export function Backdrop({ className = '', style, children }: { className?: stri
 
 // How a product site would show it: a padded backdrop, then a window, then the picture or clip.
 // A screen recording gets a bar with the window buttons (and an address only where it is the
-// real one); a still or an embed gets the window alone. The window is always light, like the apps
+// real one); a still, an embed or a clip with its own stage gets the window alone. The window is always light, like the apps
 // in it. The buttons are grey, or the Mac's red, amber and green with the colour-lights flag.
 export function MediaFrame({ bar, url, after, children }: { bar?: boolean; url?: string; after?: ReactNode; children: ReactNode }) {
   return (
@@ -160,7 +160,7 @@ export function FramedMedia({ block }: { block: MediaBlock }) {
   }
 
   return (
-    <MediaFrame bar={block.type === 'video'}>
+    <MediaFrame bar={block.type === 'video' && block.frame !== 'window'}>
       <div className="relative w-full" style={{ aspectRatio }}>
         {block.type === 'video' ? (
           <video src={block.src} autoPlay loop muted playsInline className={fill} />

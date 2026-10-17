@@ -14,6 +14,17 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.48.1',
+    date: '2026-10-17',
+    title: 'Opportunity sizing, but Balatro: no browser bar',
+    description: 'The game clips have their own stage, so they sit in the window without the browser bar.',
+    changes: [
+      'A window frame for clips: the window on the backdrop, without the browser bar',
+      'The six clips in the essay use it, and the hero reel drops its bar too',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.48.0',
     date: '2026-10-17',
     title: 'Published: Screen recordings as HTML, not video',
