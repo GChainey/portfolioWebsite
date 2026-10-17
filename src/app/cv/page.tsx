@@ -33,7 +33,7 @@ const CV_PAGE_CONTEXT = {
 }
 
 export default function CVPage() {
-  const [chatOpen, setChatOpen] = useState(true)
+  const [chatOpen, setChatOpen] = useState(false) // Closed until asked for: the page reads better wide
   const [experienceDialogOpen, setExperienceDialogOpen] = useState(false)
   const [selectedCompanyId, setSelectedCompanyId] = useState('enterpriseai')
   const { flags } = useFeatureFlags()

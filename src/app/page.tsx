@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { X, ArrowRight, FileText, LayoutGrid } from 'lucide-react'
 import { Header } from '@/components/Header'
-import { Gallery, GALLERY_LIVE } from '@/components/Gallery'
+import { GALLERY_LIVE } from '@/components/Gallery'
+import { Visuals } from '@/components/Visuals'
 import { ChatInterface } from '@/components/ChatInterface'
 import { Facehash } from 'facehash'
 import { GitHubContributions } from '@/components/GitHubContributions'
@@ -23,7 +24,6 @@ import { TestimonialCarousel } from '@/components/TestimonialCarousel'
 import { useFeatureFlags, HOME_LAYOUTS, type HomeLayout } from '@/context/FeatureFlagContext'
 import { thinkers } from '@/content/thinkers'
 import { ParticleField } from '@/components/ParticleField'
-import { Magnetic } from '@/components/Magnetic'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { ExperienceDialog } from '@/components/ExperienceDialog'
 import { PenflowSignature } from '@/components/PenflowSignature'
@@ -234,11 +234,10 @@ export default function Home() {
       current = target
       time += step.pause
     }
-    // Done typing, show tooltip after 1s, then open chat
+    // Done typing, show tooltip after 1s. The chat waits to be opened: the page reads better wide
     timeouts.push(setTimeout(() => setTypingDone(true), time))
     timeouts.push(setTimeout(() => setShowTooltip(true), time + 1000))
     timeouts.push(setTimeout(() => setChatMounted(true), time + 1000))
-    timeouts.push(setTimeout(() => setChatOpen(true), time + 1500))
 
     return () => timeouts.forEach(clearTimeout)
   }, [])
@@ -436,19 +435,6 @@ export default function Home() {
                   className="flex flex-col items-center"
                 >
                   <GitHubContributions variant="full" animate />
-
-                  {/* CTA */}
-                  <div className="mt-8">
-                    <Magnetic strength={0.25} radius={100} disabled={!flags.particleField}>
-                      <Link
-                        href="/projects/rfp"
-                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--accent-cta)] text-white text-sm font-medium rounded-full hover:brightness-110 transition-all group"
-                      >
-                        Read how
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </Link>
-                    </Magnetic>
-                  </div>
                 </motion.div>
               </div>
             </section>
@@ -478,8 +464,8 @@ export default function Home() {
             )}
 
             {view === 'visuals' ? (
-              <section className="p-8 border-b border-border">
-                <Gallery filters />
+              <section className="border-b border-border">
+                <Visuals />
               </section>
             ) : (
               <>

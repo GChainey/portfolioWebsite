@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { X, Clock, ArrowRight, ArrowUpRight, RotateCcw, LayoutGrid, FileText } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { ChatInterface } from '@/components/ChatInterface'
+import { RecordingReplay } from '@/components/replay/RecordingReplay'
 import { Facehash } from 'facehash'
 import { CaseStudyContent, componentRegistry } from '@/components/CaseStudyContent'
 import { TableOfContents } from '@/components/TableOfContents'
@@ -153,7 +154,7 @@ function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
 export default function ProjectPage() {
   const params = useParams()
   const [project, setProject] = useState<Project | null>(null)
-  const [chatOpen, setChatOpen] = useState(true)
+  const [chatOpen, setChatOpen] = useState(false) // Closed until asked for: the page reads better wide
   const [tldrOpen, setTldrOpen] = useState(false)
   const [tldrLength, setTldrLength] = useState('recruiter')
   const [tldrFocus, setTldrFocus] = useState('')
@@ -186,13 +187,6 @@ export default function ProjectPage() {
 
     return () => clearTimeout(timer)
   }, [params.id])
-
-  // Close chat on mobile
-  useEffect(() => {
-    if (window.innerWidth < 768) {
-      setChatOpen(false)
-    }
-  }, [])
 
   const generateTldr = async () => {
     if (!project) return
@@ -362,7 +356,13 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
 
 
                 {/* Hero Image for non-GitHub articles */}
-                {!project.showGitHubActivity && !project.heroReel && project.heroImage && (
+                {project.heroReplay && (
+                  <div className="w-full -mt-8">
+                    <RecordingReplay src={project.heroReplay} bar={false} />
+                  </div>
+                )}
+
+                {!project.showGitHubActivity && !project.heroReel && !project.heroReplay && project.heroImage && (
                   <div className="w-full mb-8">
                     {project.heroFrame === 'device' ? (
                       <Backdrop className="overflow-hidden">

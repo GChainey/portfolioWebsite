@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
 import { Header } from '@/components/Header'
@@ -36,15 +36,8 @@ const THINKERS_PAGE_CONTEXT = {
 
 
 export default function ThinkersPage() {
-  const [chatOpen, setChatOpen] = useState(true)
+  const [chatOpen, setChatOpen] = useState(false) // Closed until asked for: the page reads better wide
   const { flags } = useFeatureFlags()
-
-  // Close chat on mobile
-  useEffect(() => {
-    if (window.innerWidth < 768) {
-      setChatOpen(false)
-    }
-  }, [])
 
   return (
     <div className="min-h-screen bg-background transition-colors duration-700">

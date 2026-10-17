@@ -59,6 +59,7 @@ export interface ComponentBlock {
   props?: Record<string, unknown>
   caption?: string
   pending?: boolean // Dev server only, like a pending media slot
+  live?: string // A live copy of what the component shows, opened in a dialog from a button under it
 }
 
 export type ContentBlock = MediaBlock | TextBlock | HeadingBlock | ListBlock | StatsBlock | ComparisonBlock | TableBlock | ComponentBlock
@@ -75,6 +76,7 @@ export interface Project {
   heroVideo?: string // Plays in place of the hero image, which becomes its poster
   heroFrame?: 'device' | 'grid' | 'reel' // device: the hero image is a device on a transparent background, and stands on the backdrop with no window. grid: the hero sits on the dotted canvas the live demos use, not the colour backdrop. reel: a sizzle reel with its own stage, in the window without a browser bar
   heroUrl?: string // For a hero reel: the address shown in the browser bar around it
+  heroReplay?: string // A replay (/replays/... JSON) in place of the hero image, in the window with no browser bar
   heroReel?: ReelScene[] // A sizzle reel of replays in place of the hero picture: sharp, drawn by the page
   tags: string[]
   featured?: boolean // Show in hero with special treatment
@@ -1945,13 +1947,12 @@ export const projects: Project[] = [
     description: 'A marketing site in 2026: one tagline, ten wild variations, the brand as files an agent reads, and two rounds of testing whether the message landed.',
     category: 'Brand & Web',
     year: '2026',
-    // The hero reel is remix 24 (V2, the EAI builder inside the page) from the EAI prototypes
-    // repo, played top to bottom. A copy of that page runs live further down, from
+    // The hero is a replay of remix 24 (V2, the EAI builder inside the page) from the EAI
+    // prototypes repo, played top to bottom (.context/replay-tools/clips/website). A copy of that page runs live further down, from
     // public/case-studies/html-brand-website/site, with its study tracker stubbed out. The brand kit beside it is brand_atomic_system/ from the same repo, opened
     // in a Finder prototype (finder/index.html); brand-book/ is the human PDF as page images.
     heroImage: '/case-studies/html-brand-website/site-hero.webp',
-    heroVideo: '/case-studies/html-brand-website/site.mp4',
-    heroUrl: 'enterpriseaigroup.com',
+    heroReplay: '/replays/website/site.json',
     tags: ['AI', 'Brand', 'Website', 'HTML'],
     content: [
       { type: 'heading', level: 2, content: 'The short version' },
@@ -1981,10 +1982,10 @@ export const projects: Project[] = [
       { type: 'heading', level: 2, content: 'A prototype from one line' },
       { type: 'text', content: 'The first input was a tagline: “Build once. Sell to many.” It became a working page the same day. A four-step app gets built for Nike, then re-skinned for any client you name, with their logo and colours looked up live, and a QR code puts it on your phone.' },
       {
-        type: 'video',
-        src: '/case-studies/html-brand-website/first-prototype.mp4',
-        aspectRatio: '1880/1134',
-        alt: 'The first prototype building an app for Nike, then re-skinning it for Apple and CommBank',
+        type: 'component',
+        componentId: 'recording-replay',
+        // The builder alone, cropped from the page at f6834d3
+        props: { src: '/replays/website/first-prototype.json', region: { x: 128, y: 10, width: 1184, height: 726 } },
         caption: 'The first prototype, 21 September: built for Nike, then re-skinned for Apple and CommBank',
       },
       { type: 'heading', level: 2, content: 'Ten versions, each crazier than the last' },
@@ -2028,10 +2029,9 @@ export const projects: Project[] = [
       { type: 'heading', level: 2, content: 'Rebrand it, then test it' },
       { type: 'text', content: 'I put the page in Enterprise AI’s navy and cyan, tidied it, and showed it to five people on Lyssna. They looked at the top of the page, scrolled the rest, then told us from memory what it said.' },
       {
-        type: 'video',
-        src: '/case-studies/html-brand-website/round-1.mp4',
-        aspectRatio: '16/10',
-        alt: 'The page tested in round 1, running',
+        type: 'component',
+        componentId: 'recording-replay',
+        props: { src: '/replays/website/round-1.json' },
         caption: 'Round 1: the Shapeshifter style in Enterprise AI cyan, top to bottom',
         live: '/case-studies/html-brand-website/site/sell-to-many/remix/13-chat-first/index.html?theme=shape&ss=cyan&layout=mvp',
       },
