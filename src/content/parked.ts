@@ -68,7 +68,7 @@ export const PARKED: ParkedItem[] = [
     name: 'Gallery',
     status: 'local',
     since: '2026-10-07',
-    summary: 'A full-width column of real work that opens in a dialog: clips of the big pieces being used, live prototypes, and phone work in a drawn phone. On the homepage it is a Page / Visuals switch under the hero, not a section; there is also a header link.',
+    summary: 'A full-width column of real work that opens in a dialog: clips of the big pieces being used, live prototypes, and phone work in a drawn phone. The homepage\'s Page / Visuals switch went live on 2026-10-17 (the Visuals list, components/Visuals.tsx); the /gallery page and its header link are still local.',
     links: [
       { label: 'Gallery', href: '/gallery' },
       { label: 'Edit mode', href: '/gallery?edit' },
