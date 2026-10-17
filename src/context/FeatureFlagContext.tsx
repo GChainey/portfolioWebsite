@@ -3,6 +3,10 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 
 type SignatureVariant = 'off' | 'clippath' | 'penflow'
+// How the homepage shows the products and case studies. tiles is live; the carousels and the
+// five showcase variants (components/showcase) are parked here to compare
+export const HOME_LAYOUTS = ['carousel', 'tiles', 'autoplay', 'coverflow', 'scrolly', 'billboard', 'wall'] as const
+export type HomeLayout = (typeof HOME_LAYOUTS)[number]
 
 interface FeatureFlags {
   sectionTitleBorders: boolean
@@ -13,6 +17,7 @@ interface FeatureFlags {
   signatureSize: number
   warmth: boolean
   colourLights: boolean
+  homeLayout: HomeLayout
 }
 
 interface FeatureFlagContextType {
@@ -31,6 +36,7 @@ const defaultFlags: FeatureFlags = {
   signatureSize: 36,
   warmth: false,
   colourLights: false,
+  homeLayout: 'tiles',
 }
 
 const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(undefined)

@@ -90,6 +90,37 @@ export function FeatureFlagDrawer() {
                 </p>
               </div>
 
+              {/* Homepage layout picker */}
+              <div className="space-y-3">
+                <p className="text-sm font-medium text-foreground">Homepage work</p>
+                <div className="grid grid-cols-2 gap-1 bg-border/50 rounded-lg p-1">
+                  {([
+                    { value: 'tiles', label: 'Tiles (live)' },
+                    { value: 'carousel', label: 'Carousels' },
+                    { value: 'autoplay', label: '1 · Autoplay' },
+                    { value: 'coverflow', label: '2 · Coverflow' },
+                    { value: 'scrolly', label: '3 · Scroll story' },
+                    { value: 'billboard', label: '4 · Billboard' },
+                    { value: 'wall', label: '5 · The wall' },
+                  ] as const).map(({ value, label }) => (
+                    <button
+                      key={value}
+                      onClick={() => setFlag('homeLayout', value)}
+                      className={`text-xs py-1.5 px-2 rounded-md transition-colors ${
+                        flags.homeLayout === value
+                          ? 'bg-accent text-white'
+                          : 'text-muted hover:text-foreground'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-muted">
+                  How the homepage shows the products and case studies. Also ?home=billboard and so on
+                </p>
+              </div>
+
               {/* Signature Variant Picker */}
               <div className="space-y-3">
                 <p className="text-sm font-medium text-foreground">Signature</p>
