@@ -30,7 +30,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       'No "Read how" button in the homepage hero',
     ],
     aiTools: ['Claude Code'],
-    branch: 'GChainey/2tzy8',
+    branch: 'GChainey/visual-gallery-tab',
   },
   {
     version: '1.50.0',
