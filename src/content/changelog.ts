@@ -14,6 +14,40 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.50.0',
+    date: '2026-10-17',
+    title: 'Five Ways to Show the Work, and a Sizzle Reel (parked)',
+    description: 'Five homepage variants that show the products and AI case studies playing straight away, each with a way to read the features and thinking without leaving the page, plus a sizzle reel of all the work at 30, 60 and 90 seconds. All parked to compare at /showcase; the live homepage is unchanged.',
+    changes: [
+      'Autoplay: the carousel runs itself, each reel handing over to the next, and the read slides over the stage',
+      'Coverflow: all six pieces on one draggable track, neighbours waiting either side, filter by products or case studies',
+      'Scroll story: full width, each piece a chapter with its features and thinking, beside a stage that stays put and plays the one you are reading',
+      'Billboard: a dark full-width stage washed in each piece\'s colour, headlines landing word by word, a rail of what\'s next, and a full read sheet',
+      'The wall: everything playing at once in a bento grid between marquees; click a tile and it grows into the whole piece',
+      'Dispatch and Thesis recorded from their live sites as replays; Shader Wall plays live, since its shader is a canvas',
+      'Sizzle reel at /reel: 30, 60 and 90 second cuts, each clip timed so the reel lands on length',
+      'A showcase reel engine (beside the case studies\' reel) that plays video, live sites and stills, fills the stage, runs dark, and waits for each scene to load; RFP scenes come from the case study\'s own reel',
+      'Launchpad at /showcase to watch every variant and reel; or Cmd+K (Homepage work), or ?home=scrolly and so on',
+      'Fixed see-through panels: Tailwind opacity modifiers do nothing on the theme\'s CSS-variable colours',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
+    version: '1.49.0',
+    date: '2026-10-17',
+    title: 'Show, Not List: Homepage Carousels (parked)',
+    description: 'A way to show the products and the three AI case studies as one large preview that plays, with the others a click or swipe away, instead of rows of tiles. Parked behind the homepage flag; the live homepage is unchanged.',
+    changes: [
+      'Products carousel, Shader Wall first: each product\'s live site fills the stage, a click from the real thing',
+      'How design has changed with AI: the RFP sizzle reel, the website reel, and a new Configurator reel cut from its replays',
+      'Previews fill a fixed 16:10 stage edge to edge, with no backdrop or browser bar, and cross-fade in place so nothing below moves',
+      'Tabs under each carousel name every slide; arrows, arrow keys and swipe move between them',
+      'Only the slide on screen is mounted, so one reel, clip or site runs at a time',
+      'Parked: Homepage work in the flag drawer (Cmd+K), or ?home=carousel',
+    ],
+    aiTools: ['Claude Code'],
+  },
+  {
     version: '1.48.1',
     date: '2026-10-17',
     title: 'Opportunity sizing, but Balatro: no browser bar',
