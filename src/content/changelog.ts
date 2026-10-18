@@ -25,6 +25,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       'The menu is Home, Essays, CV, Contact, the current page in full colour; Changelog moves to the homepage footer',
       'The work runs full width, products first, and a product\'s name is its title (Shader Wall, Dispatch, Thesis, Wallbounce)',
       'No coloured project labels; case studies keep a plain one',
+      'Dispatch and Thesis show their apps open, in dark mode: new replays of the app on each landing page, a few things done in it',
       'The Enterprise AI site shows its phone section, "On their phone before the meeting ends", as a still',
       'Balatro and the new Wallbounce menu, live, close the list',
       'Day mode and amber only: the theme menu, dark mode, other colours and the CRT effects are gone',

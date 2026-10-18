@@ -42,7 +42,8 @@ export const VISUALS: Visual[] = [
     title: 'Dispatch',
     summary: 'Send articles to your Kindle in one click, from your browser, your Mac or a bot that reads your newsletters.',
     impact: { value: '1 click', label: 'from page to Kindle' },
-    scene: replay('/replays/products/dispatch.json', 1.2, 18.6),
+    // The app on its landing page, in dark mode, cropped to the app window and the Kindle
+    scene: replay('/replays/products/dispatch-app.json', 0.8, 11.8, { region: { x: 60, y: 0, width: 1320, height: 825 }, layout: 'full' }),
     href: 'https://www.dispatchmac.com',
     external: true,
   },
@@ -52,7 +53,8 @@ export const VISUALS: Visual[] = [
     product: true,
     title: 'Thesis',
     summary: 'Every claim in a plan is a bet. Test them all at once: AI drafts the tests and gathers the evidence.',
-    scene: replay('/replays/products/thesis.json', 0.8, 25.4),
+    // The app on its landing page, in dark mode: tap a sentence and its assumption opens
+    scene: replay('/replays/products/thesis-app.json', 0.8, 15.7, { region: { x: 120, y: 75, width: 1200, height: 750 }, layout: 'full' }),
     href: 'https://thesis-phi-self.vercel.app',
     external: true,
   },
