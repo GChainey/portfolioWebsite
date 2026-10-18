@@ -297,7 +297,7 @@ export default function Home() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <h1 className="text-4xl md:text-5xl font-medium text-foreground whitespace-nowrap">
+          <h1 className="t-display text-4xl md:text-5xl font-medium text-foreground whitespace-nowrap">
             <span>Product </span>
             <span className="relative inline">
               {suffix}

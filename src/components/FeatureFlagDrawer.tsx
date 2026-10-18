@@ -68,6 +68,28 @@ export function FeatureFlagDrawer() {
                 </p>
               </div>
 
+              {/* Design v2 Toggle */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-foreground">Design v2</p>
+                  <button
+                    onClick={() => setFlag('v2', !flags.v2)}
+                    className={`relative w-11 h-6 rounded-full transition-colors ${
+                      flags.v2 ? 'bg-accent' : 'bg-border'
+                    }`}
+                  >
+                    <motion.div
+                      className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow"
+                      animate={{ x: flags.v2 ? 20 : 0 }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                    />
+                  </button>
+                </div>
+                <p className="text-xs text-muted">
+                  Simplified: six type sizes, two weights, Geist for numbers too, one grey, three corners. Also ?v=2
+                </p>
+              </div>
+
               {/* Panels Toggle */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">

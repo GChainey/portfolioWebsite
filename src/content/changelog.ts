@@ -33,6 +33,8 @@ export const CHANGELOG: ChangelogEntry[] = [
       'Day mode and amber only: the theme menu, dark mode, other colours and the CRT effects are gone, and their CSS with them',
       'Dev only: a Panels switch (Cmd+K, or ?panels=off) to try the homepage without the ruled column and hairlines; there the quotes sit in outlined cards',
       'Dev only: a design audit page (/audit) that counts the fonts, sizes, colours and corners in use, beside a simpler set',
+      'Geist instead of Inter, everywhere',
+      'Design v2 to compare (Cmd+K, or ?v=2): six type sizes, two weights, Geist for numbers, one grey, three corners, and working see-through backgrounds',
       'Fixed: the header\'s tint never rendered (a Tailwind opacity on a var() colour)',
       'Fixed: the live Shader Wall page scrolled the homepage down as it loaded',
       'Fixed: a still in a reel started zoomed in and shrank to fit',

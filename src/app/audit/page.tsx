@@ -99,22 +99,22 @@ export default function AuditPage() {
           </section>
 
           {/* Fonts */}
-          <Section title="Fonts" now="Three families load on every page. Caveat is only for the signature experiment, which is off.">
+          <Section title="Fonts" now="Three families load on every page: Geist (since 2.0.0, was Inter), JetBrains Mono and Caveat. Caveat is only for the signature experiment, which is off.">
             <div className="grid gap-4 md:grid-cols-3">
               {[
-                { name: 'Inter', css: 'var(--font-inter)', use: 'Everything', n: (all.family.find(([c]) => c === 'font-sans')?.[1] ?? 0), keep: true },
+                { name: 'Geist', css: 'var(--font-geist-sans)', use: 'Everything', n: (all.family.find(([c]) => c === 'font-sans')?.[1] ?? 0), keep: true },
                 { name: 'JetBrains Mono', css: 'var(--font-mono)', use: 'Section numbers, counters, code', n: all.family.find(([c]) => c === 'font-mono')?.[1] ?? 0 },
                 { name: 'Caveat', css: 'var(--font-signature)', use: 'The signature experiment (flag off)', n: 1 },
               ].map((f) => (
                 <Card key={f.name} className={f.keep ? '' : 'opacity-60'}>
                   <p className="text-5xl text-foreground" style={{ fontFamily: f.css }}>Aa 0123</p>
                   <p className="mt-6 font-medium text-foreground">{f.name}</p>
-                  <p className="text-sm text-muted">{f.use}{f.name !== 'Inter' && ` · ${f.n} uses`}</p>
+                  <p className="text-sm text-muted">{f.use}{f.name !== 'Geist' && ` · ${f.n} uses`}</p>
                   <p className={`mt-3 text-sm ${f.keep ? 'text-foreground' : 'text-muted'}`}>{f.keep ? 'Keep' : 'Drop'}</p>
                 </Card>
               ))}
             </div>
-            <p className="mt-4 text-sm text-muted">Proposal: Inter only. Numbers in Inter with tabular figures, so they still line up.</p>
+            <p className="mt-4 text-sm text-muted">Proposal: Geist only. Numbers in Geist with tabular figures, so they still line up. (v2 does this.)</p>
           </Section>
 
           {/* Type sizes */}

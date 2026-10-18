@@ -19,6 +19,7 @@ interface FeatureFlags {
   colourLights: boolean
   homeLayout: HomeLayout
   panels: boolean // the boxed look: a ruled column, every section between hairlines
+  v2: boolean // the simplified design (globals.css, html.v2): six type steps, two weights, one grey, three corners
 }
 
 interface FeatureFlagContextType {
@@ -39,6 +40,7 @@ const defaultFlags: FeatureFlags = {
   colourLights: false,
   homeLayout: 'tiles',
   panels: true,
+  v2: false,
 }
 
 const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(undefined)
@@ -47,8 +49,9 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
   const [flags, setFlags] = useState<FeatureFlags>(defaultFlags)
   const [isDrawerOpen, setDrawerOpen] = useState(false)
   const [loaded, setLoaded] = useState(false)
-  // ?panels=off or on, for this visit only (not saved)
+  // ?panels=off or on, and ?v=2 or 1, for this visit only (not saved)
   const [panelsParam, setPanelsParam] = useState<boolean | null>(null)
+  const [v2Param, setV2Param] = useState<boolean | null>(null)
 
   // Load flags from localStorage on mount
   useEffect(() => {
@@ -62,6 +65,8 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
     }
     const panels = new URLSearchParams(window.location.search).get('panels')
     if (panels === 'off' || panels === 'on') setPanelsParam(panels === 'on')
+    const v = new URLSearchParams(window.location.search).get('v')
+    if (v === '1' || v === '2') setV2Param(v === '2')
     setLoaded(true)
   }, [])
 
@@ -70,6 +75,13 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (loaded) localStorage.setItem('featureFlags', JSON.stringify(flags))
   }, [flags, loaded])
+
+  const shown = { ...flags, ...(panelsParam === null ? {} : { panels: panelsParam }), ...(v2Param === null ? {} : { v2: v2Param }) }
+
+  // The simplified design is CSS on html.v2 (globals.css)
+  useEffect(() => {
+    document.documentElement.classList.toggle('v2', shown.v2)
+  }, [shown.v2])
 
   // Window buttons in colour, styled in globals.css
   useEffect(() => {
@@ -93,7 +105,7 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <FeatureFlagContext.Provider value={{ flags: panelsParam === null ? flags : { ...flags, panels: panelsParam }, setFlag, isDrawerOpen, setDrawerOpen }}>
+    <FeatureFlagContext.Provider value={{ flags: shown, setFlag, isDrawerOpen, setDrawerOpen }}>
       {children}
     </FeatureFlagContext.Provider>
   )
