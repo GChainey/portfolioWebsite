@@ -1,11 +1,19 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { X } from 'lucide-react'
-import { useFeatureFlags } from '@/context/FeatureFlagContext'
+import { ArrowDown, ArrowUp, X } from 'lucide-react'
+import { useFeatureFlags, HOME_SECTIONS, HOME_ORDER, validOrder } from '@/context/FeatureFlagContext'
 
 export function FeatureFlagDrawer() {
   const { flags, setFlag, isDrawerOpen, setDrawerOpen } = useFeatureFlags()
+  const order = validOrder(flags.homeOrder)
+  const move = (from: number, by: number) => {
+    const next = [...order]
+    const [id] = next.splice(from, 1)
+    next.splice(from + by, 0, id)
+    setFlag('homeOrder', next)
+  }
+  const isDefaultOrder = order.every((id, i) => id === HOME_ORDER[i])
 
   // Only show in development
   if (process.env.NODE_ENV !== 'development') {
@@ -46,6 +54,33 @@ export function FeatureFlagDrawer() {
 
             {/* Content */}
             <div className="flex-1 overflow-y-auto p-4 space-y-6">
+              {/* Homepage section order */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-foreground">Homepage order</p>
+                  {!isDefaultOrder && (
+                    <button onClick={() => setFlag('homeOrder', HOME_ORDER)} className="text-xs text-muted hover:text-foreground">Reset</button>
+                  )}
+                </div>
+                <ol className="rounded-lg border border-border divide-y divide-border">
+                  {order.map((id, i) => (
+                    <li key={id} className="flex items-center gap-2 px-3 py-2">
+                      <span className="text-xs font-mono text-muted tabular-nums">{i + 1}</span>
+                      <span className="flex-1 text-sm text-foreground">{HOME_SECTIONS.find((s) => s.id === id)?.label}</span>
+                      <button onClick={() => move(i, -1)} disabled={i === 0} aria-label="Move up" className="p-1 rounded text-muted hover:text-foreground hover:bg-border disabled:opacity-30 disabled:pointer-events-none">
+                        <ArrowUp className="w-3.5 h-3.5" />
+                      </button>
+                      <button onClick={() => move(i, 1)} disabled={i === order.length - 1} aria-label="Move down" className="p-1 rounded text-muted hover:text-foreground hover:bg-border disabled:opacity-30 disabled:pointer-events-none">
+                        <ArrowDown className="w-3.5 h-3.5" />
+                      </button>
+                    </li>
+                  ))}
+                </ol>
+                <p className="text-xs text-muted">
+                  Only this browser. The live site uses the order in HOME_SECTIONS (FeatureFlagContext.tsx)
+                </p>
+              </div>
+
               {/* Section Title Borders Toggle */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
@@ -159,28 +194,6 @@ export function FeatureFlagDrawer() {
                 )}
                 <p className="text-xs text-muted">
                   Animated cursive signature in footers and CV title
-                </p>
-              </div>
-
-              {/* Warmth Toggle */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium text-foreground">Warmth</p>
-                  <button
-                    onClick={() => setFlag('warmth', !flags.warmth)}
-                    className={`relative w-11 h-6 rounded-full transition-colors ${
-                      flags.warmth ? 'bg-accent' : 'bg-border'
-                    }`}
-                  >
-                    <motion.div
-                      className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow"
-                      animate={{ x: flags.warmth ? 20 : 0 }}
-                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                    />
-                  </button>
-                </div>
-                <p className="text-xs text-muted">
-                  Show warmth toggle in theme selector
                 </p>
               </div>
 

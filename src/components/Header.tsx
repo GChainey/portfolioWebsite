@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
-import { ThemeSelector } from './ThemeSelector'
 import { GALLERY_LIVE } from './Gallery'
 import { DEMOS_LIVE } from '@/content/demos'
 import { PARKED_LIVE } from '@/content/parked'
@@ -61,7 +60,6 @@ export function Header({ showBack }: HeaderProps) {
           <Link href="/contact" className="text-sm text-muted hover:text-foreground transition-colors">
             Contact
           </Link>
-          <ThemeSelector />
         </nav>
       </div>
     </header>

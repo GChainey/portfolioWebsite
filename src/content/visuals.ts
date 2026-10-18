@@ -2,28 +2,19 @@ import type { ShowcaseScene } from '@/components/showcase/ShowcaseReel'
 
 // The visuals: one piece of work per entry, each a short replay (or a video or live site where a
 // replay can't capture it) with what it is and what it did. The homepage's Visuals tab and the
-// gallery page show them one after another. In order: best first.
+// gallery page show them one after another. In order: the products, then the case studies best
+// first, then the side projects.
 
 export interface Visual {
   id: string
   project: string // who it's for, or the product: "Daisy Assess", "Configurator"
+  product?: boolean // a product of my own: its name is the title
   title: string
   summary: string // what you're looking at
   impact?: { value?: string; label: string } // what it did. Only what the case study already says
   scene: ShowcaseScene
   href?: string // the case study, essay or product
   external?: boolean
-}
-
-// Colour per project, the same ones the showcase uses
-export const PROJECT_ACCENTS: Record<string, string> = {
-  'Daisy Assess': '#16a34a',
-  Configurator: '#ea580c',
-  'Enterprise AI': '#0891b2',
-  'Shader Wall': '#c026d3',
-  Dispatch: '#2563eb',
-  Thesis: '#f59e0b',
-  Wallbounce: '#e11d48',
 }
 
 // A stretch of a replay. Full-frame recordings are 16:10, like the stage, so they fill it;
@@ -37,10 +28,32 @@ export const VISUALS: Visual[] = [
   {
     id: 'shader-wall',
     project: 'Shader Wall',
-    title: 'Your Mac desktop, alive',
-    summary: 'The landing page runs the whole app, in the browser.',
+    product: true,
+    title: 'Shader Wall',
+    summary: 'Your Mac desktop, alive. The landing page runs the whole app, in the browser.',
     scene: { site: 'https://www.shaderwall.com', hold: 12, layout: 'full', title: '' },
     href: 'https://www.shaderwall.com',
+    external: true,
+  },
+  {
+    id: 'dispatch',
+    project: 'Dispatch',
+    product: true,
+    title: 'Dispatch',
+    summary: 'Send articles to your Kindle in one click, from your browser, your Mac or a bot that reads your newsletters.',
+    impact: { value: '1 click', label: 'from page to Kindle' },
+    scene: replay('/replays/products/dispatch.json', 1.2, 18.6),
+    href: 'https://www.dispatchmac.com',
+    external: true,
+  },
+  {
+    id: 'thesis',
+    project: 'Thesis',
+    product: true,
+    title: 'Thesis',
+    summary: 'Every claim in a plan is a bet. Test them all at once: AI drafts the tests and gathers the evidence.',
+    scene: replay('/replays/products/thesis.json', 0.8, 25.4),
+    href: 'https://thesis-phi-self.vercel.app',
     external: true,
   },
   {
@@ -66,7 +79,7 @@ export const VISUALS: Visual[] = [
     title: 'Build an app, brand it per client, share it to a phone',
     summary: 'A marketing site built from an HTML brand.',
     impact: { value: '10', label: 'variations in a day' },
-    scene: replay('/replays/website/site.json', 0.5, 24.5),
+    scene: { image: '/visuals/website-phone.webp', hold: 10, layout: 'full', title: '' },
     href: '/projects/html-brand-website',
   },
   {
@@ -103,16 +116,6 @@ export const VISUALS: Visual[] = [
     href: '/projects/configurator',
   },
   {
-    id: 'dispatch',
-    project: 'Dispatch',
-    title: 'Send articles to your Kindle in one click',
-    summary: 'From your browser, your Mac or a bot that reads your newsletters.',
-    impact: { value: '1 click', label: 'from page to Kindle' },
-    scene: replay('/replays/products/dispatch.json', 1.2, 18.6),
-    href: 'https://www.dispatchmac.com',
-    external: true,
-  },
-  {
     id: 'eai-settings-nested',
     project: 'Enterprise AI',
     title: 'Two levels of settings, without getting lost',
@@ -120,15 +123,6 @@ export const VISUALS: Visual[] = [
     impact: { value: '5 of 5', label: 'switched to the right app' },
     scene: replay('/replays/eai-settings/nested.json', 0, 14.8),
     href: '/projects/eai-settings',
-  },
-  {
-    id: 'thesis',
-    project: 'Thesis',
-    title: 'Every claim in a plan is a bet. Test them all at once',
-    summary: 'AI drafts the tests and gathers the evidence.',
-    scene: replay('/replays/products/thesis.json', 0.8, 25.4),
-    href: 'https://thesis-phi-self.vercel.app',
-    external: true,
   },
   {
     id: 'configurator-jev',
@@ -172,13 +166,12 @@ export const VISUALS: Visual[] = [
     scene: video('/gallery/clips/eai-setup.mp4', 0, 26.5),
   },
   {
-    id: 'wallbounce-tuning',
-    project: 'Wallbounce',
-    title: 'Every number that shapes the movement, a slider',
-    summary: 'A tuning panel an agent built for a game.',
-    impact: { value: '58', label: 'sliders' },
-    scene: replay('/replays/wallbounce/tuning.json', 0, 13.4, { region: { x: 950, y: 0, width: 330, height: 218 } }),
-    href: '/projects/wallbounce-dev-tools',
+    id: 'configurator-qr',
+    project: 'Configurator',
+    title: 'On a real phone',
+    summary: 'A link and a QR code, straight from the builder.',
+    scene: replay('/replays/configurator/qr.json', 0, 6.5),
+    href: '/projects/configurator',
   },
   {
     id: 'balatro',
@@ -189,13 +182,12 @@ export const VISUALS: Visual[] = [
     href: '/projects/balatro-opportunity-sizing',
   },
   {
-    id: 'configurator-qr',
-    project: 'Configurator',
-    title: 'On a real phone',
-    summary: 'A link and a QR code, straight from the builder.',
-    scene: replay('/replays/configurator/qr.json', 0, 6.5),
-    href: '/projects/configurator',
+    id: 'wallbounce',
+    project: 'Wallbounce',
+    product: true,
+    title: 'Wallbounce',
+    summary: 'A top-down ode to one move from Gears of War, made with the tools an agent built for it.',
+    scene: { site: 'https://wallbounce.vercel.app', hold: 12, layout: 'full', title: '' },
+    href: '/projects/wallbounce-dev-tools',
   },
 ]
-
-export const accentOf = (v: Visual) => PROJECT_ACCENTS[v.project] ?? 'var(--accent)'

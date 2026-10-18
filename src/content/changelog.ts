@@ -14,6 +14,26 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '2.0.0',
+    date: '2026-10-18',
+    title: 'One Opinionated Homepage',
+    description: 'The homepage is the hero, a line from each colleague, then the work one piece after another, products first. Day mode and amber only: no theme menu.',
+    changes: [
+      'Visuals is the homepage, with no Page / Visuals switch; the page as written is at ?view=page',
+      'Testimonial snippets under the hero: the line that carries each quote, word for word',
+      'The work runs full width, products first, and a product\'s name is its title (Shader Wall, Dispatch, Thesis, Wallbounce)',
+      'No coloured project labels; case studies keep a plain one',
+      'The Enterprise AI site shows its phone section, "On their phone before the meeting ends", as a still',
+      'Balatro and the new Wallbounce menu, live, close the list',
+      'Day mode and amber only: the theme menu, dark mode, other colours and the CRT effects are gone',
+      'Dev only: reorder the homepage sections from the flag drawer (Cmd+K)',
+      'Fixed: the live Shader Wall page scrolled the homepage down as it loaded',
+      'Fixed: a still in a reel started zoomed in and shrank to fit',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/h8b91',
+  },
+  {
     version: '1.52.2',
     date: '2026-10-17',
     title: 'Visuals Back to Dev Only',

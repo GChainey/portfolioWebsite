@@ -1,11 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { X, ArrowRight, FileText, LayoutGrid } from 'lucide-react'
+import { X, ArrowRight } from 'lucide-react'
 import { Header } from '@/components/Header'
-import { GALLERY_LIVE } from '@/components/Gallery'
 import { Visuals } from '@/components/Visuals'
 import { ChatInterface } from '@/components/ChatInterface'
 import { Facehash } from 'facehash'
@@ -21,7 +20,9 @@ import { WallShowcase } from '@/components/showcase/Wall'
 import { PRODUCT_SLIDES, AI_SLIDES } from '@/content/showcase'
 import { writing, getProjectById } from '@/content/projects'
 import { TestimonialCarousel } from '@/components/TestimonialCarousel'
-import { useFeatureFlags, HOME_LAYOUTS, type HomeLayout } from '@/context/FeatureFlagContext'
+import { TestimonialSnippets } from '@/components/TestimonialSnippets'
+import { TESTIMONIALS } from '@/content/testimonials'
+import { useFeatureFlags, HOME_LAYOUTS, validOrder, type HomeLayout } from '@/context/FeatureFlagContext'
 import { thinkers } from '@/content/thinkers'
 import { ParticleField } from '@/components/ParticleField'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
@@ -127,51 +128,6 @@ const EXPERIENCE = [
   },
 ]
 
-// Testimonials data
-const TESTIMONIALS = [
-  {
-    name: 'Winnie Bamra',
-    role: 'Senior Product Manager',
-    company: 'Ex-SpaceX · SEEK',
-    logo: 'spacex' as const,
-    linkedIn: 'https://www.linkedin.com/in/wbamra/',
-    content: 'Gareth is a pleasure to work with and an asset to any team. He is diligent in discovery, passionate about the end user, empathetic, and collaborative in his approach. He is excellent at leading user interviews, enabling the team to collect and extract actionable insights.',
-  },
-  {
-    name: 'Richard Simms',
-    role: 'Principal Product Designer',
-    company: 'SEEK',
-    logo: 'seek' as const,
-    linkedIn: 'https://www.linkedin.com/in/richardsimms/',
-    content: 'A talented senior UX designer who can independently drive projects forward. His designs reflected a deep understanding of our users, combined with a mastery of UX principles. Meticulous attention to detail and craft are evident in everything he produces.',
-  },
-  {
-    name: 'Ahmed Hakeem',
-    role: 'Staff Engineer',
-    company: 'SEEK',
-    logo: 'seek' as const,
-    linkedIn: 'https://www.linkedin.com/in/meds/',
-    content: "A developer's best friend. I have many fond memories bouncing ideas around and jamming out features end to end from fake door tests to deployment. At every step Gareth was inquisitive, collaborative and open to thinking on their feet.",
-  },
-  {
-    name: 'David Deville',
-    role: 'Senior Content Designer',
-    company: 'SEEK',
-    logo: 'seek' as const,
-    linkedIn: 'https://www.linkedin.com/in/david-deville-98b287b8/',
-    content: "Gareth goes above and beyond designing for customer needs. Fast experimentation, elegant designs and constant iteration resulted in products like an AI-powered resume generator that genuinely helped candidates. A positive, creative and likeable teammate.",
-  },
-  {
-    name: 'Henry Vesander',
-    role: 'Chief Product Officer',
-    company: 'Best Practice Software',
-    logo: 'bestpractice' as const,
-    linkedIn: 'https://www.linkedin.com/in/henrikvesander/',
-    content: 'An outstanding UX/product designer. I hired him to build a cloud-based practice management SaaS. He is a driven individual that can be trusted in getting the job done once given guidance and a brief. I definitely recommend Gareth!',
-  },
-]
-
-
 export default function Home() {
   const [mounted, setMounted] = useState(false)
   const [suffix, setSuffix] = useState('')
@@ -181,16 +137,19 @@ export default function Home() {
   const [chatMounted, setChatMounted] = useState(false)
   const [experienceDialogOpen, setExperienceDialogOpen] = useState(false)
   const [selectedCompanyId, setSelectedCompanyId] = useState('enterpriseai')
-  // The page as written, or nothing but the gallery
-  const [view, setView] = useState<'page' | 'visuals'>('page')
+  // Visuals under the hero. The page as written is still there at ?view=page while the rest is parked
+  const [view, setView] = useState<'page' | 'visuals'>('visuals')
   const { flags } = useFeatureFlags()
   // ?home=<layout> overrides the flag, so a variant can be linked to
   const [homeOverride, setHomeOverride] = useState<HomeLayout | null>(null)
   const homeLayout = homeOverride ?? flags.homeLayout
 
   useEffect(() => {
-    const home = new URLSearchParams(window.location.search).get('home') as HomeLayout | null
+    const params = new URLSearchParams(window.location.search)
+    const home = params.get('home') as HomeLayout | null
     if (home && HOME_LAYOUTS.includes(home)) setHomeOverride(home)
+    // A showcase variant, or ?view=page, needs the page as written
+    if ((home && HOME_LAYOUTS.includes(home)) || params.get('view') === 'page') setView('page')
     // #work: jump to the work, again as the hero above it finishes loading, unless the visitor scrolls first
     if (window.location.hash === '#work') {
       let moved = false
@@ -356,6 +315,79 @@ export default function Home() {
     </>
   )
 
+  // Hero Section - Centered
+  const heroSection = (
+    <section className="relative py-24 px-8 border-b border-border overflow-hidden">
+      {flags.particleField && <ParticleField />}
+      <div className="relative z-10 flex flex-col items-center text-center">
+        {/* Tagline */}
+        <motion.p
+          className="text-sm text-muted uppercase tracking-widest mb-4"
+          initial={mounted ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          The future is Now
+        </motion.p>
+
+        {/* Animated Role */}
+        <motion.div
+          className="mb-8"
+          initial={mounted ? { opacity: 0 } : { opacity: 1 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          <h1 className="text-4xl md:text-5xl font-medium text-foreground whitespace-nowrap">
+            <span>Product </span>
+            <span className="relative inline">
+              {suffix}
+              {!typingDone && (
+                <motion.span
+                  animate={{ opacity: [1, 0] }}
+                  transition={{ duration: 0.6, repeat: Infinity, repeatType: 'reverse' }}
+                  className="inline-block w-[3px] h-[1em] bg-foreground ml-0.5 align-baseline translate-y-[0.1em]"
+                />
+              )}
+              {/* Asterisk tooltip pinned to top-right of last character */}
+              <AnimatePresence>
+                {showTooltip && (
+                  <motion.span
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+                    className="absolute -top-3 -right-4"
+                  >
+                    <TooltipProvider delayDuration={200}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-lg font-bold text-foreground cursor-default hover:opacity-60 transition-opacity">
+                            *
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent side="top" className="text-sm bg-card text-foreground border border-border shadow-lg max-w-xs">
+                          Gareth Chainey&#8482; is still professionally licensed as a product designer
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </span>
+          </h1>
+        </motion.div>
+
+        {/* GitHub Contributions - Centered */}
+        <motion.div
+          initial={mounted ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="flex flex-col items-center"
+        >
+          <GitHubContributions variant="full" animate />
+        </motion.div>
+      </div>
+    </section>
+  )
+
   return (
     <div className="min-h-screen bg-background transition-colors duration-700 overflow-x-clip">
       <Header />
@@ -368,107 +400,25 @@ export default function Home() {
           {/* The scroll story runs out of this column to the window's edges, so it can't be clipped */}
           <main className={`flex-1 min-w-0 border-x border-border ${homeLayout === 'scrolly' ? '' : 'overflow-clip'}`}>
 
-            {/* Hero Section - Centered */}
-            <section className="relative py-24 px-8 border-b border-border overflow-hidden">
-              {flags.particleField && <ParticleField />}
-              <div className="relative z-10 flex flex-col items-center text-center">
-                {/* Tagline */}
-                <motion.p
-                  className="text-sm text-muted uppercase tracking-widest mb-4"
-                  initial={mounted ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
-                  animate={{ opacity: 1, y: 0 }}
-                >
-                  The future is Now
-                </motion.p>
-
-                {/* Animated Role */}
-                <motion.div
-                  className="mb-8"
-                  initial={mounted ? { opacity: 0 } : { opacity: 1 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.2 }}
-                >
-                  <h1 className="text-4xl md:text-5xl font-medium text-foreground whitespace-nowrap">
-                    <span>Product </span>
-                    <span className="relative inline">
-                      {suffix}
-                      {!typingDone && (
-                        <motion.span
-                          animate={{ opacity: [1, 0] }}
-                          transition={{ duration: 0.6, repeat: Infinity, repeatType: 'reverse' }}
-                          className="inline-block w-[3px] h-[1em] bg-foreground ml-0.5 align-baseline translate-y-[0.1em]"
-                        />
-                      )}
-                      {/* Asterisk tooltip pinned to top-right of last character */}
-                      <AnimatePresence>
-                        {showTooltip && (
-                          <motion.span
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-                            className="absolute -top-3 -right-4"
-                          >
-                            <TooltipProvider delayDuration={200}>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-lg font-bold text-foreground cursor-default hover:opacity-60 transition-opacity">
-                                    *
-                                  </span>
-                                </TooltipTrigger>
-                                <TooltipContent side="top" className="text-sm bg-card text-foreground border border-border shadow-lg max-w-xs">
-                                  Gareth Chainey&#8482; is still professionally licensed as a product designer
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          </motion.span>
-                        )}
-                      </AnimatePresence>
-                    </span>
-                  </h1>
-                </motion.div>
-
-                {/* GitHub Contributions - Centered */}
-                <motion.div
-                  initial={mounted ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="flex flex-col items-center"
-                >
-                  <GitHubContributions variant="full" animate />
-                </motion.div>
-              </div>
-            </section>
-
-            {/* Page or visuals - the same switch the case studies have. Dev only until Visuals hangs together */}
-            {GALLERY_LIVE && (
-              <div className="flex justify-center py-4 border-b border-border">
-                <div className="flex bg-border/40 rounded-full p-0.5">
-                  {([
-                    { id: 'page', label: 'Page', icon: FileText },
-                    { id: 'visuals', label: 'Visuals', icon: LayoutGrid },
-                  ] as const).map(({ id, label, icon: Icon }) => (
-                    <button
-                      key={id}
-                      onClick={() => setView(id)}
-                      aria-pressed={view === id}
-                      className={`flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-full transition-all ${
-                        view === id ? 'bg-foreground text-background font-medium' : 'text-muted hover:text-foreground'
-                      }`}
-                    >
-                      <Icon className="w-3.5 h-3.5" />
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
             {view === 'visuals' ? (
-              <section className="border-b border-border">
-                <Visuals />
-              </section>
+              validOrder(flags.homeOrder).map((id) => (
+                <Fragment key={id}>
+                  {id === 'hero' && heroSection}
+                  {id === 'testimonials' && <TestimonialSnippets borders={flags.sectionTitleBorders} />}
+                  {id === 'visuals' && (
+                    <section className="border-b border-border" aria-label="The work">
+                      <div className={`px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
+                        <p className="text-xs text-muted uppercase tracking-widest">Products, then the work</p>
+                      </div>
+                      <Visuals />
+                    </section>
+                  )}
+                </Fragment>
+              ))
             ) : (
               <>
+            {heroSection}
+
             {/* About section */}
             <section className="p-8 border-b border-border">
               <motion.div

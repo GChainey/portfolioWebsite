@@ -146,14 +146,17 @@ function SceneMedia({ scene, playing, box, fill, dark, onReady }: { scene: Showc
           <iframe src={scene.site} title={scene.title} tabIndex={-1} aria-hidden onLoad={onReady} className="absolute left-0 top-0 origin-top-left border-0 pointer-events-none" style={inner} />
         )}
         {scene.image && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={scene.image}
-            alt=""
-            onLoad={(e) => { setSize({ width: e.currentTarget.naturalWidth, height: e.currentTarget.naturalHeight }); onReady() }}
-            className="absolute left-0 top-0 origin-top-left max-w-none"
-            style={{ ...inner, transition: `transform ${sceneDuration(scene)}s linear`, transform: `${inner.transform} scale(${playing ? 1.06 : 1})` }}
-          />
+          // Fitted by the wrapper, pushed in by the image, so fitting it once it loads never animates
+          <div className="absolute left-0 top-0 origin-top-left overflow-hidden" style={inner}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={scene.image}
+              alt=""
+              onLoad={(e) => { setSize({ width: e.currentTarget.naturalWidth, height: e.currentTarget.naturalHeight }); onReady() }}
+              className="block h-full w-full max-w-none"
+              style={{ transition: `transform ${sceneDuration(scene)}s linear`, transform: `scale(${playing ? 1.06 : 1})` }}
+            />
+          </div>
         )}
       </div>
     </div>
