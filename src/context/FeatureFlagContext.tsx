@@ -18,6 +18,7 @@ interface FeatureFlags {
   warmth: boolean
   colourLights: boolean
   homeLayout: HomeLayout
+  panels: boolean // the boxed look: a ruled column, every section between hairlines
 }
 
 interface FeatureFlagContextType {
@@ -37,6 +38,7 @@ const defaultFlags: FeatureFlags = {
   warmth: false,
   colourLights: false,
   homeLayout: 'tiles',
+  panels: true,
 }
 
 const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(undefined)
@@ -45,6 +47,8 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
   const [flags, setFlags] = useState<FeatureFlags>(defaultFlags)
   const [isDrawerOpen, setDrawerOpen] = useState(false)
   const [loaded, setLoaded] = useState(false)
+  // ?panels=off or on, for this visit only (not saved)
+  const [panelsParam, setPanelsParam] = useState<boolean | null>(null)
 
   // Load flags from localStorage on mount
   useEffect(() => {
@@ -56,6 +60,8 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
         // ignore parse errors
       }
     }
+    const panels = new URLSearchParams(window.location.search).get('panels')
+    if (panels === 'off' || panels === 'on') setPanelsParam(panels === 'on')
     setLoaded(true)
   }, [])
 
@@ -87,7 +93,7 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <FeatureFlagContext.Provider value={{ flags, setFlag, isDrawerOpen, setDrawerOpen }}>
+    <FeatureFlagContext.Provider value={{ flags: panelsParam === null ? flags : { ...flags, panels: panelsParam }, setFlag, isDrawerOpen, setDrawerOpen }}>
       {children}
     </FeatureFlagContext.Provider>
   )

@@ -278,7 +278,7 @@ export default function Home() {
 
   // Hero Section - Centered
   const heroSection = (
-    <section className="relative py-24 px-8 border-b border-border overflow-hidden">
+    <section className={`relative py-24 px-8 overflow-hidden ${flags.panels ? 'border-b border-border' : ''}`}>
       {flags.particleField && <ParticleField />}
       <div className="relative z-10 flex flex-col items-center text-center">
         {/* Tagline */}
@@ -359,7 +359,7 @@ export default function Home() {
 
           {/* Main content */}
           {/* The scroll story runs out of this column to the window's edges, so it can't be clipped */}
-          <main className={`flex-1 min-w-0 border-x border-border ${homeLayout === 'scrolly' ? '' : 'overflow-clip'}`}>
+          <main className={`flex-1 min-w-0 ${flags.panels ? 'border-x border-border' : ''} ${homeLayout === 'scrolly' ? '' : 'overflow-clip'}`}>
 
             {view !== 'page' ? (
               <>

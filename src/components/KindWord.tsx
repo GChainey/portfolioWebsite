@@ -10,13 +10,13 @@ import { splitHighlights, type Testimonial } from '@/content/testimonials'
 // phrases (content/testimonials.ts `highlights`) marked in the accent as it scrolls into view.
 const MARK = 'color-mix(in srgb, var(--accent) 32%, transparent)'
 
-export function KindWord({ t }: { t: Testimonial }) {
+export function KindWord({ t, panels = true }: { t: Testimonial; panels?: boolean }) {
   const [marked, setMarked] = useState(false)
   let n = 0
 
   return (
     <motion.figure
-      className="px-8 py-16 border-b border-border"
+      className={`px-8 ${panels ? 'py-16 border-b border-border' : 'py-20'}`}
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-25% 0px' }}

@@ -68,6 +68,28 @@ export function FeatureFlagDrawer() {
                 </p>
               </div>
 
+              {/* Panels Toggle */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-foreground">Panels</p>
+                  <button
+                    onClick={() => setFlag('panels', !flags.panels)}
+                    className={`relative w-11 h-6 rounded-full transition-colors ${
+                      flags.panels ? 'bg-accent' : 'bg-border'
+                    }`}
+                  >
+                    <motion.div
+                      className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow"
+                      animate={{ x: flags.panels ? 20 : 0 }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                    />
+                  </button>
+                </div>
+                <p className="text-xs text-muted">
+                  The ruled column and the hairlines between sections. Off: open space instead. Also ?panels=off
+                </p>
+              </div>
+
               {/* Feed Page Toggle */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">

@@ -7,6 +7,7 @@ import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Maximize2, X } fro
 import { ShowcaseReel, type ShowcaseScene } from '@/components/showcase/ShowcaseReel'
 import { useOverlay, pad, ease } from '@/components/showcase/shared'
 import { useTheme } from '@/context/ThemeContext'
+import { useFeatureFlags } from '@/context/FeatureFlagContext'
 import { VISUALS, VISUAL_SECTIONS, KIND_WORDS, type Visual } from '@/content/visuals'
 import { CASE_STUDY_SIZZLE } from '@/content/sizzle'
 import { TESTIMONIALS } from '@/content/testimonials'
@@ -120,9 +121,9 @@ function Piece({ v, theme, playing, onOpen }: { v: Visual; theme: 'light' | 'dar
   )
 }
 
-function Row({ v, theme, playing, onOpen }: { v: Visual; theme: 'light' | 'dark'; playing: boolean; onOpen: () => void }) {
+function Row({ v, theme, playing, onOpen, panels }: { v: Visual; theme: 'light' | 'dark'; playing: boolean; onOpen: () => void; panels: boolean }) {
   return (
-    <article className="px-8 py-12 border-b border-border">
+    <article className={`px-8 ${panels ? 'py-12 border-b border-border' : 'py-16'}`}>
       <div className="mb-6 grid gap-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
         <div className="min-w-0">
           <Project v={v} />
@@ -142,10 +143,10 @@ function Row({ v, theme, playing, onOpen }: { v: Visual; theme: 'light' | 'dark'
 }
 
 // The case studies cut together, captions on, playing ahead of them
-function Sizzle({ theme, playing }: { theme: 'light' | 'dark'; playing: boolean }) {
+function Sizzle({ theme, playing, panels }: { theme: 'light' | 'dark'; playing: boolean; panels: boolean }) {
   const [ref, near] = useNear<HTMLDivElement>()
   return (
-    <div className="px-8 py-12 border-b border-border">
+    <div className={`px-8 ${panels ? 'py-12 border-b border-border' : 'pt-8 pb-16'}`}>
       <div ref={ref} className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-border shadow-lg" style={{ background: theme === 'dark' ? '#09090b' : '#fafafa' }}>
         {near && <ShowcaseReel scenes={CASE_STUDY_SIZZLE} theme={theme} playing={playing} />}
       </div>
@@ -207,6 +208,7 @@ export function Visuals() {
   const { resolvedMode } = useTheme()
   const theme = resolvedMode === 'dark' ? 'dark' : 'light'
   const [open, setOpen] = useState<number | null>(null)
+  const { flags } = useFeatureFlags()
   useNoScrollJumps()
 
   const close = useCallback(() => setOpen(null), [])
@@ -216,18 +218,18 @@ export function Visuals() {
     <div>
       {VISUAL_SECTIONS.map((section, n) => (
         <section key={section.id} aria-labelledby={`visuals-${section.id}`}>
-          <header className="px-8 pt-20 pb-8 border-b border-border">
+          <header className={`px-8 ${flags.panels ? 'pt-20 pb-8 border-b border-border' : 'pt-24 pb-4'}`}>
             <p className="mb-3 text-xs font-mono text-muted tabular-nums">{pad(n + 1)}</p>
             <h2 id={`visuals-${section.id}`} className="text-4xl md:text-5xl font-medium tracking-tight text-foreground text-balance">{section.title}</h2>
           </header>
-          {section.id === 'ai' && <Sizzle theme={theme} playing={open === null} />}
+          {section.id === 'ai' && <Sizzle theme={theme} playing={open === null} panels={flags.panels} />}
           {VISUALS.map((v, i) => {
             if (v.section !== section.id) return null
             const kind = TESTIMONIALS.find((t) => t.name === KIND_WORDS[v.id])
             return (
               <Fragment key={v.id}>
-                <Row v={v} theme={theme} playing={open === null} onOpen={() => setOpen(i)} />
-                {kind && <KindWord t={kind} />}
+                <Row v={v} theme={theme} playing={open === null} onOpen={() => setOpen(i)} panels={flags.panels} />
+                {kind && <KindWord t={kind} panels={flags.panels} />}
               </Fragment>
             )
           })}

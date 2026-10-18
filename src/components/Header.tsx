@@ -24,7 +24,8 @@ export function Header({ showBack }: HeaderProps) {
   const { flags } = useFeatureFlags()
   const pathname = usePathname()
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-sm border-b border-border">
+    // A tint of the page behind a blur (a Tailwind /80 does nothing here: the colours are var()s)
+    <header className={`fixed top-0 left-0 right-0 z-40 bg-[color-mix(in_srgb,var(--background)_85%,transparent)] backdrop-blur-sm ${flags.panels ? 'border-b border-border' : ''}`}>
       <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href="/" className="text-lg font-medium text-foreground hover:opacity-70 transition-opacity">
