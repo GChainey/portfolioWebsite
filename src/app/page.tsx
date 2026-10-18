@@ -20,6 +20,7 @@ import { WallShowcase } from '@/components/showcase/Wall'
 import { PRODUCT_SLIDES, AI_SLIDES } from '@/content/showcase'
 import { writing, getProjectById } from '@/content/projects'
 import { TestimonialCarousel } from '@/components/TestimonialCarousel'
+import { WorkList } from '@/components/WorkList'
 import { TESTIMONIALS } from '@/content/testimonials'
 import { useFeatureFlags, HOME_LAYOUTS, type HomeLayout } from '@/context/FeatureFlagContext'
 import { thinkers } from '@/content/thinkers'
@@ -62,46 +63,6 @@ const EARLIER_WORK = ['seek-case-study-1', 'bestpractice-case-study-1']
 const SMALL_STUDIES = ['eai-settings', 'add-document']
 const ESSAYS = writing.filter((p) => p.category === 'Article').map((p) => p.id)
 
-const COMPANY: Record<string, string> = { enterpriseai: 'Enterprise AI', seek: 'SEEK', bestpractice: 'Best Practice' }
-
-// A titled list of case studies or essays, one per row
-function WorkList({ label, note, ids, titleBorders }: { label: string; note?: string; ids: string[]; titleBorders: boolean }) {
-  const items = ids.map(getProjectById).filter((p) => p !== undefined)
-
-  return (
-    <section className="border-b border-border">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-60px' }}
-        transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-      >
-        <div className={`flex items-center justify-between px-8 ${titleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
-          <p className="text-xs text-muted uppercase tracking-widest">{label}</p>
-          {note && <p className="text-xs text-muted">{note}</p>}
-        </div>
-
-        {items.map((project, index) => (
-          <Link
-            key={project.id}
-            href={project.externalUrl || `/projects/${project.id}`}
-            className={`group flex items-center gap-6 px-8 py-4 ${index < items.length - 1 ? 'border-b border-border' : ''}`}
-          >
-            <div className="min-w-0 flex-1">
-              <h3 className="font-medium text-foreground group-hover:text-accent transition-colors">{project.title}</h3>
-              <p className="text-sm text-muted line-clamp-1">{project.description}</p>
-            </div>
-            <span className="hidden sm:block shrink-0 text-xs text-muted">
-              {[project.companyId && COMPANY[project.companyId], project.year].filter(Boolean).join(' · ')}
-            </span>
-            <ArrowRight className="shrink-0 w-4 h-4 text-muted group-hover:text-accent group-hover:translate-x-1 transition-all" />
-          </Link>
-        ))}
-      </motion.div>
-    </section>
-  )
-}
-
 // Experience data
 const EXPERIENCE = [
   {
@@ -136,9 +97,9 @@ export default function Home() {
   const [chatMounted, setChatMounted] = useState(false)
   const [experienceDialogOpen, setExperienceDialogOpen] = useState(false)
   const [selectedCompanyId, setSelectedCompanyId] = useState('enterpriseai')
-  // Under the hero, two tabs: the work (Visuals, kind words between the pieces) or the essays as a
-  // plain list. The page as written is still there at ?view=page while the rest is parked
-  const [view, setView] = useState<'page' | 'work' | 'essays'>('work')
+  // Under the hero, the work (Visuals, kind words between the pieces); the essays have their own
+  // page. The page as written is still there at ?view=page while the rest is parked
+  const [view, setView] = useState<'page' | 'work'>('work')
   const { flags } = useFeatureFlags()
   // ?home=<layout> overrides the flag, so a variant can be linked to
   const [homeOverride, setHomeOverride] = useState<HomeLayout | null>(null)
@@ -150,7 +111,6 @@ export default function Home() {
     if (home && HOME_LAYOUTS.includes(home)) setHomeOverride(home)
     // A showcase variant, or ?view=page, needs the page as written
     if ((home && HOME_LAYOUTS.includes(home)) || params.get('view') === 'page') setView('page')
-    else if (params.get('view') === 'essays') setView('essays')
     // #work: jump to the work, again as the hero above it finishes loading, unless the visitor scrolls first
     if (window.location.hash === '#work') {
       let moved = false
@@ -404,39 +364,12 @@ export default function Home() {
             {view !== 'page' ? (
               <>
                 {heroSection}
-                <div className="flex justify-center py-4 border-b border-border" role="tablist" aria-label="Show">
-                  <div className="flex bg-[color-mix(in_srgb,var(--border)_40%,transparent)] rounded-full p-0.5">
-                    {([
-                      { id: 'work', label: 'Work' },
-                      { id: 'essays', label: 'Essays' },
-                    ] as const).map(({ id, label }) => (
-                      <button
-                        key={id}
-                        role="tab"
-                        aria-selected={view === id}
-                        onClick={() => {
-                          setView(id)
-                          window.history.replaceState(null, '', id === 'work' ? window.location.pathname : `?view=${id}`)
-                        }}
-                        className={`px-5 py-1.5 text-sm rounded-full transition-all ${
-                          view === id ? 'bg-foreground text-background font-medium' : 'text-muted hover:text-foreground'
-                        }`}
-                      >
-                        {label}
-                      </button>
-                    ))}
+                <section aria-label="The work">
+                  <div className={`px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
+                    <p className="text-xs text-muted uppercase tracking-widest">Products, then the work</p>
                   </div>
-                </div>
-                {view === 'work' ? (
-                  <section aria-label="The work">
-                    <div className={`px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
-                      <p className="text-xs text-muted uppercase tracking-widest">Products, then the work</p>
-                    </div>
-                    <Visuals />
-                  </section>
-                ) : (
-                  <WorkList label="Essays" ids={ESSAYS} titleBorders={flags.sectionTitleBorders} />
-                )}
+                  <Visuals />
+                </section>
               </>
             ) : (
               <>
@@ -501,7 +434,10 @@ export default function Home() {
               {flags.signatureVariant === 'clippath' && <Signature className="mb-4" />}
               {flags.signatureVariant === 'penflow' && <PenflowSignature className="mb-4" />}
               <div className="flex items-center justify-between">
-                <p className="text-xs text-muted">© 2025 Gareth Chainey</p>
+                <p className="text-xs text-muted">
+                  © 2025 Gareth Chainey ·{' '}
+                  <Link href="/changelog" className="hover:text-foreground transition-colors">Changelog</Link>
+                </p>
                 <button
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   className="text-xs text-muted hover:text-foreground transition-colors"
