@@ -191,3 +191,13 @@ export const VISUALS: Visual[] = [
     href: '/projects/wallbounce-dev-tools',
   },
 ]
+
+// Kind words between the pieces: after the piece with this id, the quote from this colleague
+// (content/testimonials.ts). After the products, through the case studies, and before the essays.
+export const KIND_WORDS: Record<string, string> = {
+  thesis: 'Ahmed Hakeem',
+  website: 'Richard Simms',
+  'configurator-models': 'David Deville',
+  'eai-settings-features': 'Winnie Bamra',
+  'configurator-qr': 'Henry Vesander',
+}

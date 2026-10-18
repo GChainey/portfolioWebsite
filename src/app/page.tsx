@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { X, ArrowRight } from 'lucide-react'
@@ -20,9 +20,8 @@ import { WallShowcase } from '@/components/showcase/Wall'
 import { PRODUCT_SLIDES, AI_SLIDES } from '@/content/showcase'
 import { writing, getProjectById } from '@/content/projects'
 import { TestimonialCarousel } from '@/components/TestimonialCarousel'
-import { TestimonialSnippets } from '@/components/TestimonialSnippets'
 import { TESTIMONIALS } from '@/content/testimonials'
-import { useFeatureFlags, HOME_LAYOUTS, validOrder, type HomeLayout } from '@/context/FeatureFlagContext'
+import { useFeatureFlags, HOME_LAYOUTS, type HomeLayout } from '@/context/FeatureFlagContext'
 import { thinkers } from '@/content/thinkers'
 import { ParticleField } from '@/components/ParticleField'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
@@ -137,8 +136,9 @@ export default function Home() {
   const [chatMounted, setChatMounted] = useState(false)
   const [experienceDialogOpen, setExperienceDialogOpen] = useState(false)
   const [selectedCompanyId, setSelectedCompanyId] = useState('enterpriseai')
-  // Visuals under the hero. The page as written is still there at ?view=page while the rest is parked
-  const [view, setView] = useState<'page' | 'visuals'>('visuals')
+  // Under the hero, two tabs: the work (Visuals, kind words between the pieces) or the essays as a
+  // plain list. The page as written is still there at ?view=page while the rest is parked
+  const [view, setView] = useState<'page' | 'work' | 'essays'>('work')
   const { flags } = useFeatureFlags()
   // ?home=<layout> overrides the flag, so a variant can be linked to
   const [homeOverride, setHomeOverride] = useState<HomeLayout | null>(null)
@@ -150,6 +150,7 @@ export default function Home() {
     if (home && HOME_LAYOUTS.includes(home)) setHomeOverride(home)
     // A showcase variant, or ?view=page, needs the page as written
     if ((home && HOME_LAYOUTS.includes(home)) || params.get('view') === 'page') setView('page')
+    else if (params.get('view') === 'essays') setView('essays')
     // #work: jump to the work, again as the hero above it finishes loading, unless the visitor scrolls first
     if (window.location.hash === '#work') {
       let moved = false
@@ -400,21 +401,43 @@ export default function Home() {
           {/* The scroll story runs out of this column to the window's edges, so it can't be clipped */}
           <main className={`flex-1 min-w-0 border-x border-border ${homeLayout === 'scrolly' ? '' : 'overflow-clip'}`}>
 
-            {view === 'visuals' ? (
-              validOrder(flags.homeOrder).map((id) => (
-                <Fragment key={id}>
-                  {id === 'hero' && heroSection}
-                  {id === 'testimonials' && <TestimonialSnippets borders={flags.sectionTitleBorders} />}
-                  {id === 'visuals' && (
-                    <section className="border-b border-border" aria-label="The work">
-                      <div className={`px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
-                        <p className="text-xs text-muted uppercase tracking-widest">Products, then the work</p>
-                      </div>
-                      <Visuals />
-                    </section>
-                  )}
-                </Fragment>
-              ))
+            {view !== 'page' ? (
+              <>
+                {heroSection}
+                <div className="flex justify-center py-4 border-b border-border" role="tablist" aria-label="Show">
+                  <div className="flex bg-[color-mix(in_srgb,var(--border)_40%,transparent)] rounded-full p-0.5">
+                    {([
+                      { id: 'work', label: 'Work' },
+                      { id: 'essays', label: 'Essays' },
+                    ] as const).map(({ id, label }) => (
+                      <button
+                        key={id}
+                        role="tab"
+                        aria-selected={view === id}
+                        onClick={() => {
+                          setView(id)
+                          window.history.replaceState(null, '', id === 'work' ? window.location.pathname : `?view=${id}`)
+                        }}
+                        className={`px-5 py-1.5 text-sm rounded-full transition-all ${
+                          view === id ? 'bg-foreground text-background font-medium' : 'text-muted hover:text-foreground'
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                {view === 'work' ? (
+                  <section aria-label="The work">
+                    <div className={`px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
+                      <p className="text-xs text-muted uppercase tracking-widest">Products, then the work</p>
+                    </div>
+                    <Visuals />
+                  </section>
+                ) : (
+                  <WorkList label="Essays" ids={ESSAYS} titleBorders={flags.sectionTitleBorders} />
+                )}
+              </>
             ) : (
               <>
             {heroSection}

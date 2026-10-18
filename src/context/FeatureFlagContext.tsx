@@ -7,18 +7,6 @@ type SignatureVariant = 'off' | 'clippath' | 'penflow'
 // five showcase variants (components/showcase) are parked here to compare
 export const HOME_LAYOUTS = ['carousel', 'tiles', 'autoplay', 'coverflow', 'scrolly', 'billboard', 'wall'] as const
 export type HomeLayout = (typeof HOME_LAYOUTS)[number]
-// The homepage's sections, top to bottom. This default is what the live site shows; the flag
-// drawer reorders them in dev
-export const HOME_SECTIONS = [
-  { id: 'hero', label: 'Hero' },
-  { id: 'testimonials', label: 'Testimonial snippets' },
-  { id: 'visuals', label: 'Product and UI showcase' },
-] as const
-export type HomeSection = (typeof HOME_SECTIONS)[number]['id']
-export const HOME_ORDER: HomeSection[] = HOME_SECTIONS.map((s) => s.id)
-// A stored order with every section once, or the default
-export const validOrder = (order: unknown): HomeSection[] =>
-  Array.isArray(order) && order.length === HOME_ORDER.length && HOME_ORDER.every((id) => order.includes(id)) ? order : HOME_ORDER
 
 interface FeatureFlags {
   sectionTitleBorders: boolean
@@ -30,7 +18,6 @@ interface FeatureFlags {
   warmth: boolean
   colourLights: boolean
   homeLayout: HomeLayout
-  homeOrder: HomeSection[]
 }
 
 interface FeatureFlagContextType {
@@ -50,7 +37,6 @@ const defaultFlags: FeatureFlags = {
   warmth: false,
   colourLights: false,
   homeLayout: 'tiles',
-  homeOrder: HOME_ORDER,
 }
 
 const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(undefined)

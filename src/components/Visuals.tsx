@@ -1,13 +1,15 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react'
 import { ShowcaseReel, type ShowcaseScene } from '@/components/showcase/ShowcaseReel'
 import { useOverlay, pad, ease } from '@/components/showcase/shared'
 import { useTheme } from '@/context/ThemeContext'
-import { VISUALS, type Visual } from '@/content/visuals'
+import { VISUALS, KIND_WORDS, type Visual } from '@/content/visuals'
+import { TESTIMONIALS } from '@/content/testimonials'
+import { KindWord } from '@/components/KindWord'
 
 // The visuals (content/visuals.ts), one after another: what it is and what it did, then the
 // piece across the whole column. Click a piece to open it as big as the screen allows.
@@ -119,7 +121,7 @@ function Piece({ v, theme, playing, onOpen }: { v: Visual; theme: 'light' | 'dar
 
 function Row({ v, theme, playing, onOpen }: { v: Visual; theme: 'light' | 'dark'; playing: boolean; onOpen: () => void }) {
   return (
-    <article className="px-8 py-12 border-b border-border last:border-b-0">
+    <article className="px-8 py-12 border-b border-border">
       <div className="mb-6 grid gap-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
         <div className="min-w-0">
           <Project v={v} />
@@ -199,9 +201,15 @@ export function Visuals() {
 
   return (
     <div>
-      {VISUALS.map((v, i) => (
-        <Row key={v.id} v={v} theme={theme} playing={open === null} onOpen={() => setOpen(i)} />
-      ))}
+      {VISUALS.map((v, i) => {
+        const kind = TESTIMONIALS.find((t) => t.name === KIND_WORDS[v.id])
+        return (
+          <Fragment key={v.id}>
+            <Row v={v} theme={theme} playing={open === null} onOpen={() => setOpen(i)} />
+            {kind && <KindWord t={kind} />}
+          </Fragment>
+        )
+      })}
 
       <AnimatePresence>{open !== null && <Open key="open" index={open} onStep={step} onClose={close} />}</AnimatePresence>
     </div>
