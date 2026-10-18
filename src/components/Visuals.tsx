@@ -7,7 +7,8 @@ import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Maximize2, X } fro
 import { ShowcaseReel, type ShowcaseScene } from '@/components/showcase/ShowcaseReel'
 import { useOverlay, pad, ease } from '@/components/showcase/shared'
 import { useTheme } from '@/context/ThemeContext'
-import { VISUALS, KIND_WORDS, type Visual } from '@/content/visuals'
+import { VISUALS, VISUAL_SECTIONS, KIND_WORDS, type Visual } from '@/content/visuals'
+import { CASE_STUDY_SIZZLE } from '@/content/sizzle'
 import { TESTIMONIALS } from '@/content/testimonials'
 import { KindWord } from '@/components/KindWord'
 
@@ -140,6 +141,18 @@ function Row({ v, theme, playing, onOpen }: { v: Visual; theme: 'light' | 'dark'
   )
 }
 
+// The case studies cut together, captions on, playing ahead of them
+function Sizzle({ theme, playing }: { theme: 'light' | 'dark'; playing: boolean }) {
+  const [ref, near] = useNear<HTMLDivElement>()
+  return (
+    <div className="px-8 py-12 border-b border-border">
+      <div ref={ref} className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-border shadow-lg" style={{ background: theme === 'dark' ? '#09090b' : '#fafafa' }}>
+        {near && <ShowcaseReel scenes={CASE_STUDY_SIZZLE} theme={theme} playing={playing} />}
+      </div>
+    </div>
+  )
+}
+
 // One piece, as big as the screen allows, its title and impact in a line underneath. Arrows
 // step through the rest.
 function Open({ index, onStep, onClose }: { index: number; onStep: (by: number) => void; onClose: () => void }) {
@@ -201,15 +214,25 @@ export function Visuals() {
 
   return (
     <div>
-      {VISUALS.map((v, i) => {
-        const kind = TESTIMONIALS.find((t) => t.name === KIND_WORDS[v.id])
-        return (
-          <Fragment key={v.id}>
-            <Row v={v} theme={theme} playing={open === null} onOpen={() => setOpen(i)} />
-            {kind && <KindWord t={kind} />}
-          </Fragment>
-        )
-      })}
+      {VISUAL_SECTIONS.map((section, n) => (
+        <section key={section.id} aria-labelledby={`visuals-${section.id}`}>
+          <header className="px-8 pt-20 pb-8 border-b border-border">
+            <p className="mb-3 text-xs font-mono text-muted tabular-nums">{pad(n + 1)}</p>
+            <h2 id={`visuals-${section.id}`} className="text-4xl md:text-5xl font-medium tracking-tight text-foreground text-balance">{section.title}</h2>
+          </header>
+          {section.id === 'ai' && <Sizzle theme={theme} playing={open === null} />}
+          {VISUALS.map((v, i) => {
+            if (v.section !== section.id) return null
+            const kind = TESTIMONIALS.find((t) => t.name === KIND_WORDS[v.id])
+            return (
+              <Fragment key={v.id}>
+                <Row v={v} theme={theme} playing={open === null} onOpen={() => setOpen(i)} />
+                {kind && <KindWord t={kind} />}
+              </Fragment>
+            )
+          })}
+        </section>
+      ))}
 
       <AnimatePresence>{open !== null && <Open key="open" index={open} onStep={step} onClose={close} />}</AnimatePresence>
     </div>

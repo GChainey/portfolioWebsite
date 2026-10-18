@@ -364,12 +364,7 @@ export default function Home() {
             {view !== 'page' ? (
               <>
                 {heroSection}
-                <section aria-label="The work">
-                  <div className={`px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
-                    <p className="text-xs text-muted uppercase tracking-widest">Products, then the work</p>
-                  </div>
-                  <Visuals />
-                </section>
+                <Visuals />
               </>
             ) : (
               <>
