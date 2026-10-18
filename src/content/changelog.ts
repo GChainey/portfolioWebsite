@@ -31,7 +31,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       'Fixed: a still in a reel started zoomed in and shrank to fit',
     ],
     aiTools: ['Claude Code'],
-    branch: 'GChainey/h8b91',
+    branch: 'GChainey/homepage-options-link',
   },
   {
     version: '1.52.2',
