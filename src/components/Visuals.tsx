@@ -216,10 +216,9 @@ export function Visuals() {
 
   return (
     <div>
-      {VISUAL_SECTIONS.map((section, n) => (
+      {VISUAL_SECTIONS.map((section) => (
         <section key={section.id} aria-labelledby={`visuals-${section.id}`}>
           <header className={`px-8 ${flags.panels ? 'pt-20 pb-8 border-b border-border' : 'pt-24 pb-4'}`}>
-            <p className="mb-3 text-xs font-mono text-muted tabular-nums">{pad(n + 1)}</p>
             <h2 id={`visuals-${section.id}`} className="text-4xl md:text-5xl font-medium tracking-tight text-foreground text-balance">{section.title}</h2>
           </header>
           {section.id === 'ai' && <Sizzle theme={theme} playing={open === null} panels={flags.panels} />}

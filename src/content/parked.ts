@@ -31,6 +31,20 @@ export interface ParkedItem {
 
 export const PARKED: ParkedItem[] = [
   {
+    id: 'design-audit',
+    name: 'Design audit',
+    status: 'local',
+    since: '2026-10-18',
+    summary: 'The fonts, type sizes, weights, spacing, colours and corners the site uses, counted from src each time the page loads, beside a simpler set to move to (six type steps, two weights, one palette, three corners).',
+    links: [{ label: 'Audit', href: '/audit' }],
+    gate: 'notFound() outside development in src/app/audit/page.tsx; counting in src/lib/design-audit.ts',
+    todo: [
+      'Decide on the proposed type scale, palette and corners, then apply them',
+      'Fix the see-through backgrounds: colours as rgb(var(--x) / <alpha-value>) so bg-border/50 and the rest render',
+      'Drop JetBrains Mono and Caveat once nothing needs them',
+    ],
+  },
+  {
     id: 'demos',
     name: 'Demos',
     status: 'local',

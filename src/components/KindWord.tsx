@@ -8,6 +8,7 @@ import { splitHighlights, type Testimonial } from '@/content/testimonials'
 
 // A colleague's words between two pieces of work: the whole quote, word for word, with its best
 // phrases (content/testimonials.ts `highlights`) marked in the accent as it scrolls into view.
+// Between hairlines with panels on; in a card of its own with them off.
 const MARK = 'color-mix(in srgb, var(--accent) 32%, transparent)'
 
 export function KindWord({ t, panels = true }: { t: Testimonial; panels?: boolean }) {
@@ -16,7 +17,7 @@ export function KindWord({ t, panels = true }: { t: Testimonial; panels?: boolea
 
   return (
     <motion.figure
-      className={`px-8 ${panels ? 'py-16 border-b border-border' : 'py-20'}`}
+      className={panels ? 'px-8 py-16 border-b border-border' : 'mx-8 my-12 rounded-2xl border border-border px-10 py-12 md:px-14 md:py-14'}
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-25% 0px' }}

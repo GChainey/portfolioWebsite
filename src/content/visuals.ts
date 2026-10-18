@@ -52,7 +52,6 @@ export const VISUALS: Visual[] = [
     product: true,
     title: 'Dispatch',
     summary: 'Send articles to your Kindle in one click, from your browser, your Mac or a bot that reads your newsletters.',
-    impact: { value: '1 click', label: 'from page to Kindle' },
     // The app on its landing page, in dark mode, cropped to the app window and the Kindle
     scene: replay('/replays/products/dispatch-app.json', 0.8, 11.6, { region: { x: 120, y: 51, width: 1274, height: 796 }, layout: 'full' }),
     href: 'https://www.dispatchmac.com',
@@ -76,7 +75,6 @@ export const VISUALS: Visual[] = [
     project: 'Daisy Assess',
     title: 'A council\'s whole caseload, against its targets',
     summary: 'A state tender, won with a working product, not mock-ups.',
-    impact: { value: '1', label: 'designer instead of 3 to 5' },
     scene: replay('/replays/rfp/overview.json', 0.4, 21.6),
     href: '/projects/rfp',
   },
