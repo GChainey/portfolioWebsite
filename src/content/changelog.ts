@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.53.0',
+    date: '2026-10-18',
+    title: 'Record Your Own: the HTML Recording Skill',
+    description: 'The recorder behind every clip on the site is now an agent skill, downloadable from the HTML-not-video essay.',
+    changes: [
+      'Skill source in skills/html-recording: recorder, player web component, exporter, screenshot check',
+      '"Record your own" section on /replay-vs-video with a zip download and the skills CLI command',
+      'npm run skill:pack rebuilds public/downloads/html-recording.zip from the source',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/html-recording-skill',
+  },
+  {
     version: '1.52.2',
     date: '2026-10-17',
     title: 'Visuals Back to Dev Only',

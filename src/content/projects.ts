@@ -220,7 +220,7 @@ export const projects: Project[] = [
       { type: 'component', componentId: 'replay-vs-video' },
     ],
     chatContext: {
-      description: 'Essay comparing screen recordings made as HTML (rrweb: the page\'s HTML and CSS plus every DOM change, replayed by the browser) with the same recordings as video. Each video is rendered from its HTML recording frame by frame at 2x and encoded at 60fps with x264 CRF 16, so they are the same take. Sizes: a scrolling letter 9.6 MB as video against 62 KB as HTML (158x), a mostly still RFI clip 1.3 MB against 57 KB (23x), an AI chat clip 1.2 MB against 62 KB (20x), a busy Configurator screen 3.8 MB against 78 KB (50x). HTML stays sharp when zoomed and keeps exact colours; it only works for web UIs (not canvas), records hidden values in the page, and is not a file you can post to social media. Gareth uses it for every recording in his case studies, and edits recordings after the fact: timed captions, camera zooms and highlights.',
+      description: 'Essay comparing screen recordings made as HTML (rrweb: the page\'s HTML and CSS plus every DOM change, replayed by the browser) with the same recordings as video. Each video is rendered from its HTML recording frame by frame at 2x and encoded at 60fps with x264 CRF 16, so they are the same take. Sizes: a scrolling letter 9.6 MB as video against 62 KB as HTML (158x), a mostly still RFI clip 1.3 MB against 57 KB (23x), an AI chat clip 1.2 MB against 62 KB (20x), a busy Configurator screen 3.8 MB against 78 KB (50x). HTML stays sharp when zoomed and keeps exact colours; it only works for web UIs (not canvas), records hidden values in the page, and is not a file you can post to social media. Gareth uses it for every recording in his case studies, and edits recordings after the fact: timed captions, camera zooms and highlights. The recorder is an agent skill (html-recording) people can download from the essay (/downloads/html-recording.zip) or install with `npx skills add GChainey/portfolioWebsite --skill html-recording -g`: it drives the page in headless Chromium with a visible cursor, speeds up slow AI answers, cuts loads, crops, checks itself with screenshots, and exports to any website as an <html-recording> tag or as one self-contained HTML file.',
       suggestedQuestions: [
         'Why record as HTML instead of video?',
         'How much smaller is it?',
@@ -230,6 +230,7 @@ export const projects: Project[] = [
         'How is the video made for the comparison?',
         'Can you edit a recording afterwards?',
         'What tool records it?',
+        'How do I record my own?',
       ],
     },
   },

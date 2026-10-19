@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "skill:pack": "cd skills && rm -f ../public/downloads/html-recording.zip && zip -qr -X ../public/downloads/html-recording.zip html-recording -x '*/node_modules/*' '*.DS_Store'"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.30.0",
