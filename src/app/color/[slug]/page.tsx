@@ -101,7 +101,7 @@ export default function ColorChapterPage({ params }: { params: { slug: string } 
               ))}
             </ol>
           </nav>
-          <h1 className="mt-4 flex items-baseline gap-4 text-5xl font-medium text-foreground">
+          <h1 className="mt-4 flex items-baseline gap-4 hyphens-auto break-words text-4xl font-medium text-foreground sm:text-5xl" lang="en">
             <span className="font-serif font-normal text-muted">{chapter.numeral}</span>
             {chapter.title}
           </h1>
