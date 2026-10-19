@@ -307,7 +307,7 @@ export const COLOR_CHAPTERS: ColorChapter[] = [
     numeral: 'XXIII',
     slug: 'vanishing',
     title: 'Equal light intensity—vanishing boundaries',
-    blurb: 'Tune a grey-green until its triangles dissolve into a grey-violet ground, then measure how close you got.',
+    blurb: 'Tune both a grey-green and a grey-violet until the triangles dissolve, check it with flicker, then try three fresh pairs by eye.',
     learned: [
       'Two neighbouring colours at exactly equal lightness lose the edge between them',
       'It only works between close hues. Contrasting hues vibrate instead',

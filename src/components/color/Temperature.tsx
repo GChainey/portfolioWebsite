@@ -42,6 +42,7 @@ export function Temperature() {
   return (
     <div className="space-y-20">
       <Sort />
+      <WithinHue />
       <Neighbours />
       <Polarities />
     </div>
@@ -105,13 +106,68 @@ function Sort() {
   )
 }
 
+// Four reds and four blues, each family running from leaning one way to leaning the other.
+// The painter's convention: a red leaning to orange is warm, one leaning to blue is cool; a blue
+// leaning to violet (towards red) is warm, one leaning to green is cool.
+const FAMILIES = [
+  { name: 'reds', ask: 'the coolest red', hues: [40, 28, 15, 0], answer: 3, why: 'leans towards blue' },
+  { name: 'blues', ask: 'the warmest blue', hues: [215, 235, 255, 280], answer: 3, why: 'leans towards red' },
+] as const
+
+function WithinHue() {
+  const [orders, setOrders] = useState<number[][]>(FAMILIES.map((f) => f.hues.map((_, i) => i)))
+  const [picks, setPicks] = useState<(number | null)[]>([null, null])
+  useEffect(() => setOrders(FAMILIES.map((f) => shuffle(f.hues.map((_, i) => i)))), [])
+  const done = picks.every((p) => p !== null)
+
+  return (
+    <Step n={2} title="Warm blues and cool reds" quote="Therefore, there are also warm blues and cool reds possible within their own hues.">
+      <p className="mb-6 max-w-2xl text-muted">
+        Temperature works inside a single hue too. In each row, choose {FAMILIES.map((f) => f.ask).join(' and ')}.
+      </p>
+      <div className="space-y-6">
+        {FAMILIES.map((f, r) => (
+          <div key={f.name}>
+            <p className="mb-2 text-sm text-foreground">Choose {f.ask}</p>
+            <div className="flex max-w-md gap-2">
+              {orders[r].map((i) => {
+                const hex = oklchToHex(0.55, 0.17, f.hues[i])
+                const chosen = picks[r] === i
+                const answer = done && i === f.answer
+                return (
+                  <button
+                    key={i}
+                    onClick={() => !done && setPicks((p) => p.map((x, j) => (j === r ? i : x)))}
+                    aria-label={`${f.name} ${orders[r].indexOf(i) + 1}`}
+                    aria-pressed={chosen}
+                    className={`h-16 flex-1 rounded-sm ring-offset-2 ring-offset-background ${chosen ? 'ring-2 ring-accent' : 'ring-1 ring-border'}`}
+                    style={{ background: hex }}
+                  >
+                    {answer && <span className="text-xs text-white">this one</span>}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+      {done && (
+        <p className="mt-8 max-w-2xl text-foreground" role="status">
+          {FAMILIES.map((f, r) => (picks[r] === f.answer ? `Your ${f.ask.replace('the ', '')} ${f.why}, as painters read it.` : `Painters would pick the one that ${f.why}.`)).join(' ')}{' '}
+          Every red here is a red and every blue a blue. Temperature is how each one leans compared with the others.
+        </p>
+      )}
+    </Step>
+  )
+}
+
 function Neighbours() {
   const [inner, setInner] = useState<HSV>({ h: 285, s: 0.35, v: 0.6 })
   const [vote, setVote] = useState<'left' | 'right' | 'same' | null>(null)
   const study = { left: oklchToHex(0.55, 0.2, 28), right: oklchToHex(0.5, 0.15, 260), inner: hsvHex(inner) }
 
   return (
-    <Step n={2} title="A violet with two temperatures" quote="Therefore, there are also warm blues and cool reds possible within their own hues.">
+    <Step n={3} title="A violet with two temperatures" quote="But when these temperature indicators, red and blue, are combined with color neutrals, as whites, blacks, and greys, and with their mixtures, particularly in mixtures with the temperature neutrals green and violet, then personal interpretations of temperatures may easily become disparate.">
       <p className="mb-6 max-w-2xl text-muted">
         The two small rectangles are the same violet. One sits on red, the other on blue. Which one feels warmer?
       </p>
@@ -161,7 +217,7 @@ function Polarities() {
   const set = (c: number, p: number, v: number) => setRatings((r) => r.map((row, i) => (i === c ? row.map((x, j) => (j === p ? v : x)) : row)))
 
   return (
-    <Step n={3} title="Humidity in colour" quote="Light-dark and light-heavy lead easily to soft-hard comparisons; or, quick-slow and early-late connect with young-old, and with warm-cool, as well as with wet-dry.">
+    <Step n={4} title="Humidity in colour" quote="Light-dark and light-heavy lead easily to soft-hard comparisons; or, quick-slow and early-late connect with young-old, and with warm-cool, as well as with wet-dry.">
       <p className="mb-6 max-w-2xl text-muted">
         Place each colour between the two words of each pair. There are no right answers here. Afterwards you&apos;ll
         see which of your readings follow the one thing the screen can measure, light.
