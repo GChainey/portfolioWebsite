@@ -14,6 +14,18 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.53.2',
+    date: '2026-10-18',
+    title: 'HTML Recording Skill Moves to GChainey/skills',
+    description: 'The html-recording skill has its own repo, so the install command reads npx skills add GChainey/skills.',
+    changes: [
+      'Install command and source link on /replay-vs-video point at github.com/GChainey/skills',
+      'skills/ and the skill:pack script removed from this repo; the zip is built with scripts/pack.sh in GChainey/skills',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/skills-repo',
+  },
+  {
     version: '1.53.1',
     date: '2026-10-18',
     title: 'HTML Recording Skill: MIT Licence',
