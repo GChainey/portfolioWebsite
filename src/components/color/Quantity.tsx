@@ -128,8 +128,8 @@ function FourPerformances() {
     >
       <p className="mb-6 max-w-2xl text-muted">
         Every plate uses the same four colours. Change the order of the squares and how big each one is until the
-        four plates look like four different sets of colours. Albers&apos; question: which distribution of quantities
-        hides that it is the same cast?
+        four plates look like four different sets of colours. Albers asks which distribution of quantities
+        best hides that it is the same cast.
       </p>
       <div className="mb-6 flex flex-wrap items-center gap-6">
         <Segmented value={castId} options={CASTS.map(({ id, label }) => ({ id, label }))} onChange={(id) => { setCastId(id); setJudged(false) }} />

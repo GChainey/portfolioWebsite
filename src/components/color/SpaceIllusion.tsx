@@ -164,7 +164,7 @@ function Grid() {
   return (
     <Step n={3} title="Yellow in front, behind, and level" quote="Such a differentiation makes us read the top yellow stripe in front of the vertical stripes, and the bottom yellow behind the vertical stripes.">
       <p className="mb-6 max-w-2xl text-muted">
-        Albers&apos; plate XI-3: three yellow stripes cross three others. Each crossing is a mixture. Set how much
+        In Albers&apos; plate XI-3, three yellow stripes cross three others. Each crossing is a mixture. Set how much
         yellow each row keeps. More yellow brings the yellow forward, less sends it behind. At the middle you can read
         it either way.
       </p>

@@ -155,7 +155,7 @@ function LookAlike() {
             {seen < actual - 0.1 ? `, ${Math.round((1 - seen / actual) * 100)}% closer.` : seen > actual + 0.1 ? ', further apart than before.' : ', no closer than before.'}
           </p>
           <p className="mt-2 text-sm text-muted">
-            This uses a rough model of contrast: each ground pushes its colour away from itself by about a third. Your eye
+            This uses a rough model of contrast, in which each ground pushes its colour away from itself by about a third. Your eye
             is the real judge. Join the rectangles to see the difference that is still there.
           </p>
           <div className="mt-6 flex max-w-sm gap-3 bg-[#808080] p-3">

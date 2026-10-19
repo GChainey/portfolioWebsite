@@ -132,7 +132,7 @@ function Neighbours() {
               ? 'That fits the after-image. Next to blue the violet shows its red, so it reads warm.'
               : vote === 'left'
                 ? 'The after-image predicts the other one. Next to red the violet shows its blue, so it should read cool.'
-                : 'The after-image predicts the one on blue reads warmer: next to blue the violet shows its red.'}
+                : 'The after-image predicts the one on blue reads warmer, because next to blue the violet shows its red.'}
           </p>
           <p className="mt-2 text-sm text-muted">
             Change the violet with the picker. Move it towards red or blue and see where it stops changing sides.

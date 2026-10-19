@@ -199,8 +199,8 @@ function Themes() {
     <Step n={2} title="Someone else's palette" quote="To work with the preference of others, to subordinate to someone else's palette or instrumentation, should be not only permitted but encouraged.">
       <p className="mb-6 max-w-2xl text-muted">
         Here are five colours you didn&apos;t choose, and a pair of opposites. Using only these colours, make one study
-        read as &ldquo;{THEMES[theme][0]}&rdquo; and the other as &ldquo;{THEMES[theme][1]}&rdquo;. Quantity is your only
-        tool: how much of each, and how often.
+        read as &ldquo;{THEMES[theme][0]}&rdquo; and the other as &ldquo;{THEMES[theme][1]}&rdquo;. You can change only
+        how much of each colour there is, and how often it appears.
       </p>
       <div className="mb-6 flex flex-wrap gap-6 text-sm">
         <button onClick={() => setTheme((t) => (t + 1) % THEMES.length)} className="text-foreground underline underline-offset-4 hover:text-accent">

@@ -184,7 +184,7 @@ function GreyScale() {
         <div className="mt-8 max-w-2xl border-t border-border pt-6">
           <p className="text-foreground">Your scale is {score}% even.</p>
           <p className="mt-2 text-sm text-muted">
-            Measured as perceptual lightness. Below, your steps on top, truly even ones underneath.
+            Measured as perceptual lightness. Below, your steps on top, measured even ones underneath.
           </p>
           <div className="mt-4 flex max-w-2xl flex-col overflow-hidden rounded-sm ring-1 ring-border">
             <div className="flex">
