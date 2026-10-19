@@ -1,8 +1,8 @@
 'use client'
 
 import { useId, useState } from 'react'
-import { averageLight, hexToHsv, lightnessOf } from '@/lib/color'
-import { Segmented, Step } from './parts'
+import { averageLight, hexToHsv, hexToOklch, lightnessOf, oklchToHex } from '@/lib/color'
+import { Next, Segmented, Step } from './parts'
 import { Picker, hsvHex, type HSV } from './Picker'
 
 // Chapter XIII. Bezold changed his rug designs by changing one colour only. Here the same rug is
@@ -36,7 +36,7 @@ function RugPattern({ rug, scale = 1, label, className = '' }: { rug: Rug; scale
     <svg role="img" aria-label={label} className={`block w-full rounded-sm ring-1 ring-border ${className}`} viewBox="0 0 320 240" preserveAspectRatio="xMidYMid slice">
       <defs>
         <pattern id={`rug-${id}`} width={s} height={s} patternUnits="userSpaceOnUse">
-          <rect width={s} height={s} fill={rug.ground} />
+          <rect width={s} height={s} fill={rug.ground} data-part="ground" />
           <polygon points={`${s / 2},${s * 0.08} ${s * 0.92},${s / 2} ${s / 2},${s * 0.92} ${s * 0.08},${s / 2}`} fill={rug.field} stroke={rug.line} strokeWidth={w} />
           <rect x={s * 0.4} y={s * 0.4} width={s * 0.2} height={s * 0.2} fill={rug.motif} stroke={rug.line} strokeWidth={w * 0.7} />
           <path d={`M0 0 L${s * 0.08} 0 M0 0 L0 ${s * 0.08} M${s} ${s} L${s * 0.92} ${s} M${s} ${s} L${s} ${s * 0.92}`} stroke={rug.line} strokeWidth={w} />
@@ -54,6 +54,7 @@ export function Bezold() {
   return (
     <div className="space-y-20">
       <OneLine />
+      <Match />
       <YourRug />
     </div>
   )
@@ -103,6 +104,89 @@ function OneLine() {
   )
 }
 
+// The red ground, moved lighter or darker by `d` with its hue kept
+const groundAt = (d: number) => {
+  const [L, C, h] = hexToOklch(BASE.ground)
+  return oklchToHex(L + d, C, h)
+}
+
+// Method of adjustment: set a plain patch until it looks like the red inside the rug. Done once
+// with white lines and once with black, the two settings show which way the lines pulled the red.
+function Match() {
+  const [round, setRound] = useState(0)
+  const [d, setD] = useState(0)
+  const [settings, setSettings] = useState<number[]>([])
+  const line = LINES[round % 2]
+  const rug = { ...BASE, line: line.hex }
+  const finished = settings.length === 2
+  // Black lines come first, then white
+  const [black, white] = settings
+
+  const commit = () => {
+    setSettings((s) => [...s, d])
+    setD(0)
+    setRound((r) => r + 1)
+  }
+
+  return (
+    <Step n={2} title="How far did the red move?" quote="Apparently, there is so far no clear recognition of the optical-perceptual conditions involved.">
+      <p className="mb-6 max-w-2xl text-muted">
+        Measure it on yourself. Move the slider until the plain patch looks like the red ground inside the rug, not the
+        red you know it is. You&apos;ll do it twice, once with white lines and once with black. Both rugs use exactly the
+        same red, {BASE.ground}.
+      </p>
+      {!finished ? (
+        <>
+          <p className="mb-4 text-sm text-foreground">
+            {round + 1} of 2: {line.label.toLowerCase()}
+          </p>
+          <div className="flex max-w-3xl flex-wrap items-center gap-6 bg-[#808080] p-6">
+            <div className="w-full max-w-xs">
+              <RugPattern rug={rug} scale={0.55} label={`Rug with ${line.label.toLowerCase()}`} />
+            </div>
+            <div className="h-32 w-32 shrink-0" style={{ background: groundAt(d) }} aria-label="The patch you are setting" role="img" />
+          </div>
+          <label className="mt-6 block max-w-md text-sm text-muted">
+            <span className="mb-1 flex justify-between">
+              <span>Darker</span>
+              <span>Lighter</span>
+            </span>
+            <input type="range" min={-0.2} max={0.2} step={0.005} value={d} onChange={(e) => setD(Number(e.target.value))} aria-label="The patch: lighter or darker" className="w-full accent-accent" />
+          </label>
+          <Next onClick={commit}>The patch matches the rug&apos;s red</Next>
+        </>
+      ) : (
+        <div className="max-w-2xl">
+          <div className="grid max-w-md grid-cols-3 gap-3 bg-[#808080] p-3">
+            {[
+              { hex: groundAt(white), label: 'Your match, white lines' },
+              { hex: BASE.ground, label: 'The real red' },
+              { hex: groundAt(black), label: 'Your match, black lines' },
+            ].map(({ hex, label }) => (
+              <figure key={label}>
+                <div className="h-16" style={{ background: hex }} />
+                <figcaption className="mt-1 text-xs text-white">{label}</figcaption>
+              </figure>
+            ))}
+          </div>
+          <p className="mt-6 text-foreground" data-testid="verdict">
+            {white - black > 0.015
+              ? `You saw the Bezold Effect. With white lines you set the red ${Math.round((white - black) * 100)} points lighter than with black lines. The lines pulled the red towards themselves.`
+              : black - white > 0.015
+                ? 'You set the red lighter with black lines than with white. That is contrast, the opposite of Bezold. Make the pattern finer or step back and try again: the effect needs lines too thin to see as separate shapes.'
+                : 'You set both reds about the same, so the lines didn’t move the red for you at this size. Step back from the screen and try again.'}
+          </p>
+          <p className="mt-2 text-sm text-muted">
+            Contrast pushes a colour away from its neighbour. Bezold&apos;s effect does the opposite: fine lines that touch
+            everything pull every colour towards them, as if mixed in.
+          </p>
+          <Next onClick={() => { setSettings([]); setRound(0) }}>Measure again</Next>
+        </div>
+      )}
+    </Step>
+  )
+}
+
 const PARTS = [
   { id: 'line', label: 'Lines' },
   { id: 'ground', label: 'Ground' },
@@ -133,7 +217,7 @@ function YourRug() {
   const shift = before ? lightnessOf(rugMix(rug)) - lightnessOf(rugMix(before)) : 0
 
   return (
-    <Step n={2} title="Your rug" quote="There is a special kind of optical mixture, the Bezold Effect, named after its discoverer, Wilhelm von Bezold (1837–1907).">
+    <Step n={3} title="Your rug" quote="There is a special kind of optical mixture, the Bezold Effect, named after its discoverer, Wilhelm von Bezold (1837–1907).">
       <p className="mb-6 max-w-2xl text-muted">
         Pick one part of the rug and change only that colour. Hold the button below to see the rug as it was before
         your change. Lines work best, because they touch every other colour.

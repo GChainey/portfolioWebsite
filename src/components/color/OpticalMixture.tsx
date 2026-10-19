@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { averageLight, multiply } from '@/lib/color'
-import { Segmented, Step } from './parts'
+import { averageLight, deltaE, lightnessOf, multiply, oklchToHex } from '@/lib/color'
+import { Next, Segmented, Step } from './parts'
+import { Picker, hsvHex, type HSV } from './Picker'
 
 // Chapter XII. Two colours seen at once, too small to separate, merge into a third in the eye. The
 // Impressionists painted with it, and printing still depends on it. A screen can draw dots down to
@@ -44,6 +45,7 @@ export function OpticalMixture() {
   return (
     <div className="space-y-20">
       <Dots />
+      <Predict />
       <Halftone />
     </div>
   )
@@ -128,6 +130,116 @@ function Dots() {
   )
 }
 
+// A field of two colours in a fine checkerboard of dots, drawn at `size` CSS pixels
+function DotField({ a, b, size, label }: { a: string; b: string; size: number; label: string }) {
+  const ref = useCanvas(
+    (ctx, w) => {
+      const n = Math.ceil(w / size)
+      for (let y = 0; y < n; y++) {
+        for (let x = 0; x < n; x++) {
+          ctx.fillStyle = (x + y) % 2 ? a : b
+          ctx.fillRect(x * size, y * size, size, size)
+        }
+      }
+    },
+    [a, b, size],
+  )
+  return <canvas ref={ref} className="aspect-square w-full rounded-sm ring-1 ring-border" role="img" aria-label={label} />
+}
+
+// Two colours far enough apart in hue that the mixture is a real prediction
+function randomPair(): [string, string] {
+  const h = Math.random() * 360
+  return [oklchToHex(0.55 + Math.random() * 0.3, 0.16, h), oklchToHex(0.4 + Math.random() * 0.3, 0.14, (h + 100 + Math.random() * 160) % 360)]
+}
+
+function Predict() {
+  const [pair, setPair] = useState<[string, string]>(['#f2d230', '#2c55c4'])
+  const [guess, setGuess] = useState<HSV>({ h: 0, s: 0, v: 0.6 })
+  const [size, setSize] = useState(24)
+  const [done, setDone] = useState(false)
+  const [rounds, setRounds] = useState<number[]>([])
+  const [a, b] = pair
+
+  // A new pair, and a grey guess so the picker doesn't suggest an answer. Random, so it waits for the browser.
+  const fresh = () => {
+    setPair(randomPair())
+    setGuess({ h: Math.random() * 360, s: 0, v: 0.6 })
+    setSize(24)
+    setDone(false)
+  }
+  useEffect(fresh, [])
+
+  // After the guess, the dots shrink to single screen points so the eye does the mixing
+  useEffect(() => {
+    if (!done || size <= 1) return
+    const t = setTimeout(() => setSize((s) => Math.max(1, Math.floor(s * 0.7))), 90)
+    return () => clearTimeout(t)
+  }, [done, size])
+
+  const yours = hsvHex(guess)
+  const eye = averageLight(a, b)
+  const miss = deltaE(yours, eye)
+  const paint = multiply(a, b)
+  const nearerPaint = deltaE(yours, paint) < miss
+
+  return (
+    <Step n={2} title="Predict the mixture" quote="That the dots mentioned were small indicates that this effect depends on size and on distance.">
+      <p className="mb-6 max-w-2xl text-muted">
+        Here are two colours in large dots. Make the colour you think they will become when the dots are too small to
+        see. Then the dots shrink to single points and you can compare your colour with what your eye makes of them.
+      </p>
+      <div className="flex flex-wrap items-start gap-8">
+        <div className="w-full max-w-sm">
+          <DotField a={a} b={b} size={size} label={`Dots of two colours, ${size} pixels across`} />
+        </div>
+        {!done ? (
+          <div className="w-full max-w-xs">
+            <Picker value={guess} onChange={setGuess} />
+            <div className="mt-4 h-16 rounded-sm ring-1 ring-border" style={{ background: yours }} />
+            <p className="mt-1 text-xs text-muted">Your prediction</p>
+          </div>
+        ) : (
+          <div className="w-full max-w-xs space-y-3">
+            {[
+              { hex: yours, label: 'Your prediction' },
+              { hex: eye, label: 'Measured: the average of the two lights' },
+            ].map(({ hex, label }) => (
+              <figure key={label}>
+                <div className="h-16 rounded-sm ring-1 ring-border" style={{ background: hex }} />
+                <figcaption className="mt-1 text-xs text-muted">{label}</figcaption>
+              </figure>
+            ))}
+          </div>
+        )}
+      </div>
+      {!done ? (
+        <Next onClick={() => { setDone(true); setRounds((r) => [...r, miss]) }}>That&apos;s what they&apos;ll make</Next>
+      ) : (
+        <div className="mt-8 max-w-2xl border-t border-border pt-6">
+          <p className="text-foreground" data-testid="verdict">
+            {miss < 6 ? 'Close. Your eye agrees with the measurement.' : `Off by ${miss.toFixed(0)}.`}{' '}
+            {miss >= 6 &&
+              (nearerPaint
+                ? 'Your colour is nearer to what the two would make as paint. Dots lose less light than paint, so expect a lighter, brighter mixture.'
+                : `Yours is ${lightnessOf(yours) > lightnessOf(eye) ? 'lighter' : 'darker'} than the dots make.`)}
+          </p>
+          <p className="mt-2 text-sm text-muted">
+            Judge it on the shrunken dots, not the number: hold the screen at arm&apos;s length and compare. The measured
+            colour assumes equal amounts of both, averaged as light.
+          </p>
+          {rounds.length > 1 && (
+            <p className="mt-4 text-sm text-muted">
+              Your misses so far: {rounds.map((r) => r.toFixed(0)).join(', ')}.
+            </p>
+          )}
+          <Next onClick={fresh}>Another pair</Next>
+        </div>
+      )}
+    </Step>
+  )
+}
+
 // A small made-up picture to print: a warm sky behind a cool ball
 function picture(u: number, v: number): [number, number, number] {
   const sky: [number, number, number] = [0.98 - v * 0.2, 0.75 - v * 0.45, 0.45 + v * 0.2]
@@ -182,7 +294,7 @@ function Halftone() {
   )
 
   return (
-    <Step n={2} title="Printed dots" quote="In the first case, 3 or 4 color plates subdivided into tiny printing dots mix to innumerable color shades and tints.">
+    <Step n={3} title="Printed dots" quote="In the first case, 3 or 4 color plates subdivided into tiny printing dots mix to innumerable color shades and tints.">
       <p className="mb-6 max-w-2xl text-muted">
         Every printed picture is an optical mixture. In colour there are only three inks, cyan, magenta and yellow,
         each on its own angled grid. In black and white there is one ink and the white of the paper. Make the screen

@@ -132,32 +132,60 @@ function SameTune() {
   )
 }
 
+// A round is a group to transpose and the direction to take it. The first round is the low group,
+// taken up; after that a group you haven't seen, taken down, so the skill has to transfer.
+type Round = { from: number[]; dir: 'up' | 'down' }
+const FIRST: Round = { from: LOW, dir: 'up' }
+const rand = (lo: number, hi: number) => lo + Math.random() * (hi - lo)
+
 function ByHand() {
+  const [round, setRound] = useState<Round>(FIRST)
   const [ls, setLs] = useState<number[]>([0.7, 0.7, 0.7, 0.7])
   const [done, setDone] = useState(false)
+  const [tally, setTally] = useState({ clean: 0, tries: 0 })
   const play = useTune()
 
   // A random start has to wait for the browser, or the server and client disagree
-  useEffect(() => setLs(LOW.map(() => 0.6 + Math.random() * 0.3)), [])
+  useEffect(() => setLs(LOW.map(() => rand(0.6, 0.9))), [])
 
-  const offsets = ls.map((L, i) => L - LOW[i])
+  const fresh = () => {
+    // Keep the steps between squares at least 6 points apart so there is a tune to keep
+    const base = rand(0.62, 0.72)
+    const from = [0, 1, 2, 3].map((i) => base + [-0.06, 0.04, -0.12, 0.12][i] + rand(-0.02, 0.02))
+    setRound({ from, dir: 'down' })
+    setLs(from.map(() => rand(0.15, 0.45)))
+    setDone(false)
+  }
+
+  const { from, dir } = round
+  const offsets = ls.map((L, i) => L - from[i])
   const key = offsets.reduce((a, b) => a + b, 0) / 4
   // How far each step strays from a clean transposition, in lightness points
   const miss = Math.sqrt(offsets.reduce((sum, o) => sum + (o - key) ** 2, 0) / 4) * 100
-  const exact = LOW.map((L) => L + key)
+  const exact = from.map((L) => L + key)
+  // A new key has to be a real move, at least 10 points, in the direction asked
+  const moved = dir === 'up' ? key >= 0.1 : key <= -0.1
+  const clean = miss < 2 && moved
+  const word = dir === 'up' ? 'higher' : 'lower'
+
+  const commit = () => {
+    setDone(true)
+    setTally((t) => ({ clean: t.clean + (clean ? 1 : 0), tries: t.tries + 1 }))
+  }
 
   return (
     <Step n={2} title="Transpose it by hand" quote="The only way in which the 2 groups can be compared easily and accurately is to superimpose 1 group on the other.">
       <p className="mb-6 max-w-2xl text-muted">
-        Make a higher version of the low group. Each slider moves one square. The low group sits small in the middle
-        of yours, so you can compare every boundary. When the inner and outer groups feel like the same tune, stop.
+        Make a {word} version of the {round === FIRST ? 'low' : 'new'} group. Each slider moves one square. The
+        original sits small in the middle of yours, so you can compare every boundary. When the inner and outer groups
+        feel like the same tune, stop. A new key means a move of at least 10 points of lightness.
       </p>
       <div className="flex flex-wrap items-start gap-8">
         <div className="w-full max-w-xs">
-          <Group colors={hexes(ls)} inset={hexes(LOW)} label="Your group, with the low group in the centre" />
+          <Group colors={hexes(ls)} inset={hexes(from)} label="Your group, with the original in the centre" />
           <div className="mt-2 flex gap-4 text-sm">
-            <button onClick={() => play(LOW)} className="text-foreground underline underline-offset-4 hover:text-accent">
-              Play the low group
+            <button onClick={() => play(from)} className="text-foreground underline underline-offset-4 hover:text-accent">
+              Play the original
             </button>
             <button onClick={() => play(ls)} className="text-foreground underline underline-offset-4 hover:text-accent">
               Play yours
@@ -172,22 +200,32 @@ function ByHand() {
       </div>
 
       {!done ? (
-        <Next onClick={() => setDone(true)}>Same tune, higher key</Next>
+        <Next onClick={commit}>Same tune, {word} key</Next>
       ) : (
         <div className="mt-8 max-w-2xl border-t border-border pt-6">
-          <p className="text-foreground">
-            {miss < 2
+          <p data-testid="verdict" className="text-foreground">
+            {clean
               ? 'A clean transposition. Every step moved by the same amount of light.'
-              : `Your steps are off by about ${miss.toFixed(1)} points of lightness on average.`}{' '}
-            You raised the group by {Math.round(key * 100)} points.
+              : !moved
+                ? `Not a new key yet. The group needs to move ${word} by at least 10 points, and yours moved ${Math.round(key * 100)}.`
+                : `Your steps are off by about ${miss.toFixed(1)} points of lightness on average.`}{' '}
+            {moved && `You moved the group ${Math.abs(Math.round(key * 100))} points ${word}.`}
           </p>
-          <div className="mt-6 grid max-w-md grid-cols-2 gap-4">
+          <p className="mt-4 text-sm text-muted">
+            Superimposed both ways, as Albers did: each group carries the other in its centre. In a clean transposition
+            the inner and outer groups read as the same tune.
+          </p>
+          <div className="mt-4 grid max-w-md grid-cols-2 gap-4">
             <figure>
-              <Group colors={hexes(ls)} label="Yours" />
-              <figcaption className="mt-2 text-sm text-muted">Yours</figcaption>
+              <Group colors={hexes(ls)} inset={hexes(from)} label="Yours, with the original in its centre" />
+              <figcaption className="mt-2 text-sm text-muted">Yours, original inside</figcaption>
             </figure>
             <figure>
-              <Group colors={hexes(exact)} label="An exact transposition by the same amount" />
+              <Group colors={hexes(from)} inset={hexes(ls)} label="The original, with yours in its centre" />
+              <figcaption className="mt-2 text-sm text-muted">Original, yours inside</figcaption>
+            </figure>
+            <figure>
+              <Group colors={hexes(exact)} inset={hexes(from)} label="An exact transposition by the same amount" />
               <figcaption className="mt-2 text-sm text-muted">Exact, same key</figcaption>
             </figure>
           </div>
@@ -195,11 +233,17 @@ function ByHand() {
             {offsets.map((o, i) => (
               <li key={i}>
                 Square {i + 1} moved {Math.round(o * 100)}
-                {Math.abs(o - key) > 0.03 ? `, ${o > key ? 'too far' : 'not far enough'}` : ', about right'}.
+                {Math.abs(o - key) > 0.03 ? `, ${Math.abs(o) > Math.abs(key) ? 'too far' : 'not far enough'}` : ', about right'}.
               </li>
             ))}
           </ul>
-          <Next onClick={() => { setLs(exact); setDone(false) }}>Snap mine to the exact key</Next>
+          <p data-testid="rounds" className="mt-4 text-sm text-muted">
+            Clean transpositions: {tally.clean} of {tally.tries}.
+          </p>
+          <div className="flex flex-wrap gap-x-8">
+            <Next onClick={() => { setLs(exact); setDone(false) }}>Snap mine to the exact key</Next>
+            <Next onClick={fresh}>Transpose a group you haven&apos;t seen</Next>
+          </div>
         </div>
       )}
     </Step>

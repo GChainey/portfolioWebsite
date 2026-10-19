@@ -164,7 +164,7 @@ export const COLOR_CHAPTERS: ColorChapter[] = [
     numeral: 'XII',
     slug: 'optical-mixture',
     title: 'Optical mixture—after-image revised',
-    blurb: 'Shrink dots of two colours until they become one, then watch three inks build a printed picture.',
+    blurb: 'Predict the colour two dots will blend into, then shrink them to single pixels to check, and watch three inks build a printed picture.',
     learned: [
       'Small enough dots of two colours merge into a third in the eye',
       'It depends on size and distance. Squinting does the same as stepping back',
@@ -177,7 +177,7 @@ export const COLOR_CHAPTERS: ColorChapter[] = [
     numeral: 'XIII',
     slug: 'bezold',
     title: 'The Bezold Effect',
-    blurb: 'Change one colour in a rug pattern and watch the whole design turn lighter or darker.',
+    blurb: "Match a plain patch to a rug's red, once with black lines and once with white, to measure how far one colour change moves the whole design.",
     learned: [
       'Thin lines that touch every colour change all of them at once',
       'The smaller the pattern, the more the eye mixes the lines into the colours',
@@ -190,7 +190,7 @@ export const COLOR_CHAPTERS: ColorChapter[] = [
     numeral: 'XIV',
     slug: 'intervals',
     title: 'Color intervals and transformation',
-    blurb: 'Move four colours up or down in light by the same steps, then lay one group inside the other to check the key held.',
+    blurb: 'Move four colours up or down in light by the same steps, check the key held by laying one group inside the other, then take a new group lower.',
     learned: [
       'Colours have intervals like tones. What matters is the steps between them, not where they start',
       'Raise every colour by the same amount of light and the group keeps its character',

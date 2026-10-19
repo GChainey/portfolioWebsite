@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { deltaE, lightnessOf, mixOklab } from '@/lib/color'
+import { deltaE, hexToHsv, hexToOklch, lightnessOf, mixOklab, oklchToHex } from '@/lib/color'
 import { Next, Segmented, Step } from './parts'
 import { Picker, hsvHex, type HSV } from './Picker'
 import { Overlap } from './Transparence'
@@ -87,46 +87,113 @@ function OnTop() {
   )
 }
 
-function Middle() {
-  const [pairId, setPairId] = useState(PAIRS[1].id)
-  const [guess, setGuess] = useState<HSV>({ h: 0, s: 0.2, v: 0.5 })
-  const [done, setDone] = useState(false)
-  const { a, b } = PAIRS.find((p) => p.id === pairId)!
+// A parent moved lighter or darker by `d`, keeping its hue and chroma
+function shift(hex: string, d: number) {
+  const [L, C, h] = hexToOklch(hex)
+  return oklchToHex(Math.min(0.97, Math.max(0.08, L + d)), C, h)
+}
 
-  useEffect(() => {
-    setGuess({ h: Math.random() * 360, s: 0.2, v: 0.4 + Math.random() * 0.4 })
-    setDone(false)
-  }, [pairId])
-
-  const c = hsvHex(guess)
+// How evenly a mixture sits between its parents: equal distance overall, and halfway in light
+function measure(a: string, b: string, c: string) {
   const toA = deltaE(c, a)
   const toB = deltaE(c, b)
+  const [la, lb, lc] = [a, b, c].map(lightnessOf)
+  const at = (la - lc) / (la - lb || 0.001)
+  const balance = Math.abs(toA - toB) / Math.max(toA + toB, 0.001)
+  return { toA, toB, at, balance, middle: balance < 0.12 && at > 0.4 && at < 0.6 }
+}
+
+// A pair nobody has seen before, for the transfer round: two hues well apart, one light, one dark
+function randomPair() {
+  const h = Math.random() * 360
+  return {
+    id: 'new',
+    label: 'New pair',
+    a: oklchToHex(0.78 + Math.random() * 0.1, 0.1, h),
+    b: oklchToHex(0.32 + Math.random() * 0.12, 0.12, (h + 90 + Math.random() * 180) % 360),
+  }
+}
+
+function Middle() {
+  const [pair, setPair] = useState(PAIRS[1])
+  const [guess, setGuess] = useState<HSV>({ h: 0, s: 0.2, v: 0.5 })
+  const [moveA, setMoveA] = useState(0)
+  const [moveB, setMoveB] = useState(0)
+  const [done, setDone] = useState(false)
+  const [rounds, setRounds] = useState<{ label: string; middle: boolean }[]>([])
+
+  useEffect(() => {
+    // Start near one parent, never near the answer: a random grey can land on the middle by chance
+    setGuess(hexToHsv(mixOklab(pair.a, pair.b, Math.random() < 0.5 ? 0.15 : 0.85)))
+    setMoveA(0)
+    setMoveB(0)
+    setDone(false)
+  }, [pair])
+
+  const a = shift(pair.a, moveA)
+  const b = shift(pair.b, moveB)
+  const c = hsvHex(guess)
+  const m = measure(a, b, c)
   const middle = mixOklab(a, b, 0.5)
-  const lighter = lightnessOf(a) > lightnessOf(b) ? 'a' : 'b'
-  const leansTo = toA < toB ? 'a' : 'b'
-  const balanced = Math.abs(toA - toB) < 4
+  const lighterIsA = lightnessOf(a) > lightnessOf(b)
+  // Which way the mixture leans in light: towards the lighter parent means it is too light
+  const tooLight = lighterIsA ? m.at < 0.5 : m.at > 0.5
+
+  const commit = () => {
+    setDone(true)
+    setRounds((r) => [...r, { label: pair.label, middle: m.middle }])
+  }
 
   return (
     <Step n={2} title="Find the middle mixture" quote="Since the middle mixture presupposes equidistance from the color parents, it therefore depends equally upon the absence of any predominance of the color parents.">
       <p className="mb-6 max-w-2xl text-muted">
         Now choose the mixture yourself. Aim for the one that belongs to neither parent, so both edges look equally
-        hard and the square looks flat.
+        hard and the square looks flat. Albers&apos; class often couldn&apos;t find the right paper, so he had them move
+        the parents instead. You can do both.
       </p>
-      <div className="mb-6">
-        <Segmented value={pairId} options={PAIRS.map(({ id, label }) => ({ id, label }))} onChange={setPairId} />
+      <div className="mb-6 flex flex-wrap items-center gap-4">
+        <Segmented value={pair.id} options={PAIRS.map(({ id, label }) => ({ id, label }))} onChange={(id) => setPair(PAIRS.find((p) => p.id === id)!)} />
+        <button onClick={() => setPair(randomPair())} className="text-sm text-foreground underline underline-offset-4 hover:text-accent">
+          A pair you haven&apos;t seen
+        </button>
       </div>
       <div className="flex flex-wrap items-start gap-8">
         <Overlap a={a} b={b} c={c} className="max-w-md" />
-        {!done ? <Picker value={guess} onChange={setGuess} /> : <Bars a={a} b={b} c={c} />}
+        {!done ? (
+          <div className="w-full max-w-xs space-y-5">
+            <Picker value={guess} onChange={setGuess} />
+            {[
+              { label: 'Top parent', value: moveA, set: setMoveA },
+              { label: 'Bottom parent', value: moveB, set: setMoveB },
+            ].map((s) => (
+              <label key={s.label} className="block text-sm text-muted">
+                <span className="mb-1 flex justify-between">
+                  <span className="text-foreground">{s.label}</span>
+                  <span>{s.value === 0 ? 'as given' : s.value > 0 ? 'lighter' : 'darker'}</span>
+                </span>
+                <input type="range" min={-0.15} max={0.15} step={0.01} value={s.value} onChange={(e) => s.set(Number(e.target.value))} aria-label={`${s.label}: lighter or darker`} className="w-full accent-accent" />
+              </label>
+            ))}
+          </div>
+        ) : (
+          <Bars a={a} b={b} c={c} />
+        )}
       </div>
       {!done ? (
-        <Next onClick={() => setDone(true)}>That&apos;s the middle</Next>
+        <Next onClick={commit}>That&apos;s the middle</Next>
       ) : (
         <div className="mt-8 max-w-2xl border-t border-border pt-6">
           <p className="text-foreground">
-            {balanced
-              ? `Close to the middle. It is ${toA.toFixed(0)} from one parent and ${toB.toFixed(0)} from the other.`
-              : `It leans towards the ${leansTo === lighter ? 'lighter' : 'darker'} parent, ${Math.min(toA, toB).toFixed(0)} from it and ${Math.max(toA, toB).toFixed(0)} from the other. Look for a ${leansTo === lighter ? 'darker' : 'lighter'} middle, or move the parents.`}
+            {m.middle
+              ? `A middle mixture. It is ${m.toA.toFixed(0)} from one parent and ${m.toB.toFixed(0)} from the other, and ${Math.round(m.at * 100)}% of the way in light.`
+              : `Not yet the middle. It is ${m.toA.toFixed(0)} from the top parent and ${m.toB.toFixed(0)} from the bottom one, and ${Math.round(m.at * 100)}% of the way from top to bottom in light. ${
+                  Math.abs(m.at - 0.5) < 0.1 ? 'The light is right, so the hue leans.' : `It is too ${tooLight ? 'light' : 'dark'}: choose a ${tooLight ? 'darker' : 'lighter'} middle, or move the ${tooLight ? 'lighter' : 'darker'} parent ${tooLight ? 'up' : 'down'} so the gap evens out.`
+                }`}
+          </p>
+          <p className="mt-2 text-sm text-muted">
+            The diagram is Albers&apos; blackboard check: your mixture is the outlined bar, placed by its light between the
+            two parents. A middle mixture sits on the centre line. The measure: equal distance to both parents within
+            12%, and between 40% and 60% of the way in light.
           </p>
           <div className="mt-6 grid max-w-md grid-cols-2 gap-4">
             <figure>
@@ -138,7 +205,15 @@ function Middle() {
               <figcaption className="mt-2 text-xs text-muted">The measured middle</figcaption>
             </figure>
           </div>
-          <Next onClick={() => setDone(false)}>Adjust mine</Next>
+          <div className="mt-2 flex flex-wrap gap-x-6">
+            <Next onClick={() => setDone(false)}>Adjust mine</Next>
+            <Next onClick={() => setPair(randomPair())}>Try a pair you haven&apos;t seen</Next>
+          </div>
+          {rounds.length > 1 && (
+            <p className="mt-6 text-sm text-muted" data-testid="rounds">
+              {rounds.filter((r) => r.middle).length} of {rounds.length} tries found the middle.
+            </p>
+          )}
         </div>
       )}
     </Step>

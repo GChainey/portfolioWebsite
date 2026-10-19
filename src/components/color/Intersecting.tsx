@@ -101,14 +101,21 @@ function PullTheSheet() {
   )
 }
 
+// Reds first, then the two pairs you haven't mixed: greens, and Albers' "different and opposing colors"
 function FindTheMiddle() {
-  const pair = PAIRS[0]
+  const [round, setRound] = useState(0)
+  const pair = PAIRS[round % PAIRS.length]
   const truth = mixOklab(pair.light, pair.dark)
   const [hsv, setHsv] = useState<HSV>(() => hexToHsv(mixOklab(pair.light, pair.dark, 0.25)))
+  const [strip, setStrip] = useState(0.06)
   const [done, setDone] = useState(false)
+  const [tally, setTally] = useState({ hits: 0, tries: 0 })
 
   // Start somewhere off the middle, toward one parent or the other. Random, so it waits for the browser.
-  useEffect(() => setHsv(hexToHsv(mixOklab(pair.light, pair.dark, Math.random() < 0.5 ? 0.2 : 0.8))), [pair.light, pair.dark])
+  useEffect(() => {
+    setHsv(hexToHsv(mixOklab(pair.light, pair.dark, Math.random() < 0.5 ? 0.2 : 0.8)))
+    setStrip(0.06)
+  }, [pair.light, pair.dark])
   const yours = hsvHex(hsv)
 
   // Where yours sits on the way from light to dark, by lightness: 0 is the light parent, 1 the dark
@@ -116,26 +123,43 @@ function FindTheMiddle() {
   const L2 = lightnessOf(pair.dark)
   const at = (L1 - lightnessOf(yours)) / (L1 - L2)
   const miss = deltaE(yours, truth)
+  const hit = miss < 3
+
+  const commit = () => {
+    setDone(true)
+    setTally((t) => ({ hits: t.hits + (hit ? 1 : 0), tries: t.tries + 1 }))
+  }
 
   return (
     <Step n={2} title="Find the middle yourself" quote="A true middle mixture is distinguished by being equidistant—in light and in hue—from either mixture parent.">
       <p className="mb-6 max-w-2xl text-muted">
-        Choose the red for the middle sheet. Albers&apos; test is that in a true middle, the two halves of the strip look
-        equally strong. If the strip mostly looks like one of the parents, your red leans toward that parent.
+        Choose the colour for the middle sheet, then pull the dark sheet slowly to the right as Albers did. In a true
+        middle the strip splits into two halves of equal strength, each echoing the parent on the other side. If one
+        parent seems to spread across the strip, your colour leans toward it.
       </p>
       <div className="flex flex-wrap items-start gap-8">
         <div className="w-full max-w-md">
-          <Sheets light={pair.light} middle={yours} dark={pair.dark} strip={0.4} />
+          <Sheets light={pair.light} middle={yours} dark={pair.dark} strip={strip} onStrip={setStrip} />
+          <p className="mt-2 text-sm text-muted">{pair.label}. Drag the edge of the dark sheet.</p>
         </div>
         {!done && <Picker value={hsv} onChange={setHsv} />}
       </div>
       {!done ? (
-        <Next onClick={() => setDone(true)}>That&apos;s the middle</Next>
+        <Next onClick={commit}>That&apos;s the middle</Next>
       ) : (
         <div className="mt-8 max-w-2xl border-t border-border pt-6">
-          <p className="text-foreground">
-            Your red is {Math.round(clamp(at, -1, 2) * 100)}% of the way from the light red to the dark one.{' '}
-            {miss < 3 ? 'That is a true middle.' : at < 0.45 ? 'The light parent dominates.' : at > 0.55 ? 'The dark parent dominates.' : 'Right in light, but the hue has drifted.'}
+          <p data-testid="verdict" className="text-foreground">
+            Yours is {Math.round(clamp(at, -1, 2) * 100)}% of the way from the light parent to the dark one, in light.{' '}
+            {hit
+              ? 'That is a true middle.'
+              : at < 0.45
+                ? `Not the middle: the light parent dominates. Off by ${miss.toFixed(1)}.`
+                : at > 0.55
+                  ? `Not the middle: the dark parent dominates. Off by ${miss.toFixed(1)}.`
+                  : `Not the middle: right in light, but the hue has drifted. Off by ${miss.toFixed(1)}.`}
+          </p>
+          <p className="mt-2 text-sm text-muted">
+            A true middle is within 3 units of colour difference (ΔE, OKLab) of the measured halfway point.
           </p>
           <div className="mt-6 grid max-w-md grid-cols-2 gap-4">
             <figure>
@@ -147,7 +171,15 @@ function FindTheMiddle() {
               <figcaption className="mt-2 text-sm text-muted">The measured middle, {truth}</figcaption>
             </figure>
           </div>
-          <Next onClick={() => setDone(false)}>Try again</Next>
+          <p data-testid="rounds" className="mt-4 text-sm text-muted">
+            True middles: {tally.hits} of {tally.tries}.
+          </p>
+          <div className="flex flex-wrap gap-x-8">
+            <Next onClick={() => setDone(false)}>Adjust mine</Next>
+            <Next onClick={() => { setRound((r) => r + 1); setDone(false) }}>
+              Try {PAIRS[(round + 1) % PAIRS.length].label.toLowerCase()}
+            </Next>
+          </div>
         </div>
       )}
     </Step>

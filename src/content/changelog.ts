@@ -28,6 +28,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       'Shared colour maths in src/lib/color.ts: OKLab mixing, light addition, multiply, greyscale and WCAG contrast',
       'Chapter titles shrink on phones so long words fit, and the chapter numerals wrap',
       '/color/reel plays all 25 exercises in about two minutes: HTML recordings of each page, captioned with how it works and what it teaches',
+      "Every study audited against Albers' own instructions, with a measurable check and a round on colours you haven't seen; Vanishing now lets you adjust both colours",
     ],
     aiTools: ['Claude Code'],
     branch: 'claude/project-thread-ijswqy',
