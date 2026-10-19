@@ -80,10 +80,10 @@ export default function ReplayVsVideoPage() {
             <p>
               <span className="text-foreground">Or install it with the skills CLI</span> (Claude Code, Codex, Cursor and others):
             </p>
-            <pre className="overflow-x-auto rounded-lg border border-border px-4 py-3 text-foreground"><code>npx skills add GChainey/portfolioWebsite --skill html-recording -g</code></pre>
+            <pre className="overflow-x-auto rounded-lg border border-border px-4 py-3 text-foreground"><code>npx skills add GChainey/skills --skill html-recording -g</code></pre>
             <p>
               It needs Node 20 or later, and downloads a headless Chromium (about 100 MB) the first time.{' '}
-              <a href="https://github.com/GChainey/portfolioWebsite/tree/main/skills/html-recording" className="text-foreground underline underline-offset-4 hover:text-accent">
+              <a href="https://github.com/GChainey/skills/tree/main/skills/html-recording" className="text-foreground underline underline-offset-4 hover:text-accent">
                 Source on GitHub
               </a> (MIT licensed)
             </p>
