@@ -1,6 +1,6 @@
 ---
 name: html-recording
-description: Record a web page or prototype as an HTML recording instead of a screen video. rrweb captures the real DOM, its CSS and every change; a small player replays it in the page, sharp at any zoom with exact colours, at around 1% of a video's size. Use whenever someone wants a demo, clip, walkthrough, screen recording, replay, "record this flow", a recording for a case study, docs, a README, Slack or Notion, or to re-record an existing clip after the UI changed. Not for canvas or WebGL content (games, maps, shaders): that still needs video.
+description: "Record a web page or prototype as an HTML recording instead of a screen video. rrweb captures the real DOM, its CSS and every change; a small player replays it in the page, sharp at any zoom with exact colours, at around 1% of a video's size. Use whenever someone wants a demo, clip, walkthrough, screen recording, replay, 'record this flow', a recording for a case study, docs, a README, Slack or Notion, or to re-record an existing clip after the UI changed. Not for canvas or WebGL content (games, maps, shaders): that still needs video."
 ---
 
 # HTML recordings
