@@ -314,7 +314,7 @@ export function Masters() {
         <Step n={2} title="Its instrumentation" quote="We try to give a general impression only as to climate, temperature, aroma, or sound of their work—not minute details.">
           <p className="mb-6 max-w-2xl text-muted">
             The same papers, sized by how much of the painting each one covers. This is the painter&apos;s
-            instrumentation: which colours, and how much of each. Try two papers, then sixteen, and see when the climate
+            instrumentation, which colours and how much of each. Try two papers, then sixteen, and see when the climate
             of the painting arrives.
           </p>
           <div className="max-w-2xl">

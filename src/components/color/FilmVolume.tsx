@@ -144,7 +144,7 @@ function Pool() {
     <Step n={3} title="Steps into the pool" quote="Observing the white or blue steps within the water, we will discover that with each step down the blue of the water increases progressively.">
       <p className="mb-6 max-w-2xl text-muted">
         White steps of equal depth, going down into blue water. Each step adds the same depth, so the same amount of
-        blue. Watch the boundaries between steps: they get softer the deeper you go. Chapter XX explains why.
+        blue. Watch the boundaries between steps. They get softer the deeper you go. Chapter XX explains why.
       </p>
       <div
         role="img"

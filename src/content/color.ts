@@ -115,7 +115,7 @@ export const COLOR_CHAPTERS: ColorChapter[] = [
     blurb: 'Stare at a colour for 30 seconds and the screen swaps it for white, so you see its after-image where you were already looking.',
     learned: [
       'Staring at a colour tires the eye, and white then looks tinted with the opposite colour',
-      'Yellow circles leave yellow diamonds behind: the after-image of the gaps, not of the circles',
+      'Yellow circles leave yellow diamonds behind. The diamonds are the after-image of the gaps between the circles',
       'Every ground casts its after-image on what sits on it, straight away, with no staring needed',
       'No eye is immune, however trained. Knowing about it changes nothing',
       'A neutral grey in a UI picks up the opposite of whatever brand colour surrounds it, so check greys in place',
@@ -143,7 +143,7 @@ export const COLOR_CHAPTERS: ColorChapter[] = [
       'Light added to light always gets lighter, and all three together make white',
       'Paint or ink mixed with paint always gets darker, heading towards black',
       'Mixing in the eye, as on a spinning disc, lands between the two',
-      'A screen is literally additive light. Print is subtractive ink',
+      'A screen mixes light, which adds. Print mixes ink, which subtracts',
       'Colours that work on screen can turn muddy in print, so check both before handing over a palette',
     ],
   },
@@ -164,7 +164,7 @@ export const COLOR_CHAPTERS: ColorChapter[] = [
     numeral: 'XII',
     slug: 'optical-mixture',
     title: 'Optical mixture—after-image revised',
-    blurb: 'Shrink dots of two colours until they become one, then watch a printed picture build itself from three inks.',
+    blurb: 'Shrink dots of two colours until they become one, then watch three inks build a printed picture.',
     learned: [
       'Small enough dots of two colours merge into a third in the eye',
       'It depends on size and distance. Squinting does the same as stepping back',
@@ -192,11 +192,11 @@ export const COLOR_CHAPTERS: ColorChapter[] = [
     title: 'Color intervals and transformation',
     blurb: 'Move four colours up or down in light by the same steps, then lay one group inside the other to check the key held.',
     learned: [
-      'Colours have intervals like tones: what matters is the steps between them, not where they start',
+      'Colours have intervals like tones. What matters is the steps between them, not where they start',
       'Raise every colour by the same amount of light and the group keeps its character',
       'Comparing two groups side by side is hard. Putting one inside the other makes every boundary easy to compare',
       'Near white or black there is no room left, and the steps squash together',
-      'A dark mode is a transposition: keep the lightness steps between tokens, not the tokens themselves',
+      'A dark mode is a transposition. Keep the lightness steps between tokens, not the tokens themselves',
     ],
   },
   {
@@ -222,7 +222,7 @@ export const COLOR_CHAPTERS: ColorChapter[] = [
       'The same four colours can make four different moods just by changing their sizes and order',
       'Any colour can work with any other if the quantities are right',
       'Schopenhauer gave dark colours more room to balance light. By measurement he overshot, but he was right that area evens out light',
-      'A brand palette is a cast, not a design: the proportions decide how it reads, so specify how much of each colour to use, not only which ones',
+      'The proportions of a brand palette decide how it reads, so specify how much of each colour to use, not only which ones',
     ],
   },
   {
@@ -232,9 +232,9 @@ export const COLOR_CHAPTERS: ColorChapter[] = [
     blurb: 'Change the haze in a landscape and the depth of coffee in a glass, and watch nature change a colour.',
     learned: [
       'Distance lays a thin veil of sky over everything, so far hills turn blue whatever they are made of',
-      'Clear liquids get darker and richer with depth: the same coffee is three browns in three containers',
+      'Clear liquids get darker and richer with depth. The same coffee is three browns in three containers',
       'Each equal step deeper adds less visible colour than the last, so the edges between steps soften',
-      'Thin layers can darken and lighten at once: tracing paper goes darker held to the light and whiter lying on a desk',
+      'Thin layers can darken and lighten at once. Tracing paper goes darker held to the light and whiter lying on a desk',
       'Translucent layers in an interface, like overlays, scrims and stacked glass panels, change colour with what is behind them, so check them over real content',
     ],
   },
@@ -248,7 +248,7 @@ export const COLOR_CHAPTERS: ColorChapter[] = [
       'A colour can dominate through its area or through how far its light stands from the others',
       'The same five colours can read as "early" or "late" just by changing how much of each and how often',
       'Working from a palette someone else chose shows that most of my dislikes are habits',
-      'In UI, a brand palette is mostly decided by proportion: how much of each colour, not which colours',
+      'In UI, how much of each colour a brand palette uses matters more than which colours it has',
     ],
   },
   {
@@ -257,7 +257,7 @@ export const COLOR_CHAPTERS: ColorChapter[] = [
     title: 'The Masters—color instrumentation',
     blurb: 'Turn a painting into a handful of flat colour papers, then choose the papers yourself and compare with the machine.',
     learned: [
-      "A painting's climate comes back with surprisingly few papers, often five or six",
+      "Five or six papers are often enough to bring back a painting's climate",
       'How much of each colour there is matters as much as which colours they are',
       'Clustering picks the colours that cover the most. A painter would also keep the small accent that carries the picture',
       'Flat papers take away the brushwork and leave only the colour decisions',
@@ -273,7 +273,7 @@ export const COLOR_CHAPTERS: ColorChapter[] = [
       "Equal coats don't give equal steps. Each one changes less than the last",
       'Steps that look equal need the light to multiply, not to add',
       "Measured, the eye sits between Fechner's logarithm and a cube root, so doubling overshoots a little",
-      'Even a measured, even scale looks uneven, because each step is changed by its neighbours',
+      'Even a measured, even scale looks uneven, because its neighbours change each step',
       'Make tint and shade scales in a perceptual space like OKLCH, not by adding equal amounts of black or white',
     ],
   },

@@ -119,7 +119,7 @@ function InAnInterface({ ground, figure }: { ground: string; figure: string }) {
   return (
     <Step n={2} title="Now read it" quote="One finds it rarely used except for a screaming effect in advertising, and as a result it is unpleasant, disliked, and avoided.">
       <p className="mb-6 max-w-2xl text-muted">
-        The same pair as a banner. Albers&apos; screaming advert is also an accessibility failure: the contrast
+        The same pair as a banner. Albers&apos; screaming advert is also an accessibility failure. The contrast
         guideline for text on screens measures lightness, not hue, so a vibrating pair almost never passes.
       </p>
       <div className="max-w-xl rounded-sm p-6 ring-1 ring-border sm:p-8" style={{ background: ground, color: figure }}>

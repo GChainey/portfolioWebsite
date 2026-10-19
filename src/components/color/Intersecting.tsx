@@ -120,7 +120,7 @@ function FindTheMiddle() {
   return (
     <Step n={2} title="Find the middle yourself" quote="A true middle mixture is distinguished by being equidistant—in light and in hue—from either mixture parent.">
       <p className="mb-6 max-w-2xl text-muted">
-        Choose the red for the middle sheet. Albers&apos; test: in a true middle, the two halves of the strip look
+        Choose the red for the middle sheet. Albers&apos; test is that in a true middle, the two halves of the strip look
         equally strong. If the strip mostly looks like one of the parents, your red leans toward that parent.
       </p>
       <div className="flex flex-wrap items-start gap-8">

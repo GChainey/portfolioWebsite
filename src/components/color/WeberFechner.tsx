@@ -150,8 +150,8 @@ function TwoRows() {
           <p className="text-foreground">
             {vote === evenRow ? 'Yes. ' : 'Most people pick the other one. '}The {evenRow} row doubles the light each
             step, and it looks more even. The {evenRow === 'top' ? 'bottom' : 'top'} row adds equal light, and its
-            steps crowd together in the light end. Measured, neither is perfect: doubling overshoots, so its steps
-            grow towards the lights. Modern colour science puts the eye somewhere between Weber and Fechner&apos;s logarithm and a cube
+            steps crowd together in the light end. Measured, neither is perfect. Doubling overshoots, so its steps
+            grow towards the lights. Modern colour science puts the eye somewhere between the Weber-Fechner logarithm and a cube
             root.
           </p>
           <div className="mt-6 grid gap-6 sm:grid-cols-2">
@@ -226,8 +226,8 @@ function YourScale() {
             <StepBars hexes={hexes} />
           </div>
           <p className="mt-4 text-sm text-muted">
-            Albers adds a warning: even a measured, even scale doesn&apos;t look level, because each stripe is changed by
-            its neighbours. Wide stripes start to look fluted, like a Doric column.
+            Albers warns that even a measured, even scale doesn&apos;t look level, because its neighbours change each
+            stripe. Wide stripes start to look fluted, like a Doric column.
           </p>
         </div>
       )}
