@@ -31,7 +31,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       'Shared Redis client moved to src/lib/redis.ts',
     ],
     aiTools: ['Claude Code'],
-    branch: 'GChainey/aapb3',
+    branch: 'GChainey/interaction-of-color-demos',
   },
   {
     version: '1.53.2',
