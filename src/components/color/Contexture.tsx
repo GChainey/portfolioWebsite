@@ -30,7 +30,7 @@ function WordPictures() {
   const [half, setHalf] = useState(false)
 
   return (
-    <Step n={1} title="Word pictures" quote="In reading we do not read letters but words, words as a whole, as a “word picture.”">
+    <Step title="Word pictures" quote="In reading we do not read letters but words, words as a whole, as a “word picture.”">
       <p className="mb-6 max-w-2xl text-muted">
         Blur the two lines until you can only just read one of them, or hide the bottom half of every letter.
         Capitals have the same height and much the same width, so their words lose their shape first.
@@ -89,7 +89,7 @@ function OneTone() {
   useEffect(() => setSeeds(newSeeds()), [])
 
   return (
-    <Step n={2} title="One tone is not music" quote="We are able to hear a single tone. But we almost never (that is, without special devices) see a single color unconnected and unrelated to other colors.">
+    <Step title="One tone is not music" quote="We are able to hear a single tone. But we almost never (that is, without special devices) see a single color unconnected and unrelated to other colors.">
       <p className="mb-6 max-w-2xl text-muted">
         Each square sits in its own chord of colours. How many different colours are there in the four centres?
       </p>

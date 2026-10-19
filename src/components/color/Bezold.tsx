@@ -69,7 +69,6 @@ function OneLine() {
   const [scale, setScale] = useState(1)
   return (
     <Step
-      n={1}
       title="Change one colour, change the rug"
       quote="He recognized this effect when searching for a method by which he could change the color combinations of his rug designs entirely by adding or changing 1 color only."
     >
@@ -129,7 +128,7 @@ function Match() {
   }
 
   return (
-    <Step n={2} title="How far did the red move?" quote="Apparently, there is so far no clear recognition of the optical-perceptual conditions involved.">
+    <Step title="How far did the red move?" quote="Apparently, there is so far no clear recognition of the optical-perceptual conditions involved.">
       <p className="mb-6 max-w-2xl text-muted">
         Measure it on yourself. Move the slider until the plain patch looks like the red ground inside the rug, not the
         red you know it is. You&apos;ll do it twice, once with white lines and once with black. Both rugs use exactly the
@@ -217,7 +216,7 @@ function YourRug() {
   const shift = before ? lightnessOf(rugMix(rug)) - lightnessOf(rugMix(before)) : 0
 
   return (
-    <Step n={3} title="Your rug" quote="There is a special kind of optical mixture, the Bezold Effect, named after its discoverer, Wilhelm von Bezold (1837–1907).">
+    <Step title="Your rug" quote="There is a special kind of optical mixture, the Bezold Effect, named after its discoverer, Wilhelm von Bezold (1837–1907).">
       <p className="mb-6 max-w-2xl text-muted">
         Pick one part of the rug and change only that colour. Hold the button below to see the rug as it was before
         your change. Lines work best, because they touch every other colour.

@@ -82,7 +82,7 @@ function PullTheSheet() {
   const middle = mixOklab(pair.light, pair.dark)
 
   return (
-    <Step n={1} title="Pull the dark sheet" quote="Then, very slowly, pull the dark sheet to the right, gradually making the narrow strip of the middle red wider.">
+    <Step title="Pull the dark sheet" quote="Then, very slowly, pull the dark sheet to the right, gradually making the narrow strip of the middle red wider.">
       <p className="mb-6 max-w-2xl text-muted">
         The middle colour here is exactly halfway between the other two. Drag the edge of the dark sheet to the right,
         slowly, and keep your eyes on the strip. As it widens it stops looking like one colour. Its left side darkens
@@ -131,7 +131,7 @@ function FindTheMiddle() {
   }
 
   return (
-    <Step n={2} title="Find the middle yourself" quote="A true middle mixture is distinguished by being equidistant—in light and in hue—from either mixture parent.">
+    <Step title="Find the middle yourself" quote="A true middle mixture is distinguished by being equidistant—in light and in hue—from either mixture parent.">
       <p className="mb-6 max-w-2xl text-muted">
         Choose the colour for the middle sheet, then pull the dark sheet slowly to the right as Albers did. In a true
         middle the strip splits into two halves of equal strength, each echoing the parent on the other side. If one
@@ -195,7 +195,7 @@ function Fluting() {
   const bands = [...ramp, ...ramp.slice(0, -1).reverse()]
 
   return (
-    <Step n={3} title="The fluted column" quote="This direct reading of the mixture constituents leads us to a new deception: an illusion of volume.">
+    <Step title="The fluted column" quote="This direct reading of the mixture constituents leads us to a new deception: an illusion of volume.">
       <p className="mb-6 max-w-2xl text-muted">
         Every band below is flat. Each one sits between a lighter and a darker neighbour, so each one splits like the
         strip did, and together they look curved, like the grooves of a Doric column. A screen can make the steps

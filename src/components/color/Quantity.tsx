@@ -141,7 +141,6 @@ function FourPerformances() {
 
   return (
     <Step
-      n={1}
       title="One cast, four performances"
       quote={'A set of 4 colors is to be considered—singly as "actors," together as "cast." They are to be presented in 4 different arrangements—as "performances."'}
     >
@@ -334,7 +333,7 @@ function Schopenhauer() {
   }).join(', ')
 
   return (
-    <Step n={2} title="Schopenhauer's circle" quote="Thus yellow, the lightest color, appears in the smaller amount, and its opposite, violet, as the darkest, in the largest amount.">
+    <Step title="Schopenhauer's circle" quote="Thus yellow, the lightest color, appears in the smaller amount, and its opposite, violet, as the darkest, in the largest amount.">
       <p className="mb-6 max-w-2xl text-muted">
         Goethe gave six colours equal shares of his circle. Schopenhauer, to Goethe&apos;s dismay, gave each pair of
         opposites a third and split it by light: yellow 3 to violet 9, orange 4 to blue 8, red 6 to green 6. Switch

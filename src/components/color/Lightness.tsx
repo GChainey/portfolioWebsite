@@ -81,7 +81,7 @@ function Darker() {
   }
 
   return (
-    <Step n={1} title="Which is darker?" quote="We confront them with several pairs of color, from which they are to select and to record which color in a pair is the darker.">
+    <Step title="Which is darker?" quote="We confront them with several pairs of color, from which they are to select and to record which color in a pair is the darker.">
       <p className="mb-6 max-w-2xl text-muted">
         Click the darker of each pair. If you can&apos;t tell, say so. Albers counted not voting as a good answer.
       </p>
@@ -282,7 +282,7 @@ function GreyScale() {
   }
 
   return (
-    <Step n={2} title="A grey scale with even steps" quote="The softer the steps appear, and the more equal the steps are, the more valuable and convincing the study. As any lines or empty spaces between the steps interfere with a direct comparison, such separating in-betweens prove nonsensical.">
+    <Step title="A grey scale with even steps" quote="The softer the steps appear, and the more equal the steps are, the more valuable and convincing the study. As any lines or empty spaces between the steps interfere with a direct comparison, such separating in-betweens prove nonsensical.">
       <p className="mb-6 max-w-2xl text-muted">
         White and black are fixed. Set the five greys between them so every step looks the same size. The steps touch,
         with no lines between them, as Albers asks.
@@ -384,7 +384,7 @@ function Typical() {
   }
 
   return (
-    <Step n={3} title="Sort the blues, then find the bluest" quote="The exercise in color intensity consists of sorting all possible shades and tints within a hue. From these is chosen the most typical hue (the bluest blue, the greenest green, etc.) and it is placed within the group accordingly.">
+    <Step title="Sort the blues, then find the bluest" quote="The exercise in color intensity consists of sorting all possible shades and tints within a hue. From these is chosen the most typical hue (the bluest blue, the greenest green, etc.) and it is placed within the group accordingly.">
       <p className="mb-6 max-w-2xl text-muted">
         First sort these {TONES} blues from lightest to darkest. Click them in order. Some are strong and some are
         muted, which makes it harder.

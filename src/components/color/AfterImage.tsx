@@ -143,7 +143,7 @@ function RedCircle() {
   )
 
   return (
-    <Step n={1} title="Stare, then look at white" quote="Now, by staring steadily at the marked center of the red circle (up to half a minute) one soon discovers how difficult it is to keep the eye fixed on a point.">
+    <Step title="Stare, then look at white" quote="Now, by staring steadily at the marked center of the red circle (up to half a minute) one soon discovers how difficult it is to keep the eye fixed on a point.">
       <p className="mb-6 max-w-2xl text-muted">
         Choose a colour and press start. Look only at the dot in the coloured circle until the countdown ends. Albers&apos;
         class then moved their eyes to the white circle. Here the screen can turn the coloured circle white for you, at
@@ -232,7 +232,7 @@ function Diamonds() {
   const after = phase === 'after'
 
   return (
-    <Step n={2} title="Yellow diamonds" quote="Instead of seeing the complement of the yellow circles (blue), diamond shapes are seen, the leftover shapes of the circles, in yellow.">
+    <Step title="Yellow diamonds" quote="Instead of seeing the complement of the yellow circles (blue), diamond shapes are seen, the leftover shapes of the circles, in yellow.">
       <p className="mb-6 max-w-2xl text-muted">
         The same again with yellow circles that fill a white square. You might expect blue circles afterwards. Look for
         the shapes between them instead. Albers calls it a double, reversed after-image.
@@ -284,7 +284,7 @@ function Simultaneous() {
   const inner = tinted(ground, amount)
 
   return (
-    <Step n={3} title="It happens all the time" quote="The fact that the after-image or simultaneous contrast is a psycho-physiological phenomenon should prove that no normal eye, not even the most trained one, is foolproof against color deception.">
+    <Step title="It happens all the time" quote="The fact that the after-image or simultaneous contrast is a psycho-physiological phenomenon should prove that no normal eye, not even the most trained one, is foolproof against color deception.">
       <p className="mb-6 max-w-2xl text-muted">
         You don&apos;t need to stare. A ground casts its after-image on whatever sits on it, straight away. The square
         starts as a neutral grey. Move the slider until it looks neutral grey to you.

@@ -75,7 +75,7 @@ function Dots() {
   const eye = averageLight(...Array.from({ length: 20 }, (_, i) => (i < share * 20 ? a : b)))
 
   return (
-    <Step n={1} title="Mixed in the eye" quote="Instead of using green paint mixed mechanically from yellow and blue, they applied yellow and blue unmixed in small dots, so that they became mixed only in our perception, as an impression.">
+    <Step title="Mixed in the eye" quote="Instead of using green paint mixed mechanically from yellow and blue, they applied yellow and blue unmixed in small dots, so that they became mixed only in our perception, as an impression.">
       <p className="mb-6 max-w-2xl text-muted">
         These are only two colours. Make the dots smaller and they stop being dots and become one colour. At the
         smallest size each dot is a single point on your screen. You can also change how much of each there is.
@@ -184,7 +184,7 @@ function Predict() {
   const nearerPaint = deltaE(yours, paint) < miss
 
   return (
-    <Step n={2} title="Predict the mixture" quote="That the dots mentioned were small indicates that this effect depends on size and on distance.">
+    <Step title="Predict the mixture" quote="That the dots mentioned were small indicates that this effect depends on size and on distance.">
       <p className="mb-6 max-w-2xl text-muted">
         Here are two colours in large dots. Make the colour you think they will become when the dots are too small to
         see. Then the dots shrink to single points and you can compare your colour with what your eye makes of them.
@@ -294,7 +294,7 @@ function Halftone() {
   )
 
   return (
-    <Step n={3} title="Printed dots" quote="In the first case, 3 or 4 color plates subdivided into tiny printing dots mix to innumerable color shades and tints.">
+    <Step title="Printed dots" quote="In the first case, 3 or 4 color plates subdivided into tiny printing dots mix to innumerable color shades and tints.">
       <p className="mb-6 max-w-2xl text-muted">
         Every printed picture is an optical mixture. In colour there are only three inks, cyan, magenta and yellow,
         each on its own angled grid. In black and white there is one ink and the white of the paper. Make the screen

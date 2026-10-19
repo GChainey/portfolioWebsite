@@ -54,7 +54,7 @@ export function ReversedGrounds() {
 function Example() {
   const [joined, setJoined] = useState(false)
   return (
-    <Step n={1} title="Three colours look like two" quote="1 color is to show 2 faces which refer to the 2 colors of the reversed grounds, or, the changed color is to echo the 2 changing ones.">
+    <Step title="Three colours look like two" quote="1 color is to show 2 faces which refer to the 2 colors of the reversed grounds, or, the changed color is to echo the 2 changing ones.">
       <p className="mb-6 max-w-2xl text-muted">
         The small rectangle on the dark violet looks like the light ground, and the one on the light violet looks like
         the dark ground. They are one colour.
@@ -90,7 +90,7 @@ function FindTheMiddle() {
   const { t, off } = placeOn(g.left, g.right, made)
 
   return (
-    <Step n={2} title="Find the middle colour" quote="After repeated trials it must be concluded that the only fitting color is the one which is topologically in the middle of the colors of the 2 grounds.">
+    <Step title="Find the middle colour" quote="After repeated trials it must be concluded that the only fitting color is the one which is topologically in the middle of the colors of the 2 grounds.">
       <p className="mb-6 max-w-2xl text-muted">
         Set the small rectangles so that each one looks like the ground on the other side. Most first tries land closer
         to one ground than the other. Complementary grounds are the hardest. When you can do the three, try new grounds:
@@ -182,7 +182,7 @@ function MoveTheGrounds() {
   }
 
   return (
-    <Step n={3} title="Or move the grounds" quote="Instead of pushing the in-between color to one or the other side, we must consider changing 1 or both of the grounds, either moving closer to or more distant from the in-between color.">
+    <Step title="Or move the grounds" quote="Instead of pushing the in-between color to one or the other side, we must consider changing 1 or both of the grounds, either moving closer to or more distant from the in-between color.">
       <p className="mb-6 max-w-2xl text-muted">
         Here the rectangles are fixed and both grounds are yours. Move one or both until the small colour sits in the
         middle and echoes each ground on the other side. Judge it by eye first, then check.

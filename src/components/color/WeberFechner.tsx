@@ -91,7 +91,7 @@ function Chevreul() {
   const sizes = stepSizes(hexes)
 
   return (
-    <Step n={1} title="Ten coats, ten stripes" quote="Lay a second tint on all the stripes except the first. As soon as the second is dry, lay a third one on all the stripes except the first and second, and so on all the rest, so as to have ten flat tints gradually increasing in depth from the first to the last.">
+    <Step title="Ten coats, ten stripes" quote="Lay a second tint on all the stripes except the first. As soon as the second is dry, lay a third one on all the stripes except the first and second, and so on all the rest, so as to have ten flat tints gradually increasing in depth from the first to the last.">
       <p className="mb-6 max-w-2xl text-muted">
         This is Chevreul&apos;s recipe, followed exactly. Stripe one has one coat, stripe ten has ten. Every coat is the
         same, so you might expect ten equal steps. Look at the edges between stripes as you go to the right.
@@ -152,7 +152,7 @@ function AlbersRows() {
   const steadier = Math.abs(Math.log(kept.geometric)) < Math.abs(Math.log(kept.arithmetic)) ? 'geometric' : 'arithmetic'
 
   return (
-    <Step n={2} title="Albers' two rows" quote="In an arithmetical order of contiguous mixtures, the boundaries gradually become softer, whereas in a geometric order the boundaries remain equally distinct.">
+    <Step title="Albers' two rows" quote="In an arithmetical order of contiguous mixtures, the boundaries gradually become softer, whereas in a geometric order the boundaries remain equally distinct.">
       <p className="mb-6 max-w-2xl text-muted">
         The exercise Albers sets. The same thin layer, laid 1, 2, 3, 4, 5 and 6 times in one row, and 1, 2, 4, 8, 16 and
         32 times in the other. Look only at the boundaries between steps. Which row keeps its boundaries equally sharp all
@@ -214,7 +214,7 @@ function TwoRows() {
   const evenRow = order === 'ag' ? 'bottom' : 'top'
 
   return (
-    <Step n={3} title="Which row steps evenly?" quote="The visual perception of an arithmetical progression depends upon a physical geometric progression.">
+    <Step title="Which row steps evenly?" quote="The visual perception of an arithmetical progression depends upon a physical geometric progression.">
       <p className="mb-6 max-w-2xl text-muted">
         Both rows go from nearly black to white in eight steps. One adds the same amount of light at every step. The
         other doubles the light at every step. Which one looks like a staircase of equal steps?
@@ -282,7 +282,7 @@ function YourScale() {
   }, [baseHex])
 
   return (
-    <Step n={4} title="Make an even scale" quote="We think and “feel” that we read steps of equal height.">
+    <Step title="Make an even scale" quote="We think and “feel” that we read steps of equal height.">
       <p className="mb-6 max-w-2xl text-muted">
         Move the slider from adding light towards multiplying it, until every step looks the same height. Judge by the
         edges between the stripes. Then check your eye against the measurement.

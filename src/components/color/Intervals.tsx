@@ -87,7 +87,6 @@ function SameTune() {
 
   return (
     <Step
-      n={1}
       title="The same tune in another key"
       quote={'The tune of "Good morning to you" consists of 4 tones. It can be sung in a high soprano, a low basso, and in all in-between voices.'}
     >
@@ -174,7 +173,7 @@ function ByHand() {
   }
 
   return (
-    <Step n={2} title="Transpose it by hand" quote="The only way in which the 2 groups can be compared easily and accurately is to superimpose 1 group on the other.">
+    <Step title="Transpose it by hand" quote="The only way in which the 2 groups can be compared easily and accurately is to superimpose 1 group on the other.">
       <p className="mb-6 max-w-2xl text-muted">
         Make a {word} version of the {round === FIRST ? 'low' : 'new'} group. Each slider moves one square. The
         original sits small in the middle of yours, so you can compare every boundary. When the inner and outer groups

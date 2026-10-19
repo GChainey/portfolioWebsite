@@ -103,7 +103,7 @@ function Imagine() {
   const lean = place.t < 0.4 ? 'the band' : place.t > 0.6 ? 'the strip' : 'neither parent'
 
   return (
-    <Step n={1} title="Imagine the mixture" quote="It is a challenge to study color mixture in our imagination, that is, so to say, with closed eyes.">
+    <Step title="Imagine the mixture" quote="It is a challenge to study color mixture in our imagination, that is, so to say, with closed eyes.">
       <p className="mb-6 max-w-2xl text-muted">
         Here are two &quot;colour parents&quot;. Set the square where they cross to the colour you think they would make.
         If it&apos;s right, the strip stops looking like three papers and starts to look see-through.
@@ -177,7 +177,7 @@ function Backwards() {
   const miss = deltaE(mine, answer)
 
   return (
-    <Step n={2} title="Work backwards" quote="This invites one to draw conclusions backward, that is, to guess, from a mixture and 1 mixture parent, the other mixture parent.">
+    <Step title="Work backwards" quote="This invites one to draw conclusions backward, that is, to guess, from a mixture and 1 mixture parent, the other mixture parent.">
       <p className="mb-6 max-w-2xl text-muted">
         Now you have one parent and the mixture. Find the other parent, the strip below the band, so the square looks
         like the two seen through each other.

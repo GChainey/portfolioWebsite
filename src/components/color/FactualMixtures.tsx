@@ -74,7 +74,7 @@ function Stage({ initial, ground, blend, label }: { initial: Disc[]; ground: str
 export function FactualMixtures() {
   return (
     <div className="space-y-20">
-      <Step n={1} title="Mixing light" quote="In any such mixture where there is overlapping, it will be obvious that every one of these mixtures is lighter than any of the mixture parents.">
+      <Step title="Mixing light" quote="In any such mixture where there is overlapping, it will be obvious that every one of these mixtures is lighter than any of the mixture parents.">
         <p className="mb-6 max-w-2xl text-muted">
           Your screen is three kinds of light, red, green and blue. Drag them over each other. Where two overlap you get a
           lighter colour, and where all three meet you get white.
@@ -82,7 +82,7 @@ export function FactualMixtures() {
         <Stage initial={LIGHTS} ground="#000000" blend="plus-lighter" label="Three coloured lights on black" />
       </Step>
 
-      <Step n={2} title="Mixing pigment" quote="On the contrary, the more color that is mixed, the more the mixture approaches a dark grey leaning toward black.">
+      <Step title="Mixing pigment" quote="On the contrary, the more color that is mixed, the more the mixture approaches a dark grey leaning toward black.">
         <p className="mb-6 max-w-2xl text-muted">
           Inks work the other way. Each one takes some light away from the white paper, so every overlap is darker
           than either ink. All three together come close to black.
@@ -128,7 +128,7 @@ function Compare() {
   ]
 
   return (
-    <Step n={3} title="Lighter, between, or darker" quote="Mixtures gain light only in direct color, whereas mixtures of reflected colors lose light.">
+    <Step title="Lighter, between, or darker" quote="Mixtures gain light only in direct color, whereas mixtures of reflected colors lose light.">
       <p className="mb-6 max-w-2xl text-muted">
         Pick any two colours. The screen mixes them three ways: as light, as paint, and as the psychologist&apos;s
         spinning disc, which mixes in the eye. The scale below shows how light each one is.
@@ -246,7 +246,7 @@ function InPaper() {
   }
 
   return (
-    <Step n={4} title="Now make it in paper" quote="Additive and subtractive mixtures should be made in appropriate studies in transparence illusions.">
+    <Step title="Now make it in paper" quote="Additive and subtractive mixtures should be made in appropriate studies in transparence illusions.">
       <p className="mb-6 max-w-2xl text-muted">
         Albers asks for these mixtures as illusions, with opaque papers: one thin colour mixing with white or black,
         and then the first study reversed. Set the square where the colour crosses the grey. To read as light, it has to

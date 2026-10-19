@@ -77,7 +77,7 @@ function Goethe() {
   const cell = cells[picked]
 
   return (
-    <Step n={1} title="Goethe's triangle" quote="Goethe's arrangement of 9 basic colors is probably the only one demonstrating the relatedness of primary to secondary plus tertiary colors in 2 dimensions.">
+    <Step title="Goethe's triangle" quote="Goethe's arrangement of 9 basic colors is probably the only one demonstrating the relatedness of primary to secondary plus tertiary colors in 2 dimensions.">
       <p className="mb-6 max-w-2xl text-muted">
         Give it three primaries and the triangle mixes the rest, the way paint mixes. Choose a triangle to see where
         it comes from, or show one group at a time.
@@ -156,7 +156,7 @@ function Schopenhauer() {
   })
 
   return (
-    <Step n={2} title="Schopenhauer's quantities" quote="Thus yellow, the lightest color, appears in the smaller amount, and its opposite, violet, as the darkest, in the largest amount.">
+    <Step title="Schopenhauer's quantities" quote="Thus yellow, the lightest color, appears in the smaller amount, and its opposite, violet, as the darkest, in the largest amount.">
       <p className="mb-6 max-w-2xl text-muted">
         Goethe gave his six colours equal shares. Schopenhauer weighed them by their light, 3 : 4 : 6 : 9 : 8 : 6,
         so each pair of opposites balances. The bars multiply each colour&apos;s area by its measured lightness.
@@ -211,7 +211,7 @@ function Wheels() {
   ]
 
   return (
-    <Step n={3} title="Equal steps, unequal light" quote="Besides the difference in measurements within these systems, we point out their practical value for industrial uses. We also show the limitations of the systems, particularly in connection with painting.">
+    <Step title="Equal steps, unequal light" quote="Besides the difference in measurements within these systems, we point out their practical value for industrial uses. We also show the limitations of the systems, particularly in connection with painting.">
       <p className="mb-6 max-w-2xl text-muted">
         Two twelve-step hue wheels. Both are evenly spaced by their own measure. Turn them grey to see which one
         keeps its light steady as the hue turns.

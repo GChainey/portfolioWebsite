@@ -82,7 +82,7 @@ function FindTheEdge({
   const diff = Math.abs(lightnessOf(figure) - lightnessOf(ground)) * 100
 
   return (
-    <Step n={1} title="Make the edge vibrate" quote="The conditions for these varying effects occur between colors which are contrasting in their hues but also close or similar in light intensity.">
+    <Step title="Make the edge vibrate" quote="The conditions for these varying effects occur between colors which are contrasting in their hues but also close or similar in light intensity.">
       <p className="mb-6 max-w-2xl text-muted">
         Pick two contrasting hues, or set your own. Start with a large difference, then bring them closer in
         lightness. When the edges start to double, shimmer, or cast a shadow on one side, mark it. Some people see
@@ -152,7 +152,7 @@ function InAnInterface({ ground, figure }: { ground: string; figure: string }) {
   const passes = ratio >= AA
 
   return (
-    <Step n={2} title="Now read it" quote="One finds it rarely used except for a screaming effect in advertising, and as a result it is unpleasant, disliked, and avoided.">
+    <Step title="Now read it" quote="One finds it rarely used except for a screaming effect in advertising, and as a result it is unpleasant, disliked, and avoided.">
       <p className="mb-6 max-w-2xl text-muted">
         The same pair as a banner. Albers&apos; screaming advert is also an accessibility failure. The contrast
         guideline for text on screens measures lightness, not hue, so a vibrating pair almost never passes.

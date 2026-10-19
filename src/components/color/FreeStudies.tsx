@@ -142,7 +142,7 @@ function EqualRights() {
   }
 
   return (
-    <Step n={1} title="Four colours, equal rights" quote="The aim is to find an order in which, again relatively, all 4 colors are equally important, or, respectively, equally unimportant.">
+    <Step title="Four colours, equal rights" quote="The aim is to find an order in which, again relatively, all 4 colors are equally important, or, respectively, equally unimportant.">
       <p className="mb-6 max-w-2xl text-muted">
         Stripes all the same height take shape out of the way, so only colour is left. Change the four colours, give
         each more or less room, and paint single stripes, until none of them shouts. Albers judged these by eye, and so
@@ -276,7 +276,7 @@ function Themes() {
   const update = (i: number, change: Partial<(typeof sides)[number]>) => setSides((all) => all.map((s, j) => (j === i ? { ...s, ...change } : s)))
 
   return (
-    <Step n={2} title="Someone else's palette" quote="To work with the preference of others, to subordinate to someone else's palette or instrumentation, should be not only permitted but encouraged.">
+    <Step title="Someone else's palette" quote="To work with the preference of others, to subordinate to someone else's palette or instrumentation, should be not only permitted but encouraged.">
       <p className="mb-6 max-w-2xl text-muted">
         Here are five colours you didn&apos;t choose, and a pair of opposites. Using only these colours, make one study
         read as &ldquo;{THEMES[theme][0]}&rdquo; and the other as &ldquo;{THEMES[theme][1]}&rdquo;. You can change only
@@ -414,7 +414,7 @@ function Leaves() {
   }
 
   return (
-    <Step n={3} title="Fall leaves" quote="Always keep in mind the color before the shape.">
+    <Step title="Fall leaves" quote="Always keep in mind the color before the shape.">
       <p className="mb-6 max-w-2xl text-muted">
         Albers&apos; students pressed autumn leaves and worked them in with their paper. Take a photo of leaves, or
         anything in season, and tap it to collect colours. Each one joins the stripes.

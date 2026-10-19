@@ -5,10 +5,9 @@ import type { ReactNode } from 'react'
 
 // Pieces every chapter's exercise is built from
 
-export function Step({ n, title, quote, children }: { n: number; title: string; quote?: string; children: ReactNode }) {
+export function Step({ title, quote, children }: { title: string; quote?: string; children: ReactNode }) {
   return (
     <motion.section initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="border-t border-border pt-10">
-      <p className="mb-2 text-xs uppercase tracking-widest text-muted">Step {n}</p>
       <h2 className="mb-4 text-3xl font-medium text-foreground">{title}</h2>
       {quote && <blockquote className="mb-6 max-w-2xl font-serif text-lg italic leading-relaxed text-muted">{quote}</blockquote>}
       {children}

@@ -50,7 +50,7 @@ function Clouds() {
   const diff = (lightnessOf(under) - lightnessOf(SKY)) * 100
 
   return (
-    <Step n={1} title="Where the cloud ends" quote="These shades merge, or even hinge, with the same but here very close blue. Why very close? This grey is of the same light intensity as the neighboring blue below.">
+    <Step title="Where the cloud ends" quote="These shades merge, or even hinge, with the same but here very close blue. Why very close? This grey is of the same light intensity as the neighboring blue below.">
       <p className="mb-6 max-w-2xl text-muted">
         Cumulus clouds in full sun are white on top and grey underneath. Darken the grey until you can&apos;t see
         where the cloud stops and the sky starts.
@@ -227,7 +227,7 @@ function Triangles() {
   const shown = done && view === 'grey' ? { ground: greyOf(g), figure: greyOf(f) } : { ground: g, figure: f }
 
   return (
-    <Step n={2} title="Make the triangles vanish" quote="I invite serious color students to alter the reproduced grey-violet and grey-green of this study toward equal light-intensity so that the small triangles of the underlying design almost dissolve into the ground. It is a most difficult task, but worth trying.">
+    <Step title="Make the triangles vanish" quote="I invite serious color students to alter the reproduced grey-violet and grey-green of this study toward equal light-intensity so that the small triangles of the underlying design almost dissolve into the ground. It is a most difficult task, but worth trying.">
       <p className="mb-6 max-w-2xl text-muted">
         Both papers are yours. Change either one, its hue, greyness or lightness, until the triangles are as hard
         to see as you can make them. It only works between neighbouring, muted colours. Strong opposite hues
@@ -313,7 +313,7 @@ function FreshPairs() {
   const mean = results.length ? results.reduce((s, x) => s + x, 0) / results.length : 0
 
   return (
-    <Step n={3} title="By eye alone" quote="As the selection of the papers here demands patience, so their presentation demands skill and cleanliness.">
+    <Step title="By eye alone" quote="As the selection of the papers here demands patience, so their presentation demands skill and cleanliness.">
       <p className="mb-6 max-w-2xl text-muted">
         {ROUNDS} new pairs of neighbouring colours. This time there is no flicker, no greyscale and no number until
         you commit. Only the lightness of the triangles moves.

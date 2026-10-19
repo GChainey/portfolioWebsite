@@ -36,7 +36,7 @@ function Relativity() {
   )
 
   return (
-    <Step n={1} title="Relativity" quote="The length of any object is relative to the length of longer or shorter objects. Thus, any in-between length, seen in 2 different relationships, presents 2 different values.">
+    <Step title="Relativity" quote="The length of any object is relative to the length of longer or shorter objects. Thus, any in-between length, seen in 2 different relationships, presents 2 different values.">
       <p className="mb-6 max-w-2xl text-muted">
         The coloured bars are the same length and the middle squares are the same grey. Pull their neighbours further
         apart and watch the same thing take two values.
@@ -130,7 +130,7 @@ function FactualActual() {
   const ill = ILLUSIONS.find((i) => i.id === id)!
 
   return (
-    <Step n={2} title="Factual and actual" quote="When we see opaque color as transparent or perceive opacity as translucence, then the optical reception in our eye has changed in our mind to something different. These effects we call actual facts.">
+    <Step title="Factual and actual" quote="When we see opaque color as transparent or perceive opacity as translucence, then the optical reception in our eye has changed in our mind to something different. These effects we call actual facts.">
       <p className="mb-6 max-w-2xl text-muted">
         The actual fact is what you see. The factual fact is what is there. Switch between them.
       </p>
@@ -195,7 +195,7 @@ function Variants() {
   const add = (kind: 'Variant' | 'Variety') => setMade((m) => [{ kind, study: kind === 'Variant' ? variant(ORIGINAL) : variety(ORIGINAL) }, ...m].slice(0, 6))
 
   return (
-    <Step n={3} title="Variants, not variety" quote="As variety usually concerns changes of details, variant means a more thorough re-doing of a whole or of a part within a given scheme.">
+    <Step title="Variants, not variety" quote="As variety usually concerns changes of details, variant means a more thorough re-doing of a whole or of a part within a given scheme.">
       <p className="mb-6 max-w-2xl text-muted">
         Start from one study: a muted colour pushed two ways by an orange and a blue ground. A variant re-does all
         three colours and keeps how they relate. Variety changes one detail at random. See which ones still work.

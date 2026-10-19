@@ -63,7 +63,7 @@ function OnTop() {
         : `The ${nameB} strip. The mixture belongs to it, so it reads as lying over the ${nameA} band.`
 
   return (
-    <Step n={1} title="Which one is on top?" quote="When 1 color is read as appearing above or below another in the transparence studies, a third deception is recognized: space-illusion.">
+    <Step title="Which one is on top?" quote="When 1 color is read as appearing above or below another in the transparence studies, a third deception is recognized: space-illusion.">
       <p className="mb-6 max-w-2xl text-muted">
         Slide the mixture from one parent to the other. Watch the edges of the square. The softer edge joins it to a
         parent, the harder edge separates it, and the colours seem to stack in space.
@@ -145,7 +145,7 @@ function Middle() {
   }
 
   return (
-    <Step n={2} title="Find the middle mixture" quote="Since the middle mixture presupposes equidistance from the color parents, it therefore depends equally upon the absence of any predominance of the color parents.">
+    <Step title="Find the middle mixture" quote="Since the middle mixture presupposes equidistance from the color parents, it therefore depends equally upon the absence of any predominance of the color parents.">
       <p className="mb-6 max-w-2xl text-muted">
         Now choose the mixture yourself. Aim for the one that belongs to neither parent, so both edges look equally
         hard and the square looks flat. Albers&apos; class often couldn&apos;t find the right paper, so he had them move
@@ -237,7 +237,7 @@ function Grid() {
   const y = (j: number) => 55 + j * 75
 
   return (
-    <Step n={3} title="Yellow in front, behind, and level" quote="Such a differentiation makes us read the top yellow stripe in front of the vertical stripes, and the bottom yellow behind the vertical stripes.">
+    <Step title="Yellow in front, behind, and level" quote="Such a differentiation makes us read the top yellow stripe in front of the vertical stripes, and the bottom yellow behind the vertical stripes.">
       <p className="mb-6 max-w-2xl text-muted">
         In Albers&apos; plate XI-3, three yellow stripes cross three others. Each crossing is a mixture. Set how much
         yellow each row keeps. More yellow brings the yellow forward, less sends it behind. At the middle you can read

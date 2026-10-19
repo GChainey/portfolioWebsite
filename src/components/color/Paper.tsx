@@ -99,7 +99,7 @@ function Collect({ onPick }: { onPick: (hex: string) => void }) {
   }, [])
 
   return (
-    <Step n={1} title="Collect your papers" quote="Sources easily accessible for many kinds of color paper are waste strips found at printers and bookbinders… Also, instead of full sheets of paper, just cutouts from magazines, from advertisements and illustrations.">
+    <Step title="Collect your papers" quote="Sources easily accessible for many kinds of color paper are waste strips found at printers and bookbinders… Also, instead of full sheets of paper, just cutouts from magazines, from advertisements and illustrations.">
       <p className="mb-6 max-w-2xl text-muted">
         Load a photo of a magazine, a street, a shelf of packaging, anything with colour in it. On a phone you can take
         one now. Click anywhere on it to cut out a paper. Until then, here are some printers&apos; waste strips.
@@ -162,7 +162,7 @@ function Collection({ papers, onChange }: { papers: string[]; onChange: (p: stri
         : papers
 
   return (
-    <Step n={2} title="Your palette" quote="We can choose from a large collection of tones, displayed in front of us, and can thus constantly compare neighboring and contrasting colors. This offers a training which no palette can provide.">
+    <Step title="Your palette" quote="We can choose from a large collection of tones, displayed in front of us, and can thus constantly compare neighboring and contrasting colors. This offers a training which no palette can provide.">
       {papers.length === 0 ? (
         <p className="text-sm text-muted">No papers yet. Cut some out above.</p>
       ) : (
@@ -221,7 +221,7 @@ function Choose({ papers }: { papers: string[] }) {
   const done = scores.length >= CHOOSE_ROUNDS && !!pick
 
   return (
-    <Step n={3} title="Find it in your papers" quote="In solving our problems again and again we must find just the right color which demonstrates a desired effect.">
+    <Step title="Find it in your papers" quote="In solving our problems again and again we must find just the right color which demonstrates a desired effect.">
       {papers.length < MIN_PAPERS ? (
         <p className="text-sm text-muted">Collect at least {MIN_PAPERS} papers above, then come back. You&apos;ll be shown a colour and find the paper nearest to it.</p>
       ) : !target ? (
@@ -317,7 +317,7 @@ function PaintAgain() {
   useEffect(repaint, [repaint])
 
   return (
-    <Step n={4} title="The same colour, twice" quote="Color paper permits a repeated use of precisely the same color without the slightest change in tone, light, or surface quality.">
+    <Step title="The same colour, twice" quote="Color paper permits a repeated use of precisely the same color without the slightest change in tone, light, or surface quality.">
       <p className="mb-6 max-w-2xl text-muted">
         On the left, one blue painted twice. Every coat goes on a little thinner or thicker. On the right, the same blue
         cut twice from paper.

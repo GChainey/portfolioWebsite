@@ -55,7 +55,7 @@ function Film() {
   })
 
   return (
-    <Step n={1} title="Film colour" quote="They appear as a thin, transparent, translucent layer between the eye and an object, independent of the object's surface color.">
+    <Step title="Film colour" quote="They appear as a thin, transparent, translucent layer between the eye and an object, independent of the object's surface color.">
       <p className="mb-6 max-w-2xl text-muted">
         All four ridges are green and brown forest. The air between you and them adds a veil of sky, and the further
         away a ridge is, the thicker the veil. Change how hazy the day is.
@@ -123,7 +123,7 @@ function Coffee() {
   const shown = VESSELS.map((v) => pour(liquid, v.depth * strength))
 
   return (
-    <Step n={2} title="Volume colour" quote="Though all 3 containers hold the same coffee, the containers show this coffee in 3 different browns: lightest in the stem, darker in the cup, darkest in the silex glass.">
+    <Step title="Volume colour" quote="Though all 3 containers hold the same coffee, the containers show this coffee in 3 different browns: lightest in the stem, darker in the cup, darkest in the silex glass.">
       <p className="mb-6 max-w-2xl text-muted">
         The same liquid in three containers, seen against white. Only the depth of liquid changes. Then pour your own
         glass, and try a cloudy liquid as well as clear ones.
@@ -163,7 +163,7 @@ function Pool() {
   const steps = 7
 
   return (
-    <Step n={3} title="Steps into the pool" quote="Observing the white or blue steps within the water, we will discover that with each step down the blue of the water increases progressively.">
+    <Step title="Steps into the pool" quote="Observing the white or blue steps within the water, we will discover that with each step down the blue of the water increases progressively.">
       <p className="mb-6 max-w-2xl text-muted">
         White steps of equal depth, going down into blue water. Each step adds the same depth, so the same amount of
         blue. Watch the boundaries between steps. They get softer the deeper you go. Chapter XX explains why.
@@ -208,7 +208,7 @@ function TracingPaper() {
   const rows = Array.from({ length: count }, (_, i) => layers(i + 1))
 
   return (
-    <Step n={4} title="Tracing paper, both ways" quote="By looking through several layers against the light, the paper becomes darker. However, the same layers seen from the direction of the light will appear whiter.">
+    <Step title="Tracing paper, both ways" quote="By looking through several layers against the light, the paper becomes darker. However, the same layers seen from the direction of the light will appear whiter.">
       <p className="mb-6 max-w-2xl text-muted">
         One sheet, then two, then more, stacked like steps. Against a window, every sheet takes some light away.
         Lying on a dark desk, every sheet sends more light back. The same paper goes both ways at once.
@@ -264,7 +264,7 @@ function WhichKind() {
   const score = answers.filter((a, i) => a === CASES[i].kind).length
 
   return (
-    <Step n={5} title="Which kind is it?" quote="This demonstrates that only transparent fluids present volume color.">
+    <Step title="Which kind is it?" quote="This demonstrates that only transparent fluids present volume color.">
       <p className="mb-6 max-w-2xl text-muted">
         Albers separates three ways a colour can reach you. Sort each of these. Ask yourself whether the colour belongs to
         a surface, to a veil in front of something, or to the depth of something clear.

@@ -33,7 +33,7 @@ function TwoFaces() {
   const preset = PRESETS.find((p) => p.id === presetId)!
 
   return (
-    <Step n={1} title="One colour, two faces" quote="To begin the study of how color deceives and how to make use of this, the first exercise is to make one and the same color look different.">
+    <Step title="One colour, two faces" quote="To begin the study of how color deceives and how to make use of this, the first exercise is to make one and the same color look different.">
       <p className="mb-6 max-w-2xl text-muted">
         The two small rectangles are the same colour, {preset.study.inner}. Albers names two ways a ground changes a
         colour, through light and through hue. Join the rectangles to check they match.
@@ -78,7 +78,7 @@ function Match({ studies = PRESETS.map((p) => p.study), n = 2, title = 'How far 
   const rightIsLighter = lightness(right) > lightness(left)
 
   return (
-    <Step n={n} title={title} quote={'They lead us to "see" and to "read" other colors than those with which we are confronted physically.'}>
+    <Step title={title} quote={'They lead us to "see" and to "read" other colors than those with which we are confronted physically.'}>
       <p className="mb-6 max-w-2xl text-muted">
         Here the right rectangle is yours. Change it until it looks the same as the left one. Knowing the trick
         doesn&apos;t stop it working.
@@ -171,7 +171,7 @@ function YourStudy() {
 
   return (
     <>
-      <Step n={3} title="Make your own" quote="As a practical study we ask that 2 small rectangles of the same color and the same size be placed on large grounds of very different color.">
+      <Step title="Make your own" quote="As a practical study we ask that 2 small rectangles of the same color and the same size be placed on large grounds of very different color.">
         <p className="mb-6 max-w-2xl text-muted">
           Albers&apos; class worked this out by trial and error, with no rules to start from. Pick a part, change its
           colour, and join the rectangles to check your result. Muted colours change the most.
@@ -215,7 +215,7 @@ function YourStudy() {
 
       {tested && <Match key={JSON.stringify(tested)} studies={[tested]} n={4} title="How far does yours move it?" />}
 
-      <Step n={tested ? 5 : 4} title="The exhibition" quote="Soon, these first trials are collected and separated into groups of more and less promise.">
+      <Step title="The exhibition" quote="Soon, these first trials are collected and separated into groups of more and less promise.">
         {!exhibition ? null : !exhibition.shared ? (
           <p className="text-sm text-muted">Everyone&apos;s studies will show here once the site is connected to its database.</p>
         ) : exhibition.studies.length === 0 ? (

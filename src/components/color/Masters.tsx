@@ -349,7 +349,7 @@ export function Masters() {
 
   return (
     <div className="space-y-20">
-      <Step n={1} title="A painting in paper" quote="We transfer paintings by masters into color paper, in order to identify their color instrumentation.">
+      <Step title="A painting in paper" quote="We transfer paintings by masters into color paper, in order to identify their color instrumentation.">
         <p className="mb-6 max-w-2xl text-muted">
           Start with one of these painted stand-ins, or bring a reproduction of a painting you love. The screen sorts
           every pixel into a few flat papers. Albers wanted the climate of a painting, not its details, so fewer papers
@@ -384,7 +384,7 @@ export function Masters() {
       </Step>
 
       {source && machine && (
-        <Step n={2} title="Its instrumentation" quote="We try to give a general impression only as to climate, temperature, aroma, or sound of their work—not minute details.">
+        <Step title="Its instrumentation" quote="We try to give a general impression only as to climate, temperature, aroma, or sound of their work—not minute details.">
           <p className="mb-6 max-w-2xl text-muted">
             The same papers, sized by how much of the painting each one covers. This is the painter&apos;s
             instrumentation, which colours and how much of each. Try two papers, then sixteen, and see when the climate
@@ -397,7 +397,7 @@ export function Masters() {
       )}
 
       {source && machine && (
-        <Step n={3} title="Choose the papers yourself" quote="It is another means of learning to develop a sensitive and critical eye for color relatedness.">
+        <Step title="Choose the papers yourself" quote="It is another means of learning to develop a sensitive and critical eye for color relatedness.">
           <p className="mb-6 max-w-2xl text-muted">
             A machine picks the colours that cover the most. A painter might pick a small yellow that carries the whole
             picture. Albers&apos; students worked from a box of papers, not from the painting. Tap the painting to look

@@ -65,7 +65,7 @@ function Sort() {
   const agree = order.filter((h, i) => Math.abs(measured.indexOf(h) - i) <= 1).length
 
   return (
-    <Step n={1} title="Warm to cool" quote="As any temperature can be read higher or lower in comparison with other temperatures, these qualifications are only relative.">
+    <Step title="Warm to cool" quote="As any temperature can be read higher or lower in comparison with other temperatures, these qualifications are only relative.">
       <p className="mb-6 max-w-2xl text-muted">
         Put these eight colours in order, warmest at the top. Drag them, or use the arrows. The green and the violet are
         the hard ones. Albers calls them temperature neutrals.
@@ -121,7 +121,7 @@ function WithinHue() {
   const done = picks.every((p) => p !== null)
 
   return (
-    <Step n={2} title="Warm blues and cool reds" quote="Therefore, there are also warm blues and cool reds possible within their own hues.">
+    <Step title="Warm blues and cool reds" quote="Therefore, there are also warm blues and cool reds possible within their own hues.">
       <p className="mb-6 max-w-2xl text-muted">
         Temperature works inside a single hue too. In each row, choose {FAMILIES.map((f) => f.ask).join(' and ')}.
       </p>
@@ -167,7 +167,7 @@ function Neighbours() {
   const study = { left: oklchToHex(0.55, 0.2, 28), right: oklchToHex(0.5, 0.15, 260), inner: hsvHex(inner) }
 
   return (
-    <Step n={3} title="A violet with two temperatures" quote="But when these temperature indicators, red and blue, are combined with color neutrals, as whites, blacks, and greys, and with their mixtures, particularly in mixtures with the temperature neutrals green and violet, then personal interpretations of temperatures may easily become disparate.">
+    <Step title="A violet with two temperatures" quote="But when these temperature indicators, red and blue, are combined with color neutrals, as whites, blacks, and greys, and with their mixtures, particularly in mixtures with the temperature neutrals green and violet, then personal interpretations of temperatures may easily become disparate.">
       <p className="mb-6 max-w-2xl text-muted">
         The two small rectangles are the same violet. One sits on red, the other on blue. Which one feels warmer?
       </p>
@@ -217,7 +217,7 @@ function Polarities() {
   const set = (c: number, p: number, v: number) => setRatings((r) => r.map((row, i) => (i === c ? row.map((x, j) => (j === p ? v : x)) : row)))
 
   return (
-    <Step n={4} title="Humidity in colour" quote="Light-dark and light-heavy lead easily to soft-hard comparisons; or, quick-slow and early-late connect with young-old, and with warm-cool, as well as with wet-dry.">
+    <Step title="Humidity in colour" quote="Light-dark and light-heavy lead easily to soft-hard comparisons; or, quick-slow and early-late connect with young-old, and with warm-cool, as well as with wet-dry.">
       <p className="mb-6 max-w-2xl text-muted">
         Place each colour between the two words of each pair. There are no right answers here. Afterwards you&apos;ll
         see which of your readings follow the one thing the screen can measure, light.

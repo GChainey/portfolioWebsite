@@ -49,7 +49,7 @@ function ThreeReds() {
   const [groundId, setGroundId] = useState<GroundId>('white')
   const ground = GROUNDS.find((g) => g.id === groundId)!
   return (
-    <Step n={1} title="Three reds" quote="When placed on a red ground equal to 1 of the 3 samples, only 2 of the reds will “show,” and the lost one is absorbed, subtracted.">
+    <Step title="Three reds" quote="When placed on a red ground equal to 1 of the 3 samples, only 2 of the reds will “show,” and the lost one is absorbed, subtracted.">
       <p className="mb-6 max-w-2xl text-muted">
         On white they are all just red. On another red their differences show. On a ground the same as one of them, that
         one disappears.
@@ -72,7 +72,7 @@ function AnyGround() {
   const [setId, setSetId] = useState<SetId>('light')
   const [hsv, setHsv] = useState<HSV>(() => hexToHsv('#f3efe6'))
   return (
-    <Step n={2} title="Any ground" quote="Any ground subtracts its own hue from colors which it carries and therefore influences.">
+    <Step title="Any ground" quote="Any ground subtracts its own hue from colors which it carries and therefore influences.">
       <p className="mb-6 max-w-2xl text-muted">
         Move the ground and watch it pull its own hue and its own light out of the samples. Light samples on a light
         ground run together, and so do dark ones on a dark ground.
@@ -175,7 +175,7 @@ function LookAlike() {
   const alike = seen < actual * ALIKE
 
   return (
-    <Step n={3} title="Make two colours look alike" quote="Still more exciting is the next task, the reverse of the first: to make 2 different colors look alike.">
+    <Step title="Make two colours look alike" quote="Still more exciting is the next task, the reverse of the first: to make 2 different colors look alike.">
       <p className="mb-6 max-w-2xl text-muted">
         {round === 0
           ? 'The left rectangle is a warm, lighter grey. The right one is a cool, darker grey.'
