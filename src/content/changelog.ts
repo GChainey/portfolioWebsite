@@ -14,6 +14,26 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.54.0',
+    date: '2026-10-19',
+    title: 'Interaction of Color, chapters I and IV',
+    description: "A new dev-only section rebuilds the exercises in Josef Albers' Interaction of Color, starting with visual memory and the relativity of colour.",
+    changes: [
+      '/color lists the chapters; /color/recollection is Chapter I',
+      'Visitors make the red in their head, pick Coca-Cola red from memory out of 160 reds, then remake a colour they saw for two seconds',
+      "The page measures each miss in OKLab and names each colour from about 30 everyday names, Albers' count",
+      'The real Coca-Cola sign, redrawn as SVG in the red measured from coca-cola.com (#f40000), next to the two other reds the site uses',
+      'Upstash Redis (/api/color/reds) keeps every answer anonymously, so each visitor sees how far apart everyone else\'s reds are',
+      '/color/relativity is Chapter IV: the same small colour on two grounds, with presets for light, hue and both, and a strip that joins the two to prove they match',
+      'A matching test where you set the right rectangle to look like the left, then see how far the ground moved your eye',
+      'Visitors make their own study, switch it to the tile pattern Albers warns against, and add it to a shared exhibition (/api/color/studies)',
+      'The chapters link up as a series: chapter numerals under the title, and previous and next links at the bottom of each one',
+      'Shared Redis client moved to src/lib/redis.ts',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/aapb3',
+  },
+  {
     version: '1.53.2',
     date: '2026-10-18',
     title: 'HTML Recording Skill Moves to GChainey/skills',

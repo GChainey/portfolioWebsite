@@ -31,6 +31,24 @@ export interface ParkedItem {
 
 export const PARKED: ParkedItem[] = [
   {
+    id: 'interaction-of-color',
+    name: 'Interaction of Color',
+    status: 'local',
+    since: '2026-10-19',
+    summary: "Each chapter of Josef Albers' book gets its exercise rebuilt for the browser. Chapters I (visual memory) and IV (relativity) are done.",
+    links: [
+      { label: 'Index', href: '/color' },
+      { label: 'I. Visual memory', href: '/color/recollection' },
+      { label: 'IV. Relativity', href: '/color/relativity' },
+    ],
+    gate: 'COLOR_LIVE in src/content/color.ts',
+    todo: [
+      'More chapters: each is an entry in COLOR_CHAPTERS and a component in src/app/color/[slug]/page.tsx',
+      "Everyone's reds and the exhibition only show locally with the Upstash Redis env vars set. Vercel already has them",
+      'Decide where it lives on the site (header link, essay, or homepage) before flipping COLOR_LIVE',
+    ],
+  },
+  {
     id: 'demos',
     name: 'Demos',
     status: 'local',
