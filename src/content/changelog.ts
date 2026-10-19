@@ -14,6 +14,23 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.55.0',
+    date: '2026-10-19',
+    title: 'Interaction of Color, chapter V',
+    description: "Chapter V of the dev-only Albers series: telling lighter from darker when two colours are different hues.",
+    changes: [
+      '/color/lightness: eight pairs of different hues, close but never equal in lightness, with an "I can\'t tell" option',
+      "The score is compared with Albers' reported result, 60% wrong and 40% right, not counting the undecided cases",
+      'The answers are revealed in OKLab lightness, with a desaturate-filter view that shows a greyscale conversion is not the final proof either',
+      "Albers' after-image trick: stare at the corner where one sheet covers the other, the top sheet disappears, judge the uncovered corner, then repeat in reverse order",
+      'Visitors find a pair they cannot rank and add it to a shared collection (/api/color/pairs), where others pick the darker one',
+      'The start of the gradation studies: build a grey ladder from nine shuffled greys',
+      'The chapter pages and their APIs are on for Vercel preview deployments as well as local dev, still off in production',
+    ],
+    aiTools: ['Cursor'],
+    branch: 'cursor/color-chapter-v-lightness-252f',
+  },
+  {
     version: '1.54.0',
     date: '2026-10-19',
     title: 'Interaction of Color, chapters I and IV',
