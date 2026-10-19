@@ -36,7 +36,7 @@ export interface ShowcaseScene {
 }
 
 type Recording = { meta: { width: number; height: number; mouse?: boolean }; events: unknown[] }
-type Player = { play: (t?: number) => void; pause: (t?: number) => void; destroy: () => void; setConfig: (c: { speed: number }) => void }
+type Player = { play: (t?: number) => void; pause: (t?: number) => void; destroy: () => void; setConfig: (c: { speed: number }) => void; on: (event: string, fn: () => void) => void; iframe: HTMLIFrameElement }
 type Box = { x: number; y: number; w: number; h: number }
 
 const W = 1600
@@ -69,7 +69,7 @@ function place(region: Region, box: Box, fill: boolean) {
 }
 
 // One scene's media, cropped to its region and placed in its box
-function SceneMedia({ scene, playing, box, fill, dark, onReady }: { scene: ShowcaseScene; playing: boolean; box: Box; fill: boolean; dark: boolean; onReady: () => void }) {
+function SceneMedia({ scene, playing, box, fill, dark, pageTheme, onReady }: { scene: ShowcaseScene; playing: boolean; box: Box; fill: boolean; dark: boolean; pageTheme?: 'light' | 'dark'; onReady: () => void }) {
   const root = useRef<HTMLDivElement>(null)
   const video = useRef<HTMLVideoElement>(null)
   const player = useRef<Player | null>(null)
@@ -86,13 +86,25 @@ function SceneMedia({ scene, playing, box, fill, dark, onReady }: { scene: Showc
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const r = new Replayer(rec.events as any, { root: root.current, mouseTail: false, showWarning: false, triggerFocus: false }) as unknown as Player
       r.setConfig({ speed: scene.rate ?? 1 })
+      // Replay a recording of this site in the other theme: the recorded CSS has both, so only
+      // the class on <html> needs to change. The player rebuilds the page on every seek, and a
+      // recording can set the class itself partway through, so keep it set
+      const theme = () => {
+        const html = r.iframe.contentDocument?.documentElement
+        if (!pageTheme || !html) return
+        const set = () => { if (html.classList.contains('dark') !== (pageTheme === 'dark')) html.classList.toggle('dark', pageTheme === 'dark') }
+        set()
+        new MutationObserver(set).observe(html, { attributes: true, attributeFilter: ['class'] })
+      }
+      r.on('fullsnapshot-rebuilded', theme)
       r.pause((scene.from ?? 0) * 1000)
+      theme()
       player.current = r
       // Give the rebuilt page a frame to paint before it's shown
       requestAnimationFrame(() => requestAnimationFrame(() => { if (!gone) onReady() }))
     })()
     return () => { gone = true; player.current?.destroy(); player.current = null }
-  }, [scene])
+  }, [scene, pageTheme])
 
   useEffect(() => {
     const from = scene.from ?? 0
@@ -167,9 +179,11 @@ interface ShowcaseReelProps {
   playing?: boolean // the parent can hold the reel (it also waits until it is on screen)
   onCycle?: () => void // called each time the last scene finishes
   loop?: boolean
+  dots?: boolean // false: no dot before each kicker
+  pageTheme?: 'light' | 'dark' // replay recordings of this site in this theme, whatever they were recorded in
 }
 
-export function ShowcaseReel({ scenes: all, captions = true, theme = 'light', playing: wanted = true, onCycle, loop = true }: ShowcaseReelProps) {
+export function ShowcaseReel({ scenes: all, captions = true, theme = 'light', playing: wanted = true, onCycle, loop = true, dots = true, pageTheme }: ShowcaseReelProps) {
   // Memoised: the timing effect below restarts whenever this changes
   const scenes = useMemo(() => (captions ? all : all.filter(hasMedia)), [all, captions])
   const box = useRef<HTMLDivElement>(null)
@@ -257,13 +271,13 @@ export function ShowcaseReel({ scenes: all, captions = true, theme = 'light', pl
             </div>
           ) : (
             <>
-              {hasMedia(scene) && <SceneMedia scene={scene} playing={shown && active} box={BOX[layout]} fill={fill} dark={dark} onReady={() => setReady(index)} />}
+              {hasMedia(scene) && <SceneMedia scene={scene} playing={shown && active} box={BOX[layout]} fill={fill} dark={dark} pageTheme={pageTheme} onReady={() => setReady(index)} />}
               {fill ? (
                 captions && (
                   <div className="absolute inset-x-0 bottom-0 px-24 pb-20 pt-48 text-white" style={{ background: 'linear-gradient(to top, rgba(9,9,11,.85), rgba(9,9,11,.4) 55%, transparent)' }}>
                     {scene.kicker && (
                       <div className="mb-3 flex items-center gap-2.5 text-[22px] font-medium tracking-[-0.01em] text-white/70">
-                        <i className={`inline-block h-2 w-2 rounded-full ${scene.live ? 'bg-green-500 shadow-[0_0_0_4px_rgba(34,197,94,.25)]' : 'bg-white'}`} />
+                        {dots && <i className={`inline-block h-2 w-2 rounded-full ${scene.live ? 'bg-green-500 shadow-[0_0_0_4px_rgba(34,197,94,.25)]' : 'bg-white'}`} />}
                         {scene.kicker}
                       </div>
                     )}
@@ -274,7 +288,7 @@ export function ShowcaseReel({ scenes: all, captions = true, theme = 'light', pl
                 layout !== 'bare' && <div className="absolute" style={layout === 'side' ? { left: 96, top: '50%', width: 560, transform: 'translateY(-50%)' } : { left: 96, top: 76 }}>
                   {scene.kicker && (
                     <div className={`mb-3 flex items-center gap-2.5 text-[20px] font-medium tracking-[-0.01em] ${muted}`}>
-                      <i className={`inline-block h-2 w-2 rounded-full ${scene.live ? 'bg-green-500 shadow-[0_0_0_4px_rgba(34,197,94,.18)]' : dark ? 'bg-white' : 'bg-zinc-900'}`} />
+                      {dots && <i className={`inline-block h-2 w-2 rounded-full ${scene.live ? 'bg-green-500 shadow-[0_0_0_4px_rgba(34,197,94,.18)]' : dark ? 'bg-white' : 'bg-zinc-900'}`} />}
                       {scene.kicker}
                     </div>
                   )}
