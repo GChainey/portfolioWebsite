@@ -2,8 +2,9 @@
 // exercise for the browser. Albers worked with sheets of coloured paper. On a screen you can change
 // a colour and see the effect straight away.
 //
-// Not in production yet: there is one chapter. Flip once there are enough to be worth a visit.
-export const COLOR_LIVE = process.env.NODE_ENV === 'development'
+// Not in production yet. Flip once there are enough chapters to be worth a visit. On in local dev
+// and on Vercel preview deployments, so each new chapter can be reviewed on its PR.
+export const COLOR_LIVE = process.env.NODE_ENV === 'development' || process.env.VERCEL_ENV === 'preview'
 
 export interface ColorChapter {
   numeral: string
@@ -42,7 +43,24 @@ export const COLOR_CHAPTERS: ColorChapter[] = [
       'In a UI, a token looks different on every background it sits on, so check colours in place, not on a swatch sheet',
     ],
   },
+  {
+    numeral: 'V',
+    slug: 'lightness',
+    title: 'Lighter and/or darker: light intensity, lightness',
+    blurb: 'Pick the darker of two colours, eight times. Then settle a hard pair with an after-image, and find a pair of your own.',
+    learned: [
+      'Telling lighter from darker gets hard as soon as the two colours are different hues, even after a lifetime of reading black-and-white photos',
+      '"I can\'t tell" is a useful answer. It is more honest than a guess, and it shows which pairs need another look',
+      'A desaturate filter is not proof. Averaging R, G and B gets five of the eight test pairs the wrong way round',
+      'An after-image can settle a pair the eye can\'t, but often only one of the two orders gives the right answer',
+      'In a UI, check which colour is lighter with a lightness measure, not by eye and not with a greyscale filter',
+    ],
+  },
 ]
+
+// Albers' result for the which-is-darker test, constant over a number of years of his classes,
+// not counting the undecided cases
+export const ALBERS_DARKER_TEST = { right: 40, wrong: 60 }
 
 // Coca-Cola red as Coca-Cola puts it on screen: the round sign on coca-cola.com, an sRGB PNG,
 // measured pixel by pixel (Oct 2026). public/color/coca-cola-sign.svg redraws it sharp in this red.
