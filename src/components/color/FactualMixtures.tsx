@@ -1,9 +1,10 @@
 'use client'
 
-import { useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
-import { addLight, averageLight, hexToHsv, lightnessOf, multiply } from '@/lib/color'
-import { Segmented, Step } from './parts'
+import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
+import { addLight, averageLight, hexToHsv, lightnessOf, multiply, oklchToHex } from '@/lib/color'
+import { Next, Segmented, Step } from './parts'
 import { Picker, hsvHex, type HSV } from './Picker'
+import { Overlap } from './Transparence'
 
 // Chapter X. Real mixtures, as opposed to the imagined ones of chapter IX. Light added to light gets
 // lighter, paint mixed with paint gets darker. A screen is made of light, so the first one is real
@@ -90,6 +91,7 @@ export function FactualMixtures() {
       </Step>
 
       <Compare />
+      <InPaper />
     </div>
   )
 }
@@ -183,6 +185,107 @@ function Compare() {
           <span>Lighter</span>
         </div>
       </div>
+    </Step>
+  )
+}
+
+// Chapter X's exercise: the same two effects, but made as an illusion with opaque colours, the way
+// the class does it in paper. One thin colour crosses a grey; the crossing has to look lighter than
+// both (like light) or darker than both (like paint), and then the study is reversed.
+const KINDS = [
+  { id: 'lighter', label: 'Lighter, like light' },
+  { id: 'darker', label: 'Darker, like paint' },
+] as const
+type Kind = (typeof KINDS)[number]['id']
+
+// Near white and near black rather than pure, so a crossing can still be lighter or darker than both
+const GREYS = [
+  { id: 'light', label: 'With a light grey', hex: '#d4d2cd' },
+  { id: 'dark', label: 'With a dark grey', hex: '#3b3a37' },
+] as const
+type GreyId = (typeof GREYS)[number]['id']
+
+// How much lighter or darker than both parents the crossing must be, in OKLab lightness
+export const MARGIN = 0.03
+
+export function verdict(kind: Kind, a: string, b: string, c: string) {
+  const L = lightnessOf(c)
+  const hi = Math.max(lightnessOf(a), lightnessOf(b))
+  const lo = Math.min(lightnessOf(a), lightnessOf(b))
+  return kind === 'lighter' ? { ok: L >= hi + MARGIN, by: L - hi } : { ok: L <= lo - MARGIN, by: lo - L }
+}
+
+function thinColour() {
+  return oklchToHex(0.55 + Math.random() * 0.1, 0.1 + Math.random() * 0.05, Math.random() * 360)
+}
+
+function InPaper() {
+  const [thin, setThin] = useState('#4f7fb8')
+  const [round, setRound] = useState(0)
+  const [greyId, setGreyId] = useState<GreyId>('light')
+  const [kind, setKind] = useState<Kind>('lighter')
+  const [guess, setGuess] = useState<HSV>(() => hexToHsv('#7f8fa3'))
+  const [made, setMade] = useState<Record<Kind, boolean>>({ lighter: false, darker: false })
+  const [checked, setChecked] = useState(false)
+
+  useEffect(() => {
+    if (round > 0) setThin(thinColour())
+    setMade({ lighter: false, darker: false })
+    setChecked(false)
+  }, [round, greyId])
+
+  const grey = GREYS.find((g) => g.id === greyId)!.hex
+  const mine = hsvHex(guess)
+  const v = verdict(kind, thin, grey, mine)
+  const model = kind === 'lighter' ? addLight(thin, grey) : multiply(thin, grey)
+  const pct = (n: number) => Math.round(Math.abs(n) * 100)
+
+  const check = () => {
+    setChecked(true)
+    if (v.ok) setMade((m) => ({ ...m, [kind]: true }))
+  }
+
+  return (
+    <Step n={4} title="Now make it in paper" quote="Additive and subtractive mixtures should be made in appropriate studies in transparence illusions.">
+      <p className="mb-6 max-w-2xl text-muted">
+        Albers asks for these mixtures as illusions, with opaque papers: one thin colour mixing with white or black,
+        and then the first study reversed. Set the square where the colour crosses the grey. To read as light, it has to
+        be lighter than both parents. To read as paint, darker than both. Make one, then the other.
+      </p>
+      <div className="mb-6 flex flex-wrap gap-4">
+        <Segmented value={kind} options={[...KINDS]} onChange={(k) => { setKind(k); setChecked(false) }} />
+        <Segmented value={greyId} options={GREYS.map(({ id, label }) => ({ id, label }))} onChange={setGreyId} />
+      </div>
+      <div className="flex flex-wrap items-start gap-8">
+        <Overlap a={thin} b={grey} c={mine} className="max-w-md" />
+        <Picker value={guess} onChange={(g) => { setGuess(g); setChecked(false) }} />
+      </div>
+      <Next onClick={check}>Check this study</Next>
+      {checked && (
+        <div className="mt-8 max-w-2xl border-t border-border pt-6">
+          <p className="text-foreground" data-testid="paper-result">
+            {v.ok
+              ? `Yes. The crossing is ${pct(v.by)} points ${kind === 'lighter' ? 'lighter' : 'darker'} than both parents, so it reads as ${kind === 'lighter' ? 'light added to light' : 'one glaze over another'}.`
+              : `Not yet. The crossing must be at least ${pct(MARGIN)} points ${kind === 'lighter' ? 'lighter than the lighter' : 'darker than the darker'} parent, and it is ${v.by >= 0 ? `only ${pct(v.by)} points ${kind === 'lighter' ? 'lighter' : 'darker'}` : `${pct(v.by)} points ${kind === 'lighter' ? 'darker' : 'lighter'} instead`}.`}
+          </p>
+          <div className="mt-6 grid max-w-xl grid-cols-2 gap-4">
+            <figure>
+              <Overlap a={thin} b={grey} c={mine} />
+              <figcaption className="mt-2 text-xs text-muted">Yours</figcaption>
+            </figure>
+            <figure>
+              <Overlap a={thin} b={grey} c={model} />
+              <figcaption className="mt-2 text-xs text-muted">{kind === 'lighter' ? 'The two as real light' : 'The two as real glazes'}</figcaption>
+            </figure>
+          </div>
+        </div>
+      )}
+      <p className="mt-6 text-sm text-muted" data-testid="paper-progress">
+        {made.lighter && made.darker
+          ? 'Both studies made, the first and its reverse. Try the other grey, or a new colour.'
+          : `Made: ${made.lighter ? 'lighter' : 'not lighter yet'}, ${made.darker ? 'darker' : 'not darker yet'}.`}
+      </p>
+      <Next onClick={() => setRound((r) => r + 1)}>Try a new colour</Next>
     </Step>
   )
 }

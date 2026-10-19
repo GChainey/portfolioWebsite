@@ -15,6 +15,7 @@ const COLOURS = [
   { id: 'blue', label: 'Blue', hex: '#1d4fd8' },
   { id: 'green', label: 'Green', hex: '#1f9a48' },
   { id: 'own', label: 'Your own', hex: '' },
+  { id: 'new', label: 'New colour', hex: '' },
 ] as const
 type ColourId = (typeof COLOURS)[number]['id']
 
@@ -27,6 +28,21 @@ const DURATIONS = [
 function predicted(hex: string) {
   const [, a, b] = hexToOklab(hex)
   return oklabToHex(0.86, -a * 0.35, -b * 0.35)
+}
+
+// A match counts if its hue is within this many degrees of the opposite of the stared colour
+const MATCH_DEG = 45
+const MATCH_L = 0.86
+const MATCH_C = 0.07
+const matchHex = (h: number) => oklchToHex(MATCH_L, MATCH_C, h)
+const opposite = (hex: string) => (hexToOklch(hex)[2] + 180) % 360
+const hueGap = (a: number, b: number) => {
+  const d = Math.abs(a - b) % 360
+  return Math.round(d > 180 ? 360 - d : d)
+}
+
+function newColour() {
+  return oklchToHex(0.55 + Math.random() * 0.15, 0.14 + Math.random() * 0.06, Math.random() * 360)
 }
 
 type Phase = 'idle' | 'staring' | 'after'
@@ -85,24 +101,56 @@ function Countdown({ phase, left, after }: { phase: Phase; left: number; after: 
 function RedCircle() {
   const [colourId, setColourId] = useState<ColourId>('red')
   const [own, setOwn] = useState<HSV>({ h: 280, s: 0.8, v: 0.75 })
+  const [fresh, setFresh] = useState('#c23a8a')
   const [duration, setDuration] = useState<'15' | '30'>('30')
   const [inPlace, setInPlace] = useState(true)
+  const [hue, setHue] = useState(0)
+  const [checked, setChecked] = useState(false)
+  const [round, setRound] = useState(0)
   const { phase, left, start, reset } = useStare(Number(duration))
 
-  const hex = colourId === 'own' ? hsvHex(own) : COLOURS.find((c) => c.id === colourId)!.hex
+  // A new colour is drawn after mount so the server and client render the same thing
+  useEffect(() => {
+    if (colourId === 'new') setFresh(newColour())
+  }, [colourId, round])
+
+  const predicting = colourId === 'new'
+  const hex = colourId === 'own' ? hsvHex(own) : predicting ? fresh : COLOURS.find((c) => c.id === colourId)!.hex
   const after = phase === 'after'
   // In place: the coloured circle itself turns white. Albers' way: you move your eyes to the right.
   const leftFill = after && inPlace ? '#ffffff' : hex
+  const gap = hueGap(hue, opposite(hex))
+  const pick = (id: ColourId) => { setColourId(id); setChecked(false); reset() }
+  const again = () => { setChecked(false); start() }
+
+  const hueSlider = (label: string) => (
+    <div className="mt-6 max-w-md">
+      <p className="mb-3 text-sm text-foreground">{label}</p>
+      <div className="flex items-center gap-4">
+        <div className="h-16 w-16 shrink-0 rounded-full border border-border" style={{ background: matchHex(hue) }} />
+        <input
+          type="range"
+          min={0}
+          max={359}
+          step={1}
+          value={hue}
+          onChange={(e) => { setHue(Number(e.target.value)); setChecked(false) }}
+          aria-label="Hue of the pale tint"
+          className="w-full accent-accent"
+        />
+      </div>
+    </div>
+  )
 
   return (
     <Step n={1} title="Stare, then look at white" quote="Now, by staring steadily at the marked center of the red circle (up to half a minute) one soon discovers how difficult it is to keep the eye fixed on a point.">
       <p className="mb-6 max-w-2xl text-muted">
         Choose a colour and press start. Look only at the dot in the coloured circle until the countdown ends. Albers&apos;
         class then moved their eyes to the white circle. Here the screen can turn the coloured circle white for you, at
-        the exact moment, so you don&apos;t have to move.
+        the exact moment, so you don&apos;t have to move. Then set the tint you saw.
       </p>
       <div className="mb-6 flex flex-wrap items-center gap-6">
-        <Segmented value={colourId} options={COLOURS.map(({ id, label }) => ({ id, label }))} onChange={(id) => { setColourId(id); reset() }} />
+        <Segmented value={colourId} options={COLOURS.map(({ id, label }) => ({ id, label }))} onChange={pick} />
         <Segmented value={duration} options={[...DURATIONS]} onChange={(d) => { setDuration(d); reset() }} />
         <label className="flex items-center gap-2 text-sm text-muted">
           <input type="checkbox" checked={inPlace} onChange={(e) => setInPlace(e.target.checked)} className="accent-accent" />
@@ -112,7 +160,7 @@ function RedCircle() {
       <div className="flex flex-wrap items-start gap-8">
         <div className="w-full max-w-xl">
           <div className="flex aspect-[2/1] items-center justify-around rounded-sm bg-black px-[8%]">
-            <div className="relative aspect-square w-[34%] rounded-full" style={{ background: leftFill }}>
+            <div className="relative aspect-square w-[34%] rounded-full" style={{ background: leftFill }} data-testid="stare-circle">
               <Dot />
             </div>
             {!inPlace && (
@@ -130,18 +178,36 @@ function RedCircle() {
         {colourId === 'own' && phase === 'idle' && <Picker value={own} onChange={setOwn} />}
       </div>
 
+      {predicting && phase === 'idle' && hueSlider('Before you stare, set the tint you expect to see afterwards.')}
+
       {phase === 'idle' && <Next onClick={start}>Start staring</Next>}
       {phase === 'staring' && <Next onClick={reset}>Stop</Next>}
       {after && (
         <div className="mt-8 max-w-2xl border-t border-border pt-6">
-          <p className="mb-6 text-foreground">
-            Most eyes see the white circle tinted with the opposite colour for a few seconds. Did yours look like this?
-          </p>
-          <div className="flex flex-wrap gap-6">
-            <Swatch hex={hex} label="What you stared at" />
-            <Swatch hex={predicted(hex)} label="Roughly what most people see after" />
+          {!predicting && hueSlider('The tint fades in a few seconds. Set the colour you saw as closely as you can.')}
+          {predicting && <p className="text-foreground">Was it the tint you predicted? Check it.</p>}
+          {!checked ? (
+            <Next onClick={() => setChecked(true)}>{predicting ? 'Check my prediction' : 'Check my match'}</Next>
+          ) : (
+            <>
+              <p className="mt-6 text-foreground" data-testid="match-result">
+                {gap <= MATCH_DEG
+                  ? `Your tint is ${gap}° from the opposite of what you stared at. That counts as the after-image.`
+                  : `Your tint is ${gap}° from the opposite of what you stared at. To count, get it within ${MATCH_DEG}°.`}
+              </p>
+              <div className="mt-6 flex flex-wrap gap-6">
+                <Swatch hex={hex} label="What you stared at" />
+                <Swatch hex={matchHex(hue)} label={predicting ? 'Your prediction' : 'Your match'} />
+                <Swatch hex={predicted(hex)} label="Roughly what most people see after" />
+              </div>
+            </>
+          )}
+          <div className="flex flex-wrap gap-4">
+            <Next onClick={again}>Try it again</Next>
+            <Next onClick={() => { setColourId('new'); setRound((r) => r + 1); setChecked(false); reset() }}>
+              {predicting ? 'Another new colour' : 'Predict a new colour'}
+            </Next>
           </div>
-          <Next onClick={start}>Try it again</Next>
         </div>
       )}
     </Step>

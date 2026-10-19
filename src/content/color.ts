@@ -112,7 +112,7 @@ export const COLOR_CHAPTERS: ColorChapter[] = [
     numeral: 'VIII',
     slug: 'after-image',
     title: 'Why color deception?—after-image, simultaneous contrast',
-    blurb: 'Stare at a colour for 30 seconds and the screen swaps it for white, so you see its after-image where you were already looking.',
+    blurb: "Stare at a colour for 30 seconds and the screen swaps it for white, then set the tint you saw, and predict it for a colour you haven't stared at.",
     learned: [
       'Staring at a colour tires the eye, and white then looks tinted with the opposite colour',
       'Yellow circles leave yellow diamonds behind. The diamonds are the after-image of the gaps between the circles',
@@ -125,7 +125,7 @@ export const COLOR_CHAPTERS: ColorChapter[] = [
     numeral: 'IX',
     slug: 'transparence',
     title: 'Color mixture in paper—illusion of transparence',
-    blurb: 'Imagine the colour two papers would make, put it where they cross, and see opaque paper turn see-through.',
+    blurb: 'Imagine the colour two papers would make, put it where they cross, and see opaque paper turn see-through. The page checks whether your mixture sits between its parents.',
     learned: [
       'Opaque colours read as transparent when the right in-between colour sits where two shapes overlap',
       'Any two colours have many believable mixtures, not one right answer',
@@ -138,7 +138,7 @@ export const COLOR_CHAPTERS: ColorChapter[] = [
     numeral: 'X',
     slug: 'factual-mixtures',
     title: 'Factual mixtures—additive and subtractive',
-    blurb: 'Drag coloured lights and inks over each other, then mix any two colours as light, as paint and on a spinning disc.',
+    blurb: 'Drag coloured lights and inks over each other, then make both in opaque colour, a crossing lighter than both parents and its reverse, darker than both.',
     learned: [
       'Light added to light always gets lighter, and all three together make white',
       'Paint or ink mixed with paint always gets darker, heading towards black',

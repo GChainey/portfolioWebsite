@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { deltaE, hexToHsv, hexToOklab, oklabToHex } from '@/lib/color'
+import { useEffect, useState } from 'react'
+import { deltaE, hexToHsv, hexToOklab, oklabToHex, oklchToHex } from '@/lib/color'
 import { Next, Segmented, Step } from './parts'
 import { Picker, hsvHex, type HSV } from './Picker'
 import { Plate } from './Plate'
@@ -106,12 +106,54 @@ const EDIT = [
 ] as const
 type Side = (typeof EDIT)[number]['id']
 
+// Alike enough: the model says the difference you see has shrunk to under half
+const ALIKE = 0.5
+
+// Two grounds that, in the model, make a and b look the same: their difference has to be
+// (1 + PUSH) / PUSH times the difference between a and b. Scaled down until both fit the screen.
+function solution(a: string, b: string) {
+  const p = hexToOklab(a)
+  const q = hexToOklab(b)
+  const k = (1 + PUSH) / PUSH
+  const fits = (lab: number[]) => {
+    const hex = oklabToHex(lab[0], lab[1], lab[2])
+    const back = hexToOklab(hex)
+    return Math.hypot(...back.map((v, i) => v - lab[i])) < 0.01
+  }
+  for (let scale = 1; scale > 0.2; scale -= 0.05) {
+    const mid = p.map((v, i) => (v + q[i]) / 2)
+    const half = p.map((v, i) => ((v - q[i]) * k * scale) / 2)
+    const left = mid.map((v, i) => v + half[i])
+    const right = mid.map((v, i) => v - half[i])
+    if (fits(left) && fits(right)) return { left: oklabToHex(left[0], left[1], left[2]), right: oklabToHex(right[0], right[1], right[2]) }
+  }
+  return { left: START, right: START }
+}
+
+// Two colours you haven't practised on, different in light and in hue
+function newPair() {
+  const L = 0.55 + Math.random() * 0.15
+  const h = Math.random() * 360
+  return { a: oklchToHex(L + 0.04, 0.05, h), b: oklchToHex(L - 0.04, 0.05, (h + 140 + Math.random() * 80) % 360) }
+}
+
 function LookAlike() {
+  const [pair, setPair] = useState(PAIR)
+  const [round, setRound] = useState(0)
   const [grounds, setGrounds] = useState({ left: START, right: START })
   const [side, setSide] = useState<Side>('left')
   const [hsv, setHsv] = useState<HSV>(() => hexToHsv(START))
   const [joined, setJoined] = useState(false)
   const [done, setDone] = useState(false)
+
+  // A new pair has to wait for the browser, or the server and client disagree
+  useEffect(() => {
+    if (round === 0) return
+    setPair(newPair())
+    setGrounds({ left: START, right: START })
+    setHsv(hexToHsv(START))
+    setDone(false)
+  }, [round])
 
   const choose = (s: Side) => {
     setSide(s)
@@ -121,20 +163,29 @@ function LookAlike() {
     setHsv(next)
     setGrounds((g) => ({ ...g, [side]: hsvHex(next) }))
   }
+  const showSolution = () => {
+    const g = solution(pair.a, pair.b)
+    setGrounds(g)
+    setHsv(hexToHsv(g[side]))
+  }
 
   // On any one shared ground the difference reads the same, so that is the baseline
-  const actual = deltaE(apparent(PAIR.a, START), apparent(PAIR.b, START))
-  const seen = deltaE(apparent(PAIR.a, grounds.left), apparent(PAIR.b, grounds.right))
+  const actual = deltaE(apparent(pair.a, START), apparent(pair.b, START))
+  const seen = deltaE(apparent(pair.a, grounds.left), apparent(pair.b, grounds.right))
+  const alike = seen < actual * ALIKE
 
   return (
     <Step n={3} title="Make two colours look alike" quote="Still more exciting is the next task, the reverse of the first: to make 2 different colors look alike.">
       <p className="mb-6 max-w-2xl text-muted">
-        The left rectangle is a warm, lighter grey. The right one is a cool, darker grey. Give each a ground that takes
-        away what makes it different. A warm ground takes warmth away. A dark ground makes a colour look lighter.
+        {round === 0
+          ? 'The left rectangle is a warm, lighter grey. The right one is a cool, darker grey.'
+          : 'A new pair. One is a little lighter than the other, and they differ in hue.'}{' '}
+        Give each a ground that takes away what makes it different. A warm ground takes warmth away. A dark ground makes
+        a colour look lighter.
       </p>
       <div className="flex flex-wrap items-start gap-8">
         <div className="w-full max-w-md">
-          <Plate study={{ left: grounds.left, right: grounds.right, inner: PAIR.a }} rightInner={PAIR.b} joined={joined} />
+          <Plate study={{ left: grounds.left, right: grounds.right, inner: pair.a }} rightInner={pair.b} joined={joined} />
           <button onClick={() => setJoined((j) => !j)} className="mt-4 text-sm text-foreground underline underline-offset-4 hover:text-accent">
             {joined ? 'Separate them' : 'Join them'}
           </button>
@@ -152,7 +203,8 @@ function LookAlike() {
         <div className="mt-8 max-w-2xl border-t border-border pt-6">
           <p className="text-foreground">
             On one shared ground the two look about {actual.toFixed(1)} apart. On your grounds they look about {seen.toFixed(1)} apart
-            {seen < actual - 0.1 ? `, ${Math.round((1 - seen / actual) * 100)}% closer.` : seen > actual + 0.1 ? ', further apart than before.' : ', no closer than before.'}
+            {seen < actual - 0.1 ? `, ${Math.round((1 - seen / actual) * 100)}% closer.` : seen > actual + 0.1 ? ', further apart than before.' : ', no closer than before.'}{' '}
+            {alike ? 'That counts as alike.' : `To count as alike, get it under ${(actual * ALIKE).toFixed(1)}.`}
           </p>
           <p className="mt-2 text-sm text-muted">
             This uses a rough model of contrast, in which each ground pushes its colour away from itself by about a third. Your eye
@@ -160,8 +212,8 @@ function LookAlike() {
           </p>
           <div className="mt-6 flex max-w-sm gap-3 bg-[#808080] p-3">
             {[
-              { hex: PAIR.a, label: 'Left' },
-              { hex: PAIR.b, label: 'Right' },
+              { hex: pair.a, label: 'Left' },
+              { hex: pair.b, label: 'Right' },
             ].map(({ hex, label }) => (
               <figure key={label} className="flex-1">
                 <div className="h-16" style={{ background: hex }} />
@@ -170,7 +222,11 @@ function LookAlike() {
             ))}
           </div>
           <p className="mt-2 text-xs text-muted">The two side by side on a neutral grey.</p>
-          <Next onClick={() => setDone(false)}>Keep adjusting</Next>
+          <div className="flex flex-wrap gap-x-4">
+            <Next onClick={() => setDone(false)}>Keep adjusting</Next>
+            <Next onClick={showSolution}>Show one solution</Next>
+            <Next onClick={() => setRound((r) => r + 1)}>Try a new pair</Next>
+          </div>
         </div>
       )}
     </Step>

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { deltaE, hexToOklab, hexToHsv, mixOklab } from '@/lib/color'
+import { deltaE, hexToOklab, hexToHsv, mixOklab, oklchToHex } from '@/lib/color'
 import { Next, Segmented, Step } from './parts'
 import { Picker, hsvHex, type HSV } from './Picker'
 import { Plate, type Study } from './Plate'
@@ -14,8 +14,21 @@ const GROUNDS = [
   { id: 'same', label: 'Same hue', left: '#2f5a3a', right: '#a9cf8f' },
   { id: 'different', label: 'Two hues', left: '#5a3d7a', right: '#e3b36b' },
   { id: 'opposite', label: 'Complementary', left: '#c4472f', right: '#2f8a86' },
+  { id: 'new', label: 'New grounds', left: '#5a5a5a', right: '#b0b0b0' },
 ] as const
 type GroundId = (typeof GROUNDS)[number]['id']
+
+// The test of a middle: halfway between the grounds in OKLab, and on the line between them
+const MIDDLE_T = 0.07
+const MIDDLE_OFF = 6
+const isMiddle = (t: number, off: number) => Math.abs(t - 0.5) < MIDDLE_T && off < MIDDLE_OFF
+
+// A dark and a light ground in two hues you haven't practised on, to test the skill on its own
+function newGrounds() {
+  const h = Math.random() * 360
+  const h2 = (h + 60 + Math.random() * 120) % 360
+  return { left: oklchToHex(0.32 + Math.random() * 0.08, 0.06 + Math.random() * 0.06, h), right: oklchToHex(0.78 + Math.random() * 0.08, 0.05 + Math.random() * 0.06, h2) }
+}
 
 const EXAMPLE: Study = { left: '#6b3d8f', right: '#c9a6d9', inner: mixOklab('#6b3d8f', '#c9a6d9') }
 
@@ -58,16 +71,19 @@ const startGuess = (): HSV => ({ h: Math.random() * 360, s: 0.1 + Math.random() 
 
 function FindTheMiddle() {
   const [groundId, setGroundId] = useState<GroundId>('same')
-  const g = GROUNDS.find((x) => x.id === groundId)!
+  const [fresh, setFresh] = useState<{ left: string; right: string }>(GROUNDS[3])
+  const [round, setRound] = useState(0)
+  const g = groundId === 'new' ? fresh : GROUNDS.find((x) => x.id === groundId)!
   const [guess, setGuess] = useState<HSV>({ h: 0, s: 0.2, v: 0.5 })
   const [done, setDone] = useState(false)
   const [joined, setJoined] = useState(false)
 
   useEffect(() => {
+    if (groundId === 'new') setFresh(newGrounds())
     setGuess(startGuess())
     setDone(false)
     setJoined(false)
-  }, [groundId])
+  }, [groundId, round])
 
   const made = hsvHex(guess)
   const middle = mixOklab(g.left, g.right)
@@ -77,7 +93,8 @@ function FindTheMiddle() {
     <Step n={2} title="Find the middle colour" quote="After repeated trials it must be concluded that the only fitting color is the one which is topologically in the middle of the colors of the 2 grounds.">
       <p className="mb-6 max-w-2xl text-muted">
         Set the small rectangles so that each one looks like the ground on the other side. Most first tries land closer
-        to one ground than the other. Complementary grounds are the hardest.
+        to one ground than the other. Complementary grounds are the hardest. When you can do the three, try new grounds:
+        hues you haven&apos;t seen, with no help.
       </p>
       <div className="mb-6">
         <Segmented value={groundId} options={GROUNDS.map(({ id, label }) => ({ id, label }))} onChange={setGroundId} />
@@ -96,16 +113,21 @@ function FindTheMiddle() {
       ) : (
         <div className="mt-8 max-w-2xl border-t border-border pt-6">
           <p className="text-foreground">
-            {Math.abs(t - 0.5) < 0.07 && off < 6
-              ? 'That is very close to the middle.'
+            {isMiddle(t, off)
+              ? 'That is the middle. Each rectangle should now echo the ground across from it.'
               : `Yours sits ${Math.round(Math.min(1, Math.max(0, t)) * 100)}% of the way from the left ground to the right one${off > 6 ? ', and off to one side in hue' : ''}.`}
           </p>
           <Line a={g.left} b={g.right} t={t} made={made} middle={middle} />
           <p className="mt-4 text-sm text-muted">
             The middle is measured in OKLab, halfway between the two grounds in light and in hue. Your colour is{' '}
-            {deltaE(made, middle).toFixed(1)} from it.
+            {deltaE(made, middle).toFixed(1)} from it. It counts as the middle within {Math.round(MIDDLE_T * 100)}% of halfway
+            and {MIDDLE_OFF} off the line.
           </p>
-          <Next onClick={() => setGroundId(GROUNDS[(GROUNDS.findIndex((x) => x.id === groundId) + 1) % GROUNDS.length].id)}>Try other grounds</Next>
+          {groundId === 'new' ? (
+            <Next onClick={() => setRound((r) => r + 1)}>New grounds again</Next>
+          ) : (
+            <Next onClick={() => setGroundId(GROUNDS[(GROUNDS.findIndex((x) => x.id === groundId) + 1) % GROUNDS.length].id)}>Try other grounds</Next>
+          )}
         </div>
       )}
     </Step>
@@ -113,7 +135,7 @@ function FindTheMiddle() {
 }
 
 // The two grounds at each end of a line, the true middle and yours placed along it
-function Line({ a, b, t, made, middle }: { a: string; b: string; t: number; made: string; middle: string }) {
+function Line({ a, b, t, made, middle, label = 'Yours' }: { a: string; b: string; t: number; made: string; middle: string; label?: string }) {
   const pos = Math.min(1, Math.max(0, t)) * 100
   return (
     <div className="relative mx-4 mt-6 h-16 max-w-xl">
@@ -122,10 +144,10 @@ function Line({ a, b, t, made, middle }: { a: string; b: string; t: number; made
         { left: 0, hex: a, label: 'Ground' },
         { left: 100, hex: b, label: 'Ground' },
         { left: 50, hex: middle, label: 'Middle' },
-        { left: pos, hex: made, label: 'Yours' },
+        { left: pos, hex: made, label },
       ].map((m, i) => (
         <div key={i} className="absolute top-0 flex -translate-x-1/2 flex-col items-center" style={{ left: `${m.left}%` }}>
-          <div className={`h-8 w-8 rounded-sm ${m.label === 'Yours' ? 'ring-2 ring-foreground' : 'ring-1 ring-border'}`} style={{ background: m.hex }} />
+          <div className={`h-8 w-8 rounded-sm ${i === 3 ? 'ring-2 ring-foreground' : 'ring-1 ring-border'}`} style={{ background: m.hex }} />
           <span className="mt-1 text-[10px] text-muted">{m.label}</span>
         </div>
       ))}
@@ -133,42 +155,61 @@ function Line({ a, b, t, made, middle }: { a: string; b: string; t: number; made
   )
 }
 
+const SIDES = [
+  { id: 'left', label: 'Dark ground' },
+  { id: 'right', label: 'Light ground' },
+] as const
+type Side = (typeof SIDES)[number]['id']
+
+// Albers lets the student change one ground or both when no paper sits in the middle
 function MoveTheGrounds() {
   const inner = '#7f8a6a'
-  const [left, setLeft] = useState('#3b4a2b')
+  const [grounds, setGrounds] = useState({ left: '#3b4a2b', right: '#e8d9c9' })
+  const [side, setSide] = useState<Side>('right')
   const [hsv, setHsv] = useState<HSV>(() => hexToHsv('#e8d9c9'))
-  const [measure, setMeasure] = useState(false)
-  const right = hsvHex(hsv)
+  const [done, setDone] = useState(false)
+  const { left, right } = grounds
   const { t, off } = placeOn(left, right, inner)
 
+  const choose = (next: Side) => {
+    setSide(next)
+    setHsv(hexToHsv(grounds[next]))
+  }
+  const change = (next: HSV) => {
+    setHsv(next)
+    setGrounds((g) => ({ ...g, [side]: hsvHex(next) }))
+    setDone(false)
+  }
+
   return (
-    <Step n={3} title="Or move a ground" quote="Instead of pushing the in-between color to one or the other side, we must consider changing 1 or both of the grounds, either moving closer to or more distant from the in-between color.">
+    <Step n={3} title="Or move the grounds" quote="Instead of pushing the in-between color to one or the other side, we must consider changing 1 or both of the grounds, either moving closer to or more distant from the in-between color.">
       <p className="mb-6 max-w-2xl text-muted">
-        Here the rectangles are fixed and the light ground is yours. Move it until the small colour sits in the middle.
-        Turn on the measure if you want help, after you&apos;ve tried by eye.
+        Here the rectangles are fixed and both grounds are yours. Move one or both until the small colour sits in the
+        middle and echoes each ground on the other side. Judge it by eye first, then check.
       </p>
-      <div className="mb-4 flex flex-wrap gap-2 text-sm">
-        {['#3b4a2b', '#2b3a4a', '#4a2b3a'].map((hex) => (
-          <button key={hex} onClick={() => setLeft(hex)} aria-label={`Dark ground ${hex}`} className={`h-8 w-8 rounded-sm ${left === hex ? 'ring-2 ring-foreground' : 'ring-1 ring-border'}`} style={{ background: hex }} />
-        ))}
-        <span className="self-center pl-2 text-muted">The dark ground</span>
-      </div>
       <div className="flex flex-wrap items-start gap-8">
         <Plate study={{ left, right, inner }} className="w-full max-w-md" />
         <div className="w-full max-w-xs">
-          <Picker value={hsv} onChange={setHsv} />
-          <label className="mt-4 flex items-center gap-2 text-sm text-muted">
-            <input type="checkbox" checked={measure} onChange={(e) => setMeasure(e.target.checked)} className="accent-accent" />
-            Measure it
-          </label>
-          {measure && (
-            <p className="mt-2 max-w-xs text-sm text-foreground">
-              The rectangles are {Math.round(Math.min(1, Math.max(0, t)) * 100)}% of the way from the dark ground to yours
-              {off > 6 ? `, and ${off.toFixed(0)} off the line in hue` : ''}.
-            </p>
-          )}
+          <div className="mb-4">
+            <Segmented value={side} options={[...SIDES]} onChange={choose} />
+          </div>
+          <Picker value={hsv} onChange={change} />
         </div>
       </div>
+      {!done ? (
+        <Next onClick={() => setDone(true)}>It sits in the middle</Next>
+      ) : (
+        <div className="mt-8 max-w-2xl border-t border-border pt-6">
+          <p className="text-foreground">
+            {isMiddle(t, off)
+              ? 'It does. The rectangles are halfway between your grounds.'
+              : `The rectangles are ${Math.round(Math.min(1, Math.max(0, t)) * 100)}% of the way from the dark ground to the light one${off > MIDDLE_OFF ? `, and ${off.toFixed(0)} off the line in hue` : ''}. ${
+                  t < 0.5 ? 'Move the dark ground further away, or the light one closer.' : 'Move the light ground further away, or the dark one closer.'
+                }`}
+          </p>
+          <Line a={left} b={right} t={t} made={inner} middle={mixOklab(left, right)} label="Rectangles" />
+        </div>
+      )}
     </Step>
   )
 }
