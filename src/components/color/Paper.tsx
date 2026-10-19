@@ -42,6 +42,7 @@ export function Paper() {
     <div className="space-y-20">
       <Collect onPick={add} />
       <Collection papers={papers} onChange={update} />
+      <Choose papers={papers} />
       <PaintAgain />
     </div>
   )
@@ -167,8 +168,8 @@ function Collection({ papers, onChange }: { papers: string[]; onChange: (p: stri
       ) : (
         <>
           <p className="mb-6 max-w-2xl text-muted">
-            {papers.length} {papers.length === 1 ? 'paper' : 'papers'}, kept in this browser so later chapters can use
-            them. Sort them to compare neighbours. Click one to throw it away.
+            {papers.length} {papers.length === 1 ? 'paper' : 'papers'}, kept in this browser for your next visit. Sort
+            them to compare neighbours. Click one to throw it away.
           </p>
           <Segmented value={sort} options={[...SORTS]} onChange={setSort} />
           <ul className="mt-6 grid max-w-3xl grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8">
@@ -186,6 +187,92 @@ function Collection({ papers, onChange }: { papers: string[]; onChange: (p: stri
               </li>
             ))}
           </ul>
+        </>
+      )}
+    </Step>
+  )
+}
+
+// Albers' reason for a big collection: you learn by choosing, not mixing. A colour is shown, and
+// you find the paper nearest to it by eye. The nearest is measured, so the choice can be scored.
+const MIN_PAPERS = 6
+const CHOOSE_ROUNDS = 3
+
+function nudge(hex: string): string {
+  const [L, C, h] = hexToOklch(hex)
+  return oklchToHex(Math.min(0.95, Math.max(0.1, L + (Math.random() - 0.5) * 0.08)), Math.max(0, C + (Math.random() - 0.5) * 0.05), h + (Math.random() - 0.5) * 20)
+}
+
+function Choose({ papers }: { papers: string[] }) {
+  const [target, setTarget] = useState<string | null>(null)
+  const [pick, setPick] = useState<string | null>(null)
+  const [scores, setScores] = useState<boolean[]>([])
+
+  const next = () => {
+    setTarget(nudge(papers[Math.floor(Math.random() * papers.length)]))
+    setPick(null)
+  }
+  const nearest = target ? papers.reduce((best, p) => (deltaE(p, target) < deltaE(best, target) ? p : best), papers[0]) : null
+  const choose = (hex: string) => {
+    if (pick || !nearest) return
+    setPick(hex)
+    setScores([...scores, hex === nearest])
+  }
+  const done = scores.length >= CHOOSE_ROUNDS && !!pick
+
+  return (
+    <Step n={3} title="Find it in your papers" quote="In solving our problems again and again we must find just the right color which demonstrates a desired effect.">
+      {papers.length < MIN_PAPERS ? (
+        <p className="text-sm text-muted">Collect at least {MIN_PAPERS} papers above, then come back. You&apos;ll be shown a colour and find the paper nearest to it.</p>
+      ) : !target ? (
+        <>
+          <p className="mb-2 max-w-2xl text-muted">
+            A colour will appear on a neutral grey. Find the paper in your collection that is nearest to it, by eye.
+            Nothing is mixed, only chosen. There are {CHOOSE_ROUNDS} rounds.
+          </p>
+          <Next onClick={next}>Show me a colour</Next>
+        </>
+      ) : (
+        <>
+          <div className="flex flex-wrap items-start gap-8">
+            <div className="bg-[#808080] p-5">
+              <div className="h-28 w-28" style={{ background: target }} />
+              <p className="mt-2 text-xs text-white">Find this</p>
+            </div>
+            <ul className="grid max-w-xl flex-1 grid-cols-6 gap-2 bg-[#808080] p-5 sm:grid-cols-8" aria-label="Your papers">
+              {papers.map((hex) => (
+                <li key={hex}>
+                  <button
+                    onClick={() => choose(hex)}
+                    disabled={!!pick}
+                    aria-label={`Choose ${hex}`}
+                    className={`aspect-[3/4] w-full outline-none focus-visible:ring-2 focus-visible:ring-accent ${pick && hex === nearest ? 'ring-2 ring-white' : ''} ${pick === hex && hex !== nearest ? 'ring-2 ring-black' : ''}`}
+                    style={{ background: hex }}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+          {pick && nearest && (
+            <div className="mt-6 max-w-2xl" aria-live="polite">
+              <p className="text-foreground">
+                {pick === nearest
+                  ? 'You found the nearest paper.'
+                  : `The nearest paper is ringed in white. Yours is ${deltaE(pick, target).toFixed(1)} away, the nearest ${deltaE(nearest, target).toFixed(1)}.`}
+              </p>
+              {done ? (
+                <>
+                  <p className="mt-2 text-sm text-muted">
+                    You found the nearest paper {scores.filter(Boolean).length} times out of {scores.length}. Distances are
+                    measured in OKLab, where about 2 is the smallest difference you can see side by side.
+                  </p>
+                  <Next onClick={() => { setScores([]); next() }}>Again</Next>
+                </>
+              ) : (
+                <Next onClick={next}>Next colour ({scores.length + 1} of {CHOOSE_ROUNDS})</Next>
+              )}
+            </div>
+          )}
         </>
       )}
     </Step>
@@ -230,7 +317,7 @@ function PaintAgain() {
   useEffect(repaint, [repaint])
 
   return (
-    <Step n={3} title="The same colour, twice" quote="Color paper permits a repeated use of precisely the same color without the slightest change in tone, light, or surface quality.">
+    <Step n={4} title="The same colour, twice" quote="Color paper permits a repeated use of precisely the same color without the slightest change in tone, light, or surface quality.">
       <p className="mb-6 max-w-2xl text-muted">
         On the left, one blue painted twice. Every coat goes on a little thinner or thicker. On the right, the same blue
         cut twice from paper.

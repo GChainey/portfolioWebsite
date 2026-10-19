@@ -56,32 +56,35 @@ function startFor(inner: string): HSV {
   return { ...hsv, v: Math.min(1, Math.max(0, hsv.v + nudge)) }
 }
 
-function Match() {
+// The method of adjustment: you set the right rectangle until it looks like the left one, and the
+// size of your correction measures how far the grounds moved your eye. It runs on the presets,
+// and on your own study in step 3.
+function Match({ studies = PRESETS.map((p) => p.study), n = 2, title = 'How far does it move?' }: { studies?: Study[]; n?: number; title?: string }) {
   const [round, setRound] = useState(0)
-  const preset = PRESETS[round % PRESETS.length]
-  const [guess, setGuess] = useState<HSV>(() => hexToHsv(preset.study.inner))
+  const study = studies[round % studies.length]
+  const [guess, setGuess] = useState<HSV>(() => hexToHsv(study.inner))
   const [done, setDone] = useState(false)
 
   // A random start has to wait for the browser, or the server and client disagree
   useEffect(() => {
-    setGuess(startFor(preset.study.inner))
+    setGuess(startFor(study.inner))
     setDone(false)
-  }, [preset])
+  }, [study, round])
 
-  const { left, right, inner } = preset.study
+  const { left, right, inner } = study
   const made = hsvHex(guess)
   const miss = deltaE(made, inner)
   const shift = lightness(made) - lightness(inner)
   const rightIsLighter = lightness(right) > lightness(left)
 
   return (
-    <Step n={2} title="How far does it move?" quote={'They lead us to "see" and to "read" other colors than those with which we are confronted physically.'}>
+    <Step n={n} title={title} quote={'They lead us to "see" and to "read" other colors than those with which we are confronted physically.'}>
       <p className="mb-6 max-w-2xl text-muted">
         Here the right rectangle is yours. Change it until it looks the same as the left one. Knowing the trick
         doesn&apos;t stop it working.
       </p>
       <div className="flex flex-wrap items-start gap-8">
-        <Plate study={preset.study} rightInner={made} className="w-full max-w-md" />
+        <Plate study={study} rightInner={made} className="w-full max-w-md" />
         {!done && <Picker value={guess} onChange={setGuess} />}
       </div>
 
@@ -110,7 +113,11 @@ function Match() {
             ))}
           </div>
           <p className="mt-2 text-xs text-muted">The two side by side on a neutral grey.</p>
-          <Next onClick={() => setRound((r) => r + 1)}>Try another pair of grounds</Next>
+          {studies.length > 1 ? (
+            <Next onClick={() => setRound((r) => r + 1)}>Try another pair of grounds</Next>
+          ) : (
+            <Next onClick={() => setRound((r) => r + 1)}>Try it again</Next>
+          )}
         </div>
       )}
     </Step>
@@ -131,6 +138,7 @@ function YourStudy() {
   const [tiles, setTiles] = useState(false)
   const [hsv, setHsv] = useState<HSV>(() => hexToHsv(study.inner))
   const [sent, setSent] = useState(false)
+  const [tested, setTested] = useState<Study | null>(null)
   const [exhibition, setExhibition] = useState<{ shared: boolean; studies: Study[] } | null>(null)
 
   const choose = (p: Part) => {
@@ -193,12 +201,21 @@ function YourStudy() {
             tile pattern opposite, their illusional effects annul each other.
           </blockquote>
         )}
-        <Next onClick={send} disabled={sent}>
-          {sent ? 'Added' : 'Add it to the exhibition'}
-        </Next>
+        <div className="flex flex-wrap gap-x-4">
+          <Next onClick={() => setTested({ ...study })}>{tested ? 'Measure the new version' : 'Measure it on yourself'}</Next>
+          <Next onClick={send} disabled={sent}>
+            {sent ? 'Added' : 'Add it to the exhibition'}
+          </Next>
+        </div>
+        <p className="mt-3 max-w-2xl text-xs text-muted">
+          Joining the rectangles proves they match. Measuring shows how far your grounds pull them apart: the bigger the
+          correction you need to make them look alike, the stronger the study.
+        </p>
       </Step>
 
-      <Step n={4} title="The exhibition" quote="Soon, these first trials are collected and separated into groups of more and less promise.">
+      {tested && <Match key={JSON.stringify(tested)} studies={[tested]} n={4} title="How far does yours move it?" />}
+
+      <Step n={tested ? 5 : 4} title="The exhibition" quote="Soon, these first trials are collected and separated into groups of more and less promise.">
         {!exhibition ? null : !exhibition.shared ? (
           <p className="text-sm text-muted">Everyone&apos;s studies will show here once the site is connected to its database.</p>
         ) : exhibition.studies.length === 0 ? (

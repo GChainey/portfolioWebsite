@@ -46,7 +46,7 @@ export const COLOR_CHAPTERS: ColorChapter[] = [
     numeral: 'III',
     slug: 'paper',
     title: 'Why color paper—instead of pigment and paint',
-    blurb: 'Cut colour papers out of your own photo, keep them as a palette, and see paint fail to repeat a colour.',
+    blurb: 'Cut colour papers out of your own photo, keep them as a palette, find the one nearest a colour, and see paint fail to repeat a colour.',
     learned: [
       'Albers chose paper because a paper is exactly the same colour every time it is used',
       "Magazines, packaging and printers' waste give a bigger palette than any boxed set",
