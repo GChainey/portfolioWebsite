@@ -27,7 +27,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       "Weber-Fechner layers simulated exactly, Goethe's triangle mixed from your own primaries, Schopenhauer's quantity ring, and HSV against OKLCH in grey",
       'Shared colour maths in src/lib/color.ts: OKLab mixing, light addition, multiply, greyscale and WCAG contrast',
       'Chapter titles shrink on phones so long words fit, and the chapter numerals wrap',
-      '/color/reel plays all 25 exercises in about two minutes: HTML recordings of each page, captioned with how it works and what it teaches',
+      '/color/reel plays all 25 studies in three cuts to compare (text first, title and study, and Albers in his own words), dark or light, from HTML recordings of each page',
       "Every study audited against Albers' own instructions, with a measurable check and a round on colours you haven't seen; Vanishing now lets you adjust both colours",
     ],
     aiTools: ['Claude Code'],

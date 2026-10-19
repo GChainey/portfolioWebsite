@@ -27,11 +27,13 @@ export interface ShowcaseScene {
   rate?: number // playback speed
   hold?: number // seconds, for a text-only, site or still scene
   // stack: caption above the media. side: caption beside it. center: caption alone.
-  // full: the media fills the stage, caption laid over its lower left
-  layout?: 'stack' | 'side' | 'center' | 'full'
+  // full: the media fills the stage, caption laid over its lower left. bare: the media alone
+  layout?: 'stack' | 'side' | 'center' | 'full' | 'bare'
   kicker?: string
   title: string
   sub?: string
+  quote?: string // side: a quotation under the title
+  lines?: boolean // center: the words rise in one by one and lift away before the cut
   live?: boolean // a green dot on the kicker: the model is real
 }
 
@@ -49,6 +51,43 @@ const BOX: Record<'stack' | 'side' | 'full' | 'bare', Box> = {
   full: { x: 0, y: 0, w: W, h: H },
 }
 const SITE = { width: 1440, height: 900 }
+
+// A title card whose words rise in one at a time, then lift away before the scene ends
+function Lines({ scene, shown, muted }: { scene: ShowcaseScene; shown: boolean; muted: string }) {
+  const [out, setOut] = useState(false)
+  useEffect(() => {
+    if (!shown) return
+    const t = setTimeout(() => setOut(true), sceneDuration(scene) * 1000 - 700)
+    return () => clearTimeout(t)
+  }, [shown, scene])
+  let n = 0
+  const word = (w: string, key: number) => {
+    const i = n++
+    return (
+      <span
+        key={key}
+        className="inline-block whitespace-pre"
+        style={{
+          opacity: shown && !out ? 1 : 0,
+          filter: shown && !out ? 'none' : 'blur(10px)',
+          transform: `translateY(${!shown ? 36 : out ? -40 : 0}px)`,
+          transition: `opacity 500ms ease, filter 500ms ease, transform 650ms cubic-bezier(.2,.8,.2,1)`,
+          transitionDelay: `${out ? i * 18 : 120 + i * 45}ms`,
+        }}
+      >
+        {w}
+      </span>
+    )
+  }
+  const words = (t: string) => t.split(/(?<= )/).map(word)
+  return (
+    <div className="absolute inset-0 flex flex-col items-center justify-center px-24 text-center">
+      {scene.kicker && <div className={`mb-6 text-[24px] font-medium tracking-[-0.01em] ${muted}`}>{words(scene.kicker)}</div>}
+      <div className="max-w-[1300px] text-[84px] font-semibold leading-[1.04] tracking-[-0.04em]">{words(scene.title)}</div>
+      {scene.sub && <div className={`mt-7 text-[28px] tracking-[-0.01em] ${muted}`}>{words(scene.sub)}</div>}
+    </div>
+  )
+}
 
 const cache = new Map<string, Promise<Recording>>()
 const load = (src: string) => {
@@ -262,8 +301,10 @@ export function ShowcaseReel({ scenes: all, captions = true, theme = 'light', pl
             : '#fafafa radial-gradient(#e4e4e7 1.2px, transparent 1.2px) 0 0 / 28px 28px',
         }}
       >
-        <div key={index} className="absolute inset-0" style={{ opacity: shown ? 1 : 0, transform: `translateY(${shown || fill ? 0 : 18}px)`, transition: `opacity ${FADE}ms ease, transform ${FADE}ms cubic-bezier(.2,.8,.2,1)` }}>
-          {layout === 'center' ? (
+        <div key={index} className="absolute inset-0" style={{ opacity: shown || scene.lines ? 1 : 0, transform: `translateY(${shown || fill || scene.lines ? 0 : 18}px)`, transition: `opacity ${FADE}ms ease, transform ${FADE}ms cubic-bezier(.2,.8,.2,1)` }}>
+          {layout === 'center' && scene.lines ? (
+            <Lines scene={scene} shown={shown} muted={muted} />
+          ) : layout === 'center' ? (
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-24">
               {scene.kicker && <div className={`mb-6 text-[24px] font-medium tracking-[-0.01em] ${muted}`}>{scene.kicker}</div>}
               <div className="text-[84px] font-semibold leading-[1.02] tracking-[-0.04em]">{scene.title}</div>
@@ -293,6 +334,10 @@ export function ShowcaseReel({ scenes: all, captions = true, theme = 'light', pl
                     </div>
                   )}
                   <div className={`${layout === 'side' ? 'text-[58px]' : 'text-[54px]'} font-semibold leading-[1.06] tracking-[-0.035em]`}>{scene.title}</div>
+                  {layout === 'side' && scene.quote && (
+                    <blockquote className={`mt-8 font-serif text-[30px] italic leading-[1.3] ${dark ? 'text-white/75' : 'text-zinc-600'}`}>“{scene.quote}”</blockquote>
+                  )}
+                  {layout === 'side' && scene.sub && <div className={`mt-8 text-[22px] tracking-[-0.01em] ${muted}`}>{scene.sub}</div>}
                 </div>
               )}
             </>
