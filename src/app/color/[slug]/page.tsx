@@ -65,7 +65,7 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const chapter = COLOR_CHAPTERS.find((c) => c.slug === params.slug)
-  return chapter ? { title: `${chapter.numeral}. ${chapter.title} | Interaction of Color | Gareth Chainey` } : {}
+  return chapter ? { title: `${chapter.title} | Interaction of Color | Gareth Chainey` } : {}
 }
 
 export default function ColorChapterPage({ params }: { params: { slug: string } }) {
@@ -101,8 +101,7 @@ export default function ColorChapterPage({ params }: { params: { slug: string } 
               ))}
             </ol>
           </nav>
-          <h1 className="mt-4 flex items-baseline gap-4 hyphens-auto break-words text-4xl font-medium text-foreground sm:text-5xl" lang="en">
-            <span className="font-serif font-normal text-muted">{chapter.numeral}</span>
+          <h1 className="mt-4 hyphens-auto break-words text-4xl font-medium text-foreground sm:text-5xl" lang="en">
             {chapter.title}
           </h1>
           <p className="mt-5 max-w-2xl text-xl leading-relaxed text-muted">{chapter.blurb}</p>
