@@ -142,7 +142,7 @@ function ChapterLink({ chapter, label, alignEnd }: { chapter: ColorChapter; labe
     <Link href={`/color/${chapter.slug}`} className={`group rounded border border-border p-5 ${alignEnd ? 'sm:text-right' : ''}`}>
       <span className="text-xs uppercase tracking-widest text-muted">{label}</span>
       <span className="mt-2 block text-foreground group-hover:text-accent">
-        <span className="font-serif text-muted">{chapter.numeral}</span> {chapter.title}
+        {chapter.title}
       </span>
     </Link>
   )
