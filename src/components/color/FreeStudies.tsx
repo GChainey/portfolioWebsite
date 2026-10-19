@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react'
-import { hexToHsv, lightnessOf, rgbToHex } from '@/lib/color'
+import { deltaE, hexToHsv, rgbToHex } from '@/lib/color'
 import { Next, Step } from './parts'
 import { Picker, hsvHex, type HSV } from './Picker'
 
@@ -45,14 +45,26 @@ function stripes(seed: number, count: number, weights: number[]): Stripe[] {
   return out
 }
 
-function Stripes({ list, palette, className = '' }: { list: Stripe[]; palette: string[]; className?: string }) {
+function Stripes({ list, palette, className = '', squint = false, onStripe }: { list: Stripe[]; palette: string[]; className?: string; squint?: boolean; onStripe?: (i: number) => void }) {
   return (
     <div className={`flex h-72 overflow-hidden rounded-sm ring-1 ring-border ${className}`} role="img" aria-label="A study in vertical stripes">
-      {list.map((s, i) => (
-        <div key={i} style={{ flexGrow: s.width, background: palette[s.color] }} />
-      ))}
+      <div className="flex flex-1 transition-[filter]" style={{ filter: squint ? 'blur(10px)' : 'none', transform: squint ? 'scale(1.1)' : 'none' }}>
+        {list.map((s, i) => (
+          <div key={i} data-stripe={s.color} onClick={onStripe && (() => onStripe(i))} className={onStripe ? 'cursor-pointer' : ''} style={{ flexGrow: s.width, background: palette[s.color] }} />
+        ))}
+      </div>
     </div>
   )
+}
+
+// How loud each colour is in the study. A colour pulls the eye by how much room it has and by how far
+// it stands from the others in light, hue and intensity together. A rough guide, not a judge.
+function pullOf(palette: string[], area: number[]) {
+  const apart = palette.map((h, i) => palette.reduce((a, o, j) => (j === i ? a : a + deltaE(h, o)), 0) / (palette.length - 1))
+  const meanApart = apart.reduce((a, b) => a + b, 0) / apart.length || 1
+  const pull = palette.map((_, i) => area[i] * (apart[i] / meanApart))
+  const total = pull.reduce((a, b) => a + b, 0) || 1
+  return pull.map((p) => p / total)
 }
 
 // Share of the area each colour covers
@@ -102,32 +114,63 @@ export function FreeStudies() {
   )
 }
 
+const ORDINAL = ['first', 'second', 'third', 'fourth']
+
 function EqualRights() {
   const [palette, setPalette] = useState(['#c4572e', '#e8c87a', '#3d5a6c', '#9aa38a'])
   const [seed, setSeed] = useState(1)
   const [weights, setWeights] = useState([1, 1, 1, 1])
+  const [edits, setEdits] = useState<Record<number, number>>({})
+  const [brush, setBrush] = useState(0)
+  const [squint, setSquint] = useState(false)
+  const [votes, setVotes] = useState<number[]>([])
   useEffect(() => setSeed(Math.floor(Math.random() * 1e9)), [])
-  const list = useMemo(() => stripes(seed, 46, weights), [seed, weights])
+  const base = useMemo(() => stripes(seed, 46, weights), [seed, weights])
+  const list = base.map((st, i) => (i in edits ? { ...st, color: edits[i] } : st))
   const area = shares(list, 4)
-  // Visual weight: area counts, but so does how far a colour stands out from the others in light
-  const meanL = palette.reduce((a, h) => a + lightnessOf(h), 0) / 4
-  const pull = palette.map((h, i) => area[i] * (0.6 + Math.abs(lightnessOf(h) - meanL) * 3))
-  const pullTotal = pull.reduce((a, b) => a + b, 0)
+  const pull = pullOf(palette, area)
   const loudest = pull.indexOf(Math.max(...pull))
-  const balanced = Math.max(...pull) / pullTotal < 0.34
+  const balanced = Math.max(...pull) < 0.34
+  // Albers asks for constant alternation and recurrence: no colour should sit next to itself
+  const touching = list.filter((st, i) => i > 0 && list[i - 1].color === st.color).length
+  const missing = [0, 1, 2, 3].filter((c) => area[c] === 0)
+  const tally = [0, 1, 2, 3].map((c) => votes.filter((v) => v === c).length)
+  const top = Math.max(...tally)
+  const reshuffle = (change: () => void) => {
+    change()
+    setEdits({})
+  }
 
   return (
     <Step n={1} title="Four colours, equal rights" quote="The aim is to find an order in which, again relatively, all 4 colors are equally important, or, respectively, equally unimportant.">
       <p className="mb-6 max-w-2xl text-muted">
-        Stripes all the same height take shape out of the way, so only colour is left. Shuffle the order, change the four
-        colours, and give each one more or less room, until none of them shouts.
+        Stripes all the same height take shape out of the way, so only colour is left. Change the four colours, give
+        each more or less room, and paint single stripes, until none of them shouts. Albers judged these by eye, and so
+        do you. The screen only helps you look.
       </p>
       <div className="flex flex-wrap items-start gap-8">
         <div className="w-full max-w-md">
-          <Stripes list={list} palette={palette} />
-          <button onClick={() => setSeed(Math.floor(Math.random() * 1e9))} className="mt-4 text-sm text-foreground underline underline-offset-4 hover:text-accent">
-            Shuffle the stripes
-          </button>
+          <Stripes list={list} palette={palette} squint={squint} onStripe={(i) => setEdits((e) => ({ ...e, [i]: brush }))} />
+          <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-muted">
+            Tap a stripe to paint it with
+            {palette.map((hex, i) => (
+              <button
+                key={i}
+                onClick={() => setBrush(i)}
+                aria-label={`Paint with colour ${i + 1}`}
+                className={`h-7 w-7 rounded-sm ring-offset-2 ring-offset-background ${i === brush ? 'ring-2 ring-accent' : 'ring-1 ring-border'}`}
+                style={{ background: hex }}
+              />
+            ))}
+          </div>
+          <div className="mt-4 flex flex-wrap gap-6 text-sm">
+            <button onClick={() => reshuffle(() => setSeed(Math.floor(Math.random() * 1e9)))} className="text-foreground underline underline-offset-4 hover:text-accent">
+              Shuffle the stripes
+            </button>
+            <button onClick={() => setSquint((v) => !v)} aria-pressed={squint} className="text-foreground underline underline-offset-4 hover:text-accent">
+              {squint ? 'Stop squinting' : 'Squint'}
+            </button>
+          </div>
           <div className="mt-6 space-y-3">
             {palette.map((hex, i) => (
               <label key={i} className="flex items-center gap-3 text-xs text-muted">
@@ -138,7 +181,7 @@ function EqualRights() {
                   max={3}
                   step={0.1}
                   value={weights[i]}
-                  onChange={(e) => setWeights((w) => w.map((x, j) => (j === i ? +e.target.value : x)))}
+                  onChange={(e) => reshuffle(() => setWeights((w) => w.map((x, j) => (j === i ? +e.target.value : x))))}
                   aria-label={`Room for colour ${i + 1}`}
                   className="flex-1 accent-accent"
                 />
@@ -149,15 +192,52 @@ function EqualRights() {
         </div>
         <PaletteEditor palette={palette} onChange={setPalette} />
       </div>
-      <p className="mt-8 max-w-2xl text-foreground">
-        {balanced
-          ? 'By area and by light, none of the four is taking over. Do your eyes agree?'
-          : `The ${['first', 'second', 'third', 'fourth'][loudest]} colour carries the most weight, from its area and from how far its light stands apart from the others. Give it less room, or bring its light closer.`}
-      </p>
-      <p className="mt-2 text-sm text-muted">
-        The screen can count area and light. It can&apos;t count taste. Albers says equal is relative to what each of us
-        likes and dislikes.
-      </p>
+      <div className="mt-8 max-w-2xl space-y-2">
+        <p className="text-foreground" data-balanced={balanced} data-loudest={loudest}>
+          {missing.length
+            ? `The ${missing.map((c) => ORDINAL[c]).join(' and ')} colour has no stripes left. All four have to take part.`
+            : balanced
+              ? 'By area, light, hue and intensity together, none of the four is taking over. Squint and see if your eyes agree.'
+              : `The ${ORDINAL[loudest]} colour pulls hardest, from its room and from how far it stands from the other three. Give it less room, or bring it closer to the others.`}
+        </p>
+        {touching > 0 && (
+          <p className="text-sm text-muted">
+            {touching} {touching === 1 ? 'pair' : 'pairs'} of stripes in the same colour touch, and read as one wide stripe.
+            Albers wants the four to keep alternating.
+          </p>
+        )}
+        <p className="text-sm text-muted">
+          The measure is rough. Albers says equal is relative to what each of us likes and dislikes, so it can&apos;t be
+          scored. The test that counts is other people&apos;s eyes.
+        </p>
+      </div>
+      <div className="mt-10 max-w-2xl border-t border-border pt-6">
+        <h3 className="mb-2 text-lg text-foreground">Ask people what they see first</h3>
+        <p className="mb-4 text-sm text-muted">
+          Show the study to someone for a moment and ask which colour they noticed first. Tap their answer. Ask a few
+          people. If most name the same colour, that colour dominates.
+        </p>
+        <div className="flex flex-wrap items-center gap-3">
+          {palette.map((hex, i) => (
+            <button key={i} onClick={() => setVotes((v) => [...v, i])} aria-label={`They saw colour ${i + 1} first`} className="flex items-center gap-2 rounded border border-border px-2 py-1 text-sm text-foreground hover:border-accent">
+              <span className="h-5 w-5 rounded-sm ring-1 ring-border" style={{ background: hex }} />
+              {tally[i]}
+            </button>
+          ))}
+          {votes.length > 0 && (
+            <button onClick={() => setVotes([])} className="text-sm text-muted underline underline-offset-4 hover:text-accent">
+              Clear
+            </button>
+          )}
+        </div>
+        {votes.length >= 3 && (
+          <p className="mt-4 text-foreground">
+            {top / votes.length > 0.5
+              ? `${top} of ${votes.length} people saw the ${ORDINAL[tally.indexOf(top)]} colour first. It dominates. Change it and ask again.`
+              : `No colour won a majority of ${votes.length} people. That is as close to equal rights as a study gets.`}
+          </p>
+        )}
+      </div>
     </Step>
   )
 }
@@ -238,11 +318,61 @@ function Themes() {
           </div>
         ))}
       </div>
-      <p className="mt-8 max-w-2xl text-sm text-muted">
-        Show the two to someone without the words and ask which is which. Albers warns these themes start discussions
-        without end, because everyone reads colour differently.
-      </p>
+      <BlindRead words={THEMES[theme]} lists={lists} palette={palette} />
     </Step>
+  )
+}
+
+// Albers wants a theme to be read from colour alone. So show the two studies to someone else
+// without the words, in a random order, and see if they can tell which is which.
+function BlindRead({ words, lists, palette }: { words: readonly [string, string]; lists: Stripe[][]; palette: string[] }) {
+  const [flip, setFlip] = useState<boolean | null>(null)
+  const [guess, setGuess] = useState<number | null>(null)
+  const [score, setScore] = useState({ right: 0, tries: 0 })
+  const order = flip ? [1, 0] : [0, 1]
+  const start = () => {
+    setFlip(Math.random() < 0.5)
+    setGuess(null)
+  }
+  const answer = (shown: number) => {
+    if (guess !== null) return
+    setGuess(shown)
+    const right = order[shown] === 0
+    setScore((s) => ({ right: s.right + (right ? 1 : 0), tries: s.tries + 1 }))
+  }
+
+  return (
+    <div className="mt-10 max-w-2xl border-t border-border pt-6">
+      <h3 className="mb-2 text-lg text-foreground">Can someone else read it?</h3>
+      <p className="mb-4 text-sm text-muted">
+        Hand the screen to someone. They see your two studies in a random order, without the words, and pick the one
+        that feels &ldquo;{words[0]}&rdquo;. Albers warns these themes start discussions without end, so one person proves
+        little. Ask several.
+      </p>
+      {flip === null ? (
+        <Next onClick={start}>Hide the words</Next>
+      ) : (
+        <>
+          <p className="mb-3 text-foreground">Which one feels &ldquo;{words[0]}&rdquo;?</p>
+          <div className="grid grid-cols-2 gap-4">
+            {order.map((side, shown) => (
+              <button key={shown} onClick={() => answer(shown)} aria-label={`Study ${shown ? 'B' : 'A'}`} className={`rounded-sm text-left ${guess === shown ? 'ring-2 ring-accent ring-offset-2 ring-offset-background' : ''}`}>
+                <Stripes list={lists[side]} palette={palette} className="!h-32" />
+                <span className="mt-1 block text-xs text-muted">{guess === null ? (shown ? 'B' : 'A') : words[side]}</span>
+              </button>
+            ))}
+          </div>
+          {guess !== null && (
+            <div className="flex flex-wrap items-center gap-4">
+              <p className="mt-8 text-foreground">
+                {order[guess] === 0 ? 'They read it.' : 'They read it the other way round.'} {score.right} of {score.tries} so far.
+              </p>
+              <Next onClick={start}>Next person</Next>
+            </div>
+          )}
+        </>
+      )}
+    </div>
   )
 }
 

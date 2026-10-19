@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent } from 'react'
-import { hexToOklab, oklabToHex } from '@/lib/color'
+import { hexToOklab, oklabToHex, oklchToHex } from '@/lib/color'
 import { Segmented, Step } from './parts'
 
 // Chapter XIX. Albers' class turned paintings into colour paper to learn their instrumentation:
@@ -183,6 +183,44 @@ function paintDefault(ctx: CanvasRenderingContext2D, id: DefaultId, w: number, h
 
 const W = 320
 
+// Albers' students cut from a paper collection, not from the painting. The collection is fixed: ten
+// hues at four strengths, and eight greys. You match by eye, and the paper is never exactly the
+// reproduction's colour, which is the point.
+const COLLECTION: string[] = [
+  ...[[0.35, 0.08], [0.55, 0.15], [0.72, 0.13], [0.86, 0.06]].flatMap(([L, C]) => Array.from({ length: 10 }, (_, i) => oklchToHex(L, C, 20 + i * 36))),
+  ...[0.12, 0.25, 0.38, 0.5, 0.62, 0.74, 0.86, 0.97].map((L) => oklchToHex(L, 0.005, 80)),
+]
+
+// The climate of a set of pixels: how light, how much light varies, how intense, how warm.
+// Warmth leans towards red and yellow (positive a and b) or towards blue and green.
+interface Climate {
+  light: number
+  spread: number
+  intensity: number
+  warmth: number
+}
+function climateOf(colors: Lab[]): Climate {
+  const n = colors.length || 1
+  const light = colors.reduce((a, p) => a + p[0], 0) / n
+  const spread = Math.sqrt(colors.reduce((a, p) => a + (p[0] - light) ** 2, 0) / n)
+  const intensity = colors.reduce((a, p) => a + Math.hypot(p[1], p[2]), 0) / n
+  const warmth = colors.reduce((a, p) => a + 0.5 * p[1] + p[2], 0) / n
+  return { light, spread, intensity, warmth }
+}
+const climateOfMosaic = (labels: number[], papers: Lab[]) => climateOf(labels.map((l) => papers[l]))
+
+// How far two climates are apart, scaled so 1 is about the smallest change you would notice in a picture
+const CLIMATE_UNIT = { light: 0.04, spread: 0.03, intensity: 0.02, warmth: 0.02 }
+function climateGap(a: Climate, b: Climate) {
+  return (Object.keys(CLIMATE_UNIT) as (keyof Climate)[]).map((key) => ({ key, gap: (b[key] - a[key]) / CLIMATE_UNIT[key] }))
+}
+const CLIMATE_WORDS: Record<keyof Climate, [string, string]> = {
+  light: ['darker', 'lighter'],
+  spread: ['flatter in light', 'more contrasty'],
+  intensity: ['duller', 'more intense'],
+  warmth: ['cooler', 'warmer'],
+}
+
 function useSource() {
   const [source, setSource] = useState<{ pixels: Lab[]; w: number; h: number; url: string } | null>(null)
   const read = useCallback((draw: (ctx: CanvasRenderingContext2D, w: number, h: number) => void, aspect: number) => {
@@ -231,6 +269,28 @@ function Instrumentation({ papers, area }: { papers: Lab[]; area: number[] }) {
   )
 }
 
+function ClimateReport({ painting, yours, machine }: { painting: Climate; yours: Climate; machine: Climate }) {
+  const gaps = climateGap(painting, yours)
+  const off = gaps.filter((g) => Math.abs(g.gap) >= 1.5).sort((a, b) => Math.abs(b.gap) - Math.abs(a.gap))
+  const total = (gs: { gap: number }[]) => Math.hypot(...gs.map((g) => g.gap))
+  const yoursAway = total(gaps)
+  const machineAway = total(climateGap(painting, machine))
+  return (
+    <div className="pt-4" data-climate-off={off.length}>
+      <p className="text-foreground">
+        {off.length === 0
+          ? 'Your papers keep the painting\'s climate: its light, its contrast, its intensity and its warmth.'
+          : `Your version is ${off.map((g) => CLIMATE_WORDS[g.key][g.gap > 0 ? 1 : 0]).join(', ')} than the painting.`}
+      </p>
+      <p className="mt-2 text-sm text-muted">
+        {yoursAway <= machineAway
+          ? 'That is closer to the painting\'s climate than the machine got.'
+          : 'The machine is closer in climate. It may be missing what you saw, though. Albers asked for the feel, not the numbers.'}
+      </p>
+    </div>
+  )
+}
+
 export function Masters() {
   const { source, read } = useSource()
   const [which, setWhich] = useState<DefaultId | 'yours'>('night')
@@ -259,20 +319,33 @@ export function Masters() {
   }, [source, k])
   const yours = useMemo(() => (source && mine.length > 1 ? { papers: mine, ...paperise(source.pixels, source.w, source.h, mine) } : null), [source, mine])
 
+  const [probe, setProbe] = useState<{ x: number; y: number; color: Lab } | null>(null)
   const pick = (e: MouseEvent<HTMLImageElement>) => {
     if (!source) return
     const r = e.currentTarget.getBoundingClientRect()
     const x = Math.floor(((e.clientX - r.left) / r.width) * source.w)
     const y = Math.floor(((e.clientY - r.top) / r.height) * source.h)
-    // A small patch, the way a scrap of paper averages what's under it
+    // A small patch, the way the eye averages brushwork into one colour
     const patch: Lab[] = []
     for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) {
       const p = source.pixels[Math.min(source.h - 1, Math.max(0, y + dy)) * source.w + Math.min(source.w - 1, Math.max(0, x + dx))]
       patch.push(p)
     }
     const avg = [0, 1, 2].map((i) => patch.reduce((a, p) => a + p[i], 0) / patch.length) as Lab
-    setMine((m) => [...m, avg].slice(0, 10))
+    setProbe({ x: (x / source.w) * 100, y: (y / source.h) * 100, color: avg })
   }
+  const addPaper = (hex: string) => {
+    const lab = hexToOklab(hex) as Lab
+    setMine((m) => (m.some((p) => oklabToHex(...p) === hex) ? m : [...m, lab].slice(0, 10)))
+  }
+  const climates = useMemo(() => {
+    if (!source || !machine) return null
+    return {
+      painting: climateOf(source.pixels),
+      machine: climateOfMosaic(machine.labels, machine.papers),
+      yours: yours ? climateOfMosaic(yours.labels, yours.papers) : null,
+    }
+  }, [source, machine, yours])
 
   return (
     <div className="space-y-20">
@@ -327,16 +400,25 @@ export function Masters() {
         <Step n={3} title="Choose the papers yourself" quote="It is another means of learning to develop a sensitive and critical eye for color relatedness.">
           <p className="mb-6 max-w-2xl text-muted">
             A machine picks the colours that cover the most. A painter might pick a small yellow that carries the whole
-            picture. Tap the painting to choose your own papers, then compare yours with the machine&apos;s.
+            picture. Albers&apos; students worked from a box of papers, not from the painting. Tap the painting to look
+            closely at a spot, then choose the nearest paper from the collection. You will rarely find an exact match.
+            Aim for the climate, not the details.
           </p>
           <div className="grid gap-6 sm:grid-cols-2">
             <figure>
-              <img src={source.url} alt="The painting. Tap to choose a paper." onClick={pick} className="w-full cursor-crosshair rounded-sm ring-1 ring-border" />
+              <div className="relative">
+                <img src={source.url} alt="The painting. Tap to look closely at a spot." onClick={pick} className="w-full cursor-crosshair rounded-sm ring-1 ring-border" />
+                {probe && <span className="pointer-events-none absolute h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2 ring-white" style={{ left: `${probe.x}%`, top: `${probe.y}%` }} />}
+              </div>
               <figcaption className="mt-2 flex flex-wrap items-center gap-2 text-sm text-muted">
-                {mine.length === 0 ? 'Tap to choose papers' : 'Your papers:'}
-                {mine.map((p, i) => (
-                  <button key={i} onClick={() => setMine((m) => m.filter((_, j) => j !== i))} aria-label="Remove this paper" title="Remove" className="h-6 w-6 rounded-sm ring-1 ring-border" style={{ background: oklabToHex(...p) }} />
-                ))}
+                {probe ? (
+                  <>
+                    <span className="h-6 w-10 rounded-sm ring-1 ring-border" style={{ background: oklabToHex(...probe.color) }} />
+                    The painting there
+                  </>
+                ) : (
+                  'Tap the painting to look at a spot'
+                )}
               </figcaption>
             </figure>
             <figure>
@@ -345,15 +427,29 @@ export function Masters() {
               ) : (
                 <div className="flex aspect-[4/3] items-center justify-center rounded-sm text-sm text-muted ring-1 ring-border">Choose two or more papers</div>
               )}
-              <figcaption className="mt-2 text-sm text-muted">In your {mine.length} papers</figcaption>
+              <figcaption className="mt-2 flex flex-wrap items-center gap-2 text-sm text-muted">
+                {mine.length === 0 ? 'Your papers will show here' : `Your ${mine.length} papers:`}
+                {mine.map((p, i) => (
+                  <button key={i} onClick={() => setMine((m) => m.filter((_, j) => j !== i))} aria-label="Remove this paper" title="Remove" className="h-6 w-6 rounded-sm ring-1 ring-border" style={{ background: oklabToHex(...p) }} />
+                ))}
+              </figcaption>
             </figure>
           </div>
-          {yours && (
+          <div className="mt-6 max-w-2xl">
+            <p className="mb-2 text-sm text-muted">The paper collection. Tap a paper to use it. Up to ten.</p>
+            <div className="grid grid-cols-10 gap-1" data-collection={COLLECTION.length}>
+              {COLLECTION.map((hex) => (
+                <button key={hex} onClick={() => addPaper(hex)} aria-label={`Paper ${hex}`} className="aspect-square rounded-sm ring-1 ring-border hover:ring-2 hover:ring-accent" style={{ background: hex }} />
+              ))}
+            </div>
+          </div>
+          {yours && climates?.yours && (
             <div className="mt-8 max-w-2xl space-y-3">
               <p className="text-sm text-foreground">Yours</p>
               <Instrumentation papers={yours.papers} area={yours.area} />
               <p className="pt-2 text-sm text-foreground">The machine&apos;s, with {k} papers</p>
               <Instrumentation papers={machine.papers} area={machine.area} />
+              <ClimateReport painting={climates.painting} yours={climates.yours} machine={climates.machine} />
             </div>
           )}
         </Step>

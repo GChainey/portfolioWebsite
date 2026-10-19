@@ -75,6 +75,7 @@ export function WeberFechner() {
   return (
     <div className="space-y-20">
       <Chevreul />
+      <AlbersRows />
       <TwoRows />
       <YourScale />
     </div>
@@ -114,6 +115,88 @@ function Chevreul() {
   )
 }
 
+// Albers' own exercise: the same thin layer laid 1, 2, 3, 4, 5, 6 times in one row, and 1, 2, 4, 8, 16, 32
+// times in the other. Ink on white keeps a little light from the paper's surface; veils of white on black
+// each cover a share of what is still dark.
+const ROWS = { arithmetic: [1, 2, 3, 4, 5, 6], geometric: [1, 2, 4, 8, 16, 32] }
+function layered(n: number, medium: 'ink' | 'veil') {
+  const y = medium === 'ink' ? 0.03 + 0.97 * 0.92 ** n : 1 - 0.94 ** n
+  const v = 255 * (y <= 0.0031308 ? 12.92 * y : 1.055 * y ** (1 / 2.4) - 0.055)
+  return rgbToHex([v, v, v])
+}
+// The contrast across each boundary, in perceptual lightness
+const edges = (hexes: string[]) => hexes.slice(1).map((h, i) => Math.abs(lightnessOf(h) - lightnessOf(hexes[i])))
+
+function EdgeBars({ values, max }: { values: number[]; max: number }) {
+  return (
+    <div className="flex h-12 items-end gap-1" aria-hidden>
+      {values.map((v, i) => (
+        <div key={i} className="flex-1 rounded-t-sm bg-accent opacity-70" style={{ height: `${Math.max(3, (v / max) * 100)}%` }} />
+      ))}
+    </div>
+  )
+}
+
+function AlbersRows() {
+  const [medium, setMedium] = useState<'ink' | 'veil'>('veil')
+  const [vote, setVote] = useState<'arithmetic' | 'geometric' | null>(null)
+  const rows = {
+    arithmetic: ROWS.arithmetic.map((n) => layered(n, medium)),
+    geometric: ROWS.geometric.map((n) => layered(n, medium)),
+  }
+  const e = { arithmetic: edges(rows.arithmetic), geometric: edges(rows.geometric) }
+  const max = Math.max(...e.arithmetic, ...e.geometric)
+  // How much the last boundary keeps of the first: 1 means it stays as distinct
+  const keep = (v: number[]) => v[v.length - 1] / v[0]
+  const kept = { arithmetic: keep(e.arithmetic), geometric: keep(e.geometric) }
+  const steadier = Math.abs(Math.log(kept.geometric)) < Math.abs(Math.log(kept.arithmetic)) ? 'geometric' : 'arithmetic'
+
+  return (
+    <Step n={2} title="Albers' two rows" quote="In an arithmetical order of contiguous mixtures, the boundaries gradually become softer, whereas in a geometric order the boundaries remain equally distinct.">
+      <p className="mb-6 max-w-2xl text-muted">
+        The exercise Albers sets. The same thin layer, laid 1, 2, 3, 4, 5 and 6 times in one row, and 1, 2, 4, 8, 16 and
+        32 times in the other. Look only at the boundaries between steps. Which row keeps its boundaries equally sharp all
+        the way along?
+      </p>
+      <div className="mb-6">
+        <Segmented value={medium} options={[{ id: 'veil', label: 'White veils on black' }, { id: 'ink', label: 'Thin ink on white' }]} onChange={(m) => { setMedium(m); setVote(null) }} />
+      </div>
+      <div className="max-w-2xl space-y-4" data-medium={medium}>
+        <Scale hexes={rows.arithmetic} labels={ROWS.arithmetic.map(String)} label="Row one" />
+        <Scale hexes={rows.geometric} labels={ROWS.geometric.map(String)} label="Row two" />
+      </div>
+      {!vote ? (
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Next onClick={() => setVote('arithmetic')}>Row one</Next>
+          <Next onClick={() => setVote('geometric')}>Row two</Next>
+        </div>
+      ) : (
+        <div className="mt-8 max-w-2xl border-t border-border pt-6" data-kept-arithmetic={kept.arithmetic.toFixed(2)} data-kept-geometric={kept.geometric.toFixed(2)}>
+          <div className="grid gap-6 sm:grid-cols-2">
+            <div>
+              <p className="mb-2 text-sm text-foreground">Row one, 1 to 6 layers</p>
+              <EdgeBars values={e.arithmetic} max={max} />
+              <p className="mt-2 text-xs text-muted">The last boundary is {Math.round(kept.arithmetic * 100)}% as sharp as the first.</p>
+            </div>
+            <div>
+              <p className="mb-2 text-sm text-foreground">Row two, 1 to 32 layers</p>
+              <EdgeBars values={e.geometric} max={max} />
+              <p className="mt-2 text-xs text-muted">The last boundary is {Math.round(kept.geometric * 100)}% as sharp as the first.</p>
+            </div>
+          </div>
+          <p className="mt-6 text-foreground">
+            {vote === steadier ? 'Your eye and the measurement agree. ' : 'The measurement disagrees with your eye. '}
+            {medium === 'veil'
+              ? 'With veils of white on black, the boundaries in row one soften step by step, and the boundaries in row two stay about as sharp. This is what Albers promised.'
+              : 'With thin ink on white, row one hardly softens over six layers, and row two grows sharper at every step. Doubling the layers overshoots here, so row one is the steadier one. Albers says such studies are only theoretically true, and real materials stray from the rule.'}
+          </p>
+          <p className="mt-2 text-sm text-muted">Bars show how much the light changes across each boundary, measured in perceptual lightness. Both rows use the same scale.</p>
+        </div>
+      )}
+    </Step>
+  )
+}
+
 // Grey levels from near black to white, stepped evenly in physical light or by doubling it
 const LEVELS = 8
 const arithmetic = Array.from({ length: LEVELS }, (_, i) => 0.02 + (0.98 * i) / (LEVELS - 1))
@@ -131,7 +214,7 @@ function TwoRows() {
   const evenRow = order === 'ag' ? 'bottom' : 'top'
 
   return (
-    <Step n={2} title="Which row steps evenly?" quote="The visual perception of an arithmetical progression depends upon a physical geometric progression.">
+    <Step n={3} title="Which row steps evenly?" quote="The visual perception of an arithmetical progression depends upon a physical geometric progression.">
       <p className="mb-6 max-w-2xl text-muted">
         Both rows go from nearly black to white in eight steps. One adds the same amount of light at every step. The
         other doubles the light at every step. Which one looks like a staircase of equal steps?
@@ -199,7 +282,7 @@ function YourScale() {
   }, [baseHex])
 
   return (
-    <Step n={3} title="Make an even scale" quote="We think and “feel” that we read steps of equal height.">
+    <Step n={4} title="Make an even scale" quote="We think and “feel” that we read steps of equal height.">
       <p className="mb-6 max-w-2xl text-muted">
         Move the slider from adding light towards multiplying it, until every step looks the same height. Judge by the
         edges between the stripes. Then check your eye against the measurement.

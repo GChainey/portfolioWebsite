@@ -1,12 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { averageLight, deltaE, lightnessOf } from '@/lib/color'
+import { averageLight, deltaE, hexToOklch, lightnessOf, oklchToHex } from '@/lib/color'
 import { Next, Segmented, Step } from './parts'
 
 // Chapter XVI. One cast of four colours in four performances. Nothing changes but how much of each
 // colour there is and where it sits, and the aim is four plates that look like four different casts.
-// Then Schopenhauer's colour circle, where the amounts are set by light.
+// Two checks a screen can make: does a different colour lead each plate, and can someone else find
+// a plate from another cast hidden among yours? Then Schopenhauer's colour circle, set by light.
 
 const CASTS = [
   { id: 'autumn', label: 'Cast A', colors: ['#d9a441', '#3d5a80', '#ece4d2', '#8c2f39'] },
@@ -29,6 +30,22 @@ const START: Performance[] = [
 ]
 
 const areas = ({ sides: [a, b, c] }: Performance) => [1 - a * a, a * a - b * b, b * b - c * c, c * c]
+
+// The colour with the most area leads the plate
+const leaderOf = (p: Performance) => {
+  const a = areas(p)
+  return p.order[a.indexOf(Math.max(...a))]
+}
+
+// A cast that differs from the real one in one colour, turned a little way round the hue circle.
+// A near relative, not a stranger, so it is only easy to find if the four give their cast away.
+function impostorCast(colors: readonly string[], which: number) {
+  return colors.map((hex, i) => {
+    if (i !== which) return hex
+    const [L, C, h] = hexToOklch(hex)
+    return oklchToHex(L, Math.max(C, 0.06), (h + 40) % 360)
+  })
+}
 
 // What the whole plate mixes to from across the room
 function mixOf(p: Performance, colors: readonly string[]) {
@@ -111,6 +128,8 @@ function FourPerformances() {
   }
 
   const mixes = plays.map((q) => mixOf(q, colors))
+  const leaders = plays.map(leaderOf)
+  const distinctLeaders = new Set(leaders).size
   let closest = Infinity
   let pair = [0, 1]
   mixes.forEach((a, i) => mixes.forEach((b, j) => {
@@ -140,16 +159,17 @@ function FourPerformances() {
         </div>
       </div>
 
-      <div className="grid max-w-3xl grid-cols-2 gap-4 sm:grid-cols-4">
+      {/* Albers' "stage": the same neutral frame for every performance, so the page around them stays out of it */}
+      <div className="grid max-w-3xl grid-cols-2 gap-4 rounded-sm p-4 sm:grid-cols-4" style={{ background: STAGE }}>
         {plays.map((q, i) => (
           <button
             key={i}
             onClick={() => setCurrent(i)}
             aria-pressed={i === current}
-            className={`rounded-sm p-1 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-accent ${i === current ? 'ring-2 ring-accent' : ''}`}
+            className={`rounded-sm p-1 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-white ${i === current ? 'ring-2 ring-white' : ''}`}
           >
             <Plate p={q} colors={colors} label={`Performance ${i + 1}`} />
-            <span className="mt-2 block text-left text-xs text-muted">Performance {i + 1}</span>
+            <span className="mt-2 block text-left text-xs text-white/80">Performance {i + 1}</span>
           </button>
         ))}
       </div>
@@ -206,9 +226,81 @@ function FourPerformances() {
                 ? `A good spread. Performances ${pair[0] + 1} and ${pair[1] + 1} are the closest pair.`
                 : 'Four different climates from the same four colours.'}
           </p>
+          <div className="mt-6 flex flex-wrap items-center gap-3 text-sm text-muted">
+            <span>Leading each plate:</span>
+            {leaders.map((ci, i) => (
+              <span key={i} className="flex items-center gap-1.5">
+                {i + 1}
+                <span className="h-5 w-5 rounded-sm ring-1 ring-border" style={{ background: colors[ci] }} />
+              </span>
+            ))}
+          </div>
+          <p className="mt-2 text-foreground">
+            {distinctLeaders === 4
+              ? 'Each actor leads once. The dominance shifts every time, which is how Albers says the cast gets hidden.'
+              : `Only ${distinctLeaders} of the four colours ever lead. Give ${distinctLeaders === 1 ? 'another colour' : 'the colours that never lead'} the largest area in one performance.`}
+          </p>
+          <ImpostorTest plays={plays} colors={colors} />
         </div>
       )}
     </Step>
+  )
+}
+
+const STAGE = '#777777'
+
+// The real test is someone else's eye. Hide one plate from a different cast among the four and ask
+// them to find it. If the four performances look like four casts, the stranger has nowhere to stand out.
+function ImpostorTest({ plays, colors }: { plays: Performance[]; colors: readonly string[] }) {
+  const [round, setRound] = useState<{ plates: { p: Performance; colors: readonly string[]; odd: boolean }[] } | null>(null)
+  const [guess, setGuess] = useState<number | null>(null)
+
+  const start = () => {
+    const which = Math.floor(Math.random() * 4)
+    const odd = { p: shuffled(), colors: impostorCast(colors, which), odd: true }
+    const plates = [...plays.map((p) => ({ p, colors, odd: false })), odd].sort(() => Math.random() - 0.5)
+    setRound({ plates })
+    setGuess(null)
+  }
+
+  return (
+    <div className="mt-10 border-t border-border pt-6">
+      <h3 className="mb-2 text-lg text-foreground">Test it on someone</h3>
+      <p className="mb-4 max-w-2xl text-sm text-muted">
+        Hand the screen to someone who hasn&apos;t seen your cast. Five plates appear: your four, and one made from
+        a different set of colours. Ask them to find the stranger. The harder it is, the better your performances hide
+        their cast.
+      </p>
+      {!round ? (
+        <Next onClick={start}>Show five plates</Next>
+      ) : (
+        <>
+          <div className="grid max-w-3xl grid-cols-3 gap-3 rounded-sm p-4 sm:grid-cols-5" style={{ background: STAGE }}>
+            {round.plates.map((pl, i) => (
+              <button
+                key={i}
+                onClick={() => guess === null && setGuess(i)}
+                aria-label={`Plate ${i + 1}`}
+                data-odd={pl.odd}
+                className={`rounded-sm p-1 outline-none focus-visible:ring-2 focus-visible:ring-white ${
+                  guess !== null && pl.odd ? 'ring-2 ring-white' : guess === i ? 'ring-2 ring-black' : ''
+                }`}
+              >
+                <Plate p={pl.p} colors={pl.colors} label={`Plate ${i + 1}`} />
+              </button>
+            ))}
+          </div>
+          <p className="mt-4 text-foreground">
+            {guess === null
+              ? 'Which plate uses a different set of colours?'
+              : round.plates[guess].odd
+                ? 'Found it. Your four still give the cast away. Push one colour much further in one performance and try again.'
+                : `Not that one. The stranger is plate ${round.plates.findIndex((pl) => pl.odd) + 1}, outlined in white. Your four are different enough to hide it.`}
+          </p>
+          {guess !== null && <Next onClick={start}>Another round</Next>}
+        </>
+      )}
+    </div>
   )
 }
 

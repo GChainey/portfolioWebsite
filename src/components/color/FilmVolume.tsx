@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { hexToRgb, mixOklab, rgbToHex } from '@/lib/color'
-import { Step } from './parts'
+import { Next, Segmented, Step } from './parts'
 
 // Chapter XVII. Two colours that come from nature rather than from the eye: film colour, a thin
 // veil between us and things, and volume colour, which deepens with the depth of a clear liquid.
@@ -38,6 +38,7 @@ export function FilmVolume() {
       <Coffee />
       <Pool />
       <TracingPaper />
+      <WhichKind />
     </div>
   )
 }
@@ -94,41 +95,62 @@ function Film() {
 }
 
 const COFFEE = [0.86, 0.68, 0.5]
+const TEA = [0.9, 0.62, 0.3]
+const MILK = '#f3efe4'
+type Liquid = 'coffee' | 'tea' | 'milk'
+const LIQUIDS: { id: Liquid; label: string }[] = [
+  { id: 'coffee', label: 'Coffee' },
+  { id: 'tea', label: 'Tea' },
+  { id: 'milk', label: 'Milk' },
+]
 const VESSELS = [
   { name: 'The percolator stem', depth: 1.2, w: 'w-6' },
   { name: 'The cup', depth: 4, w: 'w-24' },
   { name: 'The glass jug', depth: 11, w: 'w-40' },
 ]
 
+// A clear liquid darkens with depth. Milk is cloudy: it sends light back from just under its top,
+// so what you see is a surface colour, the same in any container.
+function pour(liquid: Liquid, depth: number) {
+  if (liquid === 'milk') return MILK
+  return throughLiquid('#fbfaf6', liquid === 'tea' ? TEA : COFFEE, depth)
+}
+
 function Coffee() {
+  const [liquid, setLiquid] = useState<Liquid>('coffee')
   const [strength, setStrength] = useState(1)
   const [depth, setDepth] = useState(6)
+  const shown = VESSELS.map((v) => pour(liquid, v.depth * strength))
 
   return (
     <Step n={2} title="Volume colour" quote="Though all 3 containers hold the same coffee, the containers show this coffee in 3 different browns: lightest in the stem, darker in the cup, darkest in the silex glass.">
       <p className="mb-6 max-w-2xl text-muted">
-        The same coffee in three containers, seen against white. Only the depth of liquid changes. Then pour your own
-        glass.
+        The same liquid in three containers, seen against white. Only the depth of liquid changes. Then pour your own
+        glass, and try a cloudy liquid as well as clear ones.
       </p>
-      <div className="flex flex-wrap items-end gap-6">
-        {VESSELS.map((v) => (
+      <div className="mb-6">
+        <Segmented value={liquid} options={LIQUIDS} onChange={setLiquid} />
+      </div>
+      <div className="flex flex-wrap items-end gap-6" data-liquid={liquid}>
+        {VESSELS.map((v, i) => (
           <figure key={v.name}>
-            <div className={`h-36 ${v.w} rounded-b-md ring-1 ring-border`} style={{ background: throughLiquid('#fbfaf6', COFFEE, v.depth * strength) }} />
+            <div data-vessel={i} data-color={shown[i]} className={`h-36 ${v.w} rounded-b-md ring-1 ring-border`} style={{ background: shown[i] }} />
             <figcaption className="mt-2 w-28 text-xs text-muted">{v.name}</figcaption>
           </figure>
         ))}
         <figure>
-          <div className="h-36 w-28 rounded-b-md ring-1 ring-border" style={{ background: throughLiquid('#fbfaf6', COFFEE, depth * strength) }} />
+          <div className="h-36 w-28 rounded-b-md ring-1 ring-border" style={{ background: pour(liquid, depth * strength) }} />
           <figcaption className="mt-2 w-28 text-xs text-muted">Yours</figcaption>
         </figure>
       </div>
       <div className="mt-6 grid max-w-xl gap-4 sm:grid-cols-2">
         <Slider label="Depth of your glass" value={depth} min={0.5} max={20} step={0.1} onChange={setDepth} />
-        <Slider label="How strong the coffee is" value={strength} min={0.3} max={2} onChange={setStrength} />
+        <Slider label={liquid === 'milk' ? 'How rich the milk is' : 'How strong it is'} value={strength} min={0.3} max={2} onChange={setStrength} />
       </div>
       <p className="mt-6 max-w-2xl text-sm text-muted">
-        Milk would look the same white in every container. Only clear liquids show volume colour, because light has to
-        pass through them to reach you.
+        {liquid === 'milk'
+          ? 'Milk is the same white in every container and at every depth. It is cloudy, so light comes back from just under the top and never travels through it. That is surface colour, not volume colour.'
+          : 'Deeper means darker and stronger in hue. Light has to pass through the liquid to reach you, and every bit of depth takes some away. That is volume colour.'}
       </p>
     </Step>
   )
@@ -211,6 +233,87 @@ function TracingPaper() {
       </div>
       <div className="mt-6">
         <Slider label={`${count} sheets`} value={count} min={1} max={10} step={1} onChange={setCount} />
+      </div>
+    </Step>
+  )
+}
+
+
+// Albers names his own examples. A student who has understood the chapter can sort them.
+type Kind = 'surface' | 'film' | 'volume'
+const KINDS: { id: Kind; label: string }[] = [
+  { id: 'surface', label: 'Surface' },
+  { id: 'film', label: 'Film' },
+  { id: 'volume', label: 'Volume' },
+]
+const CASES: { thing: string; kind: Kind; why: string }[] = [
+  { thing: 'A red apple on the table', kind: 'surface', why: 'Light bounces off its skin. Its colour stays put however far you stand.' },
+  { thing: 'Hills on the horizon on a hazy day', kind: 'film', why: 'Air sits between you and them as a thin blue veil, thicker the further they are.' },
+  { thing: 'Coffee in a tall glass jug', kind: 'volume', why: 'A clear liquid. The deeper it is, the darker it reads.' },
+  { thing: 'Three coats of gouache, one on top of another', kind: 'surface', why: 'Albers: gouache, oil and pastel hardly change when layered. They are opaque.' },
+  { thing: 'A white ceiling tinted green by a lawn outside the window', kind: 'film', why: 'Light from the lawn lays a veil over the ceiling. The paint has not changed.' },
+  { thing: 'The water over the bottom step of a pool', kind: 'volume', why: 'Each step down adds depth of clear water, so more blue.' },
+  { thing: 'A glass of milk', kind: 'surface', why: 'Cloudy, so light comes back from its top. Albers: it stays the same white in any container.' },
+  { thing: 'Three washes of watercolour, one on top of another', kind: 'volume', why: 'Watercolour is clear. Each layer adds depth, so the colour gets darker and heavier.' },
+  { thing: 'The sun, white at noon and full red at sunset', kind: 'film', why: 'More air lies in front of it at sunset. The sun has not changed.' },
+]
+
+function WhichKind() {
+  const [answers, setAnswers] = useState<(Kind | null)[]>(() => CASES.map(() => null))
+  const [checked, setChecked] = useState(false)
+  const score = answers.filter((a, i) => a === CASES[i].kind).length
+
+  return (
+    <Step n={5} title="Which kind is it?" quote="This demonstrates that only transparent fluids present volume color.">
+      <p className="mb-6 max-w-2xl text-muted">
+        Albers separates three ways a colour can reach you. Sort each of these. Ask yourself whether the colour belongs to
+        a surface, to a veil in front of something, or to the depth of something clear.
+      </p>
+      <ol className="max-w-2xl space-y-4">
+        {CASES.map((c, i) => {
+          const right = answers[i] === c.kind
+          return (
+            <li key={c.thing} data-case={i} className="border-t border-border pt-4">
+              <p className="mb-2 text-foreground">{c.thing}</p>
+              <Segmented
+                value={answers[i] ?? ('' as Kind)}
+                options={KINDS}
+                onChange={(v) => {
+                  if (checked) return
+                  setAnswers((a) => a.map((x, j) => (j === i ? v : x)))
+                }}
+              />
+              {checked && (
+                <p className={`mt-2 text-sm ${right ? 'text-foreground' : 'text-muted'}`}>
+                  {right ? 'Yes. ' : `It is ${c.kind} colour. `}
+                  {c.why}
+                </p>
+              )}
+            </li>
+          )
+        })}
+      </ol>
+      <div className="mt-6 flex flex-wrap items-center gap-4">
+        {!checked ? (
+          <Next onClick={() => setChecked(true)} disabled={answers.some((a) => a === null)}>
+            Check
+          </Next>
+        ) : (
+          <>
+            <p data-score={score} className="text-foreground">
+              {score} of {CASES.length}.{' '}
+              {score === CASES.length ? 'You can tell all three apart.' : 'Read the ones you missed, then try again.'}
+            </p>
+            <Next
+              onClick={() => {
+                setAnswers(CASES.map(() => null))
+                setChecked(false)
+              }}
+            >
+              Try again
+            </Next>
+          </>
+        )}
       </div>
     </Step>
   )
