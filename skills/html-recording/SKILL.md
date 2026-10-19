@@ -152,3 +152,5 @@ Assets become data URIs. Several recordings can go in one file.
   afterwards with `node "$SKILL_DIR/tools/localise.mjs" --origin https://… recordings/*.json`.
 - It's a recording of the UI as it was: re-record after the UI changes.
 - It plays in a browser only. For social media you still need a video.
+
+MIT licensed (`LICENSE`). The bundled `rrweb-replay.min.js` is rrweb's, also MIT (`tools/player/NOTICE`).

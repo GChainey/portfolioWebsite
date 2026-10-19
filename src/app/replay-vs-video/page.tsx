@@ -70,7 +70,7 @@ export default function ReplayVsVideoPage() {
             className="inline-flex items-center gap-2 rounded-full bg-[var(--accent-cta)] px-5 py-2.5 text-sm font-medium text-white transition-all hover:brightness-110"
           >
             <Download className="h-4 w-4" />
-            Download the skill (.zip, 87 KB)
+            Download the skill (.zip, 88 KB)
           </a>
           <div className="mt-8 space-y-3 text-sm text-muted">
             <p>
@@ -85,7 +85,7 @@ export default function ReplayVsVideoPage() {
               It needs Node 20 or later, and downloads a headless Chromium (about 100 MB) the first time.{' '}
               <a href="https://github.com/GChainey/portfolioWebsite/tree/main/skills/html-recording" className="text-foreground underline underline-offset-4 hover:text-accent">
                 Source on GitHub
-              </a>
+              </a> (MIT licensed)
             </p>
           </div>
         </section>

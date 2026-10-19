@@ -14,6 +14,15 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.53.1',
+    date: '2026-10-18',
+    title: 'HTML Recording Skill: MIT Licence',
+    description: 'The downloadable html-recording skill is MIT licensed, so people can reuse and adapt it.',
+    changes: ['LICENSE in skills/html-recording and in the zip', '"MIT licensed" next to the source link on /replay-vs-video'],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/html-recording-license',
+  },
+  {
     version: '1.53.0',
     date: '2026-10-18',
     title: 'Record Your Own: the HTML Recording Skill',
