@@ -72,6 +72,32 @@ export function oklchToHex(L: number, C: number, h: number): string {
   return rgbToHex(oklabToRgb(L, 0, 0) ?? [0, 0, 0])
 }
 
+export function hexToOklch(hex: string): { L: number; C: number; h: number } {
+  const [L, a, b] = hexToOklab(hex)
+  return { L, C: Math.hypot(a, b), h: ((Math.atan2(b, a) * 180) / Math.PI + 360) % 360 }
+}
+
+// OKLab L, 0 black to 1 white: how light a colour looks, whatever its hue
+export const lightnessOf = (hex: string) => hexToOklab(hex)[0]
+
+// CIE L*, 0 to 100: the older standard for the same thing
+export function cieLightness(hex: string): number {
+  const [r, g, b] = hexToRgb(hex).map(toLinear)
+  const y = 0.2126 * r + 0.7152 * g + 0.0722 * b
+  return y > 216 / 24389 ? 116 * Math.cbrt(y) - 16 : (24389 / 27) * y
+}
+
+// The grey a colour would be with its hue taken out and its lightness kept
+export const greyOf = (hex: string) => oklchToHex(lightnessOf(hex), 0, 0)
+
+// What a quick "desaturate" filter makes of a colour: the average of R, G and B. It treats
+// blue as bright as green, which the eye doesn't.
+export function averageGrey(hex: string): string {
+  const [r, g, b] = hexToRgb(hex)
+  const v = (r + g + b) / 3
+  return rgbToHex([v, v, v])
+}
+
 // 0 is identical. Around 2 is the smallest difference most people can see side by side.
 export function deltaE(a: string, b: string): number {
   const [l1, a1, b1] = hexToOklab(a)

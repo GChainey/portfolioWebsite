@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Header } from '@/components/Header'
+import { Lightness } from '@/components/color/Lightness'
 import { Recollection } from '@/components/color/Recollection'
 import { Relativity } from '@/components/color/Relativity'
 import { COLOR_CHAPTERS, COLOR_LIVE, type ColorChapter } from '@/content/color'
@@ -11,6 +12,7 @@ import { COLOR_CHAPTERS, COLOR_LIVE, type ColorChapter } from '@/content/color'
 const EXERCISES: Record<string, () => JSX.Element> = {
   recollection: Recollection,
   relativity: Relativity,
+  lightness: Lightness,
 }
 
 export function generateStaticParams() {
