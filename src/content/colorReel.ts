@@ -1,6 +1,6 @@
 import type { ShowcaseScene as ReelScene } from '@/components/showcase/ShowcaseReel'
 
-// The Interaction of Color series as a reel, in three cuts: every study, a few seconds each,
+// The Interaction of Color series as a reel, in three cuts: a few studies, a few seconds each,
 // with what you do in it and what it teaches. Each scene is an HTML recording of the real page
 // (public/replays/color, recorded by .context/color-clips.mjs), cropped to the exercise.
 //
@@ -48,36 +48,44 @@ const CLIPS: Clip[] = [
   { slug: 'teaching', to: 8.9, h: 406, name: 'Teaching colour', title: 'What is there isn’t what we see', sub: 'Flip each illusion between factual and actual', quote: 'When we see opaque color as transparent … these effects we call actual facts.' },
 ]
 
+// The reel plays a few studies and links to them; the rest are on /color
+const PICKS = ['relativity', 'after-image', 'transparence', 'optical-mixture', 'bezold', 'vanishing']
+const FEATURED = CLIPS.map((c, i) => ({ ...c, n: i })).filter((c) => PICKS.includes(c.slug))
+export const COLOR_REEL_STUDIES = FEATURED.map(({ slug, n, name, title }) => ({ slug, study: study(n), name, title }))
+
+const intro = card('Interaction of Color', 3, 'Josef Albers, rebuilt for the screen', `${FEATURED.length} of the 25 studies`)
+const outro = card('Colour is the most relative medium in art.', 3.5, 'Josef Albers', 'Try all 25 studies at garethchainey.com/color')
+
 // Three cuts of the same 25 studies, to compare
 export const COLOR_REEL_STYLES = {
   // The words rise in, lift away, then the study plays on its own
   text: {
     label: 'Text first',
     scenes: [
-      { ...card('Interaction of Color', 3, 'Josef Albers, rebuilt for the screen', '25 studies, one at a time'), lines: true },
-      ...CLIPS.flatMap((c, i): ReelScene[] => [
-        { layout: 'center', lines: true, kicker: `${study(i)}\u2003${c.name}`, title: c.title, sub: c.sub, hold: 2.2 },
+      { ...intro, lines: true },
+      ...FEATURED.flatMap((c): ReelScene[] => [
+        { layout: 'center', lines: true, kicker: `${study(c.n)}\u2003${c.name}`, title: c.title, sub: c.sub, hold: 2.2 },
         { ...clip(c, 'bare'), title: c.title },
       ]),
-      { ...card('Colour is the most relative medium in art.', 3.5, 'Josef Albers', 'Try every study at garethchainey.com/color'), lines: true },
+      { ...outro, lines: true },
     ],
   },
   // The lesson as a title above the study, both on screen together
   title: {
     label: 'Title and study',
     scenes: [
-      card('Interaction of Color', 3, 'Josef Albers, rebuilt for the screen', '25 studies, one at a time'),
-      ...CLIPS.map((c, i): ReelScene => ({ ...clip(c, 'stack'), kicker: `${study(i)}\u2003${c.name}`, title: c.title })),
-      card('Colour is the most relative medium in art.', 3.5, 'Josef Albers', 'Try every study at garethchainey.com/color'),
+      intro,
+      ...FEATURED.map((c): ReelScene => ({ ...clip(c, 'stack'), kicker: `${study(c.n)}\u2003${c.name}`, title: c.title })),
+      outro,
     ],
   },
   // Albers' own sentence beside the study it became
   words: {
     label: 'In his words',
     scenes: [
-      card('Interaction of Color', 3, 'Josef Albers, rebuilt for the screen', '25 studies, one at a time'),
-      ...CLIPS.map((c, i): ReelScene => ({ ...clip(c, 'side'), kicker: study(i), title: c.name, quote: c.quote })),
-      card('Colour is the most relative medium in art.', 3.5, 'Josef Albers', 'Try every study at garethchainey.com/color'),
+      intro,
+      ...FEATURED.map((c): ReelScene => ({ ...clip(c, 'side'), kicker: study(c.n), title: c.name, quote: c.quote })),
+      outro,
     ],
   },
 } satisfies Record<string, { label: string; scenes: ReelScene[] }>

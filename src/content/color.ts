@@ -12,7 +12,7 @@ export interface ColorChapter {
   title: string
   // One line on what the exercise lets you try
   blurb: string
-  // What reading it and building it taught me
+  // What reading it and building it taught me. Not shown on the pages for now
   learned: string[]
 }
 

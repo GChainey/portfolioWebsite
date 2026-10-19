@@ -23,7 +23,7 @@ export default function ColorPage() {
 
         <Link href="/color/reel" className="group mb-8 inline-flex items-center gap-2 text-sm text-muted hover:text-foreground">
           <span aria-hidden>▶</span>
-          <span className="group-hover:text-accent">Watch all 25 studies as a reel</span>
+          <span className="group-hover:text-accent">Watch a few of them in a short reel</span>
         </Link>
 
         <ol className="border-t border-border">

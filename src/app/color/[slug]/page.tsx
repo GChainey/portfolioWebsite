@@ -109,17 +109,9 @@ export default function ColorChapterPage({ params }: { params: { slug: string } 
 
         <Exercise />
 
-        <section className="mt-20 border-t border-border pt-10">
-          <h2 className="mb-4 text-3xl font-medium text-foreground">What I learned</h2>
-          <ul className="max-w-2xl list-disc space-y-2 pl-5 text-muted">
-            {chapter.learned.map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-          </ul>
-          <p className="mt-8 text-sm text-muted">
-            From chapter {chapter.numeral} of Josef Albers, <em>Interaction of Color</em> (1963).
-          </p>
-        </section>
+        <p className="mt-20 border-t border-border pt-10 text-sm text-muted">
+          From chapter {chapter.numeral} of Josef Albers, <em>Interaction of Color</em> (1963).
+        </p>
 
         <nav aria-label="More chapters" className="mt-16 grid gap-4 border-t border-border pt-10 sm:grid-cols-2">
           {prev ? <ChapterLink chapter={prev} label="Previous chapter" /> : <span />}

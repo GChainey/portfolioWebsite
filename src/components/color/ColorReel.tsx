@@ -1,11 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { RotateCcw } from 'lucide-react'
+import Link from 'next/link'
+import { ArrowRight, RotateCcw } from 'lucide-react'
 import { ShowcaseReel, reelDuration } from '@/components/showcase/ShowcaseReel'
-import { COLOR_REEL_STYLES, type ColorReelStyle } from '@/content/colorReel'
+import { COLOR_REEL_STUDIES, COLOR_REEL_STYLES, type ColorReelStyle } from '@/content/colorReel'
 
-// The whole series as a reel, in three cuts and dark or light. It plays once; the button runs it again.
+// A few of the studies as a reel, in three cuts and dark or light, with links to each. It plays once; the button runs it again.
 const THEMES = ['dark', 'light'] as const
 type Theme = (typeof THEMES)[number]
 const STYLES = Object.keys(COLOR_REEL_STYLES) as ColorReelStyle[]
@@ -18,7 +19,7 @@ function Toggle<T extends string>({ options, value, onChange, label }: { options
           key={o}
           onClick={() => onChange(o)}
           aria-pressed={value === o}
-          className={`rounded-full px-4 py-1.5 text-sm transition-colors ${value === o ? 'bg-foreground font-medium text-background' : 'text-muted hover:text-foreground'}`}
+          className={`whitespace-nowrap rounded-full px-4 py-1.5 text-sm transition-colors ${value === o ? 'bg-foreground font-medium text-background' : 'text-muted hover:text-foreground'}`}
         >
           {label(o)}
         </button>
@@ -49,7 +50,7 @@ export function ColorReel() {
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border px-8 py-6">
         <div>
           <p className="mb-1 text-xs uppercase tracking-widest text-muted">Sizzle reel</p>
-          <h1 className="text-2xl font-medium text-foreground">Interaction of Color, all 25 studies</h1>
+          <h1 className="text-2xl font-medium text-foreground">Interaction of Color, {COLOR_REEL_STUDIES.length} of the 25 studies</h1>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <Toggle options={STYLES} value={style} onChange={(s) => { setStyle(s); play() }} label={(s) => COLOR_REEL_STYLES[s].label} />
@@ -66,8 +67,23 @@ export function ColorReel() {
         <ShowcaseReel key={`${style}-${theme}-${run}`} scenes={scenes} theme={theme} pageTheme={theme} dots={false} loop={false} onCycle={() => setDone(true)} />
       </div>
       <p className="border-b border-border px-8 py-4 text-xs text-muted">
-        {Math.floor(seconds / 60)} minutes {seconds % 60} seconds. Every scene is the real study replayed in the page, not a video.
+        {Math.floor(seconds / 60) ? `${Math.floor(seconds / 60)} minute${seconds >= 120 ? 's' : ''} ` : ''}{seconds % 60} seconds. Every scene is the real study replayed in the page, not a video.
       </p>
+      <ul className="grid border-b border-border sm:grid-cols-2 lg:grid-cols-3">
+        {COLOR_REEL_STUDIES.map((s) => (
+          <li key={s.slug} className="border-b border-border sm:border-r [&:nth-child(2n)]:sm:border-r-0 lg:[&:nth-child(2n)]:border-r lg:[&:nth-child(3n)]:border-r-0">
+            <Link href={`/color/${s.slug}`} className="group block px-8 py-6">
+              <span className="text-xs uppercase tracking-widest text-muted">{s.study}</span>
+              <span className="mt-2 block text-lg text-foreground group-hover:text-accent">{s.name}</span>
+              <span className="mt-1 block text-sm text-muted">{s.title}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <Link href="/color" className="group flex items-center justify-between border-b border-border px-8 py-6 text-foreground">
+        <span className="group-hover:text-accent">All 25 studies</span>
+        <ArrowRight className="h-4 w-4 text-muted transition-transform group-hover:translate-x-1 group-hover:text-accent" />
+      </Link>
     </div>
   )
 }
