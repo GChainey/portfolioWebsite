@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { deltaE, hexToHsv, hexToOklab } from '@/lib/color'
-import { Next, Step } from './parts'
+import { Next, Segmented, Step } from './parts'
 import { Picker, hsvHex, type HSV } from './Picker'
 import { Plate, Tiles, type Study } from './Plate'
 
@@ -23,24 +23,6 @@ export function Relativity() {
       <TwoFaces />
       <Match />
       <YourStudy />
-    </div>
-  )
-}
-
-function Segmented<T extends string>({ value, options, onChange }: { value: T; options: { id: T; label: string }[]; onChange: (v: T) => void }) {
-  return (
-    <div className="inline-flex flex-wrap gap-2">
-      {options.map((o) => (
-        <button
-          key={o.id}
-          onClick={() => onChange(o.id)}
-          className={`rounded border px-3 py-1.5 text-sm transition-colors ${
-            o.id === value ? 'border-accent text-accent' : 'border-border text-muted hover:text-foreground'
-          }`}
-        >
-          {o.label}
-        </button>
-      ))}
     </div>
   )
 }

@@ -4,6 +4,29 @@ import { notFound } from 'next/navigation'
 import { Header } from '@/components/Header'
 import { Recollection } from '@/components/color/Recollection'
 import { Relativity } from '@/components/color/Relativity'
+import { Contexture } from '@/components/color/Contexture'
+import { Paper } from '@/components/color/Paper'
+import { Lightness } from '@/components/color/Lightness'
+import { ReversedGrounds } from '@/components/color/ReversedGrounds'
+import { Subtraction } from '@/components/color/Subtraction'
+import { AfterImage } from '@/components/color/AfterImage'
+import { Transparence } from '@/components/color/Transparence'
+import { FactualMixtures } from '@/components/color/FactualMixtures'
+import { SpaceIllusion } from '@/components/color/SpaceIllusion'
+import { OpticalMixture } from '@/components/color/OpticalMixture'
+import { Bezold } from '@/components/color/Bezold'
+import { Intervals } from '@/components/color/Intervals'
+import { Intersecting } from '@/components/color/Intersecting'
+import { Quantity } from '@/components/color/Quantity'
+import { FilmVolume } from '@/components/color/FilmVolume'
+import { FreeStudies } from '@/components/color/FreeStudies'
+import { Masters } from '@/components/color/Masters'
+import { WeberFechner } from '@/components/color/WeberFechner'
+import { Temperature } from '@/components/color/Temperature'
+import { Vibrating } from '@/components/color/Vibrating'
+import { Vanishing } from '@/components/color/Vanishing'
+import { Systems } from '@/components/color/Systems'
+import { Teaching } from '@/components/color/Teaching'
 import { COLOR_CHAPTERS, COLOR_LIVE, type ColorChapter } from '@/content/color'
 
 // One page per chapter of Interaction of Color: the exercise, then what it taught me.
@@ -11,6 +34,29 @@ import { COLOR_CHAPTERS, COLOR_LIVE, type ColorChapter } from '@/content/color'
 const EXERCISES: Record<string, () => JSX.Element> = {
   recollection: Recollection,
   relativity: Relativity,
+  'contexture': Contexture,
+  'paper': Paper,
+  'lightness': Lightness,
+  'reversed-grounds': ReversedGrounds,
+  'subtraction': Subtraction,
+  'after-image': AfterImage,
+  'transparence': Transparence,
+  'factual-mixtures': FactualMixtures,
+  'space': SpaceIllusion,
+  'optical-mixture': OpticalMixture,
+  'bezold': Bezold,
+  'intervals': Intervals,
+  'intersecting': Intersecting,
+  'quantity': Quantity,
+  'film-volume': FilmVolume,
+  'free-studies': FreeStudies,
+  'masters': Masters,
+  'weber-fechner': WeberFechner,
+  'temperature': Temperature,
+  'vibrating': Vibrating,
+  'vanishing': Vanishing,
+  'systems': Systems,
+  'teaching': Teaching,
 }
 
 export function generateStaticParams() {
@@ -40,7 +86,7 @@ export default function ColorChapterPage({ params }: { params: { slug: string } 
               Interaction of Color
             </Link>
             <span aria-hidden>·</span>
-            <ol className="flex gap-3 font-serif text-sm normal-case tracking-normal">
+            <ol className="flex flex-wrap gap-x-3 gap-y-1 font-serif text-sm normal-case tracking-normal">
               {COLOR_CHAPTERS.map((c) => (
                 <li key={c.slug}>
                   <Link

@@ -115,3 +115,44 @@ export function nameOf(hex: string): string {
 
 // Text that stays readable on top of a swatch
 export const inkOn = (hex: string) => (hexToOklab(hex)[0] > 0.68 ? '#111' : '#fff')
+
+// Perceptual lightness, 0 black to 1 white
+export const lightnessOf = (hex: string) => hexToOklab(hex)[0]
+
+// Lightness, chroma and hue in degrees
+export function hexToOklch(hex: string): [number, number, number] {
+  const [L, a, b] = hexToOklab(hex)
+  return [L, Math.hypot(a, b), ((Math.atan2(b, a) * 180) / Math.PI + 360) % 360]
+}
+
+export function oklabToHex(L: number, a: number, b: number): string {
+  return rgbToHex(oklabToRgb(L, a, b) ?? (oklabToRgb(L, 0, 0) as RGB) ?? [0, 0, 0])
+}
+
+// The colour a fraction t of the way from a to b, as the eye measures distance
+export function mixOklab(a: string, b: string, t = 0.5): string {
+  const p = hexToOklab(a)
+  const q = hexToOklab(b)
+  return oklabToHex(p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t, p[2] + (q[2] - p[2]) * t)
+}
+
+// The same lightness, no colour
+export const greyOf = (hex: string) => oklabToHex(lightnessOf(hex), 0, 0)
+
+// Physical mixtures, in linear light. Light adds (projectors, screens); filters and inks multiply.
+const lin = (hex: string) => hexToRgb(hex).map(toLinear)
+const fromLin = (c: number[]) => rgbToHex(c.map((v) => fromLinear(Math.min(1, Math.max(0, v)))) as RGB)
+export const addLight = (...hexes: string[]) => fromLin([0, 1, 2].map((i) => hexes.reduce((sum, h) => sum + lin(h)[i], 0)))
+export const multiply = (...hexes: string[]) => fromLin([0, 1, 2].map((i) => hexes.reduce((p, h) => p * lin(h)[i], 1)))
+// Average of the lights, as on Maxwell's spinning disc or in small dots seen from a distance
+export const averageLight = (...hexes: string[]) => fromLin([0, 1, 2].map((i) => hexes.reduce((sum, h) => sum + lin(h)[i], 0) / hexes.length))
+
+// WCAG 2 contrast ratio, 1 to 21
+export function contrastRatio(a: string, b: string): number {
+  const Y = (hex: string) => {
+    const [r, g, bl] = lin(hex)
+    return 0.2126 * r + 0.7152 * g + 0.0722 * bl
+  }
+  const [hi, lo] = [Y(a), Y(b)].sort((x, y) => y - x)
+  return (hi + 0.05) / (lo + 0.05)
+}

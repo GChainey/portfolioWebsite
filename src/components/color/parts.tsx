@@ -36,3 +36,22 @@ export function Next({ onClick, disabled, children }: { onClick: () => void; dis
     </button>
   )
 }
+
+// A row of buttons that picks one option
+export function Segmented<T extends string>({ value, options, onChange }: { value: T; options: { id: T; label: string }[]; onChange: (v: T) => void }) {
+  return (
+    <div className="inline-flex flex-wrap gap-2">
+      {options.map((o) => (
+        <button
+          key={o.id}
+          onClick={() => onChange(o.id)}
+          className={`rounded border px-3 py-1.5 text-sm transition-colors ${
+            o.id === value ? 'border-accent text-accent' : 'border-border text-muted hover:text-foreground'
+          }`}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
+  )
+}
