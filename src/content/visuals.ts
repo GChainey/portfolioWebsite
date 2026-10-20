@@ -2,28 +2,29 @@ import type { ShowcaseScene } from '@/components/showcase/ShowcaseReel'
 
 // The visuals: one piece of work per entry, each a short replay (or a video or live site where a
 // replay can't capture it) with what it is and what it did. The homepage's Visuals tab and the
-// gallery page show them one after another. In order: best first.
+// gallery page show them one after another, in three sections (VISUAL_SECTIONS): the products,
+// the case studies best first, then the creative tools.
+
+// The homepage's three sections, in order
+export type VisualSection = 'products' | 'ai' | 'creative'
+export const VISUAL_SECTIONS: { id: VisualSection; title: string; websiteTitle?: string }[] = [
+  { id: 'products', title: 'Products I\u2019ve made', websiteTitle: 'Products' },
+  { id: 'ai', title: 'How AI has changed how I design' },
+  { id: 'creative', title: 'Creative tools' },
+]
 
 export interface Visual {
   id: string
   project: string // who it's for, or the product: "Daisy Assess", "Configurator"
+  product?: boolean // a product of my own: its name is the title
+  section: VisualSection
   title: string
   summary: string // what you're looking at
   impact?: { value?: string; label: string } // what it did. Only what the case study already says
   scene: ShowcaseScene
   href?: string // the case study, essay or product
   external?: boolean
-}
-
-// Colour per project, the same ones the showcase uses
-export const PROJECT_ACCENTS: Record<string, string> = {
-  'Daisy Assess': '#16a34a',
-  Configurator: '#ea580c',
-  'Enterprise AI': '#0891b2',
-  'Shader Wall': '#c026d3',
-  Dispatch: '#2563eb',
-  Thesis: '#f59e0b',
-  Wallbounce: '#e11d48',
+  visit?: { label: string; href: string } // a second link, out to the thing itself
 }
 
 // A stretch of a replay. Full-frame recordings are 16:10, like the stage, so they fill it;
@@ -36,24 +37,51 @@ const video = (src: string, from: number, to: number): ShowcaseScene => ({ video
 export const VISUALS: Visual[] = [
   {
     id: 'shader-wall',
+    section: 'products',
     project: 'Shader Wall',
-    title: 'Your Mac desktop, alive',
-    summary: 'The landing page runs the whole app, in the browser.',
+    product: true,
+    title: 'Shader Wall',
+    summary: 'An agentic friendly native macOS app to set and create shaders as your background.',
     scene: { site: 'https://www.shaderwall.com', hold: 12, layout: 'full', title: '' },
     href: 'https://www.shaderwall.com',
     external: true,
   },
   {
+    id: 'dispatch',
+    section: 'products',
+    project: 'Dispatch',
+    product: true,
+    title: 'Dispatch',
+    summary: 'Send articles to your Kindle in one click, from your browser, your Mac or a bot that reads your newsletters.',
+    // The app on its landing page, in dark mode, cropped to the app window and the Kindle
+    scene: replay('/replays/products/dispatch-app.json', 0.8, 11.6, { region: { x: 120, y: 51, width: 1274, height: 796 }, layout: 'full' }),
+    href: 'https://www.dispatchmac.com',
+    external: true,
+  },
+  {
+    id: 'thesis',
+    section: 'products',
+    project: 'Thesis',
+    product: true,
+    title: 'Thesis',
+    summary: 'Every claim in a plan is a bet. Test them all at once: AI drafts the tests and gathers the evidence.',
+    // The app on its landing page, in dark mode: tap a sentence and its assumption opens
+    scene: replay('/replays/products/thesis-app.json', 0.8, 13.8, { region: { x: 120, y: 74, width: 1200, height: 750 }, layout: 'full' }),
+    href: 'https://thesis-phi-self.vercel.app',
+    external: true,
+  },
+  {
     id: 'rfp-overview',
+    section: 'ai',
     project: 'Daisy Assess',
     title: 'A council\'s whole caseload, against its targets',
     summary: 'A state tender, won with a working product, not mock-ups.',
-    impact: { value: '1', label: 'designer instead of 3 to 5' },
     scene: replay('/replays/rfp/overview.json', 0.4, 21.6),
     href: '/projects/rfp',
   },
   {
     id: 'configurator-overview',
+    section: 'ai',
     project: 'Configurator',
     title: 'A description of today\'s process becomes an app',
     summary: 'Describe how the job is done. Get a four-step app back.',
@@ -62,15 +90,17 @@ export const VISUALS: Visual[] = [
   },
   {
     id: 'website',
+    section: 'ai',
     project: 'Enterprise AI',
     title: 'Build an app, brand it per client, share it to a phone',
     summary: 'A marketing site built from an HTML brand.',
     impact: { value: '10', label: 'variations in a day' },
-    scene: replay('/replays/website/site.json', 0.5, 24.5),
+    scene: { image: '/visuals/website-phone.webp', hold: 10, layout: 'full', title: '' },
     href: '/projects/html-brand-website',
   },
   {
     id: 'rfp-llm-chat',
+    section: 'ai',
     project: 'Daisy Assess',
     title: 'Rough notes in, council wording out',
     summary: 'A live model, beside the assessment.',
@@ -79,6 +109,7 @@ export const VISUALS: Visual[] = [
   },
   {
     id: 'configurator-models',
+    section: 'ai',
     project: 'Configurator',
     title: 'Which model is good enough?',
     summary: 'One flag swaps the model behind every call.',
@@ -88,6 +119,7 @@ export const VISUALS: Visual[] = [
   },
   {
     id: 'rfp-determination',
+    section: 'ai',
     project: 'Daisy Assess',
     title: 'The decision letter, written from the work already done',
     summary: 'Every workflow ends in a real letter.',
@@ -96,6 +128,7 @@ export const VISUALS: Visual[] = [
   },
   {
     id: 'configurator-brand',
+    section: 'ai',
     project: 'Configurator',
     title: 'One app, three clients, each in their brand',
     summary: 'Type a name. The brand is read from their site.',
@@ -103,17 +136,8 @@ export const VISUALS: Visual[] = [
     href: '/projects/configurator',
   },
   {
-    id: 'dispatch',
-    project: 'Dispatch',
-    title: 'Send articles to your Kindle in one click',
-    summary: 'From your browser, your Mac or a bot that reads your newsletters.',
-    impact: { value: '1 click', label: 'from page to Kindle' },
-    scene: replay('/replays/products/dispatch.json', 1.2, 18.6),
-    href: 'https://www.dispatchmac.com',
-    external: true,
-  },
-  {
     id: 'eai-settings-nested',
+    section: 'ai',
     project: 'Enterprise AI',
     title: 'Two levels of settings, without getting lost',
     summary: 'You know which level you\'re on before you read a word.',
@@ -122,16 +146,8 @@ export const VISUALS: Visual[] = [
     href: '/projects/eai-settings',
   },
   {
-    id: 'thesis',
-    project: 'Thesis',
-    title: 'Every claim in a plan is a bet. Test them all at once',
-    summary: 'AI drafts the tests and gathers the evidence.',
-    scene: replay('/replays/products/thesis.json', 0.8, 25.4),
-    href: 'https://thesis-phi-self.vercel.app',
-    external: true,
-  },
-  {
     id: 'configurator-jev',
+    section: 'ai',
     project: 'Configurator',
     title: 'Select, don\'t generate',
     summary: 'Jev picks from 20 templates and says how sure it is.',
@@ -141,6 +157,7 @@ export const VISUALS: Visual[] = [
   },
   {
     id: 'rfp-ask',
+    section: 'ai',
     project: 'Daisy Assess',
     title: 'Ask the case a question',
     summary: 'Answers from the applicant\'s own documents.',
@@ -149,6 +166,7 @@ export const VISUALS: Visual[] = [
   },
   {
     id: 'eai-settings-features',
+    section: 'ai',
     project: 'Enterprise AI',
     title: 'Settings organised by what you want, not how it\'s built',
     summary: 'Four features, inside the app\'s own settings.',
@@ -158,6 +176,7 @@ export const VISUALS: Visual[] = [
   },
   {
     id: 'configurator-show-prompt',
+    section: 'ai',
     project: 'Configurator',
     title: 'Show prompt',
     summary: 'Read the request, change it, run it again.',
@@ -166,36 +185,50 @@ export const VISUALS: Visual[] = [
   },
   {
     id: 'eai-setup',
+    section: 'ai',
     project: 'Enterprise AI',
     title: 'From sign-in to building in Claude Code',
     summary: 'A native installer and a command line.',
     scene: video('/gallery/clips/eai-setup.mp4', 0, 26.5),
   },
   {
-    id: 'wallbounce-tuning',
-    project: 'Wallbounce',
-    title: 'Every number that shapes the movement, a slider',
-    summary: 'A tuning panel an agent built for a game.',
-    impact: { value: '58', label: 'sliders' },
-    scene: replay('/replays/wallbounce/tuning.json', 0, 13.4, { region: { x: 950, y: 0, width: 330, height: 218 } }),
-    href: '/projects/wallbounce-dev-tools',
-  },
-  {
-    id: 'balatro',
-    project: 'Thesis',
-    title: 'Opportunity sizing, but Balatro',
-    summary: 'Sizing a product bet like a hand of cards.',
-    scene: video('/essays/balatro-opportunity-sizing/reel.mp4', 0, 20),
-    href: '/projects/balatro-opportunity-sizing',
-  },
-  {
     id: 'configurator-qr',
+    section: 'ai',
     project: 'Configurator',
     title: 'On a real phone',
     summary: 'A link and a QR code, straight from the builder.',
     scene: replay('/replays/configurator/qr.json', 0, 6.5),
     href: '/projects/configurator',
   },
+  {
+    id: 'wallbounce',
+    section: 'creative',
+    project: 'Wallbounce',
+    product: true,
+    title: 'Wallbounce',
+    summary: 'A top-down ode to one move from Gears of War, made with the tools an agent built for it.',
+    scene: { site: 'https://wallbounce.vercel.app', hold: 12, layout: 'full', title: '' },
+    href: '/projects/wallbounce-dev-tools',
+    visit: { label: 'Play Wallbounce', href: 'https://wallbounce.vercel.app' },
+  },
+  {
+    id: 'balatro',
+    section: 'creative',
+    project: 'Thesis',
+    title: 'Opportunity sizing x Balatro',
+    summary: 'Part of Thesis. Bringing the playful scaling elements of the card game Balatro to the product world of Opportunity Sizing.',
+    scene: video('/essays/balatro-opportunity-sizing/reel.mp4', 0, 20),
+    href: '/projects/balatro-opportunity-sizing',
+  },
 ]
 
-export const accentOf = (v: Visual) => PROJECT_ACCENTS[v.project] ?? 'var(--accent)'
+// Kind words between the pieces: after the piece with this id, the quote from this colleague
+// (content/testimonials.ts). After the products, through the case studies, and before the essays.
+export const KIND_WORDS: Record<string, string> = {
+  // Winnie first: her SpaceX logo
+  thesis: 'Winnie Bamra',
+  website: 'Richard Simms',
+  'configurator-models': 'David Deville',
+  'eai-settings-features': 'Ahmed Hakeem',
+  'configurator-qr': 'Henry Vesander',
+}

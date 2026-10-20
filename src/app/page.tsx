@@ -3,12 +3,10 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { X, ArrowRight, FileText, LayoutGrid } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { Header } from '@/components/Header'
-import { GALLERY_LIVE } from '@/components/Gallery'
 import { Visuals } from '@/components/Visuals'
-import { ChatInterface } from '@/components/ChatInterface'
-import { Facehash } from 'facehash'
+import { ChatPopup } from '@/components/ChatPopup'
 import { GitHubContributions } from '@/components/GitHubContributions'
 import { ThinkerCard } from '@/components/ThinkerCard'
 import { ShowcaseCarousel } from '@/components/ShowcaseCarousel'
@@ -21,6 +19,8 @@ import { WallShowcase } from '@/components/showcase/Wall'
 import { PRODUCT_SLIDES, AI_SLIDES } from '@/content/showcase'
 import { writing, getProjectById } from '@/content/projects'
 import { TestimonialCarousel } from '@/components/TestimonialCarousel'
+import { WorkList } from '@/components/WorkList'
+import { TESTIMONIALS } from '@/content/testimonials'
 import { useFeatureFlags, HOME_LAYOUTS, type HomeLayout } from '@/context/FeatureFlagContext'
 import { thinkers } from '@/content/thinkers'
 import { ParticleField } from '@/components/ParticleField'
@@ -62,46 +62,6 @@ const EARLIER_WORK = ['seek-case-study-1', 'bestpractice-case-study-1']
 const SMALL_STUDIES = ['eai-settings', 'add-document']
 const ESSAYS = writing.filter((p) => p.category === 'Article').map((p) => p.id)
 
-const COMPANY: Record<string, string> = { enterpriseai: 'Enterprise AI', seek: 'SEEK', bestpractice: 'Best Practice' }
-
-// A titled list of case studies or essays, one per row
-function WorkList({ label, note, ids, titleBorders }: { label: string; note?: string; ids: string[]; titleBorders: boolean }) {
-  const items = ids.map(getProjectById).filter((p) => p !== undefined)
-
-  return (
-    <section className="border-b border-border">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-60px' }}
-        transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-      >
-        <div className={`flex items-center justify-between px-8 ${titleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
-          <p className="text-xs text-muted uppercase tracking-widest">{label}</p>
-          {note && <p className="text-xs text-muted">{note}</p>}
-        </div>
-
-        {items.map((project, index) => (
-          <Link
-            key={project.id}
-            href={project.externalUrl || `/projects/${project.id}`}
-            className={`group flex items-center gap-6 px-8 py-4 ${index < items.length - 1 ? 'border-b border-border' : ''}`}
-          >
-            <div className="min-w-0 flex-1">
-              <h3 className="font-medium text-foreground group-hover:text-accent transition-colors">{project.title}</h3>
-              <p className="text-sm text-muted line-clamp-1">{project.description}</p>
-            </div>
-            <span className="hidden sm:block shrink-0 text-xs text-muted">
-              {[project.companyId && COMPANY[project.companyId], project.year].filter(Boolean).join(' · ')}
-            </span>
-            <ArrowRight className="shrink-0 w-4 h-4 text-muted group-hover:text-accent group-hover:translate-x-1 transition-all" />
-          </Link>
-        ))}
-      </motion.div>
-    </section>
-  )
-}
-
 // Experience data
 const EXPERIENCE = [
   {
@@ -127,70 +87,28 @@ const EXPERIENCE = [
   },
 ]
 
-// Testimonials data
-const TESTIMONIALS = [
-  {
-    name: 'Winnie Bamra',
-    role: 'Senior Product Manager',
-    company: 'Ex-SpaceX · SEEK',
-    logo: 'spacex' as const,
-    linkedIn: 'https://www.linkedin.com/in/wbamra/',
-    content: 'Gareth is a pleasure to work with and an asset to any team. He is diligent in discovery, passionate about the end user, empathetic, and collaborative in his approach. He is excellent at leading user interviews, enabling the team to collect and extract actionable insights.',
-  },
-  {
-    name: 'Richard Simms',
-    role: 'Principal Product Designer',
-    company: 'SEEK',
-    logo: 'seek' as const,
-    linkedIn: 'https://www.linkedin.com/in/richardsimms/',
-    content: 'A talented senior UX designer who can independently drive projects forward. His designs reflected a deep understanding of our users, combined with a mastery of UX principles. Meticulous attention to detail and craft are evident in everything he produces.',
-  },
-  {
-    name: 'Ahmed Hakeem',
-    role: 'Staff Engineer',
-    company: 'SEEK',
-    logo: 'seek' as const,
-    linkedIn: 'https://www.linkedin.com/in/meds/',
-    content: "A developer's best friend. I have many fond memories bouncing ideas around and jamming out features end to end from fake door tests to deployment. At every step Gareth was inquisitive, collaborative and open to thinking on their feet.",
-  },
-  {
-    name: 'David Deville',
-    role: 'Senior Content Designer',
-    company: 'SEEK',
-    logo: 'seek' as const,
-    linkedIn: 'https://www.linkedin.com/in/david-deville-98b287b8/',
-    content: "Gareth goes above and beyond designing for customer needs. Fast experimentation, elegant designs and constant iteration resulted in products like an AI-powered resume generator that genuinely helped candidates. A positive, creative and likeable teammate.",
-  },
-  {
-    name: 'Henry Vesander',
-    role: 'Chief Product Officer',
-    company: 'Best Practice Software',
-    logo: 'bestpractice' as const,
-    linkedIn: 'https://www.linkedin.com/in/henrikvesander/',
-    content: 'An outstanding UX/product designer. I hired him to build a cloud-based practice management SaaS. He is a driven individual that can be trusted in getting the job done once given guidance and a brief. I definitely recommend Gareth!',
-  },
-]
-
-
 export default function Home() {
   const [mounted, setMounted] = useState(false)
   const [suffix, setSuffix] = useState('')
   const [typingDone, setTypingDone] = useState(false)
   const [showTooltip, setShowTooltip] = useState(false)
-  const [chatOpen, setChatOpen] = useState(false)
   const [chatMounted, setChatMounted] = useState(false)
   const [experienceDialogOpen, setExperienceDialogOpen] = useState(false)
   const [selectedCompanyId, setSelectedCompanyId] = useState('enterpriseai')
-  // The page as written, or nothing but the gallery
-  const [view, setView] = useState<'page' | 'visuals'>('page')
+  // Under the hero, the work (Visuals, kind words between the pieces); the essays have their own
+  // page. The page as written is still there at ?view=page while the rest is parked
+  const [view, setView] = useState<'page' | 'work'>('work')
   const { flags } = useFeatureFlags()
   // ?home=<layout> overrides the flag, so a variant can be linked to
   const [homeOverride, setHomeOverride] = useState<HomeLayout | null>(null)
   const homeLayout = homeOverride ?? flags.homeLayout
 
   useEffect(() => {
-    const home = new URLSearchParams(window.location.search).get('home') as HomeLayout | null
+    const params = new URLSearchParams(window.location.search)
+    const home = params.get('home') as HomeLayout | null
     if (home && HOME_LAYOUTS.includes(home)) setHomeOverride(home)
+    // A showcase variant, or ?view=page, needs the page as written
+    if ((home && HOME_LAYOUTS.includes(home)) || params.get('view') === 'page') setView('page')
     // #work: jump to the work, again as the hero above it finishes loading, unless the visitor scrolls first
     if (window.location.hash === '#work') {
       let moved = false
@@ -356,6 +274,79 @@ export default function Home() {
     </>
   )
 
+  // Hero Section - Centered
+  const heroSection = (
+    <section className={`relative py-24 px-8 overflow-hidden ${flags.panels ? 'border-b border-border' : ''}`}>
+      {flags.particleField && <ParticleField />}
+      <div className="relative z-10 flex flex-col items-center text-center">
+        {/* Tagline */}
+        <motion.p
+          className="text-sm text-muted uppercase tracking-widest mb-4"
+          initial={mounted ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          The future is Now
+        </motion.p>
+
+        {/* Animated Role */}
+        <motion.div
+          className="mb-8"
+          initial={mounted ? { opacity: 0 } : { opacity: 1 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          <h1 className="t-display text-4xl md:text-5xl font-medium text-foreground whitespace-nowrap">
+            <span>Product </span>
+            <span className="relative inline">
+              {suffix}
+              {!typingDone && (
+                <motion.span
+                  animate={{ opacity: [1, 0] }}
+                  transition={{ duration: 0.6, repeat: Infinity, repeatType: 'reverse' }}
+                  className="inline-block w-[3px] h-[1em] bg-foreground ml-0.5 align-baseline translate-y-[0.1em]"
+                />
+              )}
+              {/* Asterisk tooltip pinned to top-right of last character */}
+              <AnimatePresence>
+                {showTooltip && (
+                  <motion.span
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+                    className="absolute -top-3 -right-4"
+                  >
+                    <TooltipProvider delayDuration={200}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-lg font-bold text-foreground cursor-default hover:opacity-60 transition-opacity">
+                            *
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent side="top" className="text-sm bg-card text-foreground border border-border shadow-lg max-w-xs">
+                          Gareth Chainey&#8482; is still professionally licensed as a product designer
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </span>
+          </h1>
+        </motion.div>
+
+        {/* GitHub Contributions - Centered */}
+        <motion.div
+          initial={mounted ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="flex flex-col items-center"
+        >
+          <GitHubContributions variant="full" animate />
+        </motion.div>
+      </div>
+    </section>
+  )
+
   return (
     <div className="min-h-screen bg-background transition-colors duration-700 overflow-x-clip">
       <Header />
@@ -366,109 +357,18 @@ export default function Home() {
 
           {/* Main content */}
           {/* The scroll story runs out of this column to the window's edges, so it can't be clipped */}
-          <main className={`flex-1 min-w-0 border-x border-border ${homeLayout === 'scrolly' ? '' : 'overflow-clip'}`}>
+          {/* The scroll story and the horizontal carousels run out of this column to the window's edges, so it can't clip */}
+          <main className={`flex-1 min-w-0 ${flags.panels ? 'border-x border-border' : ''} ${homeLayout === 'scrolly' || flags.homeDesign === 'horizontal' ? '' : 'overflow-clip'}`}>
 
-            {/* Hero Section - Centered */}
-            <section className="relative py-24 px-8 border-b border-border overflow-hidden">
-              {flags.particleField && <ParticleField />}
-              <div className="relative z-10 flex flex-col items-center text-center">
-                {/* Tagline */}
-                <motion.p
-                  className="text-sm text-muted uppercase tracking-widest mb-4"
-                  initial={mounted ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
-                  animate={{ opacity: 1, y: 0 }}
-                >
-                  The future is Now
-                </motion.p>
-
-                {/* Animated Role */}
-                <motion.div
-                  className="mb-8"
-                  initial={mounted ? { opacity: 0 } : { opacity: 1 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.2 }}
-                >
-                  <h1 className="text-4xl md:text-5xl font-medium text-foreground whitespace-nowrap">
-                    <span>Product </span>
-                    <span className="relative inline">
-                      {suffix}
-                      {!typingDone && (
-                        <motion.span
-                          animate={{ opacity: [1, 0] }}
-                          transition={{ duration: 0.6, repeat: Infinity, repeatType: 'reverse' }}
-                          className="inline-block w-[3px] h-[1em] bg-foreground ml-0.5 align-baseline translate-y-[0.1em]"
-                        />
-                      )}
-                      {/* Asterisk tooltip pinned to top-right of last character */}
-                      <AnimatePresence>
-                        {showTooltip && (
-                          <motion.span
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-                            className="absolute -top-3 -right-4"
-                          >
-                            <TooltipProvider delayDuration={200}>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-lg font-bold text-foreground cursor-default hover:opacity-60 transition-opacity">
-                                    *
-                                  </span>
-                                </TooltipTrigger>
-                                <TooltipContent side="top" className="text-sm bg-card text-foreground border border-border shadow-lg max-w-xs">
-                                  Gareth Chainey&#8482; is still professionally licensed as a product designer
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          </motion.span>
-                        )}
-                      </AnimatePresence>
-                    </span>
-                  </h1>
-                </motion.div>
-
-                {/* GitHub Contributions - Centered */}
-                <motion.div
-                  initial={mounted ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="flex flex-col items-center"
-                >
-                  <GitHubContributions variant="full" animate />
-                </motion.div>
-              </div>
-            </section>
-
-            {/* Page or visuals - the same switch the case studies have. Dev only until Visuals hangs together */}
-            {GALLERY_LIVE && (
-              <div className="flex justify-center py-4 border-b border-border">
-                <div className="flex bg-border/40 rounded-full p-0.5">
-                  {([
-                    { id: 'page', label: 'Page', icon: FileText },
-                    { id: 'visuals', label: 'Visuals', icon: LayoutGrid },
-                  ] as const).map(({ id, label, icon: Icon }) => (
-                    <button
-                      key={id}
-                      onClick={() => setView(id)}
-                      aria-pressed={view === id}
-                      className={`flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-full transition-all ${
-                        view === id ? 'bg-foreground text-background font-medium' : 'text-muted hover:text-foreground'
-                      }`}
-                    >
-                      <Icon className="w-3.5 h-3.5" />
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {view === 'visuals' ? (
-              <section className="border-b border-border">
+            {view !== 'page' ? (
+              <>
+                {heroSection}
                 <Visuals />
-              </section>
+              </>
             ) : (
               <>
+            {heroSection}
+
             {/* About section */}
             <section className="p-8 border-b border-border">
               <motion.div
@@ -528,7 +428,10 @@ export default function Home() {
               {flags.signatureVariant === 'clippath' && <Signature className="mb-4" />}
               {flags.signatureVariant === 'penflow' && <PenflowSignature className="mb-4" />}
               <div className="flex items-center justify-between">
-                <p className="text-xs text-muted">© 2025 Gareth Chainey</p>
+                <p className="text-xs text-muted">
+                  © 2025 Gareth Chainey ·{' '}
+                  <Link href="/changelog" className="hover:text-foreground transition-colors">Changelog</Link>
+                </p>
                 <button
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   className="text-xs text-muted hover:text-foreground transition-colors"
@@ -539,44 +442,8 @@ export default function Home() {
             </footer>
           </main>
 
-          {/* Chat toggle button */}
-          <AnimatePresence>
-            {chatMounted && !chatOpen && (
-              <motion.button
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                onClick={() => setChatOpen(true)}
-                className="fixed bottom-6 right-6 z-50 rounded-full shadow-lg hover:scale-110 transition-all"
-              >
-                <Facehash name="GarethLLM" size={48} showInitial enableBlink interactive={false} intensity3d="subtle" style={{ backgroundColor: 'color-mix(in srgb, var(--accent) 60%, var(--background))', borderRadius: '9999px' }} />
-              </motion.button>
-            )}
-          </AnimatePresence>
-
-          {/* Chat sidebar */}
-          <AnimatePresence>
-            {chatMounted && chatOpen && (
-              <motion.aside
-                initial={{ width: 0, opacity: 0 }}
-                animate={{ width: 380, opacity: 1 }}
-                exit={{ width: 0, opacity: 0 }}
-                transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-                className="flex-shrink-0 h-[calc(100vh-56px)] sticky top-14 border-r border-border"
-                style={{ minWidth: 0 }}
-              >
-                <div className="relative h-full flex flex-col w-[380px]">
-                  <button
-                    onClick={() => setChatOpen(false)}
-                    className="absolute top-4 right-4 z-10 p-1.5 text-muted hover:text-foreground hover:bg-border/50 rounded transition-colors"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                  <ChatInterface pageContext={HOME_PAGE_CONTEXT} />
-                </div>
-              </motion.aside>
-            )}
-          </AnimatePresence>
+          {/* The chat face appears once the hero has typed itself out */}
+          {chatMounted && <ChatPopup pageContext={HOME_PAGE_CONTEXT} />}
         </div>
       </div>
     </div>

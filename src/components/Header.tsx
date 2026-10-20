@@ -1,8 +1,8 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
-import { ThemeSelector } from './ThemeSelector'
 import { GALLERY_LIVE } from './Gallery'
 import { DEMOS_LIVE } from '@/content/demos'
 import { PARKED_LIVE } from '@/content/parked'
@@ -12,10 +12,20 @@ interface HeaderProps {
   showBack?: boolean
 }
 
+// The menu: four places, the current one in full colour
+const NAV = [
+  { href: '/', label: 'Home' },
+  { href: '/essays', label: 'Essays' },
+  { href: '/cv', label: 'CV' },
+  { href: '/contact', label: 'Contact' },
+]
+
 export function Header({ showBack }: HeaderProps) {
   const { flags } = useFeatureFlags()
+  const pathname = usePathname()
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-sm border-b border-border">
+    // A tint of the page behind a blur (a Tailwind /80 does nothing here: the colours are var()s)
+    <header className={`fixed top-0 left-0 right-0 z-40 bg-[color-mix(in_srgb,var(--background)_85%,transparent)] backdrop-blur-sm ${flags.panels ? 'border-b border-border' : ''}`}>
       <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href="/" className="text-lg font-medium text-foreground hover:opacity-70 transition-opacity">
@@ -32,9 +42,15 @@ export function Header({ showBack }: HeaderProps) {
           )}
         </div>
         <nav className="flex items-center gap-6">
-          <Link href="/cv" className="text-sm text-muted hover:text-foreground transition-colors">
-            CV
-          </Link>
+          {NAV.map(({ href, label }) => {
+            const here = href === '/' ? pathname === '/' : pathname.startsWith(href)
+            return (
+              <Link key={href} href={href} aria-current={here ? 'page' : undefined} className={`text-sm transition-colors ${here ? 'text-foreground' : 'text-muted hover:text-foreground'}`}>
+                {label}
+              </Link>
+            )
+          })}
+          {/* Dev only, or behind a flag */}
           {GALLERY_LIVE && (
             <Link href="/gallery" className="text-sm text-muted hover:text-foreground transition-colors">
               Gallery
@@ -55,13 +71,6 @@ export function Header({ showBack }: HeaderProps) {
               Feed
             </Link>
           )}
-          <Link href="/changelog" className="text-sm text-muted hover:text-foreground transition-colors">
-            Changelog
-          </Link>
-          <Link href="/contact" className="text-sm text-muted hover:text-foreground transition-colors">
-            Contact
-          </Link>
-          <ThemeSelector />
         </nav>
       </div>
     </header>

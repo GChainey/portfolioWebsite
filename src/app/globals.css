@@ -34,35 +34,6 @@
     --radius: 0.5rem;
   }
 
-  .dark {
-    --background: #0a0a0a;
-    --foreground: #fafafa;
-    --border: #262626;
-    --muted: #a3a3a3;
-
-    /* Default accent: amber (dark) */
-    --accent: #fbbf24;
-    --accent-cta: color-mix(in srgb, var(--accent) 85%, #000);
-    --accent-light: #451a03;
-    --selection-bg: color-mix(in srgb, var(--accent) 20%, #0a0a0a);
-    --selection-text: color-mix(in srgb, var(--accent) 65%, white);
-
-    /* shadcn compatibility */
-    --card: #0a0a0a;
-    --card-foreground: #fafafa;
-    --popover: #0a0a0a;
-    --popover-foreground: #fafafa;
-    --primary: #fafafa;
-    --primary-foreground: #0a0a0a;
-    --secondary: #262626;
-    --secondary-foreground: #fafafa;
-    --muted-foreground: #a3a3a3;
-    --accent-foreground: #fafafa;
-    --destructive: #7f1d1d;
-    --destructive-foreground: #fafafa;
-    --input: #262626;
-    --ring: #d4d4d4;
-  }
 
   * {
     @apply border-border;
@@ -70,7 +41,7 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-inter), system-ui, sans-serif;
+    font-family: var(--font-geist-sans), system-ui, sans-serif;
   }
 }
 
@@ -89,114 +60,8 @@ gc-gallery {
   --gal-gap: 1px;
 }
 
-/* Accent color themes - OUTSIDE @layer for higher cascade priority */
-/* Light mode */
+/* The accent: amber, the only colour (no theme menu). OUTSIDE @layer for higher cascade priority */
 html.accent-amber { --accent: #d97706; --accent-light: #fef3c7; }
-html.accent-orange { --accent: #ea580c; --accent-light: #ffedd5; }
-html.accent-red { --accent: #dc2626; --accent-light: #fee2e2; }
-html.accent-rose { --accent: #e11d48; --accent-light: #ffe4e6; }
-html.accent-pink { --accent: #db2777; --accent-light: #fce7f3; }
-html.accent-fuchsia { --accent: #c026d3; --accent-light: #fae8ff; }
-html.accent-purple { --accent: #9333ea; --accent-light: #f3e8ff; }
-html.accent-violet { --accent: #7c3aed; --accent-light: #ede9fe; }
-html.accent-indigo { --accent: #4f46e5; --accent-light: #e0e7ff; }
-html.accent-blue { --accent: #2563eb; --accent-light: #dbeafe; }
-html.accent-cyan { --accent: #0891b2; --accent-light: #cffafe; }
-html.accent-teal { --accent: #0d9488; --accent-light: #ccfbf1; }
-html.accent-emerald { --accent: #059669; --accent-light: #d1fae5; }
-html.accent-green { --accent: #16a34a; --accent-light: #dcfce7; }
-html.accent-lime { --accent: #65a30d; --accent-light: #ecfccb; }
-html.accent-yellow { --accent: #ca8a04; --accent-light: #fef9c3; }
-
-/* Dark mode */
-html.dark.accent-amber { --accent: #fbbf24; --accent-light: #451a03; }
-html.dark.accent-orange { --accent: #fb923c; --accent-light: #431407; }
-html.dark.accent-red { --accent: #f87171; --accent-light: #450a0a; }
-html.dark.accent-rose { --accent: #fb7185; --accent-light: #4c0519; }
-html.dark.accent-pink { --accent: #f472b6; --accent-light: #500724; }
-html.dark.accent-fuchsia { --accent: #e879f9; --accent-light: #4a044e; }
-html.dark.accent-purple { --accent: #c084fc; --accent-light: #3b0764; }
-html.dark.accent-violet { --accent: #a78bfa; --accent-light: #2e1065; }
-html.dark.accent-indigo { --accent: #818cf8; --accent-light: #1e1b4b; }
-html.dark.accent-blue { --accent: #60a5fa; --accent-light: #172554; }
-html.dark.accent-cyan { --accent: #22d3ee; --accent-light: #083344; }
-html.dark.accent-teal { --accent: #2dd4bf; --accent-light: #042f2e; }
-html.dark.accent-emerald { --accent: #34d399; --accent-light: #022c22; }
-html.dark.accent-green { --accent: #4ade80; --accent-light: #052e16; }
-html.dark.accent-lime { --accent: #a3e635; --accent-light: #1a2e05; }
-html.dark.accent-yellow { --accent: #facc15; --accent-light: #422006; }
-
-/* Warm mode — light */
-html.warm {
-  --background: #faf6f0;
-  --foreground: #1c1a16;
-  --border: #e3dcd2;
-  --muted: #887f74;
-  --card: #faf6f0;
-  --card-foreground: #1c1a16;
-  --popover: #faf6f0;
-  --popover-foreground: #1c1a16;
-  --primary: #1c1a16;
-  --primary-foreground: #faf6f0;
-  --secondary: #f0ebe3;
-  --secondary-foreground: #1c1a16;
-  --muted-foreground: #887f74;
-  --input: #e3dcd2;
-  --ring: #1c1a16;
-}
-
-/* Warm mode — dark */
-html.dark.warm {
-  --background: #161310;
-  --foreground: #f0ebe2;
-  --border: #2c2720;
-  --muted: #a69d90;
-  --card: #161310;
-  --card-foreground: #f0ebe2;
-  --popover: #161310;
-  --popover-foreground: #f0ebe2;
-  --primary: #f0ebe2;
-  --primary-foreground: #161310;
-  --secondary: #2c2720;
-  --secondary-foreground: #f0ebe2;
-  --muted-foreground: #a69d90;
-  --input: #2c2720;
-  --ring: #ccc5ba;
-}
-
-/* CRT effects (theme menu → Effects): a sheet of glass fixed over the whole
-   page, dialogs included. Ported from Wallbounce's #stage.glass and the
-   Balatro sizing table's .sz-crt. Clicks and selection pass straight through. */
-html.crt-glass body::after,
-html.crt-scanlines body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 2147483647;
-  pointer-events: none;
-}
-
-/* Glass: fine scanlines and a vignette. */
-html.crt-glass body::after {
-  background:
-    repeating-linear-gradient(0deg, rgb(0 0 0 / 0.07) 0 1px, transparent 1px 3px),
-    radial-gradient(120% 90% at 50% 45%, transparent 55%, rgb(0 0 0 / 0.5) 100%);
-}
-
-/* Scanlines: Wallbounce's SCANLINES look (scan 0.3, vignette 0.15) as an
-   overlay: darker lines, a lighter vignette. */
-html.crt-scanlines body::after {
-  background:
-    repeating-linear-gradient(0deg, rgb(0 0 0 / 0.3) 0 1px, transparent 1px 3px),
-    radial-gradient(120% 90% at 50% 45%, transparent 40%, rgb(0 0 0 / 0.15) 100%);
-}
-
-@media print {
-  html.crt-glass body::after,
-  html.crt-scanlines body::after {
-    display: none;
-  }
-}
 
 /* Text selection highlight with accent color */
 ::selection {
@@ -310,12 +175,12 @@ html.crt-scanlines body::after {
 }
 
 /*
- * Lifeline typesets itself in Geist by default. Pointed at the site's Inter
+ * Lifeline typesets itself in Geist by default. Pointed at the site's Geist
  * instead so the timeline matches everything around it — swap back to Geist
  * (the `geist` package is installed) if the original typography is wanted.
  */
 .lifeline-typeset {
-    --lifeline-font: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    --lifeline-font: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
     font-family: var(--lifeline-font);
 }
 
@@ -325,3 +190,33 @@ html.crt-scanlines body::after {
 .colour-lights .window-light:nth-child(1) { background: #ff5f57; box-shadow: inset 0 0 0 0.5px rgba(0,0,0,.12); }
 .colour-lights .window-light:nth-child(2) { background: #febc2e; box-shadow: inset 0 0 0 0.5px rgba(0,0,0,.12); }
 .colour-lights .window-light:nth-child(3) { background: #28c840; box-shadow: inset 0 0 0 0.5px rgba(0,0,0,.12); }
+
+/* Design v2 (flag, or ?v=2): the audit's simpler set, by folding the classes already in use onto it.
+   Six type steps (display 56, heading 36, title 24, body 16, small 14, label 12), two weights,
+   Geist for numbers too, one grey, three corners, and the see-through backgrounds made to work.
+   If it sticks, these become real tokens and the classes get renamed. */
+html.v2 :is(.text-4xl, .text-5xl, .text-6xl, .md\:text-4xl, .md\:text-5xl, .md\:text-6xl, .lg\:text-5xl, .lg\:text-6xl) {
+  font-size: 2.25rem; line-height: 1.1; letter-spacing: -0.02em;
+}
+html.v2 :is(.text-2xl, .text-3xl, .md\:text-2xl, .md\:text-3xl) {
+  font-size: 1.5rem; line-height: 1.25; letter-spacing: -0.01em;
+}
+html.v2 :is(.text-base, .text-lg, .text-xl, .md\:text-lg, .md\:text-xl) {
+  font-size: 1rem; line-height: 1.6;
+}
+html.v2 .t-display { font-size: 3.5rem; line-height: 1.05; letter-spacing: -0.03em; }
+html.v2 :is(.font-semibold, .font-bold, .font-extrabold) { font-weight: 500; }
+html.v2 :is(.tracking-wide, .tracking-wider, .tracking-widest) { letter-spacing: 0.08em; }
+html.v2 :is(.tracking-tight, .tracking-tighter) { letter-spacing: -0.02em; }
+html.v2 .font-mono:not(pre, pre *, code) { font-family: var(--font-geist-sans), system-ui, sans-serif; font-variant-numeric: tabular-nums; }
+html.v2 :is(.rounded-sm, .rounded, .rounded-md) { border-radius: 6px; }
+html.v2 :is(.rounded-lg, .rounded-xl, .rounded-2xl, .rounded-3xl) { border-radius: 12px; }
+html.v2 :is(.text-zinc-400, .text-zinc-500, .text-zinc-600, .text-zinc-700, .text-gray-400) { color: var(--muted); }
+html.v2 :is(.text-zinc-900, .text-zinc-950, .text-gray-900, .text-black) { color: var(--foreground); }
+html.v2 .bg-border\/20 { background-color: color-mix(in srgb, var(--border) 20%, transparent); }
+html.v2 .bg-border\/30 { background-color: color-mix(in srgb, var(--border) 30%, transparent); }
+html.v2 .bg-border\/40 { background-color: color-mix(in srgb, var(--border) 40%, transparent); }
+html.v2 .bg-border\/50 { background-color: color-mix(in srgb, var(--border) 50%, transparent); }
+html.v2 .bg-accent\/10 { background-color: color-mix(in srgb, var(--accent) 10%, transparent); }
+html.v2 .bg-foreground\/50 { background-color: color-mix(in srgb, var(--foreground) 50%, transparent); }
+html.v2 :is(.bg-background\/80, .bg-background\/85, .bg-background\/90, .bg-background\/95) { background-color: color-mix(in srgb, var(--background) 90%, transparent); }

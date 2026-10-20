@@ -1,11 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { X, Send, MapPin, MessageCircle, Mail } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Send, MapPin, MessageCircle, Mail } from 'lucide-react'
 import { Header } from '@/components/Header'
-import { ChatInterface } from '@/components/ChatInterface'
-import { Facehash } from 'facehash'
+import { ChatPopup } from '@/components/ChatPopup'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
 
 const CONTACT_PAGE_CONTEXT = {
@@ -25,7 +24,6 @@ const CONTACT_PAGE_CONTEXT = {
 }
 
 export default function ContactPage() {
-  const [chatOpen, setChatOpen] = useState(true)
   const { flags } = useFeatureFlags()
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
 
@@ -158,44 +156,7 @@ export default function ContactPage() {
             </section>
           </main>
 
-          {/* Chat toggle button */}
-          <AnimatePresence>
-            {!chatOpen && (
-              <motion.button
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                onClick={() => setChatOpen(true)}
-                className="fixed bottom-6 right-6 z-50 rounded-full shadow-lg hover:scale-110 transition-all"
-              >
-                <Facehash name="GarethLLM" size={48} showInitial enableBlink interactive={false} intensity3d="subtle" style={{ backgroundColor: 'color-mix(in srgb, var(--accent) 60%, var(--background))', borderRadius: '9999px' }} />
-              </motion.button>
-            )}
-          </AnimatePresence>
-
-          {/* Chat sidebar */}
-          <AnimatePresence>
-            {chatOpen && (
-              <motion.aside
-                initial={false}
-                animate={{ width: 380, opacity: 1 }}
-                exit={{ width: 0, opacity: 0 }}
-                transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-                className="flex-shrink-0 h-[calc(100vh-56px)] sticky top-14 border-r border-border"
-                style={{ minWidth: 0 }}
-              >
-                <div className="relative h-full flex flex-col w-[380px]">
-                  <button
-                    onClick={() => setChatOpen(false)}
-                    className="absolute top-4 right-4 z-10 p-1.5 text-muted hover:text-foreground hover:bg-border/50 rounded transition-colors"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                  <ChatInterface pageContext={CONTACT_PAGE_CONTEXT} />
-                </div>
-              </motion.aside>
-            )}
-          </AnimatePresence>
+          <ChatPopup pageContext={CONTACT_PAGE_CONTEXT} defaultOpen />
         </div>
       </div>
     </div>

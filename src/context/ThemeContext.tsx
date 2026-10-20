@@ -35,13 +35,6 @@ export const EFFECTS: { id: Effect; label: string }[] = [
   { id: 'scanlines', label: 'Scanlines' },
 ]
 
-// Swap the html crt-* class for the chosen effect; the layout's head script does the same before first paint.
-function applyEffect(effect: Effect) {
-  const root = document.documentElement
-  root.classList.remove('crt-glass', 'crt-scanlines')
-  if (effect !== 'off') root.classList.add(`crt-${effect}`)
-}
-
 interface ThemeContextType {
   mode: Mode
   resolvedMode: ResolvedMode
@@ -62,127 +55,40 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [mode, setModeState] = useState<Mode>('dark')
-  const [systemPreference, setSystemPreference] = useState<ResolvedMode>('dark')
-  const [accent, setAccentState] = useState<AccentColor>('amber')
-  const [warm, setWarmState] = useState(false)
-  const [effect, setEffectState] = useState<Effect>('off')
-  const [mounted, setMounted] = useState(false)
+// One look: day mode, amber (the first colour), no effects. The theme menu is gone, so the
+// choices visitors saved before are ignored. The setters stay so callers still compile.
+const MODE: ResolvedMode = 'light'
+const ACCENT: AccentColor = ACCENT_COLORS[0].id
+const noop = () => {}
 
-  // Get resolved mode based on mode setting and system preference
-  const resolvedMode: ResolvedMode = mode === 'system' ? systemPreference : mode
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
-    const storedMode = localStorage.getItem('theme-mode') as Mode | null
-    const storedAccent = localStorage.getItem('theme-accent') as AccentColor | null
-    const storedWarm = localStorage.getItem('theme-warm')
-    const storedEffect = localStorage.getItem('theme-effect')
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-
-    // Default to 'dark' if no stored preference (portfolio looks best in dark)
-    const initialMode = storedMode || 'dark'
-    const initialAccent = storedAccent || 'amber'
-    const initialWarm = storedWarm === 'true'
-    const initialEffect = EFFECTS.find(e => e.id === storedEffect)?.id ?? 'off'
-    const initialSystemPref = prefersDark ? 'dark' : 'light'
-
-    setModeState(initialMode)
-    setAccentState(initialAccent)
-    setWarmState(initialWarm)
-    setEffectState(initialEffect)
-    setSystemPreference(initialSystemPref)
-
-    // Apply classes based on resolved mode
-    const resolved = initialMode === 'system' ? initialSystemPref : initialMode
-    document.documentElement.classList.toggle('dark', resolved === 'dark')
-    document.documentElement.classList.toggle('warm', initialWarm)
-    document.documentElement.className = document.documentElement.className
-      .split(' ')
-      .filter(c => !c.startsWith('accent-'))
-      .join(' ')
-    document.documentElement.classList.add(`accent-${initialAccent}`)
-    applyEffect(initialEffect)
-
-    // Listen for system preference changes
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const handleChange = (e: MediaQueryListEvent) => {
-      setSystemPreference(e.matches ? 'dark' : 'light')
-    }
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
+    const root = document.documentElement
+    root.classList.remove('dark', 'warm', 'crt-glass', 'crt-scanlines')
+    root.className = root.className.split(' ').filter(c => !c.startsWith('accent-')).join(' ')
+    root.classList.add(`accent-${ACCENT}`)
   }, [])
-
-  // Apply dark class when resolved mode changes
-  useEffect(() => {
-    if (mounted) {
-      document.documentElement.classList.toggle('dark', resolvedMode === 'dark')
-    }
-  }, [resolvedMode, mounted])
-
-  // Persist mode setting
-  useEffect(() => {
-    if (mounted) {
-      localStorage.setItem('theme-mode', mode)
-    }
-  }, [mode, mounted])
-
-  // Apply warm class when warm changes
-  useEffect(() => {
-    if (mounted) {
-      document.documentElement.classList.toggle('warm', warm)
-      localStorage.setItem('theme-warm', String(warm))
-    }
-  }, [warm, mounted])
-
-  useEffect(() => {
-    if (mounted) {
-      applyEffect(effect)
-      localStorage.setItem('theme-effect', effect)
-    }
-  }, [effect, mounted])
-
-  useEffect(() => {
-    if (mounted) {
-      // Remove old accent class and add new one
-      document.documentElement.className = document.documentElement.className
-        .split(' ')
-        .filter(c => !c.startsWith('accent-'))
-        .join(' ')
-      document.documentElement.classList.add(`accent-${accent}`)
-      localStorage.setItem('theme-accent', accent)
-    }
-  }, [accent, mounted])
-
-  const setMode = (newMode: Mode) => setModeState(newMode)
-  const setAccent = (newAccent: AccentColor) => setAccentState(newAccent)
-  const setWarm = (newWarm: boolean) => setWarmState(newWarm)
-  const setEffect = (newEffect: Effect) => setEffectState(newEffect)
-  const toggleWarm = () => setWarmState(prev => !prev)
-  const toggleMode = () => setModeState(prev => {
-    if (prev === 'system') return 'light'
-    if (prev === 'light') return 'dark'
-    return 'system'
-  })
 
   return (
     <ThemeContext.Provider value={{
-      mode,
-      resolvedMode,
-      accent,
-      warm,
-      effect,
-      setMode,
-      setAccent,
-      setWarm,
-      setEffect,
-      toggleMode,
-      toggleWarm,
+      mode: MODE,
+      resolvedMode: MODE,
+      accent: ACCENT,
+      warm: false,
+      effect: 'off',
+      setMode: noop,
+      setAccent: noop,
+      setWarm: noop,
+      setEffect: noop,
+      toggleMode: noop,
+      toggleWarm: noop,
       mounted,
       // Legacy support
-      theme: resolvedMode,
-      toggleTheme: toggleMode,
+      theme: MODE,
+      toggleTheme: noop,
     }}>
       {children}
     </ThemeContext.Provider>

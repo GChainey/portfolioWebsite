@@ -71,7 +71,7 @@ interface DialogContent {
   link?: { href: string; label: string }
 }
 
-interface PageContext {
+export interface PageContext {
   page: string
   description: string
   suggestedQuestions: string[]

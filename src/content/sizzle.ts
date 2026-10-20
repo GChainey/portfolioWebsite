@@ -115,3 +115,14 @@ export const SIZZLE: Record<'30' | '60' | '90', ReelScene[]> = {
 }
 
 export const sizzleSeconds = (cut: keyof typeof SIZZLE) => reelDuration(SIZZLE[cut])
+
+// The case studies only, no title cards: plays at the top of the homepage's AI section
+export const CASE_STUDY_SIZZLE: ReelScene[] = fit(30, [
+  at(RFP_OVERVIEW, 3.6),
+  at(RFP_REWRITE, 4),
+  at(WEB_HERO, 3.6),
+  at(WEB_SELL, 3.4),
+  at(CONFIG_BRIEF, 4),
+  at(CONFIG_BRAND, 4),
+  at(SETTINGS, 3.4),
+])

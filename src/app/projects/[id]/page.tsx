@@ -6,9 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { X, Clock, ArrowRight, ArrowUpRight, RotateCcw, LayoutGrid, FileText } from 'lucide-react'
 import { Header } from '@/components/Header'
-import { ChatInterface } from '@/components/ChatInterface'
+import { ChatPopup } from '@/components/ChatPopup'
 import { RecordingReplay } from '@/components/replay/RecordingReplay'
-import { Facehash } from 'facehash'
 import { CaseStudyContent, componentRegistry } from '@/components/CaseStudyContent'
 import { TableOfContents } from '@/components/TableOfContents'
 import { FixedTableOfContents } from '@/components/FixedTableOfContents'
@@ -154,7 +153,6 @@ function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
 export default function ProjectPage() {
   const params = useParams()
   const [project, setProject] = useState<Project | null>(null)
-  const [chatOpen, setChatOpen] = useState(false) // Closed until asked for: the page reads better wide
   const [tldrOpen, setTldrOpen] = useState(false)
   const [tldrLength, setTldrLength] = useState('recruiter')
   const [tldrFocus, setTldrFocus] = useState('')
@@ -529,27 +527,7 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
             </footer>
           </main>
 
-          {/* Chat sidebar */}
-          {chatOpen ? (
-            <aside className="flex-shrink-0 w-[380px] h-[calc(100vh-56px)] sticky top-14 border-r border-border">
-              <div className="relative h-full flex flex-col">
-                <button
-                  onClick={() => setChatOpen(false)}
-                  className="absolute top-4 right-4 z-10 p-1.5 text-muted hover:text-foreground hover:bg-border/50 rounded transition-colors"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-                <ChatInterface pageContext={pageContext} />
-              </div>
-            </aside>
-          ) : (
-            <button
-              onClick={() => setChatOpen(true)}
-              className="fixed bottom-6 right-6 z-50 rounded-full shadow-lg hover:scale-110 transition-all"
-            >
-              <Facehash name="GarethLLM" size={48} showInitial enableBlink interactive={false} intensity3d="subtle" style={{ backgroundColor: 'color-mix(in srgb, var(--accent) 60%, var(--background))', borderRadius: '9999px' }} />
-            </button>
-          )}
+          <ChatPopup pageContext={pageContext} />
         </div>
       </div>
 

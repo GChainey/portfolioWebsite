@@ -1,31 +1,29 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Columns2, Maximize2, RectangleHorizontal, X } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react'
 import { ShowcaseReel, type ShowcaseScene } from '@/components/showcase/ShowcaseReel'
 import { useOverlay, pad, ease } from '@/components/showcase/shared'
 import { useTheme } from '@/context/ThemeContext'
-import { VISUALS, accentOf, type Visual } from '@/content/visuals'
+import { useFeatureFlags } from '@/context/FeatureFlagContext'
+import { VISUALS, VISUAL_SECTIONS, KIND_WORDS, type Visual } from '@/content/visuals'
+import { CASE_STUDY_SIZZLE } from '@/content/sizzle'
+import { TESTIMONIALS } from '@/content/testimonials'
+import { KindWord } from '@/components/KindWord'
+import { HomeSections } from '@/components/HomeSections'
+import { HomeCarousels } from '@/components/HomeCarousels'
 
 // The visuals (content/visuals.ts), one after another: what it is and what it did, then the
-// piece. Two layouts while we choose: full width, the text above and the piece across the whole
-// column, or side by side. Click a piece to open it as big as the screen allows.
-
-type Layout = 'full' | 'side'
-const LAYOUTS = [
-  { id: 'full', label: 'Full width', icon: RectangleHorizontal },
-  { id: 'side', label: 'Side by side', icon: Columns2 },
-] as const
-const STORE = 'visuals-layout'
+// piece across the whole column. Click a piece to open it as big as the screen allows.
 
 // Built once: the reel restarts whenever its scenes change
 const SCENES: Record<string, ShowcaseScene[]> = Object.fromEntries(VISUALS.map((v) => [v.id, [v.scene]]))
 
 // True while the element is within a screen or so of the viewport. A replay is a whole page
 // rebuilt in an iframe, so only the ones near the screen are kept.
-function useNear<T extends HTMLElement>() {
+export function useNear<T extends HTMLElement>() {
   const ref = useRef<T>(null)
   const [near, setNear] = useState(false)
   useEffect(() => {
@@ -38,23 +36,54 @@ function useNear<T extends HTMLElement>() {
   return [ref, near] as const
 }
 
+// Live sites and rebuilt replays sit in iframes, and a page in one can scroll this one (Shader
+// Wall's does as it loads, jumping the homepage down to it). Undo any jump that didn't come from
+// the visitor: a wheel, touch, key or click in the last second, or the tail of a scroll already
+// under way (momentum, a smooth scroll to the top).
+export function useNoScrollJumps() {
+  useEffect(() => {
+    let lastY = window.scrollY
+    let intent = -Infinity
+    let moved = -Infinity
+    const mark = () => { intent = performance.now() }
+    const onScroll = () => {
+      const now = performance.now()
+      const dy = window.scrollY - lastY
+      if (dy === 0) return
+      if (now - intent < 1000 || (now - moved < 200 && Math.abs(dy) < 200)) {
+        lastY = window.scrollY
+        moved = now
+        return
+      }
+      window.scrollTo({ top: lastY, behavior: 'instant' })
+    }
+    const inputs = ['wheel', 'touchstart', 'touchmove', 'keydown', 'mousedown'] as const
+    inputs.forEach((e) => window.addEventListener(e, mark, { passive: true, capture: true }))
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      inputs.forEach((e) => window.removeEventListener(e, mark, { capture: true }))
+      window.removeEventListener('scroll', onScroll)
+    }
+  }, [])
+}
+
 // The piece itself, on the reel's 16:10 stage
 function Media({ v, theme, playing = true }: { v: Visual; theme: 'light' | 'dark'; playing?: boolean }) {
   const [ref, near] = useNear<HTMLDivElement>()
+  // A live site stays once loaded: loading it again would jump the page again
+  const [loaded, setLoaded] = useState(false)
+  useEffect(() => { if (near && v.scene.site) setLoaded(true) }, [near, v.scene.site])
   return (
     <div ref={ref} className="relative aspect-[16/10] w-full" style={{ background: theme === 'dark' ? '#09090b' : '#fafafa' }}>
-      {near && <ShowcaseReel scenes={SCENES[v.id]} captions={false} theme={theme} playing={playing} />}
+      {(near || loaded) && <ShowcaseReel scenes={SCENES[v.id]} captions={false} theme={theme} playing={playing} />}
     </div>
   )
 }
 
-function Project({ v }: { v: Visual }) {
-  return (
-    <p className="flex items-center gap-2 text-xs uppercase tracking-widest" style={{ color: accentOf(v) }}>
-      <span className="h-1.5 w-1.5 rounded-full" style={{ background: accentOf(v) }} />
-      {v.project}
-    </p>
-  )
+// Who a piece is for. A product's name is already its title
+function Project({ v, dark = false }: { v: Visual; dark?: boolean }) {
+  if (v.product) return null
+  return <p className={`mb-2 text-xs uppercase tracking-widest ${dark ? 'text-white/50' : 'text-muted'}`}>{v.project}</p>
 }
 
 function Impact({ v, dark = false }: { v: Visual; dark?: boolean }) {
@@ -83,9 +112,9 @@ function VisualLink({ v, className }: { v: Visual; className: string }) {
   )
 }
 
-function Piece({ v, theme, playing, onOpen }: { v: Visual; theme: 'light' | 'dark'; playing: boolean; onOpen: () => void }) {
+function Piece({ v, theme, playing, onOpen, frame = 'rounded-xl border border-border shadow-lg' }: { v: Visual; theme: 'light' | 'dark'; playing: boolean; onOpen: () => void; frame?: string }) {
   return (
-    <button onClick={onOpen} className="group relative block w-full overflow-hidden rounded-xl border border-border shadow-lg text-left" aria-label={`Open ${v.title}`}>
+    <button onClick={onOpen} className={`group relative block w-full overflow-hidden text-left ${frame}`} aria-label={`Open ${v.title}`}>
       <Media v={v} theme={theme} playing={playing} />
       <span className="absolute top-3 right-3 rounded-full bg-black/50 p-2 text-white opacity-0 backdrop-blur transition-opacity group-hover:opacity-100">
         <Maximize2 className="w-3.5 h-3.5" />
@@ -94,40 +123,62 @@ function Piece({ v, theme, playing, onOpen }: { v: Visual; theme: 'light' | 'dar
   )
 }
 
-function Row({ v, layout, theme, playing, onOpen }: { v: Visual; layout: Layout; theme: 'light' | 'dark'; playing: boolean; onOpen: () => void }) {
-  const text = (
-    <div className="min-w-0">
-      <Project v={v} />
-      <h3 className={`mt-2 font-medium tracking-tight text-foreground text-balance ${layout === 'full' ? 'text-3xl' : 'text-2xl'}`}>{v.title}</h3>
-      <p className="mt-1.5 text-muted">{v.summary}</p>
-    </div>
-  )
-  const aside = (v.impact || v.href) && (
-    <div className={`flex flex-wrap items-baseline gap-x-8 gap-y-2 ${layout === 'full' ? 'md:justify-end' : ''}`}>
-      <Impact v={v} />
-      <VisualLink v={v} className="text-muted hover:text-accent" />
-    </div>
-  )
-
-  if (layout === 'full') {
-    return (
-      <article className="px-8 py-12 border-b border-border last:border-b-0">
-        <div className="mb-6 grid gap-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
-          {text}
-          {aside}
-        </div>
-        <Piece v={v} theme={theme} playing={playing} onOpen={onOpen} />
-      </article>
-    )
-  }
+function Row({ v, theme, playing, onOpen, panels }: { v: Visual; theme: 'light' | 'dark'; playing: boolean; onOpen: () => void; panels: boolean }) {
   return (
-    <article className="grid gap-8 px-8 py-12 border-b border-border last:border-b-0 md:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] md:items-center">
-      <div className="space-y-5">
-        {text}
-        {aside}
+    <article className={`px-8 ${panels ? 'py-12 border-b border-border' : 'py-16'}`}>
+      <div className="mb-6 grid gap-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
+        <div className="min-w-0">
+          <Project v={v} />
+          <h3 className="font-medium tracking-tight text-foreground text-balance text-3xl">{v.title}</h3>
+          <p className="mt-1.5 text-muted">{v.summary}</p>
+        </div>
+        {(v.impact || v.href) && (
+          <div className="flex flex-wrap items-baseline gap-x-8 gap-y-2 md:justify-end">
+            <Impact v={v} />
+            <VisualLink v={v} className="text-muted hover:text-accent" />
+          </div>
+        )}
       </div>
       <Piece v={v} theme={theme} playing={playing} onOpen={onOpen} />
     </article>
+  )
+}
+
+// The website design (the Paper frame "website"): title, one line, the links in a row, then the
+// piece. No panels, no labels, no impact numbers
+function WebsiteLinks({ v }: { v: Visual }) {
+  const cls = 'text-sm leading-[18px] text-muted transition-colors hover:text-foreground'
+  return (
+    <div className="flex flex-wrap gap-2">
+      {v.href && !v.external && <Link href={v.href} className={cls}>Read case study</Link>}
+      {v.href && v.external && <a href={v.href} target="_blank" rel="noopener noreferrer" className={cls}>Visit {v.project} ↗</a>}
+      {v.visit && <a href={v.visit.href} target="_blank" rel="noopener noreferrer" className={cls}>{v.visit.label} ↗</a>}
+    </div>
+  )
+}
+
+function WebsiteRow({ v, theme, playing, onOpen }: { v: Visual; theme: 'light' | 'dark'; playing: boolean; onOpen: () => void }) {
+  return (
+    <article className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <h3 className="text-[24px] font-medium leading-[30px] tracking-[-0.01em] text-foreground text-balance">{v.title}</h3>
+        <p className="text-base leading-[26px] text-muted">{v.summary}</p>
+        <WebsiteLinks v={v} />
+      </div>
+      <Piece v={v} theme={theme} playing={playing} onOpen={onOpen} frame="rounded-xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.18)]" />
+    </article>
+  )
+}
+
+// The case studies cut together, captions on, playing ahead of them
+function Sizzle({ theme, playing, panels }: { theme: 'light' | 'dark'; playing: boolean; panels: boolean }) {
+  const [ref, near] = useNear<HTMLDivElement>()
+  return (
+    <div className={`px-8 ${panels ? 'py-12 border-b border-border' : 'pt-8 pb-16'}`}>
+      <div ref={ref} className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-border shadow-lg" style={{ background: theme === 'dark' ? '#09090b' : '#fafafa' }}>
+        {near && <ShowcaseReel scenes={CASE_STUDY_SIZZLE} theme={theme} playing={playing} />}
+      </div>
+    </div>
   )
 }
 
@@ -160,8 +211,8 @@ function Open({ index, onStep, onClose }: { index: number; onStep: (by: number) 
         </div>
         <div className="mt-4 flex flex-wrap items-center justify-between gap-x-8 gap-y-3">
           <div className="min-w-0">
-            <Project v={v} />
-            <p className="mt-1 text-lg font-medium tracking-tight text-white">{v.title}</p>
+            <Project v={v} dark />
+            <p className="text-lg font-medium tracking-tight text-white">{v.title}</p>
           </div>
           <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
             <Impact v={v} dark />
@@ -184,40 +235,53 @@ function Open({ index, onStep, onClose }: { index: number; onStep: (by: number) 
 export function Visuals() {
   const { resolvedMode } = useTheme()
   const theme = resolvedMode === 'dark' ? 'dark' : 'light'
-  const [layout, setLayout] = useState<Layout>('full')
   const [open, setOpen] = useState<number | null>(null)
-
-  // The last layout picked sticks
-  useEffect(() => {
-    const saved = localStorage.getItem(STORE)
-    if (saved === 'full' || saved === 'side') setLayout(saved)
-  }, [])
-  const choose = (id: Layout) => { setLayout(id); localStorage.setItem(STORE, id) }
+  const { flags } = useFeatureFlags()
+  useNoScrollJumps()
 
   const close = useCallback(() => setOpen(null), [])
   const step = useCallback((by: number) => setOpen((i) => (i === null ? i : (i + by + VISUALS.length) % VISUALS.length)), [])
 
+  if (flags.homeDesign === 'horizontal') return <HomeCarousels fit={flags.carouselFit} />
+  if (flags.homeDesign === 'vertical') return <HomeSections layout="vertical" />
+
+  if (flags.homeDesign === 'website') {
+    return (
+      <div className="flex flex-col gap-24 px-6 pt-16 pb-24">
+        {VISUAL_SECTIONS.map((section) => (
+          <section key={section.id} aria-labelledby={`visuals-${section.id}`} className="flex flex-col gap-12">
+            <h2 id={`visuals-${section.id}`} className="text-[36px] font-medium leading-[40px] tracking-[-0.02em] text-foreground">{section.websiteTitle ?? section.title}</h2>
+            <div className="flex flex-col gap-16">
+              {VISUALS.map((v, i) => v.section === section.id && (
+                <WebsiteRow key={v.id} v={v} theme={theme} playing={open === null} onOpen={() => setOpen(i)} />
+              ))}
+            </div>
+          </section>
+        ))}
+        <AnimatePresence>{open !== null && <Open key="open" index={open} onStep={step} onClose={close} />}</AnimatePresence>
+      </div>
+    )
+  }
+
   return (
     <div>
-      <div className="flex items-center justify-between gap-4 px-8 py-4 border-b border-border">
-        <p className="text-xs text-muted uppercase tracking-widest">{VISUALS.length} pieces</p>
-        <div className="flex bg-[color-mix(in_srgb,var(--border)_40%,transparent)] rounded-full p-0.5" role="group" aria-label="Layout">
-          {LAYOUTS.map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              onClick={() => choose(id)}
-              aria-pressed={layout === id}
-              className={`flex items-center gap-1.5 px-3.5 py-1 text-sm rounded-full transition-all ${layout === id ? 'bg-foreground text-background font-medium' : 'text-muted hover:text-foreground'}`}
-            >
-              <Icon className="w-3.5 h-3.5" />
-              {label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {VISUALS.map((v, i) => (
-        <Row key={v.id} v={v} layout={layout} theme={theme} playing={open === null} onOpen={() => setOpen(i)} />
+      {VISUAL_SECTIONS.map((section) => (
+        <section key={section.id} aria-labelledby={`visuals-${section.id}`}>
+          <header className={`px-8 ${flags.panels ? 'pt-20' : 'pt-24 pb-4'}`}>
+            <h2 id={`visuals-${section.id}`} className="text-4xl md:text-5xl font-medium tracking-tight text-foreground text-balance">{section.title}</h2>
+          </header>
+          {section.id === 'ai' && <Sizzle theme={theme} playing={open === null} panels={flags.panels} />}
+          {VISUALS.map((v, i) => {
+            if (v.section !== section.id) return null
+            const kind = TESTIMONIALS.find((t) => t.name === KIND_WORDS[v.id])
+            return (
+              <Fragment key={v.id}>
+                <Row v={v} theme={theme} playing={open === null} onOpen={() => setOpen(i)} panels={flags.panels} />
+                {kind && <KindWord t={kind} panels={flags.panels} />}
+              </Fragment>
+            )
+          })}
+        </section>
       ))}
 
       <AnimatePresence>{open !== null && <Open key="open" index={open} onStep={step} onClose={close} />}</AnimatePresence>

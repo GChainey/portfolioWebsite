@@ -68,6 +68,101 @@ export function FeatureFlagDrawer() {
                 </p>
               </div>
 
+              {/* Homepage design */}
+              <div className="space-y-3">
+                <p className="text-sm font-medium text-foreground">Homepage design</p>
+                <div className="flex gap-1 bg-border/50 rounded-lg p-1">
+                  {([
+                    { value: 'horizontal', label: 'Horizontal' },
+                    { value: 'vertical', label: 'Vertical' },
+                    { value: 'website', label: 'Website' },
+                    { value: 'list', label: 'List' },
+                  ] as const).map(({ value, label }) => (
+                    <button
+                      key={value}
+                      onClick={() => setFlag('homeDesign', value)}
+                      className={`flex-1 text-xs py-1.5 px-2 rounded-md transition-colors ${
+                        flags.homeDesign === value ? 'bg-accent text-white' : 'text-muted hover:text-foreground'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-muted">
+                  Horizontal and Vertical: the two Paper frames (a piece's clips run sideways, or down). Website: one picture per piece. List: the earlier one. Also ?design=horizontal
+                </p>
+              </div>
+
+              {/* Horizontal carousel fit */}
+              <div className="space-y-3">
+                <p className="text-sm font-medium text-foreground">Carousel fit</p>
+                <div className="flex gap-1 bg-border/50 rounded-lg p-1">
+                  {([
+                    { value: 'full', label: 'Full' },
+                    { value: 'bleed', label: 'Bleed' },
+                    { value: 'cards', label: 'Cards' },
+                  ] as const).map(({ value, label }) => (
+                    <button
+                      key={value}
+                      onClick={() => setFlag('carouselFit', value)}
+                      className={`flex-1 text-xs py-1.5 px-2 rounded-md transition-colors ${
+                        flags.carouselFit === value ? 'bg-accent text-white' : 'text-muted hover:text-foreground'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-muted">
+                  The horizontal homepage: a slide the whole window, a sliver of bleed, or a few cards to a screen. Also ?fit=full
+                </p>
+              </div>
+
+              {/* Design v2 Toggle */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-foreground">Design v2</p>
+                  <button
+                    onClick={() => setFlag('v2', !flags.v2)}
+                    className={`relative w-11 h-6 rounded-full transition-colors ${
+                      flags.v2 ? 'bg-accent' : 'bg-border'
+                    }`}
+                  >
+                    <motion.div
+                      className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow"
+                      animate={{ x: flags.v2 ? 20 : 0 }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                    />
+                  </button>
+                </div>
+                <p className="text-xs text-muted">
+                  Simplified: six type sizes, two weights, Geist for numbers too, one grey, three corners. Also ?v=2
+                </p>
+              </div>
+
+              {/* Panels Toggle */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-foreground">Panels</p>
+                  <button
+                    onClick={() => setFlag('panels', !flags.panels)}
+                    className={`relative w-11 h-6 rounded-full transition-colors ${
+                      flags.panels ? 'bg-accent' : 'bg-border'
+                    }`}
+                  >
+                    <motion.div
+                      className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow"
+                      animate={{ x: flags.panels ? 20 : 0 }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                    />
+                  </button>
+                </div>
+                <p className="text-xs text-muted">
+                  The ruled column and the hairlines between sections. Off: open space instead. Also ?panels=off
+                </p>
+              </div>
+
               {/* Feed Page Toggle */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
@@ -159,28 +254,6 @@ export function FeatureFlagDrawer() {
                 )}
                 <p className="text-xs text-muted">
                   Animated cursive signature in footers and CV title
-                </p>
-              </div>
-
-              {/* Warmth Toggle */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium text-foreground">Warmth</p>
-                  <button
-                    onClick={() => setFlag('warmth', !flags.warmth)}
-                    className={`relative w-11 h-6 rounded-full transition-colors ${
-                      flags.warmth ? 'bg-accent' : 'bg-border'
-                    }`}
-                  >
-                    <motion.div
-                      className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow"
-                      animate={{ x: flags.warmth ? 20 : 0 }}
-                      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                    />
-                  </button>
-                </div>
-                <p className="text-xs text-muted">
-                  Show warmth toggle in theme selector
                 </p>
               </div>
 

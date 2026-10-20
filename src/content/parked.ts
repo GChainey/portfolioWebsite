@@ -31,6 +31,20 @@ export interface ParkedItem {
 
 export const PARKED: ParkedItem[] = [
   {
+    id: 'design-audit',
+    name: 'Design audit',
+    status: 'local',
+    since: '2026-10-18',
+    summary: 'The fonts, type sizes, weights, spacing, colours and corners the site uses, counted from src each time the page loads, beside a simpler set to move to (six type steps, two weights, one palette, three corners). /review is the Paper design review as a page, and the walkthrough is an HTML recording of it.',
+    links: [{ label: 'Audit', href: '/audit' }, { label: 'Review', href: '/review' }, { label: 'Walkthrough', href: '/review/walkthrough.html' }],
+    gate: 'notFound() outside development in src/app/audit/page.tsx; counting in src/lib/design-audit.ts',
+    todo: [
+      'Decide on the proposed type scale, palette and corners, then apply them',
+      'Fix the see-through backgrounds: colours as rgb(var(--x) / <alpha-value>) so bg-border/50 and the rest render',
+      'Drop JetBrains Mono and Caveat once nothing needs them',
+    ],
+  },
+  {
     id: 'interaction-of-color',
     name: 'Interaction of Color',
     status: 'local',
@@ -86,13 +100,14 @@ export const PARKED: ParkedItem[] = [
     name: 'Gallery',
     status: 'local',
     since: '2026-10-07',
-    summary: 'A full-width column of real work that opens in a dialog: clips of the big pieces being used, live prototypes, and phone work in a drawn phone. On the homepage it is a Page / Visuals switch under the hero (the Visuals list, components/Visuals.tsx), and there is a header link. The switch was live briefly on 2026-10-17, then taken back: not coherent enough yet.',
+    summary: 'A full-width column of real work that opens in a dialog: clips of the big pieces being used, live prototypes, and phone work in a drawn phone. The Visuals list (components/Visuals.tsx) is now the homepage, live since 2.0.0; the /gallery page and its header link are still local.',
     links: [
       { label: 'Gallery', href: '/gallery' },
       { label: 'Edit mode', href: '/gallery?edit' },
     ],
     gate: 'GALLERY_LIVE in src/components/Gallery.tsx and LIVE in public/gallery/gallery.js (flip both)',
     todo: [
+      'Polish the product demos the homepage plays: make them more enticing as UI. First, Daisy Assess: the dashboard and its hero cards',
       'The header does not fit on a phone: it needs a mobile menu (or fewer links) before Gallery goes in it for real',
       'More small feature clips: AI writing, Document Validation, the chatbot with sources',
       'Recordings are video; every recording on the site is moving to rrweb replays',
