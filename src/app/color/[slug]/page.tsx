@@ -4,6 +4,29 @@ import { notFound } from 'next/navigation'
 import { Header } from '@/components/Header'
 import { Recollection } from '@/components/color/Recollection'
 import { Relativity } from '@/components/color/Relativity'
+import { Contexture } from '@/components/color/Contexture'
+import { Paper } from '@/components/color/Paper'
+import { Lightness } from '@/components/color/Lightness'
+import { ReversedGrounds } from '@/components/color/ReversedGrounds'
+import { Subtraction } from '@/components/color/Subtraction'
+import { AfterImage } from '@/components/color/AfterImage'
+import { Transparence } from '@/components/color/Transparence'
+import { FactualMixtures } from '@/components/color/FactualMixtures'
+import { SpaceIllusion } from '@/components/color/SpaceIllusion'
+import { OpticalMixture } from '@/components/color/OpticalMixture'
+import { Bezold } from '@/components/color/Bezold'
+import { Intervals } from '@/components/color/Intervals'
+import { Intersecting } from '@/components/color/Intersecting'
+import { Quantity } from '@/components/color/Quantity'
+import { FilmVolume } from '@/components/color/FilmVolume'
+import { FreeStudies } from '@/components/color/FreeStudies'
+import { Masters } from '@/components/color/Masters'
+import { WeberFechner } from '@/components/color/WeberFechner'
+import { Temperature } from '@/components/color/Temperature'
+import { Vibrating } from '@/components/color/Vibrating'
+import { Vanishing } from '@/components/color/Vanishing'
+import { Systems } from '@/components/color/Systems'
+import { Teaching } from '@/components/color/Teaching'
 import { COLOR_CHAPTERS, COLOR_LIVE, type ColorChapter } from '@/content/color'
 
 // One page per chapter of Interaction of Color: the exercise, then what it taught me.
@@ -11,6 +34,29 @@ import { COLOR_CHAPTERS, COLOR_LIVE, type ColorChapter } from '@/content/color'
 const EXERCISES: Record<string, () => JSX.Element> = {
   recollection: Recollection,
   relativity: Relativity,
+  'contexture': Contexture,
+  'paper': Paper,
+  'lightness': Lightness,
+  'reversed-grounds': ReversedGrounds,
+  'subtraction': Subtraction,
+  'after-image': AfterImage,
+  'transparence': Transparence,
+  'factual-mixtures': FactualMixtures,
+  'space': SpaceIllusion,
+  'optical-mixture': OpticalMixture,
+  'bezold': Bezold,
+  'intervals': Intervals,
+  'intersecting': Intersecting,
+  'quantity': Quantity,
+  'film-volume': FilmVolume,
+  'free-studies': FreeStudies,
+  'masters': Masters,
+  'weber-fechner': WeberFechner,
+  'temperature': Temperature,
+  'vibrating': Vibrating,
+  'vanishing': Vanishing,
+  'systems': Systems,
+  'teaching': Teaching,
 }
 
 export function generateStaticParams() {
@@ -19,7 +65,7 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const chapter = COLOR_CHAPTERS.find((c) => c.slug === params.slug)
-  return chapter ? { title: `${chapter.numeral}. ${chapter.title} | Interaction of Color | Gareth Chainey` } : {}
+  return chapter ? { title: `${chapter.title} | Interaction of Color | Gareth Chainey` } : {}
 }
 
 export default function ColorChapterPage({ params }: { params: { slug: string } }) {
@@ -40,7 +86,7 @@ export default function ColorChapterPage({ params }: { params: { slug: string } 
               Interaction of Color
             </Link>
             <span aria-hidden>·</span>
-            <ol className="flex gap-3 font-serif text-sm normal-case tracking-normal">
+            <ol className="flex flex-wrap gap-x-3 gap-y-1 font-serif text-sm normal-case tracking-normal">
               {COLOR_CHAPTERS.map((c) => (
                 <li key={c.slug}>
                   <Link
@@ -55,8 +101,7 @@ export default function ColorChapterPage({ params }: { params: { slug: string } 
               ))}
             </ol>
           </nav>
-          <h1 className="mt-4 flex items-baseline gap-4 text-5xl font-medium text-foreground">
-            <span className="font-serif font-normal text-muted">{chapter.numeral}</span>
+          <h1 className="mt-4 hyphens-auto break-words text-4xl font-medium text-foreground sm:text-5xl" lang="en">
             {chapter.title}
           </h1>
           <p className="mt-5 max-w-2xl text-xl leading-relaxed text-muted">{chapter.blurb}</p>
@@ -64,17 +109,9 @@ export default function ColorChapterPage({ params }: { params: { slug: string } 
 
         <Exercise />
 
-        <section className="mt-20 border-t border-border pt-10">
-          <h2 className="mb-4 text-3xl font-medium text-foreground">What I learned</h2>
-          <ul className="max-w-2xl list-disc space-y-2 pl-5 text-muted">
-            {chapter.learned.map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-          </ul>
-          <p className="mt-8 text-sm text-muted">
-            From chapter {chapter.numeral} of Josef Albers, <em>Interaction of Color</em> (1963).
-          </p>
-        </section>
+        <p className="mt-20 border-t border-border pt-10 text-sm text-muted">
+          From chapter {chapter.numeral} of Josef Albers, <em>Interaction of Color</em> (1963).
+        </p>
 
         <nav aria-label="More chapters" className="mt-16 grid gap-4 border-t border-border pt-10 sm:grid-cols-2">
           {prev ? <ChapterLink chapter={prev} label="Previous chapter" /> : <span />}
@@ -97,7 +134,7 @@ function ChapterLink({ chapter, label, alignEnd }: { chapter: ColorChapter; labe
     <Link href={`/color/${chapter.slug}`} className={`group rounded border border-border p-5 ${alignEnd ? 'sm:text-right' : ''}`}>
       <span className="text-xs uppercase tracking-widest text-muted">{label}</span>
       <span className="mt-2 block text-foreground group-hover:text-accent">
-        <span className="font-serif text-muted">{chapter.numeral}</span> {chapter.title}
+        {chapter.title}
       </span>
     </Link>
   )

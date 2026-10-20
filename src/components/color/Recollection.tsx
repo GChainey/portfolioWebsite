@@ -51,7 +51,7 @@ export function Recollection() {
 
   return (
     <div className="space-y-20">
-      <Step n={1} title='Say "red"' quote='If one says "Red" (the name of a color) and there are 50 people listening, it can be expected that there will be 50 reds in their minds.'>
+      <Step title='Say "red"' quote='If one says "Red" (the name of a color) and there are 50 people listening, it can be expected that there will be 50 reds in their minds.'>
         <p className="mb-6 text-muted">Make the red you thought of.</p>
         <div className="flex flex-wrap items-start gap-8">
           <Picker value={said} onChange={setSaid} />
@@ -65,7 +65,7 @@ export function Recollection() {
       </Step>
 
       {step >= 2 && (
-        <Step n={2} title="Now Coca-Cola red" quote="Even if all the listeners have hundreds of reds in front of them from which to choose the Coca-Cola red, they will again select quite different colors.">
+        <Step title="Now Coca-Cola red" quote="Even if all the listeners have hundreds of reds in front of them from which to choose the Coca-Cola red, they will again select quite different colors.">
           <p className="mb-6 text-muted">
             Pick it from memory. One of these {field.length} reds is the real one.
           </p>
@@ -105,7 +105,7 @@ function Reveal({ said, coke }: { said: string; coke: string }) {
   const names = [said, coke, COKE_RED].map(nameOf)
 
   return (
-    <Step n={3} title="How close?" quote="And no one can be sure that he has found the precise red shade.">
+    <Step title="How close?" quote="And no one can be sure that he has found the precise red shade.">
       <div className="flex flex-wrap gap-6">
         <Disc hex={said} label="The red you thought of" />
         <Disc hex={coke} label="Coca-Cola red, from memory" />
@@ -229,7 +229,7 @@ function Flash() {
   const average = rounds.reduce((sum, r) => sum + deltaE(r.target, r.guess), 0) / (rounds.length || 1)
 
   return (
-    <Step n={4} title="Seen two seconds ago" quote="It is hard, if not impossible, to remember distinct colors. This underscores the important fact that the visual memory is very poor in comparison with our auditory memory.">
+    <Step title="Seen two seconds ago" quote="It is hard, if not impossible, to remember distinct colors. This underscores the important fact that the visual memory is very poor in comparison with our auditory memory.">
       <p className="mb-6 text-muted">
         This time there&apos;s no name or brand to go on. You see a colour for two seconds, then make it again.
         There are {ROUNDS} rounds.

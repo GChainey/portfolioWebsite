@@ -27,16 +27,18 @@ export interface ShowcaseScene {
   rate?: number // playback speed
   hold?: number // seconds, for a text-only, site or still scene
   // stack: caption above the media. side: caption beside it. center: caption alone.
-  // full: the media fills the stage, caption laid over its lower left
-  layout?: 'stack' | 'side' | 'center' | 'full'
+  // full: the media fills the stage, caption laid over its lower left. bare: the media alone
+  layout?: 'stack' | 'side' | 'center' | 'full' | 'bare'
   kicker?: string
   title: string
   sub?: string
+  quote?: string // side: a quotation under the title
+  lines?: boolean // center: the words rise in one by one and lift away before the cut
   live?: boolean // a green dot on the kicker: the model is real
 }
 
 type Recording = { meta: { width: number; height: number; mouse?: boolean }; events: unknown[] }
-type Player = { play: (t?: number) => void; pause: (t?: number) => void; destroy: () => void; setConfig: (c: { speed: number }) => void }
+type Player = { play: (t?: number) => void; pause: (t?: number) => void; destroy: () => void; setConfig: (c: { speed: number }) => void; on: (event: string, fn: () => void) => void; iframe: HTMLIFrameElement }
 type Box = { x: number; y: number; w: number; h: number }
 
 const W = 1600
@@ -49,6 +51,43 @@ const BOX: Record<'stack' | 'side' | 'full' | 'bare', Box> = {
   full: { x: 0, y: 0, w: W, h: H },
 }
 const SITE = { width: 1440, height: 900 }
+
+// A title card whose words rise in one at a time, then lift away before the scene ends
+function Lines({ scene, shown, muted }: { scene: ShowcaseScene; shown: boolean; muted: string }) {
+  const [out, setOut] = useState(false)
+  useEffect(() => {
+    if (!shown) return
+    const t = setTimeout(() => setOut(true), sceneDuration(scene) * 1000 - 700)
+    return () => clearTimeout(t)
+  }, [shown, scene])
+  let n = 0
+  const word = (w: string, key: number) => {
+    const i = n++
+    return (
+      <span
+        key={key}
+        className="inline-block whitespace-pre"
+        style={{
+          opacity: shown && !out ? 1 : 0,
+          filter: shown && !out ? 'none' : 'blur(10px)',
+          transform: `translateY(${!shown ? 36 : out ? -40 : 0}px)`,
+          transition: `opacity 500ms ease, filter 500ms ease, transform 650ms cubic-bezier(.2,.8,.2,1)`,
+          transitionDelay: `${out ? i * 18 : 120 + i * 45}ms`,
+        }}
+      >
+        {w}
+      </span>
+    )
+  }
+  const words = (t: string) => t.split(/(?<= )/).map(word)
+  return (
+    <div className="absolute inset-0 flex flex-col items-center justify-center px-24 text-center">
+      {scene.kicker && <div className={`mb-6 text-[24px] font-medium tracking-[-0.01em] ${muted}`}>{words(scene.kicker)}</div>}
+      <div className="max-w-[1300px] text-[84px] font-semibold leading-[1.04] tracking-[-0.04em]">{words(scene.title)}</div>
+      {scene.sub && <div className={`mt-7 text-[28px] tracking-[-0.01em] ${muted}`}>{words(scene.sub)}</div>}
+    </div>
+  )
+}
 
 const cache = new Map<string, Promise<Recording>>()
 const load = (src: string) => {
@@ -69,7 +108,7 @@ function place(region: Region, box: Box, fill: boolean) {
 }
 
 // One scene's media, cropped to its region and placed in its box
-function SceneMedia({ scene, playing, box, fill, dark, onReady }: { scene: ShowcaseScene; playing: boolean; box: Box; fill: boolean; dark: boolean; onReady: () => void }) {
+function SceneMedia({ scene, playing, box, fill, dark, pageTheme, onReady }: { scene: ShowcaseScene; playing: boolean; box: Box; fill: boolean; dark: boolean; pageTheme?: 'light' | 'dark'; onReady: () => void }) {
   const root = useRef<HTMLDivElement>(null)
   const video = useRef<HTMLVideoElement>(null)
   const player = useRef<Player | null>(null)
@@ -86,13 +125,25 @@ function SceneMedia({ scene, playing, box, fill, dark, onReady }: { scene: Showc
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const r = new Replayer(rec.events as any, { root: root.current, mouseTail: false, showWarning: false, triggerFocus: false }) as unknown as Player
       r.setConfig({ speed: scene.rate ?? 1 })
+      // Replay a recording of this site in the other theme: the recorded CSS has both, so only
+      // the class on <html> needs to change. The player rebuilds the page on every seek, and a
+      // recording can set the class itself partway through, so keep it set
+      const theme = () => {
+        const html = r.iframe.contentDocument?.documentElement
+        if (!pageTheme || !html) return
+        const set = () => { if (html.classList.contains('dark') !== (pageTheme === 'dark')) html.classList.toggle('dark', pageTheme === 'dark') }
+        set()
+        new MutationObserver(set).observe(html, { attributes: true, attributeFilter: ['class'] })
+      }
+      r.on('fullsnapshot-rebuilded', theme)
       r.pause((scene.from ?? 0) * 1000)
+      theme()
       player.current = r
       // Give the rebuilt page a frame to paint before it's shown
       requestAnimationFrame(() => requestAnimationFrame(() => { if (!gone) onReady() }))
     })()
     return () => { gone = true; player.current?.destroy(); player.current = null }
-  }, [scene])
+  }, [scene, pageTheme])
 
   useEffect(() => {
     const from = scene.from ?? 0
@@ -167,9 +218,11 @@ interface ShowcaseReelProps {
   playing?: boolean // the parent can hold the reel (it also waits until it is on screen)
   onCycle?: () => void // called each time the last scene finishes
   loop?: boolean
+  dots?: boolean // false: no dot before each kicker
+  pageTheme?: 'light' | 'dark' // replay recordings of this site in this theme, whatever they were recorded in
 }
 
-export function ShowcaseReel({ scenes: all, captions = true, theme = 'light', playing: wanted = true, onCycle, loop = true }: ShowcaseReelProps) {
+export function ShowcaseReel({ scenes: all, captions = true, theme = 'light', playing: wanted = true, onCycle, loop = true, dots = true, pageTheme }: ShowcaseReelProps) {
   // Memoised: the timing effect below restarts whenever this changes
   const scenes = useMemo(() => (captions ? all : all.filter(hasMedia)), [all, captions])
   const box = useRef<HTMLDivElement>(null)
@@ -248,8 +301,10 @@ export function ShowcaseReel({ scenes: all, captions = true, theme = 'light', pl
             : '#fafafa radial-gradient(#e4e4e7 1.2px, transparent 1.2px) 0 0 / 28px 28px',
         }}
       >
-        <div key={index} className="absolute inset-0" style={{ opacity: shown ? 1 : 0, transform: `translateY(${shown || fill ? 0 : 18}px)`, transition: `opacity ${FADE}ms ease, transform ${FADE}ms cubic-bezier(.2,.8,.2,1)` }}>
-          {layout === 'center' ? (
+        <div key={index} className="absolute inset-0" style={{ opacity: shown || scene.lines ? 1 : 0, transform: `translateY(${shown || fill || scene.lines ? 0 : 18}px)`, transition: `opacity ${FADE}ms ease, transform ${FADE}ms cubic-bezier(.2,.8,.2,1)` }}>
+          {layout === 'center' && scene.lines ? (
+            <Lines scene={scene} shown={shown} muted={muted} />
+          ) : layout === 'center' ? (
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-24">
               {scene.kicker && <div className={`mb-6 text-[24px] font-medium tracking-[-0.01em] ${muted}`}>{scene.kicker}</div>}
               <div className="text-[84px] font-semibold leading-[1.02] tracking-[-0.04em]">{scene.title}</div>
@@ -257,13 +312,13 @@ export function ShowcaseReel({ scenes: all, captions = true, theme = 'light', pl
             </div>
           ) : (
             <>
-              {hasMedia(scene) && <SceneMedia scene={scene} playing={shown && active} box={BOX[layout]} fill={fill} dark={dark} onReady={() => setReady(index)} />}
+              {hasMedia(scene) && <SceneMedia scene={scene} playing={shown && active} box={BOX[layout]} fill={fill} dark={dark} pageTheme={pageTheme} onReady={() => setReady(index)} />}
               {fill ? (
                 captions && (
                   <div className="absolute inset-x-0 bottom-0 px-24 pb-20 pt-48 text-white" style={{ background: 'linear-gradient(to top, rgba(9,9,11,.85), rgba(9,9,11,.4) 55%, transparent)' }}>
                     {scene.kicker && (
                       <div className="mb-3 flex items-center gap-2.5 text-[22px] font-medium tracking-[-0.01em] text-white/70">
-                        <i className={`inline-block h-2 w-2 rounded-full ${scene.live ? 'bg-green-500 shadow-[0_0_0_4px_rgba(34,197,94,.25)]' : 'bg-white'}`} />
+                        {dots && <i className={`inline-block h-2 w-2 rounded-full ${scene.live ? 'bg-green-500 shadow-[0_0_0_4px_rgba(34,197,94,.25)]' : 'bg-white'}`} />}
                         {scene.kicker}
                       </div>
                     )}
@@ -274,11 +329,15 @@ export function ShowcaseReel({ scenes: all, captions = true, theme = 'light', pl
                 layout !== 'bare' && <div className="absolute" style={layout === 'side' ? { left: 96, top: '50%', width: 560, transform: 'translateY(-50%)' } : { left: 96, top: 76 }}>
                   {scene.kicker && (
                     <div className={`mb-3 flex items-center gap-2.5 text-[20px] font-medium tracking-[-0.01em] ${muted}`}>
-                      <i className={`inline-block h-2 w-2 rounded-full ${scene.live ? 'bg-green-500 shadow-[0_0_0_4px_rgba(34,197,94,.18)]' : dark ? 'bg-white' : 'bg-zinc-900'}`} />
+                      {dots && <i className={`inline-block h-2 w-2 rounded-full ${scene.live ? 'bg-green-500 shadow-[0_0_0_4px_rgba(34,197,94,.18)]' : dark ? 'bg-white' : 'bg-zinc-900'}`} />}
                       {scene.kicker}
                     </div>
                   )}
                   <div className={`${layout === 'side' ? 'text-[58px]' : 'text-[54px]'} font-semibold leading-[1.06] tracking-[-0.035em]`}>{scene.title}</div>
+                  {layout === 'side' && scene.quote && (
+                    <blockquote className={`mt-8 font-serif text-[30px] italic leading-[1.3] ${dark ? 'text-white/75' : 'text-zinc-600'}`}>“{scene.quote}”</blockquote>
+                  )}
+                  {layout === 'side' && scene.sub && <div className={`mt-8 text-[22px] tracking-[-0.01em] ${muted}`}>{scene.sub}</div>}
                 </div>
               )}
             </>

@@ -14,6 +14,27 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.55.0',
+    date: '2026-10-19',
+    title: 'Interaction of Color, the other 23 chapters',
+    description: "Every remaining chapter of Albers' Interaction of Color now has its own page and exercise, each rebuilt with something a screen can do that paper couldn't.",
+    changes: [
+      'Chapters II, III and V to XXV, one page each at /color/<slug>, still dev only behind COLOR_LIVE',
+      "Lightness test with measured answers scored against Albers' 60% wrong, plus a grey scale evenness meter",
+      'An after-image timer that swaps the colour for white at exactly 30 seconds, and the yellow circles that leave yellow diamonds',
+      'Draggable additive lights and subtractive inks, optical mixture dots with a distance slider, and a three-ink halftone',
+      'Upload a painting and reduce it to flat colour papers by clustering its colours in OKLab, then pick your own papers to compare',
+      "Weber-Fechner layers simulated exactly, Goethe's triangle mixed from your own primaries, Schopenhauer's quantity ring, and HSV against OKLCH in grey",
+      'Shared colour maths in src/lib/color.ts: OKLab mixing, light addition, multiply, greyscale and WCAG contrast',
+      'Chapter titles shrink on phones so long words fit, and the chapter numerals wrap',
+      '/color/reel plays the seven clearest studies in three cuts to compare (text first, title and study, and Albers in his own words), dark or light, and links to each',
+      'Chapter pages no longer show a "What I learned" list',
+      "Every study audited against Albers' own instructions, with a measurable check and a round on colours you haven't seen; Vanishing now lets you adjust both colours",
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'claude/project-thread-ijswqy',
+  },
+  {
     version: '1.54.0',
     date: '2026-10-19',
     title: 'Interaction of Color, chapters I and IV',
