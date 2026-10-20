@@ -68,6 +68,30 @@ export function FeatureFlagDrawer() {
                 </p>
               </div>
 
+              {/* Homepage design */}
+              <div className="space-y-3">
+                <p className="text-sm font-medium text-foreground">Homepage design</p>
+                <div className="flex gap-1 bg-border/50 rounded-lg p-1">
+                  {([
+                    { value: 'website', label: 'Website' },
+                    { value: 'list', label: 'List' },
+                  ] as const).map(({ value, label }) => (
+                    <button
+                      key={value}
+                      onClick={() => setFlag('homeDesign', value)}
+                      className={`flex-1 text-xs py-1.5 px-2 rounded-md transition-colors ${
+                        flags.homeDesign === value ? 'bg-accent text-white' : 'text-muted hover:text-foreground'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-muted">
+                  Website: the Paper frame, no lines, no quotes. List: the earlier one, with kind words and the sizzle. Also ?design=list
+                </p>
+              </div>
+
               {/* Design v2 Toggle */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">

@@ -7,6 +7,9 @@ type SignatureVariant = 'off' | 'clippath' | 'penflow'
 // five showcase variants (components/showcase) are parked here to compare
 export const HOME_LAYOUTS = ['carousel', 'tiles', 'autoplay', 'coverflow', 'scrolly', 'billboard', 'wall'] as const
 export type HomeLayout = (typeof HOME_LAYOUTS)[number]
+// The homepage under the hero: 'website' is the Paper frame of that name (no panel lines, each
+// piece a title, a line, links and its picture); 'list' is the earlier Visuals list
+export type HomeDesign = 'website' | 'list'
 
 interface FeatureFlags {
   sectionTitleBorders: boolean
@@ -20,6 +23,7 @@ interface FeatureFlags {
   homeLayout: HomeLayout
   panels: boolean // the boxed look: a ruled column, every section between hairlines
   v2: boolean // the simplified design (globals.css, html.v2): six type steps, two weights, one grey, three corners
+  homeDesign: HomeDesign
 }
 
 interface FeatureFlagContextType {
@@ -41,6 +45,7 @@ const defaultFlags: FeatureFlags = {
   homeLayout: 'tiles',
   panels: true,
   v2: false,
+  homeDesign: 'website',
 }
 
 const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(undefined)
@@ -52,6 +57,7 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
   // ?panels=off or on, and ?v=2 or 1, for this visit only (not saved)
   const [panelsParam, setPanelsParam] = useState<boolean | null>(null)
   const [v2Param, setV2Param] = useState<boolean | null>(null)
+  const [designParam, setDesignParam] = useState<HomeDesign | null>(null)
 
   // Load flags from localStorage on mount
   useEffect(() => {
@@ -67,6 +73,8 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
     if (panels === 'off' || panels === 'on') setPanelsParam(panels === 'on')
     const v = new URLSearchParams(window.location.search).get('v')
     if (v === '1' || v === '2') setV2Param(v === '2')
+    const design = new URLSearchParams(window.location.search).get('design')
+    if (design === 'website' || design === 'list') setDesignParam(design)
     setLoaded(true)
   }, [])
 
@@ -76,7 +84,9 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
     if (loaded) localStorage.setItem('featureFlags', JSON.stringify(flags))
   }, [flags, loaded])
 
-  const shown = { ...flags, ...(panelsParam === null ? {} : { panels: panelsParam }), ...(v2Param === null ? {} : { v2: v2Param }) }
+  const picked = { ...flags, ...(panelsParam === null ? {} : { panels: panelsParam }), ...(v2Param === null ? {} : { v2: v2Param }), ...(designParam === null ? {} : { homeDesign: designParam }) }
+  // The website design has no panel lines
+  const shown = picked.homeDesign === 'website' ? { ...picked, panels: false } : picked
 
   // The simplified design is CSS on html.v2 (globals.css)
   useEffect(() => {

@@ -3,11 +3,10 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
-import { X, ArrowRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { Visuals } from '@/components/Visuals'
-import { ChatInterface } from '@/components/ChatInterface'
-import { Facehash } from 'facehash'
+import { ChatPopup } from '@/components/ChatPopup'
 import { GitHubContributions } from '@/components/GitHubContributions'
 import { ThinkerCard } from '@/components/ThinkerCard'
 import { ShowcaseCarousel } from '@/components/ShowcaseCarousel'
@@ -93,7 +92,6 @@ export default function Home() {
   const [suffix, setSuffix] = useState('')
   const [typingDone, setTypingDone] = useState(false)
   const [showTooltip, setShowTooltip] = useState(false)
-  const [chatOpen, setChatOpen] = useState(false)
   const [chatMounted, setChatMounted] = useState(false)
   const [experienceDialogOpen, setExperienceDialogOpen] = useState(false)
   const [selectedCompanyId, setSelectedCompanyId] = useState('enterpriseai')
@@ -443,44 +441,8 @@ export default function Home() {
             </footer>
           </main>
 
-          {/* Chat toggle button */}
-          <AnimatePresence>
-            {chatMounted && !chatOpen && (
-              <motion.button
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                onClick={() => setChatOpen(true)}
-                className="fixed bottom-6 right-6 z-50 rounded-full shadow-lg hover:scale-110 transition-all"
-              >
-                <Facehash name="GarethLLM" size={48} showInitial enableBlink interactive={false} intensity3d="subtle" style={{ backgroundColor: 'color-mix(in srgb, var(--accent) 60%, var(--background))', borderRadius: '9999px' }} />
-              </motion.button>
-            )}
-          </AnimatePresence>
-
-          {/* Chat sidebar */}
-          <AnimatePresence>
-            {chatMounted && chatOpen && (
-              <motion.aside
-                initial={{ width: 0, opacity: 0 }}
-                animate={{ width: 380, opacity: 1 }}
-                exit={{ width: 0, opacity: 0 }}
-                transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-                className="flex-shrink-0 h-[calc(100vh-56px)] sticky top-14 border-r border-border"
-                style={{ minWidth: 0 }}
-              >
-                <div className="relative h-full flex flex-col w-[380px]">
-                  <button
-                    onClick={() => setChatOpen(false)}
-                    className="absolute top-4 right-4 z-10 p-1.5 text-muted hover:text-foreground hover:bg-border/50 rounded transition-colors"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                  <ChatInterface pageContext={HOME_PAGE_CONTEXT} />
-                </div>
-              </motion.aside>
-            )}
-          </AnimatePresence>
+          {/* The chat face appears once the hero has typed itself out */}
+          {chatMounted && <ChatPopup pageContext={HOME_PAGE_CONTEXT} />}
         </div>
       </div>
     </div>

@@ -35,8 +35,8 @@ export const PARKED: ParkedItem[] = [
     name: 'Design audit',
     status: 'local',
     since: '2026-10-18',
-    summary: 'The fonts, type sizes, weights, spacing, colours and corners the site uses, counted from src each time the page loads, beside a simpler set to move to (six type steps, two weights, one palette, three corners).',
-    links: [{ label: 'Audit', href: '/audit' }],
+    summary: 'The fonts, type sizes, weights, spacing, colours and corners the site uses, counted from src each time the page loads, beside a simpler set to move to (six type steps, two weights, one palette, three corners). /review is the Paper design review as a page, and the walkthrough is an HTML recording of it.',
+    links: [{ label: 'Audit', href: '/audit' }, { label: 'Review', href: '/review' }, { label: 'Walkthrough', href: '/review/walkthrough.html' }],
     gate: 'notFound() outside development in src/app/audit/page.tsx; counting in src/lib/design-audit.ts',
     todo: [
       'Decide on the proposed type scale, palette and corners, then apply them',

@@ -110,9 +110,9 @@ function VisualLink({ v, className }: { v: Visual; className: string }) {
   )
 }
 
-function Piece({ v, theme, playing, onOpen }: { v: Visual; theme: 'light' | 'dark'; playing: boolean; onOpen: () => void }) {
+function Piece({ v, theme, playing, onOpen, frame = 'rounded-xl border border-border shadow-lg' }: { v: Visual; theme: 'light' | 'dark'; playing: boolean; onOpen: () => void; frame?: string }) {
   return (
-    <button onClick={onOpen} className="group relative block w-full overflow-hidden rounded-xl border border-border shadow-lg text-left" aria-label={`Open ${v.title}`}>
+    <button onClick={onOpen} className={`group relative block w-full overflow-hidden text-left ${frame}`} aria-label={`Open ${v.title}`}>
       <Media v={v} theme={theme} playing={playing} />
       <span className="absolute top-3 right-3 rounded-full bg-black/50 p-2 text-white opacity-0 backdrop-blur transition-opacity group-hover:opacity-100">
         <Maximize2 className="w-3.5 h-3.5" />
@@ -138,6 +138,32 @@ function Row({ v, theme, playing, onOpen, panels }: { v: Visual; theme: 'light' 
         )}
       </div>
       <Piece v={v} theme={theme} playing={playing} onOpen={onOpen} />
+    </article>
+  )
+}
+
+// The website design (the Paper frame "website"): title, one line, the links in a row, then the
+// piece. No panels, no labels, no impact numbers
+function WebsiteLinks({ v }: { v: Visual }) {
+  const cls = 'text-sm leading-[18px] text-muted transition-colors hover:text-foreground'
+  return (
+    <div className="flex flex-wrap gap-2">
+      {v.href && !v.external && <Link href={v.href} className={cls}>Read case study</Link>}
+      {v.href && v.external && <a href={v.href} target="_blank" rel="noopener noreferrer" className={cls}>Visit {v.project} ↗</a>}
+      {v.visit && <a href={v.visit.href} target="_blank" rel="noopener noreferrer" className={cls}>{v.visit.label} ↗</a>}
+    </div>
+  )
+}
+
+function WebsiteRow({ v, theme, playing, onOpen }: { v: Visual; theme: 'light' | 'dark'; playing: boolean; onOpen: () => void }) {
+  return (
+    <article className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <h3 className="text-[24px] font-medium leading-[30px] tracking-[-0.01em] text-foreground text-balance">{v.title}</h3>
+        <p className="text-base leading-[26px] text-muted">{v.summary}</p>
+        <WebsiteLinks v={v} />
+      </div>
+      <Piece v={v} theme={theme} playing={playing} onOpen={onOpen} frame="rounded-xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.18)]" />
     </article>
   )
 }
@@ -213,6 +239,24 @@ export function Visuals() {
 
   const close = useCallback(() => setOpen(null), [])
   const step = useCallback((by: number) => setOpen((i) => (i === null ? i : (i + by + VISUALS.length) % VISUALS.length)), [])
+
+  if (flags.homeDesign === 'website') {
+    return (
+      <div className="flex flex-col gap-24 px-6 pt-16 pb-24">
+        {VISUAL_SECTIONS.map((section) => (
+          <section key={section.id} aria-labelledby={`visuals-${section.id}`} className="flex flex-col gap-12">
+            <h2 id={`visuals-${section.id}`} className="text-[36px] font-medium leading-[40px] tracking-[-0.02em] text-foreground">{section.websiteTitle ?? section.title}</h2>
+            <div className="flex flex-col gap-16">
+              {VISUALS.map((v, i) => v.section === section.id && (
+                <WebsiteRow key={v.id} v={v} theme={theme} playing={open === null} onOpen={() => setOpen(i)} />
+              ))}
+            </div>
+          </section>
+        ))}
+        <AnimatePresence>{open !== null && <Open key="open" index={open} onStep={step} onClose={close} />}</AnimatePresence>
+      </div>
+    )
+  }
 
   return (
     <div>

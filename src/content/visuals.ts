@@ -7,8 +7,8 @@ import type { ShowcaseScene } from '@/components/showcase/ShowcaseReel'
 
 // The homepage's three sections, in order
 export type VisualSection = 'products' | 'ai' | 'creative'
-export const VISUAL_SECTIONS: { id: VisualSection; title: string }[] = [
-  { id: 'products', title: 'Products I\u2019ve made' },
+export const VISUAL_SECTIONS: { id: VisualSection; title: string; websiteTitle?: string }[] = [
+  { id: 'products', title: 'Products I\u2019ve made', websiteTitle: 'Products' },
   { id: 'ai', title: 'How AI has changed how I design' },
   { id: 'creative', title: 'Creative tools' },
 ]
@@ -24,6 +24,7 @@ export interface Visual {
   scene: ShowcaseScene
   href?: string // the case study, essay or product
   external?: boolean
+  visit?: { label: string; href: string } // a second link, out to the thing itself
 }
 
 // A stretch of a replay. Full-frame recordings are 16:10, like the stage, so they fill it;
@@ -40,7 +41,7 @@ export const VISUALS: Visual[] = [
     project: 'Shader Wall',
     product: true,
     title: 'Shader Wall',
-    summary: 'Your Mac desktop, alive. The landing page runs the whole app, in the browser.',
+    summary: 'An agentic friendly native macOS app to set and create shaders as your background.',
     scene: { site: 'https://www.shaderwall.com', hold: 12, layout: 'full', title: '' },
     href: 'https://www.shaderwall.com',
     external: true,
@@ -208,13 +209,14 @@ export const VISUALS: Visual[] = [
     summary: 'A top-down ode to one move from Gears of War, made with the tools an agent built for it.',
     scene: { site: 'https://wallbounce.vercel.app', hold: 12, layout: 'full', title: '' },
     href: '/projects/wallbounce-dev-tools',
+    visit: { label: 'Play Wallbounce', href: 'https://wallbounce.vercel.app' },
   },
   {
     id: 'balatro',
     section: 'creative',
     project: 'Thesis',
-    title: 'Opportunity sizing, but Balatro',
-    summary: 'Sizing a product bet like a hand of cards.',
+    title: 'Opportunity sizing x Balatro',
+    summary: 'Part of Thesis. Bringing the playful scaling elements of the card game Balatro to the product world of Opportunity Sizing.',
     scene: video('/essays/balatro-opportunity-sizing/reel.mp4', 0, 20),
     href: '/projects/balatro-opportunity-sizing',
   },
