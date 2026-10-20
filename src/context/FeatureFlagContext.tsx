@@ -11,6 +11,7 @@ export type HomeLayout = (typeof HOME_LAYOUTS)[number]
 // scroll all" and "website section horizontal scroll" (components/HomeSections); 'website' is the
 // first frame (one picture per piece); 'list' is the earlier Visuals list
 export type HomeDesign = 'website' | 'list' | 'vertical' | 'horizontal'
+export type CarouselFit = 'full' | 'bleed' | 'cards'
 
 interface FeatureFlags {
   sectionTitleBorders: boolean
@@ -25,6 +26,7 @@ interface FeatureFlags {
   panels: boolean // the boxed look: a ruled column, every section between hairlines
   v2: boolean // the simplified design (globals.css, html.v2): six type steps, two weights, one grey, three corners
   homeDesign: HomeDesign
+  carouselFit: CarouselFit // horizontal design: full window, a sliver of bleed, or cards
 }
 
 interface FeatureFlagContextType {
@@ -47,6 +49,7 @@ const defaultFlags: FeatureFlags = {
   panels: true,
   v2: false,
   homeDesign: 'website',
+  carouselFit: 'bleed',
 }
 
 const FeatureFlagContext = createContext<FeatureFlagContextType | undefined>(undefined)
@@ -59,6 +62,7 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
   const [panelsParam, setPanelsParam] = useState<boolean | null>(null)
   const [v2Param, setV2Param] = useState<boolean | null>(null)
   const [designParam, setDesignParam] = useState<HomeDesign | null>(null)
+  const [fitParam, setFitParam] = useState<CarouselFit | null>(null)
 
   // Load flags from localStorage on mount
   useEffect(() => {
@@ -76,6 +80,8 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
     if (v === '1' || v === '2') setV2Param(v === '2')
     const design = new URLSearchParams(window.location.search).get('design')
     if (design === 'website' || design === 'list' || design === 'vertical' || design === 'horizontal') setDesignParam(design)
+    const fit = new URLSearchParams(window.location.search).get('fit')
+    if (fit === 'full' || fit === 'bleed' || fit === 'cards') { setFitParam(fit); if (!design) setDesignParam('horizontal') }
     setLoaded(true)
   }, [])
 
@@ -85,7 +91,7 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
     if (loaded) localStorage.setItem('featureFlags', JSON.stringify(flags))
   }, [flags, loaded])
 
-  const picked = { ...flags, ...(panelsParam === null ? {} : { panels: panelsParam }), ...(v2Param === null ? {} : { v2: v2Param }), ...(designParam === null ? {} : { homeDesign: designParam }) }
+  const picked = { ...flags, ...(panelsParam === null ? {} : { panels: panelsParam }), ...(v2Param === null ? {} : { v2: v2Param }), ...(designParam === null ? {} : { homeDesign: designParam }), ...(fitParam === null ? {} : { carouselFit: fitParam }) }
   // Only the list design has panel lines
   const shown = picked.homeDesign !== 'list' ? { ...picked, panels: false } : picked
 

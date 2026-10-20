@@ -36,7 +36,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       'Geist instead of Inter, everywhere',
       'The homepage is the Paper frame "website": no panel lines, three sections (Products, How AI has changed how I design, Creative tools), each piece a title, a line, its links and the piece; the earlier list is at ?design=list',
       'The chat is a popup in the corner, like Intercom, on every page, instead of a sidebar that takes space',
-      'Two more homepages to try, from the Paper frames: ?design=horizontal (products and tools are one carousel, a slide each; each case study\'s clips scroll sideways) and ?design=vertical (they run down the page), with Past work, a colleague\'s words between sections and somewhere to go next',
+      'Two more homepages to try, from the Paper frames: ?design=vertical (every clip down the page) and ?design=horizontal, a screen per section, each section one carousel whose title, line and links follow the slide, in three fits: ?fit=full (the window\'s width), ?fit=bleed (the content\'s width, the next one at the edge) and ?fit=cards (three to a screen). Both have Past work, a colleague\'s words between sections and somewhere to go next',
       'Dev only: the design review as a page (/review), and an HTML recording that walks through it',
       'Design v2 to compare (Cmd+K, or ?v=2): six type sizes, two weights, Geist for numbers, one grey, three corners, and working see-through backgrounds',
       'Fixed: the header\'s tint never rendered (a Tailwind opacity on a var() colour)',

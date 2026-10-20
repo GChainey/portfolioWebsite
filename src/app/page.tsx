@@ -357,7 +357,8 @@ export default function Home() {
 
           {/* Main content */}
           {/* The scroll story runs out of this column to the window's edges, so it can't be clipped */}
-          <main className={`flex-1 min-w-0 ${flags.panels ? 'border-x border-border' : ''} ${homeLayout === 'scrolly' ? '' : 'overflow-clip'}`}>
+          {/* The scroll story and the horizontal carousels run out of this column to the window's edges, so it can't clip */}
+          <main className={`flex-1 min-w-0 ${flags.panels ? 'border-x border-border' : ''} ${homeLayout === 'scrolly' || flags.homeDesign === 'horizontal' ? '' : 'overflow-clip'}`}>
 
             {view !== 'page' ? (
               <>
