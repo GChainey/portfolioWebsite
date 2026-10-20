@@ -1,5 +1,6 @@
 'use client'
 
+import { Download } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { ReplayVsVideo } from '@/components/replay/ReplayVsVideo'
 
@@ -50,6 +51,44 @@ export default function ReplayVsVideoPage() {
             </ul>
           </section>
         </div>
+
+        <section id="skill" className="mt-16 max-w-2xl border-t border-border pt-14">
+          <h2 className="mb-4 text-3xl font-medium text-foreground">Record your own</h2>
+          <p className="mb-6 text-lg leading-relaxed text-muted">
+            Every recording on this site is made with one agent skill. Install it, then ask your coding agent for a
+            recording of a page or a flow.
+          </p>
+          <ul className="mb-8 space-y-2 text-muted">
+            <li><span className="text-foreground">Records like a person.</span> It clicks, types and scrolls with a visible cursor</li>
+            <li><span className="text-foreground">Edits as it records.</span> It speeds up slow AI answers, cuts loading screens and crops to one part of the screen</li>
+            <li><span className="text-foreground">Plays anywhere.</span> One HTML tag on any website, or a single file for Slack, Notion or a pull request</li>
+            <li><span className="text-foreground">Checks its own work.</span> It screenshots the recording before you publish it</li>
+          </ul>
+          <a
+            href="/downloads/html-recording.zip"
+            download="html-recording.zip"
+            className="inline-flex items-center gap-2 rounded-full bg-[var(--accent-cta)] px-5 py-2.5 text-sm font-medium text-white transition-all hover:brightness-110"
+          >
+            <Download className="h-4 w-4" />
+            Download the skill (.zip, 88 KB)
+          </a>
+          <div className="mt-8 space-y-3 text-sm text-muted">
+            <p>
+              <span className="text-foreground">Claude Code:</span> unzip it into{' '}
+              <code className="text-foreground">~/.claude/skills</code>. It sets itself up the first time you use it.
+            </p>
+            <p>
+              <span className="text-foreground">Or install it with the skills CLI</span> (Claude Code, Codex, Cursor and others):
+            </p>
+            <pre className="overflow-x-auto rounded-lg border border-border px-4 py-3 text-foreground"><code>npx skills add GChainey/skills --skill html-recording -g</code></pre>
+            <p>
+              It needs Node 20 or later, and downloads a headless Chromium (about 100 MB) the first time.{' '}
+              <a href="https://github.com/GChainey/skills/tree/main/skills/html-recording" className="text-foreground underline underline-offset-4 hover:text-accent">
+                Source on GitHub
+              </a> (MIT licensed)
+            </p>
+          </div>
+        </section>
       </main>
     </div>
   )

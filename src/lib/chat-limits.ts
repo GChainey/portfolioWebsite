@@ -1,4 +1,4 @@
-import { Redis } from '@upstash/redis'
+import { getRedis } from '@/lib/redis'
 
 // Claude Haiku 4.5 pricing in micro-dollars per token ($1 / $5 per million tokens)
 const INPUT_MICROS_PER_TOKEN = 1
@@ -13,18 +13,6 @@ const RATE_LIMIT_WINDOW_SECONDS = 60 * 60
 export const MAX_HISTORY_MESSAGES = 12
 export const MAX_MESSAGE_CHARS = 2000
 export const MAX_CONTEXT_CHARS = 12000
-
-let redis: Redis | null | undefined
-
-// Supports both Upstash's own env names and the Vercel Marketplace (KV_*) ones
-function getRedis(): Redis | null {
-  if (redis === undefined) {
-    const url = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL
-    const token = process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN
-    redis = url && token ? new Redis({ url, token }) : null
-  }
-  return redis
-}
 
 function spendKey() {
   return `chat:spend:${new Date().toISOString().slice(0, 7)}`
