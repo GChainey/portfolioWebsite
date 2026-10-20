@@ -12,9 +12,9 @@ import { TESTIMONIALS } from '@/content/testimonials'
 
 // The horizontal homepage, a screen per section: each section is one carousel of every clip in
 // it, and the title, line and links above it follow whichever piece is showing. Three fits:
-//   full  - a slide is the whole window, edge to edge, the piece centred in it
-//   bleed - a slide is a panel the content's width, the next one showing at the window's edge
-//   cards - a few to a screen on desktop, each with its own title, like components on a sheet
+//   full  - a slide is the window's width, the piece itself centred on the page, no panel
+//   bleed - the piece in a soft amber frame, the next one showing at the window's edge
+//   cards - a few to a screen on desktop, each framed and titled, like components on a sheet
 
 export type CarouselFit = 'full' | 'bleed' | 'cards'
 
@@ -39,6 +39,10 @@ function Links({ piece }: { piece: HomePiece }) {
     </div>
   )
 }
+
+// The frame around a piece in bleed and cards: 32px of a soft amber, so it stands out a little
+// on the white page. Never a full band of colour
+const MAT = 'color-mix(in srgb, var(--accent) 14%, var(--background))'
 
 const ARROW = 'flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-foreground shadow-md transition-opacity'
 
@@ -103,7 +107,7 @@ function SectionCarousel({ slides, fit, theme }: { slides: Slide[]; fit: Carouse
         <div ref={row} onScroll={onScroll} className="scrollbar-hide flex snap-x snap-mandatory gap-8 overflow-x-auto">
           {slides.map((s, i) => (
             <article key={i} data-slide className="flex w-[calc((100%-64px)/3)] min-w-[300px] shrink-0 snap-start flex-col gap-4">
-              <ClipFrame clip={s.clip} theme={theme} />
+              <div className="rounded-2xl p-8" style={{ background: MAT }}><ClipFrame clip={s.clip} theme={theme} /></div>
               <div className="flex flex-col gap-1.5">
                 <h3 className="text-base font-medium leading-[22px] text-foreground">{s.of > 1 ? s.clip.caption : s.piece.title}</h3>
                 <p className="line-clamp-2 text-sm leading-[20px] text-muted">{s.of > 1 ? s.piece.title : s.piece.summary}</p>
@@ -120,21 +124,25 @@ function SectionCarousel({ slides, fit, theme }: { slides: Slide[]; fit: Carouse
   // full and bleed run out of the page's column to the window's edges, sized so the section
   // (title, the piece's text, the slide, the controls) fits in one screen
   const full = fit === 'full'
-  // The piece's height; each slide is a panel 64px taller with the piece centred in it. Full: the
-  // panel is the window's width. Bleed: the content's width, lined up with the text above, the
-  // next panel showing at the window's edge
-  const SLIDE_H = 'max(360px, calc(100vh - 520px))'
-  const panelW = full ? '100vw' : 'min(1232px, 88vw)'
-  const inset = full ? '0px' : `calc((100vw - ${panelW}) / 2)`
+  // Full: each slide is the window's width with the piece centred on the page, as big as the
+  // screen allows. Bleed: the piece in its frame, lined up with the text above, the next one
+  // showing at the window's edge
+  const pieceW = full
+    ? 'min(calc(100vw - 96px), calc((100vh - 200px) * 1.6))'
+    : 'min(1168px, calc(88vw - 64px), calc((100vh - 260px) * 1.6))'
+  const slideW = full ? '100vw' : `calc(${pieceW} + 64px)`
+  const inset = full ? '0px' : 'calc((100vw - min(1232px, 88vw)) / 2)'
   return (
     <div className="flex flex-col gap-6">
       {header}
       <div ref={row} onScroll={onScroll} className={`scrollbar-hide flex snap-x snap-mandatory overflow-x-auto ${full ? '' : 'gap-6'}`} style={{ width: '100vw', marginLeft: 'calc(50% - 50vw)', paddingInline: inset, scrollPaddingInline: inset }}>
         {slides.map((s, i) => (
-          <div key={i} data-slide className={`flex shrink-0 snap-start items-center justify-center bg-secondary ${full ? '' : 'rounded-2xl'}`} style={{ width: panelW, height: `calc(${SLIDE_H} + 64px)` }}>
-            <div style={{ height: SLIDE_H, aspectRatio: '16 / 10', maxWidth: 'calc(100% - 64px)' }}><ClipFrame clip={s.clip} theme={theme} /></div>
+          <div key={i} data-slide className={`flex shrink-0 snap-start items-center justify-center ${full ? '' : 'rounded-2xl p-8'}`} style={{ width: slideW, background: full ? undefined : MAT }}>
+            <div style={{ width: pieceW }}><ClipFrame clip={s.clip} theme={theme} /></div>
           </div>
         ))}
+        {/* Lets the last framed slide scroll all the way to the left edge */}
+        {!full && <div className="shrink-0" style={{ width: `calc(100vw - ${slideW} - 2 * ${inset} - 24px)` }} aria-hidden />}
       </div>
       {controls}
     </div>
