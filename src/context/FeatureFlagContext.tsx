@@ -7,9 +7,10 @@ type SignatureVariant = 'off' | 'clippath' | 'penflow'
 // five showcase variants (components/showcase) are parked here to compare
 export const HOME_LAYOUTS = ['carousel', 'tiles', 'autoplay', 'coverflow', 'scrolly', 'billboard', 'wall'] as const
 export type HomeLayout = (typeof HOME_LAYOUTS)[number]
-// The homepage under the hero: 'website' is the Paper frame of that name (no panel lines, each
-// piece a title, a line, links and its picture); 'list' is the earlier Visuals list
-export type HomeDesign = 'website' | 'list'
+// The homepage under the hero: 'vertical' and 'horizontal' are the Paper frames "website vertical
+// scroll all" and "website section horizontal scroll" (components/HomeSections); 'website' is the
+// first frame (one picture per piece); 'list' is the earlier Visuals list
+export type HomeDesign = 'website' | 'list' | 'vertical' | 'horizontal'
 
 interface FeatureFlags {
   sectionTitleBorders: boolean
@@ -74,7 +75,7 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
     const v = new URLSearchParams(window.location.search).get('v')
     if (v === '1' || v === '2') setV2Param(v === '2')
     const design = new URLSearchParams(window.location.search).get('design')
-    if (design === 'website' || design === 'list') setDesignParam(design)
+    if (design === 'website' || design === 'list' || design === 'vertical' || design === 'horizontal') setDesignParam(design)
     setLoaded(true)
   }, [])
 
@@ -85,8 +86,8 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
   }, [flags, loaded])
 
   const picked = { ...flags, ...(panelsParam === null ? {} : { panels: panelsParam }), ...(v2Param === null ? {} : { v2: v2Param }), ...(designParam === null ? {} : { homeDesign: designParam }) }
-  // The website design has no panel lines
-  const shown = picked.homeDesign === 'website' ? { ...picked, panels: false } : picked
+  // Only the list design has panel lines
+  const shown = picked.homeDesign !== 'list' ? { ...picked, panels: false } : picked
 
   // The simplified design is CSS on html.v2 (globals.css)
   useEffect(() => {

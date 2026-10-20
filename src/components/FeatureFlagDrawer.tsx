@@ -73,6 +73,8 @@ export function FeatureFlagDrawer() {
                 <p className="text-sm font-medium text-foreground">Homepage design</p>
                 <div className="flex gap-1 bg-border/50 rounded-lg p-1">
                   {([
+                    { value: 'horizontal', label: 'Horizontal' },
+                    { value: 'vertical', label: 'Vertical' },
                     { value: 'website', label: 'Website' },
                     { value: 'list', label: 'List' },
                   ] as const).map(({ value, label }) => (
@@ -88,7 +90,7 @@ export function FeatureFlagDrawer() {
                   ))}
                 </div>
                 <p className="text-xs text-muted">
-                  Website: the Paper frame, no lines, no quotes. List: the earlier one, with kind words and the sizzle. Also ?design=list
+                  Horizontal and Vertical: the two Paper frames (a piece's clips run sideways, or down). Website: one picture per piece. List: the earlier one. Also ?design=horizontal
                 </p>
               </div>
 

@@ -12,6 +12,7 @@ import { VISUALS, VISUAL_SECTIONS, KIND_WORDS, type Visual } from '@/content/vis
 import { CASE_STUDY_SIZZLE } from '@/content/sizzle'
 import { TESTIMONIALS } from '@/content/testimonials'
 import { KindWord } from '@/components/KindWord'
+import { HomeSections } from '@/components/HomeSections'
 
 // The visuals (content/visuals.ts), one after another: what it is and what it did, then the
 // piece across the whole column. Click a piece to open it as big as the screen allows.
@@ -21,7 +22,7 @@ const SCENES: Record<string, ShowcaseScene[]> = Object.fromEntries(VISUALS.map((
 
 // True while the element is within a screen or so of the viewport. A replay is a whole page
 // rebuilt in an iframe, so only the ones near the screen are kept.
-function useNear<T extends HTMLElement>() {
+export function useNear<T extends HTMLElement>() {
   const ref = useRef<T>(null)
   const [near, setNear] = useState(false)
   useEffect(() => {
@@ -38,7 +39,7 @@ function useNear<T extends HTMLElement>() {
 // Wall's does as it loads, jumping the homepage down to it). Undo any jump that didn't come from
 // the visitor: a wheel, touch, key or click in the last second, or the tail of a scroll already
 // under way (momentum, a smooth scroll to the top).
-function useNoScrollJumps() {
+export function useNoScrollJumps() {
   useEffect(() => {
     let lastY = window.scrollY
     let intent = -Infinity
@@ -239,6 +240,8 @@ export function Visuals() {
 
   const close = useCallback(() => setOpen(null), [])
   const step = useCallback((by: number) => setOpen((i) => (i === null ? i : (i + by + VISUALS.length) % VISUALS.length)), [])
+
+  if (flags.homeDesign === 'vertical' || flags.homeDesign === 'horizontal') return <HomeSections layout={flags.homeDesign} />
 
   if (flags.homeDesign === 'website') {
     return (
