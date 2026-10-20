@@ -48,8 +48,9 @@ const CLIPS: Clip[] = [
   { slug: 'teaching', to: 8.9, h: 406, name: 'Teaching colour', title: 'What is there isn’t what we see', sub: 'Flip each illusion between factual and actual', quote: 'When we see opaque color as transparent … these effects we call actual facts.' },
 ]
 
-// The reel plays a few studies and links to them; the rest are on /color
-const PICKS = ['relativity', 'after-image', 'transparence', 'optical-mixture', 'bezold', 'vanishing']
+// The reel plays the studies whose clip shows the effect on its own, with a reveal, and links to
+// them; the rest are on /color
+const PICKS = ['contexture', 'relativity', 'subtraction', 'transparence', 'intersecting', 'vibrating', 'vanishing']
 const FEATURED = CLIPS.map((c, i) => ({ ...c, n: i })).filter((c) => PICKS.includes(c.slug))
 export const COLOR_REEL_STUDIES = FEATURED.map(({ slug, n, name, title }) => ({ slug, study: study(n), name, title }))
 
