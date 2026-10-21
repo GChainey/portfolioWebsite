@@ -31,6 +31,21 @@ export interface ParkedItem {
 
 export const PARKED: ParkedItem[] = [
   {
+    id: 'component-wall',
+    name: 'Component wall',
+    status: 'local',
+    since: '2026-10-19',
+    summary: 'Small components from the Enterprise AI apps, stacked like a component library. Click one to see it working in its app.',
+    links: [{ label: 'The wall', href: '/kit' }],
+    gate: 'KIT_LIVE in src/content/kit.ts: the dev server and Vercel previews, never production',
+    todo: [
+      'Decide whether it goes on the homepage, and where. For now it is only at /kit',
+      'The four stat and clearance cards open the Daisy Assess overview clip, not a clip of that card. Record spotlight clips for them',
+      'Workspace preferences and metrics cards are from the Workspace AI prototype; their clips are the settings recordings, which show nearby screens',
+      'The cards are pictures, not live components. Make a few interactive (the toggles, the model picker) if it helps',
+    ],
+  },
+  {
     id: 'design-audit',
     name: 'Design audit',
     status: 'local',
