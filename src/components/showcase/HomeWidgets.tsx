@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { FunnelDiagram } from '@/components/FunnelDiagram'
 import { ShaderWallInner } from '@/components/showcase/ShaderWallWidgets'
 import type { Widget } from '@/content/home-showcase'
 
@@ -28,18 +27,49 @@ function Scaled({ w, h, children }: { w: number; h: number; children: React.Reac
   )
 }
 
-// SEEK: the funnel from the case study, as it's drawn there
+// SEEK: the funnel from the case study, redrawn for a card a third of the page wide. The case
+// study's diagram shrank to unreadable there, so this one has big type and solid colour: each
+// stage a bar narrowing down the page, the three leaks in SEEK pink with what was wrong beside them
+const FUNNEL = [
+  { label: 'Impressions' },
+  { label: 'Find a course', leak: 'Too much friction to find one' },
+  { label: 'Select a course', leak: 'Missing design details' },
+  { label: 'Course information' },
+  { label: 'Lead / link', leak: 'Too long to make a connection' },
+]
+const SEEK_PINK = '#E60278'
+
 function SeekFunnel() {
+  const top = 290, bottom = 130, row = 62, gap = 8
+  const width = (i: number) => top - (i / FUNNEL.length) * (top - bottom)
   return (
-    // No box round it: the diagram sits on the card's colour
-    <div className="flex h-full w-full items-center justify-center p-6 [&>figure]:my-0 [&>figure]:w-full [&_figure>div]:border-0">
-      <FunnelDiagram stages={[
-        { label: 'Impressions' },
-        { label: 'Find the right course (tabs)', highlight: true, assumption: 'Too much friction to find a course' },
-        { label: 'Select a course', highlight: true, assumption: 'Missing design details' },
-        { label: 'Course information' },
-        { label: 'Lead/Link', highlight: true, assumption: 'Too long to make a connection' },
-      ]} />
+    <div className="absolute inset-0 flex flex-col justify-center px-8" style={{ gap }}>
+      {FUNNEL.map((s, i) => {
+        const w0 = width(i), w1 = width(i + 1), inset = (w0 - w1) / 2
+        return (
+          <div key={s.label} className="flex items-center" style={{ height: row }}>
+            {/* The bar, centred in its column and narrowing to the next one */}
+            <div className="flex w-[300px] shrink-0 justify-center">
+              <div
+                className="flex items-center justify-center"
+                style={{
+                  width: w0, height: row,
+                  clipPath: `polygon(0 0, 100% 0, ${w0 - inset}px 100%, ${inset}px 100%)`,
+                  background: s.leak ? SEEK_PINK : '#fff',
+                }}
+              >
+                <span className={`text-[20px] leading-6 ${s.leak ? 'font-semibold text-white' : 'font-medium text-zinc-500'}`}>{s.label}</span>
+              </div>
+            </div>
+            {s.leak && (
+              <div className="ml-5 flex items-center gap-3">
+                <span className="h-[2px] w-6 shrink-0" style={{ background: SEEK_PINK }} />
+                <span className="text-[20px] font-medium leading-[26px] text-zinc-900">{s.leak}</span>
+              </div>
+            )}
+          </div>
+        )
+      })}
     </div>
   )
 }
@@ -79,7 +109,7 @@ function SeekAB() {
 }
 
 export function HomeWidget({ kind }: { kind: Widget }) {
-  if (kind === 'seek-funnel') return <Scaled w={820} h={512}><SeekFunnel /></Scaled>
+  if (kind === 'seek-funnel') return <Scaled w={704} h={440}><SeekFunnel /></Scaled>
   if (kind === 'seek-ab') return <Scaled w={640} h={400}><SeekAB /></Scaled>
   return <ShaderWallInner kind={kind} />
 }
