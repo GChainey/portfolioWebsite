@@ -28,6 +28,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { ExperienceDialog } from '@/components/ExperienceDialog'
 import { PenflowSignature } from '@/components/PenflowSignature'
 import { Signature } from '@/components/Signature'
+import { SiteFooter } from '@/components/SiteFooter'
+import { EXPERIENCE } from '@/content/experience'
 
 // Typewriter sequence: target text + pause after reaching it (ms)
 const TYPING_STEPS = [
@@ -61,31 +63,6 @@ const HOME_PAGE_CONTEXT = {
 const EARLIER_WORK = ['seek-case-study-1', 'bestpractice-case-study-1']
 const SMALL_STUDIES = ['eai-settings', 'add-document']
 const ESSAYS = writing.filter((p) => p.category === 'Article').map((p) => p.id)
-
-// Experience data
-const EXPERIENCE = [
-  {
-    id: 'enterpriseai',
-    company: 'Enterprise AI Group',
-    role: 'Lead Product Designer',
-    period: 'May 2025 – Present',
-    description: 'Building AI-powered enterprise solutions. One-person product team delivering prototypes that win deals.',
-  },
-  {
-    id: 'seek',
-    company: 'SEEK',
-    role: 'Senior Product Designer',
-    period: 'May 2022 – Sep 2024',
-    description: 'Led discovery and design for candidate-facing products. Built AI resume tools and skills-based course finders.',
-  },
-  {
-    id: 'bestpractice',
-    company: 'Best Practice Software',
-    role: 'UX Designer',
-    period: 'Oct 2019 – May 2022',
-    description: 'Designed cloud-based practice management SaaS. Prototyping, validation, workshops, and component libraries.',
-  },
-]
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
@@ -358,7 +335,7 @@ export default function Home() {
           {/* Main content */}
           {/* The scroll story runs out of this column to the window's edges, so it can't be clipped */}
           {/* The scroll story and the horizontal carousels run out of this column to the window's edges, so it can't clip */}
-          <main className={`flex-1 min-w-0 ${flags.panels ? 'border-x border-border' : ''} ${homeLayout === 'scrolly' || flags.homeDesign === 'horizontal' ? '' : 'overflow-clip'}`}>
+          <main className={`flex-1 min-w-0 ${flags.panels ? 'border-x border-border' : ''} ${homeLayout === 'scrolly' || flags.homeDesign === 'horizontal' || flags.homeDesign === 'showcase' ? '' : 'overflow-clip'}`}>
 
             {view !== 'page' ? (
               <>
@@ -423,23 +400,9 @@ export default function Home() {
               </>
             )}
 
-            {/* Footer */}
-            <footer className="p-8 mt-auto">
-              {flags.signatureVariant === 'clippath' && <Signature className="mb-4" />}
-              {flags.signatureVariant === 'penflow' && <PenflowSignature className="mb-4" />}
-              <div className="flex items-center justify-between">
-                <p className="text-xs text-muted">
-                  © 2025 Gareth Chainey ·{' '}
-                  <Link href="/changelog" className="hover:text-foreground transition-colors">Changelog</Link>
-                </p>
-                <button
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                  className="text-xs text-muted hover:text-foreground transition-colors"
-                >
-                  ↑ Back to top
-                </button>
-              </div>
-            </footer>
+            {flags.signatureVariant === 'clippath' && <Signature className="mx-6 mb-4" />}
+            {flags.signatureVariant === 'penflow' && <PenflowSignature className="mx-6 mb-4" />}
+            <SiteFooter />
           </main>
 
           {/* The chat face appears once the hero has typed itself out */}

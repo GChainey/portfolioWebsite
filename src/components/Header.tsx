@@ -12,9 +12,10 @@ interface HeaderProps {
   showBack?: boolean
 }
 
-// The menu: four places, the current one in full colour
+// The menu: five places, the current one in full colour
 const NAV = [
   { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
   { href: '/essays', label: 'Essays' },
   { href: '/cv', label: 'CV' },
   { href: '/contact', label: 'Contact' },

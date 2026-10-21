@@ -31,6 +31,16 @@ export interface ParkedItem {
 
 export const PARKED: ParkedItem[] = [
   {
+    id: 'showcase-homepage',
+    name: 'Showcase homepage',
+    status: 'flag',
+    since: '2026-10-20',
+    summary: 'The homepage as the Paper frame "website · products hero + 3 details": each section shows one piece at a time as big as the column, three details of how it works under it, named tabs, arrows on the piece and dots under it; the case studies with their impact; Creative tools as a ¾ track. Details are HTML recordings of Shader Wall, Dispatch and Thesis, and SEEK\'s funnel and A/B.',
+    links: [{ label: 'Showcase', href: '/?design=showcase' }],
+    gate: '?design=showcase, or Showcase under Homepage design in the flag drawer (src/context/FeatureFlagContext.tsx)',
+    todo: ['The about-me hero from Paper ("Hero · about me")', 'The Enterprise AI site case study copy and details', 'Decide whether it becomes the default homepage', 'Production deploys are paused (vercel.json)'],
+  },
+  {
     id: 'component-wall',
     name: 'Component wall',
     status: 'local',

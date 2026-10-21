@@ -9,8 +9,9 @@ export const HOME_LAYOUTS = ['carousel', 'tiles', 'autoplay', 'coverflow', 'scro
 export type HomeLayout = (typeof HOME_LAYOUTS)[number]
 // The homepage under the hero: 'vertical' and 'horizontal' are the Paper frames "website vertical
 // scroll all" and "website section horizontal scroll" (components/HomeSections); 'website' is the
-// first frame (one picture per piece); 'list' is the earlier Visuals list
-export type HomeDesign = 'website' | 'list' | 'vertical' | 'horizontal'
+// first frame (one picture per piece); 'list' is the earlier Visuals list; 'showcase' is the frame
+// "website · products hero + 3 details" (components/HomeShowcase): a piece big, three details under it
+export type HomeDesign = 'website' | 'list' | 'vertical' | 'horizontal' | 'showcase'
 export type CarouselFit = 'full' | 'bleed' | 'cards'
 
 interface FeatureFlags {
@@ -79,7 +80,7 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
     const v = new URLSearchParams(window.location.search).get('v')
     if (v === '1' || v === '2') setV2Param(v === '2')
     const design = new URLSearchParams(window.location.search).get('design')
-    if (design === 'website' || design === 'list' || design === 'vertical' || design === 'horizontal') setDesignParam(design)
+    if (design === 'website' || design === 'list' || design === 'vertical' || design === 'horizontal' || design === 'showcase') setDesignParam(design)
     const fit = new URLSearchParams(window.location.search).get('fit')
     if (fit === 'full' || fit === 'bleed' || fit === 'cards') { setFitParam(fit); if (!design) setDesignParam('horizontal') }
     setLoaded(true)
