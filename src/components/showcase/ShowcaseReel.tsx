@@ -50,10 +50,12 @@ const BOX: Record<'stack' | 'side' | 'full' | 'bare', Box> = {
 }
 const SITE = { width: 1440, height: 900 }
 
-const cache = new Map<string, Promise<Recording>>()
-const load = (src: string) => {
-  if (!cache.has(src)) cache.set(src, fetch(src).then((r) => r.json()))
-  return cache.get(src)!
+// Fetched once, parsed per player: rrweb writes into the events it plays, so two players sharing
+// one copy (a piece and a crop of it on the same page) rebuilt the page twice, one under the other
+const cache = new Map<string, Promise<string>>()
+const load = (src: string): Promise<Recording> => {
+  if (!cache.has(src)) cache.set(src, fetch(src).then((r) => r.text()))
+  return cache.get(src)!.then((text) => JSON.parse(text))
 }
 const hasMedia = (s: ShowcaseScene) => !!(s.src || s.video || s.site || s.image)
 export const sceneDuration = (s: ShowcaseScene) =>
@@ -69,7 +71,7 @@ function place(region: Region, box: Box, fill: boolean) {
 }
 
 // One scene's media, cropped to its region and placed in its box
-function SceneMedia({ scene, playing, box, fill, dark, onReady }: { scene: ShowcaseScene; playing: boolean; box: Box; fill: boolean; dark: boolean; onReady: () => void }) {
+function SceneMedia({ scene, playing, box, fill, dark, onReady, lap = 0 }: { scene: ShowcaseScene; playing: boolean; box: Box; fill: boolean; dark: boolean; onReady: () => void; lap?: number }) {
   const root = useRef<HTMLDivElement>(null)
   const video = useRef<HTMLVideoElement>(null)
   const player = useRef<Player | null>(null)
@@ -107,7 +109,8 @@ function SceneMedia({ scene, playing, box, fill, dark, onReady }: { scene: Showc
       if (playing) v.play().catch(() => {})
       else v.pause()
     }
-  }, [playing, size, scene])
+    // lap: a one-scene reel holds its scene and goes round again, so start it from the top each time
+  }, [playing, size, scene, lap])
 
   const full = size ? { x: 0, y: 0, width: size.width, height: size.height } : { x: 0, y: 0, width: 1280, height: 800 }
   const region = scene.region ?? full
@@ -170,9 +173,11 @@ interface ShowcaseReelProps {
   playing?: boolean // the parent can hold the reel (it also waits until it is on screen)
   onCycle?: () => void // called each time the last scene finishes
   loop?: boolean
+  onScreen?: boolean // the parent knows better: a carousel's next slide, clipped out of view, still plays so it arrives ready
+  clear?: boolean // no dotted canvas behind the media, so it sits on whatever the reel is placed on
 }
 
-export function ShowcaseReel({ scenes: all, captions = true, theme = 'light', playing: wanted = true, onCycle, loop = true }: ShowcaseReelProps) {
+export function ShowcaseReel({ scenes: all, captions = true, theme = 'light', playing: wanted = true, onCycle, loop = true, onScreen, clear = false }: ShowcaseReelProps) {
   // Memoised: the timing effect below restarts whenever this changes
   const scenes = useMemo(() => (captions ? all : all.filter(hasMedia)), [all, captions])
   const box = useRef<HTMLDivElement>(null)
@@ -204,7 +209,7 @@ export function ShowcaseReel({ scenes: all, captions = true, theme = 'light', pl
     if (next?.src) load(next.src)
   }, [index, scenes])
 
-  const active = visible && wanted
+  const active = (onScreen ?? visible) && wanted
 
   // Fade in, play for the scene's length, fade out, next
   useEffect(() => {
@@ -246,7 +251,7 @@ export function ShowcaseReel({ scenes: all, captions = true, theme = 'light', pl
         className={`absolute left-0 top-0 origin-top-left font-sans antialiased ${ink}`}
         style={{
           width: W, height: H, transform: `scale(${scale})`,
-          background: dark
+          background: clear ? 'transparent' : dark
             ? 'radial-gradient(ellipse 80% 60% at 70% 40%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%), #09090b radial-gradient(rgba(255,255,255,.08) 1.2px, transparent 1.2px) 0 0 / 28px 28px'
             : '#fafafa radial-gradient(#e4e4e7 1.2px, transparent 1.2px) 0 0 / 28px 28px',
         }}
@@ -260,7 +265,7 @@ export function ShowcaseReel({ scenes: all, captions = true, theme = 'light', pl
             </div>
           ) : (
             <>
-              {hasMedia(scene) && <SceneMedia scene={scene} playing={shown && active} box={BOX[layout]} fill={fill} dark={dark} onReady={() => setReady(index)} />}
+              {hasMedia(scene) && <SceneMedia scene={scene} playing={shown && active} box={BOX[layout]} fill={fill} dark={dark} onReady={() => setReady(index)} lap={scenes.length === 1 ? lap : 0} />}
               {fill ? (
                 captions && (
                   <div className="absolute inset-x-0 bottom-0 px-24 pb-20 pt-48 text-white" style={{ background: 'linear-gradient(to top, rgba(9,9,11,.85), rgba(9,9,11,.4) 55%, transparent)' }}>

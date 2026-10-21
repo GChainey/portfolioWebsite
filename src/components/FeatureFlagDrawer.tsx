@@ -73,6 +73,7 @@ export function FeatureFlagDrawer() {
                 <p className="text-sm font-medium text-foreground">Homepage design</p>
                 <div className="flex gap-1 bg-border/50 rounded-lg p-1">
                   {([
+                    { value: 'showcase', label: 'Showcase' },
                     { value: 'horizontal', label: 'Horizontal' },
                     { value: 'vertical', label: 'Vertical' },
                     { value: 'website', label: 'Website' },
@@ -90,7 +91,7 @@ export function FeatureFlagDrawer() {
                   ))}
                 </div>
                 <p className="text-xs text-muted">
-                  Horizontal and Vertical: the two Paper frames (a piece's clips run sideways, or down). Website: one picture per piece. List: the earlier one. Also ?design=horizontal
+                  Showcase: a piece big with three details under it. Horizontal and Vertical: the two Paper frames (a piece's clips run sideways, or down). Website: one picture per piece. List: the earlier one. Also ?design=horizontal
                 </p>
               </div>
 
