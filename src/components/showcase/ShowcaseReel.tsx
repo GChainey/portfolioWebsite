@@ -22,6 +22,8 @@ export interface ShowcaseScene {
   site?: string // a live site, drawn at 1440x900 and not interactive
   image?: string // a still, held with a slow push in
   region?: Region // the part of the recording to show
+  css?: string[] // rules added to a recorded page (one per string), e.g. to clear its background so only the app shows
+  scheme?: 'dark' // the recorded page's color-scheme. Chrome paints an opaque backdrop behind an iframe whose scheme differs from the page around it, so a cleared dark page still showed black
   from?: number // seconds into the recording
   to?: number
   rate?: number // playback speed
@@ -57,6 +59,26 @@ const load = (src: string): Promise<Recording> => {
   if (!cache.has(src)) cache.set(src, fetch(src).then((r) => r.text()))
   return cache.get(src)!.then((text) => JSON.parse(text))
 }
+// The pictures a recording uses (its art is often CSS masks), loaded and decoded before it plays.
+// An app that redraws itself on every click makes new elements for its pictures each time, and a
+// picture that isn't in memory yet paints blank for a frame or two, so the screen flickers. Kept
+// referenced so the browser holds on to them.
+const pictures = new Map<string, Promise<void>>()
+const held: HTMLImageElement[] = []
+const preload = (src: string): Promise<void> =>
+  cache.get(src)!.then((text) => {
+    const urls = Array.from(new Set(text.match(/\/replays\/assets\/[\w.-]+\.(?:png|jpe?g|webp|gif|svg)/g) ?? []))
+    return Promise.all(urls.map((url) => {
+      if (!pictures.has(url)) {
+        const img = new Image()
+        img.crossOrigin = 'anonymous' // a CSS mask is fetched with CORS, and only a matching request shares its cache
+        img.src = url
+        held.push(img)
+        pictures.set(url, img.decode().catch(() => {}))
+      }
+      return pictures.get(url)!
+    })).then(() => {})
+  })
 const hasMedia = (s: ShowcaseScene) => !!(s.src || s.video || s.site || s.image)
 export const sceneDuration = (s: ShowcaseScene) =>
   s.src || s.video ? ((s.to ?? 0) - (s.from ?? 0)) / (s.rate ?? 1) : s.hold ?? (s.site ? 6 : s.image ? 4 : 3)
@@ -71,7 +93,7 @@ function place(region: Region, box: Box, fill: boolean) {
 }
 
 // One scene's media, cropped to its region and placed in its box
-function SceneMedia({ scene, playing, box, fill, dark, onReady, lap = 0 }: { scene: ShowcaseScene; playing: boolean; box: Box; fill: boolean; dark: boolean; onReady: () => void; lap?: number }) {
+function SceneMedia({ scene, playing, box, fill, dark, clear, onReady, lap = 0 }: { scene: ShowcaseScene; playing: boolean; box: Box; fill: boolean; dark: boolean; clear: boolean; onReady: () => void; lap?: number }) {
   const root = useRef<HTMLDivElement>(null)
   const video = useRef<HTMLVideoElement>(null)
   const player = useRef<Player | null>(null)
@@ -83,10 +105,12 @@ function SceneMedia({ scene, playing, box, fill, dark, onReady, lap = 0 }: { sce
     let gone = false
     ;(async () => {
       const [{ Replayer }, rec] = await Promise.all([import('@rrweb/replay'), load(scene.src!)])
+      // Its pictures first (a slow one gets three seconds)
+      await Promise.race([preload(scene.src!), new Promise((r) => setTimeout(r, 3000))])
       if (gone || !root.current) return
       setSize(rec.meta)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const r = new Replayer(rec.events as any, { root: root.current, mouseTail: false, showWarning: false, triggerFocus: false }) as unknown as Player
+      const r = new Replayer(rec.events as any, { root: root.current, mouseTail: false, showWarning: false, triggerFocus: false, insertStyleRules: scene.css ?? [] }) as unknown as Player
       r.setConfig({ speed: scene.rate ?? 1 })
       r.pause((scene.from ?? 0) * 1000)
       player.current = r
@@ -119,7 +143,7 @@ function SceneMedia({ scene, playing, box, fill, dark, onReady, lap = 0 }: { sce
 
   return (
     <div
-      className={`absolute overflow-hidden ${fill ? '' : 'rounded-2xl'} bg-white`}
+      className={`absolute overflow-hidden ${fill ? '' : 'rounded-2xl'} ${clear ? '' : 'bg-white'}`}
       style={{
         left: Math.max(p.left, box.x), top: Math.max(p.top, box.y), width: Math.min(p.w, box.w), height: Math.min(p.h, box.h),
         boxShadow: fill ? undefined : dark
@@ -130,7 +154,7 @@ function SceneMedia({ scene, playing, box, fill, dark, onReady, lap = 0 }: { sce
       {/* Offset so a filled scene stays centred on its region */}
       <div className="absolute" style={{ left: Math.min(0, p.left - box.x), top: Math.min(0, p.top - box.y), width: p.w, height: p.h }}>
         {scene.src && (
-          <div ref={root} className={`rr-stage ${size?.mouse ? 'rr-mouse' : ''} absolute left-0 top-0 origin-top-left`} style={inner} />
+          <div ref={root} className={`rr-stage ${size?.mouse ? 'rr-mouse' : ''} absolute left-0 top-0 origin-top-left`} style={{ ...inner, colorScheme: scene.scheme }} />
         )}
         {scene.video && (
           <video
@@ -265,7 +289,7 @@ export function ShowcaseReel({ scenes: all, captions = true, theme = 'light', pl
             </div>
           ) : (
             <>
-              {hasMedia(scene) && <SceneMedia scene={scene} playing={shown && active} box={BOX[layout]} fill={fill} dark={dark} onReady={() => setReady(index)} lap={scenes.length === 1 ? lap : 0} />}
+              {hasMedia(scene) && <SceneMedia scene={scene} playing={shown && active} box={BOX[layout]} fill={fill} dark={dark} clear={clear} onReady={() => setReady(index)} lap={scenes.length === 1 ? lap : 0} />}
               {fill ? (
                 captions && (
                   <div className="absolute inset-x-0 bottom-0 px-24 pb-20 pt-48 text-white" style={{ background: 'linear-gradient(to top, rgba(9,9,11,.85), rgba(9,9,11,.4) 55%, transparent)' }}>

@@ -33,6 +33,7 @@ export interface ShowcasePiece {
   hero: ShowcaseScene
   framed: boolean // the hero in its colour (a demo) or bare (a showcase)
   backdrop?: number // the hero on a moving shader instead (a Shader Wall palette)
+  matte?: boolean // the hero on a plain mat of its colour (its recorded page cleared, so only the app shows)
   heroPlain?: boolean // the hero stands on its frame's colour with no window round it
   tint: string // the piece's colour: its frames and its details
   impact?: { value?: string; label: string }[] // only what the case study already says
@@ -65,6 +66,9 @@ const BP_DIALOG = { x: 38, y: 70, width: 1496, height: 858 } // the two-panel di
 
 const DISPATCH = '/replays/products/dispatch-app.json'
 const THESIS = '/replays/products/thesis-app.json'
+// The product site's black page cleared away (and the sign-up above the app hidden), so only the
+// app window, and Dispatch's Kindle, sits on the mat
+const CLEAR_PAGE = ['html, body { background: transparent !important; }', '.lede, .waitlist, .theme-toggle { visibility: hidden !important; }']
 
 export const SHOWCASE_SECTIONS: ShowcaseSection[] = [
   {
@@ -87,8 +91,8 @@ export const SHOWCASE_SECTIONS: ShowcaseSection[] = [
       {
         id: 'dispatch', title: 'Dispatch', summary: 'Send articles to your Kindle in one click, from your browser, your Mac or a bot that reads your newsletters.',
         visit: { label: 'Visit Dispatch', href: 'https://www.dispatchmac.com' },
-        // The app (and its Kindle) on a shader, cropped close so little of the black page shows
-        hero: crop(DISPATCH, 0.8, 11.6, { x: 160, y: 128, width: 1200, height: 750 }), framed: false, backdrop: 2, tint: '#E3ECF7',
+        // The app (and its Kindle) with an even margin; its frosted window made solid now there's nothing behind it
+        hero: { ...crop(DISPATCH, 0.8, 11.6, { x: 96, y: 36, width: 1322, height: 826 }), scheme: 'dark', css: [...CLEAR_PAGE, '#hero-app { background: rgb(23, 23, 25) !important; backdrop-filter: none !important; }'] }, framed: false, matte: true, tint: '#E3ECF7',
         details: [
           // Recorded from dispatchmac.com's own sections, its demo pointer stopped so the clicks are mine
           { title: 'Use it with Grokbot', scene: crop('/replays/products/dispatch-grokbot.json', 1.5, 11.1, { x: 125, y: 75, width: 1040, height: 650 }) },
@@ -99,7 +103,7 @@ export const SHOWCASE_SECTIONS: ShowcaseSection[] = [
       {
         id: 'thesis', title: 'Thesis', summary: 'Every claim in a plan is a bet. Test them all at once: AI drafts the tests and gathers the evidence.',
         visit: { label: 'Visit Thesis', href: 'https://thesis-phi-self.vercel.app' },
-        hero: crop(THESIS, 1.6, 13.8, { x: 120, y: 74, width: 1200, height: 750 }), framed: false, tint: '#E2EFE4', // past the page's fade-in
+        hero: { ...crop(THESIS, 1.6, 13.8, { x: 96, y: 59, width: 1248, height: 780 }), scheme: 'dark', css: CLEAR_PAGE }, framed: false, matte: true, tint: '#E2EFE4', // past the page's fade-in
         details: [
           { title: 'Tap a claim, see the bet', scene: crop(THESIS, 1.6, 13.8, { x: 370, y: 280, width: 600, height: 375 }) },
           { title: 'Integrate with the tools you use', scene: crop('/replays/products/thesis-integrations.json', 1.2, 12.9, { x: 72, y: 50, width: 1136, height: 710 }) },
@@ -115,36 +119,30 @@ export const SHOWCASE_SECTIONS: ShowcaseSection[] = [
     quote: 'Ahmed Hakeem',
     pieces: [
       {
-        id: 'rfp', tab: 'RFP', title: 'Using AI to partner with sales to win a deal', summary: 'Leveraging AI to compete with larger companies: a product-like prototype, seed data and connected LLMs.',
+        id: 'rfp', tab: 'Winning a tender', title: 'Using AI to partner with sales to win a deal', summary: 'Leveraging AI to compete with larger companies: a product-like prototype, seed data and connected LLMs.',
         caseStudy: '/projects/rfp',
         hero: scene('rfp-overview'), framed: true, tint: '#E6EEE7',
         impact: [{ value: '3', label: 'of us, against vendors with whole teams' }, { label: 'The prototype outlived the tender' }],
         details: [visual('rfp-llm-chat'), visual('rfp-determination', 'The decision letter'), visual('rfp-ask')],
       },
       {
-        id: 'configurator', tab: 'Configurator', title: 'Testing a thesis by building it', summary: 'Where a Figma prototype couldn’t answer the question, because it needed dynamic data.',
+        id: 'configurator', tab: 'Testing on live models', title: 'Testing a thesis by building it', summary: 'Where a Figma prototype couldn’t answer the question, because it needed dynamic data.',
         caseStudy: '/projects/configurator',
         hero: scene('configurator-overview'), framed: true, tint: '#F6E5E3',
         impact: [{ value: '6s vs 21s', label: 'GPT-4.1 against GPT-5 mini' }, { label: 'Changed the product’s direction' }],
         details: [visual('configurator-models'), visual('configurator-jev'), visual('configurator-qr')],
       },
       {
-        id: 'html-brand-website', tab: 'Enterprise AI site', title: 'Build an app, brand it per client, share it to a phone', summary: 'A marketing site built from an HTML brand.',
+        id: 'html-brand-website', tab: 'An agent-built website', title: 'Build an app, brand it per client, share it to a phone', summary: 'A marketing site built from an HTML brand.',
         caseStudy: '/projects/html-brand-website',
-        hero: scene('website'), framed: true, tint: '#FBE9DA',
+        hero: scene('website'), framed: true, tint: '#DCE7F1', // a soft Enterprise AI blue, under the site's own #F3F7FA
         impact: [{ value: '10', label: 'variations in a day' }, { value: '5 of 7', label: 'understood the offer, up from 2 of 5' }],
         details: [
           visual('eai-setup'),
-          { title: 'The site, built by an agent from the brand', scene: video('/gallery/clips/eai-website-build.mp4', 0, 22) },
+          // The site's own builder: Nike's app done, name the next client, and it re-skins for Qantas
+          { title: 'Name the next client, and the app re-skins', scene: crop('/replays/website/site.json', 10.6, 16.5, { x: 140, y: 232, width: 800, height: 500 }) },
           { title: 'The site in its new brand', scene: { image: '/case-studies/html-brand-website/site-hero.webp', hold: 10, layout: 'full', title: '' } },
         ],
-      },
-      {
-        id: 'eai-settings', tab: 'Settings', title: 'Two levels of settings, without getting lost', summary: 'Settings organised by what you want, not how it’s built.',
-        caseStudy: '/projects/eai-settings',
-        hero: scene('eai-settings-nested'), framed: true, tint: '#E3ECF7',
-        impact: [{ value: '5 of 5', label: 'switched to the right app' }, { value: '5 of 5', label: 'found the feature' }],
-        details: [visual('eai-settings-features'), visual('configurator-show-prompt')],
       },
     ],
   },

@@ -14,6 +14,21 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.0.1',
+    date: '2026-10-21',
+    title: 'Homepage Polish: Smooth Clips, Apps on Their Own',
+    description: 'The product clips stop flickering when a button is pressed, Dispatch and Thesis sit on a plain mat without their sites\' black page, and the AI section is tightened up.',
+    changes: [
+      'No more flicker on clicks: an app that redraws itself made fresh elements for its artwork, which painted blank until the image loaded. Every picture a recording uses is now loaded (the way a CSS mask asks for it) before the clip plays',
+      'Dispatch and Thesis: just the app (and Dispatch\'s Kindle) on a soft mat of their colour, in place of the shader and the black page around them',
+      'AI section: Settings removed; tabs say what each piece is (Winning a tender, Testing on live models, An agent-built website)',
+      'The website\'s phone still re-captured on the site\'s own Enterprise AI blue, on a blue mat',
+      'New detail: name the next client and the app re-skins, from Nike to Qantas, cropped close from the site\'s replay',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/new-site-version-go-live',
+  },
+  {
     version: '3.0.0',
     date: '2026-10-20',
     title: 'Launch: the New Site, Case Studies to Follow',
