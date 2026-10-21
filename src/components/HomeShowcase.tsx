@@ -22,8 +22,8 @@ import { getProjectById, hrefIsLive } from '@/content/projects'
 const ease = [0.25, 0.1, 0.25, 1] as const
 
 // Something that can be opened big: a clip or one of Shader Wall's widgets
-type Item = ShowcaseDetail
-const heroItem = (p: ShowcasePiece): Item => ({ title: p.title, scene: p.hero, backdrop: p.backdrop, plain: p.heroPlain })
+type Item = ShowcaseDetail & { matte?: string }
+const heroItem = (p: ShowcasePiece): Item => ({ title: p.title, scene: p.hero, backdrop: p.backdrop, plain: p.heroPlain, matte: p.matte ? p.tint : undefined })
 const itemsOf = (p: ShowcasePiece): Item[] => [heroItem(p), ...p.details]
 
 // A live site at its own size. Shrinking one with a transform (as the reel does) makes Chrome
@@ -40,7 +40,9 @@ function Media({ item, near: given }: { item: Item; near?: boolean }) {
   const scenes = useMemo(() => (item.scene ? [item.scene] : []), [item.scene])
   const clip = item.widget ? <HomeWidget kind={item.widget} />
     : near && item.scene?.site ? <LiveSite src={item.scene.site} />
-    : near && scenes.length > 0 && <ShowcaseReel scenes={scenes} captions={false} theme="light" onScreen={given} clear={item.plain} />
+    : near && scenes.length > 0 && <ShowcaseReel scenes={scenes} captions={false} theme="light" onScreen={given} clear={item.plain || !!item.matte} />
+  // On a plain mat of the piece's colour: the clip's own page is cleared, so only the app sits on it
+  if (item.matte) return <div ref={ref} className="absolute inset-0" style={{ background: item.matte }}>{clip}</div>
   if (item.backdrop === undefined) return <div ref={ref} className="absolute inset-0">{clip}</div>
   // On a shader: the clip inset like a window on a desktop
   return (
