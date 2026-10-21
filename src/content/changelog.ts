@@ -17,7 +17,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     version: '2.1.0',
     date: '2026-10-20',
     title: 'Pieces of the products: a component wall',
-    description: 'A dev-only wall of small components from the Enterprise AI apps, stacked like a component library. Click one to see it working in the app it came from.',
+    description: 'A wall of small components from the Enterprise AI apps, stacked like a component library. Not on the live site. Click one to see it working in the app it came from.',
     changes: [
       '24 components from Daisy Assess, Configurator, workspace settings and AI Document Review, rebuilt with each app\'s real labels, data and design tokens (Geist, zinc greys, grey card footers)',
       'Cards are dealt into columns by height; ghost columns peek in at the edges and the wall fades out at the bottom until Show all',
