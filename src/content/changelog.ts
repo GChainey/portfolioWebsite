@@ -14,6 +14,21 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.0.2',
+    date: '2026-10-21',
+    title: 'Homepage Polish: Whole Apps, a Readable Funnel, Fewer Pieces',
+    description: 'Dispatch\'s details show the whole app with even margins, SEEK\'s funnel is redrawn to read at card size, and the homepage drops what isn\'t ready.',
+    changes: [
+      'Dispatch details (Grokbot, covers, collections): the whole window and its Kindle, even margins, straight on the card\'s colour. The site\'s page is hidden, so only the named windows show',
+      'Window shadows sized to fit the margin (the site\'s 90px shadow was cut off square at the crop), and no more hairline from the next slide at a card\'s edge',
+      'SEEK funnel redrawn for the card: big type, solid SEEK pink for the three leaks, what was wrong beside each',
+      'Creative tools: full width, one at a time, Balatro first then Wallbounce',
+      'Testing on live models (Configurator) hidden on the live site until it\'s ready',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/new-site-version-go-live',
+  },
+  {
     version: '3.0.1',
     date: '2026-10-21',
     title: 'Homepage Polish: Smooth Clips, Apps on Their Own',

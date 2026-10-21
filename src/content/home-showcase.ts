@@ -1,6 +1,5 @@
 import type { ShowcaseScene } from '@/components/showcase/ShowcaseReel'
 import { VISUALS } from '@/content/visuals'
-import { COLOR_LIVE } from '@/content/color'
 
 // The homepage as the Paper frame "website · products hero + 3 details": each section steps
 // through its pieces one at a time. A piece is shown big, with three details of how it works
@@ -64,11 +63,23 @@ const dialog = (src: string, from: number, to: number, region: { x: number; y: n
 const BP = '/case-studies/bestpractice-booking'
 const BP_DIALOG = { x: 38, y: 70, width: 1496, height: 858 } // the two-panel dialog, in the 1600x986 recordings
 
+// Pieces that aren't ready yet show on the dev server only
+const DRAFTS_LIVE = process.env.NODE_ENV === 'development'
+
 const DISPATCH = '/replays/products/dispatch-app.json'
 const THESIS = '/replays/products/thesis-app.json'
-// The product site's black page cleared away (and the sign-up above the app hidden), so only the
-// app window, and Dispatch's Kindle, sits on the mat
-const CLEAR_PAGE = ['html, body { background: transparent !important; }', '.lede, .waitlist, .theme-toggle { visibility: hidden !important; }']
+// The product site's page hidden, background and all, so only the windows named (the app, and
+// Dispatch's Kindle) show, straight on the mat. The page's own decoration, invisible on black,
+// showed on a light colour. Their frosted glass is made solid, now there's nothing behind it
+const onlyWindows = (...ids: string[]) => [
+  'html, body { background: transparent !important; visibility: hidden !important; scrollbar-width: none !important; }',
+  `${ids.map((id) => `#${id}`).join(', ')} { visibility: visible !important; }`,
+  `${ids.map((id) => `#${id}.tw`).join(', ')} { background: rgb(23, 23, 25) !important; backdrop-filter: none !important; }`,
+  // A shadow that fits in the margin: the site's 90px one was cut off square at the crop's edge
+  `${ids.map((id) => `#${id}`).join(', ')} { box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.6), 0 14px 28px -10px rgba(0, 0, 0, 0.4) !important; }`,
+]
+const dispatchApp = (src: string, from: number, to: number, region: { x: number; y: number; width: number; height: number }, ...ids: string[]): ShowcaseScene =>
+  ({ ...crop(src, from, to, region), scheme: 'dark', css: onlyWindows(...ids) })
 
 export const SHOWCASE_SECTIONS: ShowcaseSection[] = [
   {
@@ -92,18 +103,19 @@ export const SHOWCASE_SECTIONS: ShowcaseSection[] = [
         id: 'dispatch', title: 'Dispatch', summary: 'Send articles to your Kindle in one click, from your browser, your Mac or a bot that reads your newsletters.',
         visit: { label: 'Visit Dispatch', href: 'https://www.dispatchmac.com' },
         // The app (and its Kindle) with an even margin; its frosted window made solid now there's nothing behind it
-        hero: { ...crop(DISPATCH, 0.8, 11.6, { x: 96, y: 36, width: 1322, height: 826 }), scheme: 'dark', css: [...CLEAR_PAGE, '#hero-app { background: rgb(23, 23, 25) !important; backdrop-filter: none !important; }'] }, framed: false, matte: true, tint: '#E3ECF7',
+        hero: dispatchApp(DISPATCH, 0.8, 11.6, { x: 96, y: 36, width: 1322, height: 826 }, 'hero-app', 'hero-kindle'), framed: false, matte: true, tint: '#E3ECF7',
         details: [
           // Recorded from dispatchmac.com's own sections, its demo pointer stopped so the clicks are mine
-          { title: 'Use it with Grokbot', scene: crop('/replays/products/dispatch-grokbot.json', 1.5, 11.1, { x: 125, y: 75, width: 1040, height: 650 }) },
-          { title: 'Artwork drawn for each collection', scene: crop('/replays/products/dispatch-covers.json', 1.5, 13.4, { x: 280, y: 120, width: 960, height: 600 }) },
-          { title: 'Collections that fill daily or weekly', scene: crop('/replays/products/dispatch-schedule.json', 1.5, 13.1, { x: 72, y: 56, width: 1136, height: 710 }) },
+          // Each the whole window (and its Kindle) with an even margin, straight on the card's colour
+          { title: 'Use it with Grokbot', plain: true, scene: dispatchApp('/replays/products/dispatch-grokbot.json', 1.5, 11.1, { x: 100, y: 60, width: 1088, height: 680 }, 'inbox-grok', 'inbox-kindle') },
+          { title: 'Artwork drawn for each collection', plain: true, scene: dispatchApp('/replays/products/dispatch-covers.json', 1.5, 13.4, { x: 32, y: 20, width: 1216, height: 760 }, 'collections-app', 'collections-kindle') },
+          { title: 'Collections that fill daily or weekly', plain: true, scene: dispatchApp('/replays/products/dispatch-schedule.json', 1.5, 13.1, { x: 32, y: 20, width: 1216, height: 760 }, 'collections-app', 'collections-kindle') },
         ],
       },
       {
         id: 'thesis', title: 'Thesis', summary: 'Every claim in a plan is a bet. Test them all at once: AI drafts the tests and gathers the evidence.',
         visit: { label: 'Visit Thesis', href: 'https://thesis-phi-self.vercel.app' },
-        hero: { ...crop(THESIS, 1.6, 13.8, { x: 96, y: 59, width: 1248, height: 780 }), scheme: 'dark', css: CLEAR_PAGE }, framed: false, matte: true, tint: '#E2EFE4', // past the page's fade-in
+        hero: { ...crop(THESIS, 1.6, 13.8, { x: 96, y: 59, width: 1248, height: 780 }), scheme: 'dark', css: onlyWindows('prose-app') }, framed: false, matte: true, tint: '#E2EFE4', // past the page's fade-in
         details: [
           { title: 'Tap a claim, see the bet', scene: crop(THESIS, 1.6, 13.8, { x: 370, y: 280, width: 600, height: 375 }) },
           { title: 'Integrate with the tools you use', scene: crop('/replays/products/thesis-integrations.json', 1.2, 12.9, { x: 72, y: 50, width: 1136, height: 710 }) },
@@ -125,13 +137,14 @@ export const SHOWCASE_SECTIONS: ShowcaseSection[] = [
         impact: [{ value: '3', label: 'of us, against vendors with whole teams' }, { label: 'The prototype outlived the tender' }],
         details: [visual('rfp-llm-chat'), visual('rfp-determination', 'The decision letter'), visual('rfp-ask')],
       },
-      {
+      // Not ready: on the dev server only for now
+      ...(DRAFTS_LIVE ? [{
         id: 'configurator', tab: 'Testing on live models', title: 'Testing a thesis by building it', summary: 'Where a Figma prototype couldn’t answer the question, because it needed dynamic data.',
         caseStudy: '/projects/configurator',
         hero: scene('configurator-overview'), framed: true, tint: '#F6E5E3',
         impact: [{ value: '6s vs 21s', label: 'GPT-4.1 against GPT-5 mini' }, { label: 'Changed the product’s direction' }],
         details: [visual('configurator-models'), visual('configurator-jev'), visual('configurator-qr')],
-      },
+      }] : []),
       {
         id: 'html-brand-website', tab: 'An agent-built website', title: 'Build an app, brand it per client, share it to a phone', summary: 'A marketing site built from an HTML brand.',
         caseStudy: '/projects/html-brand-website',
@@ -177,15 +190,9 @@ export const SHOWCASE_SECTIONS: ShowcaseSection[] = [
   {
     id: 'creative',
     title: 'Creative tools',
-    layout: 'bleed',
+    layout: 'feature',
     quote: 'Richard Simms',
     pieces: [
-      {
-        id: 'wallbounce', title: 'Wallbounce', summary: 'A top-down ode to one move from Gears of War, made with the tools an agent built for it.',
-        caseStudy: '/projects/wallbounce-dev-tools', visit: { label: 'Play Wallbounce', href: 'https://wallbounce.vercel.app' },
-        hero: scene('wallbounce'), framed: false, tint: '#F6E2E0',
-        details: [{ title: 'The tools an agent built for it', scene: video('/essays/wallbounce-dev-tools/reel.mp4', 0, 20, false) }],
-      },
       {
         id: 'balatro', title: 'Opportunity sizing x Balatro', summary: 'Part of Thesis. Bringing the playful scaling elements of the card game Balatro to the product world of Opportunity Sizing.',
         caseStudy: '/projects/balatro-opportunity-sizing',
@@ -195,13 +202,12 @@ export const SHOWCASE_SECTIONS: ShowcaseSection[] = [
           { title: 'Each number deals its card', scene: video('/essays/balatro-opportunity-sizing/read.mp4', 0, 7.6) },
         ],
       },
-      // Dev only for now, like the series itself
-      ...(COLOR_LIVE ? [{
-        id: 'interaction-of-color', title: 'Interaction of Color', summary: 'Josef Albers’ book a chapter at a time, each exercise rebuilt for the browser, where a colour can change and you see the effect straight away.',
-        more: { label: 'See the series', href: '/color' },
-        hero: { site: '/color/relativity', hold: 12, layout: 'full', title: '' } as ShowcaseScene, framed: false, tint: '#EEE7DC',
-        details: [{ title: 'Pick a red from memory', scene: { site: '/color/recollection', hold: 12, layout: 'full', title: '' } as ShowcaseScene }],
-      }] : []),
+      {
+        id: 'wallbounce', title: 'Wallbounce', summary: 'A top-down ode to one move from Gears of War, made with the tools an agent built for it.',
+        caseStudy: '/projects/wallbounce-dev-tools', visit: { label: 'Play Wallbounce', href: 'https://wallbounce.vercel.app' },
+        hero: scene('wallbounce'), framed: false, tint: '#F6E2E0',
+        details: [{ title: 'The tools an agent built for it', scene: video('/essays/wallbounce-dev-tools/reel.mp4', 0, 20, false) }],
+      },
     ],
   },
 ]

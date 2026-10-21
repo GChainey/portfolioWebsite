@@ -47,6 +47,16 @@ export const PARKED: ParkedItem[] = [
     todo: ['Restyle the case study page in the new look (the essays already have it)', 'The Enterprise AI site case study copy', 'Placeholder pictures in the job dialog (ExperienceDialog) come back with the case studies: replace or drop them', 'Then set CASE_STUDIES_LIVE to true'],
   },
   {
+    id: 'homepage-configurator',
+    name: 'Homepage: Testing on live models',
+    status: 'local',
+    since: '2026-10-21',
+    summary: 'The Configurator piece in the homepage\'s "AI has changed the impact of design" section (hero, three details, impact cards). Hidden on the live site: not ready.',
+    links: [{ label: 'Homepage', href: '/' }],
+    gate: 'DRAFTS_LIVE in src/content/home-showcase.ts',
+    todo: ['Decide what the piece should show, then set it live'],
+  },
+  {
     id: 'component-wall',
     name: 'Component wall',
     status: 'local',

@@ -232,7 +232,9 @@ function Track({ items, at, onOpen, delay = 0, chrome = '' }: { items: (Item | u
     <div ref={ref} className={`relative aspect-[16/10] w-full overflow-hidden rounded-xl transition-shadow duration-500 ${plain ? '' : chrome}`}>
       <motion.div className="absolute inset-0 flex" initial={false} animate={{ x: `${-at * 100}%` }} transition={{ ...SLIDE_T, delay }}>
         {items.map((item, i) => (
-          <div key={i} className={`relative h-full w-full shrink-0 ${item?.plain ? '' : 'bg-[#fafafa]'}`} aria-hidden={i !== at}>
+          // Each slide clipped a pixel in at the sides: the track's edge falls between pixels, and the
+          // neighbouring slide showed through it as a hairline beside a clip on its card's colour
+          <div key={i} className={`relative h-full w-full shrink-0 ${item?.plain ? '' : 'bg-[#fafafa]'}`} style={{ clipPath: 'inset(0 1px)' }} aria-hidden={i !== at}>
             {item && Math.abs(i - at) <= 1 && (
               <>
                 <Media item={item} near={near} />
