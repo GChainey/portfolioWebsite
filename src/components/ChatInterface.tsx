@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { ArrowRight, ArrowUp } from 'lucide-react'
 import { ContentDialog } from './ContentDialog'
 import { ShimmeringText } from './ui/shimmering-text'
-import { projects } from '@/content/projects'
+import { projectHref, projects } from '@/content/projects'
 import { Facehash } from 'facehash'
 
 const AVATAR_COLORS = ['#1a3040', '#1d5c52', '#6b5a2a', '#7a4a2a', '#6b3530']
@@ -15,19 +15,20 @@ const AVATAR_COLORS = ['#1a3040', '#1d5c52', '#6b5a2a', '#7a4a2a', '#6b3530']
 function ProjectCard({ projectId }: { projectId: string }) {
   const project = projects.find(p => p.id === projectId)
   if (!project) return null
+  // A case study whose page is off shows as a card that doesn't link anywhere
+  const href = projectHref(project)
 
-  return (
-    <Link href={`/projects/${project.id}`} className="group block">
-      <div className="my-2 p-3 border border-border rounded-lg hover:border-foreground/30 transition-colors bg-background">
-        <div className="flex items-center justify-between mb-1">
-          <span className="text-xs text-muted uppercase tracking-wide">{project.category}</span>
-          <ArrowRight className="w-3 h-3 text-muted group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
-        </div>
-        <h4 className="font-medium text-foreground group-hover:text-accent text-sm transition-colors">{project.title}</h4>
-        <p className="text-xs text-muted mt-1 line-clamp-2">{project.description}</p>
+  const card = (
+    <div className={`my-2 p-3 border border-border rounded-lg transition-colors bg-background ${href ? 'hover:border-foreground/30' : ''}`}>
+      <div className="flex items-center justify-between mb-1">
+        <span className="text-xs text-muted uppercase tracking-wide">{project.category}</span>
+        {href && <ArrowRight className="w-3 h-3 text-muted group-hover:text-accent group-hover:translate-x-0.5 transition-all" />}
       </div>
-    </Link>
+      <h4 className={`font-medium text-foreground text-sm transition-colors ${href ? 'group-hover:text-accent' : ''}`}>{project.title}</h4>
+      <p className="text-xs text-muted mt-1 line-clamp-2">{project.description}</p>
+    </div>
   )
+  return href ? <Link href={href} className="group block">{card}</Link> : card
 }
 
 // Strip [[name:X]] tags from content

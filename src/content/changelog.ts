@@ -14,6 +14,24 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.0.0',
+    date: '2026-10-20',
+    title: 'Launch: the New Site, Case Studies to Follow',
+    description: 'The redesign goes live with Home, About, Essays, CV and Contact. The showcase is the homepage; the case study pages wait on the dev server until they\'re ready, and nothing on the live site links to them.',
+    changes: [
+      'The showcase design is the default homepage. The live site ignores flags saved in the browser, so everyone sees the same page',
+      'Case study, product and small-study pages (and the /projects index) are a real 404 on the live site; the eight essays stay open',
+      'The homepage keeps every piece and its impact; "Read case study" links go, and Wallbounce and Balatro link to their essays as "Read the essay"',
+      'Essays page in the new look: big heading, a line on what they\'re about, one roomy row per essay, the site footer',
+      'Essay pages lose the boxed panels, read in a column, and end with "More essays" instead of the placeholder project grid',
+      'Contact page in the new look: "Say hello", the email up front, the form beside three short notes, the site footer',
+      'The job dialog on About drops its "coming soon" picture placeholders and inline case studies; chat cards for a hidden case study no longer link to a 404',
+      'Production deploys are back on (vercel.json removed)',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/new-site-version-go-live',
+  },
+  {
     version: '2.2.0',
     date: '2026-10-20',
     title: 'Showcase Homepage: a Piece Big, Three Details Under It',

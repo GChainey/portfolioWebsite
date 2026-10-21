@@ -49,7 +49,7 @@ const defaultFlags: FeatureFlags = {
   homeLayout: 'tiles',
   panels: true,
   v2: false,
-  homeDesign: 'website',
+  homeDesign: 'showcase',
   carouselFit: 'bleed',
 }
 
@@ -65,9 +65,10 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
   const [designParam, setDesignParam] = useState<HomeDesign | null>(null)
   const [fitParam, setFitParam] = useState<CarouselFit | null>(null)
 
-  // Load flags from localStorage on mount
+  // Load flags from localStorage on mount. Only the dev server has the drawer that sets them, so
+  // the live site keeps to the defaults (a flag saved on an older version can't change the design)
   useEffect(() => {
-    const stored = localStorage.getItem('featureFlags')
+    const stored = process.env.NODE_ENV === 'development' ? localStorage.getItem('featureFlags') : null
     if (stored) {
       try {
         setFlags({ ...defaultFlags, ...JSON.parse(stored) })

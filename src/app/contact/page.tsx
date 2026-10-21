@@ -2,10 +2,12 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Send, MapPin, MessageCircle, Mail } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { ChatPopup } from '@/components/ChatPopup'
-import { useFeatureFlags } from '@/context/FeatureFlagContext'
+import { SiteFooter } from '@/components/SiteFooter'
+
+const EMAIL = 'gareth.chainey@gmail.com'
 
 const CONTACT_PAGE_CONTEXT = {
   page: 'Contact',
@@ -23,142 +25,109 @@ const CONTACT_PAGE_CONTEXT = {
   ],
 }
 
+// Contact, in the homepage's look: a big heading, lots of space, no panels
+const reveal = (delay = 0) => ({
+  initial: { opacity: 0, y: 16 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.6, delay, ease: [0.25, 0.1, 0.25, 1] as const },
+})
+
+const H1 = 'text-[36px] font-medium leading-[40px] tracking-[-0.02em] text-foreground'
+const FIELD = 'w-full rounded-xl border border-border bg-background px-4 py-3 text-base text-foreground placeholder:text-muted transition-colors focus:border-accent focus:outline-none'
+
+const WAYS = [
+  { title: 'Aussie in NYC', body: 'Australian, living in New York City, on Eastern Time.' },
+  { title: 'Coffee or a call', body: 'Coffee in the city, a video call or an email, whatever suits you.' },
+  { title: 'No pitch needed', body: 'Product, design, AI, or what you’re building. Happy to just talk.' },
+]
+
 export default function ContactPage() {
-  const { flags } = useFeatureFlags()
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
 
+  // The form writes the email for you, in your own mail app
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const subject = encodeURIComponent(`Portfolio contact from ${formData.name}`)
-    const body = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`
-    )
-    window.location.href = `mailto:gareth.chainey@gmail.com?subject=${subject}&body=${body}`
+    const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`)
+    window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`
   }
 
   return (
-    <div className="min-h-screen bg-background transition-colors duration-700">
-      <Header showBack />
+    <div className="min-h-screen bg-background overflow-x-clip">
+      <Header />
+      <div className="mx-auto flex min-h-[calc(100vh-56px)] max-w-7xl flex-col pt-14">
+        <main className="flex flex-1 flex-col">
+          <div className="flex flex-col px-6 pb-24">
+            <motion.section {...reveal()} aria-labelledby="contact" className="flex flex-col gap-6 pb-12 pt-24">
+              <h1 id="contact" className={H1}>Say hello</h1>
+              <p className="max-w-3xl text-[22px] leading-[34px] tracking-[-0.01em] text-muted text-pretty">
+                Always keen for a conversation. Write below, or email{' '}
+                <a href={`mailto:${EMAIL}`} className="text-foreground underline decoration-border underline-offset-4 transition-colors hover:text-accent hover:decoration-accent">{EMAIL}</a>.
+              </p>
+            </motion.section>
 
-      <div className="max-w-7xl mx-auto pt-14">
-        <div className="flex min-h-[calc(100vh-56px)]">
-
-          <main className="flex-1 min-w-0 border-x border-border">
-            {/* Header section */}
-            <section className={`p-8 ${flags.sectionTitleBorders ? 'border-b border-border' : ''}`}>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <p className="text-xs text-muted uppercase tracking-widest mb-4">Let&apos;s Talk</p>
-                <h1 className="text-4xl font-medium text-foreground mb-4">Contact</h1>
-                <p className="text-lg text-muted max-w-2xl">
-                  I&apos;m an Aussie based in New York City and always keen for a conversation — product,
-                  design, AI, or whatever you&apos;re working on. No agenda required; say hello anytime.
-                </p>
-              </motion.div>
-            </section>
-
-            {/* Contact form */}
-            <section className="p-8 border-b border-border">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-              >
-                <form onSubmit={handleSubmit} className="space-y-6 max-w-lg">
-                  <div>
-                    <label htmlFor="name" className="block text-sm text-foreground mb-2">Name</label>
-                    <input
-                      id="name"
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                      className="w-full bg-transparent border border-border rounded px-3 py-2 text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-accent transition-colors"
-                      placeholder="Your name"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="email" className="block text-sm text-foreground mb-2">Email</label>
-                    <input
-                      id="email"
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                      className="w-full bg-transparent border border-border rounded px-3 py-2 text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-accent transition-colors"
-                      placeholder="you@example.com"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="message" className="block text-sm text-foreground mb-2">Message</label>
-                    <textarea
-                      id="message"
-                      required
-                      rows={5}
-                      value={formData.message}
-                      onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
-                      className="w-full bg-transparent border border-border rounded px-3 py-2 text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-accent transition-colors resize-none"
-                      placeholder="What would you like to discuss?"
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--accent-cta)] text-white text-sm font-medium rounded hover:brightness-110 transition-all"
-                  >
-                    Send Message
-                    <Send className="w-4 h-4" />
-                  </button>
-                </form>
-              </motion.div>
-            </section>
-
-            {/* Availability info */}
-            <section className="border-b border-border">
-              <div className="grid grid-cols-1 md:grid-cols-3">
-                <motion.div
-                  className="p-6 md:border-r border-border"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
+            <div className="grid grid-cols-1 gap-16 md:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
+              <motion.form {...reveal(0.1)} onSubmit={handleSubmit} className="flex max-w-xl flex-col gap-6">
+                <label className="flex flex-col gap-2">
+                  <span className="text-sm font-medium text-foreground">Name</span>
+                  <input
+                    type="text"
+                    required
+                    autoComplete="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
+                    className={FIELD}
+                    placeholder="Your name"
+                  />
+                </label>
+                <label className="flex flex-col gap-2">
+                  <span className="text-sm font-medium text-foreground">Email</span>
+                  <input
+                    type="email"
+                    required
+                    autoComplete="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
+                    className={FIELD}
+                    placeholder="you@example.com"
+                  />
+                </label>
+                <label className="flex flex-col gap-2">
+                  <span className="text-sm font-medium text-foreground">Message</span>
+                  <textarea
+                    required
+                    rows={6}
+                    value={formData.message}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
+                    className={`${FIELD} resize-none`}
+                    placeholder="What would you like to talk about?"
+                  />
+                </label>
+                <button
+                  type="submit"
+                  className="group inline-flex items-center gap-2 self-start rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-opacity hover:opacity-85"
                 >
-                  <MapPin className="w-5 h-5 text-accent mb-3" />
-                  <h3 className="font-medium text-foreground mb-1">Aussie in NYC</h3>
-                  <p className="text-sm text-muted">Australian by background, living in New York City (Eastern Time).</p>
-                </motion.div>
+                  Write the email
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </button>
+              </motion.form>
 
-                <motion.div
-                  className="p-6 md:border-r border-border border-t md:border-t-0"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <MessageCircle className="w-5 h-5 text-accent mb-3" />
-                  <h3 className="font-medium text-foreground mb-1">Keen to connect</h3>
-                  <p className="text-sm text-muted">Coffee in the city, a video call, or a message — whatever suits you.</p>
-                </motion.div>
+              <motion.ul {...reveal(0.2)} className="flex flex-col gap-10">
+                {WAYS.map((w) => (
+                  <li key={w.title} className="flex flex-col gap-1">
+                    <span className="text-[20px] font-medium leading-[26px] tracking-[-0.01em] text-foreground">{w.title}</span>
+                    <span className="text-base leading-[26px] text-muted">{w.body}</span>
+                  </li>
+                ))}
+              </motion.ul>
+            </div>
+          </div>
 
-                <motion.div
-                  className="p-6 border-t md:border-t-0"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                >
-                  <Mail className="w-5 h-5 text-accent mb-3" />
-                  <h3 className="font-medium text-foreground mb-1">Just talking</h3>
-                  <p className="text-sm text-muted">Swap ideas, compare notes, or catch up — I&apos;m interested in the chat itself.</p>
-                </motion.div>
-              </div>
-            </section>
-          </main>
-
-          <ChatPopup pageContext={CONTACT_PAGE_CONTEXT} defaultOpen />
-        </div>
+          <SiteFooter />
+        </main>
       </div>
+
+      <ChatPopup pageContext={CONTACT_PAGE_CONTEXT} />
     </div>
   )
 }

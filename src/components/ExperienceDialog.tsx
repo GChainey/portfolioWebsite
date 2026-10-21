@@ -5,7 +5,7 @@ import { X, ArrowRight, MessageCircle } from 'lucide-react'
 import { useEffect, useState, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { cvData } from '@/content/cv'
-import { getProjectsByCompanyId } from '@/content/projects'
+import { CASE_STUDIES_LIVE, getProjectsByCompanyId } from '@/content/projects'
 import { ChatInterface } from '@/components/ChatInterface'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
@@ -93,7 +93,8 @@ export function ExperienceDialog({ isOpen, onClose, initialCompanyId = 'enterpri
   }, [isOpen, onClose, goPrev, goNext, chatOpen])
 
   const company = companies[currentIndex]
-  const relatedProjects = getProjectsByCompanyId(company.id)
+  // The case studies and their placeholder pictures wait for the case studies to launch
+  const relatedProjects = CASE_STUDIES_LIVE ? getProjectsByCompanyId(company.id) : []
 
   const slideVariants = {
     enter: (dir: number) => ({ x: dir > 0 ? 300 : -300, opacity: 0 }),
@@ -170,6 +171,7 @@ export function ExperienceDialog({ isOpen, onClose, initialCompanyId = 'enterpri
                     <p className="text-sm text-muted leading-relaxed mb-6">{company.companyDescription}</p>
 
                     {/* Hero placeholder image */}
+                    {CASE_STUDIES_LIVE && (
                     <div className="mb-8 rounded-lg border border-border overflow-hidden bg-border/30">
                       <div className="aspect-[16/9] flex items-center justify-center">
                         <div className="text-center">
@@ -188,6 +190,7 @@ export function ExperienceDialog({ isOpen, onClose, initialCompanyId = 'enterpri
                         </div>
                       </div>
                     </div>
+                    )}
 
                     {/* Highlights */}
                     <div className="mb-8">

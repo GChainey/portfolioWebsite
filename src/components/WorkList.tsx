@@ -3,13 +3,14 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
-import { getProjectById } from '@/content/projects'
+import { getProjectById, projectHref, type Project } from '@/content/projects'
 
 const COMPANY: Record<string, string> = { enterpriseai: 'Enterprise AI', seek: 'SEEK', bestpractice: 'Best Practice' }
 
 // A titled list of case studies or essays, one per row
 export function WorkList({ label, note, ids, titleBorders }: { label: string; note?: string; ids: string[]; titleBorders: boolean }) {
-  const items = ids.map(getProjectById).filter((p) => p !== undefined)
+  // A project whose page is off is left out
+  const items = ids.map(getProjectById).filter((p): p is Project => p !== undefined && projectHref(p) !== null)
 
   return (
     <section className="border-b border-border">
@@ -27,7 +28,7 @@ export function WorkList({ label, note, ids, titleBorders }: { label: string; no
         {items.map((project, index) => (
           <Link
             key={project.id}
-            href={project.externalUrl || `/projects/${project.id}`}
+            href={projectHref(project)!}
             className={`group flex items-center gap-6 px-8 py-4 ${index < items.length - 1 ? 'border-b border-border' : ''}`}
           >
             <div className="min-w-0 flex-1">
