@@ -6,13 +6,14 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { X, Clock, ArrowRight, ArrowUpRight, RotateCcw, LayoutGrid, FileText } from 'lucide-react'
 import { Header } from '@/components/Header'
+import { SiteFooter } from '@/components/SiteFooter'
 import { ChatPopup } from '@/components/ChatPopup'
 import { RecordingReplay } from '@/components/replay/RecordingReplay'
 import { CaseStudyContent, componentRegistry } from '@/components/CaseStudyContent'
 import { TableOfContents } from '@/components/TableOfContents'
 import { FixedTableOfContents } from '@/components/FixedTableOfContents'
 import { ShimmeringText } from '@/components/ui/shimmering-text'
-import { getProjectById, projects, type Project, type ContentBlock } from '@/content/projects'
+import { getProjectById, pageIsLive, projectHref, projects, type Project, type ContentBlock } from '@/content/projects'
 import { GitHubContributions } from '@/components/GitHubContributions'
 import { Backdrop, FramedMedia, GridFrame, MediaFrame } from '@/components/ClipFrame'
 import { ReplayReel } from '@/components/replay/ReplayReel'
@@ -152,22 +153,15 @@ function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
 
 export default function ProjectPage() {
   const params = useParams()
-  const [project, setProject] = useState<Project | null>(null)
+  // Known on the first render, so the page doesn't flash empty. A page that's off is 404'd by the layout
+  const found = getProjectById(params.id as string)
+  const project = found && pageIsLive(found) ? found : null
   const [tldrOpen, setTldrOpen] = useState(false)
   const [tldrLength, setTldrLength] = useState('recruiter')
   const [tldrFocus, setTldrFocus] = useState('')
   const [tldrContent, setTldrContent] = useState<string | null>(null)
   const [tldrLoading, setTldrLoading] = useState(false)
   const [viewMode, setViewMode] = useState<'case' | 'visual'>('case')
-
-  useEffect(() => {
-    if (params.id) {
-      const found = getProjectById(params.id as string)
-      // A study marked Coming soon is a draft: it only opens on the dev server
-      const p = found?.status === 'Coming soon' && found.kind !== 'product' && process.env.NODE_ENV !== 'development' ? undefined : found
-      setProject(p || null)
-    }
-  }, [params.id])
 
   // Scroll to top on mount - disable scroll restoration and force scroll
   useEffect(() => {
@@ -234,13 +228,12 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
   }
 
 
-  if (!project) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted">Project not found</p>
-      </div>
-    )
-  }
+  if (!project) return null
+
+  // The other essays, to read next
+  const moreEssays = project.category === 'Article'
+    ? projects.filter(p => p.category === 'Article' && p.id !== project.id && projectHref(p))
+    : []
 
   const pageContext = {
     page: project.title,
@@ -275,16 +268,16 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
 
   return (
     <div className="min-h-screen bg-background transition-colors duration-700">
-      <Header showBack />
+      <Header />
 
       {/* Main content with chat sidebar */}
       <div className="max-w-7xl mx-auto pt-14">
         <div className="flex min-h-[calc(100vh-56px)]">
 
           {/* Main content */}
-          <main className="flex-1 min-w-0 border-x border-border overflow-hidden">
+          <main className="flex-1 min-w-0 overflow-hidden flex flex-col">
             {/* Project Header - Centered */}
-            <header className="py-16 px-8 border-b border-border">
+            <header className="pt-24 pb-12 px-8">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -407,7 +400,7 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
 
             {/* View Mode Tabs - only show if project has media */}
             {project.content.some(isVisual) && (
-              <div className="flex justify-center py-4 border-b border-border">
+              <div className="flex justify-center py-4">
                 <div className="flex bg-border/40 rounded-full p-0.5">
                   <button
                     onClick={() => setViewMode('case')}
@@ -436,7 +429,8 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
             )}
 
             {/* Content */}
-            <article className="p-8">
+            {/* An essay reads in a column; a case study keeps the width for its pictures */}
+            <article className={`p-8 ${project.category === 'Article' ? 'w-full max-w-3xl mx-auto' : ''}`}>
               {viewMode === 'visual' ? (
                 <VisualGallery blocks={project.content} />
               ) : (
@@ -470,61 +464,30 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
               )}
             </article>
 
-            {/* Related Projects - shown on featured articles */}
-            {project.featured && (
-              <section className="p-8 border-t border-border">
-                <h2 className="text-xl font-medium text-foreground mb-6">Explore the Projects</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {projects
-                    .filter(p => p.id !== project.id && !p.featured && p.status !== 'Coming soon')
-                    .map((p) => (
-                      <Link
-                        key={p.id}
-                        href={`/projects/${p.id}`}
-                        className="group border border-border rounded-lg overflow-hidden hover:border-foreground/30 transition-colors"
-                      >
-                        {/* Visual placeholder */}
-                        <div className="h-32 bg-border/30 flex items-center justify-center overflow-hidden">
-                          <div className="font-mono text-[7px] leading-none text-foreground/20 group-hover:text-foreground/40 transition-colors whitespace-pre select-none">
-{`  ┌────────────────────────────┐
-  │  ░░░░░░░░░░░░░░░░░░░░░░░░  │
-  │  ░░  ┌──────────────┐  ░░  │
-  │  ░░  │   ${p.id.slice(0, 8).toUpperCase().padEnd(8)}   │  ░░  │
-  │  ░░  │   ────────   │  ░░  │
-  │  ░░  │   ▪ ▪ ▪ ▪    │  ░░  │
-  │  ░░  └──────────────┘  ░░  │
-  │  ░░░░░░░░░░░░░░░░░░░░░░░░  │
-  └────────────────────────────┘`}
-                          </div>
-                        </div>
-                        <div className="p-4">
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <span className="text-xs text-muted uppercase tracking-widest">{p.category}</span>
-                              <h3 className="font-medium text-foreground group-hover:text-accent mt-1 transition-colors">
-                                {p.title}
-                              </h3>
-                              <p className="text-sm text-muted mt-1 line-clamp-2">{p.description}</p>
-                            </div>
-                            <ArrowRight className="w-4 h-4 text-muted group-hover:text-accent group-hover:translate-x-1 transition-all flex-shrink-0 mt-1" />
-                          </div>
-                        </div>
-                      </Link>
+            {/* More essays, in the Essays page's rows */}
+            {moreEssays.length > 0 && (
+              <section aria-labelledby="more-essays" className="pt-24 pb-24">
+                <div className="max-w-3xl mx-auto px-8 flex flex-col gap-10">
+                  <h2 id="more-essays" className="text-[36px] font-medium leading-[40px] tracking-[-0.02em] text-foreground">More essays</h2>
+                  <ol className="flex flex-col">
+                    {moreEssays.map((p) => (
+                      <li key={p.id} className="border-t border-border last:border-b">
+                        <Link href={projectHref(p)!} className="group flex items-baseline gap-6 py-8">
+                          <span className="flex min-w-0 flex-1 flex-col gap-2">
+                            <span className="text-[24px] font-medium leading-[30px] tracking-[-0.01em] text-foreground transition-colors group-hover:text-accent text-balance">{p.title}</span>
+                            <span className="text-base leading-[26px] text-muted text-pretty">{p.description}</span>
+                          </span>
+                          <span className="hidden shrink-0 text-sm text-muted tabular-nums sm:block">{p.year}</span>
+                          <ArrowRight className="h-4 w-4 shrink-0 self-center text-muted transition-all group-hover:translate-x-1 group-hover:text-accent" />
+                        </Link>
+                      </li>
                     ))}
+                  </ol>
                 </div>
               </section>
             )}
 
-            {/* Footer */}
-            <footer className="p-8 flex items-center justify-between">
-              <p className="text-xs text-muted">© 2025 Gareth Chainey</p>
-              <button
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="text-xs text-muted hover:text-foreground transition-colors"
-              >
-                ↑ Back to top
-              </button>
-            </footer>
+            <SiteFooter />
           </main>
 
           <ChatPopup pageContext={pageContext} />

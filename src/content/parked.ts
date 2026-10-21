@@ -31,14 +31,20 @@ export interface ParkedItem {
 
 export const PARKED: ParkedItem[] = [
   {
-    id: 'showcase-homepage',
-    name: 'Showcase homepage',
-    status: 'flag',
+    id: 'case-study-pages',
+    name: 'Case study pages',
+    status: 'local',
     since: '2026-10-20',
-    summary: 'The homepage as the Paper frame "website · products hero + 3 details": each section shows one piece at a time as big as the column, three details of how it works under it, named tabs, arrows on the piece and dots under it; the case studies with their impact; Creative tools as a ¾ track. Details are HTML recordings of Shader Wall, Dispatch and Thesis, and SEEK\'s funnel and A/B.',
-    links: [{ label: 'Showcase', href: '/?design=showcase' }],
-    gate: '?design=showcase, or Showcase under Homepage design in the flag drawer (src/context/FeatureFlagContext.tsx)',
-    todo: ['The about-me hero from Paper ("Hero · about me")', 'The Enterprise AI site case study copy and details', 'Decide whether it becomes the default homepage', 'Production deploys are paused (vercel.json)'],
+    summary: 'Every /projects page except the essays: the RFP, Configurator, Enterprise AI site and Settings studies, SEEK and Best Practice, the product pages and the small studies, plus the /projects index. The launch went out with Home, About, Essays, CV and Contact only. The homepage keeps their pieces and impact cards, without the "Read case study" links.',
+    links: [
+      { label: 'RFP', href: '/projects/rfp' },
+      { label: 'Configurator', href: '/projects/configurator' },
+      { label: 'Enterprise AI site', href: '/projects/html-brand-website' },
+      { label: 'SEEK', href: '/projects/seek-case-study-1' },
+      { label: 'All projects', href: '/projects' },
+    ],
+    gate: 'CASE_STUDIES_LIVE and pageIsLive in src/content/projects.ts (the /projects/[id] layout 404s the rest); links check projectHref / hrefIsLive',
+    todo: ['Restyle the case study page in the new look (the essays already have it)', 'The Enterprise AI site case study copy', 'Placeholder pictures in the job dialog (ExperienceDialog) come back with the case studies: replace or drop them', 'Then set CASE_STUDIES_LIVE to true'],
   },
   {
     id: 'component-wall',

@@ -11,6 +11,7 @@ import { KindWord } from '@/components/KindWord'
 import { useNear, useNoScrollJumps } from '@/components/Visuals'
 import { SHOWCASE_SECTIONS, type ShowcaseDetail, type ShowcasePiece, type ShowcaseSection } from '@/content/home-showcase'
 import { TESTIMONIALS } from '@/content/testimonials'
+import { getProjectById, hrefIsLive } from '@/content/projects'
 
 // The homepage as the Paper frame "website · products hero + 3 details" (?design=showcase).
 // Each section shows one piece at a time: what it is (and, for the work, what it did), the piece
@@ -106,11 +107,15 @@ function Detail({ d, tint, onOpen }: { d: ShowcaseDetail; tint: string; onOpen: 
   )
 }
 
+// A case study page that's off (see pageIsLive) gets no link; an essay is called one
 function Links({ piece }: { piece: ShowcasePiece }) {
   const cls = 'text-sm leading-[18px] text-muted transition-colors hover:text-foreground'
+  const story = piece.caseStudy && hrefIsLive(piece.caseStudy) ? piece.caseStudy : null
+  const essay = story && getProjectById(story.replace('/projects/', ''))?.category === 'Article'
+  if (!story && !piece.more && !piece.visit) return null
   return (
     <div className="flex flex-wrap gap-x-4 gap-y-2">
-      {piece.caseStudy && <Link href={piece.caseStudy} className={cls}>Read case study</Link>}
+      {story && <Link href={story} className={cls}>{essay ? 'Read the essay' : 'Read case study'}</Link>}
       {piece.more && <Link href={piece.more.href} className={cls}>{piece.more.label}</Link>}
       {piece.visit && <a href={piece.visit.href} target="_blank" rel="noopener noreferrer" className={cls}>{piece.visit.label} ↗</a>}
     </div>

@@ -2847,6 +2847,30 @@ export function getProjectById(id: string): Project | undefined {
   return projects.find(p => p.id === id)
 }
 
+// The launch (2026-10-20) opens the essays only: every other /projects page (case studies,
+// products, small studies) waits on the dev server until it's ready
+export const CASE_STUDIES_LIVE = process.env.NODE_ENV === 'development'
+
+export function pageIsLive(p: Project): boolean {
+  if (CASE_STUDIES_LIVE) return true
+  return p.category === 'Article' && p.status !== 'Coming soon'
+}
+
+// Where a link to the project goes, or null while its page is off
+export function projectHref(p: Project): string | null {
+  if (p.externalUrl) return p.externalUrl
+  return pageIsLive(p) ? `/projects/${p.id}` : null
+}
+
+// For a link written as a path: false when it points at a /projects page that's off
+export function hrefIsLive(href: string): boolean {
+  const match = href.match(/^\/projects(?:\/([^/?#]+))?/)
+  if (!match) return true
+  if (!match[1]) return CASE_STUDIES_LIVE
+  const p = getProjectById(match[1])
+  return !!p && pageIsLive(p)
+}
+
 export function getAllProjectIds(): string[] {
   return projects.map(p => p.id)
 }

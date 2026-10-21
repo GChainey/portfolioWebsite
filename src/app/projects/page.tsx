@@ -1,5 +1,6 @@
 'use client'
 
+import { notFound } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
@@ -7,10 +8,12 @@ import { Header } from '@/components/Header'
 import { GitHubContributions } from '@/components/GitHubContributions'
 import { ProductGrid } from '@/components/ProductCard'
 import { useFeatureFlags } from '@/context/FeatureFlagContext'
-import { products, writing } from '@/content/projects'
+import { CASE_STUDIES_LIVE, products, writing } from '@/content/projects'
 
 export default function ProjectsPage() {
   const { flags } = useFeatureFlags()
+  // Every case study in one place: off with them until they launch
+  if (!CASE_STUDIES_LIVE) notFound()
 
   return (
     <div className="min-h-screen bg-background transition-colors duration-700">
