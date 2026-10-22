@@ -264,9 +264,9 @@ function Track({ items, at, onOpen, delay = 0, chrome = '' }: { items: (Item | u
     <div ref={ref} className={`relative aspect-[16/10] w-full overflow-hidden rounded-xl transition-shadow duration-500 ${plain ? '' : chrome}`}>
       <motion.div className="absolute inset-0 flex" initial={false} animate={{ x: `${-at * 100}%` }} transition={{ ...SLIDE_T, delay }}>
         {items.map((item, i) => (
-          // Each slide clipped a pixel in at the sides: the track's edge falls between pixels, and the
-          // neighbouring slide showed through it as a hairline beside a clip on its card's colour
-          <div key={i} className={`relative h-full w-full shrink-0 ${item?.plain ? '' : 'bg-[#fafafa]'}`} style={{ clipPath: 'inset(0 1px)' }} aria-hidden={i !== at}>
+          // The slides either side clipped a pixel in: the track's edge falls between pixels, and a
+          // neighbour showed through it as a hairline. The one showing stays whole, flush to the edge
+          <div key={i} className={`relative h-full w-full shrink-0 ${item?.plain ? '' : 'bg-[#fafafa]'}`} style={i === at ? undefined : { clipPath: 'inset(0 1px)' }} aria-hidden={i !== at}>
             {item && Math.abs(i - at) <= 1 && (
               <>
                 <Media item={item} near={near} />
@@ -334,8 +334,9 @@ function FeatureSection({ section, open }: { section: ShowcaseSection; open: Ope
           <SideArrows at={at} of={n} onStep={step} label={section.id === 'products' ? 'product' : 'piece'} />
         </div>
       </div>
+      {/* Phones get the hero alone: the details are desktop-only */}
       {slots > 0 && (
-        <div className={`grid grid-cols-1 gap-8 ${cols}`}>
+        <div className={`hidden gap-8 md:grid ${cols}`}>
           {Array.from({ length: slots }, (_, k) => {
             const d = piece.details[k]
             const delay = 0.04 * (k + 1)
@@ -413,9 +414,9 @@ function BleedSection({ section, open }: { section: ShowcaseSection; open: Opene
         <Dots at={at} of={n} onGo={go} names={section.pieces.map((p) => p.title)} />
       </div>
       {details.length > 0 && (
-        <div className="flex flex-col gap-4 pt-6">
+        <div className="hidden flex-col gap-4 pt-6 md:flex">
           <p className="text-sm text-muted">Up close</p>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          <div className="grid grid-cols-3 gap-8">
             {details.map(({ d, tint }, k) => <Detail key={d.title} d={d} tint={tint} onOpen={() => open(detailItems, k)} />)}
           </div>
         </div>
