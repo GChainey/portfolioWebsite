@@ -1,214 +1,145 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Download, ArrowRight } from 'lucide-react'
+import { Download } from 'lucide-react'
 import { Header } from '@/components/Header'
 import { ChatPopup } from '@/components/ChatPopup'
-import { TestimonialCarousel } from '@/components/TestimonialCarousel'
-import { useFeatureFlags } from '@/context/FeatureFlagContext'
+import { SiteFooter } from '@/components/SiteFooter'
 import { cvData } from '@/content/cv'
 
-import { VennSkills } from '@/components/VennSkills'
-import { ExperienceDialog } from '@/components/ExperienceDialog'
-import { PenflowSignature } from '@/components/PenflowSignature'
-import { Signature } from '@/components/Signature'
+// The CV in the homepage's look: big headings, lots of space, no panels. Everything is on the page
+// (no dialogs), so it reads top to bottom and prints as it looks
 
 const CV_PAGE_CONTEXT = {
   page: 'CV',
   description: cvData.llmContext,
   suggestedQuestions: [
     "What's your biggest achievement?",
-    "How do you work with engineers?",
-    "Tell me about your AI transformation",
+    'How do you work with engineers?',
+    'Tell me about your AI transformation',
   ],
   followUpQuestions: [
-    "What was your impact at SEEK?",
-    "How do you approach user research?",
+    'What was your impact at SEEK?',
+    'How do you approach user research?',
     "What's your technical stack?",
-    "Tell me about your design philosophy",
-    "What frameworks do you use?",
+    'Tell me about your design philosophy',
+    'What frameworks do you use?',
   ],
 }
 
+const reveal = {
+  initial: { opacity: 0, y: 16 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-80px' },
+  transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] as const },
+}
+
+const H1 = 'text-[36px] font-medium leading-[40px] tracking-[-0.02em] text-foreground'
+const H2 = 'text-[28px] font-medium leading-[34px] tracking-[-0.02em] text-foreground'
+
 export default function CVPage() {
-  const [experienceDialogOpen, setExperienceDialogOpen] = useState(false)
-  const [selectedCompanyId, setSelectedCompanyId] = useState('enterpriseai')
-  const { flags } = useFeatureFlags()
-
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
-
   return (
-    <div className="min-h-screen bg-background transition-colors duration-700">
-      <Header showBack />
-
-      <div className="max-w-7xl mx-auto pt-14">
-        <div className="flex min-h-[calc(100vh-56px)]">
-
-          <main className="flex-1 min-w-0 border-x border-border">
-            {/* Header section */}
-            <section className={`p-8 ${flags.sectionTitleBorders ? 'border-b border-border' : ''}`}>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <p className="text-xs text-muted uppercase tracking-widest mb-4">Curriculum Vitae</p>
-                {flags.signatureVariant === 'clippath' ? (
-                  <Signature className="mb-4 text-4xl" />
-                ) : flags.signatureVariant === 'penflow' ? (
-                  <PenflowSignature className="mb-4 text-4xl" />
-                ) : (
-                  <h1 className="text-4xl font-medium text-foreground mb-4">{cvData.name}</h1>
-                )}
-                <p className="text-lg text-muted max-w-2xl mb-2">
-                  {cvData.summary}
-                </p>
-                <p className="text-sm text-muted mb-6">{cvData.location}</p>
+    <div className="min-h-screen bg-background overflow-x-clip">
+      <Header />
+      <div className="mx-auto flex min-h-[calc(100vh-56px)] max-w-7xl flex-col pt-14">
+        <main className="flex flex-1 flex-col">
+          <div className="flex flex-col px-6">
+            <motion.section {...reveal} aria-labelledby="cv" className="flex flex-col gap-6 pb-12 pt-24">
+              <h1 id="cv" className={H1}>{cvData.name}</h1>
+              <p className="max-w-3xl text-[22px] leading-[34px] tracking-[-0.01em] text-muted text-pretty">{cvData.summary}</p>
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
                 <a
                   href="/GarethChaineyCV.pdf"
                   download="GarethChaineyCV.pdf"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--accent-cta)] text-white text-sm font-medium rounded-full hover:brightness-110 transition-all"
+                  className="group inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-opacity hover:opacity-85"
                 >
-                  <Download className="w-4 h-4" />
-                  Download PDF
+                  <Download className="h-4 w-4" />
+                  Download the PDF
                 </a>
-              </motion.div>
-            </section>
+                <span className="text-sm text-muted">{cvData.location}</span>
+              </div>
+            </motion.section>
 
-            {/* Experience section */}
-            <section className="p-8 border-b border-border">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <div className="flex items-center justify-between mb-6">
-                  <p className="text-xs text-muted uppercase tracking-widest">Experience</p>
-                  <button
-                    onClick={() => { setSelectedCompanyId('enterpriseai'); setExperienceDialogOpen(true) }}
-                    className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1"
-                  >
-                    View <ArrowRight className="w-3 h-3" />
-                  </button>
-                </div>
-                <div className="relative">
-                  {/* Timeline line */}
-                  <div className="absolute left-[7px] top-2 bottom-2 w-[2px] bg-border" />
+            <motion.section {...reveal} aria-labelledby="experience" className="flex flex-col gap-10 py-16">
+              <h2 id="experience" className={H2}>Experience</h2>
+              {/* A timeline: one dot per job on a quiet line */}
+              <ol className="relative flex max-w-3xl flex-col gap-14">
+                <span aria-hidden className="absolute bottom-2 left-[7px] top-2 w-[2px] bg-border" />
+                {cvData.experience.map((exp) => (
+                  <li key={exp.id} className="relative flex gap-6">
+                    <span aria-hidden className="z-10 mt-2 h-4 w-4 shrink-0 rounded-full border-4 border-background bg-foreground" />
+                    <div className="flex flex-col gap-1">
+                      <span className="flex flex-wrap items-baseline gap-x-3">
+                        <span className="text-[24px] font-medium leading-[30px] tracking-[-0.01em] text-foreground">{exp.company}</span>
+                        <span className="text-sm text-muted">{exp.period}</span>
+                      </span>
+                      <span className="text-base text-muted">{exp.role} · {exp.location}</span>
+                      <p className="mt-2 text-base leading-[26px] text-muted">{exp.companyDescription}</p>
+                      <ul className="mt-3 flex flex-col gap-2.5">
+                        {exp.highlights.map((h) => (
+                          <li key={h} className="flex gap-3 text-base leading-[26px] text-foreground">
+                            <span aria-hidden className="mt-[11px] h-1 w-1 shrink-0 rounded-full bg-muted" />
+                            <span>{h}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </motion.section>
 
-                  <div className="space-y-8">
-                    {cvData.experience.map((exp, index) => (
-                      <motion.div
-                        key={exp.id}
-                        className="flex gap-6 relative cursor-pointer group"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.3 + index * 0.1 }}
-                        onClick={() => { setSelectedCompanyId(exp.id); setExperienceDialogOpen(true) }}
-                      >
-                        {/* Timeline dot */}
-                        <div className="flex-shrink-0 w-4 h-4 rounded-full bg-foreground border-4 border-background z-10 mt-1" />
-
-                        <div className="flex-1 pb-2">
-                          <div className="flex items-baseline gap-3 mb-1">
-                            <h3 className="font-medium text-foreground group-hover:text-accent transition-colors">{exp.company}</h3>
-                            <span className="text-xs text-muted">{exp.period}</span>
-                          </div>
-                          <p className="text-sm text-muted mb-1">{exp.role} · {exp.location}</p>
-                          <p className="text-sm text-muted mb-3">{exp.companyDescription}</p>
-                          <ul className="space-y-2">
-                            {exp.highlights.map((highlight, i) => (
-                              <li key={i} className="text-sm text-muted flex gap-2">
-                                <span className="text-foreground/40 flex-shrink-0 mt-1">&#8226;</span>
-                                <span>{highlight}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            </section>
-
-            <ExperienceDialog
-              isOpen={experienceDialogOpen}
-              onClose={() => setExperienceDialogOpen(false)}
-              initialCompanyId={selectedCompanyId}
-            />
-
-            {/* Education section */}
-            <section className="p-8 border-b border-border">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-              >
-                <p className="text-xs text-muted uppercase tracking-widest mb-6">Education</p>
-                <div className="space-y-4">
+            <div className="grid grid-cols-1 gap-16 py-16 md:grid-cols-2">
+              <motion.section {...reveal} aria-labelledby="education" className="flex flex-col gap-8">
+                <h2 id="education" className={H2}>Education</h2>
+                <ul className="flex flex-col gap-6">
                   {cvData.education.map((edu) => (
-                    <div key={edu.id}>
-                      <div className="flex items-baseline gap-3">
-                        <h3 className="font-medium text-foreground text-sm">{edu.title}</h3>
-                        <span className="text-xs text-muted">{edu.year}</span>
-                      </div>
-                      {edu.institution && (
-                        <p className="text-sm text-muted">{edu.institution}</p>
-                      )}
+                    <li key={edu.id} className="flex flex-col gap-1">
+                      <span className="text-[18px] font-medium leading-6 text-foreground">{edu.title}</span>
+                      <span className="text-sm text-muted">{[edu.institution, edu.year].filter(Boolean).join(' · ')}</span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.section>
+
+              <motion.section {...reveal} aria-labelledby="skills" className="flex flex-col gap-8">
+                <h2 id="skills" className={H2}>Skills</h2>
+                <dl className="flex flex-col gap-6">
+                  {cvData.skills.map((g) => (
+                    <div key={g.category} className="flex flex-col gap-2">
+                      <dt className="text-[18px] font-medium leading-6 text-foreground">{g.category}</dt>
+                      <dd className="text-base leading-[26px] text-muted">{g.items.join(', ')}</dd>
                     </div>
                   ))}
-                </div>
-              </motion.div>
-            </section>
+                </dl>
+              </motion.section>
+            </div>
 
-            {/* Skills Venn diagram */}
-            <section className="px-8 py-6 border-b border-border">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.55 }}
-              >
-                <p className="text-xs text-muted uppercase tracking-widest mb-4">Skills</p>
-                <VennSkills />
-              </motion.div>
-            </section>
+            <motion.section {...reveal} aria-labelledby="kind-words" className="flex flex-col gap-10 pb-24 pt-16">
+              <h2 id="kind-words" className={H2}>Kind words</h2>
+              <ul className="grid grid-cols-1 gap-x-16 gap-y-12 md:grid-cols-2">
+                {cvData.testimonials.map((t) => (
+                  <li key={t.name} className="flex flex-col gap-4">
+                    <blockquote className="text-[18px] leading-[28px] text-foreground text-pretty">“{t.content}”</blockquote>
+                    <span className="text-sm text-muted">
+                      {t.linkedIn ? (
+                        <a href={t.linkedIn} target="_blank" rel="noopener noreferrer" className="font-medium text-foreground transition-colors hover:text-accent">{t.name}</a>
+                      ) : (
+                        <span className="font-medium text-foreground">{t.name}</span>
+                      )}
+                      {' · '}{t.role}, {t.company}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </motion.section>
+          </div>
 
-            {/* Testimonials section */}
-            <section className="border-b border-border overflow-hidden">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-              >
-                <div className={`px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
-                  <p className="text-xs text-muted uppercase tracking-widest">Kind words from colleagues</p>
-                </div>
-
-                <TestimonialCarousel testimonials={cvData.testimonials} animationDelay={0.65} />
-              </motion.div>
-            </section>
-
-            {/* Footer */}
-            <footer className="p-8">
-              {flags.signatureVariant === 'clippath' && <Signature className="mb-4" />}
-              {flags.signatureVariant === 'penflow' && <PenflowSignature className="mb-4" />}
-              <div className="flex items-center justify-between">
-                <p className="text-xs text-muted">&copy; 2025 Gareth Chainey</p>
-                <button
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                  className="text-xs text-muted hover:text-foreground transition-colors"
-                >
-                  &uarr; Back to top
-                </button>
-              </div>
-            </footer>
-          </main>
-
-          <ChatPopup pageContext={CV_PAGE_CONTEXT} />
-        </div>
+          <SiteFooter />
+        </main>
       </div>
+
+      <ChatPopup pageContext={CV_PAGE_CONTEXT} />
     </div>
   )
 }

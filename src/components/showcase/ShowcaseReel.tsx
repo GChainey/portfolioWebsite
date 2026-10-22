@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { REPLAY_CSS } from '@/components/replay/replayStyles'
+import { liveShaders, LIVE_SHADER_CSS } from '@/components/replay/liveShaders'
 
 // The showcase's reel engine (the parked homepage variants and the sizzle reels). It grew out of
 // the case studies' ReplayReel, which has since gone its own way (titles left, subtitles, camera).
@@ -23,6 +24,7 @@ export interface ShowcaseScene {
   image?: string // a still, held with a slow push in
   region?: Region // the part of the recording to show
   css?: string[] // rules added to a recorded page (one per string), e.g. to clear its background so only the app shows
+  liveShader?: boolean // Shader Wall: its WebGL drawn live from the recorded settings, not the recorded stills (replay/liveShaders)
   scheme?: 'dark' // the recorded page's color-scheme. Chrome paints an opaque backdrop behind an iframe whose scheme differs from the page around it, so a cleared dark page still showed black
   from?: number // seconds into the recording
   to?: number
@@ -38,7 +40,7 @@ export interface ShowcaseScene {
 }
 
 type Recording = { meta: { width: number; height: number; mouse?: boolean }; events: unknown[] }
-type Player = { play: (t?: number) => void; pause: (t?: number) => void; destroy: () => void; setConfig: (c: { speed: number }) => void }
+type Player = { play: (t?: number) => void; pause: (t?: number) => void; destroy: () => void; setConfig: (c: { speed: number }) => void; on: (e: string, h: () => void) => void; iframe: HTMLIFrameElement }
 type Box = { x: number; y: number; w: number; h: number }
 
 const W = 1600
@@ -103,21 +105,32 @@ function SceneMedia({ scene, playing, box, fill, dark, clear, onReady, lap = 0 }
   useEffect(() => {
     if (!scene.src) return
     let gone = false
+    let shaders: ReturnType<typeof liveShaders> | undefined
     ;(async () => {
       const [{ Replayer }, rec] = await Promise.all([import('@rrweb/replay'), load(scene.src!)])
       // Its pictures first (a slow one gets three seconds)
       await Promise.race([preload(scene.src!), new Promise((r) => setTimeout(r, 3000))])
       if (gone || !root.current) return
       setSize(rec.meta)
+      const css = [...(scene.css ?? []), ...(scene.liveShader ? LIVE_SHADER_CSS : [])]
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const r = new Replayer(rec.events as any, { root: root.current, mouseTail: false, showWarning: false, triggerFocus: false, insertStyleRules: scene.css ?? [] }) as unknown as Player
+      const r = new Replayer(rec.events as any, { root: root.current, mouseTail: false, showWarning: false, triggerFocus: false, insertStyleRules: css,
+        // A canvas in a document without scripting draws nothing (it shows its fallback content), so a
+        // live shader needs the replay's frame to allow scripts. rrweb rebuilds recorded scripts as inert
+        // <noscript>, and these recordings have had their script sources removed too
+        UNSAFE_replayCanvas: !!scene.liveShader }) as unknown as Player
+      if (scene.liveShader) {
+        shaders = liveShaders(() => r.iframe.contentDocument)
+        r.on('event-cast', shaders.update)
+        r.on('fullsnapshot-rebuilded', shaders.update)
+      }
       r.setConfig({ speed: scene.rate ?? 1 })
       r.pause((scene.from ?? 0) * 1000)
       player.current = r
       // Give the rebuilt page a frame to paint before it's shown
       requestAnimationFrame(() => requestAnimationFrame(() => { if (!gone) onReady() }))
     })()
-    return () => { gone = true; player.current?.destroy(); player.current = null }
+    return () => { gone = true; shaders?.destroy(); player.current?.destroy(); player.current = null }
   }, [scene])
 
   useEffect(() => {

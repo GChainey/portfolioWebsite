@@ -14,6 +14,23 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.1.0',
+    date: '2026-10-21',
+    title: 'Shader Wall, Live: the Real Shader in Its Replays',
+    description: 'Shader Wall\'s clips draw the app\'s own Paper shaders live, from the settings the recording shows, instead of a few soft stills a second. Plus a CV in the new look, a tab icon, and the carousel dots under the whole group.',
+    changes: [
+      'Shader Wall replays: each wallpaper and preview runs the real shader (Paper\'s, as the app uses), reading the selected preset, its sliders and its colours from the replayed page, so it is sharp and moves smoothly',
+      'Its registry (content/shaderwall-registry.json) is Shader Wall\'s own list of 24 shaders, taken from shaderwall.com',
+      'The recorded stills are gone from the recordings: about 220 KB each instead of 2 to 2.7 MB',
+      'Shader Wall\'s hero is now its replay (the whole desktop clicking through presets) instead of the live site in a frame',
+      'CV in the new look: name and summary, the PDF, a timeline with every highlight, education and skills side by side, kind words as quotes',
+      'A tab icon: a G in the site\'s amber, in Geist, plus a home-screen icon',
+      'The carousel dots sit under the piece and its details, since they move all of them',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/new-site-version-go-live',
+  },
+  {
     version: '3.0.2',
     date: '2026-10-21',
     title: 'Homepage Polish: Whole Apps, a Readable Funnel, Fewer Pieces',

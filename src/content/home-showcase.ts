@@ -63,6 +63,10 @@ const dialog = (src: string, from: number, to: number, region: { x: number; y: n
 const BP = '/case-studies/bestpractice-booking'
 const BP_DIALOG = { x: 38, y: 70, width: 1496, height: 858 } // the two-panel dialog, in the 1600x986 recordings
 
+// Shader Wall: a replay with the real shader drawn live (replay/liveShaders), not the recorded stills
+const shaderWall = (src: string, from: number, to: number, region?: { x: number; y: number; width: number; height: number }): ShowcaseScene =>
+  ({ src, from, to, layout: 'full', title: '', liveShader: true, ...(region ? { region } : {}) })
+
 // Pieces that aren't ready yet show on the dev server only
 const DRAFTS_LIVE = process.env.NODE_ENV === 'development'
 
@@ -91,12 +95,13 @@ export const SHOWCASE_SECTIONS: ShowcaseSection[] = [
       {
         id: 'shader-wall', title: 'Shader Wall', summary: 'An agentic friendly native macOS app to set and create shaders as your background.',
         visit: { label: 'Visit Shader Wall', href: 'https://www.shaderwall.com' },
-        hero: scene('shader-wall'), framed: false, tint: '#ECE7F5',
+        // The whole desktop, clicking through the presets
+        hero: shaderWall('/replays/products/shaderwall-presets.json', 0.5, 15), framed: false, tint: '#ECE7F5',
         details: [
-          // Recorded from the app on shaderwall.com; its WebGL is caught as frames laid over the canvas
-          { title: 'Tune it with sliders', scene: crop('/replays/products/shaderwall-sliders.json', 0.5, 14.7, { x: 286, y: 97, width: 968, height: 605 }) },
-          { title: 'Or ask your agent, over MCP', scene: crop('/replays/products/shaderwall-agent.json', 0, 10.4, { x: 4, y: 18, width: 1248, height: 780 }) },
-          { title: 'Click through the presets', scene: crop('/replays/products/shaderwall-presets.json', 0.5, 15, { x: 286, y: 97, width: 968, height: 605 }) },
+          // Recorded from the app on shaderwall.com. Its WebGL is drawn live from the recorded settings
+          { title: 'Tune it with sliders', scene: shaderWall('/replays/products/shaderwall-sliders.json', 0.5, 14.7, { x: 286, y: 97, width: 968, height: 605 }) },
+          { title: 'Or ask your agent, over MCP', scene: shaderWall('/replays/products/shaderwall-agent.json', 0, 10.4, { x: 4, y: 18, width: 1248, height: 780 }) },
+          { title: 'Click through the presets', scene: shaderWall('/replays/products/shaderwall-presets.json', 0.5, 15, { x: 286, y: 97, width: 968, height: 605 }) },
         ],
       },
       {
