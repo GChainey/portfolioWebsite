@@ -32,6 +32,19 @@ const itemsOf = (p: ShowcasePiece): Item[] => [heroItem(p), ...p.details]
 // Given its window size and a region, it's laid out at that size and zoomed so the region fills
 // the frame: a close-up of one part of a live page. Given keys (and on this site), it presses them
 // in turn, so a game's menu steps through itself
+// A live site plays silently: its audio is held suspended. Wallbounce starts its music and
+// sound on the first key, and the keys pressed for it here count
+function silence(win: Window & typeof globalThis) {
+  const Real = win.AudioContext as typeof AudioContext & { quiet?: true }
+  if (!Real || Real.quiet) return
+  class Quiet extends Real {
+    static quiet = true as const
+    constructor(options?: AudioContextOptions) { super(options); void this.suspend() }
+    resume() { return Promise.resolve() }
+  }
+  win.AudioContext = Quiet
+}
+
 function LiveSite({ scene }: { scene: ShowcaseScene }) {
   const box = useRef<HTMLDivElement>(null)
   const frame = useRef<HTMLIFrameElement>(null)
@@ -54,13 +67,14 @@ function LiveSite({ scene }: { scene: ShowcaseScene }) {
       if (!win) return
       const code = keys.codes[i++ % keys.codes.length]
       try {
+        silence(win)
         win.dispatchEvent(new win.KeyboardEvent('keydown', { code, key: code, bubbles: true }))
         setTimeout(() => win.dispatchEvent(new win.KeyboardEvent('keyup', { code, key: code, bubbles: true })), 90)
       } catch { /* another origin: it just sits */ }
     }, keys.every)
     return () => clearInterval(id)
   }, [keys])
-  const iframe = <iframe ref={frame} src={scene.site} title="" tabIndex={-1} aria-hidden loading="lazy" className={`pointer-events-none border-0 bg-white ${size ? 'absolute left-0 top-0 origin-top-left' : 'absolute inset-0 h-full w-full'}`} style={size ? { width: size.width, height: size.height, transform: `scale(${k}) translate(${-(region?.x ?? 0)}px, ${-(region?.y ?? 0)}px)` } : undefined} />
+  const iframe = <iframe ref={frame} src={scene.site} onLoad={() => { try { silence(frame.current!.contentWindow as Window & typeof globalThis) } catch { /* another origin */ } }} title="" tabIndex={-1} aria-hidden loading="lazy" className={`pointer-events-none border-0 bg-white ${size ? 'absolute left-0 top-0 origin-top-left' : 'absolute inset-0 h-full w-full'}`} style={size ? { width: size.width, height: size.height, transform: `scale(${k}) translate(${-(region?.x ?? 0)}px, ${-(region?.y ?? 0)}px)` } : undefined} />
   return <div ref={box} className="absolute inset-0 overflow-hidden">{iframe}</div>
 }
 
@@ -163,7 +177,8 @@ function About({ piece }: { piece: ShowcasePiece }) {
       <h3 className="text-[24px] font-medium leading-[30px] tracking-[-0.01em] text-foreground text-balance">{piece.title}</h3>
       <p className="text-base leading-[26px] text-muted">{piece.summary}</p>
       {piece.impact && (
-        <dl className="flex flex-wrap gap-3 py-2">
+        // Desktop only: on a phone the cards stack awkwardly, and the case study has them
+        <dl className="hidden flex-wrap gap-3 py-2 md:flex">
           {piece.impact.map((m) => (
             <div key={m.label} className="flex flex-col justify-center gap-0.5 rounded-xl border border-border bg-background px-4 py-3">
               {m.value && <dt className="text-[20px] font-medium leading-[26px] tracking-[-0.01em] text-foreground tabular-nums">{m.value}</dt>}

@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.3.3',
+    date: '2026-10-22',
+    title: 'Phone Header, Impact Cards and a Silent Wallbounce',
+    description: 'The header fits on a phone, the homepage drops its impact cards there, and the live Wallbounce plays without sound everywhere.',
+    changes: [
+      'On phones the header shows GC instead of the full name, which was wrapping onto two lines beside the menu; the links sit a little closer',
+      'The impact cards under each homepage piece are desktop-only; on a phone the case study has them',
+      'Wallbounce on the homepage is silent at every size: the game\'s audio is held suspended, so the keys pressed for it no longer start its music',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/mobile-header-impact',
+  },
+  {
     version: '3.3.2',
     date: '2026-10-22',
     title: 'Swipe Through the Homepage on Phones',
