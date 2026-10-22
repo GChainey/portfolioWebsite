@@ -1,0 +1,2204 @@
+[
+ {
+  "id": "warp",
+  "exportName": "Warp",
+  "name": "Warp",
+  "description": "Fluid, swirling bands that warp and fold across the screen.",
+  "defaults": {
+   "speed": 1.8,
+   "scale": 1,
+   "rotation": 0,
+   "proportion": 0.64,
+   "softness": 1.5,
+   "distortion": 0.2,
+   "swirl": 0.86,
+   "swirlIterations": 7,
+   "shapeScale": 0.6,
+   "shape": "edge",
+   "colors": [
+    "#0D3856",
+    "#D1D1D1",
+    "#ECECEC"
+   ]
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "speed",
+    "label": "Speed",
+    "min": 0,
+    "max": 4,
+    "step": 0.05
+   },
+   {
+    "type": "slider",
+    "key": "swirl",
+    "label": "Swirl",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "swirlIterations",
+    "label": "Swirl iterations",
+    "min": 1,
+    "max": 12,
+    "step": 1
+   },
+   {
+    "type": "slider",
+    "key": "proportion",
+    "label": "Proportion",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "softness",
+    "label": "Softness",
+    "min": 0,
+    "max": 2,
+    "step": 0.02
+   },
+   {
+    "type": "slider",
+    "key": "distortion",
+    "label": "Distortion",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "shapeScale",
+    "label": "Shape scale",
+    "min": 0,
+    "max": 2,
+    "step": 0.02
+   },
+   {
+    "type": "slider",
+    "key": "scale",
+    "label": "Scale",
+    "min": 0.2,
+    "max": 3,
+    "step": 0.05
+   },
+   {
+    "type": "select",
+    "key": "shape",
+    "label": "Pattern",
+    "options": [
+     {
+      "value": "checks",
+      "label": "Checks"
+     },
+     {
+      "value": "stripes",
+      "label": "Stripes"
+     },
+     {
+      "value": "edge",
+      "label": "Edge"
+     }
+    ]
+   },
+   {
+    "type": "colors",
+    "key": "colors",
+    "label": "Colors",
+    "min": 2,
+    "max": 5
+   }
+  ]
+ },
+ {
+  "id": "mesh",
+  "exportName": "MeshGradient",
+  "name": "Mesh Gradient",
+  "description": "Soft, morphing gradient mesh with gentle grain.",
+  "defaults": {
+   "speed": 3.98,
+   "scale": 1.15,
+   "distortion": 0.71,
+   "swirl": 0.85,
+   "grainOverlay": 0.71,
+   "colors": [
+    "#244B10",
+    "#CB8046",
+    "#1A352F",
+    "#3943A2",
+    "#BE5A70"
+   ]
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "speed",
+    "label": "Speed",
+    "min": 0,
+    "max": 4,
+    "step": 0.05
+   },
+   {
+    "type": "slider",
+    "key": "distortion",
+    "label": "Distortion",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "swirl",
+    "label": "Swirl",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "grainOverlay",
+    "label": "Grain",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "scale",
+    "label": "Scale",
+    "min": 0.2,
+    "max": 3,
+    "step": 0.05
+   },
+   {
+    "type": "colors",
+    "key": "colors",
+    "label": "Colors",
+    "min": 2,
+    "max": 6
+   }
+  ]
+ },
+ {
+  "id": "swirl",
+  "exportName": "Swirl",
+  "name": "Swirl",
+  "description": "Concentric bands twisting into a hypnotic vortex.",
+  "defaults": {
+   "speed": 0.8,
+   "scale": 1,
+   "bandCount": 6,
+   "twist": 0.3,
+   "proportion": 0.5,
+   "softness": 0.5,
+   "colorBack": "#0A0A12",
+   "colors": [
+    "#FF6B6B",
+    "#FFD93D",
+    "#6BCB77"
+   ]
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "speed",
+    "label": "Speed",
+    "min": 0,
+    "max": 4,
+    "step": 0.05
+   },
+   {
+    "type": "slider",
+    "key": "bandCount",
+    "label": "Band count",
+    "min": 1,
+    "max": 16,
+    "step": 1
+   },
+   {
+    "type": "slider",
+    "key": "twist",
+    "label": "Twist",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "proportion",
+    "label": "Proportion",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "softness",
+    "label": "Softness",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "scale",
+    "label": "Scale",
+    "min": 0.2,
+    "max": 3,
+    "step": 0.05
+   },
+   {
+    "type": "color",
+    "key": "colorBack",
+    "label": "Background"
+   },
+   {
+    "type": "colors",
+    "key": "colors",
+    "label": "Colors",
+    "min": 2,
+    "max": 5
+   }
+  ]
+ },
+ {
+  "id": "voronoi",
+  "exportName": "Voronoi",
+  "name": "Voronoi",
+  "description": "Glowing cellular tiles drifting and pulsing.",
+  "defaults": {
+   "speed": 0.5,
+   "scale": 1,
+   "stepsPerColor": 2,
+   "distortion": 0.3,
+   "gap": 0.05,
+   "glow": 0.5,
+   "colorGap": "#000000",
+   "colorGlow": "#FFFFFF",
+   "colors": [
+    "#1A1A40",
+    "#7B2FF7",
+    "#F107A3"
+   ]
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "speed",
+    "label": "Speed",
+    "min": 0,
+    "max": 4,
+    "step": 0.05
+   },
+   {
+    "type": "slider",
+    "key": "distortion",
+    "label": "Distortion",
+    "min": 0,
+    "max": 0.5,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "gap",
+    "label": "Gap",
+    "min": 0,
+    "max": 0.1,
+    "step": 0.005
+   },
+   {
+    "type": "slider",
+    "key": "glow",
+    "label": "Glow",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "stepsPerColor",
+    "label": "Steps per color",
+    "min": 1,
+    "max": 6,
+    "step": 1
+   },
+   {
+    "type": "slider",
+    "key": "scale",
+    "label": "Scale",
+    "min": 0.2,
+    "max": 3,
+    "step": 0.05
+   },
+   {
+    "type": "color",
+    "key": "colorGap",
+    "label": "Gap color"
+   },
+   {
+    "type": "color",
+    "key": "colorGlow",
+    "label": "Glow color"
+   },
+   {
+    "type": "colors",
+    "key": "colors",
+    "label": "Colors",
+    "min": 2,
+    "max": 5
+   }
+  ]
+ },
+ {
+  "id": "metaballs",
+  "exportName": "Metaballs",
+  "name": "Metaballs",
+  "description": "Merging blobs of liquid color floating in space.",
+  "defaults": {
+   "speed": 0.8,
+   "scale": 1,
+   "count": 8,
+   "size": 1,
+   "colorBack": "#050510",
+   "colors": [
+    "#00C6FF",
+    "#0072FF",
+    "#7B2FF7"
+   ]
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "speed",
+    "label": "Speed",
+    "min": 0,
+    "max": 4,
+    "step": 0.05
+   },
+   {
+    "type": "slider",
+    "key": "count",
+    "label": "Count",
+    "min": 1,
+    "max": 20,
+    "step": 1
+   },
+   {
+    "type": "slider",
+    "key": "size",
+    "label": "Size",
+    "min": 0,
+    "max": 2,
+    "step": 0.02
+   },
+   {
+    "type": "slider",
+    "key": "scale",
+    "label": "Scale",
+    "min": 0.2,
+    "max": 3,
+    "step": 0.05
+   },
+   {
+    "type": "color",
+    "key": "colorBack",
+    "label": "Background"
+   },
+   {
+    "type": "colors",
+    "key": "colors",
+    "label": "Colors",
+    "min": 2,
+    "max": 5
+   }
+  ]
+ },
+ {
+  "id": "grain",
+  "exportName": "GrainGradient",
+  "name": "Grain Gradient",
+  "description": "Grainy, film-like gradient with shifting shapes.",
+  "defaults": {
+   "speed": 0.6,
+   "scale": 1,
+   "softness": 0.7,
+   "intensity": 0.5,
+   "noise": 0.3,
+   "shape": "wave",
+   "colorBack": "#000000",
+   "colors": [
+    "#FF2D55",
+    "#FFCC00",
+    "#5856D6"
+   ]
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "speed",
+    "label": "Speed",
+    "min": 0,
+    "max": 4,
+    "step": 0.05
+   },
+   {
+    "type": "slider",
+    "key": "softness",
+    "label": "Softness",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "intensity",
+    "label": "Intensity",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "noise",
+    "label": "Noise",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "scale",
+    "label": "Scale",
+    "min": 0.2,
+    "max": 3,
+    "step": 0.05
+   },
+   {
+    "type": "select",
+    "key": "shape",
+    "label": "Shape",
+    "options": [
+     {
+      "value": "wave",
+      "label": "Wave"
+     },
+     {
+      "value": "dots",
+      "label": "Dots"
+     },
+     {
+      "value": "truchet",
+      "label": "Truchet"
+     },
+     {
+      "value": "corners",
+      "label": "Corners"
+     },
+     {
+      "value": "ripple",
+      "label": "Ripple"
+     },
+     {
+      "value": "blob",
+      "label": "Blob"
+     },
+     {
+      "value": "sphere",
+      "label": "Sphere"
+     }
+    ]
+   },
+   {
+    "type": "color",
+    "key": "colorBack",
+    "label": "Background"
+   },
+   {
+    "type": "colors",
+    "key": "colors",
+    "label": "Colors",
+    "min": 2,
+    "max": 5
+   }
+  ]
+ },
+ {
+  "id": "dotorbit",
+  "exportName": "DotOrbit",
+  "name": "Dot Orbit",
+  "description": "Orbiting dots forming a lively particle field.",
+  "defaults": {
+   "speed": 0.5,
+   "scale": 1,
+   "size": 0.6,
+   "sizeRange": 0.5,
+   "spreading": 0.5,
+   "stepsPerColor": 2,
+   "colorBack": "#0A0A0A",
+   "colors": [
+    "#00FFA3",
+    "#00B3FF",
+    "#FF00D4"
+   ]
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "speed",
+    "label": "Speed",
+    "min": 0,
+    "max": 4,
+    "step": 0.05
+   },
+   {
+    "type": "slider",
+    "key": "size",
+    "label": "Dot size",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "sizeRange",
+    "label": "Size range",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "spreading",
+    "label": "Spreading",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "stepsPerColor",
+    "label": "Steps per color",
+    "min": 1,
+    "max": 6,
+    "step": 1
+   },
+   {
+    "type": "slider",
+    "key": "scale",
+    "label": "Scale",
+    "min": 0.2,
+    "max": 3,
+    "step": 0.05
+   },
+   {
+    "type": "color",
+    "key": "colorBack",
+    "label": "Background"
+   },
+   {
+    "type": "colors",
+    "key": "colors",
+    "label": "Colors",
+    "min": 2,
+    "max": 5
+   }
+  ]
+ },
+ {
+  "id": "color-panels",
+  "exportName": "ColorPanels",
+  "name": "Color Panels",
+  "description": "Translucent panels of color turning around a central axis.",
+  "animated": true,
+  "defaults": {
+   "speed": 0.5,
+   "scale": 1,
+   "colors": [
+    "#ff9d00",
+    "#fd4f30",
+    "#809bff",
+    "#6d2eff",
+    "#333aff",
+    "#f15cff",
+    "#ffd557"
+   ],
+   "colorBack": "#000000",
+   "angle1": 0,
+   "angle2": 0,
+   "length": 1.1,
+   "blur": 0,
+   "fadeIn": 1,
+   "fadeOut": 0.3,
+   "gradient": 0,
+   "density": 3
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "angle1",
+    "label": "Angle1",
+    "min": -1,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "angle2",
+    "label": "Angle2",
+    "min": -1,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "length",
+    "label": "Length",
+    "min": 0,
+    "max": 3,
+    "step": 0.05
+   },
+   {
+    "type": "slider",
+    "key": "blur",
+    "label": "Blur",
+    "min": 0,
+    "max": 0.5,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "fadeIn",
+    "label": "Fade in",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "fadeOut",
+    "label": "Fade out",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "gradient",
+    "label": "Gradient",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "density",
+    "label": "Density",
+    "min": 0.25,
+    "max": 7,
+    "step": 0.05
+   },
+   {
+    "type": "colors",
+    "key": "colors",
+    "label": "Colors",
+    "min": 2,
+    "max": 7
+   },
+   {
+    "type": "color",
+    "key": "colorBack",
+    "label": "Background"
+   }
+  ]
+ },
+ {
+  "id": "dithering",
+  "exportName": "Dithering",
+  "name": "Dithering",
+  "description": "Two-color dithering over drifting shapes, like an old screen.",
+  "animated": true,
+  "defaults": {
+   "speed": 1,
+   "scale": 1,
+   "colorBack": "#000000",
+   "colorFront": "#00b2ff",
+   "shape": "sphere",
+   "type": "4x4",
+   "size": 2
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "size",
+    "label": "Size",
+    "min": 0,
+    "max": 4,
+    "step": 1
+   },
+   {
+    "type": "select",
+    "key": "shape",
+    "label": "Shape",
+    "options": [
+     {
+      "value": "simplex",
+      "label": "Simplex"
+     },
+     {
+      "value": "warp",
+      "label": "Warp"
+     },
+     {
+      "value": "dots",
+      "label": "Dots"
+     },
+     {
+      "value": "wave",
+      "label": "Wave"
+     },
+     {
+      "value": "ripple",
+      "label": "Ripple"
+     },
+     {
+      "value": "swirl",
+      "label": "Swirl"
+     },
+     {
+      "value": "sphere",
+      "label": "Sphere"
+     }
+    ]
+   },
+   {
+    "type": "select",
+    "key": "type",
+    "label": "Style",
+    "options": [
+     {
+      "value": "random",
+      "label": "Random"
+     },
+     {
+      "value": "2x2",
+      "label": "2x2"
+     },
+     {
+      "value": "4x4",
+      "label": "4x4"
+     },
+     {
+      "value": "8x8",
+      "label": "8x8"
+     }
+    ]
+   },
+   {
+    "type": "color",
+    "key": "colorBack",
+    "label": "Background"
+   },
+   {
+    "type": "color",
+    "key": "colorFront",
+    "label": "Front"
+   }
+  ]
+ },
+ {
+  "id": "dot-grid",
+  "exportName": "DotGrid",
+  "name": "Dot Grid",
+  "description": "A calm grid of dots, diamonds, squares, or triangles.",
+  "animated": false,
+  "defaults": {
+   "speed": 0,
+   "scale": 1,
+   "colorBack": "#000000",
+   "colorFill": "#ffffff",
+   "colorStroke": "#ffaa00",
+   "size": 2,
+   "gapX": 32,
+   "gapY": 32,
+   "strokeWidth": 0,
+   "sizeRange": 0,
+   "opacityRange": 0,
+   "shape": "circle"
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "size",
+    "label": "Size",
+    "min": 0,
+    "max": 4,
+    "step": 1
+   },
+   {
+    "type": "slider",
+    "key": "gapX",
+    "label": "Gap x",
+    "min": 2,
+    "max": 500,
+    "step": 1
+   },
+   {
+    "type": "slider",
+    "key": "gapY",
+    "label": "Gap y",
+    "min": 2,
+    "max": 500,
+    "step": 1
+   },
+   {
+    "type": "slider",
+    "key": "strokeWidth",
+    "label": "Stroke width",
+    "min": 0,
+    "max": 50,
+    "step": 1
+   },
+   {
+    "type": "slider",
+    "key": "sizeRange",
+    "label": "Size range",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "opacityRange",
+    "label": "Opacity range",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "select",
+    "key": "shape",
+    "label": "Shape",
+    "options": [
+     {
+      "value": "circle",
+      "label": "Circle"
+     },
+     {
+      "value": "diamond",
+      "label": "Diamond"
+     },
+     {
+      "value": "square",
+      "label": "Square"
+     },
+     {
+      "value": "triangle",
+      "label": "Triangle"
+     }
+    ]
+   },
+   {
+    "type": "color",
+    "key": "colorBack",
+    "label": "Background"
+   },
+   {
+    "type": "color",
+    "key": "colorFill",
+    "label": "Fill"
+   },
+   {
+    "type": "color",
+    "key": "colorStroke",
+    "label": "Stroke"
+   }
+  ]
+ },
+ {
+  "id": "gem-smoke",
+  "exportName": "GemSmoke",
+  "name": "Gem Smoke",
+  "description": "Smoky color swirling inside a cut-gem shape.",
+  "animated": true,
+  "defaults": {
+   "speed": 1,
+   "scale": 1,
+   "colorBack": "#f0efea",
+   "colorInner": "#fafaf5",
+   "colors": [
+    "#333333",
+    "#e7e6df"
+   ],
+   "outerGlow": 0.55,
+   "innerGlow": 1,
+   "innerDistortion": 0.8,
+   "outerDistortion": 0.6,
+   "offset": 0,
+   "angle": 0,
+   "size": 0.8,
+   "shape": "diamond"
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "outerGlow",
+    "label": "Outer glow",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "innerGlow",
+    "label": "Inner glow",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "innerDistortion",
+    "label": "Inner distortion",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "outerDistortion",
+    "label": "Outer distortion",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "offset",
+    "label": "Offset",
+    "min": -1,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "angle",
+    "label": "Angle",
+    "min": 0,
+    "max": 360,
+    "step": 1
+   },
+   {
+    "type": "slider",
+    "key": "size",
+    "label": "Size",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "select",
+    "key": "shape",
+    "label": "Shape",
+    "options": [
+     {
+      "value": "none",
+      "label": "None"
+     },
+     {
+      "value": "circle",
+      "label": "Circle"
+     },
+     {
+      "value": "daisy",
+      "label": "Daisy"
+     },
+     {
+      "value": "diamond",
+      "label": "Diamond"
+     },
+     {
+      "value": "metaballs",
+      "label": "Metaballs"
+     }
+    ]
+   },
+   {
+    "type": "colors",
+    "key": "colors",
+    "label": "Colors",
+    "min": 2,
+    "max": 6
+   },
+   {
+    "type": "color",
+    "key": "colorBack",
+    "label": "Background"
+   },
+   {
+    "type": "color",
+    "key": "colorInner",
+    "label": "Inner"
+   }
+  ]
+ },
+ {
+  "id": "god-rays",
+  "exportName": "GodRays",
+  "name": "God Rays",
+  "description": "Rays of light streaming out from a glowing center.",
+  "animated": true,
+  "defaults": {
+   "speed": 0.75,
+   "scale": 1,
+   "colorBack": "#000000",
+   "colorBloom": "#0000ff",
+   "colors": [
+    "#a600ff6e",
+    "#6200fff0",
+    "#ffffff",
+    "#33fff5"
+   ],
+   "density": 0.3,
+   "spotty": 0.3,
+   "midIntensity": 0.4,
+   "midSize": 0.2,
+   "intensity": 0.8,
+   "bloom": 0.4
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "density",
+    "label": "Density",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "spotty",
+    "label": "Spotty",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "midIntensity",
+    "label": "Mid intensity",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "midSize",
+    "label": "Mid size",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "intensity",
+    "label": "Intensity",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "bloom",
+    "label": "Bloom",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "colors",
+    "key": "colors",
+    "label": "Colors",
+    "min": 2,
+    "max": 5
+   },
+   {
+    "type": "color",
+    "key": "colorBack",
+    "label": "Background"
+   },
+   {
+    "type": "color",
+    "key": "colorBloom",
+    "label": "Bloom"
+   }
+  ]
+ },
+ {
+  "id": "liquid-metal",
+  "exportName": "LiquidMetal",
+  "name": "Liquid Metal",
+  "description": "Chrome that flows and shimmers across an abstract shape.",
+  "animated": true,
+  "defaults": {
+   "speed": 1,
+   "scale": 1,
+   "colorBack": "#AAAAAC",
+   "colorTint": "#ffffff",
+   "distortion": 0.07,
+   "repetition": 2,
+   "shiftRed": 0.3,
+   "shiftBlue": 0.3,
+   "contour": 0.4,
+   "softness": 0.1,
+   "angle": 70,
+   "shape": "diamond"
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "distortion",
+    "label": "Distortion",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "repetition",
+    "label": "Repetition",
+    "min": 1,
+    "max": 10,
+    "step": 1
+   },
+   {
+    "type": "slider",
+    "key": "shiftRed",
+    "label": "Shift red",
+    "min": -1,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "shiftBlue",
+    "label": "Shift blue",
+    "min": -1,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "contour",
+    "label": "Contour",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "softness",
+    "label": "Softness",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "angle",
+    "label": "Angle",
+    "min": 0,
+    "max": 360,
+    "step": 1
+   },
+   {
+    "type": "select",
+    "key": "shape",
+    "label": "Shape",
+    "options": [
+     {
+      "value": "none",
+      "label": "None"
+     },
+     {
+      "value": "circle",
+      "label": "Circle"
+     },
+     {
+      "value": "daisy",
+      "label": "Daisy"
+     },
+     {
+      "value": "diamond",
+      "label": "Diamond"
+     },
+     {
+      "value": "metaballs",
+      "label": "Metaballs"
+     }
+    ]
+   },
+   {
+    "type": "color",
+    "key": "colorBack",
+    "label": "Background"
+   },
+   {
+    "type": "color",
+    "key": "colorTint",
+    "label": "Tint"
+   }
+  ]
+ },
+ {
+  "id": "neuro-noise",
+  "exportName": "NeuroNoise",
+  "name": "Neuro Noise",
+  "description": "A glowing web of fluid lines, like neurons firing.",
+  "animated": true,
+  "defaults": {
+   "speed": 1,
+   "scale": 1,
+   "colorFront": "#ffffff",
+   "colorMid": "#47a6ff",
+   "colorBack": "#000000",
+   "brightness": 0.05,
+   "contrast": 0.3
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "brightness",
+    "label": "Brightness",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "contrast",
+    "label": "Contrast",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "color",
+    "key": "colorFront",
+    "label": "Front"
+   },
+   {
+    "type": "color",
+    "key": "colorMid",
+    "label": "Mid"
+   },
+   {
+    "type": "color",
+    "key": "colorBack",
+    "label": "Background"
+   }
+  ]
+ },
+ {
+  "id": "paper-texture",
+  "exportName": "PaperTexture",
+  "name": "Paper Texture",
+  "description": "Still paper grain with fibers, crumples, and folds.",
+  "animated": false,
+  "defaults": {
+   "speed": 0,
+   "scale": 1,
+   "colorFront": "#9fadbc",
+   "colorBack": "#ffffff",
+   "contrast": 0.3,
+   "roughness": 0.4,
+   "fiber": 0.3,
+   "fiberSize": 0.2,
+   "crumples": 0.3,
+   "crumpleSize": 0.35,
+   "folds": 0.65,
+   "foldCount": 5,
+   "fade": 0,
+   "drops": 0.2
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "contrast",
+    "label": "Contrast",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "roughness",
+    "label": "Roughness",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "fiber",
+    "label": "Fiber",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "fiberSize",
+    "label": "Fiber size",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "crumples",
+    "label": "Crumples",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "crumpleSize",
+    "label": "Crumple size",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "folds",
+    "label": "Folds",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "foldCount",
+    "label": "Fold count",
+    "min": 1,
+    "max": 15,
+    "step": 1
+   },
+   {
+    "type": "slider",
+    "key": "fade",
+    "label": "Fade",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "drops",
+    "label": "Drops",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "color",
+    "key": "colorFront",
+    "label": "Front"
+   },
+   {
+    "type": "color",
+    "key": "colorBack",
+    "label": "Background"
+   }
+  ]
+ },
+ {
+  "id": "perlin-noise",
+  "exportName": "PerlinNoise",
+  "name": "Perlin Noise",
+  "description": "Classic Perlin noise, from soft clouds to crisp blotches.",
+  "animated": true,
+  "defaults": {
+   "speed": 0.5,
+   "scale": 1,
+   "colorBack": "#632ad5",
+   "colorFront": "#fccff7",
+   "proportion": 0.35,
+   "softness": 0.1,
+   "octaveCount": 1,
+   "persistence": 1,
+   "lacunarity": 1.5
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "proportion",
+    "label": "Proportion",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "softness",
+    "label": "Softness",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "octaveCount",
+    "label": "Octave count",
+    "min": 1,
+    "max": 8,
+    "step": 1
+   },
+   {
+    "type": "slider",
+    "key": "persistence",
+    "label": "Persistence",
+    "min": 0.3,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "lacunarity",
+    "label": "Lacunarity",
+    "min": 1.5,
+    "max": 10,
+    "step": 0.05
+   },
+   {
+    "type": "color",
+    "key": "colorBack",
+    "label": "Background"
+   },
+   {
+    "type": "color",
+    "key": "colorFront",
+    "label": "Front"
+   }
+  ]
+ },
+ {
+  "id": "pulsing-border",
+  "exportName": "PulsingBorder",
+  "name": "Pulsing Border",
+  "description": "Luminous color trails pulsing around the screen edge.",
+  "animated": true,
+  "defaults": {
+   "speed": 1,
+   "scale": 1,
+   "colorBack": "#000000",
+   "colors": [
+    "#0dc1fd",
+    "#d915ef",
+    "#ff3f2ecc"
+   ],
+   "roundness": 0.25,
+   "thickness": 0.1,
+   "softness": 0.75,
+   "intensity": 0.2,
+   "bloom": 0.25,
+   "spots": 5,
+   "spotSize": 0.5,
+   "pulse": 0.25,
+   "smoke": 0.3,
+   "smokeSize": 0.6
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "roundness",
+    "label": "Roundness",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "thickness",
+    "label": "Thickness",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "softness",
+    "label": "Softness",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "intensity",
+    "label": "Intensity",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "bloom",
+    "label": "Bloom",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "spots",
+    "label": "Spots",
+    "min": 1,
+    "max": 20,
+    "step": 1
+   },
+   {
+    "type": "slider",
+    "key": "spotSize",
+    "label": "Spot size",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "pulse",
+    "label": "Pulse",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "smoke",
+    "label": "Smoke",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "smokeSize",
+    "label": "Smoke size",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "colors",
+    "key": "colors",
+    "label": "Colors",
+    "min": 2,
+    "max": 5
+   },
+   {
+    "type": "color",
+    "key": "colorBack",
+    "label": "Background"
+   }
+  ]
+ },
+ {
+  "id": "simplex-noise",
+  "exportName": "SimplexNoise",
+  "name": "Simplex Noise",
+  "description": "Bands of color flowing in smooth, rounded curves.",
+  "animated": true,
+  "defaults": {
+   "speed": 0.5,
+   "scale": 1,
+   "colors": [
+    "#4449CF",
+    "#FFD1E0",
+    "#F94446",
+    "#FFD36B",
+    "#FFFFFF"
+   ],
+   "stepsPerColor": 2,
+   "softness": 0
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "stepsPerColor",
+    "label": "Steps per color",
+    "min": 1,
+    "max": 10,
+    "step": 1
+   },
+   {
+    "type": "slider",
+    "key": "softness",
+    "label": "Softness",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "colors",
+    "key": "colors",
+    "label": "Colors",
+    "min": 2,
+    "max": 10
+   }
+  ]
+ },
+ {
+  "id": "smoke-ring",
+  "exportName": "SmokeRing",
+  "name": "Smoke Ring",
+  "description": "A soft ring of smoke drifting around a dark center.",
+  "animated": true,
+  "defaults": {
+   "speed": 0.5,
+   "scale": 1,
+   "colorBack": "#000000",
+   "colors": [
+    "#ffffff"
+   ],
+   "noiseScale": 3,
+   "noiseIterations": 8,
+   "radius": 0.25,
+   "thickness": 0.65,
+   "innerShape": 0.7
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "noiseScale",
+    "label": "Noise scale",
+    "min": 0.01,
+    "max": 5,
+    "step": 0.05
+   },
+   {
+    "type": "slider",
+    "key": "noiseIterations",
+    "label": "Noise iterations",
+    "min": 1,
+    "max": 8,
+    "step": 1
+   },
+   {
+    "type": "slider",
+    "key": "radius",
+    "label": "Radius",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "thickness",
+    "label": "Thickness",
+    "min": 0.01,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "innerShape",
+    "label": "Inner shape",
+    "min": 0,
+    "max": 4,
+    "step": 0.05
+   },
+   {
+    "type": "colors",
+    "key": "colors",
+    "label": "Colors",
+    "min": 1,
+    "max": 10
+   },
+   {
+    "type": "color",
+    "key": "colorBack",
+    "label": "Background"
+   }
+  ]
+ },
+ {
+  "id": "spiral",
+  "exportName": "Spiral",
+  "name": "Spiral",
+  "description": "A hypnotic spiral that twists, tapers, and morphs.",
+  "animated": true,
+  "defaults": {
+   "speed": 1,
+   "scale": 1,
+   "colorBack": "#001429",
+   "colorFront": "#79D1FF",
+   "density": 1,
+   "distortion": 0,
+   "strokeWidth": 0.5,
+   "strokeTaper": 0,
+   "strokeCap": 0,
+   "noise": 0,
+   "noiseFrequency": 0,
+   "softness": 0
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "density",
+    "label": "Density",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "distortion",
+    "label": "Distortion",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "strokeWidth",
+    "label": "Stroke width",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "strokeTaper",
+    "label": "Stroke taper",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "strokeCap",
+    "label": "Stroke cap",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "noise",
+    "label": "Noise",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "noiseFrequency",
+    "label": "Noise frequency",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "softness",
+    "label": "Softness",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "color",
+    "key": "colorBack",
+    "label": "Background"
+   },
+   {
+    "type": "color",
+    "key": "colorFront",
+    "label": "Front"
+   }
+  ]
+ },
+ {
+  "id": "static-mesh-gradient",
+  "exportName": "StaticMeshGradient",
+  "name": "Static Mesh Gradient",
+  "description": "A still mesh gradient with warped color spots.",
+  "animated": false,
+  "defaults": {
+   "speed": 0,
+   "scale": 1,
+   "colors": [
+    "#ffad0a",
+    "#6200ff",
+    "#e2a3ff",
+    "#ff99fd"
+   ],
+   "positions": 2,
+   "waveX": 1,
+   "waveXShift": 0.6,
+   "waveY": 1,
+   "waveYShift": 0.21,
+   "mixing": 0.93,
+   "grainMixer": 0,
+   "grainOverlay": 0
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "positions",
+    "label": "Positions",
+    "min": 0,
+    "max": 100,
+    "step": 1
+   },
+   {
+    "type": "slider",
+    "key": "waveX",
+    "label": "Wave x",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "waveXShift",
+    "label": "Wave xshift",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "waveY",
+    "label": "Wave y",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "waveYShift",
+    "label": "Wave yshift",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "mixing",
+    "label": "Mixing",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "grainMixer",
+    "label": "Grain mixer",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "grainOverlay",
+    "label": "Grain overlay",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "colors",
+    "key": "colors",
+    "label": "Colors",
+    "min": 2,
+    "max": 10
+   }
+  ]
+ },
+ {
+  "id": "static-radial-gradient",
+  "exportName": "StaticRadialGradient",
+  "name": "Static Radial Gradient",
+  "description": "A still radial glow with a movable focal point.",
+  "animated": false,
+  "defaults": {
+   "speed": 0,
+   "scale": 1,
+   "colorBack": "#000000",
+   "colors": [
+    "#00bbff",
+    "#00ffe1",
+    "#ffffff"
+   ],
+   "radius": 0.8,
+   "focalDistance": 0.99,
+   "focalAngle": 0,
+   "falloff": 0.24,
+   "mixing": 0.5,
+   "distortion": 0,
+   "distortionShift": 0,
+   "distortionFreq": 12,
+   "grainMixer": 0,
+   "grainOverlay": 0
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "radius",
+    "label": "Radius",
+    "min": 0,
+    "max": 3,
+    "step": 0.05
+   },
+   {
+    "type": "slider",
+    "key": "focalDistance",
+    "label": "Focal distance",
+    "min": 0,
+    "max": 3,
+    "step": 0.05
+   },
+   {
+    "type": "slider",
+    "key": "focalAngle",
+    "label": "Focal angle",
+    "min": 0,
+    "max": 360,
+    "step": 1
+   },
+   {
+    "type": "slider",
+    "key": "falloff",
+    "label": "Falloff",
+    "min": -1,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "mixing",
+    "label": "Mixing",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "distortion",
+    "label": "Distortion",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "distortionShift",
+    "label": "Distortion shift",
+    "min": -1,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "distortionFreq",
+    "label": "Distortion freq",
+    "min": 0,
+    "max": 20,
+    "step": 1
+   },
+   {
+    "type": "slider",
+    "key": "grainMixer",
+    "label": "Grain mixer",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "grainOverlay",
+    "label": "Grain overlay",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "colors",
+    "key": "colors",
+    "label": "Colors",
+    "min": 2,
+    "max": 10
+   },
+   {
+    "type": "color",
+    "key": "colorBack",
+    "label": "Background"
+   }
+  ]
+ },
+ {
+  "id": "water",
+  "exportName": "Water",
+  "name": "Water",
+  "description": "Rippling water caustics catching the light.",
+  "animated": true,
+  "defaults": {
+   "speed": 1,
+   "scale": 1,
+   "colorBack": "#909090",
+   "colorHighlight": "#ffffff",
+   "highlights": 0.07,
+   "layering": 0.5,
+   "edges": 0.8,
+   "waves": 0.3,
+   "caustic": 0.1,
+   "size": 1
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "highlights",
+    "label": "Highlights",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "layering",
+    "label": "Layering",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "edges",
+    "label": "Edges",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "waves",
+    "label": "Waves",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "caustic",
+    "label": "Caustic",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "size",
+    "label": "Size",
+    "min": 0.01,
+    "max": 7,
+    "step": 0.05
+   },
+   {
+    "type": "color",
+    "key": "colorBack",
+    "label": "Background"
+   },
+   {
+    "type": "color",
+    "key": "colorHighlight",
+    "label": "Highlight"
+   }
+  ]
+ },
+ {
+  "id": "waves",
+  "exportName": "Waves",
+  "name": "Waves",
+  "description": "Lines of waves, from sharp zigzags to smooth curves.",
+  "animated": false,
+  "defaults": {
+   "speed": 0,
+   "scale": 1,
+   "colorFront": "#ffbb00",
+   "colorBack": "#000000",
+   "shape": 0,
+   "frequency": 0.5,
+   "amplitude": 0.5,
+   "spacing": 1.2,
+   "proportion": 0.1,
+   "softness": 0
+  },
+  "controls": [
+   {
+    "type": "slider",
+    "key": "shape",
+    "label": "Shape",
+    "min": 0,
+    "max": 3,
+    "step": 1
+   },
+   {
+    "type": "slider",
+    "key": "frequency",
+    "label": "Frequency",
+    "min": 0,
+    "max": 2,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "amplitude",
+    "label": "Amplitude",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "spacing",
+    "label": "Spacing",
+    "min": 0,
+    "max": 2,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "proportion",
+    "label": "Proportion",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "slider",
+    "key": "softness",
+    "label": "Softness",
+    "min": 0,
+    "max": 1,
+    "step": 0.01
+   },
+   {
+    "type": "color",
+    "key": "colorFront",
+    "label": "Front"
+   },
+   {
+    "type": "color",
+    "key": "colorBack",
+    "label": "Background"
+   }
+  ]
+ }
+]

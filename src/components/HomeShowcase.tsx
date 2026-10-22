@@ -301,7 +301,6 @@ function FeatureSection({ section, open }: { section: ShowcaseSection; open: Ope
           )}
           <SideArrows at={at} of={n} onStep={step} label={section.id === 'products' ? 'product' : 'piece'} />
         </div>
-        <Dots at={at} of={n} onGo={go} names={section.pieces.map((p) => p.title)} />
       </div>
       {slots > 0 && (
         <div className={`grid grid-cols-1 gap-8 ${cols}`}>
@@ -326,6 +325,8 @@ function FeatureSection({ section, open }: { section: ShowcaseSection; open: Ope
           })}
         </div>
       )}
+      {/* Under the piece and its details: the dots move all of them, so they close the group */}
+      <Dots at={at} of={n} onGo={go} names={section.pieces.map((p) => p.title)} />
     </section>
   )
 }
