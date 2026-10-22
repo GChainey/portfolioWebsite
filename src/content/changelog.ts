@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.3.1',
+    date: '2026-10-22',
+    title: 'Homepage Carousel Edges and a Lighter Phone View',
+    description: 'The carousel window\'s colour now meets its border, and phones get each piece\'s hero without the detail cards.',
+    changes: [
+      'Fixed a white sliver between the carousel window\'s hairline border and the clip inside it: only the slides either side are clipped now, the one showing stays flush',
+      'On phones the homepage shows each piece\'s hero frame alone; the detail cards underneath are desktop-only',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/carousel-border-gap',
+    pr: 'https://github.com/GChainey/portfolioWebsite/pull/144',
+  },
+  {
     version: '3.3.0',
     date: '2026-10-22',
     title: 'Case Study Pages in the New Look',
