@@ -27,10 +27,12 @@ export function Header({ showBack }: HeaderProps) {
   return (
     // A tint of the page behind a blur (a Tailwind /80 does nothing here: the colours are var()s)
     <header className={`fixed top-0 left-0 right-0 z-40 bg-[color-mix(in_srgb,var(--background)_85%,transparent)] backdrop-blur-sm ${flags.panels ? 'border-b border-border' : ''}`}>
-      <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between gap-6">
         <div className="flex items-center gap-3">
-          <Link href="/" className="text-lg font-medium text-foreground hover:opacity-70 transition-opacity">
-            Gareth Chainey
+          {/* Initials on phones: the full name wrapped onto two lines beside the menu */}
+          <Link href="/" aria-label="Gareth Chainey" className="whitespace-nowrap text-lg font-medium text-foreground hover:opacity-70 transition-opacity">
+            <span className="sm:hidden">GC</span>
+            <span className="hidden sm:inline">Gareth Chainey</span>
           </Link>
           {showBack && (
             <>
@@ -42,7 +44,7 @@ export function Header({ showBack }: HeaderProps) {
             </>
           )}
         </div>
-        <nav className="flex items-center gap-6">
+        <nav className="flex items-center gap-4 sm:gap-6">
           {NAV.map(({ href, label }) => {
             const here = href === '/' ? pathname === '/' : pathname.startsWith(href)
             return (
