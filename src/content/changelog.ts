@@ -23,7 +23,8 @@ export const CHANGELOG: ChangelogEntry[] = [
       'On phones the homepage shows each piece\'s hero frame alone; the detail cards underneath are desktop-only',
     ],
     aiTools: ['Claude Code'],
-    branch: 'GChainey/c2wr7',
+    branch: 'GChainey/carousel-border-gap',
+    pr: 'https://github.com/GChainey/portfolioWebsite/pull/144',
   },
   {
     version: '3.3.0',
