@@ -14,6 +14,22 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.2.0',
+    date: '2026-10-22',
+    title: 'Wallbounce, Live, and Impact as Scale',
+    description: 'Wallbounce on the homepage is the game itself, running: its new menu stepping through itself, and its three tools up close. The Enterprise AI pieces show what AI made possible in scale and depth.',
+    changes: [
+      'The site\'s build of Wallbounce updated to the latest game (new Lock-on menu, versus, horde, speedrun board)',
+      'Hero: the live game on its menu, pressing down and up through Solo, Multiplayer, Learn, Palette and Options',
+      'Details, each the live game zoomed in: a TAS run with its path traced, the tuning sliders beside play, and the frame strip on the timing examples',
+      'Live sites on the homepage can be laid out at a set size and zoomed into a region, and can press keys in turn on this site\'s own pages',
+      'Winning a tender: 1 designer where it took 3 to 5 plus engineers; days, not weeks, for a feature; one prototype in English and in Polish',
+      'The agent-built website: 10 versions in a day from one tagline; 2 of 5 then 5 of 7 got the offer across two rounds of tests',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/new-site-version-go-live',
+  },
+  {
     version: '3.1.0',
     date: '2026-10-21',
     title: 'Shader Wall, Live: the Real Shader in Its Replays',

@@ -67,6 +67,12 @@ const BP_DIALOG = { x: 38, y: 70, width: 1496, height: 858 } // the two-panel di
 const shaderWall = (src: string, from: number, to: number, region?: { x: number; y: number; width: number; height: number }): ShowcaseScene =>
   ({ src, from, to, layout: 'full', title: '', liveShader: true, ...(region ? { region } : {}) })
 
+// Wallbounce, live: this site's build of the game (public/essays/wallbounce-dev-tools/game), laid
+// out at 1280x800 and zoomed into a region
+const WALLBOUNCE = '/essays/wallbounce-dev-tools/game/index.html'
+const wallbounce = (query: string, region: { x: number; y: number; width: number; height: number }, keys?: { codes: string[]; every: number }, size = { width: 1280, height: 800 }): ShowcaseScene =>
+  ({ site: WALLBOUNCE + query, siteSize: size, region, keys, hold: 20, layout: 'full', title: '' })
+
 // Pieces that aren't ready yet show on the dev server only
 const DRAFTS_LIVE = process.env.NODE_ENV === 'development'
 
@@ -139,7 +145,8 @@ export const SHOWCASE_SECTIONS: ShowcaseSection[] = [
         id: 'rfp', tab: 'Winning a tender', title: 'Using AI to partner with sales to win a deal', summary: 'Leveraging AI to compete with larger companies: a product-like prototype, seed data and connected LLMs.',
         caseStudy: '/projects/rfp',
         hero: scene('rfp-overview'), framed: true, tint: '#E6EEE7',
-        impact: [{ value: '3', label: 'of us, against vendors with whole teams' }, { label: 'The prototype outlived the tender' }],
+        // Pre-revenue work: its impact is the scale and depth AI made possible (from the case study)
+        impact: [{ value: '1 designer', label: 'where it took 3 to 5, plus engineers' }, { value: 'Days', label: 'not weeks, for a major feature' }, { value: '2 markets', label: 'one prototype, in English and in Polish' }],
         details: [visual('rfp-llm-chat'), visual('rfp-determination', 'The decision letter'), visual('rfp-ask')],
       },
       // Not ready: on the dev server only for now
@@ -154,7 +161,7 @@ export const SHOWCASE_SECTIONS: ShowcaseSection[] = [
         id: 'html-brand-website', tab: 'An agent-built website', title: 'Build an app, brand it per client, share it to a phone', summary: 'A marketing site built from an HTML brand.',
         caseStudy: '/projects/html-brand-website',
         hero: scene('website'), framed: true, tint: '#DCE7F1', // a soft Enterprise AI blue, under the site's own #F3F7FA
-        impact: [{ value: '10', label: 'variations in a day' }, { value: '5 of 7', label: 'understood the offer, up from 2 of 5' }],
+        impact: [{ value: '10 versions', label: 'in a day, from one tagline' }, { value: '2 of 5 → 5 of 7', label: 'got the offer, across two rounds of tests' }],
         details: [
           visual('eai-setup'),
           // The site's own builder: Nike's app done, name the next client, and it re-skins for Qantas
@@ -210,8 +217,16 @@ export const SHOWCASE_SECTIONS: ShowcaseSection[] = [
       {
         id: 'wallbounce', title: 'Wallbounce', summary: 'A top-down ode to one move from Gears of War, made with the tools an agent built for it.',
         caseStudy: '/projects/wallbounce-dev-tools', visit: { label: 'Play Wallbounce', href: 'https://wallbounce.vercel.app' },
-        hero: scene('wallbounce'), framed: false, tint: '#F6E2E0',
-        details: [{ title: 'The tools an agent built for it', scene: video('/essays/wallbounce-dev-tools/reel.mp4', 0, 20, false) }],
+        // The game itself, live (this site's build of it), not a recording: its menu stepping through
+        // itself, then its three tools up close
+        hero: wallbounce('?dev=0', { x: 140, y: 110, width: 960, height: 600 }, { codes: ['ArrowDown', 'ArrowDown', 'ArrowDown', 'ArrowDown', 'ArrowUp', 'ArrowUp', 'ArrowUp', 'ArrowUp'], every: 1600 }),
+        framed: false, tint: '#F6E2E0',
+        details: [
+          { title: 'TAS: a near tool-assisted run, its path traced', scene: wallbounce('?watch&level=1&dev=0', { x: 200, y: 160, width: 760, height: 475 }) },
+          // Laid out small, so the game takes more of the window beside the panel
+          { title: 'Tuning sliders beside the game', scene: wallbounce('?watch&level=1&dev=1', { x: 0, y: 0, width: 880, height: 550 }, undefined, { width: 880, height: 550 }) },
+          { title: 'A frame strip for every press', scene: wallbounce('?examples=timing&dev=0', { x: 380, y: 360, width: 520, height: 325 }) },
+        ],
       },
     ],
   },

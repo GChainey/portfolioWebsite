@@ -28,8 +28,40 @@ const itemsOf = (p: ShowcasePiece): Item[] => [heroItem(p), ...p.details]
 
 // A live site at its own size. Shrinking one with a transform (as the reel does) makes Chrome
 // draw its frosted glass wrong: Shader Wall's dock got a second, wider pane behind it
-function LiveSite({ src }: { src: string }) {
-  return <iframe src={src} title="" tabIndex={-1} aria-hidden loading="lazy" className="pointer-events-none absolute inset-0 h-full w-full border-0 bg-white" />
+//
+// Given its window size and a region, it's laid out at that size and zoomed so the region fills
+// the frame: a close-up of one part of a live page. Given keys (and on this site), it presses them
+// in turn, so a game's menu steps through itself
+function LiveSite({ scene }: { scene: ShowcaseScene }) {
+  const box = useRef<HTMLDivElement>(null)
+  const frame = useRef<HTMLIFrameElement>(null)
+  const [k, setK] = useState(0)
+  const { siteSize: size, region, keys } = scene
+  useEffect(() => {
+    const el = box.current
+    if (!el || !size) return
+    const fit = () => setK(el.clientWidth / (region?.width ?? size.width))
+    fit()
+    const ro = new ResizeObserver(fit)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [size, region])
+  useEffect(() => {
+    if (!keys) return
+    let i = 0
+    const id = setInterval(() => {
+      const win = frame.current?.contentWindow as (Window & typeof globalThis) | null
+      if (!win) return
+      const code = keys.codes[i++ % keys.codes.length]
+      try {
+        win.dispatchEvent(new win.KeyboardEvent('keydown', { code, key: code, bubbles: true }))
+        setTimeout(() => win.dispatchEvent(new win.KeyboardEvent('keyup', { code, key: code, bubbles: true })), 90)
+      } catch { /* another origin: it just sits */ }
+    }, keys.every)
+    return () => clearInterval(id)
+  }, [keys])
+  const iframe = <iframe ref={frame} src={scene.site} title="" tabIndex={-1} aria-hidden loading="lazy" className={`pointer-events-none border-0 bg-white ${size ? 'absolute left-0 top-0 origin-top-left' : 'absolute inset-0 h-full w-full'}`} style={size ? { width: size.width, height: size.height, transform: `scale(${k}) translate(${-(region?.x ?? 0)}px, ${-(region?.y ?? 0)}px)` } : undefined} />
+  return <div ref={box} className="absolute inset-0 overflow-hidden">{iframe}</div>
 }
 
 // A clip, drawn only while it's near the screen. A track works that out for its slides (they
@@ -39,7 +71,7 @@ function Media({ item, near: given }: { item: Item; near?: boolean }) {
   const near = given ?? seen
   const scenes = useMemo(() => (item.scene ? [item.scene] : []), [item.scene])
   const clip = item.widget ? <HomeWidget kind={item.widget} />
-    : near && item.scene?.site ? <LiveSite src={item.scene.site} />
+    : near && item.scene?.site ? <LiveSite scene={item.scene} />
     : near && scenes.length > 0 && <ShowcaseReel scenes={scenes} captions={false} theme="light" onScreen={given} clear={item.plain || !!item.matte} />
   // On a plain mat of the piece's colour: the clip's own page is cleared, so only the app sits on it
   if (item.matte) return <div ref={ref} className="absolute inset-0" style={{ background: item.matte }}>{clip}</div>
