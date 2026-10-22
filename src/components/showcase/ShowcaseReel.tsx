@@ -21,6 +21,8 @@ export interface ShowcaseScene {
   src?: string // /replays/... JSON
   video?: string // an mp4, played from `from` to `to`
   site?: string // a live site, drawn at 1440x900 and not interactive
+  siteSize?: { width: number; height: number } // the homepage's live sites: the window it's laid out in, so `region` can zoom into it
+  keys?: { codes: string[]; every: number } // a same-origin live site: keys pressed in turn, one every `every` ms, round and round (a game's menu stepping through itself)
   image?: string // a still, held with a slow push in
   region?: Region // the part of the recording to show
   css?: string[] // rules added to a recorded page (one per string), e.g. to clear its background so only the app shows
