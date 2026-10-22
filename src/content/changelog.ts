@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.3.2',
+    date: '2026-10-22',
+    title: 'Swipe Through the Homepage on Phones',
+    description: 'Phones swap the tab row and arrows for a row of heroes you swipe sideways.',
+    changes: [
+      'On phones the tab row under each section heading is gone; there wasn\'t room for it',
+      'The heroes sit in a sideways-scrolling row that snaps piece to piece, the next one showing at the edge; the words above and the dots below follow the swipe',
+      'Tapping a dot scrolls the row to that piece; desktop keeps the tabs, arrows and detail cards',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/mobile-swipe-carousel',
+  },
+  {
     version: '3.3.1',
     date: '2026-10-22',
     title: 'Homepage Carousel Edges and a Lighter Phone View',

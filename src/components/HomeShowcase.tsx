@@ -285,7 +285,8 @@ function Track({ items, at, onOpen, delay = 0, chrome = '' }: { items: (Item | u
 function Tabs({ section, at, onGo }: { section: ShowcaseSection; at: number; onGo: (i: number) => void }) {
   if (section.pieces.length < 2) return null
   return (
-    <div role="tablist" aria-label={section.title} className="flex flex-wrap gap-x-8 gap-y-2 border-b border-border">
+    // Phones have no room for them: there the pieces are swiped through instead
+    <div role="tablist" aria-label={section.title} className="hidden flex-wrap gap-x-8 gap-y-2 border-b border-border md:flex">
       {section.pieces.map((p, i) => (
         <button
           key={p.id}
@@ -307,7 +308,17 @@ function FeatureSection({ section, open }: { section: ShowcaseSection; open: Ope
   const [[at, dir], setPage] = useState<[number, number]>([0, 1])
   const n = section.pieces.length
   const piece = section.pieces[at]
-  const go = (i: number) => setPage(([a]) => [Math.min(n - 1, Math.max(0, i)), i >= a ? 1 : -1])
+  const row = useRef<HTMLDivElement>(null)
+  const stride = () => {
+    const slides = row.current?.querySelectorAll<HTMLElement>('[data-slide]')
+    return slides && slides.length > 1 ? slides[1].offsetLeft - slides[0].offsetLeft : 1
+  }
+  const turn = (i: number) => setPage((prev) => (i === prev[0] ? prev : [i, i > prev[0] ? 1 : -1]))
+  const go = (i: number) => {
+    const to = Math.min(n - 1, Math.max(0, i))
+    turn(to)
+    row.current?.scrollTo({ left: to * stride(), behavior: 'smooth' }) // the phone row; hidden, it doesn't move
+  }
   const step = (by: number) => go(at + by)
   const items = itemsOf(piece)
   const slots = Math.max(...section.pieces.map((p) => p.details.length))
@@ -323,7 +334,24 @@ function FeatureSection({ section, open }: { section: ShowcaseSection; open: Ope
       </div>
       <Swap k={piece.id} dir={dir}><About piece={piece} /></Swap>
       <div className="flex flex-col gap-5">
-        <div className="relative">
+        {/* Phones: the heroes in a row you swipe, the next one showing at the edge */}
+        <div
+          ref={row}
+          onScroll={() => turn(Math.min(n - 1, Math.round((row.current?.scrollLeft ?? 0) / stride())))}
+          className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 py-1 md:hidden"
+          style={{ scrollPaddingInline: 24 }}
+        >
+          {section.pieces.map((p, i) => {
+            const hero = heroes[i]
+            const frame = <Frame item={hero} onOpen={() => open(itemsOf(p), 0)} className={`rounded-xl ${hero.plain ? '' : framed ? 'shadow-[0_10px_30px_-10px_rgba(0,0,0,0.18)]' : 'shadow-[0_0_0_1px_var(--border)]'}`} />
+            return (
+              <div key={p.id} data-slide className="w-[88%] shrink-0 snap-start">
+                {framed ? <div className="rounded-2xl p-4" style={{ background: p.tint }}>{frame}</div> : frame}
+              </div>
+            )
+          })}
+        </div>
+        <div className="relative hidden md:block">
           {framed ? (
             <div className="rounded-[20px] p-6 md:p-12" style={tint}>
               <Track items={heroes} at={at} onOpen={() => open(items, 0)} chrome="shadow-[0_10px_30px_-10px_rgba(0,0,0,0.18)]" />
