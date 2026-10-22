@@ -28,37 +28,26 @@ export function clipGeometry(crop: ClipCrop): { aspectRatio: string; video: CSSP
   }
 }
 
-// Soft washes of the accent colour, bled into pink, sky and straw, over a tinted base. It
-// follows the accent the visitor picked and reads in both themes.
-const wash = (color: string, at: string, reach: string) => `radial-gradient(ellipse at ${at}, ${color}, transparent ${reach})`
-const tint = (other: string, strength: number) =>
-  `color-mix(in srgb, color-mix(in srgb, var(--accent), ${other}) ${strength}%, transparent)`
-
-const BACKDROP = [
-  wash('color-mix(in srgb, var(--accent) 60%, transparent)', '8% 0%', '55%'),
-  wash(tint('#f472b6', 50), '100% 10%', '50%'),
-  wash(tint('#38bdf8', 42), '85% 100%', '55%'),
-  wash(tint('#fde68a', 48), '0% 100%', '50%'),
-  'color-mix(in srgb, var(--accent) 28%, var(--background))',
-].join(', ')
+// The mat every picture and clip sits on: one soft colour, the study's own (the page sets --mat
+// from the homepage's tint for it), or a quiet grey. The homepage's look: no washes, no gradients
+const MAT = 'var(--mat, #EEF0F3)'
 
 // The backdrop on its own, for something that needs no window: a phone, a device mock-up
 export function Backdrop({ className = '', style, children }: { className?: string; style?: CSSProperties; children: ReactNode }) {
   return (
-    <div className={`rounded-2xl ${className}`} style={{ ...style, background: BACKDROP }}>
+    <div className={`rounded-[20px] ${className}`} style={{ ...style, background: MAT }}>
       {children}
     </div>
   )
 }
 
-// How a product site would show it: a padded backdrop, then a window, then the picture or clip.
-// A screen recording gets a bar with the window buttons (and an address only where it is the
-// real one); a still, an embed or a clip with its own stage gets the window alone. The window is always light, like the apps
-// in it. The buttons are grey, or the Mac's red, amber and green with the colour-lights flag.
+// How the homepage shows it: the mat, then the picture or clip in a light window with a soft
+// shadow. Only a clip with a real address gets a bar, to show it
 export function MediaFrame({ bar, url, after, children }: { bar?: boolean; url?: string; after?: ReactNode; children: ReactNode }) {
+  bar = bar && !!url
   return (
-    <Backdrop className="p-4 sm:p-8">
-      <div className="overflow-hidden rounded-lg bg-white shadow-2xl ring-1 ring-black/10">
+    <Backdrop className="p-5 sm:p-10 md:p-12">
+      <div className="overflow-hidden rounded-xl bg-white shadow-[0_10px_30px_-10px_rgba(0,0,0,0.18)]">
         {bar && (
           <div className="flex items-center gap-3 h-8 sm:h-9 px-3 bg-[#f4f4f5] border-b border-[#e4e4e7]">
             <span className="flex shrink-0 gap-1.5" aria-hidden>
@@ -143,7 +132,7 @@ export function FramedMedia({ block }: { block: MediaBlock }) {
           muted
           playsInline
           aria-label={block.alt}
-          className="block max-h-full max-w-full w-auto h-auto rounded-xl bg-white shadow-2xl ring-1 ring-black/10"
+          className="block max-h-full max-w-full w-auto h-auto rounded-xl bg-white shadow-[0_10px_30px_-10px_rgba(0,0,0,0.18)]"
         />
       </Backdrop>
     )
