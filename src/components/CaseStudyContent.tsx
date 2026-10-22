@@ -99,10 +99,10 @@ function MediaBlock({ block }: { block: Media }) {
   }
 
   return (
-    <figure className="my-8">
+    <figure className="my-12">
       <FramedMedia block={block} />
       {block.caption && (
-        <figcaption className="mt-2 text-sm text-muted text-center">
+        <figcaption className="mt-3 text-[15px] leading-5 text-muted">
           {block.caption}
         </figcaption>
       )}
@@ -152,6 +152,9 @@ function withLinks(text: string): React.ReactNode {
 
 const ease = [0.25, 0.1, 0.25, 1] as const
 
+// Words read in a column from the left edge, under the title; pictures, clips and live pieces take the full width
+const READ = 'w-full max-w-[680px]'
+
 // Each block comes in the first time it is scrolled to, so the page builds as it is read:
 // the paragraph, then the clip, then the card that goes with it. The blocks already on screen
 // when the page opens come in one after another.
@@ -174,12 +177,13 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
           return (
             <motion.div
               key={index}
+              className={READ}
               {...reveal(index)}
             >
               <Tag
                 id={slugify(block.content)}
-                className={`font-medium text-foreground scroll-mt-24 ${
-                  block.level === 2 ? 'text-2xl mt-12 mb-4' : 'text-xl mt-8 mb-3'
+                className={`font-medium text-foreground scroll-mt-24 text-balance ${
+                  block.level === 2 ? 'text-[28px] leading-[34px] tracking-[-0.02em] mt-20 mb-5' : 'text-[20px] leading-[26px] tracking-[-0.01em] mt-12 mb-3'
                 }`}
               >
                 {block.content}
@@ -192,7 +196,7 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
           return (
             <motion.p
               key={index}
-              className="text-muted leading-relaxed mb-4"
+              className={`${READ} text-[17px] leading-[28px] text-muted text-pretty mb-5`}
               {...reveal(index)}
             >
               {withLinks(block.content)}
@@ -205,7 +209,7 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
           return (
             <List
               key={index}
-              className={`${block.ordered ? 'list-decimal' : 'list-disc'} list-inside text-muted mb-6 space-y-2`}
+              className={`${READ} ${block.ordered ? 'list-decimal' : 'list-disc'} pl-5 text-[17px] leading-[28px] text-muted mb-6 space-y-2 marker:text-border`}
               {...reveal(index)}
             >
               {block.items.map((item, i) => (
@@ -219,13 +223,13 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
           return (
             <motion.div
               key={index}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-8"
+              className={`${READ} grid grid-cols-1 sm:grid-cols-2 gap-3 my-10`}
               {...reveal(index)}
             >
               {block.items.map((item, i) => (
-                <div key={i} className="border border-border rounded-lg p-5 bg-border/20">
-                  <p className="text-4xl md:text-5xl font-medium text-foreground tracking-tight">{item.value}</p>
-                  <p className="mt-4 text-foreground">{item.label}</p>
+                <div key={i} className="rounded-2xl border border-border bg-background p-6">
+                  <p className="text-[40px] leading-[44px] font-medium text-foreground tracking-[-0.03em] tabular-nums">{item.value}</p>
+                  <p className="mt-3 text-foreground">{item.label}</p>
                   {item.note && <p className="mt-1 text-sm text-muted">{item.note}</p>}
                 </div>
               ))}
@@ -233,7 +237,8 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
           )
         }
 
-        // Read like a diff: what came out, in grey with a minus, and what went in, lit with a plus
+        // The old way and the new way, side by side: the old in a quiet card, the new on the
+        // study's mat. The old lands first, then the new answers it
         if (block.type === 'comparison') {
           const sides = [
             { label: block.beforeLabel ?? 'Before', lines: [block.before].flat(), now: false },
@@ -242,8 +247,7 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
           return (
             <motion.div
               key={index}
-              className="my-6 overflow-hidden rounded-xl border border-border"
-              // The old way lands first, then the new way answers it
+              className={`${READ} my-8 grid grid-cols-1 gap-3 sm:grid-cols-2`}
               initial="hidden"
               whileInView="shown"
               viewport={{ once: true, margin: '0px 0px -18% 0px' }}
@@ -253,19 +257,13 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
                 <motion.div
                   key={label}
                   variants={{ hidden: { opacity: 0, y: 12 }, shown: { opacity: 1, y: 0, transition: { duration: 0.5, ease } } }}
-                  className={`px-4 py-4 sm:px-5 ${now ? 'border-t border-border' : ''}`}
-                  // Tailwind can't apply opacity to the CSS-variable colours, so mix them here
-                  style={{ backgroundColor: `color-mix(in srgb, var(${now ? '--accent' : '--foreground'}) ${now ? 9 : 3}%, transparent)` }}
+                  className={`rounded-2xl p-5 ${now ? '' : 'border border-border'}`}
+                  style={now ? { background: 'var(--mat, #EEF0F3)' } : undefined}
                 >
-                  <p className={`pl-7 mb-1.5 text-xs uppercase tracking-widest ${now ? 'text-accent' : 'text-muted'}`}>{label}</p>
-                  <ul className="space-y-1.5">
+                  <p className={`mb-3 text-sm font-medium ${now ? 'text-foreground' : 'text-muted'}`}>{label}</p>
+                  <ul className="space-y-2">
                     {lines.map((line) => (
-                      <li key={line} className="flex gap-3 leading-relaxed">
-                        <span className={`w-4 shrink-0 text-center font-mono ${now ? 'text-accent' : 'text-muted'}`} aria-hidden>
-                          {now ? '+' : '−'}
-                        </span>
-                        <span className={now ? 'text-foreground' : 'text-muted'}>{line}</span>
-                      </li>
+                      <li key={line} className={`text-[15px] leading-[23px] ${now ? 'text-foreground' : 'text-muted'}`}>{line}</li>
                     ))}
                   </ul>
                 </motion.div>
@@ -276,7 +274,7 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
 
         if (block.type === 'table') {
           return (
-            <motion.figure key={index} className="my-8" {...reveal(index)}>
+            <motion.figure key={index} className={`${READ} my-8`} {...reveal(index)}>
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse font-mono text-sm tabular-nums">
                   <thead>
@@ -321,7 +319,7 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
               <Component {...(block.props || {})} />
               {block.caption && (
                 // The component brings its own margin, so the caption is pulled up under it
-                <p className="-mt-5 mb-8 text-sm text-muted text-center">{block.caption}</p>
+                <p className="-mt-5 mb-10 text-[15px] leading-5 text-muted">{block.caption}</p>
               )}
               {block.live && <div className="-mt-5 mb-8"><OpenLive src={block.live} title={block.caption || 'The page, running'} /></div>}
             </motion.div>

@@ -17,6 +17,7 @@ import { getProjectById, pageIsLive, projectHref, projects, type Project, type C
 import { GitHubContributions } from '@/components/GitHubContributions'
 import { Backdrop, FramedMedia, GridFrame, MediaFrame } from '@/components/ClipFrame'
 import { ReplayReel } from '@/components/replay/ReplayReel'
+import { SHOWCASE_SECTIONS } from '@/content/home-showcase'
 
 // Calculate read time from content blocks
 function calculateReadTime(content: Project['content']): number {
@@ -230,6 +231,10 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
 
   if (!project) return null
 
+  const isEssay = project.category === 'Article'
+  // Its piece on the homepage, if it has one: its colour and what it made possible
+  const piece = SHOWCASE_SECTIONS.flatMap((x) => x.pieces).find((x) => x.caseStudy === `/projects/${project.id}`)
+
   // The other essays, to read next
   const moreEssays = project.category === 'Article'
     ? projects.filter(p => p.category === 'Article' && p.id !== project.id && projectHref(p))
@@ -267,7 +272,8 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
   )
 
   return (
-    <div className="min-h-screen bg-background transition-colors duration-700">
+    // The study's colour (the homepage's tint for it) is the mat its pictures and clips sit on
+    <div className="min-h-screen bg-background transition-colors duration-700" style={{ ['--mat' as string]: piece?.tint }}>
       <Header />
 
       {/* Main content with chat sidebar */}
@@ -276,7 +282,73 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
 
           {/* Main content */}
           <main className="flex-1 min-w-0 overflow-hidden flex flex-col">
-            {/* Project Header - Centered */}
+            {/* A case study: left-aligned, in the homepage's look, with what it made possible up top */}
+            {!isEssay && (
+              <header className="px-6 pb-8 pt-24 sm:px-8">
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+                  className="mx-auto flex max-w-5xl flex-col gap-6"
+                >
+                  <p className="text-sm text-muted">{[project.category, project.year].join(' · ')}</p>
+                  <h1 className="max-w-4xl text-[36px] font-medium leading-[1.1] tracking-[-0.025em] text-foreground text-balance md:text-[44px]">{project.title}</h1>
+                  {!project.hideDescription && (
+                    <p className="max-w-3xl text-[22px] leading-[34px] tracking-[-0.01em] text-muted text-pretty">{project.description}</p>
+                  )}
+                  {piece?.impact && (
+                    <dl className="flex flex-wrap gap-3">
+                      {piece.impact.map((m) => (
+                        <div key={m.label} className="flex flex-col justify-center gap-0.5 rounded-xl border border-border bg-background px-4 py-3">
+                          {m.value && <dt className="text-[20px] font-medium leading-[26px] tracking-[-0.01em] text-foreground tabular-nums">{m.value}</dt>}
+                          <dd className={m.value ? 'text-sm leading-5 text-muted' : 'text-[15px] font-medium leading-[26px] text-foreground'}>{m.label}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  )}
+                  <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+                    {project.liveUrl && (
+                      <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-foreground transition-colors hover:text-accent">Visit {project.title} ↗</a>
+                    )}
+                    {readTime}
+                  </div>
+                </motion.div>
+
+                {/* The hero, as big as the column, on the study's mat */}
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
+                  className="mx-auto mt-12 max-w-5xl"
+                >
+                  {project.heroReel ? (
+                    <Backdrop className="p-5 sm:p-10 md:p-12">
+                      <div className="overflow-hidden rounded-xl bg-white shadow-[0_10px_30px_-10px_rgba(0,0,0,0.18)]">
+                        <ReplayReel scenes={project.heroReel} />
+                      </div>
+                    </Backdrop>
+                  ) : project.heroReplay ? (
+                    <MediaFrame>
+                      <RecordingReplay src={project.heroReplay} bar={false} />
+                    </MediaFrame>
+                  ) : project.showGitHubActivity ? (
+                    <div className="flex justify-center"><GitHubContributions variant="full" animate /></div>
+                  ) : project.heroImage ? (
+                    <HeroFrame grid={project.heroFrame === 'grid'} bar={!!project.heroVideo} url={project.heroUrl}>
+                      {project.heroVideo ? (
+                        <video src={project.heroVideo} poster={project.heroImage} aria-label={project.title} autoPlay loop muted playsInline className="block h-auto w-full" />
+                      ) : (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={project.heroImage} alt={project.title} className="block h-auto w-full" />
+                      )}
+                    </HeroFrame>
+                  ) : null}
+                </motion.div>
+              </header>
+            )}
+
+            {/* An essay: centred, as it was */}
+            {isEssay && (
             <header className="pt-24 pb-12 px-8">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -397,9 +469,10 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
                 </>
               )}
             </header>
+            )}
 
-            {/* View Mode Tabs - only show if project has media */}
-            {project.content.some(isVisual) && (
+            {/* View Mode Tabs: an essay with media. A case study is all pictures already */}
+            {isEssay && project.content.some(isVisual) && (
               <div className="flex justify-center py-4">
                 <div className="flex bg-border/40 rounded-full p-0.5">
                   <button
@@ -430,7 +503,7 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
 
             {/* Content */}
             {/* An essay reads in a column; a case study keeps the width for its pictures */}
-            <article className={`p-8 ${project.category === 'Article' ? 'w-full max-w-3xl mx-auto' : ''}`}>
+            <article className={`p-8 w-full mx-auto ${isEssay ? 'max-w-3xl' : 'max-w-[68rem]'}`}>
               {viewMode === 'visual' ? (
                 <VisualGallery blocks={project.content} />
               ) : (

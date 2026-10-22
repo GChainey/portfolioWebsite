@@ -14,6 +14,21 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.3.0',
+    date: '2026-10-22',
+    title: 'Case Study Pages in the New Look',
+    description: 'The case study template, restyled to match the homepage, ready for the studies to come back on. Essays share the new type.',
+    changes: [
+      'A case study opens left-aligned: what it is, the title, the summary, then what it made possible as cards (the homepage\'s impact), then its hero on the study\'s own colour',
+      'Pictures and clips sit on a flat mat in the study\'s colour (a quiet grey on essays) in a soft-shadowed window, instead of the orange watercolour',
+      'Words read in a 680px column from the left edge; pictures, clips and live pieces take the full width',
+      'Before and now side by side: the old way in a quiet card, the new way on the study\'s colour',
+      'Larger headings and body type, left captions, stat cards like the homepage\'s',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/new-site-version-go-live',
+  },
+  {
     version: '3.2.0',
     date: '2026-10-22',
     title: 'Wallbounce, Live, and Impact as Scale',
