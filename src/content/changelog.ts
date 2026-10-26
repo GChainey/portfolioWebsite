@@ -14,6 +14,18 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.3.4',
+    date: '2026-10-26',
+    title: 'Impact Cards in One Row',
+    description: 'On desktop the homepage impact cards sit side by side in one row instead of wrapping onto a second line.',
+    changes: [
+      'The cards take the full width of the section; only the title and summary keep the reading width, which was pushing the third card onto its own line',
+      'From laptop width up the cards never wrap',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/beca5',
+  },
+  {
     version: '3.3.3',
     date: '2026-10-22',
     title: 'Phone Header, Impact Cards and a Silent Wallbounce',

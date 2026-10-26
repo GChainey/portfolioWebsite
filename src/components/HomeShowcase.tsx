@@ -173,12 +173,13 @@ function Links({ piece }: { piece: ShowcasePiece }) {
 // What it is, then what it did (from the case study) as small bordered cards side by side, then the links
 function About({ piece }: { piece: ShowcasePiece }) {
   return (
-    <div className="flex max-w-3xl flex-col gap-2">
-      <h3 className="text-[24px] font-medium leading-[30px] tracking-[-0.01em] text-foreground text-balance">{piece.title}</h3>
-      <p className="text-base leading-[26px] text-muted">{piece.summary}</p>
+    <div className="flex flex-col gap-2">
+      <h3 className="max-w-3xl text-[24px] font-medium leading-[30px] tracking-[-0.01em] text-foreground text-balance">{piece.title}</h3>
+      <p className="max-w-3xl text-base leading-[26px] text-muted">{piece.summary}</p>
       {piece.impact && (
-        // Desktop only: on a phone the cards stack awkwardly, and the case study has them
-        <dl className="hidden flex-wrap gap-3 py-2 md:flex">
+        // Desktop only: on a phone the cards stack awkwardly, and the case study has them.
+        // Full width, so on a wide screen they sit in one row
+        <dl className="hidden flex-wrap gap-3 py-2 md:flex lg:flex-nowrap">
           {piece.impact.map((m) => (
             <div key={m.label} className="flex flex-col justify-center gap-0.5 rounded-xl border border-border bg-background px-4 py-3">
               {m.value && <dt className="text-[20px] font-medium leading-[26px] tracking-[-0.01em] text-foreground tabular-nums">{m.value}</dt>}
