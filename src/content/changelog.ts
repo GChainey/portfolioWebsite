@@ -23,7 +23,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       'From laptop width up the cards never wrap',
     ],
     aiTools: ['Claude Code'],
-    branch: 'GChainey/beca5',
+    branch: 'GChainey/desktop-impact-cards-wrap',
   },
   {
     version: '3.3.3',
