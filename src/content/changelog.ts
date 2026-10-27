@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.4.0',
+    date: '2026-10-27',
+    title: 'Recording Studio in the Repo',
+    description: 'Case study clips are made and edited from this repo with the html-recording package, and the recorder download includes Recording Studio.',
+    changes: [
+      'html-recording is a devDependency: npm run replays opens Recording Studio on public/replays, and npm run replays:record runs a clip script',
+      'Clip scripts live in scripts/replays/ (starting with the RFP study), so they no longer disappear with the workspace that made them',
+      'The html-recording download now includes Recording Studio, zooms that follow the mouse, and the npm package',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'html-recording',
+  },
+  {
     version: '3.3.4',
     date: '2026-10-26',
     title: 'Impact Cards in One Row',

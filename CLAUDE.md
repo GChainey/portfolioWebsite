@@ -40,6 +40,12 @@ Example entry format:
 - **Minor (0.X.0)**: New features or significant enhancements
 - **Patch (0.0.X)**: Bug fixes and small improvements
 
+## Replays (case study clips)
+Clips are HTML recordings (`html-recording`, a devDependency), never screen video. Clip scripts live
+in `scripts/replays/<study>.mjs`; record with `npm run replays:record -- scripts/replays/<study>.mjs
+[clip] --base <app url> --out public/replays`; edit with `npm run replays` (Recording Studio). See
+`scripts/replays/README.md`.
+
 ## Code Patterns
 
 ### Theme System
