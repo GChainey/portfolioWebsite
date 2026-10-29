@@ -14,6 +14,25 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.5.0',
+    date: '2026-10-28',
+    title: 'Homepage Carousels and Typeset Articles',
+    description: 'The homepage sections become simple ¾ carousels with no tabs, results read as a sentence, and essays and case studies are set with shadcn/typeset in a centred column.',
+    changes: [
+      'Homepage: every section is a row of ¾-width cards inside the page column, the next one peeking; arrows beside the section title; no tabs and no dots',
+      'The card in focus plays its clip; the others are blurred and hold a still until they slide to the front',
+      'Each card keeps one button, on its title row and right-aligned, so only the card in focus shows one',
+      'Impact reads as one sentence (numbers in ink, the rest grey) on the homepage and under a case study\'s title',
+      'Everything below the hero sits on the logo\'s left edge; the hero and the colleague quotes stay centred',
+      'Essays and case studies: shadcn/typeset styles the words in a centred column, with pictures and clips wider than it',
+      'Case study hero reels sit straight on the study\'s colour (no dotted panel), and each clip says what it shows first, the way Cursor\'s feature reels do',
+      'Sections no longer fade in as you scroll; captions are centred',
+      'Parked (dev only, see /parked): a binary decode text effect and a 3D curved carousel with sliders',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/shadcn-typeset-installation',
+  },
+  {
     version: '3.4.0',
     date: '2026-10-27',
     title: 'Recording Studio in the Repo',

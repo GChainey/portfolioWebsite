@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, MotionConfig } from 'framer-motion'
 import type { ContentBlock } from '@/content/projects'
 import { slugify } from '@/components/TableOfContents'
 import { FunnelDiagram } from '@/components/FunnelDiagram'
@@ -102,7 +101,7 @@ function MediaBlock({ block }: { block: Media }) {
     <figure className="my-12">
       <FramedMedia block={block} />
       {block.caption && (
-        <figcaption className="mt-3 text-[15px] leading-5 text-muted">
+        <figcaption className="mt-3 text-center text-[15px] leading-5 text-muted">
           {block.caption}
         </figcaption>
       )}
@@ -143,74 +142,53 @@ function withLinks(text: string): React.ReactNode {
     if (!m) return part
     const external = /^https?:/.test(m[2])
     return (
-      <a key={i} href={m[2]} {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})} className="text-foreground underline decoration-border underline-offset-4 transition-colors hover:text-accent hover:decoration-accent">
+      <a key={i} href={m[2]} {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})} className="transition-colors hover:text-accent">
         {m[1]}
       </a>
     )
   })
 }
 
-const ease = [0.25, 0.1, 0.25, 1] as const
-
-// Words read in a column from the left edge, under the title; pictures, clips and live pieces take the full width
-const READ = 'w-full max-w-[680px]'
-
-// Each block comes in the first time it is scrolled to, so the page builds as it is read:
-// the paragraph, then the clip, then the card that goes with it. The blocks already on screen
-// when the page opens come in one after another.
-const reveal = (index: number) => ({
-  initial: { opacity: 0, y: 16 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '0px 0px -12% 0px' },
-  transition: { duration: 0.5, ease, delay: index < 6 ? 0.1 + index * 0.06 : 0 },
-})
+// Words read in a centred column; pictures, clips and live pieces take the full width. Typeset
+// styles the words; the cards, clips and live pieces opt out with not-typeset. The column is 37em
+// of the body size, not of each element's own (a heading's em is bigger)
+const READ = 'mx-auto w-full max-w-[calc(var(--typeset-size)*37)]'
 
 export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
   return (
-    // Visitors who ask for reduced motion get the fades without the movement
-    <MotionConfig reducedMotion="user">
-    <div className="prose prose-neutral dark:prose-invert max-w-none">
+    <div className="typeset typeset-article">
       {blocks.map((block, index) => {
 
         if (block.type === 'heading') {
           const Tag = block.level === 2 ? 'h2' : 'h3'
           return (
-            <motion.div
+            <Tag
               key={index}
-              className={READ}
-              {...reveal(index)}
+              id={slugify(block.content)}
+              className={`${READ} scroll-mt-24 text-balance`}
             >
-              <Tag
-                id={slugify(block.content)}
-                className={`font-medium text-foreground scroll-mt-24 text-balance ${
-                  block.level === 2 ? 'text-[28px] leading-[34px] tracking-[-0.02em] mt-20 mb-5' : 'text-[20px] leading-[26px] tracking-[-0.01em] mt-12 mb-3'
-                }`}
-              >
-                {block.content}
-              </Tag>
-            </motion.div>
+              {block.content}
+            </Tag>
           )
         }
 
         if (block.type === 'text') {
           return (
-            <motion.p
+            <p
               key={index}
-              className={`${READ} text-[17px] leading-[28px] text-muted text-pretty mb-5`}
-              {...reveal(index)}
+              className={`${READ} text-pretty`}
             >
               {withLinks(block.content)}
-            </motion.p>
+            </p>
           )
         }
 
         if (block.type === 'list') {
-          const List = block.ordered ? motion.ol : motion.ul
+          const List = block.ordered ? 'ol' : 'ul'
           return (
             <List
               key={index}
-              className={`${READ} ${block.ordered ? 'list-decimal' : 'list-disc'} pl-5 text-[17px] leading-[28px] text-muted mb-6 space-y-2 marker:text-border`}
-              {...reveal(index)}
+              className={READ}
             >
               {block.items.map((item, i) => (
                 <li key={i}>{item}</li>
@@ -221,10 +199,9 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
 
         if (block.type === 'stats') {
           return (
-            <motion.div
+            <div
               key={index}
-              className={`${READ} grid grid-cols-1 sm:grid-cols-2 gap-3 my-10`}
-              {...reveal(index)}
+              className={`not-typeset ${READ} grid grid-cols-1 sm:grid-cols-2 gap-3 my-10`}
             >
               {block.items.map((item, i) => (
                 <div key={i} className="rounded-2xl border border-border bg-background p-6">
@@ -233,30 +210,25 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
                   {item.note && <p className="mt-1 text-sm text-muted">{item.note}</p>}
                 </div>
               ))}
-            </motion.div>
+            </div>
           )
         }
 
         // The old way and the new way, side by side: the old in a quiet card, the new on the
-        // study's mat. The old lands first, then the new answers it
+        // study's mat
         if (block.type === 'comparison') {
           const sides = [
             { label: block.beforeLabel ?? 'Before', lines: [block.before].flat(), now: false },
             { label: block.afterLabel ?? 'Now', lines: [block.after].flat(), now: true },
           ]
           return (
-            <motion.div
+            <div
               key={index}
-              className={`${READ} my-8 grid grid-cols-1 gap-3 sm:grid-cols-2`}
-              initial="hidden"
-              whileInView="shown"
-              viewport={{ once: true, margin: '0px 0px -18% 0px' }}
-              variants={{ hidden: { opacity: 0 }, shown: { opacity: 1, transition: { duration: 0.3, staggerChildren: 0.45 } } }}
+              className={`not-typeset ${READ} my-8 grid grid-cols-1 gap-3 sm:grid-cols-2`}
             >
               {sides.map(({ label, lines, now }) => (
-                <motion.div
+                <div
                   key={label}
-                  variants={{ hidden: { opacity: 0, y: 12 }, shown: { opacity: 1, y: 0, transition: { duration: 0.5, ease } } }}
                   className={`rounded-2xl p-5 ${now ? '' : 'border border-border'}`}
                   style={now ? { background: 'var(--mat, #EEF0F3)' } : undefined}
                 >
@@ -266,24 +238,21 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
                       <li key={line} className={`text-[15px] leading-[23px] ${now ? 'text-foreground' : 'text-muted'}`}>{line}</li>
                     ))}
                   </ul>
-                </motion.div>
+                </div>
               ))}
-            </motion.div>
+            </div>
           )
         }
 
         if (block.type === 'table') {
           return (
-            <motion.figure key={index} className={`${READ} my-8`} {...reveal(index)}>
+            <figure key={index} className={`${READ} my-8`}>
               <div className="overflow-x-auto">
-                <table className="w-full border-collapse font-mono text-sm tabular-nums">
+                <table className="tabular-nums">
                   <thead>
                     <tr>
                       {block.headers.map((header, i) => (
-                        <th
-                          key={header}
-                          className={`py-2 pr-4 last:pr-0 border-b border-border text-xs font-normal uppercase tracking-widest text-muted whitespace-nowrap ${i === 0 ? 'text-left' : 'text-right'}`}
-                        >
+                        <th key={header} className={i === 0 ? 'text-left' : 'text-right'}>
                           {header}
                         </th>
                       ))}
@@ -293,7 +262,7 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
                     {block.rows.map((row, r) => (
                       <tr key={row[0]} className={r === block.highlight ? 'text-accent' : 'text-foreground'}>
                         {row.map((cell, i) => (
-                          <td key={i} className={`py-2 pr-4 last:pr-0 border-b border-border whitespace-nowrap ${i === 0 ? 'text-left' : 'text-right'}`}>
+                          <td key={i} className={i === 0 ? 'text-left' : 'text-right'}>
                             {cell}
                           </td>
                         ))}
@@ -302,8 +271,8 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
                   </tbody>
                 </table>
               </div>
-              {block.caption && <figcaption className="mt-2 text-sm text-muted text-center">{block.caption}</figcaption>}
-            </motion.figure>
+              {block.caption && <figcaption className="text-center">{block.caption}</figcaption>}
+            </figure>
           )
         }
 
@@ -311,35 +280,36 @@ export function CaseStudyContent({ blocks }: CaseStudyContentProps) {
           const Component = componentRegistry[block.componentId]
           if (!Component) return null
           if (block.pending && process.env.NODE_ENV !== 'development') return null
+          // A clip says what it shows before it shows it, so its caption is its title card
+          const titled = block.componentId === 'recording-replay' && !!block.caption
           return (
-            <motion.div
+            <div
               key={index}
-              {...reveal(index)}
+              className="not-typeset"
             >
-              <Component {...(block.props || {})} />
-              {block.caption && (
+              <Component {...(block.props || {})} {...(titled ? { title: block.caption } : {})} />
+              {block.caption && !titled && (
                 // The component brings its own margin, so the caption is pulled up under it
-                <p className="-mt-5 mb-10 text-[15px] leading-5 text-muted">{block.caption}</p>
+                <p className="-mt-5 mb-10 text-center text-[15px] leading-5 text-muted">{block.caption}</p>
               )}
               {block.live && <div className="-mt-5 mb-8"><OpenLive src={block.live} title={block.caption || 'The page, running'} /></div>}
-            </motion.div>
+            </div>
           )
         }
 
         if (block.type === 'image' || block.type === 'gif' || block.type === 'video' || block.type === 'embed') {
           return (
-            <motion.div
+            <div
               key={index}
-              {...reveal(index)}
+              className="not-typeset"
             >
               <MediaBlock block={block} />
-            </motion.div>
+            </div>
           )
         }
 
         return null
       })}
     </div>
-    </MotionConfig>
   )
 }

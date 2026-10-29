@@ -18,6 +18,7 @@ import { GitHubContributions } from '@/components/GitHubContributions'
 import { Backdrop, FramedMedia, GridFrame, MediaFrame } from '@/components/ClipFrame'
 import { ReplayReel } from '@/components/replay/ReplayReel'
 import { SHOWCASE_SECTIONS } from '@/content/home-showcase'
+import { ImpactSentence } from '@/components/ImpactSentence'
 
 // Calculate read time from content blocks
 function calculateReadTime(content: Project['content']): number {
@@ -103,11 +104,8 @@ function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
           const Component = componentRegistry[block.componentId]
           if (!Component) return null
           return (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.08 }}
             >
               {heading && (
                 <p className="text-xs text-muted uppercase tracking-widest mb-2">
@@ -120,7 +118,7 @@ function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
                   {block.caption}
                 </p>
               )}
-            </motion.div>
+            </div>
           )
         }
 
@@ -128,11 +126,8 @@ function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
         const mediaBlock = block as ContentBlock & { type: 'image' | 'gif' | 'video' | 'embed' }
 
         return (
-          <motion.div
+          <div
             key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.08 }}
           >
             {heading && (
               <p className="text-xs text-muted uppercase tracking-widest mb-2">
@@ -145,7 +140,7 @@ function VisualGallery({ blocks }: { blocks: ContentBlock[] }) {
                 {mediaBlock.caption}
               </p>
             )}
-          </motion.div>
+          </div>
         )
       })}
     </div>
@@ -285,11 +280,9 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
             {/* A case study: left-aligned, in the homepage's look, with what it made possible up top */}
             {!isEssay && (
               <header className="px-6 pb-8 pt-24 sm:px-8">
-                <motion.div
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-                  className="mx-auto flex max-w-5xl flex-col gap-6"
+                <div
+                  // Centred, the title sits in the words' column: typeset's 37em at 18px
+                  className="mx-auto flex max-w-[666px] flex-col gap-6"
                 >
                   <p className="text-sm text-muted">{[project.category, project.year].join(' · ')}</p>
                   <h1 className="max-w-4xl text-[36px] font-medium leading-[1.1] tracking-[-0.025em] text-foreground text-balance md:text-[44px]">{project.title}</h1>
@@ -297,14 +290,8 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
                     <p className="max-w-3xl text-[22px] leading-[34px] tracking-[-0.01em] text-muted text-pretty">{project.description}</p>
                   )}
                   {piece?.impact && (
-                    <dl className="flex flex-wrap gap-3">
-                      {piece.impact.map((m) => (
-                        <div key={m.label} className="flex flex-col justify-center gap-0.5 rounded-xl border border-border bg-background px-4 py-3">
-                          {m.value && <dt className="text-[20px] font-medium leading-[26px] tracking-[-0.01em] text-foreground tabular-nums">{m.value}</dt>}
-                          <dd className={m.value ? 'text-sm leading-5 text-muted' : 'text-[15px] font-medium leading-[26px] text-foreground'}>{m.label}</dd>
-                        </div>
-                      ))}
-                    </dl>
+                    // What it did, as a sentence on a black rule: the numbers in ink, the rest in grey
+                    <ImpactSentence impact={piece.impact} className="border-l-2 border-foreground pl-5 text-[22px] leading-[32px] tracking-[-0.01em]" />
                   )}
                   <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
                     {project.liveUrl && (
@@ -312,20 +299,16 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
                     )}
                     {readTime}
                   </div>
-                </motion.div>
+                </div>
 
                 {/* The hero, as big as the column, on the study's mat */}
-                <motion.div
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7, delay: 0.15, ease: [0.25, 0.1, 0.25, 1] }}
+                <div
                   className="mx-auto mt-12 max-w-5xl"
                 >
                   {project.heroReel ? (
-                    <Backdrop className="p-5 sm:p-10 md:p-12">
-                      <div className="overflow-hidden rounded-xl bg-white shadow-[0_10px_30px_-10px_rgba(0,0,0,0.18)]">
-                        <ReplayReel scenes={project.heroReel} />
-                      </div>
+                    // The reel straight on the study's colour: its app window is the only frame
+                    <Backdrop className="p-2 sm:p-4">
+                      <ReplayReel scenes={project.heroReel} />
                     </Backdrop>
                   ) : project.heroReplay ? (
                     <MediaFrame>
@@ -343,17 +326,15 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
                       )}
                     </HeroFrame>
                   ) : null}
-                </motion.div>
+                </div>
               </header>
             )}
 
             {/* An essay: centred, as it was */}
             {isEssay && (
             <header className="pt-24 pb-12 px-8">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex flex-col items-center text-center max-w-3xl mx-auto"
+              <div
+                className="flex flex-col items-center text-center mx-auto max-w-5xl"
               >
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-xs text-muted uppercase tracking-widest">{project.category}</span>
@@ -370,7 +351,7 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
                   )}
                 </div>
 
-                <h1 className="text-4xl md:text-5xl font-medium text-foreground mb-4 hover-accent-text">
+                <h1 className="max-w-3xl text-4xl md:text-5xl font-medium text-foreground mb-4 hover-accent-text">
                   {project.title}
                 </h1>
 
@@ -407,14 +388,11 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
 
                 {/* GitHub Activity - inside header for featured articles */}
                 {project.showGitHubActivity && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
+                  <div
                     className="flex flex-col items-center mb-8"
                   >
                     <GitHubContributions variant="full" animate />
-                  </motion.div>
+                  </div>
                 )}
 
 
@@ -457,7 +435,7 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
                 )}
 
                 {!project.heroReel && readTime}
-              </motion.div>
+              </div>
 
               {/* A reel of replays, full-bleed across the column: the product is the hero */}
               {project.heroReel && (
@@ -502,23 +480,21 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
             )}
 
             {/* Content */}
-            {/* An essay reads in a column; a case study keeps the width for its pictures */}
-            <article className={`p-8 w-full mx-auto ${isEssay ? 'max-w-3xl' : 'max-w-[68rem]'}`}>
+            {/* The words in a centred column; pictures and clips take the full width */}
+            <article className="p-8 w-full mx-auto max-w-[68rem]">
               {viewMode === 'visual' ? (
                 <VisualGallery blocks={project.content} />
               ) : (
                 <>
                   {/* Table of Contents - inline at top, becomes fixed when scrolled past */}
                   {!tldrContent && (
-                    <div className="hidden lg:block" data-inline-toc>
+                    <div className="hidden lg:block mx-auto max-w-[666px]" data-inline-toc>
                       <TableOfContents blocks={project.content} />
                     </div>
                   )}
 
                   {tldrContent ? (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
+                    <div
                       className="max-w-2xl mx-auto"
                     >
                       <div className="mb-6 px-4 py-3 bg-amber-100 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800/50 rounded-lg">
@@ -529,7 +505,7 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
                       <div className="prose prose-neutral dark:prose-invert">
                         <p className="text-lg text-foreground leading-relaxed whitespace-pre-wrap">{tldrContent}</p>
                       </div>
-                    </motion.div>
+                    </div>
                   ) : (
                     <CaseStudyContent blocks={project.content} />
                   )}

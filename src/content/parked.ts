@@ -31,6 +31,26 @@ export interface ParkedItem {
 
 export const PARKED: ParkedItem[] = [
   {
+    id: 'curve-carousel',
+    name: 'Homepage: the curve',
+    status: 'local',
+    since: '2026-10-28',
+    summary: 'The homepage sections as a ring of cards seen from just outside it, after the codepen "Carousel #1": the front card big, its neighbours bending away blurred, the far side of the ring through the gaps. Sliders bottom left (zoom, band width, camera distance, cards round the ring, gap, fade, blur, height, turn) to tune it by eye. Parked: the idea didn\'t land yet.',
+    links: [{ label: 'Homepage, curved', href: '/?track=curve' }],
+    gate: '?track=curve, dev server only (useCurve in src/components/HomeShowcase.tsx); CurveSection and CurveControls there too',
+    todo: ['Find the settings that read as "big in front, the rest just bending away behind"', 'Then decide whether it replaces the contained row on desktop'],
+  },
+  {
+    id: 'decode-text',
+    name: 'Binary decode text',
+    status: 'local',
+    since: '2026-10-28',
+    summary: 'Text that decodes in from flickering 0s and 1s, left to right, like the readouts in Ghost in the Shell. Tried on the homepage hero tagline and on the homepage case study cards (title and impact sentence), then parked: not important for now.',
+    links: [],
+    gate: 'Not used anywhere. Wrap text in <DecodeText> (src/components/DecodeText.tsx), or pass decode to <ImpactSentence>',
+    todo: ['Decide where, if anywhere, it earns its place', 'Hero tagline: start the typing after it settles (the delay was 1000ms)'],
+  },
+  {
     id: 'case-study-pages',
     name: 'Case study pages',
     status: 'local',

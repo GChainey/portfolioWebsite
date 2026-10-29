@@ -213,10 +213,11 @@ interface ShowcaseReelProps {
   onCycle?: () => void // called each time the last scene finishes
   loop?: boolean
   onScreen?: boolean // the parent knows better: a carousel's next slide, clipped out of view, still plays so it arrives ready
+  still?: boolean // while not playing, show the scene's first frame, paused, instead of nothing (a card waiting out of focus)
   clear?: boolean // no dotted canvas behind the media, so it sits on whatever the reel is placed on
 }
 
-export function ShowcaseReel({ scenes: all, captions = true, theme = 'light', playing: wanted = true, onCycle, loop = true, onScreen, clear = false }: ShowcaseReelProps) {
+export function ShowcaseReel({ scenes: all, captions = true, theme = 'light', playing: wanted = true, onCycle, loop = true, onScreen, clear = false, still = false }: ShowcaseReelProps) {
   // Memoised: the timing effect below restarts whenever this changes
   const scenes = useMemo(() => (captions ? all : all.filter(hasMedia)), [all, captions])
   const box = useRef<HTMLDivElement>(null)
@@ -295,7 +296,7 @@ export function ShowcaseReel({ scenes: all, captions = true, theme = 'light', pl
             : '#fafafa radial-gradient(#e4e4e7 1.2px, transparent 1.2px) 0 0 / 28px 28px',
         }}
       >
-        <div key={index} className="absolute inset-0" style={{ opacity: shown ? 1 : 0, transform: `translateY(${shown || fill ? 0 : 18}px)`, transition: `opacity ${FADE}ms ease, transform ${FADE}ms cubic-bezier(.2,.8,.2,1)` }}>
+        <div key={index} className="absolute inset-0" style={{ opacity: shown || (still && !wanted) ? 1 : 0, transform: `translateY(${shown || fill ? 0 : 18}px)`, transition: `opacity ${FADE}ms ease, transform ${FADE}ms cubic-bezier(.2,.8,.2,1)` }}>
           {layout === 'center' ? (
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-24">
               {scene.kicker && <div className={`mb-6 text-[24px] font-medium tracking-[-0.01em] ${muted}`}>{scene.kicker}</div>}

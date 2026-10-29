@@ -35,7 +35,7 @@ export interface ShowcasePiece {
   matte?: boolean // the hero on a plain mat of its colour (its recorded page cleared, so only the app shows)
   heroPlain?: boolean // the hero stands on its frame's colour with no window round it
   tint: string // the piece's colour: its frames and its details
-  impact?: { value?: string; label: string }[] // only what the case study already says
+  impact?: { value?: string; label: string }[] // only what the case study already says. Read as one sentence: value then label
   details: ShowcaseDetail[]
 }
 
@@ -146,7 +146,7 @@ export const SHOWCASE_SECTIONS: ShowcaseSection[] = [
         caseStudy: '/projects/rfp',
         hero: scene('rfp-overview'), framed: true, tint: '#E6EEE7',
         // Pre-revenue work: its impact is the scale and depth AI made possible (from the case study)
-        impact: [{ value: '1 designer', label: 'where it took 3 to 5, plus engineers' }, { value: 'Days', label: 'not weeks, for a major feature' }, { value: '2 markets', label: 'one prototype, in English and in Polish' }],
+        impact: [{ value: '1 designer', label: 'where it took 3 to 5, plus engineers' }, { value: 'Days', label: ', not weeks, for a major feature' }, { value: '2 markets', label: 'from one prototype, in English and in Polish' }],
         details: [visual('rfp-llm-chat'), visual('rfp-determination', 'The decision letter'), visual('rfp-ask')],
       },
       // Not ready: on the dev server only for now
@@ -154,7 +154,7 @@ export const SHOWCASE_SECTIONS: ShowcaseSection[] = [
         id: 'configurator', tab: 'Testing on live models', title: 'Testing a thesis by building it', summary: 'Where a Figma prototype couldn’t answer the question, because it needed dynamic data.',
         caseStudy: '/projects/configurator',
         hero: scene('configurator-overview'), framed: true, tint: '#F6E5E3',
-        impact: [{ value: '6s vs 21s', label: 'GPT-4.1 against GPT-5 mini' }, { label: 'Changed the product’s direction' }],
+        impact: [{ value: '6s vs 21s', label: ': GPT-4.1 against GPT-5 mini' }, { label: 'Changed the product’s direction' }],
         details: [visual('configurator-models'), visual('configurator-jev'), visual('configurator-qr')],
       }] : []),
       {
