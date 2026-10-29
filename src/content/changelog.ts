@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.5.1',
+    date: '2026-10-28',
+    title: 'Feels Native on a Phone',
+    description: 'Platform fixes so the site behaves like an app on a phone: no stuck hovers, no tap flash, carousels that don\'t pull the page back.',
+    changes: [
+      'Hover styles only apply where a pointer can hover (Tailwind hoverOnlyWhenSupported), so a tap no longer leaves a button or card stuck in its hover state',
+      'No grey flash over tapped controls, no double-tap wait, and a long press no longer selects a button\'s label',
+      'Swiping past the end of a homepage carousel no longer drags the browser into going back',
+      'The browser bar matches the page (theme-color), and the lightbox sizes to the visible screen (dvh)',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/mobile-native-fixes',
+  },
+  {
     version: '3.5.0',
     date: '2026-10-28',
     title: 'Homepage Carousels and Typeset Articles',

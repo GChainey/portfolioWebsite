@@ -58,6 +58,21 @@
     @apply bg-background text-foreground;
     font-family: var(--font-geist-sans), system-ui, sans-serif;
   }
+
+  /* Phones: no grey flash over a tapped control (they all have their own :active), no font
+     inflation in landscape, no wait for a double tap, and a long press doesn't select a
+     button's label */
+  html {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+  }
+  button, a, [role="button"] {
+    touch-action: manipulation;
+  }
+  button, [role="button"] {
+    user-select: none;
+    -webkit-user-select: none;
+  }
 }
 
 /* Gallery (public/gallery) - map the shared <gc-gallery> onto the site tokens */
