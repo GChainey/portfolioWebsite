@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { JetBrains_Mono, Caveat } from 'next/font/google'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
@@ -19,6 +19,9 @@ const caveat = Caveat({
   subsets: ['latin'],
   variable: '--font-signature',
 })
+
+// The browser's bar matches the page: the site is day mode only
+export const viewport: Viewport = { themeColor: '#ffffff' }
 
 export const metadata: Metadata = {
   title: 'Gareth Chainey | Product Designer × AI',

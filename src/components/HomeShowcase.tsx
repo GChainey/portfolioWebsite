@@ -199,7 +199,7 @@ function Lightbox({ items, start, onClose }: { items: Item[]; start: number; onC
     >
       <motion.div
         className="flex flex-col gap-4"
-        style={{ width: 'min(92vw, calc((100vh - 140px) * 1.6))' }}
+        style={{ width: 'min(92vw, calc((100dvh - 140px) * 1.6))' }}
         initial={{ scale: 0.96, y: 12 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.98 }} transition={{ duration: 0.25, ease }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -280,7 +280,7 @@ function ContainedSection({ section, open }: { section: ShowcaseSection; open: O
       <div
         ref={row}
         onScroll={() => setAt(Math.min(n - 1, Math.round((row.current?.scrollLeft ?? 0) / stride())))}
-        className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-6 overflow-x-auto px-6 md:mx-0 md:px-0"
+        className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-6 overflow-x-auto overscroll-x-contain px-6 md:mx-0 md:px-0"
         style={{ scrollPaddingInline: 24 }}
       >
         {section.pieces.map((p, i) => {
