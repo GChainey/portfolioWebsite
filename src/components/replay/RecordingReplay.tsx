@@ -11,7 +11,8 @@ import { MediaFrame, Backdrop } from '@/components/ClipFrame'
 // and its colours are exact. No app code ships, only the rendered page.
 //
 // It loads when it comes near the screen, loops, and pauses off screen. People who prefer less
-// motion see its last frame.
+// motion see its last frame. With a title, each loop says what it shows first, the way Cursor's
+// feature reels do: the title alone on white, which lifts away to the clip.
 
 type Region = { x: number; y: number; width: number; height: number }
 
@@ -24,11 +25,15 @@ interface RecordingReplayProps {
   // recording
   notes?: Note[]
   bar?: boolean // the window's bar of dots. Off for a hero, which reads better without it
+  title?: string // shown on its own before each loop
 }
+
+const CARD = 1600 // ms the title holds before the clip
+const CARD_OUT = 450 // ms for it to lift away
 
 type Recording = { meta: { width: number; height: number; duration: number; mouse?: boolean }; events: unknown[] }
 
-export function RecordingReplay({ src, region, aspectRatio, notes, bar = true }: RecordingReplayProps) {
+export function RecordingReplay({ src, region, aspectRatio, notes, bar = true, title }: RecordingReplayProps) {
   const box = useRef<HTMLDivElement>(null)
   const root = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState({ width: 1280, height: 800 })
@@ -37,6 +42,9 @@ export function RecordingReplay({ src, region, aspectRatio, notes, bar = true }:
   const player = useRef<{ play: (t?: number) => void; pause: (t?: number) => void; destroy: () => void; getCurrentTime: () => number } | null>(null)
   const [line, setLine] = useState(0)
   const visible = useRef(false)
+  const [card, setCard] = useState(!!title)
+  const carding = useRef(!!title)
+  const cardTimer = useRef<ReturnType<typeof setTimeout>>()
 
   const view = region ?? { x: 0, y: 0, width: size.width, height: size.height }
 
@@ -56,8 +64,21 @@ export function RecordingReplay({ src, region, aspectRatio, notes, bar = true }:
     const el = box.current
     if (!el) return
     let cancelled = false
+    // The title, then the clip from the start. Without a title, straight to the clip
+    const fromTop = (r: NonNullable<typeof player.current>) => {
+      clearTimeout(cardTimer.current)
+      if (!title) { r.play(0); return }
+      carding.current = true
+      setCard(true)
+      r.pause(0)
+      cardTimer.current = setTimeout(() => {
+        carding.current = false
+        setCard(false)
+        if (visible.current && player.current === r) r.play(0)
+      }, CARD)
+    }
     const start = async () => {
-      if (player.current) { player.current.play(); return }
+      if (player.current) { if (carding.current) fromTop(player.current); else player.current.play(); return }
       const [{ Replayer }, rec] = await Promise.all([
         import('@rrweb/replay'),
         fetch(src).then((r) => r.json() as Promise<Recording>),
@@ -74,10 +95,10 @@ export function RecordingReplay({ src, region, aspectRatio, notes, bar = true }:
         UNSAFE_replayCanvas: false,
       })
       // Loop, after a beat on the last frame so its line can be read
-      r.on('finish', () => { setTimeout(() => { if (visible.current && player.current === r) r.play(0) }, notes ? 2200 : 0) })
+      r.on('finish', () => { setTimeout(() => { if (visible.current && player.current === r) fromTop(r) }, notes ? 2200 : 0) })
       player.current = r
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) r.pause(rec.meta.duration)
-      else if (visible.current) r.play()
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { carding.current = false; setCard(false); r.pause(rec.meta.duration) }
+      else if (visible.current) fromTop(r)
     }
     const io = new IntersectionObserver(([entry]) => {
       visible.current = entry.isIntersecting
@@ -85,8 +106,8 @@ export function RecordingReplay({ src, region, aspectRatio, notes, bar = true }:
       else player.current?.pause()
     }, { rootMargin: '200px 0px' })
     io.observe(el)
-    return () => { cancelled = true; io.disconnect(); player.current?.destroy(); player.current = null }
-  }, [src])
+    return () => { cancelled = true; clearTimeout(cardTimer.current); io.disconnect(); player.current?.destroy(); player.current = null }
+  }, [src, title, notes])
 
   // Follow the replay's clock for the subtitle
   useEffect(() => {
@@ -96,13 +117,26 @@ export function RecordingReplay({ src, region, aspectRatio, notes, bar = true }:
   }, [notes])
 
   const stage = (
-    <div ref={box} className="relative w-full overflow-hidden bg-white" style={{ aspectRatio: aspectRatio ?? `${view.width} / ${view.height}` }}>
+    <div ref={box} className="relative w-full overflow-hidden bg-white [container-type:inline-size]" style={{ aspectRatio: aspectRatio ?? `${view.width} / ${view.height}` }}>
       <style dangerouslySetInnerHTML={{ __html: REPLAY_CSS }} />
       <div
         ref={root}
         className={`rr-stage ${mouse ? 'rr-mouse' : ''} absolute left-0 top-0 origin-top-left`}
         style={{ width: size.width, height: size.height, transform: `scale(${scale}) translate(${-view.x}px, ${-view.y}px)`, opacity: scale ? 1 : 0 }}
       />
+      {/* The title on white, first. It lifts away, a little blurred, to the clip under it */}
+      {title && (
+        <div
+          aria-hidden={!card}
+          className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white px-[10%] text-center"
+          style={{
+            opacity: card ? 1 : 0, transform: `translateY(${card ? 0 : -10}px)`, filter: `blur(${card ? 0 : 5}px)`,
+            transition: `opacity ${CARD_OUT}ms ease-out, transform ${CARD_OUT}ms cubic-bezier(.23,1,.32,1), filter ${CARD_OUT}ms ease-out`,
+          }}
+        >
+          <p className="text-balance text-[clamp(18px,4cqw,44px)] font-medium leading-[1.15] tracking-[-0.03em] text-zinc-950">{title}</p>
+        </div>
+      )}
     </div>
   )
 

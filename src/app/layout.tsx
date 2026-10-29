@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { JetBrains_Mono, Caveat } from 'next/font/google'
 import { GeistSans } from 'geist/font/sans'
+import { GeistMono } from 'geist/font/mono'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { FeatureFlagProvider } from '@/context/FeatureFlagContext'
 import { FeatureFlagDrawer } from '@/components/FeatureFlagDrawer'
@@ -31,8 +32,8 @@ export default function RootLayout({
 }) {
   // Day mode and amber only: one opinionated look, no theme menu
   return (
-    <html lang="en" className="accent-amber" suppressHydrationWarning>
-      <body className={`${GeistSans.variable} ${mono.variable} ${caveat.variable} antialiased`}>
+    <html lang="en" className={`accent-amber ${GeistSans.variable} ${GeistMono.variable}`} suppressHydrationWarning>
+      <body className={`${mono.variable} ${caveat.variable} antialiased`}>
         <ThemeProvider>
           <FeatureFlagProvider>
             <ScrollToTop />

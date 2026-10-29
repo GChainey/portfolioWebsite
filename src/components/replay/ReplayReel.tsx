@@ -9,9 +9,10 @@ import { Subtitle, type Note } from './Subtitle'
 // page, so it is as sharp as the site itself. It is laid out on a 1600x1000 stage and scaled
 // to fit.
 //
-// Each scene is a title on the left, centred on the product, the product large on the right,
-// and a line at the bottom centre that narrates what is happening, like a subtitle. The last
-// scene, with no recording, closes on a title and a line under it.
+// Each scene says what it shows, then shows it, the way Cursor's feature reels do (the
+// sizzle-reel skill): its title alone on white, which lifts away to the product, large and
+// centred, with a line at the bottom centre that narrates what is happening, like a subtitle.
+// The last scene, with no recording, closes on a title and a line under it.
 
 type Region = { x: number; y: number; width: number; height: number }
 
@@ -39,7 +40,9 @@ type Player = { play: (t?: number) => void; pause: (t?: number) => void; destroy
 const W = 1600
 const H = 1000
 const FADE = 450
-const MEDIA = { x: 560, y: 48, w: 992, h: 790 } // everything right of the title
+const CARD = 1.6 // seconds the title holds on its own before the product
+const CARD_OUT = 450 // ms for the title to lift away
+const MEDIA = { x: 100, y: 48, w: 1400, h: 790 }
 const LINGER = 1.2 // seconds to hold each recording's last frame, so the last line can be read
 
 const cache = new Map<string, Promise<Recording>>()
@@ -47,7 +50,7 @@ const load = (src: string) => {
   if (!cache.has(src)) cache.set(src, fetch(src).then((r) => r.json()))
   return cache.get(src)!
 }
-const duration = (s: ReelScene) => (s.src ? ((s.to ?? 0) - (s.from ?? 0)) / (s.rate ?? 1) + LINGER : s.hold ?? 3)
+const duration = (s: ReelScene) => (s.src ? CARD + ((s.to ?? 0) - (s.from ?? 0)) / (s.rate ?? 1) + LINGER : s.hold ?? 3)
 
 // Rises and fades in after `delay` seconds, once the scene is up
 const rise = (shown: boolean, delay: number): CSSProperties => ({
@@ -155,6 +158,7 @@ export function ReplayReel({ scenes }: { scenes: ReelScene[] }) {
   const [scale, setScale] = useState(0)
   const [index, setIndex] = useState(0)
   const [shown, setShown] = useState(false) // the current scene has faded in
+  const [demo, setDemo] = useState(false) // its title has lifted away, and the product plays
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -179,18 +183,20 @@ export function ReplayReel({ scenes }: { scenes: ReelScene[] }) {
   // stays up and still.
   useEffect(() => {
     if (!visible) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setShown(true); return }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setShown(true); setDemo(true); return }
     const scene = scenes[index]
     const ready = scene.src ? load(scene.src) : Promise.resolve(null)
-    let t1: ReturnType<typeof setTimeout>, t2: ReturnType<typeof setTimeout>
+    let t0: ReturnType<typeof setTimeout>, t1: ReturnType<typeof setTimeout>, t2: ReturnType<typeof setTimeout>
     let gone = false
+    setDemo(false)
     ready.then(() => {
       if (gone) return
       setShown(true)
+      t0 = setTimeout(() => setDemo(true), CARD * 1000)
       t1 = setTimeout(() => setShown(false), duration(scene) * 1000)
       t2 = setTimeout(() => setIndex((i) => (i + 1) % scenes.length), duration(scene) * 1000 + FADE)
     })
-    return () => { gone = true; clearTimeout(t1); clearTimeout(t2) }
+    return () => { gone = true; clearTimeout(t0); clearTimeout(t1); clearTimeout(t2) }
   }, [index, visible, scenes])
 
   const scene = scenes[index]
@@ -200,17 +206,28 @@ export function ReplayReel({ scenes }: { scenes: ReelScene[] }) {
       <div
         className="absolute left-0 top-0 origin-top-left font-sans text-zinc-950 antialiased"
         style={{
+          // No canvas of its own: the reel sits straight on whatever it's placed on (a case study's colour)
           width: W, height: H, transform: `scale(${scale})`,
-          background: '#fafafa radial-gradient(#e4e4e7 1.2px, transparent 1.2px) 0 0 / 28px 28px',
         }}
       >
         <div key={index} className="absolute inset-0" style={{ opacity: shown ? 1 : 0, transform: `translateY(${shown ? 0 : 18}px)`, transition: `opacity ${FADE}ms ease, transform ${FADE}ms cubic-bezier(.2,.8,.2,1)` }}>
           {scene.src ? (
             <>
-              {/* Centred on the product, which is centred in its box */}
-              <div className="absolute -translate-y-1/2 text-[66px] font-semibold leading-[1.02] tracking-[-0.04em] [text-wrap:balance]" style={{ left: 72, width: 440, top: MEDIA.y + MEDIA.h / 2 }}>{scene.title}</div>
-              <SceneMedia scene={scene} playing={shown && visible} />
-              {scene.notes && <Notes notes={scene.notes} shown={shown} />}
+              <SceneMedia scene={scene} playing={demo && visible} />
+              {scene.notes && <Notes notes={scene.notes} shown={demo} />}
+              {/* The title on white, first, where the product's window will be. It lifts away, a little
+                  blurred, to the product under it */}
+              <div
+                className="absolute flex items-center justify-center rounded-2xl bg-white px-32 text-center shadow-[0_0_0_1px_rgba(9,9,11,.08),0_40px_80px_-24px_rgba(9,9,11,.28)]"
+                style={{
+                  left: MEDIA.x, top: MEDIA.y, width: MEDIA.w, height: MEDIA.h,
+                  opacity: demo ? 0 : 1, transform: `translateY(${demo ? -16 : 0}px)`, filter: `blur(${demo ? 6 : 0}px)`,
+                  transition: `opacity ${CARD_OUT}ms ease-out, transform ${CARD_OUT}ms cubic-bezier(.23,1,.32,1), filter ${CARD_OUT}ms ease-out`,
+                  pointerEvents: 'none',
+                }}
+              >
+                <div className="text-[60px] font-medium leading-[1.15] tracking-[-0.03em] [text-wrap:balance]">{scene.title}</div>
+              </div>
             </>
           ) : (
             <div className="absolute inset-0 flex flex-col items-center justify-center px-40 text-center">

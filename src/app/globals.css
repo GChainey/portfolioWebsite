@@ -1,6 +1,21 @@
+/* shadcn/typeset. postcss-import needs @import first; Tailwind still files its
+   @layer components after the base styles, as if it came after the directives */
+@import "./typeset.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* shadcn/typeset preset for case studies and essays. Geist comes from the geist package
+   (next/font/google in Next 14 has no Geist), so the variables are its own names */
+.typeset-article {
+  --typeset-font-body: var(--font-geist-sans);
+  --typeset-font-heading: var(--font-geist-sans);
+  --typeset-font-mono: var(--font-geist-mono);
+  --typeset-size: 18px;
+  --typeset-leading: 1.6;
+  --typeset-flow: 1.25em;
+}
 
 @layer base {
   :root {
