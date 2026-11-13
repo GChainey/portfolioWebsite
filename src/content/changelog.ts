@@ -23,7 +23,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       'Dark graphite tile with a faint inner edge, so it holds on light and dark tab bars',
     ],
     aiTools: ['Claude Code'],
-    branch: 'GChainey/nrkj5',
+    branch: 'GChainey/favicon-conductor-logo-update',
   },
   {
     version: '3.8.0',
