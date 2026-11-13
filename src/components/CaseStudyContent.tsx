@@ -13,6 +13,7 @@ import { AskReplay } from '@/components/replay/AskReplay'
 import { RecordingReplay } from '@/components/replay/RecordingReplay'
 import { ReplayVsVideo } from '@/components/replay/ReplayVsVideo'
 import { FrameStripReplay } from '@/components/replay/FrameStripReplay'
+import { RfpLetter } from '@/components/stageshow/RfpLetter'
 import { FramedMedia, clipGeometry } from '@/components/ClipFrame'
 import { FrameDialog } from '@/components/FrameDialog'
 import { ArrowUpRight } from 'lucide-react'
@@ -29,6 +30,7 @@ export const componentRegistry: Record<string, React.ComponentType<any>> = {
   'recording-replay': RecordingReplay,
   'frame-strip': FrameStripReplay,
   'replay-vs-video': ReplayVsVideo,
+  'rfp-letter-scene': RfpLetter,
 }
 
 interface CaseStudyContentProps {
