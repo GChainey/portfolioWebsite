@@ -15,6 +15,7 @@ import { KindWord } from '@/components/KindWord'
 import { HomeSections } from '@/components/HomeSections'
 import { HomeCarousels } from '@/components/HomeCarousels'
 import { HomeShowcase } from '@/components/HomeShowcase'
+import { HomeStrip } from '@/components/HomeStrip'
 
 // The visuals (content/visuals.ts), one after another: what it is and what it did, then the
 // piece across the whole column. Click a piece to open it as big as the screen allows.
@@ -243,6 +244,7 @@ export function Visuals() {
   const close = useCallback(() => setOpen(null), [])
   const step = useCallback((by: number) => setOpen((i) => (i === null ? i : (i + by + VISUALS.length) % VISUALS.length)), [])
 
+  if (flags.homeDesign === 'strip') return <HomeStrip />
   if (flags.homeDesign === 'showcase') return <HomeShowcase />
   if (flags.homeDesign === 'horizontal') return <HomeCarousels fit={flags.carouselFit} />
   if (flags.homeDesign === 'vertical') return <HomeSections layout="vertical" />

@@ -19,6 +19,8 @@ import { Backdrop, FramedMedia, GridFrame, MediaFrame } from '@/components/ClipF
 import { ReplayReel } from '@/components/replay/ReplayReel'
 import { SHOWCASE_SECTIONS } from '@/content/home-showcase'
 import { ImpactSentence } from '@/components/ImpactSentence'
+import { CaseStudyIssue } from '@/components/CaseStudyIssue'
+import { getIssue } from '@/content/case-study-issues'
 
 // Calculate read time from content blocks
 function calculateReadTime(content: Project['content']): number {
@@ -158,6 +160,9 @@ export default function ProjectPage() {
   const [tldrContent, setTldrContent] = useState<string | null>(null)
   const [tldrLoading, setTldrLoading] = useState(false)
   const [viewMode, setViewMode] = useState<'case' | 'visual'>('case')
+  // ?style=issue: the study as an issue (components/CaseStudyIssue), where it has one
+  const [asIssue, setAsIssue] = useState(false)
+  useEffect(() => { setAsIssue(new URLSearchParams(window.location.search).get('style') === 'issue') }, [params.id])
 
   // Scroll to top on mount - disable scroll restoration and force scroll
   useEffect(() => {
@@ -225,6 +230,18 @@ ${articleText(project.content).slice(0, TLDR_ARTICLE_CHARS)}
 
 
   if (!project) return null
+
+  const issue = asIssue ? getIssue(project.id) : undefined
+  if (issue) {
+    return (
+      <div className="min-h-screen overflow-x-clip bg-background">
+        <Header />
+        <div className="pt-14"><CaseStudyIssue issue={issue} project={project} /></div>
+        <div className="mx-auto max-w-7xl"><SiteFooter /></div>
+        <ChatPopup pageContext={{ page: project.title, ...project.chatContext }} />
+      </div>
+    )
+  }
 
   const isEssay = project.category === 'Article'
   // Its piece on the homepage, if it has one: its colour and what it made possible

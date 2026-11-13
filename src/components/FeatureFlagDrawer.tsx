@@ -74,6 +74,7 @@ export function FeatureFlagDrawer() {
                 <div className="flex gap-1 bg-border/50 rounded-lg p-1">
                   {([
                     { value: 'showcase', label: 'Showcase' },
+                    { value: 'strip', label: 'Strip' },
                     { value: 'horizontal', label: 'Horizontal' },
                     { value: 'vertical', label: 'Vertical' },
                     { value: 'website', label: 'Website' },

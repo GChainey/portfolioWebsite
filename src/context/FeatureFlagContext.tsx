@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { usePathname } from 'next/navigation'
 
 type SignatureVariant = 'off' | 'clippath' | 'penflow'
 // How the homepage shows the products and case studies. tiles is live; the carousels and the
@@ -10,8 +11,9 @@ export type HomeLayout = (typeof HOME_LAYOUTS)[number]
 // The homepage under the hero: 'vertical' and 'horizontal' are the Paper frames "website vertical
 // scroll all" and "website section horizontal scroll" (components/HomeSections); 'website' is the
 // first frame (one picture per piece); 'list' is the earlier Visuals list; 'showcase' is the frame
-// "website · products hero + 3 details" (components/HomeShowcase): a piece big, three details under it
-export type HomeDesign = 'website' | 'list' | 'vertical' | 'horizontal' | 'showcase'
+// "website · products hero + 3 details" (components/HomeShowcase): a piece big, three details under it;
+// 'strip' is every piece in one sideways strip, after nickpyl.space (components/HomeStrip)
+export type HomeDesign = 'website' | 'list' | 'vertical' | 'horizontal' | 'showcase' | 'strip'
 export type CarouselFit = 'full' | 'bleed' | 'cards'
 
 interface FeatureFlags {
@@ -76,16 +78,24 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
         // ignore parse errors
       }
     }
-    const panels = new URLSearchParams(window.location.search).get('panels')
-    if (panels === 'off' || panels === 'on') setPanelsParam(panels === 'on')
-    const v = new URLSearchParams(window.location.search).get('v')
-    if (v === '1' || v === '2') setV2Param(v === '2')
-    const design = new URLSearchParams(window.location.search).get('design')
-    if (design === 'website' || design === 'list' || design === 'vertical' || design === 'horizontal' || design === 'showcase') setDesignParam(design)
-    const fit = new URLSearchParams(window.location.search).get('fit')
-    if (fit === 'full' || fit === 'bleed' || fit === 'cards') { setFitParam(fit); if (!design) setDesignParam('horizontal') }
     setLoaded(true)
   }, [])
+
+  // The URL's choices, read on every page change, not just the first load: the provider stays
+  // mounted across links, so the launchpad's cards (/?design=strip and so on) would otherwise all
+  // open whichever design was picked first. A choice not in the URL keeps the one already made
+  const pathname = usePathname()
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const panels = params.get('panels')
+    if (panels === 'off' || panels === 'on') setPanelsParam(panels === 'on')
+    const v = params.get('v')
+    if (v === '1' || v === '2') setV2Param(v === '2')
+    const design = params.get('design')
+    if (design === 'website' || design === 'list' || design === 'vertical' || design === 'horizontal' || design === 'showcase' || design === 'strip') setDesignParam(design)
+    const fit = params.get('fit')
+    if (fit === 'full' || fit === 'bleed' || fit === 'cards') { setFitParam(fit); if (!design) setDesignParam('horizontal') }
+  }, [pathname])
 
   // Save flags to localStorage when they change, once the stored ones are in (saving before that
   // would write the defaults over them)

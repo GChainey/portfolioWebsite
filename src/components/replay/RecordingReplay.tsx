@@ -26,6 +26,7 @@ interface RecordingReplayProps {
   notes?: Note[]
   bar?: boolean // the window's bar of dots. Off for a hero, which reads better without it
   title?: string // shown on its own before each loop
+  bare?: boolean // just the clip, no mat or window round it: the caller frames it
 }
 
 const CARD = 1600 // ms the title holds before the clip
@@ -33,7 +34,7 @@ const CARD_OUT = 450 // ms for it to lift away
 
 type Recording = { meta: { width: number; height: number; duration: number; mouse?: boolean }; events: unknown[] }
 
-export function RecordingReplay({ src, region, aspectRatio, notes, bar = true, title }: RecordingReplayProps) {
+export function RecordingReplay({ src, region, aspectRatio, notes, bar = true, title, bare = false }: RecordingReplayProps) {
   const box = useRef<HTMLDivElement>(null)
   const root = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState({ width: 1280, height: 800 })
@@ -146,6 +147,8 @@ export function RecordingReplay({ src, region, aspectRatio, notes, bar = true, t
       <Subtitle notes={notes} line={line} className="px-3 py-1 text-xs sm:px-5 sm:py-2 sm:text-sm" />
     </div>
   )
+
+  if (bare) return stage
 
   return (
     <figure className="my-8 not-prose">
