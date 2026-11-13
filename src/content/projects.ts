@@ -1838,11 +1838,17 @@ export const projects: Project[] = [
 
       { type: 'heading', level: 3, content: '5. Workflows that end somewhere real' },
       {
-        // A Stageshow scene (components/stageshow), rebuilt in the page like Rewrite and Ask; the
-        // real dialog is in the clip below it and in the hero reel (spot-rfi)
         type: 'component',
-        componentId: 'rfp-letter-scene',
-        caption: 'Issues raised by different officers: tick one in, and it\u2019s written into the letter',
+        componentId: 'recording-replay',
+        props: {
+          src: '/replays/rfp/spot-rfi.json', region: { x: 216, y: 153, width: 1080, height: 644 },
+          notes: [
+            { at: 0, text: 'Issues raised by different officers' },
+            { at: 3.5, text: 'Tick one out, and the letter drops it' },
+            { at: 10, text: 'Tick it back in, and it returns' },
+          ],
+        },
+        caption: 'Issues raised by different officers, ticked in or out, and the letter follows',
       },
       {
         type: 'component',
