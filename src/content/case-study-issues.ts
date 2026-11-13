@@ -71,6 +71,7 @@ export const ISSUES: CaseStudyIssue[] = [
       title: 'A team’s worth of work, from one',
       aside: 'And the prototype didn’t get filed away after the tender. Engineering kept building on it.',
       numbers: [
+        { value: '$2M', label: 'in deals won since, from this design' },
         { value: '1', label: 'designer, where it took 3 to 5 plus engineers' },
         { value: 'Days', label: 'not weeks, for a major feature' },
         { value: '2', label: 'markets from one prototype, English and Polish' },

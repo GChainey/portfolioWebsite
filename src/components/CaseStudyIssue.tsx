@@ -88,7 +88,7 @@ export function CaseStudyIssue({ issue, project }: { issue: Issue; project: Proj
         {/* Chapter one: what it did */}
         <section className="flex flex-col gap-14">
           <ChapterHead n="one" name="The impact" title={impact.title} aside={impact.aside} />
-          <div className="grid grid-cols-1 border-t border-foreground md:grid-cols-3">
+          <div className={`grid grid-cols-1 border-t border-foreground ${impact.numbers.length > 3 ? 'md:grid-cols-4' : 'md:grid-cols-3'}`}>
             {impact.numbers.map((n, i) => (
               <div key={n.value} className={`flex flex-col gap-2 py-8 md:pr-8 ${i ? 'border-t border-border md:border-l md:border-t-0 md:pl-8' : ''}`}>
                 <span className={`${display.className} text-[72px] leading-none tracking-[-0.03em] text-foreground md:text-[96px]`}>{n.value}</span>

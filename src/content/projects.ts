@@ -1691,7 +1691,7 @@ export const projects: Project[] = [
     tags: ['AI', 'Enterprise', 'Prototyping', 'Claude Code', 'RFP'],
     content: [
       { type: 'heading', level: 2, content: 'The short version' },
-      { type: 'text', content: 'I was the only designer on a small startup\'s response to a state government tender, up against vendors with whole teams. Before AI, I would have answered it with Figma mock-ups and a lot of help. This time I built a working prototype with Claude Code. This is the difference, example by example.' },
+      { type: 'text', content: 'I was the only designer on a small startup\'s response to a state government tender, up against vendors with whole teams. Before AI, I would have answered it with Figma mock-ups and a lot of help. This time I built a working prototype with Claude Code, and we have since won $2 million worth of deals from this design. This is the difference, example by example.' },
 
       { type: 'heading', level: 2, content: 'The setup' },
       {
@@ -1838,11 +1838,17 @@ export const projects: Project[] = [
 
       { type: 'heading', level: 3, content: '5. Workflows that end somewhere real' },
       {
-        // A Stageshow scene (components/stageshow), rebuilt in the page like Rewrite and Ask; the
-        // real dialog is in the clip below it and in the hero reel (spot-rfi)
         type: 'component',
-        componentId: 'rfp-letter-scene',
-        caption: 'Issues raised by different officers: tick one in, and it\u2019s written into the letter',
+        componentId: 'recording-replay',
+        props: {
+          src: '/replays/rfp/spot-rfi.json', region: { x: 216, y: 153, width: 1080, height: 644 },
+          notes: [
+            { at: 0, text: 'Issues raised by different officers' },
+            { at: 3.5, text: 'Tick one out, and the letter drops it' },
+            { at: 10, text: 'Tick it back in, and it returns' },
+          ],
+        },
+        caption: 'Issues raised by different officers, ticked in or out, and the letter follows',
       },
       {
         type: 'component',
@@ -1903,6 +1909,7 @@ export const projects: Project[] = [
       {
         type: 'list',
         items: [
+          'We have since won $2 million worth of deals from this design.',
           'The prototype outlived the tender. It is still referenced and iterated on today.',
           'Engineering kept building on it, instead of receiving a hand-off and filing it away.',
           'I could design faster than engineering could build, without being held to the existing technical limits.',
