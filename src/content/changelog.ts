@@ -14,6 +14,18 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.8.1',
+    date: '2026-11-13',
+    title: 'A Block-Letter GC Favicon',
+    description: 'The amber G in the tab becomes GC built from stacked blocks on a dark tile, after Conductor’s app icon.',
+    changes: [
+      'Tab icon and home-screen icon share one mark: G and C drawn on a 4×5 grid, neighbouring blocks merged into bars, the bottom row a shade back',
+      'Dark graphite tile with a faint inner edge, so it holds on light and dark tab bars',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/nrkj5',
+  },
+  {
     version: '3.8.0',
     date: '2026-11-13',
     title: 'A Narrow, Written Homepage',
