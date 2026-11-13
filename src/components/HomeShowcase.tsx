@@ -23,9 +23,9 @@ import { ImpactSentence } from '@/components/ImpactSentence'
 const ease = [0.25, 0.1, 0.25, 1] as const
 
 // Something that can be opened big: a clip or one of Shader Wall's widgets
-type Item = ShowcaseDetail & { matte?: string }
-const heroItem = (p: ShowcasePiece): Item => ({ title: p.title, scene: p.hero, backdrop: p.backdrop, plain: p.heroPlain, matte: p.matte ? p.tint : undefined })
-const itemsOf = (p: ShowcasePiece): Item[] => [heroItem(p), ...p.details]
+export type Item = ShowcaseDetail & { matte?: string }
+export const heroItem = (p: ShowcasePiece): Item => ({ title: p.title, scene: p.hero, backdrop: p.backdrop, plain: p.heroPlain, matte: p.matte ? p.tint : undefined })
+export const itemsOf = (p: ShowcasePiece): Item[] => [heroItem(p), ...p.details]
 
 // A live site at its own size. Shrinking one with a transform (as the reel does) makes Chrome
 // draw its frosted glass wrong: Shader Wall's dock got a second, wider pane behind it
@@ -81,7 +81,7 @@ function LiveSite({ scene }: { scene: ShowcaseScene }) {
 
 // A clip, drawn only while it's near the screen. A track works that out for its slides (they
 // sit off to the side, clipped, so they'd never count as near on their own)
-function Media({ item, near: given, playing = true }: { item: Item; near?: boolean; playing?: boolean }) {
+export function Media({ item, near: given, playing = true }: { item: Item; near?: boolean; playing?: boolean }) {
   const [ref, seen] = useNear<HTMLDivElement>()
   const near = given ?? seen
   const scenes = useMemo(() => (item.scene ? [item.scene] : []), [item.scene])
@@ -129,7 +129,7 @@ function Dots({ at, of, onGo, names }: { at: number; of: number; onGo: (i: numbe
 
 // The way in: the case study (or essay, or the product's site) as a button, anything else as a
 // quiet link beside it. A case study page that's off (see pageIsLive) gets no link
-function Links({ piece, centred = false }: { piece: ShowcasePiece; centred?: boolean }) {
+export function Links({ piece, centred = false }: { piece: ShowcasePiece; centred?: boolean }) {
   const story = piece.caseStudy && hrefIsLive(piece.caseStudy) ? piece.caseStudy : null
   const essay = story && getProjectById(story.replace('/projects/', ''))?.category === 'Article'
   const links = [
@@ -176,7 +176,7 @@ function About({ piece, centred = false, beside = false }: { piece: ShowcasePiec
 }
 
 // One item big and on its own, the rest of the piece a step either side
-function Lightbox({ items, start, onClose }: { items: Item[]; start: number; onClose: () => void }) {
+export function Lightbox({ items, start, onClose }: { items: Item[]; start: number; onClose: () => void }) {
   const [i, setI] = useState(start)
   const step = useCallback((by: number) => setI((n) => (n + by + items.length) % items.length), [items.length])
   useEffect(() => {

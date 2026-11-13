@@ -31,6 +31,26 @@ export interface ParkedItem {
 
 export const PARKED: ParkedItem[] = [
   {
+    id: 'case-study-issue',
+    name: 'Case study as an issue',
+    status: 'local',
+    since: '2026-11-13',
+    summary: 'A second case study style, after Dia\'s release notes: a magazine masthead ("Gareth, lately · No. 01"), a wall of the real replays on a Shader Wall canvas straight under the headline, then three chapters for every study: the impact, the delight, and how AI made it possible. Serif display headlines (Fraunces). Designed in Paper first (page "Message, impact + hero", artboard 2c).',
+    links: [{ label: 'RFP as an issue', href: '/projects/rfp?style=issue' }, { label: 'Launchpad', href: '/showcase' }],
+    gate: '?style=issue on a case study page that has an issue in src/content/case-study-issues.ts (only RFP). Case study pages are off on the live site, so it\'s dev and previews only',
+    todo: ['The real Claude Code prompt and what it changed for chapter three (ai.prompt)', 'Record the state-scale replay; it\'s the strongest picture for chapter three', 'An issue for SEEK next, to test the template on the strongest numbers', 'Decide whether issues replace the article style'],
+  },
+  {
+    id: 'strip-homepage',
+    name: 'Homepage: one strip',
+    status: 'unlisted',
+    since: '2026-11-12',
+    summary: 'Every piece, one screen each, in one sideways strip, after nickpyl.space. Scrolling down moves the strip; the tile at the left edge is in focus and plays, the right of the strip blurs out. Pictures only: the section title (top left) and section list (top right) change as a new tile reaches the edge, and a piece\'s words only show once its tile in focus is clicked. Colleague quotes close each section as tiles. Settles on the nearest tile when scrolling stops; arrow keys and trackpad swipes step it.',
+    links: [{ label: 'Homepage, one strip', href: '/?design=strip' }],
+    gate: '?design=strip, or Strip in the flag drawer (Cmd+K). src/components/HomeStrip.tsx',
+    todo: ['Decide whether it replaces the showcase as the live homepage', 'Phones: a sideways swipe on the strip itself does nothing yet (scrolling down moves it)'],
+  },
+  {
     id: 'curve-carousel',
     name: 'Homepage: the curve',
     status: 'local',

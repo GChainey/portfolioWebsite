@@ -14,6 +14,25 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.7.0',
+    date: '2026-11-13',
+    title: 'Homepage Strip and Case Studies as Issues',
+    description: 'Two parked styles to compare: the homepage as one sideways strip (?design=strip, after nickpyl.space), and a case study as an issue (?style=issue, after Dia\'s release notes), both on the launchpad.',
+    changes: [
+      'One screen per piece, plus the colleague quotes, in one row; scrolling down moves it sideways. A piece\'s details open with it in the lightbox',
+      'The tile at the left edge is in focus and plays its clip; tiles further right go softer behind layered blur',
+      'Pictures only: the section title and section list swap in as a new tile reaches the edge; a piece\'s title, impact and links only show once its tile is clicked',
+      'The strip settles on the nearest tile when scrolling stops; click a tile to bring it in, click again for its words, then See it big for its details',
+      'Trackpad swipes and the arrow keys move the strip too; the section list jumps to any section',
+      'Launchpad (/showcase) gets a Homepage designs group: every ?design= homepage, Showcase marked live and the strip as new',
+      'Fix: ?design=, ?v=, ?panels= and ?fit= are read on every page change, not just the first load, so each launchpad card opens its own design',
+      'Case study as an issue (?style=issue, RFP first), after Dia\'s release notes: the real replays on a Shader Wall canvas under the headline, then three chapters, the impact, the delight and how AI made it possible',
+      'The launchpad gets a Case study styles group: the article and the issue',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/justinschueler.com-inspiration',
+  },
+  {
     version: '3.6.0',
     date: '2026-11-13',
     title: 'Stageshow Scenes in the Case Studies',
