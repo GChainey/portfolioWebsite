@@ -145,8 +145,8 @@ export const SHOWCASE_SECTIONS: ShowcaseSection[] = [
         id: 'rfp', tab: 'Winning a tender', title: 'Using AI to partner with sales to win a deal', summary: 'Leveraging AI to compete with larger companies: a product-like prototype, seed data and connected LLMs.',
         caseStudy: '/projects/rfp',
         hero: scene('rfp-overview'), framed: true, tint: '#E6EEE7',
-        // Pre-revenue work: its impact is the scale and depth AI made possible (from the case study)
-        impact: [{ value: '1 designer', label: 'where it took 3 to 5, plus engineers' }, { value: 'Days', label: ', not weeks, for a major feature' }, { value: '2 markets', label: 'from one prototype, in English and in Polish' }],
+        // Revenue first (deals won since, on this design), then the scale AI made possible (from the case study)
+        impact: [{ value: '$2 million', label: 'in deals won since, from this design' }, { value: '1 designer', label: 'where it took 3 to 5, plus engineers' }, { value: 'Days', label: ', not weeks, for a major feature' }, { value: '2 markets', label: 'from one prototype, in English and in Polish' }],
         details: [visual('rfp-llm-chat'), visual('rfp-determination', 'The decision letter'), visual('rfp-ask')],
       },
       // Not ready: on the dev server only for now
