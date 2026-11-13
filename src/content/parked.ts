@@ -31,6 +31,16 @@ export interface ParkedItem {
 
 export const PARKED: ParkedItem[] = [
   {
+    id: 'narrow-homepage',
+    name: 'Homepage: narrow and written',
+    status: 'unlisted',
+    since: '2026-11-13',
+    summary: 'After justinschueler.com: a written introduction that lights up word by word, then the showcase in one 540px column (header and footer too), two sizes of type (15 and 24), ink #181818 and one grey. Rows run the window’s width, centred on the column, neighbours smaller and fainter.',
+    links: [{ label: 'Narrow homepage', href: '/?width=narrow' }, { label: 'Just the intro', href: '/?hero=intro' }],
+    gate: '?width=narrow (HomeShowcase useNarrow, Header, SiteFooter) and ?hero=intro (components/HeroIntro.tsx)',
+    todo: ['Gareth to confirm the intro and Now wording', 'Decide whether it becomes the live homepage', 'Then the same type and colour across the site'],
+  },
+  {
     id: 'stageshow-scenes',
     name: 'Stageshow scenes',
     status: 'local',

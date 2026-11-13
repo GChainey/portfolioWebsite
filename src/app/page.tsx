@@ -30,6 +30,7 @@ import { PenflowSignature } from '@/components/PenflowSignature'
 import { Signature } from '@/components/Signature'
 import { SiteFooter } from '@/components/SiteFooter'
 import { EXPERIENCE } from '@/content/experience'
+import { HeroIntro } from '@/components/HeroIntro'
 
 // Typewriter sequence: target text + pause after reaching it (ms)
 const TYPING_STEPS = [
@@ -79,10 +80,14 @@ export default function Home() {
   // ?home=<layout> overrides the flag, so a variant can be linked to
   const [homeOverride, setHomeOverride] = useState<HomeLayout | null>(null)
   const homeLayout = homeOverride ?? flags.homeLayout
+  // ?hero=intro: the short written introduction (components/HeroIntro) in place of the typed title
+  const [intro, setIntro] = useState(false)
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const home = params.get('home') as HomeLayout | null
+    // ?width=narrow is the narrow homepage, which opens with the intro too
+    setIntro(params.get('hero') === 'intro' || params.get('width') === 'narrow')
     if (home && HOME_LAYOUTS.includes(home)) setHomeOverride(home)
     // A showcase variant, or ?view=page, needs the page as written
     if ((home && HOME_LAYOUTS.includes(home)) || params.get('view') === 'page') setView('page')
@@ -339,8 +344,8 @@ export default function Home() {
 
             {view !== 'page' ? (
               <>
-                {heroSection}
-                <Visuals />
+                {intro ? <HeroIntro /> : heroSection}
+                <div id="work" className="scroll-mt-14"><Visuals /></div>
               </>
             ) : (
               <>

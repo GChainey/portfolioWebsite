@@ -442,6 +442,95 @@ function CurveControls({ set, onChange }: { set: CurveSettings; onChange: (s: Cu
   )
 }
 
+// The narrow version (?width=narrow, with the written intro above it), after justinschueler.com:
+// everything in one 540px column, two sizes of type (15 and 24), soft ink and one grey. Each
+// section is a quiet label, then its pieces as cards the width of the column, the row running off
+// the window's right edge so the next one shows. The clips play at the column's width, smaller
+// than the full design's. Click one to see it big
+const INK = '#181818'
+const GREY = '#666666'
+const COL = 'min(540px, calc(100vw - 48px))' // the column's width
+const LINK = 'underline decoration-[#c8c8c8] decoration-1 underline-offset-4 transition-[text-decoration-color] duration-150 hover:decoration-[#181818]'
+
+export function useNarrow() {
+  const [narrow, setNarrow] = useState(false)
+  useEffect(() => { setNarrow(new URLSearchParams(window.location.search).get('width') === 'narrow') }, [])
+  return narrow
+}
+
+// A piece's way in, as one quiet link: its case study, its page here, or its site
+function NarrowLink({ piece }: { piece: ShowcasePiece }) {
+  const story = piece.caseStudy && hrefIsLive(piece.caseStudy) ? piece.caseStudy : null
+  const essay = story && getProjectById(story.replace('/projects/', ''))?.category === 'Article'
+  if (story) return <Link href={story} className={LINK}>{essay ? 'Read the essay' : 'Read the case study'}</Link>
+  if (piece.more) return <Link href={piece.more.href} className={LINK}>{piece.more.label}</Link>
+  if (piece.visit) return <a href={piece.visit.href} target="_blank" rel="noopener noreferrer" className={LINK}>{piece.visit.label} ↗</a>
+  return null
+}
+
+function NarrowSection({ section, open }: { section: ShowcaseSection; open: Opener }) {
+  const row = useRef<HTMLDivElement>(null)
+  const [at, setAt] = useState(0)
+  const n = section.pieces.length
+  const stride = () => {
+    const slides = row.current?.querySelectorAll<HTMLElement>('[data-slide]')
+    return slides && slides.length > 1 ? slides[1].offsetLeft - slides[0].offsetLeft : 1
+  }
+  return (
+    <section aria-labelledby={`home-${section.id}`} className="flex flex-col gap-6 py-20">
+      <div className="flex items-baseline justify-between gap-6 text-[15px] leading-[22px]" style={{ color: GREY }}>
+        <h2 id={`home-${section.id}`} className="font-normal">{section.title}</h2>
+        {n > 1 && <span className="tabular-nums">{at + 1} / {n}</span>}
+      </div>
+      {/* Products open with a line about them, each one named and linked to its site */}
+      {section.id === 'products' && (
+        <p className="text-[24px] leading-[28px] tracking-[-0.02em] text-pretty" style={{ color: INK }}>
+          Alongside the day job, I build my own products:{' '}
+          {section.pieces.map((p, i) => (
+            <Fragment key={p.id}>
+              {p.visit ? <a href={p.visit.href} target="_blank" rel="noopener noreferrer" className={LINK}>{p.title}</a> : p.title}
+              {i < n - 2 ? ', ' : i === n - 2 ? ' and ' : '.'}
+            </Fragment>
+          ))}
+        </p>
+      )}
+      {/* The row runs the window's full width, padded so the card in focus sits on the column and
+          snaps there. The cards either side stay in view, a little smaller and fainter */}
+      <div
+        ref={row}
+        onScroll={() => setAt(Math.min(n - 1, Math.max(0, Math.round((row.current?.scrollLeft ?? 0) / stride()))))}
+        className="scrollbar-hide flex snap-x snap-mandatory gap-6 overflow-x-auto overscroll-x-contain"
+        style={{ marginInline: `calc((${COL} - 100vw) / 2)`, paddingInline: `calc((100vw - ${COL}) / 2)`, scrollPaddingInline: `calc((100vw - ${COL}) / 2)` }}
+      >
+        {section.pieces.map((p, i) => {
+          const hero = heroItem(p)
+          const focus = i === at
+          const frame = <Frame item={hero} playing={focus} onOpen={() => open(itemsOf(p), 0)} className={`rounded-xl ${hero.plain ? '' : p.framed ? '' : 'shadow-[0_0_0_1px_#F0F0F0]'}`} />
+          return (
+            <article
+              key={p.id}
+              data-slide
+              className="flex shrink-0 snap-center flex-col gap-4 transition-[transform,opacity] duration-500 ease-[cubic-bezier(.23,1,.32,1)] motion-reduce:transition-none"
+              style={{ width: COL, transform: focus ? undefined : 'scale(0.8)', opacity: focus ? 1 : 0.7 }}
+            >
+              {p.framed ? <div className="rounded-xl p-3" style={{ background: p.tint }}>{frame}</div> : frame}
+              <div className="flex flex-col gap-1 text-[15px] leading-[22px]">
+                <div className="flex items-baseline justify-between gap-6">
+                  <h3 className="font-normal" style={{ color: INK }}>{p.tab ?? p.title}</h3>
+                  <span className="shrink-0" style={{ color: GREY }}><NarrowLink piece={p} /></span>
+                </div>
+                {p.impact
+                  ? <ImpactSentence impact={p.impact} className="text-[15px] leading-[22px]" />
+                  : <p style={{ color: GREY }}>{p.summary}</p>}
+              </div>
+            </article>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
 // How the sections lay out their pieces: contained. The curve is parked (see content/parked.ts):
 // ?track=curve on the dev server only
 function useCurve() {
@@ -457,6 +546,34 @@ export function HomeShowcase() {
   const [lightbox, setLightbox] = useState<{ items: Item[]; start: number } | null>(null)
   const open: Opener = useCallback((items, start) => setLightbox({ items, start }), [])
   const close = useCallback(() => setLightbox(null), [])
+  const narrow = useNarrow()
+  if (narrow) {
+    return (
+      <div className="mx-auto flex w-full max-w-[588px] flex-col px-6" style={{ color: INK }}>
+        {SHOWCASE_SECTIONS.map((section) => {
+          const quote = TESTIMONIALS.find((t) => t.name === section.quote)
+          return (
+            <Fragment key={section.id}>
+              <NarrowSection section={section} open={open} />
+              {quote && (
+                <figure className="flex flex-col gap-4 py-20">
+                  <blockquote className="text-[24px] leading-[28px] tracking-[-0.02em] text-pretty">“{quote.pull}”</blockquote>
+                  <figcaption className="text-[15px] leading-[22px]" style={{ color: GREY }}>{quote.name}, {quote.role}</figcaption>
+                </figure>
+              )}
+            </Fragment>
+          )
+        })}
+        <section aria-labelledby="home-onward" className="flex flex-col gap-3 py-20 text-[15px] leading-[22px]">
+          <h2 id="home-onward" className="font-normal" style={{ color: GREY }}>Elsewhere</h2>
+          <p>
+            Read <Link href="/essays" className={LINK}>the essays</Link>, see <Link href="/cv" className={LINK}>the CV</Link>, or <Link href="/contact" className={LINK}>get in touch</Link>.
+          </p>
+        </section>
+        <AnimatePresence>{lightbox && <Lightbox key="lightbox" items={lightbox.items} start={lightbox.start} onClose={close} />}</AnimatePresence>
+      </div>
+    )
+  }
   return (
     <div className="flex flex-col px-6">
       {SHOWCASE_SECTIONS.map((section) => {

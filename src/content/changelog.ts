@@ -14,6 +14,22 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.8.0',
+    date: '2026-11-13',
+    title: 'A Narrow, Written Homepage',
+    description: 'After justinschueler.com: a clear introduction that lights up word by word, and the whole homepage in one 540px column with two sizes of type, soft ink and one grey. At ?width=narrow (or just the intro at ?hero=intro).',
+    changes: [
+      'Intro: "I’m Gareth, an Aussie product designer in New York. I design by building: working prototypes, made with AI, that help small teams win big deals." Each word lights from a ghost in reading order; the Now line and the GitHub graph clear out of a fog as the sentence ends',
+      'Narrow homepage: header, sections and footer on a 540px column, 15px labels and 24px statements, ink #181818 and grey #666',
+      'Each section is a row the window’s full width, centred on the column: the card in focus plays, its neighbours stay in view at 80% and fainter, and it snaps card by card',
+      'Products open with a line: "Alongside the day job, I build my own products: Shader Wall, Dispatch and Thesis."',
+      'Quotes become one 24px pull line; the page ends with one sentence of links',
+      'Fix: ?width=narrow always uses the showcase design, whatever design this browser last picked in the flag drawer',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/justinschueler.com-inspiration',
+  },
+  {
     version: '3.7.2',
     date: '2026-11-13',
     title: 'Stageshow Scene Parked',

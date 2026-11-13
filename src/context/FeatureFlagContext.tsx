@@ -95,6 +95,8 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
     if (design === 'website' || design === 'list' || design === 'vertical' || design === 'horizontal' || design === 'showcase' || design === 'strip') setDesignParam(design)
     const fit = params.get('fit')
     if (fit === 'full' || fit === 'bleed' || fit === 'cards') { setFitParam(fit); if (!design) setDesignParam('horizontal') }
+    // The narrow homepage is a version of the showcase, whatever design this browser last picked
+    if (params.get('width') === 'narrow' && !design) setDesignParam('showcase')
   }, [pathname])
 
   // Save flags to localStorage when they change, once the stored ones are in (saving before that
