@@ -31,6 +31,20 @@ export interface ParkedItem {
 
 export const PARKED: ParkedItem[] = [
   {
+    id: 'stageshow-scenes',
+    name: 'Stageshow scenes',
+    status: 'local',
+    since: '2026-11-13',
+    summary: 'Faux-UI scenes built with the Stageshow kit (Benji Taylor\'s stageshow skill, MIT), copied into src/components/stageshow/kit. The first is the RFP\'s request for information: two reviewers\' issues ticked in, each written into the letter. It was the spotlight in the RFP case study for a day, then came out so the redesign can borrow from it; the real spot-rfi clip is back in its place.',
+    links: [{ label: 'The scenes', href: '/stageshow' }],
+    gate: 'PARKED_LIVE: /stageshow is the dev server only. The scene is still registered as rfp-letter-scene in CaseStudyContent, so a component block puts it back in a case study',
+    todo: [
+      'Pick what to keep for the case study redesign: the scene itself, its framing on the mat, or the highlight on the new line',
+      'More scenes if the redesign wants them (the Stageshow skill: film each with its scripts/film.mjs before shipping)',
+      'Delete src/components/stageshow if nothing ends up used',
+    ],
+  },
+  {
     id: 'case-study-issue',
     name: 'Case study as an issue',
     status: 'local',

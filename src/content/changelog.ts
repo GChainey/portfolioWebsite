@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.7.2',
+    date: '2026-11-13',
+    title: 'Stageshow Scene Parked',
+    description: 'The Stageshow RFI scene comes out of the RFP case study and is parked on a dev-only page, to borrow from in the case study redesign.',
+    changes: [
+      'The RFP case study\'s "Workflows that end somewhere real" opens with the real spot-rfi clip again',
+      'New /stageshow page (dev server only) shows the parked scene; it stays registered as rfp-letter-scene',
+      'Listed on /parked as "Stageshow scenes"',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/skills-install',
+  },
+  {
     version: '3.7.1',
     date: '2026-11-13',
     title: 'RFP Impact: $2 Million in Deals',
