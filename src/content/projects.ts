@@ -1691,7 +1691,7 @@ export const projects: Project[] = [
     tags: ['AI', 'Enterprise', 'Prototyping', 'Claude Code', 'RFP'],
     content: [
       { type: 'heading', level: 2, content: 'The short version' },
-      { type: 'text', content: 'I was the only designer on a small startup\'s response to a state government tender, up against vendors with whole teams. Before AI, I would have answered it with Figma mock-ups and a lot of help. This time I built a working prototype with Claude Code. This is the difference, example by example.' },
+      { type: 'text', content: 'I was the only designer on a small startup\'s response to a state government tender, up against vendors with whole teams. Before AI, I would have answered it with Figma mock-ups and a lot of help. This time I built a working prototype with Claude Code, and we have since won $2 million worth of deals from this design. This is the difference, example by example.' },
 
       { type: 'heading', level: 2, content: 'The setup' },
       {
@@ -1903,6 +1903,7 @@ export const projects: Project[] = [
       {
         type: 'list',
         items: [
+          'We have since won $2 million worth of deals from this design.',
           'The prototype outlived the tender. It is still referenced and iterated on today.',
           'Engineering kept building on it, instead of receiving a hand-off and filing it away.',
           'I could design faster than engineering could build, without being held to the existing technical limits.',
