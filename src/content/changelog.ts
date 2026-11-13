@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.7.1',
+    date: '2026-11-13',
+    title: 'RFP Impact: $2 Million in Deals',
+    description: 'The RFP piece now leads its impact with revenue: $2 million in deals won since, from this design.',
+    changes: [
+      'The RFP impact sentence (homepage and under the case study title) opens with "$2 million in deals won since, from this design"',
+      'The case study says it too, in the short version and first under "What happened next"',
+      'The issue style (?style=issue) leads its impact chapter with $2M; the numbers row takes four columns when there are four',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/skills-install',
+  },
+  {
     version: '3.7.0',
     date: '2026-11-13',
     title: 'Homepage Strip and Case Studies as Issues',
