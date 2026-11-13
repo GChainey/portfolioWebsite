@@ -1,0 +1,320 @@
+/* Daisy Assess is shadcn on zinc, set in Geist: map its tokens onto the kit's */
+.rl .ss-stage {
+  --ss-font: var(--font-geist-sans), Geist, system-ui, -apple-system, sans-serif;
+  --ss-text-strong: #09090b;
+  --ss-text: #71717a;
+  --ss-line: rgb(9 9 11 / 0.1);
+  --ss-accent: #18181b;
+  overflow: hidden;
+  /* The case studies' figure mat (components/ClipFrame) */
+  border-radius: 20px;
+  background: var(--mat, #eef0f3);
+  font-family: var(--ss-font);
+}
+
+/* The dialog: pinned, inset top and sides, off the bottom */
+.rl .rl-dialog {
+  position: absolute;
+  top: 36px;
+  left: 40px;
+  width: 640px;
+  height: 480px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 252px;
+  grid-template-rows: auto minmax(0, 1fr);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: var(--ss-shadow-hero);
+  overflow: hidden;
+}
+
+.rl .rl-head {
+  padding: 18px 20px 0;
+  border-bottom: 1px solid var(--ss-line);
+}
+
+.rl .rl-title,
+.rl .rl-panetitle {
+  color: var(--ss-text-strong);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.rl .rl-tabs {
+  display: flex;
+  gap: 20px;
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ss-text);
+}
+
+.rl .rl-tabs span {
+  padding-bottom: 9px;
+  border-bottom: 2px solid transparent;
+}
+
+.rl .rl-tabs span[data-on] {
+  color: var(--ss-text-strong);
+  border-color: var(--ss-text-strong);
+}
+
+/* The letter: a white page on the dialog's muted preview ground */
+.rl .rl-letterpane {
+  padding: 18px 20px 0;
+  background: #f4f4f5;
+}
+
+.rl .rl-page {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  height: 100%;
+  padding: 20px 22px;
+  border-radius: 6px 6px 0 0;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgb(9 9 11 / 0.06), 0 2px 6px rgb(9 9 11 / 0.05);
+}
+
+.rl .rl-letterhead {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ss-line);
+}
+
+.rl .rl-dear {
+  color: var(--ss-text-strong);
+  font-size: 11.5px;
+  line-height: 1.4;
+}
+
+.rl .rl-lines {
+  display: grid;
+  gap: 8px;
+}
+
+.rl .rl-conditions {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rl .rl-conditions li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 19px;
+  padding: 2px 6px 2px 14px;
+  margin: 0 -6px;
+  border-radius: 4px;
+  color: #3f3f46;
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+
+.rl .rl-conditions li::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 10px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.rl .rl-conditions li b {
+  margin-right: 4px;
+  color: var(--ss-text-strong);
+  font-weight: 600;
+}
+
+.rl .rl-new li {
+  display: block;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+/* Just written in: a warm wash that fades once the line has settled */
+.rl .rl-new li[data-fresh] {
+  animation: rl-fresh 2.4s ease-out 0.25s both;
+}
+
+@keyframes rl-fresh {
+  0%, 30% { background: #fef3c7; }
+  100% { background: rgb(254 243 199 / 0); }
+}
+
+.rl .rl-sign {
+  display: grid;
+  gap: 6px;
+  padding-top: 12px;
+  border-top: 1px solid var(--ss-line);
+}
+
+/* The issues panel: the right column, full height */
+.rl .rl-pane {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 18px 16px;
+  border-left: 1px solid var(--ss-line);
+}
+
+.rl .rl-panehead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.rl .rl-close {
+  flex: none;
+  color: var(--ss-text);
+}
+
+.rl .rl-card {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--ss-line);
+  border-radius: 10px;
+}
+
+.rl .rl-doc {
+  color: var(--ss-text-strong);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.rl .rl-issue {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  align-items: start;
+  column-gap: 10px;
+}
+
+/* Runs off the foot of the stage, so the panel reads as a longer list */
+.rl .rl-card--quiet {
+  min-height: 132px;
+  align-content: start;
+}
+
+.rl .rl-card--quiet .rl-issue__body {
+  gap: 8px;
+  padding-top: 5px;
+}
+
+.rl .rl-issue__body {
+  display: grid;
+  gap: 5px;
+}
+
+.rl .rl-by {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 18px;
+}
+
+/* Daisy Assess draws reviewers as blue two-initial discs */
+.rl .rl-avatar {
+  flex: none;
+  background: #3b82f6;
+  color: #fff;
+}
+
+.rl .rl-who {
+  color: var(--ss-text-strong);
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.rl .rl-when {
+  color: var(--ss-text);
+  font-size: 11px;
+}
+
+.rl .rl-desc {
+  margin: 0;
+  color: var(--ss-text);
+  font-size: 11.5px;
+  line-height: 1.4;
+}
+
+/* shadcn's checkbox: a 16px rounded square that fills with the primary */
+.rl .rl-box {
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 1px #a1a1aa;
+  color: #fff;
+  transition: background-color 0.16s ease, box-shadow 0.16s ease, transform 0.12s ease-out;
+}
+
+.rl .rl-box svg {
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.14s ease, transform 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+.rl .rl-box[data-on] {
+  background: var(--ss-accent);
+  box-shadow: inset 0 0 0 1px var(--ss-accent);
+}
+
+.rl .rl-box[data-on] svg {
+  opacity: 1;
+  transform: none;
+}
+
+.rl .rl-box[data-pressed] {
+  transform: scale(0.94);
+}
+
+/* Narrow: the panel over the letter, the letter's top cropped away so the
+   conditions sit just above the panel */
+.rl .ss-stage[data-layout='compact'] .rl-dialog {
+  top: 16px;
+  left: 16px;
+  width: 326px;
+  height: 560px;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr);
+}
+
+.rl .ss-stage[data-layout='compact'] .rl-head {
+  display: none;
+}
+
+.rl .ss-stage[data-layout='compact'] .rl-pane {
+  grid-column: 1;
+  grid-row: 1;
+  border-left: 0;
+  border-bottom: 1px solid var(--ss-line);
+}
+
+.rl .ss-stage[data-layout='compact'] .rl-card--quiet {
+  display: none;
+}
+
+.rl .ss-stage[data-layout='compact'] .rl-letterpane {
+  grid-row: 2 / 4;
+  padding: 14px 14px 0;
+}
+
+.rl .ss-stage[data-layout='compact'] .rl-letterhead,
+.rl .ss-stage[data-layout='compact'] .rl-dear,
+.rl .ss-stage[data-layout='compact'] .rl-lines:first-of-type {
+  display: none;
+}

@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.6.0',
+    date: '2026-11-13',
+    title: 'Stageshow Scenes in the Case Studies',
+    description: 'The RFP case study\'s request-for-information spotlight becomes a Stageshow scene: the prototype\'s dialog rebuilt in the page, where ticking two reviewers\' issues writes each one into the letter.',
+    changes: [
+      'Added the Stageshow React kit (from Benji Taylor\'s stageshow skill, MIT) under components/stageshow/kit for faux-UI scenes',
+      'New rfp-letter-scene component: Daisy Assess\'s RFI dialog in its own zinc and Geist look, two issues ticked in, each written into the letter with a brief highlight; plays once in view and rests on the finished letter',
+      'A second, stacked design for phone widths: the issues panel over the letter',
+      'Replaces the cropped spot-rfi clip in "Workflows that end somewhere real"; the real dialog still plays in the clip below it and in the hero reel',
+    ],
+    aiTools: ['Claude Code', 'Stageshow'],
+    branch: 'GChainey/skills-install',
+  },
+  {
     version: '3.5.1',
     date: '2026-10-28',
     title: 'Feels Native on a Phone',
