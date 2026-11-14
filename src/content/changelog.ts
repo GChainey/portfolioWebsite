@@ -14,11 +14,14 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: '3.10.0',
+    version: '4.0.0',
     date: '2026-11-13',
-    title: 'Draft Homepage: Sections and Short Case Studies',
-    description: 'The draft homepage (/draft, dev server only) gets an opening line per section and its first short case studies, on one template.',
+    title: 'The Narrow Homepage Goes Live',
+    description: 'The narrow, written homepage (after justinschueler.com) is now the live homepage. Its short case studies stay on the dev server until they\'re written.',
     changes: [
+      'The homepage at / is the narrow design (app/draft/page.tsx); the one before it opens with ?design=, ?width=, ?hero= or ?classic',
+      'Off the dev server: project names and cards don\'t link to the unfinished case studies, essays link to /essays, and the controls panel is hidden',
+      'The narrow header\'s name and Home link go to /',
       'Each section opens with a line: Products, then Projects ("AI has fundamentally changed design."), Before AI (what SEEK and Best Practice taught), and Creative ("AI enables so much more.")',
       'SEEK and Best Practice move to their own Before AI rail',
       'Short case studies at /draft/daisy-assess, /draft/website, /draft/configurator, /draft/seek and /draft/bestpractice: the claim, the impact, then moments wider than the text, from content in app/draft/case-studies.ts',

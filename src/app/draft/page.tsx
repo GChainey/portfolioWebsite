@@ -9,6 +9,8 @@ import { Shader } from '@/components/showcase/ShaderWallWidgets'
 import { SHOWCASE_SECTIONS } from '@/content/home-showcase'
 import { RfpLetter } from '@/components/stageshow/RfpLetter'
 import { TESTIMONIALS } from '@/content/testimonials'
+import { PARKED_LIVE } from '@/content/parked'
+import { CASE_STUDIES_LIVE } from '@/content/projects'
 import { COMPANY_MARKS } from '@/content/company-marks'
 import { EssayCard, ESSAYS, SKILLS, GREY, Headline, INK, LINE, SHADOW, SHELL } from './style'
 
@@ -238,7 +240,7 @@ function WorkCard({ p, focus, near, pad }: { p: (typeof PROJECTS)[number]; focus
       <div className="flex justify-between gap-4"><span>{p.name}</span><span className="tabular-nums" style={{ color: GREY }}>{p.year}</span></div>
     </div>
   )
-  return p.href ? <Link href={p.href} className="block">{card}</Link> : card
+  return studyLive(p.href) ? <Link href={p.href!} className="block">{card}</Link> : card
 }
 
 // Kind words, as justinschueler.com's numbered services: the person, then their words when opened
@@ -307,6 +309,15 @@ function Controls({ logos, setLogos, seekDots, setSeekDots, pad, setPad }: { log
   )
 }
 
+// This page is the live homepage (app/page.tsx) and /draft on the dev server. Off the dev server
+// the short case studies and the draft essays page aren't live yet: case study names are plain
+// text, cards don't link to them, and essays go to /essays
+const ESSAYS_HREF = PARKED_LIVE ? '/draft/essays' : '/essays'
+const studyLive = (href?: string) => !!href && (!href.startsWith('/draft/') || CASE_STUDIES_LIVE)
+function StudyLink({ href, children }: { href?: string; children: ReactNode }) {
+  return studyLive(href) ? <Link href={href!} className="dr-link">{children}</Link> : <>{children}</>
+}
+
 // Before a landing-page card opens: below the link if it wouldn't fit above (the card is about 230 tall)
 const peekRoom = (e: { currentTarget: HTMLElement }) => {
   e.currentTarget.toggleAttribute('data-below', e.currentTarget.getBoundingClientRect().top < 250)
@@ -362,7 +373,7 @@ export default function DraftHome() {
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
       <main className="mx-auto flex max-w-[588px] flex-col gap-[120px] px-6 pb-16 pt-16">
         <header className="dr-fog flex items-start justify-between" style={fog}>
-          <div className="flex flex-col"><Link href="/draft">Gareth Chainey</Link><span style={{ color: GREY }}>Product designer</span></div>
+          <div className="flex flex-col"><Link href="/">Gareth Chainey</Link><span style={{ color: GREY }}>Product designer</span></div>
           <span style={{ color: GREY }}>New York</span>
         </header>
 
@@ -401,7 +412,7 @@ export default function DraftHome() {
             as="p"
             lead="AI has fundamentally changed design."
             rest={PROJECTS.map((p, i) => (
-              <span key={p.name}><Link href={p.href!} className="dr-link">{p.name.replace(/^An /, 'an ')}</Link>{i < PROJECTS.length - 2 ? ', ' : i === PROJECTS.length - 2 ? ' and ' : '.'}</span>
+              <span key={p.name}><StudyLink href={p.href}>{p.name.replace(/^An /, 'an ')}</StudyLink>{i < PROJECTS.length - 2 ? ', ' : i === PROJECTS.length - 2 ? ' and ' : '.'}</span>
             ))}
           />
           <Rail label="Projects" items={PROJECTS} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={pad} />} />
@@ -411,7 +422,7 @@ export default function DraftHome() {
           <Headline
             as="p"
             lead="Before AI."
-            rest={<>At <Link href="/draft/seek" className="dr-link">SEEK</Link> I learned a release is where the work starts: follow the funnel, one leak at a time. At <Link href="/draft/bestpractice" className="dr-link">Best Practice</Link>, the craft was in small decisions, like three toggles becoming one control.</>}
+            rest={<>At <StudyLink href="/draft/seek">SEEK</StudyLink> I learned a release is where the work starts: follow the funnel, one leak at a time. At <StudyLink href="/draft/bestpractice">Best Practice</StudyLink>, the craft was in small decisions, like three toggles becoming one control.</>}
           />
           <Rail label="Before AI" items={BEFORE_AI} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={pad} />} />
         </section>
@@ -421,7 +432,7 @@ export default function DraftHome() {
             as="p"
             lead="AI enables so much more."
             rest={<>Internal tools that help build the thing, scratching a curious itch, or dreaming big: {CREATIVE.map((p, i) => (
-              <span key={p.name}><Link href={p.href!} className="dr-link">{p.name}</Link>{i < CREATIVE.length - 2 ? ', ' : i === CREATIVE.length - 2 ? ' and ' : '.'}</span>
+              <span key={p.name}><StudyLink href={p.href}>{p.name}</StudyLink>{i < CREATIVE.length - 2 ? ', ' : i === CREATIVE.length - 2 ? ' and ' : '.'}</span>
             ))}</>}
           />
           <Rail label="Creative" items={CREATIVE} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={pad} />} />
@@ -435,7 +446,7 @@ export default function DraftHome() {
         </section>
 
         <section className="dr-rise flex flex-col gap-6" style={rise(4)}>
-          <Label right={<Link href="/draft/essays" className="dr-link">All essays</Link>}>Thoughts</Label>
+          <Label right={<Link href={ESSAYS_HREF} className="dr-link">All essays</Link>}>Thoughts</Label>
           <Thoughts />
         </section>
 
@@ -444,10 +455,10 @@ export default function DraftHome() {
             <a href={`mailto:${EMAIL}`} className="dr-link" style={{ color: INK }}>{EMAIL}</a>
             <span>{copied ? 'Copied' : 'press E'}</span>
           </div>
-          <div className="flex gap-5"><Link href="/draft/essays">Essays</Link><Link href="/cv">CV</Link><a href="https://x.com/garethchainey" target="_blank" rel="noopener noreferrer">X ↗</a><Link href="/contact">Contact</Link><Link href="/changelog">Changelog</Link></div>
+          <div className="flex gap-5"><Link href={ESSAYS_HREF}>Essays</Link><Link href="/cv">CV</Link><a href="https://x.com/garethchainey" target="_blank" rel="noopener noreferrer">X ↗</a><Link href="/contact">Contact</Link><Link href="/changelog">Changelog</Link></div>
         </footer>
       </main>
-      <Controls logos={logos} setLogos={setLogos} seekDots={seekDots} setSeekDots={setSeekDots} pad={pad} setPad={setPad} />
+      {PARKED_LIVE && <Controls logos={logos} setLogos={setLogos} seekDots={seekDots} setSeekDots={setSeekDots} pad={pad} setPad={setPad} />}
     </div>
   )
 }

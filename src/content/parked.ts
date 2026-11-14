@@ -32,13 +32,13 @@ export interface ParkedItem {
 export const PARKED: ParkedItem[] = [
   {
     id: 'draft-homepage',
-    name: 'Draft homepage',
+    name: 'Short case studies (and the draft essays page)',
     status: 'local',
     since: '2026-11-13',
-    summary: 'The homepage redesigned in justinschueler.com\'s narrow column with the simpler style system from the Polar audit: companies as cards with facet marks, products and projects as real clips on the grey, a Creative rail, essays and skills as cards, and the first short case study (RFP).',
-    links: [{ label: 'Draft homepage', href: '/draft' }, { label: 'DAISY Assess', href: '/draft/daisy-assess' }, { label: 'Website', href: '/draft/website' }, { label: 'Configurator', href: '/draft/configurator' }, { label: 'SEEK', href: '/draft/seek' }, { label: 'Best Practice', href: '/draft/bestpractice' }, { label: 'Essays', href: '/draft/essays' }],
-    gate: 'PARKED_LIVE: app/draft/layout.tsx returns 404 off the dev server',
-    todo: ['Write the EAI one-liner', 'Short case studies for the other projects: impact, craft, what AI made possible', 'Pick the logo style and card padding, then remove the controls panel', 'Decide whether it replaces the live homepage'],
+    summary: 'The homepage went live on 13 Nov; its short case studies (one template, content in app/draft/case-studies.ts) and the /draft/essays page are still to write. The brief is in Paper: page "Short case studies (to write)".',
+    links: [{ label: 'Homepage, with the controls', href: '/draft' }, { label: 'DAISY Assess', href: '/draft/daisy-assess' }, { label: 'Website', href: '/draft/website' }, { label: 'Configurator', href: '/draft/configurator' }, { label: 'SEEK', href: '/draft/seek' }, { label: 'Best Practice', href: '/draft/bestpractice' }, { label: 'Essays', href: '/draft/essays' }],
+    gate: 'PARKED_LIVE: app/draft/layout.tsx returns 404 off the dev server. On the live homepage the case study links are plain text until CASE_STUDIES_LIVE',
+    todo: ['Write each case study to the brief, DAISY Assess first', 'Then link them from the live homepage (turn on CASE_STUDIES_LIVE, or per study)', 'Write the EAI one-liner']
   },
   {
     id: 'narrow-homepage',

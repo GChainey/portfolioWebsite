@@ -31,6 +31,7 @@ import { Signature } from '@/components/Signature'
 import { SiteFooter } from '@/components/SiteFooter'
 import { EXPERIENCE } from '@/content/experience'
 import { HeroIntro } from '@/components/HeroIntro'
+import DraftHome from './draft/page'
 
 // Typewriter sequence: target text + pause after reaching it (ms)
 const TYPING_STEPS = [
@@ -65,7 +66,18 @@ const EARLIER_WORK = ['seek-case-study-1', 'bestpractice-case-study-1']
 const SMALL_STUDIES = ['eai-settings', 'add-document']
 const ESSAYS = writing.filter((p) => p.category === 'Article').map((p) => p.id)
 
+// The homepage is the narrow design (app/draft/page.tsx, 13 Nov 2026). The one before it stays for
+// the design launchpad and parked links: ?design=, ?width=, ?hero= or ?classic open it
 export default function Home() {
+  const [classic, setClassic] = useState(false)
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search)
+    if (['design', 'width', 'hero', 'classic'].some((k) => q.has(k))) setClassic(true)
+  }, [])
+  return classic ? <ClassicHome /> : <DraftHome />
+}
+
+function ClassicHome() {
   const [mounted, setMounted] = useState(false)
   const [suffix, setSuffix] = useState('')
   const [typingDone, setTypingDone] = useState(false)
