@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.8.1',
+    date: '2026-11-13',
+    title: 'A Logo: the Facet Cube',
+    description: 'The amber G in the tab gives way to a logo: the cube from the facet app icons drawn for the prototypes’ admin screens. Three flat planes, one gap between them, black on a grey card.',
+    changes: [
+      'Tab icon and home-screen icon share one mark (src/app/_icon/mark.tsx), the cube’s exact path from the facet set',
+      'Black #09090b on a grey #f4f4f5 card with a faint edge, as in the set; drawn a touch bigger so it holds at 16px',
+      'Tried on the way: a GC in stacked blocks, GC and G in facets on amber, a round G and five blocky Gs',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/favicon-conductor-logo-update',
+  },
+  {
     version: '3.8.0',
     date: '2026-11-13',
     title: 'A Narrow, Written Homepage',
