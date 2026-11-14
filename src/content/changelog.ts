@@ -14,6 +14,27 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '4.0.0',
+    date: '2026-11-13',
+    title: 'The Narrow Homepage Goes Live',
+    description: 'The narrow, written homepage (after justinschueler.com) is now the live homepage. Its short case studies stay on the dev server until they\'re written.',
+    changes: [
+      'The homepage at / is the narrow design (app/draft/page.tsx); the one before it opens with ?design=, ?width=, ?hero= or ?classic',
+      'Off the dev server: project names and cards don\'t link to the unfinished case studies, essays link to /essays, and the controls panel is hidden',
+      'The narrow header\'s name and Home link go to /',
+      'Each section opens with a line: Products, then Projects ("AI has fundamentally changed design."), Before AI (what SEEK and Best Practice taught), and Creative ("AI enables so much more.")',
+      'SEEK and Best Practice move to their own Before AI rail',
+      'Short case studies at /draft/daisy-assess, /draft/website, /draft/configurator, /draft/seek and /draft/bestpractice: the claim, the impact, then moments wider than the text, from content in app/draft/case-studies.ts',
+      'Every product and project card framed like Shader Wall\'s: the clip fills a window inset 12px on the grey; Dispatch, Thesis and the RFI scene sit on a Shader Wall wallpaper instead of a second grey',
+      'Company logos as dots (SEEK\'s arrow, EAI\'s E, Best Practice\'s hummingbird) on tiles with no outline',
+      'The landing-page card on a product\'s name opens below it when there\'s no room above',
+      'The controls keep their choices when you go to a case study and back',
+      'Footer: a link to X',
+    ],
+    aiTools: ['Claude Code', 'Paper'],
+    branch: 'GChainey/justinschueler.com-inspiration',
+  },
+  {
     version: '3.9.0',
     date: '2026-11-13',
     title: 'A Draft Homepage, Simpler Styles',

@@ -33,7 +33,7 @@ export function Header({ showBack }: HeaderProps) {
     return (
       <header className="fixed top-0 left-0 right-0 z-40 bg-[color-mix(in_srgb,var(--background)_85%,transparent)] backdrop-blur-sm">
         <div className="mx-auto flex h-14 max-w-[588px] items-center justify-between gap-6 px-6 text-[15px] leading-[22px]">
-          <Link href="/?width=narrow" aria-label="Gareth Chainey" className="whitespace-nowrap text-[#181818] transition-opacity hover:opacity-70">
+          <Link href="/" aria-label="Gareth Chainey" className="whitespace-nowrap text-[#181818] transition-opacity hover:opacity-70">
             <span className="sm:hidden">GC</span>
             <span className="hidden sm:inline">Gareth Chainey</span>
           </Link>
@@ -41,7 +41,7 @@ export function Header({ showBack }: HeaderProps) {
             {NAV.map(({ href, label }) => {
               const here = href === '/' ? pathname === '/' : pathname.startsWith(href)
               return (
-                <Link key={href} href={href === '/' ? '/?width=narrow' : href} aria-current={here ? 'page' : undefined} className={`transition-colors ${here ? 'text-[#181818]' : 'text-[#666] hover:text-[#181818]'}`}>
+                <Link key={href} href={href} aria-current={here ? 'page' : undefined} className={`transition-colors ${here ? 'text-[#181818]' : 'text-[#666] hover:text-[#181818]'}`}>
                   {label}
                 </Link>
               )
