@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og'
 import { Mark } from './_icon/mark'
 
-// The tab icon: GC in stacked blocks on a dark tile, drawn at build time so every browser gets a PNG
+// The tab icon: GC in facets on an amber tile, drawn at build time so every browser gets a PNG
 export const size = { width: 64, height: 64 }
 export const contentType = 'image/png'
 

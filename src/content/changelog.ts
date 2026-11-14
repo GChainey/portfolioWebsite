@@ -16,11 +16,11 @@ export const CHANGELOG: ChangelogEntry[] = [
   {
     version: '3.8.1',
     date: '2026-11-13',
-    title: 'A Block-Letter GC Favicon',
-    description: 'The amber G in the tab becomes GC built from stacked blocks on a dark tile, after Conductor’s app icon.',
+    title: 'A Facet GC Favicon',
+    description: 'The amber G in the tab becomes GC drawn in the facet style of the app icons from the prototypes’ admin screens: solid planes, no strokes, one gap between planes.',
     changes: [
-      'Tab icon and home-screen icon share one mark: G and C drawn on a 4×5 grid, neighbouring blocks merged into bars, the bottom row a shade back',
-      'Dark graphite tile with a faint inner edge, so it holds on light and dark tab bars',
+      'Tab icon and home-screen icon share one mark, drawn as SVG paths in a 100-unit box like the facet app icons',
+      'The G’s bar and spur are their own plane, one gap off its bowl; white on the site’s amber so it holds on light and dark tab bars',
     ],
     aiTools: ['Claude Code'],
     branch: 'GChainey/favicon-conductor-logo-update',
