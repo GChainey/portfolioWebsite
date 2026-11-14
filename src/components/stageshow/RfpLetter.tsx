@@ -66,10 +66,11 @@ function Issue({ doc, who, when, text, on, tick }: { doc: string; who: string; w
   )
 }
 
-export function RfpLetter() {
+// bare: inside a card (components/cards/TrayCard): no margins, and a white ground instead of the mat
+export function RfpLetter({ bare = false }: { bare?: boolean } = {}) {
   return (
-    <figure className="my-8 not-prose" role="img" aria-label="Ticking two reviewers' issues writes each one into the request for information letter">
-      <Stage width={720} height={440} compact={{ below: 600, width: 358, height: 520 }} initial={initial} poster={poster} script={script} play="once" fill cursor={{ at: { wide: { x: 690, y: 420 }, compact: { x: 340, y: 500 } } }} className="rl">
+    <figure className={bare ? 'not-prose rl--bare' : 'my-8 not-prose'} role="img" aria-label="Ticking two reviewers' issues writes each one into the request for information letter">
+      <Stage width={bare ? 520 : 720} height={bare ? 330 : 440} compact={{ below: bare ? 400 : 600, width: 358, height: 520 }} initial={initial} poster={poster} script={script} play="once" fill={!bare} cursor={{ at: { wide: bare ? { x: 495, y: 312 } : { x: 690, y: 420 }, compact: { x: 340, y: 500 } } }} className="rl">
         {(s) => (
           <div className="rl-dialog">
             <header className="rl-head">

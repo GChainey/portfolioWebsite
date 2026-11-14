@@ -318,3 +318,25 @@
 .rl .ss-stage[data-layout='compact'] .rl-lines:first-of-type {
   display: none;
 }
+
+/* In a card (TrayCard), designed at the card's size: a light neutral ground, no mat, and the
+   dialog narrower so the letter and the issues both stay in, running off the bottom */
+.rl--bare .rl .ss-stage {
+  border-radius: 0;
+  background: #f4f4f4;
+}
+
+.rl--bare .rl .ss-stage:not([data-layout='compact']) .rl-dialog {
+  top: 24px;
+  left: 20px;
+  width: 480px;
+  grid-template-columns: minmax(0, 1fr) 224px;
+}
+
+/* In the card the payoff has to land in the crop: no letterhead or filler conditions above the
+   new lines, and no role beside each reviewer's name, so the issue rows keep their inset */
+.rl--bare .rl .ss-stage:not([data-layout='compact']) .rl-letterhead,
+.rl--bare .rl .ss-stage:not([data-layout='compact']) .rl-conditions > li,
+.rl--bare .rl .ss-stage:not([data-layout='compact']) .rl-when {
+  display: none;
+}

@@ -1,0 +1,119 @@
+/* Shader Wall is a dark macOS app set in the system face: map its look onto the kit's dark tokens */
+.swp .ss-stage {
+  --ss-font: var(--font-geist-sans), Geist, system-ui, -apple-system, sans-serif;
+  --ss-accent: #0a84ff;
+  overflow: hidden;
+  font-family: var(--ss-font);
+}
+
+/* The desktop: the wallpaper fills the frame. Every preset is mounted; the chosen one fades in */
+.swp .swp-desktop {
+  position: absolute;
+  inset: 0;
+}
+
+.swp .swp-wall {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.swp .swp-wall[data-on] {
+  opacity: 1;
+}
+
+/* The tool: the app's window, pinned top-left over the desktop, off the bottom */
+.swp .swp-win {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  width: 248px;
+  height: 340px;
+}
+
+.swp .swp-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 100%;
+  padding: 14px 10px;
+}
+
+.swp .swp-title {
+  padding: 0 8px 4px;
+  color: var(--ss-text);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.swp .swp-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.swp .swp-list .ss-row__title {
+  font-size: 13px;
+}
+
+/* A preset's swatch: its wallpaper, in a disc */
+.swp .swp-swatch {
+  position: relative;
+  display: block;
+  width: 18px;
+  height: 18px;
+  overflow: hidden;
+  border-radius: 50%;
+  flex: none;
+}
+
+.swp .swp-swatch--quiet {
+  background: var(--ss-line);
+}
+
+/* Set as wallpaper, the app's blue button; it confirms on itself */
+.swp .swp-set {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 32px;
+  margin: 10px 8px 0;
+  border-radius: 8px;
+  background: var(--ss-accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.swp .swp-set > span {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.23, 1, 0.32, 1), filter 0.25s ease;
+}
+
+.swp .swp-set__done {
+  opacity: 0;
+  transform: translateY(6px);
+  filter: blur(2px);
+}
+
+.swp .swp-set[data-done] .swp-set__idle {
+  opacity: 0;
+  transform: translateY(-6px);
+  filter: blur(2px);
+}
+
+.swp .swp-set[data-done] .swp-set__done {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Narrow: the desktop shows above, the window under it full width, still off the bottom */
+.swp .ss-stage[data-layout='compact'] .swp-win {
+  top: 110px;
+  left: 16px;
+  width: 326px;
+}

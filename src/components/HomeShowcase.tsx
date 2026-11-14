@@ -505,7 +505,7 @@ function NarrowSection({ section, open }: { section: ShowcaseSection; open: Open
         {section.pieces.map((p, i) => {
           const hero = heroItem(p)
           const focus = i === at
-          const frame = <Frame item={hero} playing={focus} onOpen={() => open(itemsOf(p), 0)} className={`rounded-xl ${hero.plain ? '' : p.framed ? '' : 'shadow-[0_0_0_1px_#F0F0F0]'}`} />
+          const frame = <Frame item={hero} playing={focus} onOpen={() => open(itemsOf(p), 0)} className={`rounded-xl ${hero.plain ? '' : 'shadow-[0_0_0_1px_#F0F0F0]'}`} />
           return (
             <article
               key={p.id}
@@ -513,7 +513,8 @@ function NarrowSection({ section, open }: { section: ShowcaseSection; open: Open
               className="flex shrink-0 snap-center flex-col gap-4 transition-[transform,opacity] duration-500 ease-[cubic-bezier(.23,1,.32,1)] motion-reduce:transition-none"
               style={{ width: COL, transform: focus ? undefined : 'scale(0.8)', opacity: focus ? 1 : 0.7 }}
             >
-              {p.framed ? <div className="rounded-xl p-3" style={{ background: p.tint }}>{frame}</div> : frame}
+              {/* No coloured mat round a demo here: the screen stands on its own */}
+              {frame}
               <div className="flex flex-col gap-1 text-[15px] leading-[22px]">
                 <div className="flex items-baseline justify-between gap-6">
                   <h3 className="font-normal" style={{ color: INK }}>{p.tab ?? p.title}</h3>
