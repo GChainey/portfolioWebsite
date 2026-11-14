@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ChevronDown } from 'lucide-react'
 import { GitHubContributions } from '@/components/GitHubContributions'
 import { Media, heroItem } from '@/components/HomeShowcase'
+import { Shader } from '@/components/showcase/ShaderWallWidgets'
 import { SHOWCASE_SECTIONS } from '@/content/home-showcase'
 import { RfpLetter } from '@/components/stageshow/RfpLetter'
 import { TESTIMONIALS } from '@/content/testimonials'
@@ -17,7 +18,7 @@ import { EssayCard, ESSAYS, SKILLS, GREY, Headline, INK, LINE, SHADOW, SHELL } f
 // The statement lights up word by word while the rest waits in a fog; sections rise in after.
 // The work leads with Stageshow scenes where there is one (Shader Wall, the RFP letter) and clean
 // stills elsewhere: no coloured mats. Case studies are short, enough to start a conversation
-// (/draft/rfp is the first).
+// (/draft/<slug>, from ./case-studies).
 
 const EMAIL = 'gareth.chainey@gmail.com'
 
@@ -49,11 +50,15 @@ const PRODUCTS: { name: string; href: string; landing: string; piece: string }[]
 
 // piece as the products; the RFP's is its Stageshow scene, which fills its card instead
 const PROJECTS: { name: string; year: string; href?: string; piece: string; scene?: ReactNode }[] = [
-  { name: 'Winning a tender', year: '2025', href: '/draft/rfp', piece: 'rfp', scene: <RfpLetter bare /> },
-  { name: 'Testing on live models', year: '2025–26', piece: 'configurator' },
-  { name: 'An agent-built website', year: '2026', piece: 'html-brand-website' },
-  { name: 'SEEK, fixing the funnel', year: '2024', piece: 'seek' },
-  { name: 'Booking in two panels', year: '2021', piece: 'bestpractice' },
+  { name: 'DAISY Assess', year: '2025', href: '/draft/daisy-assess', piece: 'rfp', scene: <RfpLetter bare /> },
+  { name: 'Testing on live models', year: '2025–26', href: '/draft/configurator', piece: 'configurator' },
+  { name: 'An agent-built website', year: '2026', href: '/draft/website', piece: 'html-brand-website' },
+]
+
+// Before AI: the earlier work, on its own rail, each introduced by what it taught
+const BEFORE_AI: typeof PROJECTS = [
+  { name: 'SEEK, fixing the funnel', year: '2024', href: '/draft/seek', piece: 'seek' },
+  { name: 'Booking in two panels', year: '2021', href: '/draft/bestpractice', piece: 'bestpractice' },
 ]
 
 // Creative: the games, on their own rail
@@ -87,8 +92,14 @@ const CSS = `
 .dr-gh .text-xs, .dr-gh .text-sm { font-size: 13px; line-height: 20px; }
 .dr-gh .text-muted { color: ${GREY}; }
 .dr-gh .text-foreground { color: ${INK}; font-weight: 400; }
+/* A Stageshow scene on a desktop: its own grey ground goes, so the wallpaper shows */
+.dr-desk .rl--bare .rl .ss-stage { background: transparent; }
 /* Back from a case study: the page is already known, so it's there at once */
 .dr-still .dr-word, .dr-still .dr-fog, .dr-still .dr-rise { animation: none; opacity: 1; }
+/* No room above (the link near the top of the window): it opens below instead, so it's always whole */
+.dr-peek[data-below] .dr-peek-card { bottom: auto; top: calc(100% + 10px); transform-origin: 50% 0; transform: translateX(-50%) translateY(-6px) scale(.96); }
+.dr-peek[data-below]:focus-visible .dr-peek-card { transform: translateX(-50%); }
+@media (hover: hover) and (pointer: fine) { .dr-peek[data-below]:hover .dr-peek-card { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) { .dr-word, .dr-fog, .dr-rise { animation: none; opacity: 1; } .dr-peek-card, .dr-peek:hover .dr-peek-card { transform: translateX(-50%); } }
 `
 
@@ -103,6 +114,9 @@ const RATIO = 1.6
 // sat empty for seconds: their entrance animations are skipped here, straight to where they end.
 // near: the rail is close to the screen, so every card loads ahead of being scrolled to
 const NO_ENTRANCE = '*, *::before, *::after { animation-delay: 0s !important; animation-duration: 0s !important; }'
+// Every card is framed the same way, Shader Wall's: the clip fills a window inset on the grey, a
+// desktop and its apps. Dispatch's and Thesis's pages are cleared down to their app windows (the
+// showcase's css), so they sit on a desktop of their own (Desk), never a second grey
 const ITEMS = Object.fromEntries(Object.values(PIECES).map((p) => {
   const item = { ...heroItem(p), matte: p.matte ? 'transparent' : undefined }
   return [p.id, item.scene?.src ? { ...item, scene: { ...item.scene, css: [...(item.scene.css ?? []), NO_ENTRANCE] } } : item]
@@ -110,9 +124,20 @@ const ITEMS = Object.fromEntries(Object.values(PIECES).map((p) => {
 function Live({ id, focus, near }: { id: string; focus: boolean; near: boolean }) {
   const item = ITEMS[id]
   if (!item) return null
-  return <Media item={item} playing={focus} near={near || undefined} />
+  const media = <Media item={item} playing={focus} near={near || undefined} />
+  return PIECES[id]?.matte ? <Desk palette={DESKS[id] ?? 0}>{media}</Desk> : media
 }
-const onlyWindows = (id: string) => !!PIECES[id]?.matte
+
+// A desktop wallpaper (a Shader Wall palette) for the clips and scenes that are only windows
+const DESKS: Record<string, number> = { dispatch: 1, thesis: 3, rfp: 0 }
+function Desk({ palette, children }: { palette: number; children: ReactNode }) {
+  return (
+    <div className="absolute inset-0">
+      <Shader p={{ speed: 0.3, swirl: 0.5, grain: 0, hue: 0, palette }} />
+      <div className="absolute inset-0">{children}</div>
+    </div>
+  )
+}
 
 // The work inset on the card's grey by \`pad\` on every side, the card taking the work's own ratio
 // so the gap is even all round, and the corners concentric: the card's radius is the window's
@@ -189,7 +214,7 @@ function CompaniesCard({ logos, seekDots }: { logos: Logos; seekDots: boolean })
     <div className="grid grid-cols-1 gap-1 rounded-[20px] p-1 min-[480px]:grid-cols-3" style={{ background: SHELL }}>
       {COMPANIES.map((c) => (
         <article key={c.name} className="flex flex-col gap-6 rounded-[16px] bg-white p-4 min-[480px]:min-h-[176px]" style={{ boxShadow: SHADOW }}>
-          {logos !== 'none' && <Mark id={c.mark === 'seek' && seekDots ? 'seek-dots' : c.mark} outline={logos === 'outline'} />}
+          {logos !== 'none' && <Mark id={seekDots ? `${c.mark}-dots` : c.mark} outline={logos === 'outline'} />}
           <div className="flex flex-col gap-1">
             <h3 className="font-normal">{c.name}</h3>
             <p className="text-[13px] leading-[20px] text-pretty" style={{ color: GREY }}>{c.about}</p>
@@ -209,7 +234,7 @@ function CompaniesCard({ logos, seekDots }: { logos: Logos; seekDots: boolean })
 function WorkCard({ p, focus, near, pad }: { p: (typeof PROJECTS)[number]; focus: boolean; near: boolean; pad: number }) {
   const card = (
     <div className="flex flex-col gap-4">
-      {p.scene ? <div className="overflow-hidden" style={{ aspectRatio: 540 / 340, borderRadius: outer(pad), background: SHELL }}>{p.scene}</div> : <Framed pad={pad} ratio={RATIO} bare={onlyWindows(p.piece)}><Live id={p.piece} focus={focus} near={near} /></Framed>}
+      <Framed pad={pad} ratio={RATIO}>{p.scene ? <Desk palette={DESKS[p.piece] ?? 0}><div className="dr-desk absolute inset-0" data-ss-fill>{p.scene}</div></Desk> : <Live id={p.piece} focus={focus} near={near} />}</Framed>
       <div className="flex justify-between gap-4"><span>{p.name}</span><span className="tabular-nums" style={{ color: GREY }}>{p.year}</span></div>
     </div>
   )
@@ -267,10 +292,10 @@ function Controls({ logos, setLogos, seekDots, setSeekDots, pad, setPad }: { log
         </div>
       </div>
       <div className="flex flex-col gap-1.5">
-        <span style={{ color: GREY }}>SEEK mark</span>
+        <span style={{ color: GREY }}>Logo marks</span>
         <div className="grid grid-cols-2 gap-1 rounded-[10px] p-0.5" style={{ background: SHELL }}>
           {[false, true].map((d) => (
-            <button key={String(d)} onClick={() => setSeekDots(d)} className="rounded-[8px] py-1 transition-[background-color,box-shadow] duration-150" style={d === seekDots ? { background: '#fff', boxShadow: '0 1px 2px rgba(0,0,0,0.08)' } : { color: GREY }}>{d ? 'Dots' : 'Disc'}</button>
+            <button key={String(d)} onClick={() => setSeekDots(d)} className="rounded-[8px] py-1 transition-[background-color,box-shadow] duration-150" style={d === seekDots ? { background: '#fff', boxShadow: '0 1px 2px rgba(0,0,0,0.08)' } : { color: GREY }}>{d ? 'Dots' : 'Solid'}</button>
           ))}
         </div>
       </div>
@@ -282,11 +307,21 @@ function Controls({ logos, setLogos, seekDots, setSeekDots, pad, setPad }: { log
   )
 }
 
+// Before a landing-page card opens: below the link if it wouldn't fit above (the card is about 230 tall)
+const peekRoom = (e: { currentTarget: HTMLElement }) => {
+  e.currentTarget.toggleAttribute('data-below', e.currentTarget.getBoundingClientRect().top < 250)
+}
+
 // The intro plays once per visit: on the first load, not when you come back to the page from a case
 // study. Module state lives as long as the app does in the tab, so a reload plays it again
 let introPlayed = false
 // Where the page was when you left it, so coming back puts you there again
 let leftAt = 0
+const KNOBS = { logos: 'plain' as Logos, seekDots: true, pad: 12 }
+function useKnob<K extends keyof typeof KNOBS>(k: K) {
+  const [v, setV] = useState(KNOBS[k])
+  return [v, (next: (typeof KNOBS)[K]) => { KNOBS[k] = next; setV(next) }] as const
+}
 
 export default function DraftHome() {
   const [intro] = useState(() => !introPlayed)
@@ -302,9 +337,10 @@ export default function DraftHome() {
     return () => window.removeEventListener('scroll', keep)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
   const [copied, setCopied] = useState(false)
-  const [logos, setLogos] = useState<Logos>('outline')
-  const [seekDots, setSeekDots] = useState(true)
-  const [pad, setPad] = useState(12)
+  // The controls' choices, kept for the visit like the intro, so going to a case study and back keeps them
+  const [logos, setLogos] = useKnob('logos')
+  const [seekDots, setSeekDots] = useKnob('seekDots')
+  const [pad, setPad] = useKnob('pad')
   // press E: copy the email, as justinschueler.com does
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
@@ -345,7 +381,7 @@ export default function DraftHome() {
             as="p"
             lead="Alongside the day job, I build my own products."
             rest={PRODUCTS.map((p, i) => (
-              <span key={p.name}><a href={p.href} target="_blank" rel="noopener noreferrer" className="dr-link dr-peek">{p.name}<span className="dr-peek-card" aria-hidden>{/* eslint-disable-next-line @next/next/no-img-element */}<img src={p.landing} alt="" /><span>{p.href.replace(/^https:\/\/(www\.)?/, '')}</span></span></a>{i < PRODUCTS.length - 2 ? ', ' : i === PRODUCTS.length - 2 ? ' and ' : '.'}</span>
+              <span key={p.name}><a href={p.href} target="_blank" rel="noopener noreferrer" className="dr-link dr-peek" onPointerEnter={peekRoom} onFocus={peekRoom}>{p.name}<span className="dr-peek-card" aria-hidden>{/* eslint-disable-next-line @next/next/no-img-element */}<img src={p.landing} alt="" /><span>{p.href.replace(/^https:\/\/(www\.)?/, '')}</span></span></a>{i < PRODUCTS.length - 2 ? ', ' : i === PRODUCTS.length - 2 ? ' and ' : '.'}</span>
             ))}
           />
           <Rail
@@ -353,18 +389,41 @@ export default function DraftHome() {
             items={PRODUCTS}
             render={(p, focus, near) => (
               <a href={p.href} target="_blank" rel="noopener noreferrer" className="flex flex-col gap-4">
-                <Framed pad={pad} ratio={RATIO} bare={onlyWindows(p.piece)}><Live id={p.piece} focus={focus} near={near} /></Framed>
+                <Framed pad={pad} ratio={RATIO}><Live id={p.piece} focus={focus} near={near} /></Framed>
                 <span>{p.name}</span>
               </a>
             )}
           />
         </section>
 
-        <section id="projects" className="dr-rise scroll-mt-10" style={rise(1)}>
+        <section id="projects" className="dr-rise flex scroll-mt-10 flex-col gap-16" style={rise(1)}>
+          <Headline
+            as="p"
+            lead="AI has fundamentally changed design."
+            rest={PROJECTS.map((p, i) => (
+              <span key={p.name}><Link href={p.href!} className="dr-link">{p.name.replace(/^An /, 'an ')}</Link>{i < PROJECTS.length - 2 ? ', ' : i === PROJECTS.length - 2 ? ' and ' : '.'}</span>
+            ))}
+          />
           <Rail label="Projects" items={PROJECTS} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={pad} />} />
         </section>
 
-        <section className="dr-rise" style={rise(2)}>
+        <section className="dr-rise flex flex-col gap-16" style={rise(1)}>
+          <Headline
+            as="p"
+            lead="Before AI."
+            rest={<>At <Link href="/draft/seek" className="dr-link">SEEK</Link> I learned a release is where the work starts: follow the funnel, one leak at a time. At <Link href="/draft/bestpractice" className="dr-link">Best Practice</Link>, the craft was in small decisions, like three toggles becoming one control.</>}
+          />
+          <Rail label="Before AI" items={BEFORE_AI} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={pad} />} />
+        </section>
+
+        <section className="dr-rise flex flex-col gap-16" style={rise(2)}>
+          <Headline
+            as="p"
+            lead="AI enables so much more."
+            rest={<>Internal tools that help build the thing, scratching a curious itch, or dreaming big: {CREATIVE.map((p, i) => (
+              <span key={p.name}><Link href={p.href!} className="dr-link">{p.name}</Link>{i < CREATIVE.length - 2 ? ', ' : i === CREATIVE.length - 2 ? ' and ' : '.'}</span>
+            ))}</>}
+          />
           <Rail label="Creative" items={CREATIVE} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={pad} />} />
         </section>
 
@@ -385,7 +444,7 @@ export default function DraftHome() {
             <a href={`mailto:${EMAIL}`} className="dr-link" style={{ color: INK }}>{EMAIL}</a>
             <span>{copied ? 'Copied' : 'press E'}</span>
           </div>
-          <div className="flex gap-5"><Link href="/draft/essays">Essays</Link><Link href="/cv">CV</Link><Link href="/contact">Contact</Link><Link href="/changelog">Changelog</Link></div>
+          <div className="flex gap-5"><Link href="/draft/essays">Essays</Link><Link href="/cv">CV</Link><a href="https://x.com/garethchainey" target="_blank" rel="noopener noreferrer">X ↗</a><Link href="/contact">Contact</Link><Link href="/changelog">Changelog</Link></div>
         </footer>
       </main>
       <Controls logos={logos} setLogos={setLogos} seekDots={seekDots} setSeekDots={setSeekDots} pad={pad} setPad={setPad} />

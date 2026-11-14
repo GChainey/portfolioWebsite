@@ -36,7 +36,7 @@ export const PARKED: ParkedItem[] = [
     status: 'local',
     since: '2026-11-13',
     summary: 'The homepage redesigned in justinschueler.com\'s narrow column with the simpler style system from the Polar audit: companies as cards with facet marks, products and projects as real clips on the grey, a Creative rail, essays and skills as cards, and the first short case study (RFP).',
-    links: [{ label: 'Draft homepage', href: '/draft' }, { label: 'Short RFP case study', href: '/draft/rfp' }, { label: 'Essays', href: '/draft/essays' }],
+    links: [{ label: 'Draft homepage', href: '/draft' }, { label: 'DAISY Assess', href: '/draft/daisy-assess' }, { label: 'Website', href: '/draft/website' }, { label: 'Configurator', href: '/draft/configurator' }, { label: 'SEEK', href: '/draft/seek' }, { label: 'Best Practice', href: '/draft/bestpractice' }, { label: 'Essays', href: '/draft/essays' }],
     gate: 'PARKED_LIVE: app/draft/layout.tsx returns 404 off the dev server',
     todo: ['Write the EAI one-liner', 'Short case studies for the other projects: impact, craft, what AI made possible', 'Pick the logo style and card padding, then remove the controls panel', 'Decide whether it replaces the live homepage'],
   },
