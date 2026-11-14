@@ -20,7 +20,8 @@ export const CHANGELOG: ChangelogEntry[] = [
     description: 'The tab’s G is redrawn in the facet style of the app icons from the prototypes’ admin screens: solid planes, no strokes, one gap between planes.',
     changes: [
       'Tab icon and home-screen icon share one mark, drawn as SVG paths in a 100-unit box like the facet app icons',
-      'A round G: its bar and spur are their own plane, one gap off the bowl; white on the site’s amber so it holds on light and dark tab bars',
+      'A ring with its right side cut flat and a bar laid in, one gap clear of the ring below it',
+      'Black on a grey card, like the set; the amber tile is gone',
     ],
     aiTools: ['Claude Code'],
     branch: 'GChainey/favicon-conductor-logo-update',
