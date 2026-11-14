@@ -16,11 +16,11 @@ export const CHANGELOG: ChangelogEntry[] = [
   {
     version: '3.8.1',
     date: '2026-11-13',
-    title: 'A Facet GC Favicon',
-    description: 'The amber G in the tab becomes GC drawn in the facet style of the app icons from the prototypes’ admin screens: solid planes, no strokes, one gap between planes.',
+    title: 'A Facet G Favicon',
+    description: 'The tab’s G is redrawn in the facet style of the app icons from the prototypes’ admin screens: solid planes, no strokes, one gap between planes.',
     changes: [
       'Tab icon and home-screen icon share one mark, drawn as SVG paths in a 100-unit box like the facet app icons',
-      'The G’s bar and spur are their own plane, one gap off its bowl; white on the site’s amber so it holds on light and dark tab bars',
+      'A round G: its bar and spur are their own plane, one gap off the bowl; white on the site’s amber so it holds on light and dark tab bars',
     ],
     aiTools: ['Claude Code'],
     branch: 'GChainey/favicon-conductor-logo-update',
