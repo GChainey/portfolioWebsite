@@ -38,6 +38,20 @@ export function Shell({ children, className = '' }: { children: ReactNode; class
   )
 }
 
+// The text column, and the wider measure the work runs at so it leads
+export const COL = 'min(540px, calc(100vw - 48px))'
+export const WIDE = 'min(720px, calc(100vw - 48px))'
+
+// A moment: the work in a shell, wider than the text, one grey line under it on the column
+export function Moment({ children, line }: { children: ReactNode; line: ReactNode }) {
+  return (
+    <figure className="flex flex-col gap-3" style={{ marginInline: `calc((${COL} - ${WIDE}) / 2)` }}>
+      <Shell><div data-ss-fill>{children}</div></Shell>
+      <figcaption className="self-center text-[13px] leading-[20px]" style={{ width: COL, color: GREY }}>{line}</figcaption>
+    </figure>
+  )
+}
+
 // Label grey on the left, value ink on the right, a hairline above
 export function Rows({ rows }: { rows: [label: string, value: ReactNode][] }) {
   return (
