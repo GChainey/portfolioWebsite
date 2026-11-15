@@ -14,6 +14,21 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.10.0',
+    date: '2026-11-15',
+    title: 'The Apps Table, First and Last',
+    description: 'A craft beat for the short case studies at /draft/apps-table (dev server only): the workspace\'s Apps table as first built and as it is now, marked up in red whiteboard marker with what was wrong and what changed.',
+    changes: [
+      'MarkedUp: a screenshot with hand-drawn rings, arrows and words in Permanent Marker, placed in the screenshot\'s own pixels so they stay on target at any width',
+      'Rings draw on, one note after another, when the picture scrolls into view; with reduced motion they are simply there',
+      'On a phone the words would be too small, so they become numbered marks with the notes listed underneath',
+      'First (8 Sep) and last (13 Nov) taken from the prototypes repo at those commits, sidebar collapsed, at 2x',
+      'Moment (the work in a shell, wider than the text) moved into the draft\'s shared styles so every short case study can use it',
+    ],
+    aiTools: ['Claude Code', 'Paper'],
+    branch: 'GChainey/apps-table-first-last',
+  },
+  {
     version: '3.9.0',
     date: '2026-11-13',
     title: 'A Draft Homepage, Simpler Styles',

@@ -1,28 +1,14 @@
 'use client'
 
-import type { ReactNode } from 'react'
 import Link from 'next/link'
 import { RfpLetter } from '@/components/stageshow/RfpLetter'
 import { RecordingReplay } from '@/components/replay/RecordingReplay'
-import { GREY, Headline, INK, Rows, Shell } from '../style'
+import { GREY, Headline, INK, Moment, Rows } from '../style'
 
 // A short case study in the draft's narrow design (/draft/rfp): enough of the work to get someone
 // interested and no more. The claim, the result, three moments that show it (a Stageshow scene and
 // two replays) and what happened. The text keeps to the 540px column; the artefacts run wider
-// (up to 720) so the work leads. Styles from ../style.
-
-const COL = 'min(540px, calc(100vw - 48px))'
-const WIDE = 'min(720px, calc(100vw - 48px))'
-
-// A moment: the work in a shell, wider than the text, one grey line under it on the column
-function Moment({ children, line }: { children: ReactNode; line: string }) {
-  return (
-    <figure className="flex flex-col gap-3" style={{ marginInline: `calc((${COL} - ${WIDE}) / 2)` }}>
-      <Shell><div data-ss-fill>{children}</div></Shell>
-      <figcaption className="self-center text-[13px] leading-[20px]" style={{ width: COL, color: GREY }}>{line}</figcaption>
-    </figure>
-  )
-}
+// (up to 720) so the work leads. Styles and Moment from ../style.
 
 export default function DraftRfp() {
   return (
