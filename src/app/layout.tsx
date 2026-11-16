@@ -25,7 +25,7 @@ export const viewport: Viewport = { themeColor: '#ffffff' }
 
 export const metadata: Metadata = {
   title: 'Gareth Chainey | Product Designer × AI',
-  description: 'Product designer showcasing the transformation of design through AI',
+  description: 'Gareth Chainey, an Aussie product designer in New York. I design by building: working prototypes, made with AI, that help small teams win big deals.',
 }
 
 export default function RootLayout({

@@ -3,19 +3,19 @@
 import Link from 'next/link'
 import { RfpLetter } from '@/components/stageshow/RfpLetter'
 import { RecordingReplay } from '@/components/replay/RecordingReplay'
-import { GREY, Headline, INK, Moment, Rows } from '../style'
+import { EMAIL, GREY, Headline, INK, LINE, Moment, Rows } from '@/components/site/style'
 
-// A short case study in the draft's narrow design (/draft/rfp): enough of the work to get someone
+// A short case study in the homepage's narrow design (/work/rfp): enough of the work to get someone
 // interested and no more. The claim, the result, three moments that show it (a Stageshow scene and
 // two replays) and what happened. The text keeps to the 540px column; the artefacts run wider
-// (up to 720) so the work leads. Styles and Moment from ../style.
+// (up to 720) so the work leads. Styles and Moment from components/site/style.
 
-export default function DraftRfp() {
+export default function RfpCaseStudy() {
   return (
     <div className="min-h-screen overflow-x-clip bg-white text-[15px] leading-[22px]" style={{ color: INK }}>
       <main className="mx-auto flex max-w-[588px] flex-col gap-24 px-6 pb-24 pt-16">
         <header className="flex items-start justify-between">
-          <Link href="/draft" className="transition-opacity hover:opacity-70">← Gareth Chainey</Link>
+          <Link href="/" className="transition-opacity hover:opacity-70">← Gareth Chainey</Link>
           <span style={{ color: GREY }}>Enterprise AI, 2025</span>
         </header>
 
@@ -49,6 +49,11 @@ export default function DraftRfp() {
           <Headline lead="What happened next." rest="The prototype outlived the tender." />
           <Rows rows={[['Today', 'Still iterated on'], ['Engineering', 'Kept building on it, no hand-off'], ['Design', 'Ahead of the build, not held to its limits']]} />
         </section>
+
+        <footer className="flex flex-col gap-4 border-t pt-8" style={{ borderColor: LINE }}>
+          <Headline lead="The rest is better as a conversation." rest={<>Write to me at <a href={`mailto:${EMAIL}`} className="underline decoration-[#c8c8c8] underline-offset-4 transition-[text-decoration-color] duration-150 hover:decoration-current">{EMAIL}</a>.</>} />
+          <Link href="/" className="self-start transition-opacity hover:opacity-70" style={{ color: GREY }}>← Back to the work</Link>
+        </footer>
       </main>
     </div>
   )

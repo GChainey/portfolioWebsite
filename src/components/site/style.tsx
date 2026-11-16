@@ -14,6 +14,8 @@ import { projectHref, writing } from '@/content/projects'
 // Rows    label grey on the left, value ink on the right; one hairline between groups.
 // Space   4 8 12 16 24 32 48 64 96 only.
 
+export const EMAIL = 'gareth.chainey@gmail.com'
+
 export const INK = '#181818'
 export const GREY = '#666666'
 export const LINE = '#EBEBEB'

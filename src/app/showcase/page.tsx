@@ -57,7 +57,7 @@ export default function ShowcaseLaunchpad() {
             {DESIGNS.map((v, i) => (
               <Link
                 key={v.id}
-                href={`/?design=${v.id}`}
+                href={`/classic?design=${v.id}`}
                 className={`group block p-6 border-b border-border ${i % 3 !== 2 ? 'lg:border-r' : ''} ${i % 2 === 0 ? 'sm:max-lg:border-r' : ''}`}
               >
                 <div className="relative overflow-hidden rounded-xl border border-border bg-[#fafafa]" style={{ aspectRatio: '16 / 10' }}>
@@ -107,7 +107,7 @@ export default function ShowcaseLaunchpad() {
             {VARIANTS.map((v, i) => (
               <Link
                 key={v.id}
-                href={`/?home=${v.id}#work`}
+                href={`/classic?home=${v.id}#work`}
                 className={`group block p-6 border-b border-border ${i % 3 !== 2 ? 'lg:border-r' : ''} ${i % 2 === 0 ? 'sm:max-lg:border-r' : ''}`}
               >
                 <div className="relative overflow-hidden rounded-xl border border-border bg-black" style={{ aspectRatio: '16 / 10' }}>
