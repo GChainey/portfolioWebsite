@@ -3,6 +3,9 @@
 import { type ReactNode, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { RfpLetter } from '@/components/stageshow/RfpLetter'
+import { SeekAllTab } from '@/components/stageshow/SeekAllTab'
+import { SeekCards } from '@/components/stageshow/SeekCards'
+import { SeekConnect } from '@/components/stageshow/SeekConnect'
 import { RecordingReplay } from '@/components/replay/RecordingReplay'
 import { Funnel, type FunnelData } from '@/components/site/funnel'
 import { Contents } from '@/components/site/contents'
@@ -19,7 +22,7 @@ export type Media =
   | { replay: string; region?: Region; phone?: boolean; ground?: boolean } // an HTML replay, sharp at any size. phone: a phone-sized recording, shown in an iPhone on the grey (region crops off its own status bar). ground: the recording paints its own grey page, so it fills the shell with no white panel round it
   | { video: string; ratio: number } // the pre-AI work, which only exists as video. Below 1, a phone
   | { stills: string[] } // a few stills side by side, two to a row
-  | { scene: 'rfp-letter' } // a Stageshow scene
+  | { scene: 'rfp-letter' | 'seek-all-tab' | 'seek-cards' | 'seek-connect' } // a Stageshow scene
   | { image: string; ratio: number } // a cut-out still (phones on a transparent ground), standing on the grey
   | { funnel: FunnelData } // the interactive funnel: first release, or after the fixes
   | { before: string; after: string } // two phone recordings side by side: the original, then the fix
@@ -109,7 +112,7 @@ function Art({ media }: { media: Media }) {
   if ('replay' in media && media.phone) return <PhoneReplay src={media.replay} region={media.region} />
   if ('replay' in media && media.ground) return <div className="overflow-hidden rounded-[24px]" style={{ background: SHELL }}><RecordingReplay src={media.replay} region={media.region} bare /></div>
   if ('replay' in media) return <Mat><RecordingReplay src={media.replay} region={media.region} bare /></Mat>
-  if ('scene' in media) return <Shell scene><div data-ss-fill><RfpLetter bare /></div></Shell>
+  if ('scene' in media) return <Shell scene><div data-ss-fill>{media.scene === 'seek-all-tab' ? <SeekAllTab bare /> : media.scene === 'seek-cards' ? <SeekCards bare /> : media.scene === 'seek-connect' ? <SeekConnect bare /> : <RfpLetter bare />}</div></Shell>
   if ('video' in media) {
     // A phone recording stands on the grey, the height of a landscape clip. The recording is the
     // phone, bezel and all, on black: round it to the bezel's corners so the black doesn't show

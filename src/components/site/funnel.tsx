@@ -4,12 +4,12 @@ import { useEffect, useRef, useState } from 'react'
 import { GREY, INK, LINE, SHELL } from '@/components/site/style'
 
 // The funnel, redrawn from the long SEEK case study for the short template: a funnel of stages,
-// the leaks in ink with the assumption beside each (the site's tones, no hue). One switch flips it from the first
-// release to after the fixes: the leaks close (the funnel widens and they turn white like the rest), each assumption becomes its fix,
+// the steps where people dropped out in ink, the assumption about why beside each (the site's tones, no hue). One switch flips it from the first
+// release to after the fixes: those steps close (the funnel widens and they turn white like the rest), each assumption becomes its fix,
 // and the result at the bottom goes from one number to the other. A card links to its section.
 // It draws itself in once, the first time it scrolls into view.
 
-export type FunnelStage = { label: string; leak?: string; fix?: string; href?: string }
+export type FunnelStage = { label: string; assumption?: string; fix?: string; href?: string } // assumption: why people dropped out here
 export type FunnelState = { label: string; result: string; widths: number[] } // widths: % of the column, one per stage
 export type FunnelData = { stages: FunnelStage[]; before: FunnelState; after: FunnelState }
 
@@ -37,7 +37,7 @@ export function Funnel({ data }: { data: FunnelData }) {
   }, [])
 
   const state = fixed ? data.after : data.before
-  const leaks = data.stages.map((s, i) => ({ s, i })).filter(({ s }) => s.leak)
+  const leaks = data.stages.map((s, i) => ({ s, i })).filter(({ s }) => s.assumption)
   const side = (i: number) => (leaks.findIndex((l) => l.i === i) % 2 === 0 ? 'right' : 'left')
   const enter = (delay: number) => ({
     opacity: shown ? 1 : 0,
@@ -47,8 +47,8 @@ export function Funnel({ data }: { data: FunnelData }) {
 
   const card = (s: FunnelStage, n: number) => (
     <a href={s.href} className="block rounded-[12px] bg-white px-3 py-2 text-[13px] leading-[20px] transition-transform duration-150 ease-out active:scale-[0.97]" style={{ boxShadow: `0 0 0 1px ${LINE}` }}>
-      <span style={{ color: GREY }}>{fixed ? `Fix ${n}` : `Leak ${n}`}</span>
-      <span className="block text-pretty" style={{ color: INK }}>{fixed ? s.fix : s.leak}</span>
+      <span style={{ color: GREY }}>{fixed ? `Fix ${n}` : `Assumption ${n}`}</span>
+      <span className="block text-pretty" style={{ color: INK }}>{fixed ? s.fix : s.assumption}</span>
     </a>
   )
 
@@ -71,7 +71,7 @@ export function Funnel({ data }: { data: FunnelData }) {
       <div className="grid w-full grid-cols-1 gap-y-1 min-[600px]:grid-cols-[1fr_minmax(0,280px)_1fr] min-[600px]:gap-x-6">
         {data.stages.map((s, i) => {
           const n = leaks.findIndex((l) => l.i === i) + 1
-          const leak = !!s.leak
+          const leak = !!s.assumption
           return (
             <div key={s.label} className="contents">
               <div className="relative hidden h-14 min-[600px]:block" style={enter(500 + i * 60)}>{leak && side(i) === 'left' && <div className="absolute inset-x-0 top-1/2 -translate-y-1/2">{card(s, n)}</div>}</div>

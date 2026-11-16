@@ -1,0 +1,80 @@
+/* SEEK's current look, from recreations/seek/seek.css (Inter stands in for SEEK Sans) */
+@font-face { font-family: 'SAT Inter'; src: url(/stageshow/seek/inter-latin.woff2) format('woff2'); font-weight: 100 900; font-display: block; }
+
+.sat .ss-stage {
+  --sat-ink: #1C2330;
+  --sat-body: #2E3849;
+  --sat-muted: #5A6881;
+  --sat-blue: #1E47A8;
+  --sat-navy: #0D3880;
+  --sat-line: #E3E6EA;
+  --sat-card-line: #D3D7DE;
+  --sat-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --ss-font: 'SAT Inter', Inter, -apple-system, system-ui, sans-serif;
+  overflow: hidden;
+  border-radius: 20px;
+  /* The case study's grey shell; the scene paints the same grey as its own ground */
+  background: var(--frame-ground, #F4F4F4);
+  font-family: var(--ss-font);
+}
+
+/* The phone: centred, pinned a gutter from the top, off the bottom */
+.sat .sat-phone { position: absolute; top: 48px; left: 190px; }
+.sat .sat-phone[data-layout="compact"] { top: 24px; left: 24px; }
+
+/* The screen, in iOS points */
+.sat .sat-screen { position: absolute; inset: 62px 0 0; display: flex; flex-direction: column; height: 100%; color: var(--sat-body); font: 400 15px/22px var(--ss-font); }
+.sat .sat-bar { display: flex; align-items: center; justify-content: space-between; height: 52px; padding: 0 16px; border-bottom: 1px solid var(--sat-line); flex: none; }
+.sat .sat-wordmark { font-weight: 700; font-size: 22px; letter-spacing: -0.02em; color: var(--sat-navy); }
+.sat .sat-bar__end { display: flex; align-items: center; gap: 18px; }
+.sat .sat-menu { display: grid; gap: 5px; width: 20px; }
+.sat .sat-menu i { display: block; height: 2px; border-radius: 1px; background: var(--sat-ink); }
+
+.sat .sat-module { padding: 20px 16px 0; flex: none; }
+.sat .sat-title { font: 600 20px/26px var(--ss-font); color: var(--sat-ink); letter-spacing: -0.01em; }
+
+/* Tabs: the selected one blue with its underline; All grows in at the front and the rest make room */
+.sat .sat-tabs { display: flex; margin-top: 14px; border-bottom: 1px solid var(--sat-line); white-space: nowrap; overflow: hidden; }
+.sat .sat-tab { position: relative; flex: none; display: block; padding: 6px 0 10px; margin-right: 20px; font-size: 16px; line-height: 20px; color: var(--sat-muted); transition: color 200ms ease; }
+.sat .sat-tab::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; border-radius: 2px; background: var(--sat-blue); transform: scaleX(0); transition: transform 260ms var(--sat-ease); }
+.sat .sat-tab[data-on] { color: var(--sat-blue); }
+.sat .sat-tab--more { display: flex; align-items: center; height: 36px; padding: 0; }
+.sat .sat-tab[data-on]::after { transform: scaleX(1); }
+.sat .sat-all { flex: none; display: block; width: 0; overflow: hidden; opacity: 0; transition: width 480ms var(--sat-ease), opacity 260ms ease; }
+.sat .sat-all[data-in] { width: 39px; opacity: 1; transition: width 480ms var(--sat-ease), opacity 260ms ease 120ms; }
+
+/* The list: three layers in one cell, one shown; a swap fades and lifts 8px */
+.sat .sat-scroller { flex: 1; min-height: 0; }
+.sat .sat-scroller .ss-scroll { height: 100%; overflow: hidden; }
+.sat .sat-stack { display: grid; grid-template-columns: minmax(0, 1fr); padding: 0 16px 32px; }
+.sat .sat-layer { grid-area: 1 / 1; min-width: 0; will-change: transform; opacity: 0; transform: translateY(8px); transition: opacity 220ms ease, transform 220ms var(--sat-ease); pointer-events: none; }
+.sat .sat-layer[data-show] { opacity: 1; transform: none; transition-delay: 90ms; }
+/* All's groups arrive one after another */
+.sat .sat-layer[data-show] .sat-group { animation: none; }
+.sat .sat-layer .sat-group { will-change: transform; transition: opacity 260ms ease, transform 260ms var(--sat-ease); }
+.sat .sat-layer:not([data-show]) .sat-group { opacity: 0; transform: translateY(8px); }
+.sat .sat-layer[data-show] .sat-group:nth-child(2) { transition-delay: 140ms; }
+.sat .sat-layer[data-show] .sat-group:nth-child(3) { transition-delay: 220ms; }
+
+.sat .sat-group { margin-top: 24px; }
+.sat .sat-group__title { font: 600 18px/24px var(--ss-font); color: var(--sat-ink); }
+.sat .sat-group__title--under { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1.5px; }
+.sat .sat-group__bar { margin: 6px 0; }
+.sat .sat-rail { display: flex; gap: 12px; margin-top: 14px; margin-right: -16px; overflow: hidden; }
+.sat .sat-card { flex: none; width: 260px; padding: 16px; border: 1px solid var(--sat-card-line); border-radius: 16px; background: #fff; display: flex; flex-direction: column; }
+.sat .sat-card__title { font: 600 15px/21px var(--ss-font); color: var(--sat-ink); }
+.sat .sat-card__bar { margin: 6px 0; }
+.sat .sat-card__sub { margin-top: 7px; }
+.sat .sat-card__facts { display: grid; gap: 9px; margin-top: 16px; }
+
+/* The note, top-left at the gutter: two versions in one cell, crossfading. No room beside a
+   compact phone, so it stays wide-only */
+.sat .sat-note { position: absolute; left: 48px; top: 48px; width: 118px; display: grid; }
+.sat .ss-stage[data-layout="compact"] .sat-note { visibility: hidden; }
+.sat .sat-note__text { grid-area: 1 / 1; display: flex; flex-direction: column; gap: 4px; font-size: 13px; line-height: 18px; opacity: 0; transition: opacity 300ms ease; }
+.sat .sat-note__text[data-show] { opacity: 1; transition-delay: 150ms; }
+.sat .sat-note__text b { font-weight: 600; color: #181818; }
+.sat .sat-note__text span { color: #666; }
+
+/* Bare: inside the case study's shell, which is already the grey and the corners */
+.sat--bare .ss-stage { border-radius: 0; }

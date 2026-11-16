@@ -119,46 +119,46 @@ export const STUDIES: Study[] = [
       },
 
       // 3. The funnel
-      { lead: 'We laid the journey out as a funnel.', rest: 'Five steps, three of them leaking. Within a week or two we had a fix out for each.' },
+      { lead: 'We laid the journey out as a funnel.', rest: 'Five steps, and people were dropping out at three. One assumption for each, and within a week or two a fix out for each.' },
       {
         moment: {
           funnel: {
             stages: [
               { label: 'Sees the courses' },
-              { label: 'Finds the right course', leak: 'Too much friction to find one', fix: 'An All tab, made the default', href: '#find' },
-              { label: 'Picks a course', leak: 'The cards all look the same', fix: 'Logo and course name first', href: '#pick' },
+              { label: 'Finds the right course', assumption: 'Too much friction to find a course', fix: 'An All tab, made the default', href: '#find' },
+              { label: 'Picks a course', assumption: 'Missing design details', fix: 'Logo and course name first', href: '#pick' },
               { label: 'Reads about it' },
-              { label: 'Enquires or visits', leak: 'Too many steps to get there', fix: 'Enquire in place, in a sheet', href: '#connect' },
+              { label: 'Enquires or visits', assumption: 'Too long to make a connection', fix: 'Enquire in place, in a sheet', href: '#connect' },
             ],
             before: { label: 'First release', result: '9%', widths: [100, 78, 58, 52, 44] },
             after: { label: 'After the fixes', result: '20%', widths: [100, 94, 88, 84, 78] },
           },
         },
-        line: 'Switch between the first release and the fixes. One assumption per leak, one small fix for each, measured one at a time.',
+        line: 'Switch between the first release and the fixes. One assumption where people dropped out, one small fix for each, measured one at a time.',
       },
 
       // 4. Piece by piece
       {
         id: 'find',
-        lead: 'Leak 1: too much friction to find a course.',
+        lead: 'Too much friction to find a course.',
         rest: 'So, an All tab, made the default.',
         body: 'You had to work through the tabs one at a time to see what was on offer. Now every qualification is on one page, and the tabs are still there as shortcuts.',
       },
-      { moment: { before: '/replays/seek/release.json', after: '/replays/seek/all-tab.json' }, line: 'Before, one qualification at a time. After, an All tab by default: every qualification on one scroll, the tabs kept as shortcuts.' },
+      { moment: { scene: 'seek-all-tab' }, line: 'The first release swapped the list a tab at a time. The fix: an All tab, first and selected, with every qualification on one scroll and the tabs kept as shortcuts.' },
       {
         id: 'pick',
-        lead: 'Leak 2: the cards all looked the same.',
+        lead: 'Missing design details.',
         rest: 'So, the provider’s logo and the course name first.',
         body: 'The first cards were mostly text, with the provider’s name where the course name should be. The new card leads with the logo and the course, then the provider, how long it takes, where and when.',
       },
-      { moment: { before: '/replays/seek/cards-before.json', after: '/replays/seek/cards-after.json' }, line: 'Before, the provider’s name where the course should be. After, the logo and the course name first.' },
+      { moment: { scene: 'seek-cards' }, line: 'Before the fix, every card read the same: text only, the provider where the course goes. After it, each card leads with the provider’s logo and the course name, with the provider under it.' },
       {
         id: 'connect',
-        lead: 'Leak 3: too many steps to make a connection.',
+        lead: 'Too long to make a connection.',
         rest: 'So, it moved into a sheet on the same page.',
         body: 'A course took you off the career page to a separate course page, and only there could you ask the provider for more.',
       },
-      { moment: { before: '/replays/seek/connect-before.json', after: '/replays/seek/connect-after.json' }, line: 'Before, a course page and then a form page. After, a sheet on the same page, with the form in it.' },
+      { moment: { scene: 'seek-connect' }, line: 'Before the fix, a course opened its own page and the form another. After it, the course opens in a sheet over the same page, and Enquire turns the sheet into the form.' },
 
       // 5. The impact
       {
@@ -179,14 +179,14 @@ export const STUDIES: Study[] = [
         list: [
           'Ship small and early, so you have a baseline to measure against.',
           'Lay the journey out as steps, and find where people drop out.',
-          'Write down one assumption for each leak.',
-          'Ship one small fix per leak, and measure each on its own.',
+          'Write down one assumption for each place people drop out.',
+          'Ship one small fix for each, and measure each on its own.',
         ],
       },
       {
         lead: 'What I took from it.',
         list: [
-          'A usability test tells you whether people can use something, not whether they will. The tabs passed testing and still leaked.',
+          'A usability test tells you whether people can use something, not whether they will. The tabs passed testing and still lost people.',
           'A release is where the work starts, not where it ends.',
         ],
       },
