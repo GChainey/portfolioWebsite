@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.13.1',
+    date: '2026-11-16',
+    title: 'Leading With the Work',
+    description: 'The homepage gets to the work sooner: the line about what I do at Enterprise AI now introduces the projects, straight after the contributions, ahead of the companies and products.',
+    changes: [
+      'The EAI line heads the projects rail; "AI has fundamentally changed design" and the "Projects" label go, since the sentence introduces the work',
+      'Companies, then products, follow the work',
+      'A rail can hide its visible label and keep it for screen readers',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/lead-with-work',
+  },
+  {
     version: '3.13.0',
     date: '2026-11-16',
     title: 'What I Do at EAI, One-Grey Company Cards, Dot Logos',
