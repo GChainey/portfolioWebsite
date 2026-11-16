@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.13.3',
+    date: '2026-11-16',
+    title: 'Companies on Hover',
+    description: 'The companies section is hidden for now. Each company shows where its name comes up instead: hover Enterprise AI, SEEK or Best Practice for its card.',
+    changes: [
+      'A hover card per company (dot logo on a white tile, what it is, role and years) on its name in the EAI line and the Before AI sentence, dotted underline; keyboard focus opens it too',
+      'The Companies section is hidden; its cards stay in components/site/companies.tsx',
+      'The review panel keeps only the EAI line options',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/company-peek',
+  },
+  {
     version: '3.13.2',
     date: '2026-11-16',
     title: 'Homepage Order: Products, Then the Day Job',
