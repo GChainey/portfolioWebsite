@@ -5,8 +5,8 @@ import { GREY, INK, LINE, SHADOW } from './style'
 
 // The table of contents that shows once you scroll past the headline: the old article one
 // (FixedTableOfContents), redrawn in the site's tones. At rest it's a short line per section to the
-// left of the column, the one you're reading longer and darker; click it for the list, click a
-// section to go there. It sits in the margin outside the work's 720px column and opens leftwards,
+// left of the column, the one you're reading longer and darker; point at it (or click, or focus it)
+// for the list, click a section to go there. It sits in the margin outside the work's 720px column and opens leftwards,
 // so it never covers a recording: only on screens wide enough for that (xl, 1280+).
 
 export type Section = { id: string; label: string }
@@ -18,6 +18,10 @@ export function Contents({ sections, after }: { sections: Section[]; after: stri
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState<string | null>(null)
   const panel = useRef<HTMLDivElement>(null)
+  const leave = useRef<ReturnType<typeof setTimeout>>(undefined)
+  // Hover opens it; leaving closes it after a beat, so a slightly wide path to a section doesn't drop it
+  const enter = () => { clearTimeout(leave.current); setOpen(true) }
+  const exit = () => { clearTimeout(leave.current); leave.current = setTimeout(() => setOpen(false), 180) }
 
   // Show once the headline (#after) has scrolled off
   useEffect(() => {
@@ -57,6 +61,8 @@ export function Contents({ sections, after }: { sections: Section[]; after: stri
   return (
     <nav
       aria-label="Contents"
+      onPointerEnter={(e) => { if (e.pointerType === 'mouse') enter() }}
+      onPointerLeave={(e) => { if (e.pointerType === 'mouse') exit() }}
       className="fixed top-1/2 z-40 hidden flex-col items-end xl:flex"
       style={{
         // Its right edge 32px outside the 720px work column
@@ -68,7 +74,7 @@ export function Contents({ sections, after }: { sections: Section[]; after: stri
       }}
     >
       {!open ? (
-        <button onClick={() => setOpen(true)} aria-label="Open contents" className="flex flex-col items-end gap-[6px] px-1 py-2">
+        <button onClick={() => setOpen(true)} onFocus={() => setOpen(true)} aria-label="Open contents" className="flex flex-col items-end gap-[6px] px-1 py-2">
           {sections.map((s, i) => (
             <span key={s.id} className="block h-[2px] rounded-full" style={{
               width: s.id === active ? 24 : 12,

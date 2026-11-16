@@ -69,7 +69,8 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&l
 
 // ---------- State ----------
 const V = new URLSearchParams(location.search).get('v') || 'final'
-if (new URLSearchParams(location.search).get('divider') === '0') document.documentElement.classList.add('no-divider')
+// The two panels are told apart by tone alone (Gareth, 2026-11-16); ?divider=1 brings the line back
+if (new URLSearchParams(location.search).get('divider') !== '1') document.documentElement.classList.add('no-divider')
 const S = {
   patient: null, query: '', open: null, // open: which popover ('patient' | 'type' | 'providers' | 'unit' | 'on' | 'end')
   type: 'Short appointment', duration: 15,

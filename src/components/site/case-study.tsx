@@ -22,6 +22,7 @@ export type Media =
   | { scene: 'rfp-letter' } // a Stageshow scene
   | { image: string; ratio: number } // a cut-out still (phones on a transparent ground), standing on the grey
   | { funnel: FunnelData } // the interactive funnel: first release, or after the fixes
+  | { before: string; after: string } // two phone recordings side by side: the original, then the fix
 
 export type Block =
   | { moment: Media; line: string }
@@ -45,29 +46,60 @@ function Video({ src }: { src: string }) {
 // status bar), its outer width ÷ height
 const IPHONE_RATIO = (402 + 26) / (874 + 26)
 
-// A phone-sized recording in an iPhone, standing on the grey. The phone is sized to the shell's
-// height (24px clear above and below), so it's as big as the frame allows on any screen
-function PhoneReplay({ src, region }: { src: string; region?: Region }) {
+// A phone-sized recording in the iPhone, the recording filling the whole screen: its own status bar
+// sits under the Dynamic Island, so a sheet's dimming covers it as iOS does
+function IPhone({ src, region, width }: { src: string; region?: Region; width: number }) {
+  return (
+    <Phone width={width} frame="pro" status={false} className="case-phone" style={{ filter: 'drop-shadow(0 16px 24px rgba(0,0,0,0.12))' }}>
+      <RecordingReplay src={src} region={region} bare />
+    </Phone>
+  )
+}
+
+// The phones are sized to the shell's height (24px clear above and below, and room for a label
+// over a pair), so they're as big as the frame allows on any screen
+function useFit(pad: number) {
   const box = useRef<HTMLDivElement>(null)
   const [width, setWidth] = useState(0)
   useEffect(() => {
     const el = box.current
     if (!el) return
-    const fit = () => setWidth(Math.round((el.clientHeight - 48) * IPHONE_RATIO))
+    const fit = () => setWidth(Math.round((el.clientHeight - pad) * IPHONE_RATIO))
     fit()
     const ro = new ResizeObserver(fit)
     ro.observe(el)
     return () => ro.disconnect()
-  }, [])
+  }, [pad])
+  return [box, width] as const
+}
+
+function PhoneReplay({ src, region }: { src: string; region?: Region }) {
+  const [box, width] = useFit(48)
   return (
     <div ref={box} className="flex aspect-[5/4] items-center justify-center rounded-[20px]" style={{ background: SHELL }}>
-      {width > 0 && <Phone width={width} frame="pro" style={{ filter: 'drop-shadow(0 16px 24px rgba(0,0,0,0.12))' }}><RecordingReplay src={src} region={region} bare /></Phone>}
+      {width > 0 && <IPhone src={src} region={region} width={width} />}
+    </div>
+  )
+}
+
+// The original and the fix, side by side: two phones on one grey, each labelled
+function PhonePair({ before, after }: { before: string; after: string }) {
+  const [box, width] = useFit(84)
+  return (
+    <div ref={box} className="flex aspect-[5/4] items-center justify-center gap-6 rounded-[20px] min-[600px]:gap-12" style={{ background: SHELL }}>
+      {width > 0 && [['Before', before], ['After', after]].map(([label, src]) => (
+        <div key={label} className="flex flex-col items-center gap-3">
+          <span className="text-[13px] leading-[20px]" style={{ color: GREY }}>{label}</span>
+          <IPhone src={src} width={Math.min(width, 280)} />
+        </div>
+      ))}
     </div>
   )
 }
 
 function Art({ media }: { media: Media }) {
   if ('funnel' in media) return <Funnel data={media.funnel} />
+  if ('before' in media) return <PhonePair before={media.before} after={media.after} />
   if ('image' in media) return (
     <div className="rounded-[20px] p-3 min-[600px]:p-6" style={{ background: SHELL }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -138,6 +170,8 @@ export function CaseStudy({ study }: { study: Study }) {
         {blocks}
       </main>
       <Contents sections={sections} after="study-top" />
+      {/* The recordings carry their own status bar and safe area: the kit's would double them */}
+      <style>{'.case-phone .ss-phone__content{padding-top:0!important}.case-phone .ss-phone__home{display:none}'}</style>
     </div>
   )
 }

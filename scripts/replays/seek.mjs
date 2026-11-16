@@ -84,6 +84,24 @@ await clip('seek/cards', async (r) => {
   await hold(r)
 })
 
+// Leak 2, side by side: the same row of cards before and after, each swiped once
+for (const [name, after] of [['seek/cards-before', false], ['seek/cards-after', true]]) {
+  await clip(name, async (r) => {
+    const { page } = r
+    await open(r, 'cards')
+    if (after) await page.evaluate(() => swapCards())
+    await page.evaluate(() => scrollTo(0, 250))
+    await page.waitForTimeout(400)
+    await r.start()
+    await r.wait(1400)
+    await swipe(r, page.locator('.rail').first(), 280)
+    await r.wait(1400)
+    await swipe(r, page.locator('.rail').first(), -280)
+    await r.wait(1200)
+    await hold(r)
+  })
+}
+
 // Leak 3 before: a card leaves the page for a course page, then a form on another page
 await clip('seek/connect-before', async (r) => {
   const { page } = r

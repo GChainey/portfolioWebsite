@@ -39,8 +39,8 @@ button { font: inherit; color: inherit; border: 0; background: none; padding: 0;
 a { color: inherit; text-decoration: none; cursor: pointer; }
 h1, h2, h3, p { margin: 0; }
 
-/* Status bar and SEEK's header */
-.status { height: 47px; display: flex; align-items: center; justify-content: space-between; padding: 6px 30px 0 38px; color: #000; font: 600 16px/1 -apple-system, Inter, sans-serif; }
+/* Status bar (pinned, as iOS's is; the sheet's dimming covers it) and SEEK's header */
+.status { position: sticky; top: 0; z-index: 5; background: #fff; height: 47px; display: flex; align-items: center; justify-content: space-between; padding: 6px 30px 0 38px; color: #000; font: 600 16px/1 -apple-system, Inter, sans-serif; }
 .status .icons { display: flex; gap: 6px; align-items: center; }
 .status svg { fill: currentColor; }
 .bar { height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid var(--line); background: #fff; }
@@ -117,7 +117,7 @@ h1, h2, h3, p { margin: 0; }
 .facts-panel dd { margin: 0; color: var(--ink); text-align: right; }
 .page h2 { margin-top: 28px; font: 600 18px/24px Inter, sans-serif; color: var(--ink); }
 .page h2 + p { margin-top: 8px; }
-.dock { position: fixed; left: 0; right: 0; bottom: 0; max-width: 430px; margin: 0 auto; padding: 16px 16px 34px; background: #fff; border-top: 1px solid var(--line); }
+.dock { position: fixed; z-index: 6; left: 0; right: 0; bottom: 0; max-width: 430px; margin: 0 auto; padding: 16px 16px 34px; background: #fff; border-top: 1px solid var(--line); }
 
 /* Fields */
 .form { display: grid; gap: 16px; margin-top: 20px; }
@@ -128,8 +128,8 @@ h1, h2, h3, p { margin: 0; }
 .select.input { display: flex; margin-top: 0; }
 
 /* The sheet */
-.scrim { position: fixed; inset: 0; background: var(--scrim); opacity: 0; transition: opacity 300ms ease; }
-.sheet { position: fixed; left: 0; right: 0; bottom: 0; max-width: 430px; margin: 0 auto; background: #fff; border-radius: 24px 24px 0 0; padding: 12px 20px 34px; transform: translateY(100%); transition: transform 420ms var(--ease-drawer); max-height: calc(100vh - 60px); overflow-y: auto; }
+.scrim { position: fixed; inset: 0; z-index: 10; background: var(--scrim); opacity: 0; transition: opacity 300ms ease; }
+.sheet { position: fixed; z-index: 11; left: 0; right: 0; bottom: 0; max-width: 430px; margin: 0 auto; background: #fff; border-radius: 24px 24px 0 0; padding: 12px 20px 34px; transform: translateY(100%); transition: transform 420ms var(--ease-drawer); max-height: calc(100vh - 60px); overflow-y: auto; }
 .open .scrim { opacity: 1; }
 .open .sheet { transform: none; }
 .handle { width: 36px; height: 5px; border-radius: 3px; background: var(--card-line); margin: 0 auto 18px; }
