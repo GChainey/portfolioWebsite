@@ -8,6 +8,7 @@ import type { Study } from '@/components/site/case-study'
 
 const BP = '/case-studies/bestpractice-booking'
 const SEEK = '/case-studies/seek-learning'
+const PHONE = 390 / 844 // the SEEK recreation is recorded at a phone's size
 const SITE = '/case-studies/html-brand-website'
 
 export const STUDIES: Study[] = [
@@ -96,7 +97,7 @@ export const STUDIES: Study[] = [
       ['Role', 'Lead designer, in a team of seven'],
     ],
     blocks: [
-      { moment: { hero: { desktop: `${SEEK}/final-desktop.mp4`, desktopRatio: 1506 / 978, phone: `${SEEK}/connection-mobile.mp4`, phoneRatio: 540 / 1114 } }, line: 'Courses on a SEEK career page, as they shipped: desktop and phone.' },
+      { moment: { hero: { desktop: `${SEEK}/final-desktop.mp4`, desktopRatio: 1506 / 978, phone: '/replays/seek/hero.json', phoneRatio: PHONE, phoneReplay: true } }, line: 'Courses on a SEEK career page, as they shipped: desktop and phone.' },
 
       // 1. The release
       {
@@ -108,7 +109,7 @@ export const STUDIES: Study[] = [
           'Pick a course, read about it, then enquire or visit the provider’s site. That last step is the premium connection providers pay for.',
         ],
       },
-      { moment: { video: `${SEEK}/mvp.mp4`, ratio: 540 / 1114 }, line: 'The first release: one qualification at a time.' },
+      { moment: { replay: '/replays/seek/release.json', phone: PHONE }, line: 'The first release: one qualification at a time.' },
 
       // 2. The goals, and the miss
       {
@@ -144,23 +145,22 @@ export const STUDIES: Study[] = [
         rest: 'So, an All tab, made the default.',
         body: 'You had to work through the tabs one at a time to see what was on offer. Now every qualification is on one page, and the tabs are still there as shortcuts.',
       },
-      { moment: { video: `${SEEK}/all-tab.mp4`, ratio: 540 / 1114 }, line: 'The All tab: every qualification on one scroll.' },
+      { moment: { replay: '/replays/seek/all-tab.json', phone: PHONE }, line: 'The All tab: every qualification on one scroll, the tabs kept as shortcuts.' },
       {
         id: 'pick',
         lead: 'Leak 2: the cards all looked the same.',
         rest: 'So, the provider’s logo and the course name first.',
         body: 'The first cards were mostly text, with the provider’s name where the course name should be. The new card leads with the logo and the course, then the provider, how long it takes, where and when.',
       },
-      { moment: { image: `${SEEK}/select-a-course.webp`, ratio: 2000 / 1334 }, line: 'Left, the first card. Right, the new one.' },
+      { moment: { replay: '/replays/seek/cards.json', phone: PHONE }, line: 'The first cards, then the logo and course name first.' },
       {
         id: 'connect',
         lead: 'Leak 3: too many steps to make a connection.',
-        rest: 'So, the connection moved onto the page.',
+        rest: 'So, it moved into a sheet on the same page.',
         body: 'A course took you off the career page to a separate course page, and only there could you ask the provider for more.',
       },
-      { moment: { video: `${SEEK}/connection-before.mp4`, ratio: 1600 / 958 }, line: 'Before: the career page, then a course page, then the form.' },
-      { moment: { video: `${SEEK}/flyout.mp4`, ratio: 1600 / 1166 }, line: 'After: a course card opens a fly-out with Enquire and Visit website, and the form opens in place.' },
-      { moment: { video: `${SEEK}/connection-mobile.mp4`, ratio: 540 / 1114 }, line: 'On a phone the same thing slides up as a sheet.' },
+      { moment: { replay: '/replays/seek/connect-before.json', phone: PHONE }, line: 'Before: a course leaves for its own page, then a form on another page.' },
+      { moment: { replay: '/replays/seek/connect-after.json', phone: PHONE }, line: 'After: the course opens in a sheet, and the enquiry form opens in it.' },
 
       // 5. The impact
       {
@@ -198,15 +198,81 @@ export const STUDIES: Study[] = [
     slug: 'bestpractice',
     label: 'Best Practice',
     meta: '2021',
-    lead: 'Booking an appointment, in two panels.',
-    rest: 'Repeats and injury claims fit in without the dialog getting any longer.',
-    rows: [['Tested with', '5 people, on a Figma prototype'], ['They', 'Understood it, and could tell an appointment’s state at a glance']],
+    // For a recruiter: a form that grew with every feature, made into a pattern that new features
+    // slot into. No numbers were measured in testing, so none are claimed. Recreated in Microsoft's
+    // Fluent design system as HTML recordings (recreations/bestpractice, scripts/replays/bestpractice.mjs)
+    lead: 'A booking dialog that got longer with every feature, redesigned so new features don’t.',
+    rest: 'Two panels: the appointment on the left, the work on the right.',
+    rows: [
+      ['Pattern', 'Repeats and injury claims fit in, and the dialog didn’t get longer'],
+      ['Tested with', '5 people: they understood it and could finish the workflows'],
+      ['Used by', 'Australia’s largest practice management system'],
+      ['Role', 'Lead designer, in a team of five'],
+    ],
     blocks: [
-      { moment: { video: `${BP}/final.mp4`, ratio: 1600 / 986 }, line: 'Provider, date and time in one row, and the row is the door to the right panel.' },
-      { lead: 'Small decisions, all the way down.', rest: 'Three toggles became one segmented control.' },
-      { moment: { video: `${BP}/repeat.mp4`, ratio: 1600 / 1148 }, line: 'A repeat collapses into one line: every 2 weeks, 3 of 5 occurrences.' },
-      { moment: { video: `${BP}/provider-dates.mp4`, ratio: 1600 / 986 }, line: 'Each provider has their own date.' },
-      { moment: { video: `${BP}/unavailable.mp4`, ratio: 1600 / 986 }, line: 'An unavailable provider shows their next free time, one click from it.' },
+      { moment: { replay: '/replays/bestpractice/final.json', ground: true }, line: 'Find the patient, pick three providers, jump to the next free day, book.' },
+
+      // 1. The problem
+      {
+        lead: 'Booking is what a receptionist does all day.',
+        rest: 'It was slow, and the dialog grew with every feature.',
+        list: [
+          'You had to pick a provider before you could see a time. Receptionists start from the other end: when is anyone free?',
+          'Repeats, the waiting list, urgent appointments and conflicts were each added inline, so the dialog grew downwards every time.',
+        ],
+      },
+      { moment: { image: `${BP}/fluent-steps.png`, ratio: 2222 / 1721 }, line: 'The first version: pick a provider, then see their times.' },
+      { moment: { replay: '/replays/bestpractice/before.json', ground: true }, line: 'Each new feature made the same dialog longer.' },
+
+      // 2. The goals
+      {
+        lead: 'Three goals, and three things to measure.',
+        rest: 'Pre-launch, so no customers to talk to.',
+        list: [
+          'Fast, and the way receptionists really work.',
+          'Readable at a glance.',
+          'Robust enough for features that didn’t exist yet.',
+        ],
+        body: 'Measured by time to book, how often people book in the dialog instead of the calendar, and receptionist satisfaction.',
+      },
+
+      // 3. What didn't work
+      { lead: 'Keeping it all inline didn’t hold up.', rest: 'Every new feature would mean another fight for space.' },
+      { moment: { stills: [`${BP}/fluent-iter-grid.png`, `${BP}/fluent-iter-tabs.png`] }, line: 'Every provider’s times in one grid, then a tab per provider. Neither was readable at a glance.' },
+
+      // 4. The idea, and the clean-up that made it work
+      {
+        lead: 'Split it in two.',
+        rest: 'The left panel is the appointment; anything that needs room opens on the right, then gets out of the way.',
+        body: 'For that to work the left panel had to be short. Two changes did most of it.',
+      },
+      { moment: { image: `${BP}/fluent-toggles.png`, ratio: 1788 / 647 }, line: 'Three switches allowed combinations that made no sense. One control, one choice.' },
+      { moment: { image: `${BP}/fluent-bundling.png`, ratio: 1934 / 743 }, line: 'Provider, date and time answer one question, so they became one row: the door to the right panel.' },
+
+      // 5. Proof: repeats, then a workflow that didn't exist yet
+      { lead: 'Repeats took the most room, so they were the proof.', rest: 'Set up on the right, one line on the left.' },
+      { moment: { replay: '/replays/bestpractice/repeat.json', ground: true }, line: 'A repeat folds into one line: every 2 weeks, 3 of 5 occurrences.' },
+      { moment: { replay: '/replays/bestpractice/injury-claim.json', ground: true }, line: 'An injury claim, a workflow still to come, in the same pattern: a row on the left, the work on the right.' },
+
+      // 6. Testing, and what it taught us
+      {
+        lead: 'Five people, the same booking tasks.',
+        rest: 'They understood it, could finish the workflows and could read an appointment at a glance.',
+        body: 'They also showed us how receptionists really juggle providers. Two things the design didn’t handle yet:',
+      },
+      { moment: { replay: '/replays/bestpractice/provider-dates.json', ground: true }, line: 'Each provider gets their own date, so you can compare across days.' },
+      { moment: { replay: '/replays/bestpractice/unavailable.json', ground: true }, line: 'A provider with nothing free shows their next available time, one click away.' },
+
+      // Why it travels
+      {
+        lead: 'It works on any form that keeps growing.',
+        rest: 'Settings, checkout, onboarding: the same three moves.',
+        list: [
+          'Keep a short summary on the left that you can read at a glance.',
+          'Do the work in a panel that opens beside it, then gets out of the way.',
+          'Test the pattern on features that don’t exist yet, not just today’s.',
+        ],
+      },
     ],
   },
 ]

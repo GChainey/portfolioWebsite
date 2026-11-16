@@ -14,13 +14,13 @@ import { COL, GREY, Headline, INK, LINE, Mat, Rows, SHELL, Shell, WIDE } from '@
 
 type Region = { x: number; y: number; width: number; height: number }
 export type Media =
-  | { replay: string; region?: Region } // an HTML replay, sharp at any size
+  | { replay: string; region?: Region; phone?: number; ground?: boolean } // an HTML replay, sharp at any size. phone: its width ÷ height, shown as a phone on the grey. ground: the recording paints its own grey page, so it fills the shell with no white panel round it
   | { video: string; ratio: number } // the pre-AI work, which only exists as video. Below 1, a phone
   | { stills: string[] } // a few stills side by side, two to a row
   | { scene: 'rfp-letter' } // a Stageshow scene
   | { image: string; ratio: number } // a cut-out still (phones on a transparent ground), standing on the grey
   | { funnel: FunnelData } // the interactive funnel: first release, or after the fixes
-  | { hero: { desktop: string; desktopRatio: number; phone: string; phoneRatio: number } } // desktop and phone together
+  | { hero: { desktop: string; desktopRatio: number; phone: string; phoneRatio: number; phoneReplay?: boolean } } // desktop and phone together; the phone a video or an HTML replay
 
 export type Block =
   | { moment: Media; line: string }
@@ -48,7 +48,9 @@ function Art({ media }: { media: Media }) {
     return (
       <div className="relative aspect-[16/10] overflow-hidden rounded-[24px]" style={{ background: SHELL }}>
         <div className="absolute left-[5%] top-[8%] w-[74%] overflow-hidden rounded-[10px] bg-white" style={{ aspectRatio: h.desktopRatio, boxShadow: `0 0 0 1px ${LINE}` }}><Video src={h.desktop} /></div>
-        <div className="absolute bottom-[8%] right-[5%] h-[84%] overflow-hidden" style={{ aspectRatio: h.phoneRatio, borderRadius: '15% / 7.2%', filter: 'drop-shadow(0 16px 24px rgba(0,0,0,0.18))' }}><Video src={h.phone} /></div>
+        {h.phoneReplay
+          ? <div className="absolute bottom-[8%] right-[5%] h-[84%] overflow-hidden rounded-[20px] bg-white" style={{ aspectRatio: h.phoneRatio, boxShadow: `0 0 0 1px ${LINE}, 0 16px 32px -12px rgba(0,0,0,0.25)` }}><RecordingReplay src={h.phone} bare /></div>
+          : <div className="absolute bottom-[8%] right-[5%] h-[84%] overflow-hidden" style={{ aspectRatio: h.phoneRatio, borderRadius: '15% / 7.2%', filter: 'drop-shadow(0 16px 24px rgba(0,0,0,0.18))' }}><Video src={h.phone} /></div>}
       </div>
     )
   }
@@ -58,6 +60,16 @@ function Art({ media }: { media: Media }) {
       <img src={media.image} alt="" className="block w-full" style={{ aspectRatio: media.ratio }} />
     </div>
   )
+  if ('replay' in media && media.phone) return (
+    // A phone-sized replay stands on the grey as a plain screen (no drawn bezel): rounded like a
+    // phone, a hairline edge, one soft shadow. A taller frame than a landscape clip, so it reads
+    <div className="relative aspect-[5/4] rounded-[20px]" style={{ background: SHELL }}>
+      <div className="absolute inset-y-6 left-1/2 -translate-x-1/2 overflow-hidden rounded-[28px] bg-white" style={{ aspectRatio: media.phone, boxShadow: `0 0 0 1px ${LINE}, 0 16px 32px -16px rgba(0,0,0,0.2)` }}>
+        <RecordingReplay src={media.replay} bare />
+      </div>
+    </div>
+  )
+  if ('replay' in media && media.ground) return <div className="overflow-hidden rounded-[24px]" style={{ background: SHELL }}><RecordingReplay src={media.replay} region={media.region} bare /></div>
   if ('replay' in media) return <Mat><RecordingReplay src={media.replay} region={media.region} bare /></Mat>
   if ('scene' in media) return <Shell scene><div data-ss-fill><RfpLetter bare /></div></Shell>
   if ('video' in media) {
