@@ -14,6 +14,15 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.13.2',
+    date: '2026-11-16',
+    title: 'Homepage Order: Products, Then the Day Job',
+    description: 'Intro, contributions, the products I build alongside the day job, then the day job: what I do at Enterprise AI and its projects. Companies follow.',
+    changes: ['Products move up under the contributions; the EAI line and its projects follow them, then companies'],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/home-order',
+  },
+  {
     version: '3.13.1',
     date: '2026-11-16',
     title: 'Leading With the Work',

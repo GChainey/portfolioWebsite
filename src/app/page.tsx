@@ -336,19 +336,8 @@ export default function Home() {
         {/* The contributions: the change in the role, from designing to building */}
         <div className="dr-fog dr-gh" style={fog}><GitHubContributions variant="full" animate={intro} /></div>
 
-        {/* The work first: what I do at EAI, then the projects it covers. The sentence introduces
-            them, so the rail has no label */}
-        <section id="projects" className="dr-fog flex scroll-mt-10 flex-col gap-16" style={fog}>
-          <Headline as="p" lead={ABOUT[about].lead} rest={ABOUT[about].rest} />
-          <Rail label="Work at Enterprise AI" hideLabel items={PROJECTS} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={PAD} />} />
-        </section>
-
-        <section className="dr-rise flex flex-col gap-6" style={rise(0)}>
-          <Label>Companies</Label>
-          <CompaniesCard variant={cards} tiles={tiles} />
-        </section>
-
-        <section className="dr-rise flex flex-col gap-16" style={rise(1)}>
+        {/* The products I build alongside the day job, then the day job */}
+        <section className="dr-fog flex flex-col gap-16" style={fog}>
           <Headline
             as="p"
             lead="Alongside the day job, I build my own products."
@@ -366,6 +355,20 @@ export default function Home() {
               </a>
             )}
           />
+        </section>
+
+
+        {/* What I do at EAI, then the projects it covers. The sentence introduces them, so the rail
+            has no label */}
+        <section id="projects" className="dr-rise flex scroll-mt-10 flex-col gap-16" style={rise(1)}>
+          <Headline as="p" lead={ABOUT[about].lead} rest={ABOUT[about].rest} />
+          <Rail label="Work at Enterprise AI" hideLabel items={PROJECTS} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={PAD} />} />
+        </section>
+
+
+        <section className="dr-rise flex flex-col gap-6" style={rise(2)}>
+          <Label>Companies</Label>
+          <CompaniesCard variant={cards} tiles={tiles} />
         </section>
 
         <section className="dr-rise flex flex-col gap-16" style={rise(2)}>
