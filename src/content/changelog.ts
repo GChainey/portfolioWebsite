@@ -14,6 +14,22 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.13.0',
+    date: '2026-11-16',
+    title: 'What I Do at EAI, One-Grey Company Cards, Dot Logos',
+    description: 'The homepage says what I do at Enterprise AI, the company cards become one grey surface with all three logos drawn in dots, the email copies on a click, and the contact page goes.',
+    changes: [
+      'A line under the contributions: "Currently I lead design at Enterprise AI. Some days that’s a prototype that wins a deal. Others it’s the website, a pull request to prod, or where the product goes next."',
+      'Company cards: one grey, the companies as columns with a hairline between them, logos on white tiles (components/site/companies.tsx)',
+      'Every company logo in dots: Enterprise AI and Best Practice redrawn on SEEK’s 5 × 5 dot grid (scripts/facets/company-marks.py)',
+      'The email in the footer copies on a click, as well as with E; /contact redirects home and leaves the nav',
+      'A review panel, bottom left on the dev server only, to flip between the EAI lines, the card styles and the logo tiles; each choice goes in the URL',
+      'External project links on /projects and in the experience dialog open in a new tab',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/company-cards',
+  },
+  {
     version: '4.3.2',
     date: '2026-11-15',
     title: 'Case Studies: Product on the Mat, No Big Number',

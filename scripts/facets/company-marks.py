@@ -53,6 +53,18 @@ def m_seek_dots():
         for k in range(a, b+1): dots.append(circle(50 + c*s, 50 + k*s, r, 24))
     return dots, []
 
+# The dot set: every mark on SEEK's 5 × 5 grid (pitch 12, radius 6, inset to one gap), so the
+# three logos read as one family. '#' is a dot, '.' a space; rows top to bottom
+def dots(rows):
+    h = len(rows); w = max(len(r) for r in rows)
+    cells = [(i - (w-1)/2, j - (h-1)/2) for j, row in enumerate(rows) for i, ch in enumerate(row) if ch == '#']
+    return lambda: ([circle(50 + x*12, 50 + y*12, 6, 24) for x, y in cells], [])
+
+# Enterprise AI, dots: the E's three bars as rows, the middle one short with its dot beside it
+m_eai_dots = dots(['#####', '.....', '###.#', '.....', '#####'])
+# Best Practice, dots: the hummingbird's raised wing, body and head, and its tail
+m_bird_dots = dots(['#..#.', '.####', '..##.', '.#...', '#....'])
+
 # Best Practice: its hummingbird, in planes: wing raised, body, head, beak, tail
 def m_bird():
     head = circle(66,30,12,40)
@@ -74,7 +86,7 @@ def fit(fn, box=62):
     T = lambda p: [(50+(x-cx)*s, 50+(y-cy)*s) for x,y in p]
     return [T(p) for p in facets], [T(p) for p in holes]
 
-MARKS = [('seek', m_seek), ('seek-dots', m_seek_dots), ('best-practice', m_bird), ('eai', m_eai)]
+MARKS = [('seek', m_seek), ('seek-dots', m_seek_dots), ('best-practice', m_bird), ('best-practice-dots', m_bird_dots), ('eai', m_eai), ('eai-dots', m_eai_dots)]
 
 if __name__ == '__main__':
     root = os.path.join(os.path.dirname(__file__), '..', '..')

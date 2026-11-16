@@ -62,6 +62,7 @@ export default function ProjectsPage() {
                   <Link
                     key={project.id}
                     href={project.externalUrl || `/projects/${project.id}`}
+                    {...(project.externalUrl ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                     className="group block"
                   >
                     <motion.div

@@ -8,7 +8,6 @@ export const LIVE_PATHS = [
   'src/app/page.tsx',
   'src/app/essays',
   'src/app/cv',
-  'src/app/contact',
   'src/app/projects',
   'src/app/changelog',
   'src/components/Visuals.tsx',

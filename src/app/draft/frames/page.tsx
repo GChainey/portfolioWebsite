@@ -4,6 +4,7 @@ import type { CSSProperties, ReactNode } from 'react'
 import Link from 'next/link'
 import { AppIconPicker } from '@/components/stageshow/AppIconPicker'
 import { MarkedUp } from '@/components/MarkedUp'
+import { CompaniesCard, type CompaniesVariant } from '@/components/site/companies'
 import { LAST, FRAME } from '@/content/apps-table-notes'
 import { COL, GREY, Headline, INK, LINE, SHADOW, SHELL, Shell, WIDE } from '@/components/site/style'
 
@@ -59,6 +60,13 @@ const VARIANTS: Variant[] = [
   { id: 'c', name: 'C · Canvas', note: 'A pale dotted field with a hairline edge, the way a design tool shows an artboard.', frame: Canvas },
 ]
 
+const COMPANY_VARIANTS: { key: string; id: CompaniesVariant; tiles?: 'white' | 'grey'; name: string; note: string }[] = [
+  { key: 'before', id: 'before', name: 'Before (live today)', note: 'Three white panels, each with its own shadow, on a grey ring.' },
+  { key: 'grey', id: 'grey', tiles: 'white', name: 'One grey, white logo tiles', note: 'No panels: the companies are columns on the grey, a hairline between them. The logo tiles are white.' },
+  { key: 'grey-grey', id: 'grey', tiles: 'grey', name: 'One grey, grey logo tiles', note: 'The same, with the logo tiles in the card’s own grey and a hairline round them: pure grey.' },
+  { key: 'flat', id: 'flat', name: 'Flat white', note: 'The white panels stay, inset 8px on the grey, with a hairline edge and no shadow.' },
+]
+
 function Pair({ v }: { v: Variant }) {
   return (
     <section className="flex flex-col gap-6">
@@ -88,6 +96,17 @@ export default function DraftFrames() {
         </header>
         <Headline as="h1" lead="How the work sits on the page." rest="Today’s, then three ways out." />
         {VARIANTS.map((v) => <Pair key={v.id} v={v} />)}
+
+        <Headline lead="The company cards." rest="The same question, for the homepage’s three companies." />
+        {COMPANY_VARIANTS.map((v) => (
+          <section key={v.key} id={`companies-${v.key}`} className="flex flex-col gap-6">
+            <div className="flex flex-col gap-1">
+              <span>{v.name}</span>
+              <span className="text-[13px] leading-[20px]" style={{ color: GREY }}>{v.note}</span>
+            </div>
+            <CompaniesCard variant={v.id} tiles={v.tiles} />
+          </section>
+        ))}
       </main>
     </div>
   )
