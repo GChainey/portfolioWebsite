@@ -141,7 +141,7 @@ function Label({ children, right }: { children: ReactNode; right?: ReactNode }) 
 
 // A row that runs the window's full width, the item in focus on the column, its neighbours smaller
 // and fainter either side (as justinschueler.com's projects do)
-function Rail<T>({ items, render, label }: { items: T[]; render: (item: T, focus: boolean, near: boolean) => ReactNode; label: string }) {
+function Rail<T>({ items, render, label, hideLabel = false }: { items: T[]; render: (item: T, focus: boolean, near: boolean) => ReactNode; label: string; hideLabel?: boolean }) {
   const row = useRef<HTMLDivElement>(null)
   const [near, setNear] = useState(false)
   useEffect(() => {
@@ -160,8 +160,8 @@ function Rail<T>({ items, render, label }: { items: T[]; render: (item: T, focus
     setAt(Math.min(items.length - 1, Math.max(0, Math.round(el.scrollLeft / (s[1].offsetLeft - s[0].offsetLeft)))))
   }
   return (
-    <div className="flex flex-col gap-6">
-      <Label>{label}</Label>
+    <div className="flex flex-col gap-6" role="region" aria-label={label}>
+      {!hideLabel && <Label>{label}</Label>}
       <div
         ref={row}
         onScroll={onScroll}
@@ -336,17 +336,19 @@ export default function Home() {
         {/* The contributions: the change in the role, from designing to building */}
         <div className="dr-fog dr-gh" style={fog}><GitHubContributions variant="full" animate={intro} /></div>
 
-        {/* What I do at EAI, then the companies */}
-        <section className="dr-fog flex flex-col gap-16" style={fog}>
+        {/* The work first: what I do at EAI, then the projects it covers. The sentence introduces
+            them, so the rail has no label */}
+        <section id="projects" className="dr-fog flex scroll-mt-10 flex-col gap-16" style={fog}>
           <Headline as="p" lead={ABOUT[about].lead} rest={ABOUT[about].rest} />
-
-          <div className="flex flex-col gap-6">
-            <Label>Companies</Label>
-            <CompaniesCard variant={cards} tiles={tiles} />
-          </div>
+          <Rail label="Work at Enterprise AI" hideLabel items={PROJECTS} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={PAD} />} />
         </section>
 
-        <section className="dr-rise flex flex-col gap-16" style={rise(0)}>
+        <section className="dr-rise flex flex-col gap-6" style={rise(0)}>
+          <Label>Companies</Label>
+          <CompaniesCard variant={cards} tiles={tiles} />
+        </section>
+
+        <section className="dr-rise flex flex-col gap-16" style={rise(1)}>
           <Headline
             as="p"
             lead="Alongside the day job, I build my own products."
@@ -364,11 +366,6 @@ export default function Home() {
               </a>
             )}
           />
-        </section>
-
-        <section id="projects" className="dr-rise flex scroll-mt-10 flex-col gap-16" style={rise(1)}>
-          <Headline as="p" lead="AI has fundamentally changed design." rest={listed(PROJECTS, (n) => n.replace(/^An /, 'an '))} />
-          <Rail label="Projects" items={PROJECTS} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={PAD} />} />
         </section>
 
         <section className="dr-rise flex flex-col gap-16" style={rise(2)}>
