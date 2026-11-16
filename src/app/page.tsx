@@ -148,7 +148,9 @@ function Label({ children, right }: { children: ReactNode; right?: ReactNode }) 
 }
 
 // A row that runs the window's full width, the item in focus on the column, its neighbours smaller
-// and fainter either side (as justinschueler.com's projects do)
+// and fainter either side (as justinschueler.com's projects do). A rail under a written sentence
+// hides its label (hideLabel): the sentence introduces the cards. Only sections with no sentence
+// (Kind words, Thoughts) keep a label
 function Rail<T>({ items, render, label, hideLabel = false }: { items: T[]; render: (item: T, focus: boolean, near: boolean) => ReactNode; label: string; hideLabel?: boolean }) {
   const row = useRef<HTMLDivElement>(null)
   const [near, setNear] = useState(false)
@@ -358,6 +360,7 @@ export default function Home() {
           />
           <Rail
             label="Products"
+            hideLabel
             items={PRODUCTS}
             render={(p, focus, near) => (
               <a href={p.href} target="_blank" rel="noopener noreferrer" className="flex flex-col gap-4">
@@ -386,12 +389,12 @@ export default function Home() {
             lead="Before AI."
             rest={<>At <Co name="SEEK" focusable={!liveHref('/draft/seek')}><StudyLink href="/draft/seek">SEEK</StudyLink></Co> I learned a release is where the work starts: follow the funnel, one leak at a time. At <Co name="Best Practice" focusable={!liveHref('/draft/bestpractice')}><StudyLink href="/draft/bestpractice">Best Practice</StudyLink></Co>, the craft was in small decisions, like three toggles becoming one control.</>}
           />
-          <Rail label="Before AI" items={BEFORE_AI} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={PAD} />} />
+          <Rail label="Before AI" hideLabel items={BEFORE_AI} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={PAD} />} />
         </section>
 
         <section className="dr-rise flex flex-col gap-16" style={rise(3)}>
           <Headline as="p" lead="AI enables so much more." rest={<>Internal tools that help build the thing, scratching a curious itch, or dreaming big: {listed(CREATIVE)}</>} />
-          <Rail label="Creative" items={CREATIVE} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={PAD} />} />
+          <Rail label="Creative" hideLabel items={CREATIVE} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={PAD} />} />
         </section>
 
         <section className="dr-rise flex flex-col gap-10" style={rise(4)}>
