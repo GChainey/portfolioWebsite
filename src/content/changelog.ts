@@ -14,6 +14,21 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '4.0.0',
+    date: '2026-11-15',
+    title: 'The Narrow Homepage Goes Live',
+    description: 'The draft design becomes the site: the narrow, written homepage at /, the first short case study at /work/rfp, and the essays in the same style. The old showcase homepage moves to /classic, unlisted.',
+    changes: [
+      'Homepage: the draft from /draft, with the review controls taken out and their picks kept (outlined marks, SEEK as dots, work inset 12px)',
+      'Winning a tender (/work/rfp) is the first public case study, linked from the Projects rail, and now ends on a way to start the conversation',
+      '/essays uses the new essay cards; the essays themselves are unchanged',
+      'Shared styles moved to components/site/style; titles and descriptions for link previews',
+      'The old homepage and all its ?design= variants live on at /classic; the Apps table craft beat stays on the dev server',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/f7y05',
+  },
+  {
     version: '3.10.0',
     date: '2026-11-15',
     title: 'The Apps Table, First and Last',

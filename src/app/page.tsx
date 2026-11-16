@@ -1,419 +1,359 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
-import { Header } from '@/components/Header'
-import { Visuals } from '@/components/Visuals'
-import { ChatPopup } from '@/components/ChatPopup'
+import { ChevronDown } from 'lucide-react'
 import { GitHubContributions } from '@/components/GitHubContributions'
-import { ThinkerCard } from '@/components/ThinkerCard'
-import { ShowcaseCarousel } from '@/components/ShowcaseCarousel'
-import { HomeTiles } from '@/components/HomeTiles'
-import { AutoplayShowcase } from '@/components/showcase/Autoplay'
-import { CoverflowShowcase } from '@/components/showcase/Coverflow'
-import { ScrollyShowcase } from '@/components/showcase/Scrolly'
-import { BillboardShowcase } from '@/components/showcase/Billboard'
-import { WallShowcase } from '@/components/showcase/Wall'
-import { PRODUCT_SLIDES, AI_SLIDES } from '@/content/showcase'
-import { writing, getProjectById } from '@/content/projects'
-import { TestimonialCarousel } from '@/components/TestimonialCarousel'
-import { WorkList } from '@/components/WorkList'
+import { Media, heroItem } from '@/components/HomeShowcase'
+import { SHOWCASE_SECTIONS } from '@/content/home-showcase'
+import { RfpLetter } from '@/components/stageshow/RfpLetter'
 import { TESTIMONIALS } from '@/content/testimonials'
-import { useFeatureFlags, HOME_LAYOUTS, type HomeLayout } from '@/context/FeatureFlagContext'
-import { thinkers } from '@/content/thinkers'
-import { ParticleField } from '@/components/ParticleField'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { ExperienceDialog } from '@/components/ExperienceDialog'
-import { PenflowSignature } from '@/components/PenflowSignature'
-import { Signature } from '@/components/Signature'
-import { SiteFooter } from '@/components/SiteFooter'
-import { EXPERIENCE } from '@/content/experience'
-import { HeroIntro } from '@/components/HeroIntro'
+import { COMPANY_MARKS } from '@/content/company-marks'
+import { EMAIL, EssayCard, ESSAYS, SKILLS, GREY, Headline, INK, LINE, SHADOW, SHELL } from '@/components/site/style'
 
-// Typewriter sequence: target text + pause after reaching it (ms)
-const TYPING_STEPS = [
-  { text: 'Designer', pause: 1500 },
-  { text: 'Designer?', pause: 1000 },
-  { text: '', pause: 300 },
-  { text: 'Engineer?', pause: 1000 },
-  { text: '', pause: 300 },
-  { text: 'Orchestrator', pause: 0 },
+// The homepage: justinschueler.com's narrow design with my content. One 540px column; styles from
+// components/site/style (after the Polar audit: one weight, four sizes,
+// ink and one grey, shells holding panels).
+// The statement lights up word by word while the rest waits in a fog; sections rise in after.
+// The work leads with Stageshow scenes where there is one (Shader Wall, the RFP letter) and clean
+// stills elsewhere: no coloured mats. Case studies are short, enough to start a conversation
+// (/work/rfp is the first).
+
+type Run = { text: string; href?: string }
+const STATEMENT: Run[] = [
+  { text: 'I’m Gareth, an Aussie product designer in New York. I design by building: ' },
+  { text: 'working prototypes', href: '#projects' },
+  { text: ', made with AI, that help small teams win big deals.' },
 ]
-const CHAR_DELAY = 80
 
-// Page context for chat
-const HOME_PAGE_CONTEXT = {
-  page: 'Home',
-  description: 'Portfolio homepage showing experience at Enterprise AI Group, SEEK, and Best Practice Software. Products built and shipped include Dispatch, Shader Wall and Thesis. Projects include RFP response system, ProductLite prototyping, and LLM Configurator.',
-  suggestedQuestions: [
-    "How has your role evolved with AI?",
-    "What's your design philosophy?",
-    "Tell me about your current work",
-  ],
-  followUpQuestions: [
-    "What tools do you use?",
-    "How do you prototype in code?",
-    "What's Shape Up?",
-    "Tell me about SEEK",
-  ]
+// Each company as a little card, the three side by side across the column: its mark (the facet
+// style of the prototypes' app icons, content/company-marks), the name, what the company is, then
+// the role and years. The EAI line is a placeholder until we write it
+const COMPANIES: { name: string; mark: string; about: string; role: string; years: string }[] = [
+  { name: 'Enterprise AI Group', mark: 'eai', about: 'A platform where consultants build apps with agents', role: 'Lead product designer', years: '2025 – now' },
+  { name: 'SEEK', mark: 'seek', about: 'Australia’s largest job marketplace', role: 'Senior product designer', years: '2022 – 2024' },
+  { name: 'Best Practice', mark: 'best-practice', about: 'Australia’s largest practice management platform', role: 'Product designer', years: '2019 – 2022' },
+]
+
+// landing: a still of the product's landing page, for the hover card on its name in the sentence
+// piece: the homepage showcase's piece (content/home-showcase), whose hero clip plays here: the
+// real page as an HTML replay (or the real video), so it's sharp at any size. On the card it sits
+// inset on the grey, by the padding the controls set
+const PRODUCTS: { name: string; href: string; landing: string; piece: string }[] = [
+  { name: 'Shader Wall', href: 'https://www.shaderwall.com', landing: '/draft/landing-shaderwall.jpg', piece: 'shader-wall' },
+  { name: 'Dispatch', href: 'https://www.dispatchmac.com', landing: '/draft/landing-dispatch.jpg', piece: 'dispatch' },
+  { name: 'Thesis', href: 'https://thesis-phi-self.vercel.app', landing: '/draft/landing-thesis.jpg', piece: 'thesis' },
+]
+
+// piece as the products; the RFP's is its Stageshow scene, which fills its card instead
+const PROJECTS: { name: string; year: string; href?: string; piece: string; scene?: ReactNode }[] = [
+  { name: 'Winning a tender', year: '2025', href: '/work/rfp', piece: 'rfp', scene: <RfpLetter bare /> },
+  { name: 'Testing on live models', year: '2025–26', piece: 'configurator' },
+  { name: 'An agent-built website', year: '2026', piece: 'html-brand-website' },
+  { name: 'SEEK, fixing the funnel', year: '2024', piece: 'seek' },
+  { name: 'Booking in two panels', year: '2021', piece: 'bestpractice' },
+]
+
+// Creative: the games, on their own rail
+const CREATIVE: typeof PROJECTS = [
+  { name: 'Opportunity sizing x Balatro', year: '2026', href: '/projects/balatro-opportunity-sizing', piece: 'balatro' },
+  { name: 'Wallbounce', year: '2026', href: '/projects/wallbounce-dev-tools', piece: 'wallbounce' },
+]
+
+
+const WORD_START = 0.3
+const WORD_STEP = 0.04
+const WORD_TIME = 0.9
+
+const CSS = `
+.dr-word { display: inline-block; opacity: .15; animation: dr-word ${WORD_TIME}s cubic-bezier(.23,1,.32,1) forwards; }
+@keyframes dr-word { to { opacity: 1 } }
+.dr-fog { animation: dr-fog 2.2s cubic-bezier(.23,1,.32,1) backwards; }
+@keyframes dr-fog { from { opacity: .2; filter: blur(8px) } to { opacity: 1; filter: none } }
+.dr-rise { animation: dr-rise .5s cubic-bezier(.2,0,0,1) backwards; }
+@keyframes dr-rise { from { opacity: 0; transform: translateY(12px) } to { opacity: 1; transform: none } }
+.dr-link { text-decoration-line: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; text-decoration-color: #c8c8c8; transition: text-decoration-color 150ms ease; }
+@media (hover: hover) and (pointer: fine) { .dr-link:hover { text-decoration-color: ${INK}; } }
+/* A product's landing page peeks up from its name: grows from the link, quick out */
+.dr-peek { position: relative; white-space: nowrap; }
+.dr-peek-card { position: absolute; left: 50%; bottom: calc(100% + 10px); z-index: 20; display: block; width: 288px; padding: 4px; border-radius: 16px; background: ${SHELL}; box-shadow: ${SHADOW}; opacity: 0; pointer-events: none; transform: translateX(-50%) translateY(6px) scale(.96); transform-origin: 50% 100%; transition: opacity 120ms ease, transform 120ms ease; }
+.dr-peek-card img { display: block; width: 100%; aspect-ratio: 16 / 10; border-radius: 12px; }
+.dr-peek-card span { display: block; padding: 6px 8px 2px; font-size: 13px; line-height: 20px; letter-spacing: 0; color: ${GREY}; }
+.dr-peek:focus-visible .dr-peek-card { opacity: 1; transform: translateX(-50%); transition: opacity 200ms cubic-bezier(.23,1,.32,1), transform 200ms cubic-bezier(.23,1,.32,1); }
+@media (hover: hover) and (pointer: fine) { .dr-peek:hover .dr-peek-card { opacity: 1; transform: translateX(-50%); transition: opacity 200ms cubic-bezier(.23,1,.32,1) 60ms, transform 200ms cubic-bezier(.23,1,.32,1) 60ms; } }
+/* The contributions graph is a shared component: bring its labels onto the page's type and greys */
+.dr-gh .text-xs, .dr-gh .text-sm { font-size: 13px; line-height: 20px; }
+.dr-gh .text-muted { color: ${GREY}; }
+.dr-gh .text-foreground { color: ${INK}; font-weight: 400; }
+/* Back from a case study: the page is already known, so it's there at once */
+.dr-still .dr-word, .dr-still .dr-fog, .dr-still .dr-rise { animation: none; opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .dr-word, .dr-fog, .dr-rise { animation: none; opacity: 1; } .dr-peek-card, .dr-peek:hover .dr-peek-card { transform: translateX(-50%); } }
+`
+
+const PIECES = Object.fromEntries(SHOWCASE_SECTIONS.flatMap((sec) => sec.pieces).map((p) => [p.id, p]))
+// The clips are laid out on the showcase's 1600x1000 stage
+const RATIO = 1.6
+
+// A piece's hero clip, playing while its card is in focus. Pieces whose page is cleared to just the
+// app's windows (Dispatch, Thesis) sit straight on the card's grey
+//
+// The recorded sites fade their windows in on load, and a replay plays that in real time, so a card
+// sat empty for seconds: their entrance animations are skipped here, straight to where they end.
+// near: the rail is close to the screen, so every card loads ahead of being scrolled to
+const NO_ENTRANCE = '*, *::before, *::after { animation-delay: 0s !important; animation-duration: 0s !important; }'
+const ITEMS = Object.fromEntries(Object.values(PIECES).map((p) => {
+  const item = { ...heroItem(p), matte: p.matte ? 'transparent' : undefined }
+  return [p.id, item.scene?.src ? { ...item, scene: { ...item.scene, css: [...(item.scene.css ?? []), NO_ENTRANCE] } } : item]
+}))
+function Live({ id, focus, near }: { id: string; focus: boolean; near: boolean }) {
+  const item = ITEMS[id]
+  if (!item) return null
+  return <Media item={item} playing={focus} near={near || undefined} />
+}
+const onlyWindows = (id: string) => !!PIECES[id]?.matte
+
+// The work inset on the card's grey by \`pad\` on every side, the card taking the work's own ratio
+// so the gap is even all round, and the corners concentric: the card's radius is the window's
+// plus the padding
+const INNER = 8
+// How far the work sits in from its card's edge
+const PAD = 12
+const outer = (pad: number) => pad + INNER
+function Framed({ pad, ratio, bare = false, children }: { pad: number; ratio: number; bare?: boolean; children: ReactNode }) {
+  return (
+    <div style={{ padding: pad, borderRadius: outer(pad), background: SHELL }}>
+      <div className="relative overflow-hidden" style={{ aspectRatio: ratio, borderRadius: INNER, boxShadow: pad && !bare ? SHADOW : undefined }}>{children}</div>
+    </div>
+  )
 }
 
-// Plain lists that close the page: the earlier jobs, the essays, then the small studies
-const EARLIER_WORK = ['seek-case-study-1', 'bestpractice-case-study-1']
-const SMALL_STUDIES = ['eai-settings', 'add-document']
-const ESSAYS = writing.filter((p) => p.category === 'Article').map((p) => p.id)
+function Label({ children, right }: { children: ReactNode; right?: ReactNode }) {
+  return <div className="flex items-baseline justify-between" style={{ color: GREY }}><h2 className="font-normal">{children}</h2>{right}</div>
+}
+
+// A row that runs the window's full width, the item in focus on the column, its neighbours smaller
+// and fainter either side (as justinschueler.com's projects do)
+function Rail<T>({ items, render, label }: { items: T[]; render: (item: T, focus: boolean, near: boolean) => ReactNode; label: string }) {
+  const row = useRef<HTMLDivElement>(null)
+  const [near, setNear] = useState(false)
+  useEffect(() => {
+    const el = row.current
+    if (!el) return
+    const io = new IntersectionObserver(([e]) => setNear(e.isIntersecting), { rootMargin: '100% 0px' })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+  const [at, setAt] = useState(0)
+  const COL = 'min(540px, calc(100vw - 48px))'
+  const onScroll = () => {
+    const el = row.current
+    const s = el?.querySelectorAll<HTMLElement>('[data-slide]')
+    if (!el || !s || s.length < 2) return
+    setAt(Math.min(items.length - 1, Math.max(0, Math.round(el.scrollLeft / (s[1].offsetLeft - s[0].offsetLeft)))))
+  }
+  return (
+    <div className="flex flex-col gap-6">
+      <Label>{label}</Label>
+      <div
+        ref={row}
+        onScroll={onScroll}
+        className="scrollbar-hide flex snap-x snap-mandatory gap-8 overflow-x-auto overscroll-x-contain"
+        style={{ marginInline: `calc((${COL} - 100vw) / 2)`, paddingInline: `calc((100vw - ${COL}) / 2)`, scrollPaddingInline: `calc((100vw - ${COL}) / 2)` }}
+      >
+        {items.map((item, i) => (
+          <div key={i} data-slide className="shrink-0 snap-center transition-[transform,opacity] duration-500 ease-[cubic-bezier(.23,1,.32,1)] motion-reduce:transition-none" style={{ width: COL, transform: i === at ? undefined : 'scale(0.8)', opacity: i === at ? 1 : 0.7 }}>
+            {render(item, i === at, near)}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// A company's mark on its tile: ink on the shell grey, a hairline round it
+function Mark({ id }: { id: string }) {
+  const m = COMPANY_MARKS[id]
+  return (
+    <svg viewBox="0 0 100 100" className="h-10 w-10 shrink-0" aria-hidden>
+      <rect width="100" height="100" rx="22" fill={SHELL} />
+      <rect x=".75" y=".75" width="98.5" height="98.5" rx="21.25" fill="none" stroke={INK} strokeOpacity=".08" strokeWidth="1.5" />
+      <path d={m.f} fill={INK} />
+      {m.h && <path d={m.h} fill={SHELL} />}
+    </svg>
+  )
+}
+
+// Companies: one shell, a little panel per company side by side, together the column's width
+function CompaniesCard() {
+  return (
+    <div className="grid grid-cols-1 gap-1 rounded-[20px] p-1 min-[480px]:grid-cols-3" style={{ background: SHELL }}>
+      {COMPANIES.map((c) => (
+        <article key={c.name} className="flex flex-col gap-6 rounded-[16px] bg-white p-4 min-[480px]:min-h-[176px]" style={{ boxShadow: SHADOW }}>
+          <Mark id={c.mark === 'seek' ? 'seek-dots' : c.mark} />
+          <div className="flex flex-col gap-1">
+            <h3 className="font-normal">{c.name}</h3>
+            <p className="text-[13px] leading-[20px] text-pretty" style={{ color: GREY }}>{c.about}</p>
+          </div>
+          <div className="mt-auto flex flex-col border-t pt-3 text-[13px] leading-[20px]" style={{ borderColor: LINE, color: GREY }}>
+            <span>{c.role}</span>
+            <span className="tabular-nums">{c.years}</span>
+          </div>
+        </article>
+      ))}
+    </div>
+  )
+}
+
+// A project or creative piece: its clip framed on the grey (or its Stageshow scene filling the card),
+// then the name and year
+function WorkCard({ p, focus, near, pad }: { p: (typeof PROJECTS)[number]; focus: boolean; near: boolean; pad: number }) {
+  const card = (
+    <div className="flex flex-col gap-4">
+      {p.scene ? <div className="overflow-hidden" style={{ aspectRatio: 540 / 340, borderRadius: outer(pad), background: SHELL }}>{p.scene}</div> : <Framed pad={pad} ratio={RATIO} bare={onlyWindows(p.piece)}><Live id={p.piece} focus={focus} near={near} /></Framed>}
+      <div className="flex justify-between gap-4"><span>{p.name}</span><span className="tabular-nums" style={{ color: GREY }}>{p.year}</span></div>
+    </div>
+  )
+  return p.href ? <Link href={p.href} className="block">{card}</Link> : card
+}
+
+// Kind words, as justinschueler.com's numbered services: the person, then their words when opened
+function KindWords() {
+  const [open, setOpen] = useState<number | null>(0)
+  return (
+    <div className="flex flex-col">
+      {TESTIMONIALS.slice(0, 4).map((t, i) => (
+        <div key={t.name} className="border-b" style={{ borderColor: LINE }}>
+          <button onClick={() => setOpen(open === i ? null : i)} aria-expanded={open === i} className="flex w-full items-center gap-6 py-3.5 text-left">
+            <span className="w-6 shrink-0 tabular-nums" style={{ color: GREY }}>{String(i + 1).padStart(2, '0')}</span>
+            <span className="flex-1">{t.name}<span style={{ color: GREY }}>, {t.role}</span></span>
+            <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200 ease-out" style={{ color: GREY, transform: open === i ? 'rotate(180deg)' : undefined }} />
+          </button>
+          <div className="grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(.23,1,.32,1)] motion-reduce:transition-none" style={{ gridTemplateRows: open === i ? '1fr' : '0fr' }}>
+            <div className="overflow-hidden">
+              <p className="pb-5 pl-12 pr-4" style={{ color: GREY }}>“{t.content}”</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+// Thoughts: the essays as little cards in one shell, like the companies, scrolling sideways:
+// title and year, then the essay's leading line under a hairline
+function Thoughts() {
+  return (
+    <div className="rounded-[20px] p-1" style={{ background: SHELL }}>
+      <div className="scrollbar-hide flex snap-x snap-mandatory gap-1 overflow-x-auto overscroll-x-contain rounded-[16px]">
+        {[...ESSAYS, ...SKILLS].map((e) => <EssayCard key={e.title} essay={e} className="w-[232px] shrink-0 snap-start" />)}
+      </div>
+    </div>
+  )
+}
+
+// The intro plays once per visit: on the first load, not when you come back to the page from a case
+// study. Module state lives as long as the app does in the tab, so a reload plays it again
+let introPlayed = false
+// Where the page was when you left it, so coming back puts you there again
+let leftAt = 0
 
 export default function Home() {
-  const [mounted, setMounted] = useState(false)
-  const [suffix, setSuffix] = useState('')
-  const [typingDone, setTypingDone] = useState(false)
-  const [showTooltip, setShowTooltip] = useState(false)
-  const [chatMounted, setChatMounted] = useState(false)
-  const [experienceDialogOpen, setExperienceDialogOpen] = useState(false)
-  const [selectedCompanyId, setSelectedCompanyId] = useState('enterpriseai')
-  // Under the hero, the work (Visuals, kind words between the pieces); the essays have their own
-  // page. The page as written is still there at ?view=page while the rest is parked
-  const [view, setView] = useState<'page' | 'work'>('work')
-  const { flags } = useFeatureFlags()
-  // ?home=<layout> overrides the flag, so a variant can be linked to
-  const [homeOverride, setHomeOverride] = useState<HomeLayout | null>(null)
-  const homeLayout = homeOverride ?? flags.homeLayout
-  // ?hero=intro: the short written introduction (components/HeroIntro) in place of the typed title
-  const [intro, setIntro] = useState(false)
-
+  const [intro] = useState(() => !introPlayed)
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    const home = params.get('home') as HomeLayout | null
-    // ?width=narrow is the narrow homepage, which opens with the intro too
-    setIntro(params.get('hero') === 'intro' || params.get('width') === 'narrow')
-    if (home && HOME_LAYOUTS.includes(home)) setHomeOverride(home)
-    // A showcase variant, or ?view=page, needs the page as written
-    if ((home && HOME_LAYOUTS.includes(home)) || params.get('view') === 'page') setView('page')
-    // #work: jump to the work, again as the hero above it finishes loading, unless the visitor scrolls first
-    if (window.location.hash === '#work') {
-      let moved = false
-      const stop = () => { moved = true }
-      window.addEventListener('wheel', stop, { once: true })
-      window.addEventListener('touchstart', stop, { once: true })
-      ;[300, 900, 1800, 3000].forEach((ms) => setTimeout(() => { if (!moved) document.getElementById('work')?.scrollIntoView() }, ms))
+    introPlayed = true
+    if (!intro && leftAt) {
+      const y = leftAt
+      // after the browser's own attempt, which lands at the top while the page is still short
+      requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo({ top: y, behavior: 'instant' })))
     }
-  }, [])
-
-  // Track client-side mount to prevent hydration issues with animations
+    const keep = () => { leftAt = window.scrollY }
+    window.addEventListener('scroll', keep, { passive: true })
+    return () => window.removeEventListener('scroll', keep)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  const [copied, setCopied] = useState(false)
+  // press E: copy the email, as justinschueler.com does
   useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  // Typewriter effect
-  useEffect(() => {
-    const timeouts: ReturnType<typeof setTimeout>[] = []
-    let time = 800 // initial delay before typing starts
-    let current = ''
-
-    for (const step of TYPING_STEPS) {
-      const target = step.text
-      // Find common prefix length
-      let common = 0
-      while (common < current.length && common < target.length && current[common] === target[common]) {
-        common++
-      }
-      // Delete back to common prefix
-      for (let i = current.length; i > common; i--) {
-        const text = current.substring(0, i - 1)
-        timeouts.push(setTimeout(() => setSuffix(text), time))
-        time += CHAR_DELAY
-      }
-      // Type forward to target
-      for (let i = common + 1; i <= target.length; i++) {
-        const text = target.substring(0, i)
-        timeouts.push(setTimeout(() => setSuffix(text), time))
-        time += CHAR_DELAY
-      }
-      current = target
-      time += step.pause
+    const key = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() !== 'e' || e.metaKey || e.ctrlKey || (e.target as HTMLElement).closest('input, textarea')) return
+      navigator.clipboard?.writeText(EMAIL).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1600) })
     }
-    // Done typing, show tooltip after 1s. The chat waits to be opened: the page reads better wide
-    timeouts.push(setTimeout(() => setTypingDone(true), time))
-    timeouts.push(setTimeout(() => setShowTooltip(true), time + 1000))
-    timeouts.push(setTimeout(() => setChatMounted(true), time + 1000))
-
-    return () => timeouts.forEach(clearTimeout)
+    window.addEventListener('keydown', key)
+    return () => window.removeEventListener('keydown', key)
   }, [])
 
-
-
-  const thinkersSection = (
-    <>
-      {/* Product Thinkers section */}
-      <section className="border-b border-border">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-        >
-          <div className={`flex items-center justify-between px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
-            <p className="text-xs text-muted uppercase tracking-widest">Product Thinkers</p>
-            <Link href="/thinkers" className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1">
-              View all <ArrowRight className="w-3 h-3" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2">
-            {thinkers.map((thinker, index) => (
-              <div
-                key={thinker.id}
-                className={`p-5 ${index % 2 === 0 ? 'md:border-r border-border' : ''} ${index < thinkers.length - (thinkers.length % 2 === 0 ? 2 : 1) ? 'border-b border-border' : ''}`}
-              >
-                <ThinkerCard thinker={thinker} index={index} />
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </section>
-    </>
-  )
-
-  const testimonialsSection = (
-    <>
-      {/* Testimonials section */}
-      <section className="border-b border-border overflow-hidden">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-        >
-          <div className={`px-8 ${flags.sectionTitleBorders ? 'py-4 border-b border-border' : 'pt-8 pb-4'}`}>
-            <p className="text-xs text-muted uppercase tracking-widest">Kind words from colleagues</p>
-          </div>
-
-          <TestimonialCarousel testimonials={TESTIMONIALS} />
-        </motion.div>
-      </section>
-    </>
-  )
-
-  const experienceSection = (
-    <>
-      {/* Experience section */}
-      <section className="p-8 border-b border-border">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-        >
-          <div className="flex items-center justify-between mb-6">
-            <p className="text-xs text-muted uppercase tracking-widest">Experience</p>
-            <button
-              onClick={() => { setSelectedCompanyId('enterpriseai'); setExperienceDialogOpen(true) }}
-              className="text-xs text-muted hover:text-accent transition-colors flex items-center gap-1"
-            >
-              View <ArrowRight className="w-3 h-3" />
-            </button>
-          </div>
-          <div className="relative">
-            {/* Timeline line */}
-            <div className="absolute left-[7px] top-2 bottom-2 w-[2px] bg-border" />
-
-            <div className="space-y-8">
-              {EXPERIENCE.map((exp, index) => (
-                <motion.div
-                  key={exp.company}
-                  className="flex gap-6 relative cursor-pointer group"
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.12 }}
-                  onClick={() => { setSelectedCompanyId(exp.id); setExperienceDialogOpen(true) }}
-                >
-                  {/* Timeline dot */}
-                  <div className="flex-shrink-0 w-4 h-4 rounded-full bg-foreground border-4 border-background z-10 mt-1" />
-
-                  <div className="flex-1 pb-2">
-                    <div className="flex items-baseline gap-3 mb-1">
-                      <h3 className="font-medium text-foreground group-hover:text-accent transition-colors">{exp.company}</h3>
-                      <span className="text-xs text-muted">{exp.period}</span>
-                    </div>
-                    <p className="text-sm text-muted mb-2">{exp.role}</p>
-                    <p className="text-sm text-muted">{exp.description}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-      </section>
-
-      <ExperienceDialog
-        isOpen={experienceDialogOpen}
-        onClose={() => setExperienceDialogOpen(false)}
-        initialCompanyId={selectedCompanyId}
-      />
-    </>
-  )
-
-  // Hero Section - Centered
-  const heroSection = (
-    <section className={`relative py-24 px-8 overflow-hidden ${flags.panels ? 'border-b border-border' : ''}`}>
-      {flags.particleField && <ParticleField />}
-      <div className="relative z-10 flex flex-col items-center text-center">
-        {/* Tagline */}
-        <motion.p
-          className="text-sm text-muted uppercase tracking-widest mb-4"
-          initial={mounted ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          The future is Now
-        </motion.p>
-
-        {/* Animated Role */}
-        <motion.div
-          className="mb-8"
-          initial={mounted ? { opacity: 0 } : { opacity: 1 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          <h1 className="t-display text-4xl md:text-5xl font-medium text-foreground whitespace-nowrap">
-            <span>Product </span>
-            <span className="relative inline">
-              {suffix}
-              {!typingDone && (
-                <motion.span
-                  animate={{ opacity: [1, 0] }}
-                  transition={{ duration: 0.6, repeat: Infinity, repeatType: 'reverse' }}
-                  className="inline-block w-[3px] h-[1em] bg-foreground ml-0.5 align-baseline translate-y-[0.1em]"
-                />
-              )}
-              {/* Asterisk tooltip pinned to top-right of last character */}
-              <AnimatePresence>
-                {showTooltip && (
-                  <motion.span
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-                    className="absolute -top-3 -right-4"
-                  >
-                    <TooltipProvider delayDuration={200}>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-lg font-bold text-foreground cursor-default hover:opacity-60 transition-opacity">
-                            *
-                          </span>
-                        </TooltipTrigger>
-                        <TooltipContent side="top" className="text-sm bg-card text-foreground border border-border shadow-lg max-w-xs">
-                          Gareth Chainey&#8482; is still professionally licensed as a product designer
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </span>
-          </h1>
-        </motion.div>
-
-        {/* GitHub Contributions - Centered */}
-        <motion.div
-          initial={mounted ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="flex flex-col items-center"
-        >
-          <GitHubContributions variant="full" animate />
-        </motion.div>
-      </div>
-    </section>
-  )
+  let n = 0
+  const words = (text: string) => text.split(/(\s+)/).filter(Boolean).map((w, k) => /^\s+$/.test(w) ? w : <span key={k} className="dr-word" style={{ animationDelay: `${WORD_START + n++ * WORD_STEP}s` }}>{w}</span>)
+  const statement = STATEMENT.map((r, k) => r.href ? <a key={k} href={r.href} className="dr-link">{words(r.text)}</a> : <span key={k}>{words(r.text)}</span>)
+  const fog = { animationDelay: `${WORD_START + n * WORD_STEP + WORD_TIME - 0.6}s` }
+  const rise = (i: number) => ({ animationDelay: `${2.6 + i * 0.1}s` })
 
   return (
-    <div className="min-h-screen bg-background transition-colors duration-700 overflow-x-clip">
-      <Header />
+    <div className={`min-h-screen overflow-x-clip bg-white text-[15px] leading-[22px] ${intro ? '' : 'dr-still'}`} style={{ color: INK }}>
+      <style dangerouslySetInnerHTML={{ __html: CSS }} />
+      <main className="mx-auto flex max-w-[588px] flex-col gap-[120px] px-6 pb-16 pt-16">
+        <header className="dr-fog flex items-start justify-between" style={fog}>
+          <div className="flex flex-col"><Link href="/">Gareth Chainey</Link><span style={{ color: GREY }}>Product designer</span></div>
+          <span style={{ color: GREY }}>New York</span>
+        </header>
 
-      {/* Main content with chat sidebar */}
-      <div className="max-w-7xl mx-auto pt-14">
-        <div className="flex min-h-[calc(100vh-56px)]">
+        <h1 className="-mt-12 text-[24px] font-normal leading-[30px] tracking-[-0.02em] text-pretty">{statement}</h1>
 
-          {/* Main content */}
-          {/* The scroll story runs out of this column to the window's edges, so it can't be clipped */}
-          {/* The scroll story and the horizontal carousels run out of this column to the window's edges, so it can't clip */}
-          <main className={`flex-1 min-w-0 ${flags.panels ? 'border-x border-border' : ''} ${homeLayout === 'scrolly' || flags.homeDesign === 'horizontal' || flags.homeDesign === 'showcase' || flags.homeDesign === 'strip' ? '' : 'overflow-clip'}`}>
+        {/* The contributions: the change in the role, from designing to building */}
+        <div className="dr-fog dr-gh" style={fog}><GitHubContributions variant="full" animate={intro} /></div>
 
-            {view !== 'page' ? (
-              <>
-                {intro ? <HeroIntro /> : heroSection}
-                <div id="work" className="scroll-mt-14"><Visuals /></div>
-              </>
-            ) : (
-              <>
-            {heroSection}
+        <section className="dr-fog flex flex-col gap-6" style={fog}>
+          <Label>Companies</Label>
+          <CompaniesCard />
+        </section>
 
-            {/* About section */}
-            <section className="p-8 border-b border-border">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-              >
-                <p className="text-xs text-muted uppercase tracking-widest mb-4">About</p>
-                <p className="text-lg text-muted leading-relaxed max-w-2xl">
-                  I help scale-ups create high quality prototypes to win deals.
-                  My role has transformed—I now orchestrate AI tools to multiply output
-                  and deliver 10× the impact.
-                </p>
-              </motion.div>
-            </section>
-
-            {/* The work. Tiles are live; the carousels and five showcase variants are parked to
-                compare (Cmd+K, ?home=scrolly etc, or the launchpad at /showcase) */}
-            {/* #work: the launchpad (/showcase) links straight here */}
-            <div id="work" className="scroll-mt-14">
-            {homeLayout === 'tiles' ? (
-              <HomeTiles titleBorders={flags.sectionTitleBorders} />
-            ) : homeLayout === 'autoplay' ? (
-              <AutoplayShowcase borders={flags.sectionTitleBorders} />
-            ) : homeLayout === 'coverflow' ? (
-              <CoverflowShowcase borders={flags.sectionTitleBorders} />
-            ) : homeLayout === 'scrolly' ? (
-              <ScrollyShowcase borders={flags.sectionTitleBorders} />
-            ) : homeLayout === 'billboard' ? (
-              <BillboardShowcase />
-            ) : homeLayout === 'wall' ? (
-              <WallShowcase />
-            ) : (
-              <>
-                <ShowcaseCarousel label="Products" note="Things I've built and shipped" slides={PRODUCT_SLIDES} titleBorders={flags.sectionTitleBorders} />
-                <ShowcaseCarousel label="How design has changed with AI" note="Three case studies" slides={AI_SLIDES} titleBorders={flags.sectionTitleBorders} />
-              </>
+        <section className="dr-rise flex flex-col gap-16" style={rise(0)}>
+          <Headline
+            as="p"
+            lead="Alongside the day job, I build my own products."
+            rest={PRODUCTS.map((p, i) => (
+              <span key={p.name}><a href={p.href} target="_blank" rel="noopener noreferrer" className="dr-link dr-peek">{p.name}<span className="dr-peek-card" aria-hidden>{/* eslint-disable-next-line @next/next/no-img-element */}<img src={p.landing} alt="" /><span>{p.href.replace(/^https:\/\/(www\.)?/, '')}</span></span></a>{i < PRODUCTS.length - 2 ? ', ' : i === PRODUCTS.length - 2 ? ' and ' : '.'}</span>
+            ))}
+          />
+          <Rail
+            label="Products"
+            items={PRODUCTS}
+            render={(p, focus, near) => (
+              <a href={p.href} target="_blank" rel="noopener noreferrer" className="flex flex-col gap-4">
+                <Framed pad={PAD} ratio={RATIO} bare={onlyWindows(p.piece)}><Live id={p.piece} focus={focus} near={near} /></Framed>
+                <span>{p.name}</span>
+              </a>
             )}
-            </div>
+          />
+        </section>
 
-            {experienceSection}
+        <section id="projects" className="dr-rise scroll-mt-10" style={rise(1)}>
+          <Rail label="Projects" items={PROJECTS} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={PAD} />} />
+        </section>
 
-            {testimonialsSection}
-            {thinkersSection}
+        <section className="dr-rise" style={rise(2)}>
+          <Rail label="Creative" items={CREATIVE} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={PAD} />} />
+        </section>
 
-            {/* The reading closes the page: earlier work, essays, then the small studies */}
-            <WorkList label="Earlier work" note="SEEK and Best Practice" ids={EARLIER_WORK} titleBorders={flags.sectionTitleBorders} />
-            <WorkList label="Essays" ids={ESSAYS} titleBorders={flags.sectionTitleBorders} />
-            <WorkList label="Small studies" note="For the curious" ids={SMALL_STUDIES} titleBorders={flags.sectionTitleBorders} />
+        <section className="dr-rise flex flex-col gap-10" style={rise(3)}>
+          <div className="flex flex-col gap-6">
+            <Label>Kind words</Label>
+            <KindWords />
+          </div>
+        </section>
 
-              </>
-            )}
+        <section className="dr-rise flex flex-col gap-6" style={rise(4)}>
+          <Label right={<Link href="/essays" className="dr-link">All essays</Link>}>Thoughts</Label>
+          <Thoughts />
+        </section>
 
-            {flags.signatureVariant === 'clippath' && <Signature className="mx-6 mb-4" />}
-            {flags.signatureVariant === 'penflow' && <PenflowSignature className="mx-6 mb-4" />}
-            <SiteFooter />
-          </main>
-
-          {/* The chat face appears once the hero has typed itself out */}
-          {chatMounted && <ChatPopup pageContext={HOME_PAGE_CONTEXT} />}
-        </div>
-      </div>
+        <footer className="flex flex-col gap-6 border-t pt-8" style={{ borderColor: LINE, color: GREY }}>
+          <div className="flex items-baseline justify-between gap-4">
+            <a href={`mailto:${EMAIL}`} className="dr-link" style={{ color: INK }}>{EMAIL}</a>
+            <span className="hidden [@media(hover:hover)_and_(pointer:fine)]:inline">{copied ? 'Copied' : 'press E'}</span>
+          </div>
+          <div className="flex gap-5"><Link href="/essays">Essays</Link><Link href="/cv">CV</Link><Link href="/contact">Contact</Link><Link href="/changelog">Changelog</Link></div>
+        </footer>
+      </main>
     </div>
   )
 }

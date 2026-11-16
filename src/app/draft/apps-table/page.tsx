@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { MarkedUp, type Note } from '@/components/MarkedUp'
-import { GREY, Headline, INK, Moment } from '../style'
+import { GREY, Headline, INK, Moment } from '@/components/site/style'
 
 // The craft beat for a short case study (/draft/apps-table): the workspace's Apps table as it was
 // first built and as it is now, marked up in red the way you would on a whiteboard. Both are
@@ -30,7 +30,7 @@ export default function DraftAppsTable() {
     <div className="min-h-screen overflow-x-clip bg-white text-[15px] leading-[22px]" style={{ color: INK }}>
       <main className="mx-auto flex max-w-[588px] flex-col gap-24 px-6 pb-24 pt-16">
         <header className="flex items-start justify-between">
-          <Link href="/draft" className="transition-opacity hover:opacity-70">← Gareth Chainey</Link>
+          <Link href="/" className="transition-opacity hover:opacity-70">← Gareth Chainey</Link>
           <span style={{ color: GREY }}>Enterprise AI, 2026</span>
         </header>
 
