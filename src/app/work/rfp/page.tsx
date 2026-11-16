@@ -38,7 +38,7 @@ export default function RfpCaseStudy() {
           <p>Before AI, I would have answered with Figma mock-ups and a lot of help. This time I built the product with Claude Code, connected to real models and one set of seed data, so the people judging the tender could try it for themselves.</p>
         </section>
 
-        <Moment line="Tick a reviewer’s issue in, and it’s written into the request for information.">
+        <Moment scene line="Tick a reviewer’s issue in, and it’s written into the request for information.">
           <RfpLetter bare />
         </Moment>
 

@@ -31,11 +31,15 @@ export function Headline({ lead, rest, as: Tag = 'h2' }: { lead: ReactNode; rest
   )
 }
 
-// The shell and its panel: the one framed surface
-export function Shell({ children, className = '' }: { children: ReactNode; className?: string }) {
+// The shell: the one framed surface, one grey. Recordings, screenshots and video sit inset on it
+// (12px, concentric 8px corners, a hairline edge, no shadow); a Stageshow scene paints the same grey
+// as its own ground, so it fills the shell edge to edge (scene). Never a white panel with a shadow
+// inside the grey: that read as a second, different grey (reviewed at /draft/frames, option A).
+export function Shell({ children, className = '', scene = false }: { children: ReactNode; className?: string; scene?: boolean }) {
+  if (scene) return <div className={`overflow-hidden rounded-[20px] ${className}`} style={{ background: SHELL, ['--frame-ground' as string]: SHELL }}>{children}</div>
   return (
-    <div className={`rounded-[20px] p-1 ${className}`} style={{ background: SHELL }}>
-      <div className="overflow-hidden rounded-[16px] bg-white" style={{ boxShadow: SHADOW }}>{children}</div>
+    <div className={`rounded-[20px] p-3 ${className}`} style={{ background: SHELL }}>
+      <div className="overflow-hidden rounded-[8px] bg-white" style={{ boxShadow: `0 0 0 1px ${LINE}` }}>{children}</div>
     </div>
   )
 }
@@ -45,10 +49,10 @@ export const COL = 'min(540px, calc(100vw - 48px))'
 export const WIDE = 'min(720px, calc(100vw - 48px))'
 
 // A moment: the work in a shell, wider than the text, one grey line under it on the column
-export function Moment({ children, line }: { children: ReactNode; line: ReactNode }) {
+export function Moment({ children, line, scene = false }: { children: ReactNode; line: ReactNode; scene?: boolean }) {
   return (
     <figure className="flex flex-col gap-3" style={{ marginInline: `calc((${COL} - ${WIDE}) / 2)` }}>
-      <Shell><div data-ss-fill>{children}</div></Shell>
+      <Shell scene={scene}><div data-ss-fill>{children}</div></Shell>
       <figcaption className="self-center text-[13px] leading-[20px]" style={{ width: COL, color: GREY }}>{line}</figcaption>
     </figure>
   )
