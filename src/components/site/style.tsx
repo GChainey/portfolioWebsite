@@ -5,8 +5,8 @@ import { projectHref, writing } from '@/content/projects'
 // The draft's whole style, after the "Polar, taken apart" audit (Paper file "Fancy unity"), turned
 // to a light page. Fewer parts, each used the same way everywhere:
 //
-// Type    one weight (400); four sizes: 13 caption, 15 body, 24 headline and figure, 40 the one
-//         big number. Hierarchy comes from size and grey, never bold. A headline is two sentences
+// Type    one weight (400); three sizes: 13 caption, 15 body, 24 headline. No big numbers: a case
+//         study's impact is the first of its rows, the same size as the rest. Hierarchy comes from size and grey, never bold. A headline is two sentences
 //         at the same size, the first in ink, the second grey. Numbers are tabular.
 // Colour  white page, #F4F4F4 shell, #EBEBEB hairline, #181818 ink, #666 grey. No hue.
 // Surface shell (radius 20, #F4F4F4, 4px padding) holding panels (radius 16, white, one shadow),
@@ -48,11 +48,23 @@ export function Shell({ children, className = '', scene = false }: { children: R
 export const COL = 'min(540px, calc(100vw - 48px))'
 export const WIDE = 'min(720px, calc(100vw - 48px))'
 
-// A moment: the work in a shell, wider than the text, one grey line under it on the column
-export function Moment({ children, line, scene = false }: { children: ReactNode; line: ReactNode; scene?: boolean }) {
+// The product on the grey with room round it: a whole screen (a replay, a screenshot) inset 32px
+// (12px on a phone) instead of the shell's 12, same hairline edge, no shadow. Full product edge to
+// edge in the shell looked cramped and narrow
+export function Mat({ children }: { children: ReactNode }) {
+  return (
+    <div className="rounded-[24px] p-3 min-[600px]:p-8" style={{ background: SHELL }}>
+      <div className="overflow-hidden rounded-[10px] bg-white" style={{ boxShadow: `0 0 0 1px ${LINE}` }}>{children}</div>
+    </div>
+  )
+}
+
+// A moment: the work wider than the text, one grey line under it on the column. mat: a whole
+// product screen, on the mat; scene: a Stageshow scene, filling the shell; otherwise in the shell
+export function Moment({ children, line, scene = false, mat = false }: { children: ReactNode; line: ReactNode; scene?: boolean; mat?: boolean }) {
   return (
     <figure className="flex flex-col gap-3" style={{ marginInline: `calc((${COL} - ${WIDE}) / 2)` }}>
-      <Shell scene={scene}><div data-ss-fill>{children}</div></Shell>
+      {mat ? <Mat>{children}</Mat> : <Shell scene={scene}><div data-ss-fill>{children}</div></Shell>}
       <figcaption className="self-center text-[13px] leading-[20px]" style={{ width: COL, color: GREY }}>{line}</figcaption>
     </figure>
   )

@@ -17,8 +17,7 @@ export const STUDIES: Study[] = [
     meta: 'Enterprise AI, 2025',
     lead: 'Building with AI, I answered tenders with a working product, not a Figma prototype.',
     rest: 'It showed real functionality, and how we use the technology on real problems.',
-    figure: { value: '$2 million', unit: 'in signed deals so far' },
-    rows: [['Tenders', 'More than one, from the same prototype'], ['Markets', '2, English and Polish'], ['Engineering', 'Still the design they build from']],
+    rows: [['Signed deals', '$2 million so far'], ['Tenders', 'More than one, from the same prototype'], ['Markets', '2, English and Polish'], ['Engineering', 'Still the design they build from']],
     blocks: [
       { lead: 'Deep enough to tell a real story.', rest: 'One case, followed all the way through.' },
       { moment: { replay: '/replays/rfp/seed-data.json' }, line: 'One case from the dashboard to its assessment and its request for information. Every screen follows it.' },
@@ -86,8 +85,7 @@ export const STUDIES: Study[] = [
     meta: '2024',
     lead: 'The first release missed, so we followed the funnel.',
     rest: 'Three leaks, fixed one assumption at a time.',
-    figure: { value: '9% → 20%', unit: 'education conversion, against a goal of 12%' },
-    rows: [['Paid connections', '+34%, against a goal of 10 to 15%']],
+    rows: [['Education conversion', '9% → 20%, against a goal of 12%'], ['Paid connections', '+34%, against a goal of 10 to 15%']],
     blocks: [
       { moment: { video: `${SEEK}/final-desktop.mp4`, ratio: 1506 / 978 }, line: 'The course finder on a role page, as it shipped.' },
       { lead: 'One leak at a time.', rest: 'A five-stage funnel, one assumption for each.' },

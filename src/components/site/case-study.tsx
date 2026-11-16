@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 import Link from 'next/link'
 import { RfpLetter } from '@/components/stageshow/RfpLetter'
 import { RecordingReplay } from '@/components/replay/RecordingReplay'
-import { COL, GREY, Headline, INK, LINE, Rows, SHELL, Shell, WIDE } from '@/components/site/style'
+import { COL, GREY, Headline, INK, LINE, Mat, Rows, SHELL, Shell, WIDE } from '@/components/site/style'
 
 // The short case study, in the draft's design: enough to get someone interested, built round three
 // things: the impact, the craft, and what AI let me do that I couldn't before (where it applies;
@@ -28,8 +28,7 @@ export type Study = {
   meta: string // company, year
   lead: string // the claim, ink
   rest: string // the rest of it, grey
-  figure?: { value: string; unit: string }
-  rows?: [string, string][]
+  rows?: [string, string][] // the facts under the headline, the impact first: no big number
   blocks: Block[]
 }
 
@@ -38,7 +37,7 @@ function Video({ src }: { src: string }) {
 }
 
 function Art({ media }: { media: Media }) {
-  if ('replay' in media) return <Shell><div data-ss-fill><RecordingReplay src={media.replay} region={media.region} bare /></div></Shell>
+  if ('replay' in media) return <Mat><RecordingReplay src={media.replay} region={media.region} bare /></Mat>
   if ('scene' in media) return <Shell scene><div data-ss-fill><RfpLetter bare /></div></Shell>
   if ('video' in media) {
     // A phone recording stands on the grey, the height of a landscape clip
@@ -47,7 +46,7 @@ function Art({ media }: { media: Media }) {
         <div className="h-full overflow-hidden rounded-[16px] bg-white" style={{ aspectRatio: media.ratio, boxShadow: `0 0 0 1px ${LINE}` }}><Video src={media.video} /></div>
       </div>
     )
-    return <Shell><div style={{ aspectRatio: media.ratio }}><Video src={media.video} /></div></Shell>
+    return <Mat><div style={{ aspectRatio: media.ratio }}><Video src={media.video} /></div></Mat>
   }
   return (
     <div className="grid grid-cols-2 gap-3 rounded-[20px] p-3" style={{ background: SHELL }}>
@@ -87,12 +86,6 @@ export function CaseStudy({ study }: { study: Study }) {
 
         <section className="flex flex-col gap-8">
           <Headline as="h1" lead={study.lead} rest={study.rest} />
-          {study.figure && (
-            <div className="flex flex-col gap-1">
-              <span className="text-[40px] leading-[48px] tracking-[-0.02em] tabular-nums">{study.figure.value}</span>
-              <span style={{ color: GREY }}>{study.figure.unit}</span>
-            </div>
-          )}
           {study.rows && <Rows rows={study.rows} />}
         </section>
 

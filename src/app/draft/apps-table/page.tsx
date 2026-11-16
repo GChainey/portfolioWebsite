@@ -25,11 +25,11 @@ export default function DraftAppsTable() {
           <p>The first version was the table every admin page has. Every number was true, and none of them told the person who owns the apps where to go next.</p>
         </section>
 
-        <Moment line="First, 8 September: a list of apps with their status and counts.">
+        <Moment mat line="First, 8 September: a list of apps with their status and counts.">
           <MarkedUp src="/case-studies/apps-table/first.webp" alt="The first Apps table: four totals, then each app with a Live or Draft badge, submissions, completion, when it was edited and a Settings button" frame={FRAME} notes={FIRST} />
         </Moment>
 
-        <Moment line="Last, 13 November: who uses each app, what it earns, and whether use is growing.">
+        <Moment mat line="Last, 13 November: who uses each app, what it earns, and whether use is growing.">
           <MarkedUp src="/case-studies/apps-table/last.webp" alt="The Apps table now: tabs for All, Live, On trial and Drafts, one card of paying clients, runs and trials, then each app with its client logos, money earned a month and a 12-week sparkline" frame={FRAME} notes={LAST} />
         </Moment>
       </main>
