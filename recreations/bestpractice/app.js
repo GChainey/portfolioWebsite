@@ -28,7 +28,7 @@ const I = {
 }
 
 // ---------- Data ----------
-const COLORS = [['#CFE4FA', '#0E4775'], ['#F6D1D5', '#6E0811'], ['#C8F1EA', '#0A4B43'], ['#E6D1F2', '#3F1B54'], ['#FDE7C8', '#6A3A04'], ['#DCE6C6', '#2C3A12'], ['#D6E3F5', '#173A6B']]
+const COLORS = [['var(--brand-bg2)', 'var(--brand)']] // one avatar colour: initials tell people apart (audit, 2026-11-16)
 const PEOPLE = {
   CC: { name: 'Charlie Charmoose', c: 1, days: { 0: [], 1: [630, 660, 840, 900, 960, 1005], 2: [540, 570, 600, 900] } },
   DS: { name: 'Dominique Sat', c: 0, days: { 0: [540, 555, 570, 600, 630, 660, 690, 780, 840, 915, 960, 1005], 1: [570, 600, 810, 840, 900], 2: [540, 600, 660] } },
@@ -60,12 +60,13 @@ const long = (d) => { const x = day(d); return `${ord(x.getDate())} ${x.toLocale
 const hm = (m) => { const h = Math.floor(m / 60), mm = m % 60; return `${h % 12 || 12}:${pad(mm)} ${h < 12 ? 'am' : 'pm'}` }
 const times = (id, d) => PEOPLE[id].days[d] ?? []
 const nextAvail = (id, d) => { for (let k = d + 1; k < d + 14; k++) if (times(id, k).length) return [k, times(id, k)[0]]; return null }
-const av = (id, size = 's28') => { const p = PEOPLE[id]; const [bg, fg] = COLORS[p.c]; return `<span class="av ${size}" style="background:${bg};color:${fg}">${initials(p.name)}</span>` }
-const avName = (name, size = 's24', c = 0) => { const [bg, fg] = COLORS[c]; return `<span class="av ${size}" style="background:${bg};color:${fg}">${initials(name)}</span>` }
+const av = (id, size = 's28') => { const p = PEOPLE[id]; const [bg, fg] = COLORS[0]; return `<span class="av ${size}" style="background:${bg};color:${fg}">${initials(p.name)}</span>` }
+const avName = (name, size = 's24', c = 0) => { const [bg, fg] = COLORS[0]; return `<span class="av ${size}" style="background:${bg};color:${fg}">${initials(name)}</span>` }
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
 
 // ---------- State ----------
 const V = new URLSearchParams(location.search).get('v') || 'final'
+if (new URLSearchParams(location.search).get('divider') === '0') document.documentElement.classList.add('no-divider')
 const S = {
   patient: null, query: '', open: null, // open: which popover ('patient' | 'type' | 'providers' | 'unit' | 'on' | 'end')
   type: 'Short appointment', duration: 15,
@@ -179,7 +180,7 @@ function detailsPanel() {
           <div class="input select ${S.open === 'providers' ? 'focus' : ''}" data-act="open:providers" role="combobox" aria-label="Provider">${providerSummary()}${S.providers.length ? `<button class="dismiss" data-act="clearProviders" aria-label="Clear providers">${I.x}</button>` : `<span class="ico">${I.down}</span>`}</div>
           ${S.open === 'providers' ? `<div class="listbox" role="listbox">${[['ALL', 'All providers'], ...ORDER.map((id) => [id, PEOPLE[id].name])].map(([id, n]) => {
             const on = id === 'ALL' ? S.providers.length === ORDER.length : S.providers.includes(id)
-            return `<button class="option" role="option" aria-selected="${on}" data-act="prov:${id}"><span class="check ${on ? 'on' : ''}">${on ? I.check : ''}</span>${id === 'ALL' ? `<span class="av s24" style="background:#E0E0E0;color:#424242;font-size:8px">ALL</span>` : av(id, 's24')}${n}</button>`
+            return `<button class="option" role="option" aria-selected="${on}" data-act="prov:${id}"><span class="check ${on ? 'on' : ''}">${on ? I.check : ''}</span>${id === 'ALL' ? `<span class="av s24" style="background:var(--bg3);color:var(--fg3)">ALL</span>` : av(id, 's24')}${n}</button>`
           }).join('')}</div>` : ''}
         </div>
       </div>
@@ -252,16 +253,16 @@ const dayBox = (inner) => `<div class="boxed" style="animation:none;align-items:
 const staticViews = {
   before: () => oldDialog({ interactive: true }),
   steps: () => `<div class="compare">
-    <div><span class="chip">Step 1</span>${oldDialog({ provider: null, timesHtml: dayBox(`<div class="empty" style="padding:28px 0;font-style:italic">Pick a provider to see available times</div>`), caption: 'You have to pick a provider to see times' })}</div>
+    <div><span class="chip">Step 1</span>${oldDialog({ provider: null, timesHtml: dayBox(`<div class="empty" style="padding:24px 0;font-style:italic">Pick a provider to see available times</div>`), caption: 'You have to pick a provider to see times' })}</div>
     <div><span class="chip">Step 2</span>${oldDialog({ timesHtml: dayBox(`<div class="grid6" style="width:100%">${[540, 555, 570, 585, 600, 615, 660, 675, 690, 705, 720, 735, 780, 810, 840, 870, 900, 930].map((m) => `<button class="time">${hm(m)}</button>`).join('')}</div>`), caption: 'Once a provider is picked, you see their times' })}</div></div>`,
   'iter-grid': () => `<div class="compare">${oldDialog({ provider: 'Dominique Sat, Yarn Oldrick, Charlie Charmoose', timesHtml: dayBox(`<div class="times" style="width:100%;grid-template-columns:repeat(4,1fr)">${[['DS', 540], ['2+', 555], ['YO', 570], ['3+', 585], ['DS', 600], ['YO', 615], ['2+', 630], ['DS', 645], ['3+', 660], ['YO', 690], ['DS', 720], ['2+', 750]].map(([p, m], k) => `<button class="time" style="${k === 6 ? 'background:var(--brand-bg2);color:var(--brand)' : ''}"><span class="prefix">${p}</span>${hm(m)}</button>`).join('')}</div>`), caption: 'A mixed grid: every provider’s times in one, marked with who' })}</div>`,
   'iter-tabs': () => `<div class="compare">${oldDialog({ provider: 'Dominique Sat, Yarn Oldrick, Charlie Charmoose', timesHtml: dayBox(`<div class="tabs" style="width:100%">${['Dominique (12)', 'Yarn (6)', 'Charlie (0)'].map((t, k) => `<button class="${k === 0 ? 'on' : ''}">${t}</button>`).join('')}</div><div class="grid6" style="width:100%">${times('DS', 0).map((m) => `<button class="time">${hm(m)}</button>`).join('')}</div>`), caption: 'A tab per provider: easier to read, but you compare by clicking' })}</div>`,
   toggles: () => `<div class="compare" style="gap:48px">
     <div><span class="chip">Before</span>
-      ${[[true, true, false, false], [true, false, false, true]].map(([a, b, c, ok]) => `<div class="dialog static" style="width:auto;padding:16px 20px;display:flex;align-items:center;gap:24px"><span class="mark" style="background:${ok ? '#107C10' : 'var(--red)'}">${ok ? I.checkmark : I.cross}</span>${[['Repeat', a], ['Urgent', b], ['Add to waiting list', c]].map(([t, on]) => `<div class="sw-field">${label(t)}${sw('x', on)}</div>`).join('')}</div>`).join('')}
+      ${[[true, true, false, false], [true, false, false, true]].map(([a, b, c, ok]) => `<div class="dialog static" style="width:auto;padding:16px 24px;display:flex;align-items:center;gap:24px"><span class="mark" style="background:${ok ? '#107C10' : 'var(--red)'}">${ok ? I.checkmark : I.cross}</span>${[['Repeat', a], ['Urgent', b], ['Add to waiting list', c]].map(([t, on]) => `<div class="sw-field">${label(t)}${sw('x', on)}</div>`).join('')}</div>`).join('')}
       <div class="caption" style="text-align:left">Three switches allow combinations that make no sense</div></div>
     <div><span class="chip">After</span>
-      ${[null, 'repeat'].map((m) => `<div class="dialog static" style="width:380px;padding:16px 20px"><div class="group" style="width:100%">${[['urgent', 'Urgent'], ['repeat', 'Repeat'], ['waiting', 'Add to waiting list']].map(([k, t]) => `<button class="${m === k ? 'on' : ''}">${t}</button>`).join('')}</div></div>`).join('')}
+      ${[null, 'repeat'].map((m) => `<div class="dialog static" style="width:380px;padding:16px 24px"><div class="group" style="width:100%">${[['urgent', 'Urgent'], ['repeat', 'Repeat'], ['waiting', 'Add to waiting list']].map(([k, t]) => `<button class="${m === k ? 'on' : ''}">${t}</button>`).join('')}</div></div>`).join('')}
       <div class="caption" style="text-align:left">One control: one choice at a time</div></div></div>`,
   bundling: () => `<div class="compare" style="gap:48px">
     <div><span class="chip">Before</span><div class="dialog static" style="width:400px;padding:20px;display:flex;flex-direction:column;gap:12px">

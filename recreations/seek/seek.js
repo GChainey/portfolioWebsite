@@ -3,18 +3,12 @@ const V = new URLSearchParams(location.search).get('v') || 'final'
 const app = document.getElementById('app')
 const sheetRoot = document.getElementById('sheet-root')
 
-// ---- Provider marks: simple stand-ins, not the real logos ----
-const MARKS = {
-  monarch: '<svg class="m-monarch" viewBox="0 0 28 18"><path d="M0 18 5 4l4 7 5-11 5 11 4-7 5 14z"/></svg>',
-  swinburne: '<span class="mark dark" style="margin:0;width:100%;height:100%;display:grid;grid-template-columns:repeat(2,9px);gap:2px;place-content:center"><i style="width:9px;height:9px;background:#fff"></i><i style="width:9px;height:9px;background:#D0343A"></i><i style="width:9px;height:9px;background:#D0343A"></i><i style="width:9px;height:9px;background:#fff"></i></span>',
-  rmit: '<span style="font:700 11px/1 Inter;letter-spacing:.02em;color:#E60028">RMIT</span>',
-  torrens: '<span style="width:22px;height:22px;border-radius:50%;border:3px solid #1C2330;display:block"></span>',
-  upskilled: '<span style="font:700 15px/1 Inter;color:#4B2C8F">U</span>',
-  tafe: '<span style="font:700 10px/1 Inter;color:#B5121B">TAFE</span>',
-  coder: '<span style="font:700 14px/1 ui-monospace,monospace;color:#1C2330">&lt;/&gt;</span>',
-  wagon: '<span style="width:20px;height:14px;border-radius:3px;background:#E04C3B;display:block"></span>',
-  cqu: '<span style="font:700 10px/1 Inter;color:#00788A">CQU</span>',
-}
+// ---- Provider logos: each provider's own mark (logos/), cropped to its compact form ----
+// fill: a square mark that is its own tile, edge to edge; the rest sit inset on a white tile
+const LOGO = { monarch: ['monarch.svg', true], swinburne: ['swinburne.svg', true], wagon: ['lewagon.svg', true], rmit: ['rmit.svg'], torrens: ['torrens.png'], upskilled: ['upskilled.svg'], tafe: ['tafe.svg'], coder: ['coder.svg'], cqu: ['cqu.svg'] }
+const PROVIDER = { monarch: 'Monarch Institute', swinburne: 'Swinburne University', wagon: 'Le Wagon', rmit: 'RMIT University', torrens: 'Torrens University', upskilled: 'Upskilled', tafe: 'TAFE NSW', coder: 'Coder Academy', cqu: 'CQUniversity' }
+const MARKS = Object.fromEntries(Object.entries(LOGO).map(([k, [f]]) => [k, `<img src="logos/${f}" alt="${PROVIDER[k]} logo">`]))
+const markClass = (k) => (LOGO[k] && LOGO[k][1] ? 'mark fill' : 'mark')
 
 // ---- Courses, by qualification (the shipped module) ----
 const QUALS = [
@@ -89,7 +83,7 @@ const oldCard = (title, partner, facts, id = '') => `
   </button>`
 const newCard = (c) => `
   <button class="card" data-course="${c.id}">
-    <div class="mark">${MARKS[c.mark]}</div>
+    <div class="${markClass(c.mark)}">${MARKS[c.mark]}</div>
     <h3>${esc(c.course)}</h3>
     <div class="by">${esc(c.provider)}</div>
     <div class="facts">${c.facts.map((f) => `<span>${esc(f)}</span>`).join('')}</div>
@@ -184,7 +178,7 @@ function coursePage(id) {
   scrollTo(0, 0)
   app.innerHTML = `<section class="page">
     <a class="back" data-back>${backArrow}<span>SEEK Learning · Courses</span></a>
-    <div class="mark">${MARKS[c.mark]}</div>
+    <div class="${markClass(c.mark)}">${MARKS[c.mark]}</div>
     <h1>${esc(c.course)}</h1><div class="by">${esc(c.provider)}</div>
     <dl class="facts-panel"><div><dt>Duration</dt><dd>${esc(c.dur || c.facts[0])}</dd></div><div><dt>Study mode</dt><dd>${esc(c.mode || c.facts[1])}</dd></div><div><dt>Starts</dt><dd>${esc(c.start || c.facts[2].replace('Starts ', ''))}</dd></div></dl>
     <h2>About this course</h2><p>${esc(c.about || c.summary || 'Build job-ready skills with a course that fits around you.')}</p>
@@ -226,7 +220,7 @@ function openSheet(id) {
     <div class="sheet" role="dialog" aria-label="${esc(c.course)}">
       <div class="handle"></div>
       <div class="sheet-head">
-        <div class="mark">${MARKS[c.mark]}</div>
+        <div class="${markClass(c.mark)}">${MARKS[c.mark]}</div>
         <div><div class="eyebrow">${esc(c.type)}</div><h2>${esc(c.course)}</h2><div class="by">${esc(c.provider)}</div></div>
         <button class="close" data-close aria-label="Close"><svg width="16" height="16" viewBox="0 0 16 16" stroke="#1C2330" stroke-width="2"><path d="m2 2 12 12M14 2 2 14"/></svg></button>
       </div>

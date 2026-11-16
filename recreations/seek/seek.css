@@ -92,9 +92,11 @@ h1, h2, h3, p { margin: 0; }
 .dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--card-line); transition: background-color 200ms ease; }
 .dots i.on { background: var(--body); }
 
-/* Provider marks: simple stand-ins, not real logos */
-.m-monarch { width: 28px; height: 18px; fill: var(--ink); }
-.mark.dark { background: var(--ink); }
+/* Provider logos: a white tile with a hairline, the logo inset; a square mark fills its tile */
+.mark { background: #fff !important; box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+.mark img { display: block; max-width: 76%; max-height: 76%; object-fit: contain; }
+.mark.fill { box-shadow: none; }
+.mark.fill img { width: 100%; height: 100%; max-width: none; max-height: none; object-fit: cover; }
 
 /* Buttons */
 .btn { height: 48px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font: 600 16px/1 Inter, sans-serif; transition: transform 150ms var(--ease-out); }

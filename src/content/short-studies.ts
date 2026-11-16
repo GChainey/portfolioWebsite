@@ -221,7 +221,7 @@ export const STUDIES: Study[] = [
           'Repeats, the waiting list, urgent appointments and conflicts were each added inline, so the dialog grew downwards every time.',
         ],
       },
-      { moment: { image: `${BP}/fluent-steps.png`, ratio: 2222 / 1721 }, line: 'The first version: pick a provider, then see their times.' },
+      { moment: { image: `${BP}/fluent-steps.png`, ratio: 2130 / 1694 }, line: 'The first version: pick a provider, then see their times.' },
       { moment: { replay: '/replays/bestpractice/before.json', ground: true }, line: 'Each new feature made the same dialog longer.' },
 
       // 2. The goals
@@ -246,8 +246,8 @@ export const STUDIES: Study[] = [
         rest: 'The left panel is the appointment; anything that needs room opens on the right, then gets out of the way.',
         body: 'For that to work the left panel had to be short. Two changes did most of it.',
       },
-      { moment: { image: `${BP}/fluent-toggles.png`, ratio: 1788 / 647 }, line: 'Three switches allowed combinations that made no sense. One control, one choice.' },
-      { moment: { image: `${BP}/fluent-bundling.png`, ratio: 1934 / 743 }, line: 'Provider, date and time answer one question, so they became one row: the door to the right panel.' },
+      { moment: { image: `${BP}/fluent-toggles.png`, ratio: 1716 / 607 }, line: 'Three switches allowed combinations that made no sense. One control, one choice.' },
+      { moment: { image: `${BP}/fluent-bundling.png`, ratio: 1842 / 708 }, line: 'Provider, date and time answer one question, so they became one row: the door to the right panel.' },
 
       // 5. Proof: repeats, then a workflow that didn't exist yet
       { lead: 'Repeats took the most room, so they were the proof.', rest: 'Set up on the right, one line on the left.' },
