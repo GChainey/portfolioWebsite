@@ -41,6 +41,16 @@ export const PARKED: ParkedItem[] = [
     todo: ['Delete it, and the variants that only it uses, once nothing is borrowed from it'],
   },
   {
+    id: 'details',
+    name: 'Details: small features, craft and delight',
+    status: 'local',
+    since: '2026-11-15',
+    summary: 'One long page of small features, a few lines each and the work itself. First up: app icons drawn from what the app already knows (a hero still, then the set-up step playing), then the Apps table, first and last.',
+    links: [{ label: 'Details', href: '/draft/details' }],
+    gate: 'PARKED_LIVE: app/draft/layout.tsx returns 404 off the dev server',
+    todo: ['More details: candidates are the Add document preview, the RFI letter, Recording Studio', 'Decide where it lives on the live site (its own page, or a section of the homepage)', 'Export the icon scenes as MP4 for posting'],
+  },
+  {
     id: 'apps-table',
     name: 'Apps table, first and last',
     status: 'local',

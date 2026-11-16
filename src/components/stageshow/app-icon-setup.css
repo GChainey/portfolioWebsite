@@ -1,0 +1,266 @@
+/* The workspace prototype is shadcn on zinc, set in Geist: its tokens onto the kit's */
+.ais .ss-stage {
+  --ss-font: var(--font-geist-sans), Geist, system-ui, -apple-system, sans-serif;
+  --ss-text-strong: #09090b;
+  --ss-text: #71717a;
+  --ss-line: rgb(9 9 11 / 0.08);
+  --ss-accent: #18181b;
+  /* The one colour: a highlighter on the words an icon came from */
+  --ais-hl: rgb(253 224 71 / 0.55);
+  --ais-hl-read: rgb(253 224 71 / 0.22);
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--mat, #eef0f3);
+  font-family: var(--ss-font);
+}
+
+/* In the draft's shell: its grey ground, no mat corners of its own */
+.ais--bare .ais .ss-stage {
+  border-radius: 0;
+  background: #f4f4f4;
+}
+
+/* ---- The window: inset top and sides, off the bottom ---- */
+
+.ais .ais-window {
+  position: absolute;
+  top: 36px;
+  left: 40px;
+  width: 640px;
+  height: 470px;
+  box-shadow: var(--ss-shadow-hero);
+}
+
+.ais .ais-body { background: #fff; }
+
+.ais .ais-app {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  height: 100%;
+}
+
+.ais .ais-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 0;
+  border-right: 1px solid var(--ss-line);
+  background: #fafafa;
+  color: #52525b;
+}
+
+.ais .ais-rail__rule { width: 20px; height: 1px; margin: 2px 0; background: var(--ss-line); }
+.ais .ais-rail__app { width: 22px; height: 22px; flex: none; }
+
+.ais .ais-rail__here {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin: -6px 0;
+  border-radius: 8px;
+  background: #ececee;
+}
+
+/* The app's sidebar icon: a dashed blank until it has one, then the mark fades in */
+.ais .ais-railicon { position: relative; display: block; width: 22px; height: 22px; }
+.ais .ais-railicon > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+.ais .ais-railicon > svg[data-on] { opacity: 1; }
+
+.ais .ais-main { min-width: 0; }
+
+.ais .ais-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 46px;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--ss-line);
+  font-size: 13px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.ais .ais-crumb { color: var(--ss-text); }
+.ais .ais-crumb--here { color: var(--ss-text-strong); font-weight: 500; }
+.ais .ais-crumb__sep { color: #d4d4d8; }
+
+/* The set-up steps: two done, this one, one to go */
+.ais .ais-steps { display: flex; gap: 6px; margin-left: auto; }
+
+.ais .ais-step {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  border: 1px solid #e4e4e7;
+  color: var(--ss-text);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.ais .ais-step[data-done] { border-color: transparent; background: #f4f4f5; color: var(--ss-text-strong); }
+.ais .ais-step[data-now] { border-color: transparent; background: var(--ss-text-strong); color: #fff; }
+
+.ais .ais-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 24px 14px;
+}
+
+.ais .ais-head__text { display: flex; flex-direction: column; gap: 4px; }
+.ais .ais-title { color: var(--ss-text-strong); font-size: 18px; font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; }
+.ais .ais-sub { color: var(--ss-text); font-size: 13px; line-height: 1.4; }
+
+/* Waits, quiet, until an icon is picked */
+.ais .ais-continue {
+  flex: none;
+  padding: 7px 12px;
+  border-radius: 8px;
+  background: #f4f4f5;
+  color: #a1a1aa;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+.ais .ais-continue[data-ready] { background: var(--ss-text-strong); color: #fff; }
+
+.ais .ais-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 236px;
+  gap: 28px;
+  padding: 0 24px;
+}
+
+/* ---- What the app knows ---- */
+
+.ais .ais-facts { margin: 0; }
+
+.ais .ais-fact {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 11px 0;
+  border-top: 1px solid var(--ss-line);
+}
+
+.ais .ais-fact dt { color: var(--ss-text); font-size: 12px; line-height: 1.3; }
+.ais .ais-fact dd { margin: 0; color: var(--ss-text-strong); font-size: 13px; line-height: 1.45; }
+.ais .ais-fact--quiet dt,
+.ais .ais-fact--quiet dd { display: flex; align-items: center; height: 17px; }
+
+/* The highlighter: bright while its icon is the one in focus, a faint trace once it has been read */
+.ais .ais-hl {
+  padding: 1px 2px;
+  margin: 0 -2px;
+  border-radius: 3px;
+  background: transparent;
+  color: inherit;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition: background-color 260ms ease;
+}
+
+.ais .ais-hl[data-read] { background: var(--ais-hl-read); }
+.ais .ais-hl[data-lit] { background: var(--ais-hl); }
+
+/* ---- The four icons ---- */
+
+.ais .ais-opts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 12px;
+  align-content: start;
+  padding-top: 11px;
+}
+
+.ais .ais-opt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 4px 10px;
+  border-radius: 12px;
+  transition: background-color 160ms ease;
+}
+
+.ais .ais-opt[data-hover] { background: #f7f7f8; }
+
+.ais .ais-opt__tile {
+  position: relative;
+  display: block;
+  width: 56px;
+  height: 56px;
+  border-radius: 13px;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 2px transparent;
+  transition: box-shadow 180ms ease, transform 160ms ease-out;
+}
+
+.ais .ais-opt[data-pressed] .ais-opt__tile { transform: scale(0.96); }
+.ais .ais-opt[data-on] .ais-opt__tile { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--ss-text-strong); }
+
+/* Before it is drawn: an empty tile in its place, so nothing moves when it arrives */
+.ais .ais-opt__empty {
+  position: absolute;
+  inset: 0;
+  border-radius: 13px;
+  background: #f4f4f5;
+  transition: opacity 240ms ease;
+}
+
+.ais .ais-opt__mark {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transform: scale(0.94);
+  filter: blur(2px);
+  transition: opacity 320ms ease-out, transform 420ms cubic-bezier(0.23, 1, 0.32, 1), filter 320ms ease-out;
+}
+
+.ais .ais-opt[data-drawn] .ais-opt__mark { opacity: 1; transform: none; filter: none; }
+.ais .ais-opt[data-drawn] .ais-opt__empty { opacity: 0; }
+
+.ais .ais-opt__cap {
+  color: var(--ss-text);
+  font-size: 11px;
+  line-height: 1.3;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 240ms ease 120ms, color 200ms ease;
+}
+
+.ais .ais-opt[data-drawn] .ais-opt__cap { opacity: 1; }
+.ais .ais-opt[data-lit] .ais-opt__cap { color: var(--ss-text-strong); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ais .ais-opt__mark { transform: none; filter: none; }
+}
+
+/* ---- Narrow: the same step, stacked ---- */
+
+.ais .ss-stage[data-layout='compact'] .ais-window { top: 20px; left: 16px; width: 326px; height: 680px; }
+.ais .ss-stage[data-layout='compact'] .ais-steps { display: none; }
+.ais .ss-stage[data-layout='compact'] .ais-top,
+.ais .ss-stage[data-layout='compact'] .ais-cols { padding-left: 16px; padding-right: 16px; }
+.ais .ss-stage[data-layout='compact'] .ais-head { padding: 18px 16px 10px; }
+.ais .ss-stage[data-layout='compact'] .ais-cols { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+.ais .ss-stage[data-layout='compact'] .ais-fact { padding: 8px 0; }
+.ais .ss-stage[data-layout='compact'] .ais-fact--quiet { display: none; }
+.ais .ss-stage[data-layout='compact'] .ais-opts { gap: 6px; padding-top: 4px; border-top: 1px solid var(--ss-line); }
+.ais .ss-stage[data-layout='compact'] .ais-sub { font-size: 12px; }

@@ -77,19 +77,20 @@ const GEO: Record<Layout, { win: { left: number; top: number; width: number; hei
   compact: { win: { left: 16, top: 24, width: 326, height: 470 } },
 }
 
-export function AppIconPicker() {
+// still: the poster only, no script (a hero picture). bare: inside the site's shell, on its grey
+export function AppIconPicker({ still = false, bare = false }: { still?: boolean; bare?: boolean } = {}) {
   return (
-    <figure className="my-8 not-prose" role="img" aria-label="Clicking an app's icon opens four facet icons drawn from its description; pointing at one previews it in the header, breadcrumb and sidebar, and clicking keeps it">
+    <figure className={bare ? 'not-prose aip--bare' : 'my-8 not-prose'} role="img" aria-label="Clicking an app's icon opens four facet icons drawn from its description; pointing at one previews it in the header, breadcrumb and sidebar, and clicking keeps it">
       <Stage<S>
         width={720}
         height={440}
         compact={{ below: 600, width: 358, height: 440 }}
         initial={initial}
         poster={poster}
-        script={script}
+        script={still ? undefined : script}
         play="once"
-        fill
-        cursor={{ at: { wide: { x: 640, y: 400 }, compact: { x: 320, y: 400 } } }}
+        fill={!bare}
+        cursor={still ? undefined : { at: { wide: { x: 640, y: 400 }, compact: { x: 320, y: 400 } } }}
         className="aip"
       >
         {(s, rect, layout) => {
