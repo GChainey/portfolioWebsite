@@ -209,59 +209,34 @@ export const STUDIES: Study[] = [
     ],
     blocks: [
       { moment: { replay: '/replays/bestpractice/final.json', ground: true }, line: 'Find the patient, pick three providers, jump to the next free day, book.' },
-
-      // 1. The problem
       {
         lead: 'Booking is what a receptionist does all day.',
-        rest: 'It was slow, and the dialog grew with every feature.',
-        list: [
-          'You had to pick a provider before you could see a time. Receptionists start from the other end: when is anyone free?',
-          'Repeats, the waiting list, urgent appointments and conflicts were each added inline, so the dialog grew downwards every time.',
-        ],
-      },
-      { moment: { image: `${BP}/fluent-steps.png`, ratio: 2130 / 1694 }, line: 'The first version: pick a provider, then see their times.' },
-      { moment: { replay: '/replays/bestpractice/before.json', ground: true }, line: 'Each new feature made the same dialog longer.' },
-
-      // 2. The goals
-      {
-        lead: 'Three goals, and three things to measure.',
-        rest: 'Pre-launch, so no customers to talk to.',
-        list: [
-          'Fast, and the way receptionists really work.',
-          'Readable at a glance.',
-          'Robust enough for features that didn’t exist yet.',
-        ],
-        body: 'Measured by time to book, how often people book in the dialog instead of the calendar, and receptionist satisfaction.',
+        rest: 'Every feature had made the dialog longer.',
+        body: 'So I split it in two: the appointment on the left, readable at a glance, and the work in a panel that opens beside it and gets out of the way when you’re done. Then the craft was in the small decisions.',
       },
 
-      // 3. What didn't work
-      { lead: 'Keeping it all inline didn’t hold up.', rest: 'Every new feature would mean another fight for space.' },
-      { moment: { stills: [`${BP}/fluent-iter-grid.png`, `${BP}/fluent-iter-tabs.png`] }, line: 'Every provider’s times in one grid, then a tab per provider. Neither was readable at a glance.' },
+      { lead: 'One control, one choice.', rest: 'Urgent, Repeat and the waiting list were three switches that allowed combinations that made no sense.' },
+      { moment: { scene: 'bp-segmented' }, line: 'One choice at a time, and what it sets up opens right under it.' },
 
-      // 4. The idea, and the clean-up that made it work
-      {
-        lead: 'Split it in two.',
-        rest: 'The left panel is the appointment; anything that needs room opens on the right, then gets out of the way.',
-        body: 'For that to work the left panel had to be short. Two changes did most of it.',
-      },
-      { moment: { image: `${BP}/fluent-toggles.png`, ratio: 1716 / 607 }, line: 'Three switches allowed combinations that made no sense. One control, one choice.' },
-      { moment: { image: `${BP}/fluent-bundling.png`, ratio: 1842 / 708 }, line: 'Provider, date and time answer one question, so they became one row: the door to the right panel.' },
+      { lead: 'Three answers, one row.', rest: 'Provider, date and time answer one question, so they became one row: the door to the right panel.' },
+      { moment: { scene: 'bp-details-row' }, line: 'The row opens the panel, a time is picked, the row fills in.' },
 
-      // 5. Proof: repeats, then a workflow that didn't exist yet
-      { lead: 'Repeats took the most room, so they were the proof.', rest: 'Set up on the right, one line on the left.' },
-      { moment: { replay: '/replays/bestpractice/repeat.json', ground: true }, line: 'A repeat folds into one line: every 2 weeks, 3 of 5 occurrences.' },
-      { moment: { replay: '/replays/bestpractice/injury-claim.json', ground: true }, line: 'An injury claim, a workflow still to come, in the same pattern: a row on the left, the work on the right.' },
+      { lead: 'A repeat in one line.', rest: 'Set up on the right, folded on the left.' },
+      { moment: { replay: '/replays/bestpractice/repeat.json', ground: true }, line: 'Every 2 weeks, 3 of 5 occurrences, with the next and final dates under it.' },
 
-      // 6. Testing, and what it taught us
+      { lead: 'Never a dead end.', rest: 'Found in testing: a provider with nothing free shows their next time, one click away.' },
+      { moment: { scene: 'bp-next-available' }, line: 'The next available time is a link; one click and it’s picked.' },
+
+      { lead: 'Each provider, their own day.', rest: 'Also from testing: receptionists compare providers across days.' },
+      { moment: { replay: '/replays/bestpractice/provider-dates.json', ground: true }, line: 'Dominique moves to the next day; Yarn stays on the 25th.' },
+
+      { lead: 'Ready for what came next.', rest: 'An injury claim, a workflow still to come, in the same pattern.' },
+      { moment: { replay: '/replays/bestpractice/injury-claim.json', ground: true }, line: 'A row on the left, the work on the right.' },
+
       {
         lead: 'Five people, the same booking tasks.',
         rest: 'They understood it, could finish the workflows and could read an appointment at a glance.',
-        body: 'They also showed us how receptionists really juggle providers. Two things the design didn’t handle yet:',
       },
-      { moment: { replay: '/replays/bestpractice/provider-dates.json', ground: true }, line: 'Each provider gets their own date, so you can compare across days.' },
-      { moment: { replay: '/replays/bestpractice/unavailable.json', ground: true }, line: 'A provider with nothing free shows their next available time, one click away.' },
-
-      // Why it travels
       {
         lead: 'It works on any form that keeps growing.',
         rest: 'Settings, checkout, onboarding: the same three moves.',

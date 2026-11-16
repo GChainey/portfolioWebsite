@@ -60,8 +60,9 @@ const long = (d) => { const x = day(d); return `${ord(x.getDate())} ${x.toLocale
 const hm = (m) => { const h = Math.floor(m / 60), mm = m % 60; return `${h % 12 || 12}:${pad(mm)} ${h < 12 ? 'am' : 'pm'}` }
 const times = (id, d) => PEOPLE[id].days[d] ?? []
 const nextAvail = (id, d) => { for (let k = d + 1; k < d + 14; k++) if (times(id, k).length) return [k, times(id, k)[0]]; return null }
-// Everyone has a headshot (avatars/, from Unsplash, free licence); initials only as a fallback
-const PHOTOS = new Set(['alex-edmond', 'bob-nguyen', 'bobby-smith', 'charlie-charmoose', 'dominique-sat', 'elliott-lock', 'john-garner', 'mona-kane', 'roberta-bobbins', 'sam-darris', 'yarn-oldrick'])
+// Providers have headshots (avatars/, from Unsplash, free licence). Patients get initials: a practice
+// often won't have their photo (Gareth, 2026-11-16)
+const PHOTOS = new Set(['alex-edmond', 'charlie-charmoose', 'dominique-sat', 'elliott-lock', 'john-garner', 'sam-darris', 'yarn-oldrick'])
 const photo = (name) => { const f = name.replace(/^Dr /, '').toLowerCase().replace(/[^a-z]+/g, '-'); return PHOTOS.has(f) ? `avatars/${f}.jpg` : null }
 const avName = (name, size = 's24') => { const src = photo(name); if (src) return `<img class="av ${size}" src="${src}" alt="">`; const [bg, fg] = COLORS[0]; return `<span class="av ${size}" style="background:${bg};color:${fg}">${initials(name)}</span>` }
 const av = (id, size = 's28') => avName(PEOPLE[id].name, size)
@@ -273,7 +274,7 @@ const staticViews = {
       <div class="field">${label('Provider', true)}<div class="input"><span class="tag">${av('YO', 's20')}<span class="val">Yarn Oldrick</span></span><button class="dismiss">${I.x}</button></div></div>
       <div class="field">${label('Date and time')}<div class="boxed" style="animation:none;flex-direction:row"><div class="field" style="flex:1">${label('Date')}<div class="input"><span class="val">${short(0)}</span><span class="ico">${I.cal}</span></div></div><div class="field" style="flex:1">${label('Time')}<div class="input"><span class="val">11:00 am</span><span class="ico">${I.clock}</span></div></div></div></div></div>
       <div class="caption" style="text-align:left">Three fields, and you set them in order</div></div>
-    <div><span class="chip">After</span><div class="dialog static" style="width:400px;padding:20px">
+    <div><span class="chip">After</span><div class="dialog static" style="width:400px;padding:20px;display:flex;flex-direction:column">
       <div class="field">${label('Appointment details', true)}<button class="card">${av('YO', 's40')}<span class="lines"><b>Yarn Oldrick</b><span>${long(0)}</span><span>11:00 am – 11:15 am</span></span><span class="chev">${I.right}</span></button></div></div>
       <div class="caption" style="text-align:left">One row you read at a glance, and the door to the right panel</div></div></div>`,
 }

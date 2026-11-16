@@ -1,0 +1,407 @@
+/* Best Practice's New appointment dialog in Fluent 2 (recreations/bestpractice/fluent.css), for the
+   three Stageshow scenes. Everything is scoped under .bp. Fluent's tokens, audited to the fewest:
+   brand #0F6CBD with its tint #EBF3FC, ink #242424 and #616161, grey ground #F5F5F5, hairline
+   #D1D1D1, the original design's teal #CCF0E8 for a picked time. Type 20 / 14 / 12, weights 400
+   and 600. Space 4 inside a part, then 8, 12, 16, 24. */
+
+.bp .ss-stage {
+  --bp-brand: #0f6cbd;
+  --bp-brand-tint: #ebf3fc;
+  --bp-brand-tint-2: #cfe4fa;
+  --bp-ink: #242424;
+  --bp-ink-2: #616161;
+  --bp-ground: #f5f5f5;
+  --bp-line: #d1d1d1;
+  --bp-pick: #ccf0e8;
+  --bp-pick-hover: #e6f7f3;
+  --bp-red: #c50f1f;
+  --ss-font: 'Segoe UI Variable Text', 'Segoe UI Variable', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
+  --ss-text-strong: var(--bp-ink);
+  --ss-text: var(--bp-ink-2);
+  overflow: hidden;
+  border-radius: 20px;
+  /* The case study's shell grey: the scene fills its shell edge to edge */
+  background: var(--frame-ground, #f4f4f4);
+  font-family: var(--ss-font);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--bp-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The close-up: the dialog drawn at 1.3x from its top-left, placed by zoomStyle(); the view slides
+   to the right panel when it opens */
+.bp .bp-zoom {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  transition: transform 640ms cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.bp .bp-dialog {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  /* Taller than the stage shows even pulled back, so it always runs off the bottom */
+  height: 780px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 0 2px rgb(0 0 0 / 0.08), 0 8px 24px rgb(0 0 0 / 0.08);
+  transition: width 640ms cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.bp .bp-left {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+}
+
+/* No line between the panels: the grey tells them apart */
+.bp .bp-right {
+  flex: none;
+  /* Its content stays faint while the dialog's edge passes over it, then fades up; closing, it
+     fades first */
+  opacity: 0;
+  transition: opacity 160ms ease;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  background: var(--bp-ground);
+}
+
+.bp .bp-dialog[data-two] .bp-right {
+  opacity: 1;
+  transition: opacity 320ms ease 380ms;
+}
+
+/* Compact: the right panel slides in over the left, inside the same window */
+.bp .bp-dialog[data-push] .bp-right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 1;
+  transform: translateX(100%);
+  will-change: transform;
+  transition: transform 520ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.bp .bp-dialog[data-push][data-two] .bp-right { transform: none; }
+
+/* The panel it covers steps back as it's covered, the way a push does; never seen through it */
+.bp .bp-dialog[data-push] .bp-left { transition: opacity 360ms ease; }
+.bp .bp-dialog[data-push][data-two] .bp-left { opacity: 0; }
+
+.bp .bp-close {
+  position: absolute;
+  top: 28px;
+  right: 24px;
+  color: var(--bp-ink);
+  display: grid;
+}
+
+.bp .bp-title {
+  margin-bottom: 4px;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+}
+
+.bp .bp-title--sub { font-weight: 400; }
+
+.bp .bp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.bp .bp-label { color: var(--bp-ink); }
+.bp .bp-req { padding-left: 4px; color: var(--bp-red); }
+
+.bp .bp-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 12px;
+  min-width: 0;
+  border: 1px solid var(--bp-line);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.bp .bp-input:has(> .bp-photo:first-child),
+.bp .bp-input:has(> .bp-initials:first-child),
+.bp .bp-input:has(> .bp-badge:first-child) {
+  /* A face or a count leading a field sits as far from its left as from its top; the icon at
+     the other end matches it */
+  padding: 0 6px;
+}
+
+.bp .bp-val {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bp .bp-ico { flex: none; color: var(--bp-ink-2); }
+
+.bp .bp-photo {
+  flex: none;
+  display: block;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--bp-ground);
+}
+
+.bp .bp-initials {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--bp-brand-tint);
+  color: var(--bp-brand);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+  text-box: trim-both cap alphabetic;
+}
+
+.bp .bp-step { display: grid; }
+
+.bp .bp-disc {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e0e0e0;
+}
+
+/* The details row: full width of its panel, a hairline, no shadow; hover is the brand tint */
+.bp .bp-card {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) 16px;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--bp-line);
+  border-radius: 8px;
+  background: #fff;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.bp .bp-card[data-hover],
+.bp .bp-card[data-on] {
+  background: var(--bp-brand-tint);
+  border-color: var(--bp-brand-tint-2);
+}
+
+.bp .bp-card[data-on] { border-color: var(--bp-brand); }
+
+.bp .bp-card__lead { width: 40px; height: 40px; }
+
+.bp .bp-glyph {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--bp-brand-tint);
+  color: var(--bp-brand);
+}
+
+.bp .bp-card[data-hover] .bp-glyph,
+.bp .bp-card[data-on] .bp-glyph { background: #fff; }
+
+.bp .bp-lines {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.bp .bp-lines b { font-weight: 600; }
+.bp .bp-lines span { color: var(--bp-ink-2); }
+.bp .bp-lines--slim { gap: 0; flex: 1; }
+.bp .bp-strong { color: var(--bp-ink); font-weight: 600; }
+.bp .bp-lines .bp-strong { color: var(--bp-ink); }
+.bp .bp-small { font-size: 12px; line-height: 16px; }
+
+.bp .bp-chev { display: grid; color: var(--bp-ink-2); transition: color 150ms ease; }
+.bp .bp-card[data-hover] .bp-chev,
+.bp .bp-card[data-on] .bp-chev { color: var(--bp-brand); }
+
+/* Urgent · Repeat · Add to waiting list: hugs its labels, regular weight */
+.bp .bp-group {
+  /* Full width of the panel, as in the product: the three share it, the long label gets more */
+  display: grid;
+  /* 1 : 1 : 1.45, but never narrower than a label (the phone column is tight) */
+  grid-template-columns: minmax(max-content, 1fr) minmax(max-content, 1fr) minmax(max-content, 1.45fr);
+  align-self: stretch;
+}
+
+.bp .ss-stage[data-layout='compact'] .bp-seg { padding: 0 8px; }
+
+.bp .bp-seg {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 32px;
+  padding: 0 12px;
+  margin-left: -1px;
+  white-space: nowrap;
+  border: 1px solid var(--bp-line);
+  background: #fff;
+  color: var(--bp-ink);
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+.bp .bp-seg:first-child { margin-left: 0; border-radius: 4px 0 0 4px; }
+.bp .bp-seg:last-child { border-radius: 0 4px 4px 0; }
+.bp .bp-seg[data-hover] { background: var(--bp-ground); }
+
+.bp .bp-seg[data-on] {
+  z-index: 1;
+  background: var(--bp-brand-tint);
+  border-color: var(--bp-brand);
+  color: var(--bp-brand);
+}
+
+/* What a choice set up: a slim row under the group */
+.bp .bp-slimwrap { padding-top: 0; }
+
+.bp .bp-slim {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--bp-line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.bp .bp-slim__ico { display: grid; color: var(--bp-ink-2); }
+
+.bp .bp-area {
+  /* Tall enough that the stage's bottom edge always cuts through it, in the close-up and pulled
+     back, whichever line is open */
+  height: 400px;
+  border: 1px solid var(--bp-line);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.bp .bp-row2 {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Wide: the right panel is as wide as the left, room for the date and providers side by side */
+.bp .ss-stage[data-layout='wide'] .bp-row2 {
+  display: grid;
+  grid-template-columns: 124px minmax(0, 1fr);
+}
+
+.bp .bp-badge {
+  flex: none;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 4px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: var(--bp-brand);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* A provider and their times */
+.bp .bp-prov {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.bp .bp-prov--first { padding-top: 0; border-top: 0; }
+
+.bp .bp-prov__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bp .bp-prov__name { flex: 1; min-width: 0; }
+.bp .bp-prov__head .ss-states { flex: none; }
+
+.bp .bp-link {
+  color: var(--bp-brand);
+  white-space: nowrap;
+}
+
+.bp .bp-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.bp .bp-times {
+  display: grid;
+  gap: 4px;
+}
+
+.bp .bp-time {
+  display: grid;
+  place-items: center;
+  height: 32px;
+  border-radius: 4px;
+  white-space: nowrap;
+  transition: background-color 150ms ease;
+}
+
+.bp .bp-time[data-hover] { background: var(--bp-pick-hover); }
+.bp .bp-time[data-on] { background: var(--bp-pick); font-weight: 600; }
+
+.bp .bp-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.bp .bp-input--date { width: 136px; }
+
+/* "Next available appointment is …": never a dead end, the date is the link */
+.bp .bp-next {
+  padding: 4px 0;
+  text-align: center;
+  font-style: italic;
+  color: var(--bp-ink-2);
+}
+
+.bp .bp-next .bp-link { font-style: italic; }
+
+/* A line a choice set up, under the group: the space opens with it */
+.bp .bp-collapse { padding-top: 12px; will-change: transform; }
+
+/* Charlie's day, opened from the link: the date, then the times */
+.bp .bp-jump { display: flex; flex-direction: column; gap: 8px; }
+
+/* Moving by layout (the day opening pushes them), so give them a layer: their text glides */
+.bp .bp-prov { will-change: transform; }
