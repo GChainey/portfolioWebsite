@@ -14,7 +14,7 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: '4.1.0',
+    version: '4.2.0',
     date: '2026-11-15',
     title: 'Section Intros, Before AI, Five Short Studies',
     description: 'From PR #159: the homepage gets a line to open each section of work and its own Before AI rail; five short case studies on one template go on the dev server to review.',
@@ -27,6 +27,21 @@ export const CHANGELOG: ChangelogEntry[] = [
     ],
     aiTools: ['Claude Code'],
     branch: 'GChainey/new-design-public',
+  },
+  {
+    version: '4.1.0',
+    date: '2026-11-15',
+    title: 'Picking an App Icon Where It Lives',
+    description: 'A Stageshow scene on /stageshow (dev server only): an app\'s facet icon, drawn from what the app already knows, changed in place instead of through a form.',
+    changes: [
+      'Click the icon in the app header: four facet options open under it, drawn from the app\'s description',
+      'Pointing at one previews it in the header, the breadcrumb and the sidebar at once; clicking keeps it',
+      'Replaces the Paper "Create an app icon" dialog, which asked for a description the app already had, a style and a pick',
+      'Real facet marks: six from the prototype\'s icon file and three from the Paper facet set, in facet-marks.ts with a shared FacetTile',
+      'A compact layout for phones, and a poster with the daisy picked for reduced motion',
+    ],
+    aiTools: ['Claude Code', 'Paper'],
+    branch: 'GChainey/facet-icon-flow',
   },
   {
     version: '4.0.0',
