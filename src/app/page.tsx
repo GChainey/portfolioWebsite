@@ -9,6 +9,7 @@ import { SHOWCASE_SECTIONS } from '@/content/home-showcase'
 import { RfpLetter } from '@/components/stageshow/RfpLetter'
 import { TESTIMONIALS } from '@/content/testimonials'
 import { COMPANY_MARKS } from '@/content/company-marks'
+import { PARKED_LIVE } from '@/content/parked'
 import { EMAIL, EssayCard, ESSAYS, SKILLS, GREY, Headline, INK, LINE, SHADOW, SHELL } from '@/components/site/style'
 
 // The homepage: justinschueler.com's narrow design with my content. One 540px column; styles from
@@ -45,13 +46,18 @@ const PRODUCTS: { name: string; href: string; landing: string; piece: string }[]
   { name: 'Thesis', href: 'https://thesis-phi-self.vercel.app', landing: '/draft/landing-thesis.jpg', piece: 'thesis' },
 ]
 
-// piece as the products; the RFP's is its Stageshow scene, which fills its card instead
+// piece as the products; the RFP's is its Stageshow scene, which fills its card instead. A /draft/
+// href is a short case study still on the dev server only: off it, the name is plain text
 const PROJECTS: { name: string; year: string; href?: string; piece: string; scene?: ReactNode }[] = [
   { name: 'Winning a tender', year: '2025', href: '/work/rfp', piece: 'rfp', scene: <RfpLetter bare /> },
-  { name: 'Testing on live models', year: '2025–26', piece: 'configurator' },
-  { name: 'An agent-built website', year: '2026', piece: 'html-brand-website' },
-  { name: 'SEEK, fixing the funnel', year: '2024', piece: 'seek' },
-  { name: 'Booking in two panels', year: '2021', piece: 'bestpractice' },
+  { name: 'Testing on live models', year: '2025–26', href: '/draft/configurator', piece: 'configurator' },
+  { name: 'An agent-built website', year: '2026', href: '/draft/website', piece: 'html-brand-website' },
+]
+
+// Before AI: the earlier work, on its own rail
+const BEFORE_AI: typeof PROJECTS = [
+  { name: 'SEEK, fixing the funnel', year: '2024', href: '/draft/seek', piece: 'seek' },
+  { name: 'Booking in two panels', year: '2021', href: '/draft/bestpractice', piece: 'bestpractice' },
 ]
 
 // Creative: the games, on their own rail
@@ -204,6 +210,16 @@ function CompaniesCard() {
   )
 }
 
+const liveHref = (href?: string) => href && (!href.startsWith('/draft/') || PARKED_LIVE) ? href : undefined
+function StudyLink({ href, children }: { href?: string; children: ReactNode }) {
+  const live = liveHref(href)
+  return live ? <Link href={live} className="dr-link">{children}</Link> : <>{children}</>
+}
+// A list as a sentence: a, b and c.
+const listed = (items: { name: string; href?: string }[], name = (n: string) => n) => items.map((p, i) => (
+  <span key={p.name}><StudyLink href={p.href}>{name(p.name)}</StudyLink>{i < items.length - 2 ? ', ' : i === items.length - 2 ? ' and ' : '.'}</span>
+))
+
 // A project or creative piece: its clip framed on the grey (or its Stageshow scene filling the card),
 // then the name and year
 function WorkCard({ p, focus, near, pad }: { p: (typeof PROJECTS)[number]; focus: boolean; near: boolean; pad: number }) {
@@ -213,7 +229,8 @@ function WorkCard({ p, focus, near, pad }: { p: (typeof PROJECTS)[number]; focus
       <div className="flex justify-between gap-4"><span>{p.name}</span><span className="tabular-nums" style={{ color: GREY }}>{p.year}</span></div>
     </div>
   )
-  return p.href ? <Link href={p.href} className="block">{card}</Link> : card
+  const href = liveHref(p.href)
+  return href ? <Link href={href} className="block">{card}</Link> : card
 }
 
 // Kind words, as justinschueler.com's numbered services: the person, then their words when opened
@@ -326,22 +343,33 @@ export default function Home() {
           />
         </section>
 
-        <section id="projects" className="dr-rise scroll-mt-10" style={rise(1)}>
+        <section id="projects" className="dr-rise flex scroll-mt-10 flex-col gap-16" style={rise(1)}>
+          <Headline as="p" lead="AI has fundamentally changed design." rest={listed(PROJECTS, (n) => n.replace(/^An /, 'an '))} />
           <Rail label="Projects" items={PROJECTS} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={PAD} />} />
         </section>
 
-        <section className="dr-rise" style={rise(2)}>
+        <section className="dr-rise flex flex-col gap-16" style={rise(2)}>
+          <Headline
+            as="p"
+            lead="Before AI."
+            rest={<>At <StudyLink href="/draft/seek">SEEK</StudyLink> I learned a release is where the work starts: follow the funnel, one leak at a time. At <StudyLink href="/draft/bestpractice">Best Practice</StudyLink>, the craft was in small decisions, like three toggles becoming one control.</>}
+          />
+          <Rail label="Before AI" items={BEFORE_AI} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={PAD} />} />
+        </section>
+
+        <section className="dr-rise flex flex-col gap-16" style={rise(3)}>
+          <Headline as="p" lead="AI enables so much more." rest={<>Internal tools that help build the thing, scratching a curious itch, or dreaming big: {listed(CREATIVE)}</>} />
           <Rail label="Creative" items={CREATIVE} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={PAD} />} />
         </section>
 
-        <section className="dr-rise flex flex-col gap-10" style={rise(3)}>
+        <section className="dr-rise flex flex-col gap-10" style={rise(4)}>
           <div className="flex flex-col gap-6">
             <Label>Kind words</Label>
             <KindWords />
           </div>
         </section>
 
-        <section className="dr-rise flex flex-col gap-6" style={rise(4)}>
+        <section className="dr-rise flex flex-col gap-6" style={rise(5)}>
           <Label right={<Link href="/essays" className="dr-link">All essays</Link>}>Thoughts</Label>
           <Thoughts />
         </section>
@@ -351,7 +379,7 @@ export default function Home() {
             <a href={`mailto:${EMAIL}`} className="dr-link" style={{ color: INK }}>{EMAIL}</a>
             <span className="hidden [@media(hover:hover)_and_(pointer:fine)]:inline">{copied ? 'Copied' : 'press E'}</span>
           </div>
-          <div className="flex gap-5"><Link href="/essays">Essays</Link><Link href="/cv">CV</Link><Link href="/contact">Contact</Link><Link href="/changelog">Changelog</Link></div>
+          <div className="flex gap-5"><Link href="/essays">Essays</Link><Link href="/cv">CV</Link><a href="https://x.com/garethchainey" target="_blank" rel="noopener noreferrer">X ↗</a><Link href="/contact">Contact</Link><Link href="/changelog">Changelog</Link></div>
         </footer>
       </main>
     </div>

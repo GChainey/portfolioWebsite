@@ -14,6 +14,21 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '4.1.0',
+    date: '2026-11-15',
+    title: 'Section Intros, Before AI, Five Short Studies',
+    description: 'From PR #159: the homepage gets a line to open each section of work and its own Before AI rail; five short case studies on one template go on the dev server to review.',
+    changes: [
+      'Homepage: "AI has fundamentally changed design." over the Projects, "Before AI." with SEEK and Best Practice on their own rail, and "AI enables so much more." over Creative',
+      'Projects is the three AI-era pieces; SEEK and Best Practice moved to Before AI',
+      'X in the footer',
+      'Five short case studies on one template (DAISY Assess, the website, Testing on live models, SEEK, Best Practice) at /draft/<slug>, dev server only; their names stay plain text on the live site',
+      'A compare tab on the RFP study (dev only): the live /work/rfp, the template version, or both side by side at /draft/compare',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/new-design-public',
+  },
+  {
     version: '4.0.0',
     date: '2026-11-15',
     title: 'The Narrow Homepage Goes Live',
