@@ -14,6 +14,21 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.12.0',
+    date: '2026-11-15',
+    title: 'Details: Small Features, Craft and Delight',
+    description: 'A draft page at /draft/details (dev server only): one long page of small features, each a few lines, a hero and an example of it in use. It opens with app icons drawn from what the app already knows.',
+    changes: [
+      'App icons: the picker as a still for the hero, then the set-up step playing',
+      'The set-up step reads the app\'s name, what it does and its documents, and draws a facet icon from each idea it finds; the word it came from is highlighted as the icon draws in',
+      'Pointing at an icon lights its word again and shows it in the sidebar; clicking picks it and Continue wakes up',
+      'The Apps table, first and last, as the second detail; its marker notes moved to content/apps-table-notes.ts so both pages share them',
+      'AppIconPicker takes still and bare; a compact layout for each scene on phones',
+    ],
+    aiTools: ['Claude Code', 'Paper'],
+    branch: 'GChainey/details-page',
+  },
+  {
     version: '3.11.0',
     date: '2026-11-15',
     title: 'Picking an App Icon Where It Lives',
