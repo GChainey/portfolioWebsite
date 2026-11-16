@@ -18,7 +18,7 @@ type Detail = {
   lead: string // the headline's claim, in ink
   rest: string // the rest of it, in grey
   body: ReactNode
-  shots: { node: ReactNode; line: ReactNode }[]
+  shots: { node: ReactNode; line: ReactNode; scene?: boolean }[]
 }
 
 const DETAILS: Detail[] = [
@@ -34,8 +34,8 @@ const DETAILS: Detail[] = [
       </>
     ),
     shots: [
-      { node: <AppIconPicker still bare />, line: 'Change it where it lives: point at one and the header, breadcrumb and sidebar show it.' },
-      { node: <AppIconSetup bare />, line: 'Setting it up: each word lights up as the icon it gave is drawn.' },
+      { scene: true, node: <AppIconPicker still bare />, line: 'Change it where it lives: point at one and the header, breadcrumb and sidebar show it.' },
+      { scene: true, node: <AppIconSetup bare />, line: 'Setting it up: each word lights up as the icon it gave is drawn.' },
     ],
   },
   {
@@ -72,7 +72,7 @@ export default function DraftDetails() {
               <div className="flex flex-col gap-3">{d.body}</div>
             </div>
             {d.shots.map((s, i) => (
-              <Moment key={i} line={s.line}>{s.node}</Moment>
+              <Moment key={i} line={s.line} scene={s.scene}>{s.node}</Moment>
             ))}
           </article>
         ))}

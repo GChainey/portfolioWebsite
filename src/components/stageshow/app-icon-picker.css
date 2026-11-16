@@ -17,7 +17,7 @@
 /* In the site's shell: its grey ground, no mat corners of its own */
 .aip--bare .aip .ss-stage {
   border-radius: 0;
-  background: #f4f4f4;
+  background: var(--frame-ground, #f4f4f4);
 }
 
 /* ---- Facet tiles ---- */

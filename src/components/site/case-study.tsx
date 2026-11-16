@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 import Link from 'next/link'
 import { RfpLetter } from '@/components/stageshow/RfpLetter'
 import { RecordingReplay } from '@/components/replay/RecordingReplay'
-import { COL, GREY, Headline, INK, Rows, SHELL, Shell, WIDE } from '@/components/site/style'
+import { COL, GREY, Headline, INK, LINE, Rows, SHELL, Shell, WIDE } from '@/components/site/style'
 
 // The short case study, in the draft's design: enough to get someone interested, built round three
 // things: the impact, the craft, and what AI let me do that I couldn't before (where it applies;
@@ -39,20 +39,20 @@ function Video({ src }: { src: string }) {
 
 function Art({ media }: { media: Media }) {
   if ('replay' in media) return <Shell><div data-ss-fill><RecordingReplay src={media.replay} region={media.region} bare /></div></Shell>
-  if ('scene' in media) return <Shell><div data-ss-fill><RfpLetter bare /></div></Shell>
+  if ('scene' in media) return <Shell scene><div data-ss-fill><RfpLetter bare /></div></Shell>
   if ('video' in media) {
     // A phone recording stands on the grey, the height of a landscape clip
     if (media.ratio < 1) return (
       <div className="flex aspect-[16/10] items-center justify-center rounded-[20px] p-6" style={{ background: SHELL }}>
-        <div className="h-full overflow-hidden rounded-[16px] bg-white" style={{ aspectRatio: media.ratio }}><Video src={media.video} /></div>
+        <div className="h-full overflow-hidden rounded-[16px] bg-white" style={{ aspectRatio: media.ratio, boxShadow: `0 0 0 1px ${LINE}` }}><Video src={media.video} /></div>
       </div>
     )
     return <Shell><div style={{ aspectRatio: media.ratio }}><Video src={media.video} /></div></Shell>
   }
   return (
-    <div className="grid grid-cols-2 gap-1 rounded-[20px] p-1" style={{ background: SHELL }}>
+    <div className="grid grid-cols-2 gap-3 rounded-[20px] p-3" style={{ background: SHELL }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      {media.stills.map((s) => <img key={s} src={s} alt="" className="block w-full rounded-[16px] bg-white" />)}
+      {media.stills.map((s) => <img key={s} src={s} alt="" className="block w-full rounded-[8px] bg-white" style={{ boxShadow: `0 0 0 1px ${LINE}` }} />)}
     </div>
   )
 }

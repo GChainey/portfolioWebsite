@@ -120,7 +120,7 @@ const onlyWindows = (id: string) => !!PIECES[id]?.matte
 
 // The work inset on the card's grey by \`pad\` on every side, the card taking the work's own ratio
 // so the gap is even all round, and the corners concentric: the card's radius is the window's
-// plus the padding
+// plus the padding. A hairline edge, not a shadow: one grey, nothing raised inside it
 const INNER = 8
 // How far the work sits in from its card's edge
 const PAD = 12
@@ -128,7 +128,7 @@ const outer = (pad: number) => pad + INNER
 function Framed({ pad, ratio, bare = false, children }: { pad: number; ratio: number; bare?: boolean; children: ReactNode }) {
   return (
     <div style={{ padding: pad, borderRadius: outer(pad), background: SHELL }}>
-      <div className="relative overflow-hidden" style={{ aspectRatio: ratio, borderRadius: INNER, boxShadow: pad && !bare ? SHADOW : undefined }}>{children}</div>
+      <div className="relative overflow-hidden" style={{ aspectRatio: ratio, borderRadius: INNER, boxShadow: pad && !bare ? `0 0 0 1px ${LINE}` : undefined }}>{children}</div>
     </div>
   )
 }

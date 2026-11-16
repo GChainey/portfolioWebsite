@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.12.1',
+    date: '2026-11-15',
+    title: 'One Grey Around the Work',
+    description: 'The frame around every piece of work is now one grey surface. It used to be a grey ring around a white panel with its own shadow, so a scene inside read as grey, a shadow line, then a second grey.',
+    changes: [
+      'Shell (components/site/style.tsx): recordings, screenshots and video sit inset 12px on the grey with 8px corners and a hairline edge, no shadow',
+      'Stageshow scenes fill the shell edge to edge on the same grey (Shell scene, Moment scene)',
+      'The same hairline in place of the shadow on the homepage\'s clips and in the case study pages\' videos and stills',
+      'Reviewed at /draft/frames (dev only) against two other ways: no plate, and a dotted canvas',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/app-icon-demo',
+  },
+  {
     version: '4.3.0',
     date: '2026-11-15',
     title: 'Section Intros, Before AI, Five Short Studies',

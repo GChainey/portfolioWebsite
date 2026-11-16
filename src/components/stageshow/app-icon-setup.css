@@ -17,7 +17,7 @@
 /* In the draft's shell: its grey ground, no mat corners of its own */
 .ais--bare .ais .ss-stage {
   border-radius: 0;
-  background: #f4f4f4;
+  background: var(--frame-ground, #f4f4f4);
 }
 
 /* ---- The window: inset top and sides, off the bottom ---- */
