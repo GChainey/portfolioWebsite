@@ -83,15 +83,115 @@ export const STUDIES: Study[] = [
     slug: 'seek',
     label: 'SEEK',
     meta: '2024',
-    lead: 'The first release missed, so we followed the funnel.',
-    rest: 'Three leaks, fixed one assumption at a time.',
-    rows: [['Education conversion', '9% → 20%, against a goal of 12%'], ['Paid connections', '+34%, against a goal of 10 to 15%']],
+    // For a recruiter: what moved, in words that travel. "Education conversion" is the share of people
+    // who saw the courses and signed up with a provider; a paid connection is the premium lead SEEK
+    // charges providers for
+    lead: 'We more than doubled a sign-up funnel, from 9% to 20%.',
+    rest: 'A launch that missed its goal, turned round in a week or two, one step of the funnel at a time.',
+    rows: [
+      ['Sign-up conversion', '9% → 20%, against a goal of 12%'],
+      ['Premium connections', '+34%, against a goal of 10 to 15%'],
+      ['Release to fixes', 'A week or two'],
+      ['Rolled out to', 'All 3,000+ career pages'],
+      ['Role', 'Lead designer, in a team of seven'],
+    ],
     blocks: [
-      { moment: { video: `${SEEK}/final-desktop.mp4`, ratio: 1506 / 978 }, line: 'The course finder on a role page, as it shipped.' },
-      { lead: 'One leak at a time.', rest: 'A five-stage funnel, one assumption for each.' },
-      { moment: { video: `${SEEK}/all-tab.mp4`, ratio: 540 / 1114 }, line: 'An All tab, made the default. The tabs are still there as shortcuts.' },
-      { moment: { video: `${SEEK}/flyout.mp4`, ratio: 1600 / 1166 }, line: 'A course card opens a fly-out: a short summary, Enquire and Visit website.' },
-      { moment: { video: `${SEEK}/connection-mobile.mp4`, ratio: 540 / 1114 }, line: 'On mobile the same thing slides up as a sheet.' },
+      { moment: { hero: { desktop: `${SEEK}/final-desktop.mp4`, desktopRatio: 1506 / 978, phone: `${SEEK}/connection-mobile.mp4`, phoneRatio: 540 / 1114 } }, line: 'Courses on a SEEK career page, as they shipped: desktop and phone.' },
+
+      // 1. The release
+      {
+        lead: 'We shipped it bare, on purpose.',
+        rest: 'A fast release, and a baseline to measure every fix against.',
+        list: [
+          'The brief: get more job seekers signing up with a course provider from SEEK’s career pages, the pages that describe a job.',
+          'The first release: a list of courses on the page, one tab per qualification.',
+          'Pick a course, read about it, then enquire or visit the provider’s site. That last step is the premium connection providers pay for.',
+        ],
+      },
+      { moment: { video: `${SEEK}/mvp.mp4`, ratio: 540 / 1114 }, line: 'The first release: one qualification at a time.' },
+
+      // 2. The goals, and the miss
+      {
+        lead: 'We set the goals before it went live.',
+        rest: 'The first numbers came back short.',
+        rows: [['Sign-up conversion', '9% → 12%'], ['Premium connections', '+10 to 15%']],
+        body: 'The tempting move was a redesign. We went to the data instead.',
+      },
+
+      // 3. The funnel
+      { lead: 'We laid the journey out as a funnel.', rest: 'Five steps, three of them leaking. Within a week or two we had a fix out for each.' },
+      {
+        moment: {
+          funnel: {
+            stages: [
+              { label: 'Sees the courses' },
+              { label: 'Finds the right course', leak: 'Too much friction to find one', fix: 'An All tab, made the default', href: '#find' },
+              { label: 'Picks a course', leak: 'The cards all look the same', fix: 'Logo and course name first', href: '#pick' },
+              { label: 'Reads about it' },
+              { label: 'Enquires or visits', leak: 'Too many steps to get there', fix: 'Enquire in place, in a sheet', href: '#connect' },
+            ],
+            before: { label: 'First release', result: '9%', widths: [100, 78, 58, 52, 44] },
+            after: { label: 'After the fixes', result: '20%', widths: [100, 94, 88, 84, 78] },
+          },
+        },
+        line: 'Switch between the first release and the fixes. One assumption per leak, one small fix for each, measured one at a time.',
+      },
+
+      // 4. Piece by piece
+      {
+        id: 'find',
+        lead: 'Leak 1: too much friction to find a course.',
+        rest: 'So, an All tab, made the default.',
+        body: 'You had to work through the tabs one at a time to see what was on offer. Now every qualification is on one page, and the tabs are still there as shortcuts.',
+      },
+      { moment: { video: `${SEEK}/all-tab.mp4`, ratio: 540 / 1114 }, line: 'The All tab: every qualification on one scroll.' },
+      {
+        id: 'pick',
+        lead: 'Leak 2: the cards all looked the same.',
+        rest: 'So, the provider’s logo and the course name first.',
+        body: 'The first cards were mostly text, with the provider’s name where the course name should be. The new card leads with the logo and the course, then the provider, how long it takes, where and when.',
+      },
+      { moment: { image: `${SEEK}/select-a-course.webp`, ratio: 2000 / 1334 }, line: 'Left, the first card. Right, the new one.' },
+      {
+        id: 'connect',
+        lead: 'Leak 3: too many steps to make a connection.',
+        rest: 'So, the connection moved onto the page.',
+        body: 'A course took you off the career page to a separate course page, and only there could you ask the provider for more.',
+      },
+      { moment: { video: `${SEEK}/connection-before.mp4`, ratio: 1600 / 958 }, line: 'Before: the career page, then a course page, then the form.' },
+      { moment: { video: `${SEEK}/flyout.mp4`, ratio: 1600 / 1166 }, line: 'After: a course card opens a fly-out with Enquire and Visit website, and the form opens in place.' },
+      { moment: { video: `${SEEK}/connection-mobile.mp4`, ratio: 540 / 1114 }, line: 'On a phone the same thing slides up as a sheet.' },
+
+      // 5. The impact
+      {
+        lead: 'All three fixes together beat the goals.',
+        rest: 'So it went to every career page.',
+        rows: [
+          ['Sign-up conversion', '9% → 20%, goal 12%'],
+          ['Premium connections', '+34%, goal 10 to 15%'],
+          ['Whole-page conversion', '5% → 9%'],
+          ['Rolled out to', 'All 3,000+ career pages'],
+        ],
+      },
+
+      // Why it travels: the method, not the courses
+      {
+        lead: 'It works on any funnel.',
+        rest: 'Sign-up, checkout, onboarding: the same four moves.',
+        list: [
+          'Ship small and early, so you have a baseline to measure against.',
+          'Lay the journey out as steps, and find where people drop out.',
+          'Write down one assumption for each leak.',
+          'Ship one small fix per leak, and measure each on its own.',
+        ],
+      },
+      {
+        lead: 'What I took from it.',
+        list: [
+          'A usability test tells you whether people can use something, not whether they will. The tabs passed testing and still leaked.',
+          'A release is where the work starts, not where it ends.',
+        ],
+      },
     ],
   },
   {
