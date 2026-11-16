@@ -60,8 +60,11 @@ const long = (d) => { const x = day(d); return `${ord(x.getDate())} ${x.toLocale
 const hm = (m) => { const h = Math.floor(m / 60), mm = m % 60; return `${h % 12 || 12}:${pad(mm)} ${h < 12 ? 'am' : 'pm'}` }
 const times = (id, d) => PEOPLE[id].days[d] ?? []
 const nextAvail = (id, d) => { for (let k = d + 1; k < d + 14; k++) if (times(id, k).length) return [k, times(id, k)[0]]; return null }
-const av = (id, size = 's28') => { const p = PEOPLE[id]; const [bg, fg] = COLORS[0]; return `<span class="av ${size}" style="background:${bg};color:${fg}">${initials(p.name)}</span>` }
-const avName = (name, size = 's24', c = 0) => { const [bg, fg] = COLORS[0]; return `<span class="av ${size}" style="background:${bg};color:${fg}">${initials(name)}</span>` }
+// Everyone has a headshot (avatars/, from Unsplash, free licence); initials only as a fallback
+const PHOTOS = new Set(['alex-edmond', 'bob-nguyen', 'bobby-smith', 'charlie-charmoose', 'dominique-sat', 'elliott-lock', 'john-garner', 'mona-kane', 'roberta-bobbins', 'sam-darris', 'yarn-oldrick'])
+const photo = (name) => { const f = name.replace(/^Dr /, '').toLowerCase().replace(/[^a-z]+/g, '-'); return PHOTOS.has(f) ? `avatars/${f}.jpg` : null }
+const avName = (name, size = 's24') => { const src = photo(name); if (src) return `<img class="av ${size}" src="${src}" alt="">`; const [bg, fg] = COLORS[0]; return `<span class="av ${size}" style="background:${bg};color:${fg}">${initials(name)}</span>` }
+const av = (id, size = 's28') => avName(PEOPLE[id].name, size)
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
 
 // ---------- State ----------

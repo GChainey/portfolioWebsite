@@ -8,7 +8,9 @@ import type { Study } from '@/components/site/case-study'
 
 const BP = '/case-studies/bestpractice-booking'
 const SEEK = '/case-studies/seek-learning'
-const PHONE = 390 / 844 // the SEEK recreation is recorded at a phone's size
+// The SEEK recreation is recorded at a phone's size with its own status bar; the iPhone frame draws
+// a real one, so the recordings are cropped below it
+const SEEK_SCREEN = { x: 0, y: 47, width: 390, height: 797 }
 const SITE = '/case-studies/html-brand-website'
 
 export const STUDIES: Study[] = [
@@ -97,7 +99,7 @@ export const STUDIES: Study[] = [
       ['Role', 'Lead designer, in a team of seven'],
     ],
     blocks: [
-      { moment: { hero: { desktop: `${SEEK}/final-desktop.mp4`, desktopRatio: 1506 / 978, phone: '/replays/seek/hero.json', phoneRatio: PHONE, phoneReplay: true } }, line: 'Courses on a SEEK career page, as they shipped: desktop and phone.' },
+      { moment: { replay: '/replays/seek/hero.json', phone: true, region: SEEK_SCREEN }, line: 'Courses on a SEEK career page, as they shipped.' },
 
       // 1. The release
       {
@@ -109,7 +111,7 @@ export const STUDIES: Study[] = [
           'Pick a course, read about it, then enquire or visit the provider’s site. That last step is the premium connection providers pay for.',
         ],
       },
-      { moment: { replay: '/replays/seek/release.json', phone: PHONE }, line: 'The first release: one qualification at a time.' },
+      { moment: { replay: '/replays/seek/release.json', phone: true, region: SEEK_SCREEN }, line: 'The first release: one qualification at a time.' },
 
       // 2. The goals, and the miss
       {
@@ -145,22 +147,22 @@ export const STUDIES: Study[] = [
         rest: 'So, an All tab, made the default.',
         body: 'You had to work through the tabs one at a time to see what was on offer. Now every qualification is on one page, and the tabs are still there as shortcuts.',
       },
-      { moment: { replay: '/replays/seek/all-tab.json', phone: PHONE }, line: 'The All tab: every qualification on one scroll, the tabs kept as shortcuts.' },
+      { moment: { replay: '/replays/seek/all-tab.json', phone: true, region: SEEK_SCREEN }, line: 'The All tab: every qualification on one scroll, the tabs kept as shortcuts.' },
       {
         id: 'pick',
         lead: 'Leak 2: the cards all looked the same.',
         rest: 'So, the provider’s logo and the course name first.',
         body: 'The first cards were mostly text, with the provider’s name where the course name should be. The new card leads with the logo and the course, then the provider, how long it takes, where and when.',
       },
-      { moment: { replay: '/replays/seek/cards.json', phone: PHONE }, line: 'The first cards, then the logo and course name first.' },
+      { moment: { replay: '/replays/seek/cards.json', phone: true, region: SEEK_SCREEN }, line: 'The first cards, then the logo and course name first.' },
       {
         id: 'connect',
         lead: 'Leak 3: too many steps to make a connection.',
         rest: 'So, it moved into a sheet on the same page.',
         body: 'A course took you off the career page to a separate course page, and only there could you ask the provider for more.',
       },
-      { moment: { replay: '/replays/seek/connect-before.json', phone: PHONE }, line: 'Before: a course leaves for its own page, then a form on another page.' },
-      { moment: { replay: '/replays/seek/connect-after.json', phone: PHONE }, line: 'After: the course opens in a sheet, and the enquiry form opens in it.' },
+      { moment: { replay: '/replays/seek/connect-before.json', phone: true, region: SEEK_SCREEN }, line: 'Before: a course leaves for its own page, then a form on another page.' },
+      { moment: { replay: '/replays/seek/connect-after.json', phone: true, region: SEEK_SCREEN }, line: 'After: the course opens in a sheet, and the enquiry form opens in it.' },
 
       // 5. The impact
       {

@@ -1,11 +1,13 @@
 'use client'
 
-import type { ReactNode } from 'react'
+import { type ReactNode, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { RfpLetter } from '@/components/stageshow/RfpLetter'
 import { RecordingReplay } from '@/components/replay/RecordingReplay'
 import { Funnel, type FunnelData } from '@/components/site/funnel'
-import { COL, GREY, Headline, INK, LINE, Mat, Rows, SHELL, Shell, WIDE } from '@/components/site/style'
+import { Contents } from '@/components/site/contents'
+import { Phone } from '@/components/stageshow/kit/phone'
+import { COL, GREY, Headline, INK, Mat, Rows, SHELL, Shell, WIDE } from '@/components/site/style'
 
 // The short case study, in the draft's design: enough to get someone interested, built round three
 // things: the impact, the craft, and what AI let me do that I couldn't before (where it applies;
@@ -14,13 +16,12 @@ import { COL, GREY, Headline, INK, LINE, Mat, Rows, SHELL, Shell, WIDE } from '@
 
 type Region = { x: number; y: number; width: number; height: number }
 export type Media =
-  | { replay: string; region?: Region; phone?: number; ground?: boolean } // an HTML replay, sharp at any size. phone: its width ÷ height, shown as a phone on the grey. ground: the recording paints its own grey page, so it fills the shell with no white panel round it
+  | { replay: string; region?: Region; phone?: boolean; ground?: boolean } // an HTML replay, sharp at any size. phone: a phone-sized recording, shown in an iPhone on the grey (region crops off its own status bar). ground: the recording paints its own grey page, so it fills the shell with no white panel round it
   | { video: string; ratio: number } // the pre-AI work, which only exists as video. Below 1, a phone
   | { stills: string[] } // a few stills side by side, two to a row
   | { scene: 'rfp-letter' } // a Stageshow scene
   | { image: string; ratio: number } // a cut-out still (phones on a transparent ground), standing on the grey
   | { funnel: FunnelData } // the interactive funnel: first release, or after the fixes
-  | { hero: { desktop: string; desktopRatio: number; phone: string; phoneRatio: number; phoneReplay?: boolean } } // desktop and phone together; the phone a video or an HTML replay
 
 export type Block =
   | { moment: Media; line: string }
@@ -40,35 +41,40 @@ function Video({ src }: { src: string }) {
   return <video src={src} autoPlay muted loop playsInline preload="metadata" className="block h-full w-full object-cover" />
 }
 
+// The iPhone 18 Pro from the Stageshow kit (Apple's geometry: titanium band, Dynamic Island, its own
+// status bar), its outer width ÷ height
+const IPHONE_RATIO = (402 + 26) / (874 + 26)
+
+// A phone-sized recording in an iPhone, standing on the grey. The phone is sized to the shell's
+// height (24px clear above and below), so it's as big as the frame allows on any screen
+function PhoneReplay({ src, region }: { src: string; region?: Region }) {
+  const box = useRef<HTMLDivElement>(null)
+  const [width, setWidth] = useState(0)
+  useEffect(() => {
+    const el = box.current
+    if (!el) return
+    const fit = () => setWidth(Math.round((el.clientHeight - 48) * IPHONE_RATIO))
+    fit()
+    const ro = new ResizeObserver(fit)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+  return (
+    <div ref={box} className="flex aspect-[5/4] items-center justify-center rounded-[20px]" style={{ background: SHELL }}>
+      {width > 0 && <Phone width={width} frame="pro" style={{ filter: 'drop-shadow(0 16px 24px rgba(0,0,0,0.12))' }}><RecordingReplay src={src} region={region} bare /></Phone>}
+    </div>
+  )
+}
+
 function Art({ media }: { media: Media }) {
   if ('funnel' in media) return <Funnel data={media.funnel} />
-  if ('hero' in media) {
-    // The desktop as a window on the grey, the phone standing in front of its right edge
-    const h = media.hero
-    return (
-      <div className="relative aspect-[16/10] overflow-hidden rounded-[24px]" style={{ background: SHELL }}>
-        <div className="absolute left-[5%] top-[8%] w-[74%] overflow-hidden rounded-[10px] bg-white" style={{ aspectRatio: h.desktopRatio, boxShadow: `0 0 0 1px ${LINE}` }}><Video src={h.desktop} /></div>
-        {h.phoneReplay
-          ? <div className="absolute bottom-[8%] right-[5%] h-[84%] overflow-hidden rounded-[20px] bg-white" style={{ aspectRatio: h.phoneRatio, boxShadow: `0 0 0 1px ${LINE}, 0 16px 32px -12px rgba(0,0,0,0.25)` }}><RecordingReplay src={h.phone} bare /></div>
-          : <div className="absolute bottom-[8%] right-[5%] h-[84%] overflow-hidden" style={{ aspectRatio: h.phoneRatio, borderRadius: '15% / 7.2%', filter: 'drop-shadow(0 16px 24px rgba(0,0,0,0.18))' }}><Video src={h.phone} /></div>}
-      </div>
-    )
-  }
   if ('image' in media) return (
     <div className="rounded-[20px] p-3 min-[600px]:p-6" style={{ background: SHELL }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={media.image} alt="" className="block w-full" style={{ aspectRatio: media.ratio }} />
     </div>
   )
-  if ('replay' in media && media.phone) return (
-    // A phone-sized replay stands on the grey as a plain screen (no drawn bezel): rounded like a
-    // phone, a hairline edge, one soft shadow. A taller frame than a landscape clip, so it reads
-    <div className="relative aspect-[5/4] rounded-[20px]" style={{ background: SHELL }}>
-      <div className="absolute inset-y-6 left-1/2 -translate-x-1/2 overflow-hidden rounded-[28px] bg-white" style={{ aspectRatio: media.phone, boxShadow: `0 0 0 1px ${LINE}, 0 16px 32px -16px rgba(0,0,0,0.2)` }}>
-        <RecordingReplay src={media.replay} bare />
-      </div>
-    </div>
-  )
+  if ('replay' in media && media.phone) return <PhoneReplay src={media.replay} region={media.region} />
   if ('replay' in media && media.ground) return <div className="overflow-hidden rounded-[24px]" style={{ background: SHELL }}><RecordingReplay src={media.replay} region={media.region} bare /></div>
   if ('replay' in media) return <Mat><RecordingReplay src={media.replay} region={media.region} bare /></Mat>
   if ('scene' in media) return <Shell scene><div data-ss-fill><RfpLetter bare /></div></Shell>
@@ -83,9 +89,10 @@ function Art({ media }: { media: Media }) {
     return <Mat><div style={{ aspectRatio: media.ratio }}><Video src={media.video} /></div></Mat>
   }
   return (
+    // Stills paint their own grey ground, so they sit straight on the shell: no card round each
     <div className="grid grid-cols-2 gap-3 rounded-[20px] p-3" style={{ background: SHELL }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      {media.stills.map((s) => <img key={s} src={s} alt="" className="block w-full rounded-[8px] bg-white" style={{ boxShadow: `0 0 0 1px ${LINE}` }} />)}
+      {media.stills.map((s) => <img key={s} src={s} alt="" className="block w-full" />)}
     </div>
   )
 }
@@ -100,12 +107,16 @@ function Moment({ media, line }: { media: Media; line: string }) {
   )
 }
 
+// A section's id: the one it was given (links point at those), else its headline as a slug
+const slug = (t: string) => t.toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48)
+
 export function CaseStudy({ study }: { study: Study }) {
+  const sections = study.blocks.flatMap((b) => 'lead' in b ? [{ id: b.id ?? slug(b.lead), label: b.lead.replace(/\.$/, '') }] : [])
   const blocks: ReactNode[] = study.blocks.map((b, i) => 'moment' in b
     ? <Moment key={i} media={b.moment} line={b.line} />
     : (
-      <section key={i} id={b.id} className="flex scroll-mt-16 flex-col gap-4">
-        <Headline lead={b.lead} rest={b.rest} />
+      <section key={i} id={b.id ?? slug(b.lead)} className="flex scroll-mt-16 flex-col gap-4">
+        <Headline lead={b.lead} rest={b.rest} stacked />
         {b.body && <p className="text-pretty">{b.body}</p>}
         {b.rows && <Rows rows={b.rows} />}
         {b.list && <ul className="flex list-disc flex-col gap-2 pl-5 text-pretty marker:text-[#666666]">{b.list.map((li) => <li key={li}>{li}</li>)}</ul>}
@@ -119,13 +130,14 @@ export function CaseStudy({ study }: { study: Study }) {
           <span className="text-right" style={{ color: GREY }}>{study.label}, {study.meta}</span>
         </header>
 
-        <section className="flex flex-col gap-8">
-          <Headline as="h1" lead={study.lead} rest={study.rest} />
+        <section id="study-top" className="flex flex-col gap-8">
+          <Headline as="h1" lead={study.lead} rest={study.rest} stacked />
           {study.rows && <Rows rows={study.rows} />}
         </section>
 
         {blocks}
       </main>
+      <Contents sections={sections} after="study-top" />
     </div>
   )
 }
