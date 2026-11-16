@@ -51,7 +51,7 @@ const PRODUCTS: { name: string; href: string; landing: string; piece: string }[]
 // piece as the products; the RFP's is its Stageshow scene, which fills its card instead. A /draft/
 // href is a short case study still on the dev server only: off it, the name is plain text
 const PROJECTS: { name: string; year: string; href?: string; piece: string; scene?: ReactNode }[] = [
-  { name: 'Winning a tender', year: '2025', href: '/work/rfp', piece: 'rfp', scene: <RfpLetter bare /> },
+  { name: 'Winning a tender', year: '2025', href: '/work/rfp', piece: 'rfp', scene: <RfpLetter filled /> },
   { name: 'Testing on live models', year: '2025–26', href: '/draft/configurator', piece: 'configurator' },
   { name: 'An agent-built website', year: '2026', href: '/draft/website', piece: 'html-brand-website' },
 ]
@@ -118,7 +118,9 @@ const RATIO = 1.6
 // near: the rail is close to the screen, so every card loads ahead of being scrolled to
 const NO_ENTRANCE = '*, *::before, *::after { animation-delay: 0s !important; animation-duration: 0s !important; }'
 const ITEMS = Object.fromEntries(Object.values(PIECES).map((p) => {
-  const item = { ...heroItem(p), matte: p.matte ? 'transparent' : undefined }
+  // Windows recorded on their own (Dispatch, Thesis) sit on white inside the frame, like every other
+  // piece: one grey frame, a hairline, the work
+  const item = { ...heroItem(p), matte: p.matte ? '#fff' : undefined }
   return [p.id, item.scene?.src ? { ...item, scene: { ...item.scene, css: [...(item.scene.css ?? []), NO_ENTRANCE] } } : item]
 }))
 function Live({ id, focus, near }: { id: string; focus: boolean; near: boolean }) {
@@ -126,7 +128,6 @@ function Live({ id, focus, near }: { id: string; focus: boolean; near: boolean }
   if (!item) return null
   return <Media item={item} playing={focus} near={near || undefined} />
 }
-const onlyWindows = (id: string) => !!PIECES[id]?.matte
 
 // The work inset on the card's grey by \`pad\` on every side, the card taking the work's own ratio
 // so the gap is even all round, and the corners concentric: the card's radius is the window's
@@ -212,7 +213,7 @@ const listed = (items: { name: string; href?: string }[], name = (n: string) => 
 function WorkCard({ p, focus, near, pad }: { p: (typeof PROJECTS)[number]; focus: boolean; near: boolean; pad: number }) {
   const card = (
     <div className="flex flex-col gap-4">
-      {p.scene ? <div className="overflow-hidden" style={{ aspectRatio: 540 / 340, borderRadius: outer(pad), background: SHELL }}>{p.scene}</div> : <Framed pad={pad} ratio={RATIO} bare={onlyWindows(p.piece)}><Live id={p.piece} focus={focus} near={near} /></Framed>}
+      {p.scene ? <Framed pad={pad} ratio={RATIO}><div className="absolute inset-0">{p.scene}</div></Framed> : <Framed pad={pad} ratio={RATIO}><Live id={p.piece} focus={focus} near={near} /></Framed>}
       <div className="flex justify-between gap-4"><span>{p.name}</span><span className="tabular-nums" style={{ color: GREY }}>{p.year}</span></div>
     </div>
   )
@@ -347,7 +348,7 @@ export default function Home() {
         <h1 className="-mt-12 text-[24px] font-normal leading-[30px] tracking-[-0.02em] text-pretty">{statement}</h1>
 
         {/* The contributions: the change in the role, from designing to building */}
-        <div className="dr-fog dr-gh" style={fog}><GitHubContributions variant="full" animate={intro} /></div>
+        <div className="dr-fog dr-gh -mt-12" style={fog}><GitHubContributions variant="full" animate={intro} /></div>
 
         {/* The products I build alongside the day job, then the day job */}
         <section className="dr-fog flex flex-col gap-16" style={fog}>
@@ -364,7 +365,7 @@ export default function Home() {
             items={PRODUCTS}
             render={(p, focus, near) => (
               <a href={p.href} target="_blank" rel="noopener noreferrer" className="flex flex-col gap-4">
-                <Framed pad={PAD} ratio={RATIO} bare={onlyWindows(p.piece)}><Live id={p.piece} focus={focus} near={near} /></Framed>
+                <Framed pad={PAD} ratio={RATIO}><Live id={p.piece} focus={focus} near={near} /></Framed>
                 <span>{p.name}</span>
               </a>
             )}

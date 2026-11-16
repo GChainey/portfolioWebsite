@@ -340,3 +340,17 @@
 .rl--bare .rl .ss-stage:not([data-layout='compact']) .rl-when {
   display: none;
 }
+
+/* Filled: the dialog is the picture, edge to edge in the homepage card's frame */
+.rl--filled .rl .ss-stage {
+  background: #fff;
+}
+
+.rl--filled .rl .ss-stage .rl-dialog {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  box-shadow: none;
+}

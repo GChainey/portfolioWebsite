@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.13.5',
+    date: '2026-11-16',
+    title: 'One Frame for Every Card on the Homepage',
+    description: 'Every piece of work on the homepage now sits in the same frame: 12px of grey, a hairline edge, the work filling it. And the GitHub graph sits closer to the intro.',
+    changes: [
+      'Dispatch and Thesis: their recorded windows now sit on white inside the frame, with the hairline edge, like Shader Wall',
+      'Winning a tender: the RFI dialog fills the frame edge to edge (RfpLetter filled), no second grey and no uneven padding',
+      'The gap between the intro and the GitHub graph shrinks from 120px to 72px',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/consistent-cards',
+  },
+  {
     version: '3.13.4',
     date: '2026-11-16',
     title: 'No Labels Under a Sentence',

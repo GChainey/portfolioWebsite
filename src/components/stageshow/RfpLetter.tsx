@@ -66,11 +66,14 @@ function Issue({ doc, who, when, text, on, tick }: { doc: string; who: string; w
   )
 }
 
-// bare: inside a card (components/cards/TrayCard): no margins, and a white ground instead of the mat
-export function RfpLetter({ bare = false }: { bare?: boolean } = {}) {
+// bare: inside a card (components/cards/TrayCard): no margins, and a white ground instead of the mat.
+// filled: inside a framed card on the homepage, the dialog is the whole picture, edge to edge, so it
+// sits in the frame like every other piece of work (no mat, no inset, no shadow of its own)
+export function RfpLetter({ bare = false, filled = false }: { bare?: boolean; filled?: boolean } = {}) {
+  if (filled) bare = true
   return (
-    <figure className={bare ? 'not-prose rl--bare' : 'my-8 not-prose'} role="img" aria-label="Ticking two reviewers' issues writes each one into the request for information letter">
-      <Stage width={bare ? 520 : 720} height={bare ? 330 : 440} compact={{ below: bare ? 400 : 600, width: 358, height: 520 }} initial={initial} poster={poster} script={script} play="once" fill={!bare} cursor={{ at: { wide: bare ? { x: 495, y: 312 } : { x: 690, y: 420 }, compact: { x: 340, y: 500 } } }} className="rl">
+    <figure className={filled ? 'not-prose rl--bare rl--filled' : bare ? 'not-prose rl--bare' : 'my-8 not-prose'} role="img" aria-label="Ticking two reviewers' issues writes each one into the request for information letter">
+      <Stage width={filled ? 512 : bare ? 520 : 720} height={filled ? 320 : bare ? 330 : 440} compact={filled ? undefined : { below: bare ? 400 : 600, width: 358, height: 520 }} initial={initial} poster={poster} script={script} play="once" fill={!bare} cursor={{ at: { wide: bare ? { x: 495, y: 312 } : { x: 690, y: 420 }, compact: { x: 340, y: 500 } } }} className="rl">
         {(s) => (
           <div className="rl-dialog">
             <header className="rl-head">
