@@ -5,6 +5,7 @@ import { Header } from '@/components/Header'
 import { PARKED_LIVE } from '@/content/parked'
 import { RfpLetter } from '@/components/stageshow/RfpLetter'
 import { ShaderWallPresets } from '@/components/stageshow/ShaderWallPresets'
+import { AppIconPicker } from '@/components/stageshow/AppIconPicker'
 import { TrayCard, TestimonialTray } from '@/components/cards/TrayCard'
 
 // Parked Stageshow scenes (src/components/stageshow), kept to pull into the case study redesign.
@@ -23,6 +24,15 @@ export default function StageshowPage() {
             Faux-UI scenes built with the Stageshow kit, parked for the case study redesign. Dev server only.
           </p>
         </div>
+
+        <section className="pb-20">
+          <h2 className="text-lg font-medium text-foreground">App icons: pick one where it lives</h2>
+          <p className="mt-1 text-muted">
+            The app already has a facet icon, drawn from its description. Click it, point at an option to see it in the header,
+            breadcrumb and sidebar, click to keep it. <code className="text-sm text-foreground">src/components/stageshow/AppIconPicker.tsx</code>.
+          </p>
+          <AppIconPicker />
+        </section>
 
         {/* The tray cards (components/cards/TrayCard) with Stageshow scenes as their previews, at the
             narrow homepage's 540px column */}
