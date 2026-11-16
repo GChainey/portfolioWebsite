@@ -8,7 +8,7 @@ import { Media, heroItem } from '@/components/HomeShowcase'
 import { SHOWCASE_SECTIONS } from '@/content/home-showcase'
 import { RfpLetter } from '@/components/stageshow/RfpLetter'
 import { TESTIMONIALS } from '@/content/testimonials'
-import { CompaniesCard } from '@/components/site/companies'
+import { CompanyPeek } from '@/components/site/companies'
 import { PARKED_LIVE } from '@/content/parked'
 import { EMAIL, EssayCard, ESSAYS, SKILLS, GREY, Headline, INK, LINE, SHADOW, SHELL } from '@/components/site/style'
 
@@ -87,6 +87,14 @@ const CSS = `
 .dr-peek-card { position: absolute; left: 50%; bottom: calc(100% + 10px); z-index: 20; display: block; width: 288px; padding: 4px; border-radius: 16px; background: ${SHELL}; box-shadow: ${SHADOW}; opacity: 0; pointer-events: none; transform: translateX(-50%) translateY(6px) scale(.96); transform-origin: 50% 100%; transition: opacity 120ms ease, transform 120ms ease; }
 .dr-peek-card img { display: block; width: 100%; aspect-ratio: 16 / 10; border-radius: 12px; }
 .dr-peek-card span { display: block; padding: 6px 8px 2px; font-size: 13px; line-height: 20px; letter-spacing: 0; color: ${GREY}; }
+.dr-co { text-decoration-line: underline; text-decoration-style: dotted; text-decoration-thickness: 1px; text-underline-offset: 4px; text-decoration-color: #b4b4b4; cursor: default; outline-offset: 4px; }
+.dr-peek-card.dr-co-card { width: 300px; padding: 12px; white-space: normal; text-align: left; }
+.dr-co-card .dr-co-row { display: flex; gap: 12px; align-items: flex-start; padding: 0; }
+.dr-co-card .dr-co-row svg { width: 40px; height: 40px; flex: none; }
+.dr-co-card span { padding: 0; }
+.dr-co-card .dr-co-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.dr-co-card .dr-co-name { font-size: 15px; line-height: 22px; }
+.dr-co-card .dr-co-role { margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.08); }
 .dr-peek:focus-visible .dr-peek-card { opacity: 1; transform: translateX(-50%); transition: opacity 200ms cubic-bezier(.23,1,.32,1), transform 200ms cubic-bezier(.23,1,.32,1); }
 @media (hover: hover) and (pointer: fine) { .dr-peek:hover .dr-peek-card { opacity: 1; transform: translateX(-50%); transition: opacity 200ms cubic-bezier(.23,1,.32,1) 60ms, transform 200ms cubic-bezier(.23,1,.32,1) 60ms; } }
 /* The contributions graph is a shared component: bring its labels onto the page's type and greys */
@@ -184,6 +192,14 @@ function StudyLink({ href, children }: { href?: string; children: ReactNode }) {
   const live = liveHref(href)
   return live ? <Link href={live} className="dr-link">{children}</Link> : <>{children}</>
 }
+// A company's name in a sentence, its card peeking up on hover (or keyboard focus when the name
+// isn't already a link). The companies section is hidden for now; this is where they show
+const COMPANY_NAME: Record<string, string> = { 'Enterprise AI': 'Enterprise AI Group', SEEK: 'SEEK', 'Best Practice': 'Best Practice' }
+function Co({ name, children, focusable = true }: { name: string; children?: ReactNode; focusable?: boolean }) {
+  return <span className="dr-peek dr-co" tabIndex={focusable ? 0 : undefined}>{children ?? name}<CompanyPeek name={COMPANY_NAME[name] ?? name} /></span>
+}
+const withCompanies = (text: string) => text.split(/(Enterprise AI|SEEK|Best Practice)/).map((t, i) => i % 2 ? <Co key={i} name={t} /> : t)
+
 // A list as a sentence: a, b and c.
 const listed = (items: { name: string; href?: string }[], name = (n: string) => n) => items.map((p, i) => (
   <span key={p.name}><StudyLink href={p.href}>{name(p.name)}</StudyLink>{i < items.length - 2 ? ', ' : i === items.length - 2 ? ' and ' : '.'}</span>
@@ -243,9 +259,9 @@ let introPlayed = false
 // Where the page was when you left it, so coming back puts you there again
 let leftAt = 0
 
-// Dev server only: one panel, bottom left, to flip between the versions under review (the EAI line,
-// the company cards, their logo tiles). Each change is written to the URL, so a version can be shared
-type Review = { about: number; cards: 'grey' | 'flat'; tiles: 'white' | 'grey' }
+// Dev server only: one panel, bottom left, to flip between the versions under review (the EAI line).
+// Each change is written to the URL, so a version can be shared
+type Review = { about: number }
 function ReviewPanel({ r, set }: { r: Review; set: (r: Review) => void }) {
   const [open, setOpen] = useState(true)
   if (!PARKED_LIVE) return null
@@ -266,8 +282,6 @@ function ReviewPanel({ r, set }: { r: Review; set: (r: Review) => void }) {
         <>
           {seg('EAI line', r.about, ABOUT.map((_, i) => [i, String(i + 1)] as [number, string]), (about) => set({ ...r, about }))}
           <p className="px-1 text-pretty" style={{ color: GREY }}>{ABOUT[r.about].lead} {ABOUT[r.about].rest}</p>
-          {seg('Company cards', r.cards, [['grey', 'One grey'], ['flat', 'White cards']], (cards) => set({ ...r, cards }))}
-          {seg('Logo tiles', r.tiles, [['white', 'White'], ['grey', 'Grey']], (tiles) => set({ ...r, tiles }), r.cards !== 'grey')}
         </>
       )}
     </nav>
@@ -288,21 +302,18 @@ export default function Home() {
     return () => window.removeEventListener('scroll', keep)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
   const [copied, setCopied] = useState(false)
-  // Versions under review, set from the panel (dev server only) or the URL: ?about=1-5,
-  // ?cards=white, ?tiles=grey
-  const [review, setReview] = useState<Review>({ about: 1, cards: 'grey', tiles: 'white' })
-  const { about, cards, tiles } = review
+  // The EAI line under review, set from the panel (dev server only) or the URL: ?about=1-5
+  const [review, setReview] = useState<Review>({ about: 1 })
+  const { about } = review
   useEffect(() => {
     const q = new URLSearchParams(window.location.search)
     const a = Number(q.get('about'))
-    setReview({ about: a >= 1 && a <= ABOUT.length ? a - 1 : 1, cards: q.get('cards') === 'white' ? 'flat' : 'grey', tiles: q.get('tiles') === 'grey' ? 'grey' : 'white' })
+    setReview({ about: a >= 1 && a <= ABOUT.length ? a - 1 : 1 })
   }, [])
   const changeReview = (r: Review) => {
     setReview(r)
     const q = new URLSearchParams(window.location.search)
     q.set('about', String(r.about + 1))
-    if (r.cards === 'flat') q.set('cards', 'white'); else q.delete('cards')
-    if (r.tiles === 'grey') q.set('tiles', 'grey'); else q.delete('tiles')
     window.history.replaceState(null, '', `${window.location.pathname}?${q}`)
   }
   // Copy the email: click it, or press E as justinschueler.com does. There's no contact page
@@ -361,21 +372,19 @@ export default function Home() {
         {/* What I do at EAI, then the projects it covers. The sentence introduces them, so the rail
             has no label */}
         <section id="projects" className="dr-rise flex scroll-mt-10 flex-col gap-16" style={rise(1)}>
-          <Headline as="p" lead={ABOUT[about].lead} rest={ABOUT[about].rest} />
+          <Headline as="p" lead={withCompanies(ABOUT[about].lead)} rest={withCompanies(ABOUT[about].rest)} />
           <Rail label="Work at Enterprise AI" hideLabel items={PROJECTS} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={PAD} />} />
         </section>
 
 
-        <section className="dr-rise flex flex-col gap-6" style={rise(2)}>
-          <Label>Companies</Label>
-          <CompaniesCard variant={cards} tiles={tiles} />
-        </section>
+        {/* Companies: hidden for now, they show on hover where their names come up (Co). The cards and
+            their review options are in components/site/companies.tsx */}
 
         <section className="dr-rise flex flex-col gap-16" style={rise(2)}>
           <Headline
             as="p"
             lead="Before AI."
-            rest={<>At <StudyLink href="/draft/seek">SEEK</StudyLink> I learned a release is where the work starts: follow the funnel, one leak at a time. At <StudyLink href="/draft/bestpractice">Best Practice</StudyLink>, the craft was in small decisions, like three toggles becoming one control.</>}
+            rest={<>At <Co name="SEEK" focusable={!liveHref('/draft/seek')}><StudyLink href="/draft/seek">SEEK</StudyLink></Co> I learned a release is where the work starts: follow the funnel, one leak at a time. At <Co name="Best Practice" focusable={!liveHref('/draft/bestpractice')}><StudyLink href="/draft/bestpractice">Best Practice</StudyLink></Co>, the craft was in small decisions, like three toggles becoming one control.</>}
           />
           <Rail label="Before AI" items={BEFORE_AI} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={PAD} />} />
         </section>

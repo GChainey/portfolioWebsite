@@ -78,3 +78,23 @@ export function CompaniesCard({ variant = 'grey', tiles = 'white' }: { variant?:
     </div>
   )
 }
+
+// A company as a hover card, for its name in a sentence (the homepage's .dr-peek): the mark on a
+// white tile, the name, what the company is, then the role and years, on one grey. Spans only, so it
+// can sit inside a line of text
+export function CompanyPeek({ name }: { name: string }) {
+  const c = COMPANIES.find((x) => x.name === name)
+  if (!c) return null
+  return (
+    <span className="dr-peek-card dr-co-card" aria-hidden>
+      <span className="dr-co-row">
+        <Mark id={`${c.mark}-dots`} tile="#fff" />
+        <span className="dr-co-text">
+          <span className="dr-co-name" style={{ color: INK }}>{c.name}</span>
+          <span>{c.about}</span>
+        </span>
+      </span>
+      <span className="dr-co-role">{c.role} · {c.years}</span>
+    </span>
+  )
+}
