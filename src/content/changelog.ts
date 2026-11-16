@@ -14,6 +14,15 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.13.4',
+    date: '2026-11-16',
+    title: 'No Labels Under a Sentence',
+    description: 'A section that opens with a sentence no longer labels its cards: the Products, Before AI and Creative labels go. Kind words and Thoughts, which have no sentence, keep theirs.',
+    changes: ['Products, Before AI and Creative rails lose their labels (kept for screen readers)'],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/no-section-labels',
+  },
+  {
     version: '3.13.3',
     date: '2026-11-16',
     title: 'Companies on Hover',
