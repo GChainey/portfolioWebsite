@@ -14,7 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: '3.12.1',
+    version: '4.3.2',
+    date: '2026-11-15',
+    title: 'Case Studies: Product on the Mat, No Big Number',
+    description: 'Two rules for every short case study: a whole product screen sits on the grey with room round it, and the impact is the first fact in the table rather than a big number.',
+    changes: [
+      'Mat (components/site/style): a whole product screen inset 32px on the grey (12px on a phone) with the shell\'s hairline edge, instead of the shell\'s 12px',
+      'Used for the RFP study\'s product clips, the Apps table screenshots and every replay and landscape video in the template studies; Stageshow scenes keep their own ground',
+      'The big $2 million is now the first row of the facts table, the same size as the rest; the template\'s figure field is gone (DAISY Assess and SEEK lead their rows with it instead)',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/website',
+  },
+  {
+    version: '4.3.1',
     date: '2026-11-15',
     title: 'One Grey Around the Work',
     description: 'The frame around every piece of work is now one grey surface. It used to be a grey ring around a white panel with its own shadow, so a scene inside read as grey, a shadow line, then a second grey.',

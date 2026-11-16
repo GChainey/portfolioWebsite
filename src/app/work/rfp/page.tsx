@@ -22,14 +22,10 @@ export default function RfpCaseStudy() {
 
         <section className="flex flex-col gap-8">
           <Headline as="h1" lead="One designer answered a state government tender with a working product." rest="Up against vendors with whole teams." />
-          <div className="flex flex-col gap-1">
-            <span className="text-[40px] leading-[48px] tracking-[-0.02em] tabular-nums">$2 million</span>
-            <span style={{ color: GREY }}>in deals won since, from this design</span>
-          </div>
-          <Rows rows={[['Designers', '1, where it took 3 to 5'], ['A major feature', 'Days, not weeks'], ['Markets', '2, English and Polish']]} />
+          <Rows rows={[['Deals won since', '$2 million'], ['Designers', '1, where it took 3 to 5'], ['A major feature', 'Days, not weeks'], ['Markets', '2, English and Polish']]} />
         </section>
 
-        <Moment line="The working prototype we answered with: open an application and follow it through the council’s workflow.">
+        <Moment mat line="The working prototype we answered with: open an application and follow it through the council’s workflow.">
           <RecordingReplay src="/replays/rfp/overview.json" bare />
         </Moment>
 
@@ -42,7 +38,7 @@ export default function RfpCaseStudy() {
           <RfpLetter bare />
         </Moment>
 
-        <Moment line="Rough notes in a field, rewritten by a live model the way that council writes its reports.">
+        <Moment mat line="Rough notes in a field, rewritten by a live model the way that council writes its reports.">
           <RecordingReplay src="/replays/rfp/spot-rewrite.json" region={{ x: 802, y: 117, width: 555, height: 336 }} bare />
         </Moment>
 
