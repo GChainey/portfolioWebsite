@@ -14,7 +14,22 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: '3.12.0',
+    version: '4.3.0',
+    date: '2026-11-15',
+    title: 'Section Intros, Before AI, Five Short Studies',
+    description: 'From PR #159: the homepage gets a line to open each section of work and its own Before AI rail; five short case studies on one template go on the dev server to review.',
+    changes: [
+      'Homepage: "AI has fundamentally changed design." over the Projects, "Before AI." with SEEK and Best Practice on their own rail, and "AI enables so much more." over Creative',
+      'Projects is the three AI-era pieces; SEEK and Best Practice moved to Before AI',
+      'X in the footer',
+      'Five short case studies on one template (DAISY Assess, the website, Testing on live models, SEEK, Best Practice) at /draft/<slug>, dev server only; their names stay plain text on the live site',
+      'A compare tab on the RFP study (dev only): the live /work/rfp, the template version, or both side by side at /draft/compare',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/new-design-public',
+  },
+  {
+    version: '4.2.0',
     date: '2026-11-15',
     title: 'Details: Small Features, Craft and Delight',
     description: 'A draft page at /draft/details (dev server only): one long page of small features, each a few lines, a hero and an example of it in use. It opens with app icons drawn from what the app already knows.',
@@ -29,7 +44,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     branch: 'GChainey/details-page',
   },
   {
-    version: '3.11.0',
+    version: '4.1.0',
     date: '2026-11-15',
     title: 'Picking an App Icon Where It Lives',
     description: 'A Stageshow scene on /stageshow (dev server only): an app\'s facet icon, drawn from what the app already knows, changed in place instead of through a form.',

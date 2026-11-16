@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { RfpLetter } from '@/components/stageshow/RfpLetter'
 import { RecordingReplay } from '@/components/replay/RecordingReplay'
+import { CompareTab } from '@/components/site/CompareTab'
 import { EMAIL, GREY, Headline, INK, LINE, Moment, Rows } from '@/components/site/style'
 
 // A short case study in the homepage's narrow design (/work/rfp): enough of the work to get someone
@@ -55,6 +56,7 @@ export default function RfpCaseStudy() {
           <Link href="/" className="self-start transition-opacity hover:opacity-70" style={{ color: GREY }}>← Back to the work</Link>
         </footer>
       </main>
+      <CompareTab />
     </div>
   )
 }
