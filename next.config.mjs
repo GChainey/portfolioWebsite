@@ -22,6 +22,10 @@ const nextConfig = {
       { source: '/variants/brand/best-practice', destination: '/variants/brand-case.html' },
     ]
   },
+  // No contact page: the email is on the homepage, one click to copy
+  async redirects() {
+    return [{ source: '/contact', destination: '/', permanent: false }]
+  },
   async headers() {
     return [
       { source: '/variants/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] },

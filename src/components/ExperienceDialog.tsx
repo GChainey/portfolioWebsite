@@ -296,6 +296,7 @@ export function ExperienceDialog({ isOpen, onClose, initialCompanyId = 'enterpri
 
                         <Link
                           href={project.externalUrl || `/projects/${project.id}`}
+                          {...(project.externalUrl ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                           className="group inline-flex items-center gap-1.5 text-sm text-muted hover:text-accent transition-colors"
                         >
                           View full case study

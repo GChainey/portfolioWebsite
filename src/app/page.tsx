@@ -8,7 +8,7 @@ import { Media, heroItem } from '@/components/HomeShowcase'
 import { SHOWCASE_SECTIONS } from '@/content/home-showcase'
 import { RfpLetter } from '@/components/stageshow/RfpLetter'
 import { TESTIMONIALS } from '@/content/testimonials'
-import { COMPANY_MARKS } from '@/content/company-marks'
+import { CompaniesCard } from '@/components/site/companies'
 import { PARKED_LIVE } from '@/content/parked'
 import { EMAIL, EssayCard, ESSAYS, SKILLS, GREY, Headline, INK, LINE, SHADOW, SHELL } from '@/components/site/style'
 
@@ -27,13 +27,15 @@ const STATEMENT: Run[] = [
   { text: ', made with AI, that help small teams win big deals.' },
 ]
 
-// Each company as a little card, the three side by side across the column: its mark (the facet
-// style of the prototypes' app icons, content/company-marks), the name, what the company is, then
-// the role and years. The EAI line is a placeholder until we write it
-const COMPANIES: { name: string; mark: string; about: string; role: string; years: string }[] = [
-  { name: 'Enterprise AI Group', mark: 'eai', about: 'A platform where consultants build apps with agents', role: 'Lead product designer', years: '2025 – now' },
-  { name: 'SEEK', mark: 'seek', about: 'Australia’s largest job marketplace', role: 'Senior product designer', years: '2022 – 2024' },
-  { name: 'Best Practice', mark: 'best-practice', about: 'Australia’s largest practice management platform', role: 'Product designer', years: '2019 – 2022' },
+// What I do at Enterprise AI, under the contributions: one two-tone line, the job in ink and what it
+// covers in grey (design, sales, marketing, engineering, product, shipping). Variations to choose
+// from with ?about=1 to 5 or the review panel; the second is the default
+const ABOUT: { lead: string; rest: string }[] = [
+  { lead: 'Currently I lead design at Enterprise AI.', rest: 'Delight for our users, prototypes that win deals for sales, the brand and website for marketing, building with engineering, a hand on where the product goes. And I ship to prod.' },
+  { lead: 'Currently I lead design at Enterprise AI.', rest: 'Some days that’s a prototype that wins a deal. Others it’s the website, a pull request to prod, or where the product goes next.' },
+  { lead: 'At Enterprise AI I lead design, and wear a few hats.', rest: 'Designer, sales sidekick, brand keeper, engineering pair, product compass, and the one who ships to prod.' },
+  { lead: 'Currently I lead design at Enterprise AI.', rest: 'Design, sales, marketing, engineering and product, often in the same week. Most of it ships.' },
+  { lead: 'Currently I lead design at Enterprise AI,', rest: 'where a good prototype wins the deal, the website is mine too, and design doesn’t stop at the handoff: I build with engineering and ship to prod.' },
 ]
 
 // landing: a still of the product's landing page, for the hover card on its name in the sentence
@@ -177,39 +179,6 @@ function Rail<T>({ items, render, label }: { items: T[]; render: (item: T, focus
 }
 
 // A company's mark on its tile: ink on the shell grey, a hairline round it
-function Mark({ id }: { id: string }) {
-  const m = COMPANY_MARKS[id]
-  return (
-    <svg viewBox="0 0 100 100" className="h-10 w-10 shrink-0" aria-hidden>
-      <rect width="100" height="100" rx="22" fill={SHELL} />
-      <rect x=".75" y=".75" width="98.5" height="98.5" rx="21.25" fill="none" stroke={INK} strokeOpacity=".08" strokeWidth="1.5" />
-      <path d={m.f} fill={INK} />
-      {m.h && <path d={m.h} fill={SHELL} />}
-    </svg>
-  )
-}
-
-// Companies: one shell, a little panel per company side by side, together the column's width
-function CompaniesCard() {
-  return (
-    <div className="grid grid-cols-1 gap-1 rounded-[20px] p-1 min-[480px]:grid-cols-3" style={{ background: SHELL }}>
-      {COMPANIES.map((c) => (
-        <article key={c.name} className="flex flex-col gap-6 rounded-[16px] bg-white p-4 min-[480px]:min-h-[176px]" style={{ boxShadow: SHADOW }}>
-          <Mark id={c.mark === 'seek' ? 'seek-dots' : c.mark} />
-          <div className="flex flex-col gap-1">
-            <h3 className="font-normal">{c.name}</h3>
-            <p className="text-[13px] leading-[20px] text-pretty" style={{ color: GREY }}>{c.about}</p>
-          </div>
-          <div className="mt-auto flex flex-col border-t pt-3 text-[13px] leading-[20px]" style={{ borderColor: LINE, color: GREY }}>
-            <span>{c.role}</span>
-            <span className="tabular-nums">{c.years}</span>
-          </div>
-        </article>
-      ))}
-    </div>
-  )
-}
-
 const liveHref = (href?: string) => href && (!href.startsWith('/draft/') || PARKED_LIVE) ? href : undefined
 function StudyLink({ href, children }: { href?: string; children: ReactNode }) {
   const live = liveHref(href)
@@ -274,6 +243,37 @@ let introPlayed = false
 // Where the page was when you left it, so coming back puts you there again
 let leftAt = 0
 
+// Dev server only: one panel, bottom left, to flip between the versions under review (the EAI line,
+// the company cards, their logo tiles). Each change is written to the URL, so a version can be shared
+type Review = { about: number; cards: 'grey' | 'flat'; tiles: 'white' | 'grey' }
+function ReviewPanel({ r, set }: { r: Review; set: (r: Review) => void }) {
+  const [open, setOpen] = useState(true)
+  if (!PARKED_LIVE) return null
+  const seg = <V extends string | number>(label: string, value: V, options: [V, string][], on: (v: V) => void, off = false) => (
+    <div className="flex flex-col gap-1" style={{ opacity: off ? 0.4 : 1 }}>
+      <span className="px-1" style={{ color: GREY }}>{label}</span>
+      <div className="flex gap-1 rounded-[10px] p-0.5" style={{ background: SHELL }}>
+        {options.map(([v, l]) => (
+          <button key={String(v)} type="button" disabled={off} onClick={() => on(v)} className="flex-1 rounded-[8px] px-2.5 py-1 transition-[background-color,box-shadow] duration-150 active:scale-[0.97]" style={v === value ? { background: '#fff', boxShadow: '0 1px 2px rgba(0,0,0,0.08)' } : { color: GREY }}>{l}</button>
+        ))}
+      </div>
+    </div>
+  )
+  return (
+    <nav className="fixed bottom-4 left-4 z-50 flex w-[236px] flex-col gap-3 rounded-[16px] bg-white p-2 text-[13px] leading-[20px]" style={{ boxShadow: SHADOW, color: INK, outline: `1px solid ${LINE}` }}>
+      <button type="button" onClick={() => setOpen(!open)} className="flex justify-between px-1 text-left"><span>Review</span><span style={{ color: GREY }}>{open ? 'Hide' : 'Show'}</span></button>
+      {open && (
+        <>
+          {seg('EAI line', r.about, ABOUT.map((_, i) => [i, String(i + 1)] as [number, string]), (about) => set({ ...r, about }))}
+          <p className="px-1 text-pretty" style={{ color: GREY }}>{ABOUT[r.about].lead} {ABOUT[r.about].rest}</p>
+          {seg('Company cards', r.cards, [['grey', 'One grey'], ['flat', 'White cards']], (cards) => set({ ...r, cards }))}
+          {seg('Logo tiles', r.tiles, [['white', 'White'], ['grey', 'Grey']], (tiles) => set({ ...r, tiles }), r.cards !== 'grey')}
+        </>
+      )}
+    </nav>
+  )
+}
+
 export default function Home() {
   const [intro] = useState(() => !introPlayed)
   useEffect(() => {
@@ -288,11 +288,29 @@ export default function Home() {
     return () => window.removeEventListener('scroll', keep)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
   const [copied, setCopied] = useState(false)
-  // press E: copy the email, as justinschueler.com does
+  // Versions under review, set from the panel (dev server only) or the URL: ?about=1-5,
+  // ?cards=white, ?tiles=grey
+  const [review, setReview] = useState<Review>({ about: 1, cards: 'grey', tiles: 'white' })
+  const { about, cards, tiles } = review
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search)
+    const a = Number(q.get('about'))
+    setReview({ about: a >= 1 && a <= ABOUT.length ? a - 1 : 1, cards: q.get('cards') === 'white' ? 'flat' : 'grey', tiles: q.get('tiles') === 'grey' ? 'grey' : 'white' })
+  }, [])
+  const changeReview = (r: Review) => {
+    setReview(r)
+    const q = new URLSearchParams(window.location.search)
+    q.set('about', String(r.about + 1))
+    if (r.cards === 'flat') q.set('cards', 'white'); else q.delete('cards')
+    if (r.tiles === 'grey') q.set('tiles', 'grey'); else q.delete('tiles')
+    window.history.replaceState(null, '', `${window.location.pathname}?${q}`)
+  }
+  // Copy the email: click it, or press E as justinschueler.com does. There's no contact page
+  const copy = () => navigator.clipboard?.writeText(EMAIL).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1600) })
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
       if (e.key.toLowerCase() !== 'e' || e.metaKey || e.ctrlKey || (e.target as HTMLElement).closest('input, textarea')) return
-      navigator.clipboard?.writeText(EMAIL).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1600) })
+      copy()
     }
     window.addEventListener('keydown', key)
     return () => window.removeEventListener('keydown', key)
@@ -318,9 +336,14 @@ export default function Home() {
         {/* The contributions: the change in the role, from designing to building */}
         <div className="dr-fog dr-gh" style={fog}><GitHubContributions variant="full" animate={intro} /></div>
 
-        <section className="dr-fog flex flex-col gap-6" style={fog}>
-          <Label>Companies</Label>
-          <CompaniesCard />
+        {/* What I do at EAI, then the companies */}
+        <section className="dr-fog flex flex-col gap-16" style={fog}>
+          <Headline as="p" lead={ABOUT[about].lead} rest={ABOUT[about].rest} />
+
+          <div className="flex flex-col gap-6">
+            <Label>Companies</Label>
+            <CompaniesCard variant={cards} tiles={tiles} />
+          </div>
         </section>
 
         <section className="dr-rise flex flex-col gap-16" style={rise(0)}>
@@ -376,12 +399,13 @@ export default function Home() {
 
         <footer className="flex flex-col gap-6 border-t pt-8" style={{ borderColor: LINE, color: GREY }}>
           <div className="flex items-baseline justify-between gap-4">
-            <a href={`mailto:${EMAIL}`} className="dr-link" style={{ color: INK }}>{EMAIL}</a>
-            <span className="hidden [@media(hover:hover)_and_(pointer:fine)]:inline">{copied ? 'Copied' : 'press E'}</span>
+            <button type="button" onClick={copy} className="dr-link text-left" style={{ color: INK }} aria-label={`Copy ${EMAIL}`}>{EMAIL}</button>
+            <span aria-live="polite">{copied ? 'Copied' : <span className="hidden [@media(hover:hover)_and_(pointer:fine)]:inline">Click or press E to copy</span>}</span>
           </div>
-          <div className="flex gap-5"><Link href="/essays">Essays</Link><Link href="/cv">CV</Link><a href="https://x.com/garethchainey" target="_blank" rel="noopener noreferrer">X ↗</a><Link href="/contact">Contact</Link><Link href="/changelog">Changelog</Link></div>
+          <div className="flex gap-5"><Link href="/essays">Essays</Link><Link href="/cv">CV</Link><a href="https://x.com/garethchainey" target="_blank" rel="noopener noreferrer">X ↗</a><Link href="/changelog">Changelog</Link></div>
         </footer>
       </main>
+      <ReviewPanel r={review} set={changeReview} />
     </div>
   )
 }

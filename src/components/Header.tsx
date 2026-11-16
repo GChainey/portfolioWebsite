@@ -19,7 +19,6 @@ const NAV = [
   { href: '/about', label: 'About' },
   { href: '/essays', label: 'Essays' },
   { href: '/cv', label: 'CV' },
-  { href: '/contact', label: 'Contact' },
 ]
 
 export function Header({ showBack }: HeaderProps) {
