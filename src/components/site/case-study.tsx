@@ -14,6 +14,7 @@ import { SeekConnect } from '@/components/stageshow/SeekConnect'
 import { RecordingReplay } from '@/components/replay/RecordingReplay'
 import { Funnel, type FunnelData } from '@/components/site/funnel'
 import { Contents } from '@/components/site/contents'
+import { RichText } from '@/components/site/reference'
 import { Phone } from '@/components/stageshow/kit/phone'
 import { COL, GREY, Headline, INK, LINE, Mat, Rows, SHELL, Shell, WIDE } from '@/components/site/style'
 
@@ -195,9 +196,9 @@ export function CaseStudy({ study }: { study: Study }) {
     : (
       <section key={i} id={b.id ?? slug(b.lead)} className="flex scroll-mt-16 flex-col gap-4">
         <Headline lead={b.lead} rest={b.rest} stacked />
-        {b.body && <p className="text-pretty">{b.body}</p>}
+        {b.body && <p className="text-pretty"><RichText text={b.body} /></p>}
         {b.rows && <Rows rows={b.rows} />}
-        {b.list && <ul className="flex list-disc flex-col gap-2 pl-5 text-pretty marker:text-[#666666]">{b.list.map((li) => <li key={li}>{li}</li>)}</ul>}
+        {b.list && <ul className="flex list-disc flex-col gap-2 pl-5 text-pretty marker:text-[#666666]">{b.list.map((li) => <li key={li}><RichText text={li} /></li>)}</ul>}
       </section>
     ))
   return (
