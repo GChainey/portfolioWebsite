@@ -18,3 +18,9 @@ push crossing the window edge, and one `half-pixel glyph` on the note's clock ic
 
 Not checked: dark theme, real devices and Safari, pause/resume and offscreen return by hand, the
 case-study page itself.
+
+## Round 4
+
+Loops continuously with a visible reset (Segmented: the waiting list clicked off; Repeat: Repeat
+clicked off, the line folds away). The comment is a fixed 96px field, never stretched; the left
+panel has white space below it. Re-gated at 720 and 390: rehearsal passed.

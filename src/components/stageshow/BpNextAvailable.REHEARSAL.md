@@ -30,3 +30,12 @@ case-study page itself.
   label, so it fits the phone column too.
 - Wide stage is now 720 × 620 (the close-up and the pulled-back view both run off the bottom).
 - Re-filmed: `--gate` at 720 and 390, rehearsal passed at both.
+
+## Round 3 (right panel only)
+
+A close-up of the Appointment details panel alone (PanelWindow: the panel is the window, 420 drawn
+at 640). Charlie's stepper shows 25/05/2021 with nothing free and the line "Next available
+appointment is 26/05/2021 at 10:30 am" in full ink, the date a bold underlined link. Click: the
+date rolls to 26/05/2021 with a brand-tint flash that settles, the times drop in with 10:30 am in
+teal, "Less" fades in, Dominique moves down. Holds 2.5s, then Charlie's ‹ takes it back a day (the
+reset) and it loops. Filmed: `--gate` at 720 and 390, rehearsal passed, 0 candidates.

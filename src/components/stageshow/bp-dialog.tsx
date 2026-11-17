@@ -1,7 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { CalendarDays, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Clock, Repeat, Stethoscope, X } from 'lucide-react'
+import { AlertTriangle, CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Clock, Info, Repeat, Stethoscope, X } from 'lucide-react'
 import { Bar, Text } from './kit/window'
 import { States } from './kit/motion/States'
 import './bp-scenes.css'
@@ -16,7 +16,7 @@ import './bp-scenes.css'
 // one stroke (1.5) throughout.
 
 const AV = '/case-studies/bestpractice-booking/avatars'
-export const PHOTO = { charlie: `${AV}/charlie-charmoose.jpg`, dominique: `${AV}/dominique-sat.jpg`, yarn: `${AV}/yarn-oldrick.jpg` }
+export const PHOTO = { charlie: `${AV}/charlie-charmoose.jpg`, dominique: `${AV}/dominique-sat.jpg`, yarn: `${AV}/yarn-oldrick.jpg`, john: `${AV}/john-garner.jpg` }
 
 // Design sizes per layout. Wide: the dialog whole across with a 40 gutter, off the bottom. With
 // one panel that's a close-up (380 drawn at 640, about 1.7x); when the right panel opens the camera
@@ -57,10 +57,10 @@ export function Label({ children, req = false }: { children: ReactNode; req?: bo
 // The dialog: the left panel always, the right panel opening beside it (the dialog widens as the
 // camera pulls back; the right panel's content is laid out at its own width throughout, so nothing
 // reflows) or, compact, pushed in over the left
-export function Dialog({ layout, two, left, right }: { layout: Layout; two: boolean; left: ReactNode; right?: ReactNode }) {
+export function Dialog({ layout, two, left, right, hidden = false }: { layout: Layout; two: boolean; left: ReactNode; right?: ReactNode; hidden?: boolean }) {
   const d = DIM[layout]
   return (
-    <div className="bp-zoom" style={zoomStyle(layout, two)}>
+    <div className="bp-zoom" data-hidden={hidden || undefined} style={zoomStyle(layout, two)}>
       <div className="ss-window bp-dialog" data-two={two || undefined} data-push={d.push || undefined} style={{ width: d.push || !two ? d.left : d.left + d.right }}>
         <div className="bp-left" style={{ width: d.left }}>{left}</div>
         {right && <div className="bp-right" style={{ width: d.right }}>{right}</div>}
@@ -86,26 +86,31 @@ export function Patient() {
 // The appointment details row: the door to the right panel. Full width of its panel. Empty, it
 // says what's missing; filled, a face, a day and a time. Hover tints it; open (its panel showing)
 // it stays lit with the chevron pointing back
-export function DetailsRow({ filled, open = false, target }: { filled: boolean; open?: boolean; target?: string }) {
+export type RowValue = 'empty' | 'partial' | 'filled'
+// snap: it takes over from MergeRow at identical geometry (checked pixel for pixel), so its arrival is an
+// instant handoff, not an entrance
+export function DetailsRow({ filled, value, open = false, target, snap = false }: { filled?: boolean; value?: RowValue; open?: boolean; target?: string; snap?: boolean }) {
+  const v: RowValue = value ?? (filled ? 'filled' : 'empty')
   return (
-    <div className="bp-field">
+    <div className="bp-field" data-snap={snap || undefined}>
       <Label req>Appointment details</Label>
       <div className="bp-card" data-on={open || undefined} data-target={target} data-cursor="hand">
         <States
-          value={filled ? 'filled' : 'empty'}
+          value={v === 'empty' ? 'empty' : 'photo'}
           align="start"
           className="bp-card__lead"
           states={{
             empty: <span className="bp-glyph"><Stethoscope {...I} /></span>,
-            filled: <Photo src={PHOTO.charlie} size={40} />,
+            photo: <Photo src={PHOTO.charlie} size={40} />,
           }}
         />
         <States
-          value={filled ? 'filled' : 'empty'}
+          value={v}
           align="start"
           className="bp-card__lines"
           states={{
             empty: <span className="bp-lines"><b>No provider selected</b><span>25th May 2021</span><span>No time selected</span></span>,
+            partial: <span className="bp-lines"><b>Charlie Charmoose</b><span>26th May 2021</span><span>No time selected</span></span>,
             filled: <span className="bp-lines"><b>Charlie Charmoose</b><span>26th May 2021</span><span>10:30 am – 10:45 am</span></span>,
           }}
         />
@@ -151,14 +156,14 @@ export function Comment() {
 
 // The right panel's head: its title is secondary to the dialog's (regular weight), then the date
 // and the providers picked
-export function RightHead({ providers }: { providers: ReactNode }) {
+export function RightHead({ providers, date = '25/05/2021' }: { providers: ReactNode; date?: string }) {
   return (
     <>
       <Title><span className="bp-title--sub">Appointment details</span></Title>
       <div className="bp-row2">
         <div className="bp-field">
           <Label>Date</Label>
-          <div className="bp-input" data-cursor="hand"><span className="bp-val">25/05/2021</span><CalendarDays {...I} className="bp-ico" /></div>
+          <div className="bp-input" data-cursor="hand"><span className="bp-val">{date}</span><CalendarDays {...I} className="bp-ico" /></div>
         </div>
         <div className="bp-field">
           <Label req>Provider</Label>
@@ -182,11 +187,11 @@ export function ProviderHead({ photo, name, link, up = false }: { photo?: string
   )
 }
 
-export function Stepper({ date, next }: { date: ReactNode; next?: string }) {
+export function Stepper({ date, next, back, flash }: { date: ReactNode; next?: string; back?: string; flash?: boolean }) {
   return (
     <div className="bp-stepper">
-      <span className="bp-ico bp-step" data-cursor="hand"><ChevronLeft {...I} /></span>
-      <div className="bp-input bp-input--date" data-cursor="hand"><span className="bp-val">{date}</span><CalendarDays {...I} className="bp-ico" /></div>
+      <span className="bp-ico bp-step" data-cursor="hand" data-target={back}><ChevronLeft {...I} /></span>
+      <div className="bp-input bp-input--date" data-cursor="hand" data-flash={flash || undefined}><span className="bp-val">{date}</span><CalendarDays {...I} className="bp-ico" /></div>
       <span className="bp-ico bp-step" data-cursor="hand" data-target={next}><ChevronRight {...I} /></span>
     </div>
   )
@@ -234,3 +239,71 @@ export function Note({ children }: { children: ReactNode }) {
 export function Button({ children, target }: { children: ReactNode; target?: string }) {
   return <span className="bp-btn" data-target={target} data-cursor="hand">{children}</span>
 }
+
+// The right panel alone as the window, for a close-up of what happens inside it (BpNextAvailable,
+// BpProviderDates): the panel is the product here, its title the chrome, top-left
+export const PANEL = { wide: { w: 420, gutter: 40 }, compact: { w: 326, gutter: 16 } } as const
+export function PanelWindow({ layout, children }: { layout: Layout; children: ReactNode }) {
+  const p = PANEL[layout]
+  return (
+    <div className="bp-zoom" style={{ transform: `translate(${p.gutter}px, ${p.gutter}px) scale(${SPAN[layout] / p.w})` }}>
+      <div className="ss-window bp-dialog bp-dialog--panel" style={{ width: p.w }}>
+        <div className="bp-right bp-right--solo" style={{ width: p.w }}>{children}</div>
+        <span className="bp-close" aria-hidden data-cursor="hand"><X {...I} /></span>
+      </div>
+    </div>
+  )
+}
+
+// The old way, then the merge: Provider, Date and Time as three fields that gather into the one
+// Appointment details row. One component, every part placed absolutely so it can travel: the three
+// field outlines dissolve as the row's outline arrives, the labels give way to one, and the face,
+// name, date and time each glide from their field to their line in the row. Once merged it hands
+// over to the real DetailsRow at the same geometry (an invisible swap at rest).
+export function MergeRow({ merged, width }: { merged: boolean; width: number }) {
+  const W = width
+  const half = (W - 12) / 2
+  const A = { photo: [7, 30], name: [35, 30], date: [13, 98], time: [half + 25, 98] }
+  const B = { photo: [13, 37], name: [65, 37], date: [65, 57], time: [65, 77] }
+  // delay: the parts leave one after another (name, date, then time), so the date is up and out of
+  // the time's path before the time sets off
+  const at = (p: number[], scale = 1, delay = 0) => ({ transform: `translate(${p[0]}px, ${p[1]}px) scale(${scale})`, transitionDelay: `${delay}ms` })
+  const m = merged
+  return (
+    <div className="bp-merge" data-merged={m || undefined} data-snap style={{ height: m ? 110 : 124 }}>
+      <span className="bp-label bp-m bp-m--a" style={at([0, 0])}>Provider<span className="bp-req">*</span></span>
+      <span className="bp-label bp-m bp-m--a" style={at([0, 68])}>Date</span>
+      <span className="bp-label bp-m bp-m--a" style={at([half + 12, 68])}>Time</span>
+      <span className="bp-label bp-m bp-m--b" style={at([0, 0])}>Appointment details<span className="bp-req">*</span></span>
+      <span className="bp-mbox bp-m--a" style={{ left: 0, top: 24, width: W, height: 32 }} />
+      <span className="bp-mbox bp-m--a" style={{ left: 0, top: 92, width: half, height: 32 }} />
+      <span className="bp-mbox bp-m--a" style={{ left: half + 12, top: 92, width: half, height: 32 }} />
+      <span className="bp-mcard bp-m--b" style={{ left: 0, top: 24, width: W, height: 86 }} />
+      <span className="bp-m bp-m--a bp-ico" style={at([half - 28, 100])}><CalendarDays {...I} /></span>
+      <span className="bp-m bp-m--a bp-ico" style={at([W - 28, 100])}><Clock {...I} /></span>
+      <span className="bp-m bp-m--a bp-ico" style={at([W - 28, 32])}><X {...I} /></span>
+      <span className="bp-m bp-m--b bp-chev" style={at([W - 29, 59])}><ChevronRight {...I} /></span>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img className="bp-m bp-mphoto" src={PHOTO.charlie} alt="" width={40} height={40} style={at(m ? B.photo : A.photo, m ? 1 : 0.5)} />
+      <span className="bp-m bp-mtext" style={at(m ? B.name : A.name)}><span className="bp-m--a">Charlie Charmoose</span><b className="bp-m--b">Charlie Charmoose</b></span>
+      <span className="bp-m bp-mtext" style={at(m ? B.date : A.date, 1, m ? 60 : 0)}><span className="bp-m--a">26/05/2021</span><span className="bp-m--b bp-ink2">26th May 2021</span></span>
+      <span className="bp-m bp-mtext" style={at(m ? B.time : A.time, 1, m ? 300 : 0)}><span className="bp-m--a bp-ink2">Select a time</span><span className="bp-m--b bp-ink2">No time selected</span></span>
+    </div>
+  )
+}
+
+// The old dialog's parts: a Fluent switch, and a message bar
+export function Switch({ on, target }: { on: boolean; target?: string }) {
+  return <span className="bp-switch" data-on={on || undefined} data-target={target} data-cursor="hand"><span className="bp-switch__thumb" /></span>
+}
+
+export function Message({ kind, children }: { kind: 'warning' | 'info'; children: ReactNode }) {
+  return (
+    <div className="bp-msg" data-kind={kind}>
+      {kind === 'warning' ? <AlertTriangle {...I} className="bp-msg__ico" /> : <Info {...I} className="bp-msg__ico" />}
+      <span className="bp-lines">{children}</span>
+    </div>
+  )
+}
+
+export const Tick = () => <Check {...I} />

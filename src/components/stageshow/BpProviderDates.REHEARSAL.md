@@ -17,3 +17,10 @@ Filmed: `--gate` at 720 and 390, rehearsal passed, 0 candidates at both.
 
 Not checked: dark theme, real devices and Safari, pause/resume and offscreen return by hand, the
 case-study page itself.
+
+## Round 2 (right panel only)
+
+A close-up of the Appointment details panel alone (PanelWindow). Dominique's › rolls her date to
+26/05/2021 with a brand-tint flash, her times crossfade to the 26th's; Yarn's 25/05/2021 sits
+directly below, unchanged. Holds 2.5s, then Dominique's ‹ takes her back (the reset) and it loops.
+Filmed: `--gate` at 720 and 390, rehearsal passed, 0 candidates.

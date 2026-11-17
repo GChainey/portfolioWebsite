@@ -37,3 +37,17 @@ case-study page itself.
 - The two panels are an even 50/50 split in the wide design (380 + 380, ~1.68x with one panel,
   ~0.84x with both). Compact unchanged. After the pick the cursor goes to the grey beside the
   dialog, not over the comment field.
+
+## Round 3 (rebuilt: the merge)
+
+Now leads the study. Starts on the old way: Provider (Charlie's headshot tag), Date and Time as
+three fields. They merge into the one Appointment details row (MergeRow in bp-dialog.tsx): the
+three outlines dissolve as the row's arrives, the labels give way to one, and the face, name, date
+and time each glide to their line (staggered, so the date is out of the time's path; the field's
+words leave before the row's arrive, so a moving line is never two strings at once). It hands over
+to the real DetailsRow at identical geometry: checked pixel for pixel (0 differing pixels), so the
+two nodes carry `data-snap`. Then the row opens the 50/50 panel, 10:30 am is picked, the panel
+closes, the row fills, holds 2.5s, and the dialog fades out and the next run fades in (the reset).
+The Group is gone from this scene (not its story); the comment is a fixed 96px field.
+Filmed: `--gate` at 720 and 390, rehearsal passed. Candidates: the row-text crossfade as the camera
+settles; 200ms near-empty during the fade reset (deliberate); at 390 the panel push.

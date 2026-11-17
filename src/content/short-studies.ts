@@ -199,55 +199,66 @@ export const STUDIES: Study[] = [
     slug: 'bestpractice',
     label: 'Best Practice',
     meta: '2021',
-    // For a recruiter: a form that grew with every feature, made into a pattern that new features
-    // slot into. No numbers were measured in testing, so none are claimed. Recreated in Microsoft's
-    // Fluent design system as HTML recordings (recreations/bestpractice, scripts/replays/bestpractice.mjs)
-    lead: 'A booking dialog that got longer with every feature, redesigned so new features don’t.',
-    rest: 'Two panels: the appointment on the left, the work on the right.',
+    // Crafting a better experience from a design that had grown unwieldy. What made it robust was a
+    // few reusable patterns (after Christopher Alexander's pattern language): a second panel for room,
+    // a row that holds any kind of answer, one control for the choices. No numbers were measured in
+    // testing, so none are claimed. Recreated in Fluent 2: recordings (recreations/bestpractice,
+    // scripts/replays/bestpractice.mjs) and Stageshow scenes (components/stageshow/Bp*.tsx)
+    lead: 'Crafting a better booking experience from a dialog that had grown unwieldy.',
+    rest: 'A few reusable patterns made it robust enough for features that didn’t exist yet.',
     rows: [
-      ['Pattern', 'Repeats and injury claims fit in, and the dialog didn’t get longer'],
+      ['Patterns', 'A second panel, a row that holds any answer, one control for the choices'],
       ['Tested with', '5 people: they understood it and could finish the workflows'],
       ['Used by', 'Australia’s largest practice management system'],
       ['Role', 'Lead designer, in a team of five'],
     ],
     blocks: [
-      { moment: { replay: '/replays/bestpractice/final.json', ground: true, region: BP_DIALOG }, line: 'Open the details, pick a provider and a time, and the row fills in.', was: { media: { image: `${BP}/fluent-steps.png`, ratio: 2130 / 1694 }, line: 'Before: pick a provider first, and only then see their times.' } },
+      { moment: { replay: '/replays/bestpractice/final.json', ground: true, region: BP_DIALOG }, line: 'Open the details, pick a provider and a time, and the row fills in.' },
+
       {
-        lead: 'Booking is what a receptionist does all day.',
-        rest: 'Every feature had made the dialog longer.',
-        body: 'So I split it in two: the appointment on the left, readable at a glance, and the work in a panel that opens beside it and gets out of the way when you’re done. Then the craft was in the small decisions.',
+        lead: 'Every feature had made it longer.',
+        rest: 'Booking is what a receptionist does all day.',
+        body: 'Repeats, the waiting list and urgent appointments were each added inline, so the dialog grew down the screen and could be switched into combinations that made no sense.',
       },
+      { moment: { scene: 'bp-old-dialog' }, line: 'The old dialog: every switch adds its fields, and it keeps growing.' },
 
-      { lead: 'One control, one choice.', rest: 'Urgent, Repeat and the waiting list were three switches that allowed combinations that made no sense.' },
-      { moment: { scene: 'bp-segmented' }, line: 'One choice at a time: picking the waiting list lets go of Repeat, and what it sets up opens right under it.', was: { media: { image: `${BP}/fluent-toggles-before.png`, ratio: 835 / 483 }, line: 'Before: three switches, and combinations that made no sense.' } },
+      {
+        lead: 'Three answers, one row.',
+        rest: 'Provider, date and time answer one question, so they became one component.',
+        body: 'The row reads at a glance and is the door to a second panel, where there’s room to do the work. When you’re done the panel gets out of the way and the row fills in.',
+      },
+      { moment: { scene: 'bp-details-row' }, line: 'Three fields merge into one row; the row opens the panel, a time is picked, the row fills in.' },
 
-      { lead: 'Three answers, one row.', rest: 'Provider, date and time answer one question, so they became one row: the door to the right panel.' },
-      { moment: { scene: 'bp-details-row' }, line: 'The row opens the panel, a time is picked, the row fills in.', was: { media: { image: `${BP}/fluent-bundling-before.png`, ratio: 921 / 579 }, line: 'Before: provider, date and time as three fields, set in order.' } },
+      { lead: 'One control, one choice.', rest: 'Three switches allowed combinations that made no sense.' },
+      { moment: { scene: 'bp-segmented' }, line: 'One choice at a time: picking the waiting list lets go of Repeat, and what it sets up opens right under it.', was: { media: { scene: 'bp-old-dialog' }, line: 'Before: three switches, on in any combination, each adding its own fields.' } },
 
-      { lead: 'A repeat in one line.', rest: 'Set up on the right, folded on the left.' },
-      { moment: { scene: 'bp-repeat' }, line: 'Set up beside the appointment, then folded into one line: every 2 weeks, 3 times, the next and final dates under it.', was: { media: { replay: '/replays/bestpractice/before.json', ground: true }, line: 'Before: each switch added its fields inline, and the dialog kept growing.' } },
+      { lead: 'A repeat in one line.', rest: 'Set up in the second panel, folded into the row.' },
+      { moment: { scene: 'bp-repeat' }, line: 'Set up beside the appointment, then folded into one line: every 2 weeks, 3 times, the next and final dates under it.', was: { media: { scene: 'bp-old-dialog' }, line: 'Before: the repeat’s fields added inline, and the dialog kept growing.' } },
 
       { lead: 'Never a dead end.', rest: 'Found in testing: a provider with nothing free shows their next time, one click away.' },
-      { moment: { scene: 'bp-next-available' }, line: 'The next available time is a link; one click and it’s picked.', was: { media: { image: `${BP}/fluent-iter-empty.png`, ratio: 1088 / 1010 }, line: 'Before: a provider with nothing free was an empty tab, and nowhere to go from it.' } },
+      { moment: { scene: 'bp-next-available' }, line: 'The next available time is a link; one click and that day opens with the time picked.', was: { media: { image: `${BP}/fluent-iter-empty.png`, ratio: 1088 / 1010 }, line: 'Before: a provider with nothing free was an empty tab, and nowhere to go from it.' } },
 
       { lead: 'Each provider, their own day.', rest: 'Also from testing: receptionists compare providers across days.' },
-      { moment: { scene: 'bp-provider-dates' }, line: 'Dominique moves to the 26th; Yarn stays on the 25th. Each provider keeps their own day.' },
+      { moment: { scene: 'bp-provider-dates' }, line: 'Dominique moves to the 26th; Yarn stays on the 25th.' },
 
-      { lead: 'Ready for what came next.', rest: 'An injury claim, a workflow still to come, in the same pattern.' },
-      { moment: { replay: '/replays/bestpractice/injury-claim.json', ground: true, region: BP_DIALOG }, line: 'A row on the left, the work on the right: the claim lands in the row.' },
+      { lead: 'Ready for what came next.', rest: 'An injury claim, a workflow still to come, used the same patterns.' },
+      { moment: { replay: '/replays/bestpractice/injury-claim.json', ground: true, region: BP_DIALOG }, line: 'A row on the left, the work in the second panel: the claim lands in the row.' },
+
+      {
+        lead: 'Patterns made it robust.',
+        rest: 'New workflows reused them instead of adding to the dialog.',
+        body: 'The idea is Christopher Alexander’s [pattern language](https://en.wikipedia.org/wiki/A_Pattern_Language): solutions to problems that keep coming back, which combine into a whole that stays coherent as it grows. Here there were three.',
+        list: [
+          'A second panel, so there’s room to do the work and the appointment stays readable.',
+          'A row that holds any kind of answer, who and when, a repeat, an injury claim, and opens the panel to change it.',
+          'One control for the choices that change what the appointment is.',
+        ],
+      },
+      { moment: { scene: 'bp-final' }, line: 'Where it landed: the appointment on the left, the work on the right.' },
 
       {
         lead: 'Five people, the same booking tasks.',
         rest: 'They understood it, could finish the workflows and could read an appointment at a glance.',
-      },
-      {
-        lead: 'It works on any form that keeps growing.',
-        rest: 'Settings, checkout, onboarding: the same three moves.',
-        list: [
-          'Keep a short summary on the left that you can read at a glance.',
-          'Do the work in a panel that opens beside it, then gets out of the way.',
-          'Test the pattern on features that don’t exist yet, not just today’s.',
-        ],
       },
     ],
   },

@@ -10,7 +10,8 @@ import { Button, Comment, Dialog, Group, Note, Patient, Pick, SlimRow, Title, ty
 // it works out to; set it up and the panel tucks away, the whole repeat folded into one line.
 //
 // Beats: Repeat (the panel opens, filled) → read it → Set up repeat → the panel closes and the line
-// opens under the control. Plays once; the line holds. Poster = the folded line.
+// opens under the control; it holds, then Repeat is clicked off and the line folds away (the loop's
+// start). Poster = the folded line.
 // Real strings: the title, the patient, the three choices, the panel's settings and dates, the line.
 
 type S = { on: Choice; open: boolean; set: boolean }
@@ -33,14 +34,20 @@ async function script(a: Act<S>) {
   a.set({ set: true })
   await a.wait(500)
   await a.move(a.layout === 'wide' ? { x: 704, y: 300 } : { x: 350, y: 220 })
-  await a.wait(3000)
+  await a.wait(2500)
+  // The reset: Repeat off, the line folds away, and it goes again
+  a.mark('reset')
+  await a.click({ at: 'seg-repeat', x: 0.84, y: 0.72 })
+  a.set({ on: 'none', set: false })
+  await a.wait(900)
   await a.move(a.layout === 'wide' ? { x: 660, y: 590 } : { x: 330, y: 360 })
+  await a.wait(400)
 }
 
 export function BpRepeat() {
   return (
     <figure className="not-prose bp-fig" role="img" aria-label="Choosing Repeat opens its setup beside the appointment, already filled in; setting it up folds the whole repeat into one line: every 2 weeks, 3 times, next 08/06/2021, final 22/06/2021">
-      <Stage width={720} height={620} compact={{ below: 600, width: 358, height: 380 }} initial={initial} poster={poster} script={script} play="once" cursor={{ at: { wide: { x: 660, y: 590 }, compact: { x: 330, y: 360 } }, style: 'large' }} className="bp">
+      <Stage width={720} height={620} compact={{ below: 600, width: 358, height: 380 }} initial={initial} poster={poster} script={script} cursor={{ at: { wide: { x: 660, y: 590 }, compact: { x: 330, y: 360 } }, style: 'large' }} className="bp">
         {(s, _rect, layout) => (
           <Dialog
             layout={layout}

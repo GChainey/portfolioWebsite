@@ -36,8 +36,11 @@
   top: 0;
   left: 0;
   transform-origin: 0 0;
-  transition: transform 640ms cubic-bezier(0.77, 0, 0.175, 1);
+  transition: transform 640ms cubic-bezier(0.77, 0, 0.175, 1), opacity 300ms ease;
 }
+
+/* A loop's reset: the dialog fades out and the next run fades in */
+.bp .bp-zoom[data-hidden] { opacity: 0; }
 
 .bp .bp-dialog {
   position: relative;
@@ -294,9 +297,8 @@
 .bp .bp-slim__ico { display: grid; color: var(--bp-ink-2); }
 
 .bp .bp-area {
-  /* Tall enough that the stage's bottom edge always cuts through it, in the close-up and pulled
-     back, whichever line is open */
-  height: 400px;
+  /* A fixed textarea: it never stretches to fill the panel (white space below it is the panel) */
+  height: 96px;
   border: 1px solid var(--bp-line);
   border-radius: 4px;
   background: #fff;
@@ -449,3 +451,171 @@
 .bp .bp-times-swap { display: grid; width: 100%; }
 .bp .bp-times-swap .ss-states__item,
 .bp .bp-times-swap .bp-times { width: 100%; }
+
+/* The right panel alone, as its own window */
+.bp .bp-dialog--panel { background: var(--bp-ground); }
+.bp .bp-right--solo { opacity: 1; }
+
+/* A date that just changed: a moment of the brand tint, then it settles */
+.bp .bp-input[data-flash] { animation: bp-flash 1600ms ease-out; }
+
+/* The merge: three fields gathering into one row (MergeRow) */
+.bp .bp-merge {
+  position: relative;
+  transition: height 700ms cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.bp .bp-m {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  white-space: nowrap;
+  will-change: transform;
+  transition: transform 700ms cubic-bezier(0.77, 0, 0.175, 1), opacity 420ms ease;
+}
+
+.bp .bp-mbox,
+.bp .bp-mcard {
+  position: absolute;
+  border: 1px solid var(--bp-line);
+  background: #fff;
+  transition: opacity 420ms ease;
+}
+
+.bp .bp-mbox { border-radius: 4px; }
+.bp .bp-mcard { border-radius: 8px; }
+.bp .bp-mphoto { border-radius: 50%; object-fit: cover; }
+.bp .bp-mtext { display: grid; line-height: 20px; }
+.bp .bp-mtext > * { grid-area: 1 / 1; transition: opacity 420ms ease; }
+.bp .bp-mtext b { font-weight: 600; }
+.bp .bp-ink2 { color: var(--bp-ink-2); }
+
+/* Which half shows: the fields (a) or the row (b). The row's outline arrives as the fields' leave */
+.bp .bp-merge .bp-m--b { opacity: 0; }
+.bp .bp-merge[data-merged] .bp-m--a { opacity: 0; }
+.bp .bp-merge[data-merged] .bp-m--b { opacity: 1; transition-delay: 160ms; }
+/* The words themselves never overlap: the field's version leaves fast, the row's arrives late, so a
+   moving line is never two strings on top of each other */
+.bp .bp-merge[data-merged] .bp-mtext > .bp-m--a { transition: opacity 140ms ease; }
+.bp .bp-merge[data-merged] .bp-mtext > .bp-m--b { transition: opacity 320ms ease 300ms; }
+
+/* The old one-column dialog (BpOldDialog) */
+.bp .bp-old { width: 480px; height: auto; display: flex; flex-direction: column; gap: 12px; padding: 24px; background: #fff; }
+.bp .bp-old .bp-pair { grid-template-columns: minmax(0, 1fr) 120px; }
+.bp .bp-old .bp-pair--even { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+
+.bp .bp-switch {
+  position: relative;
+  display: block;
+  width: 40px;
+  height: 20px;
+  border: 1px solid var(--bp-ink-2);
+  border-radius: 10px;
+  background: #fff;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.bp .bp-switch__thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--bp-ink-2);
+  transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1), background-color 150ms ease;
+}
+
+.bp .bp-switch[data-on] { background: var(--bp-brand); border-color: var(--bp-brand); }
+.bp .bp-switch[data-on] .bp-switch__thumb { transform: translateX(20px); background: #fff; }
+
+.bp .bp-boxed {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 4px;
+  background: var(--bp-ground);
+}
+
+.bp .bp-msg {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.bp .bp-msg__ico { flex: none; margin-top: 2px; color: var(--bp-ink-2); }
+.bp .bp-msg[data-kind='warning'] { background: #fff9f5; border-color: #fdcfb4; }
+.bp .bp-msg[data-kind='warning'] .bp-msg__ico { color: #bc4b09; }
+
+.bp .bp-actions { display: flex; justify-content: flex-end; gap: 8px; padding-top: 4px; }
+.bp .bp-btn--secondary { background: #fff; color: var(--bp-ink); border: 1px solid var(--bp-line); }
+.bp .bp-btn--secondary[data-hover] { background: var(--bp-ground); }
+
+.bp .bp-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bp .bp-check__box {
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--bp-ink-2);
+  border-radius: 2px;
+  background: #fff;
+}
+
+.bp .bp-prio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.bp .bp-prio .bp-seg { padding: 0; }
+
+@keyframes bp-flash {
+  0% { background: var(--bp-brand-tint); border-color: var(--bp-brand); }
+  100% { background: #fff; border-color: var(--bp-line); }
+}
+
+/* The way out of a dead end, made unmistakable: the line reads at full ink and the date is a link
+   that looks like one */
+.bp .bp-next--loud { color: var(--bp-ink); }
+.bp .bp-link--line { text-decoration: underline; text-underline-offset: 3px; font-weight: 600; }
+
+/* The old dialog: its sections open with the Collapse, the gap above each carried inside it */
+.bp .bp-old__more { padding-bottom: 0; }
+.bp .bp-old .ss-collapse { margin-top: -12px; }
+.bp .bp-old .bp-old__more { padding-top: 12px; }
+.bp .bp-area--old { height: 64px; }
+
+/* The old dialog's grey sections: a section opens on a label, so it takes a little more room above
+   than beside (the fields' own text sits 12 further in) */
+.bp .bp-old .bp-boxed { padding-top: 18px; }
+/* Drawn small as it grows: a face or initials keep clear of the name */
+.bp .bp-old .bp-input:has(> .bp-initials, > .bp-photo) { gap: 12px; }
+
+/* The appointment book behind the old dialog: quiet filler under Fluent's modal scrim */
+.bp .bp-book {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+.bp .bp-book__bar { display: flex; gap: 12px; align-items: center; height: 48px; padding: 0 24px; background: var(--bp-ground); border-bottom: 1px solid #e0e0e0; }
+.bp .bp-book__grid { flex: 1; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
+.bp .bp-book__day { display: flex; flex-direction: column; gap: 8px; padding: 16px 12px; border-right: 1px solid #e0e0e0; }
+.bp .bp-book__slot { height: 56px; border-radius: 4px; background: #fafafa; }
+.bp .bp-book__slot[data-on] { background: var(--bp-brand-tint); }
+.bp .bp-book__scrim { position: absolute; inset: 0; background: rgb(0 0 0 / 0.4); }
+
+/* The old dialog's messages hug their words */
+.bp .bp-old .bp-msg { align-self: flex-start; }
+
+/* Moving by layout as the old dialog grows, inside a scaling camera: on a layer, so text glides */
+.bp .bp-old .bp-boxed { will-change: transform; }

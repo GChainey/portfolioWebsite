@@ -36,3 +36,9 @@ by hand, the case-study page itself (the scene isn't wired in yet).
 Leads and rests on Add to waiting list ("Waiting list · Priority 2" / "Any provider · From
 01/06/2021"), held 3s; Repeat only passes through (1.1s) as the one-at-a-time beat. Poster = the
 waiting list on, so it no longer matches BpRepeat's poster. Re-gated at 720 and 390.
+
+## Round 4
+
+Loops continuously with a visible reset (Segmented: the waiting list clicked off; Repeat: Repeat
+clicked off, the line folds away). The comment is a fixed 96px field, never stretched; the left
+panel has white space below it. Re-gated at 720 and 390: rehearsal passed.
