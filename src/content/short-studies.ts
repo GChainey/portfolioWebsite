@@ -247,11 +247,11 @@ export const STUDIES: Study[] = [
       {
         lead: 'Patterns made it robust.',
         rest: 'New workflows reused them instead of adding to the dialog.',
-        body: 'The idea is Christopher Alexander’s [pattern language](https://en.wikipedia.org/wiki/A_Pattern_Language): solutions to problems that keep coming back, which combine into a whole that stays coherent as it grows. Here there were three.',
+        body: 'A [pattern language](https://en.wikipedia.org/wiki/A_Pattern_Language), in Christopher Alexander’s sense. Three of them:',
         list: [
-          'A second panel, so there’s room to do the work and the appointment stays readable.',
-          'A row that holds any kind of answer, who and when, a repeat, an injury claim, and opens the panel to change it.',
-          'One control for the choices that change what the appointment is.',
+          'A second panel, for room to work.',
+          'A row that holds any answer and opens the panel.',
+          'One control for the choices.',
         ],
       },
       { moment: { scene: 'bp-final' }, line: 'Where it landed: the appointment on the left, the work on the right.' },
