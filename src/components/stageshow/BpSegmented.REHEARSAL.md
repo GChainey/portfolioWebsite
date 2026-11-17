@@ -30,3 +30,9 @@ by hand, the case-study page itself (the scene isn't wired in yet).
   label, so it fits the phone column too.
 - Wide stage is now 720 × 620 (the close-up and the pulled-back view both run off the bottom).
 - Re-filmed: `--gate` at 720 and 390, rehearsal passed at both.
+
+## Round 3
+
+Leads and rests on Add to waiting list ("Waiting list · Priority 2" / "Any provider · From
+01/06/2021"), held 3s; Repeat only passes through (1.1s) as the one-at-a-time beat. Poster = the
+waiting list on, so it no longer matches BpRepeat's poster. Re-gated at 720 and 390.

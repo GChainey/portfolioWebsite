@@ -219,7 +219,7 @@ export const STUDIES: Study[] = [
       },
 
       { lead: 'One control, one choice.', rest: 'Urgent, Repeat and the waiting list were three switches that allowed combinations that made no sense.' },
-      { moment: { scene: 'bp-segmented' }, line: 'One choice at a time, and what it sets up opens right under it.', was: { media: { image: `${BP}/fluent-toggles-before.png`, ratio: 835 / 483 }, line: 'Before: three switches, and combinations that made no sense.' } },
+      { moment: { scene: 'bp-segmented' }, line: 'One choice at a time: picking the waiting list lets go of Repeat, and what it sets up opens right under it.', was: { media: { image: `${BP}/fluent-toggles-before.png`, ratio: 835 / 483 }, line: 'Before: three switches, and combinations that made no sense.' } },
 
       { lead: 'Three answers, one row.', rest: 'Provider, date and time answer one question, so they became one row: the door to the right panel.' },
       { moment: { scene: 'bp-details-row' }, line: 'The row opens the panel, a time is picked, the row fills in.', was: { media: { image: `${BP}/fluent-bundling-before.png`, ratio: 921 / 579 }, line: 'Before: provider, date and time as three fields, set in order.' } },
