@@ -225,13 +225,13 @@ export const STUDIES: Study[] = [
       { moment: { scene: 'bp-details-row' }, line: 'The row opens the panel, a time is picked, the row fills in.', was: { media: { image: `${BP}/fluent-bundling-before.png`, ratio: 921 / 579 }, line: 'Before: provider, date and time as three fields, set in order.' } },
 
       { lead: 'A repeat in one line.', rest: 'Set up on the right, folded on the left.' },
-      { moment: { replay: '/replays/bestpractice/repeat.json', ground: true }, line: 'Every 2 weeks, 3 of 5 occurrences, with the next and final dates under it.', was: { media: { replay: '/replays/bestpractice/before.json', ground: true }, line: 'Before: each switch added its fields inline, and the dialog kept growing.' } },
+      { moment: { scene: 'bp-repeat' }, line: 'Set up beside the appointment, then folded into one line: every 2 weeks, 3 times, the next and final dates under it.', was: { media: { replay: '/replays/bestpractice/before.json', ground: true }, line: 'Before: each switch added its fields inline, and the dialog kept growing.' } },
 
       { lead: 'Never a dead end.', rest: 'Found in testing: a provider with nothing free shows their next time, one click away.' },
       { moment: { scene: 'bp-next-available' }, line: 'The next available time is a link; one click and it’s picked.', was: { media: { image: `${BP}/fluent-iter-empty.png`, ratio: 1088 / 1010 }, line: 'Before: a provider with nothing free was an empty tab, and nowhere to go from it.' } },
 
       { lead: 'Each provider, their own day.', rest: 'Also from testing: receptionists compare providers across days.' },
-      { moment: { replay: '/replays/bestpractice/provider-dates.json', ground: true }, line: 'Dominique moves to the next day; Yarn stays on the 25th.' },
+      { moment: { scene: 'bp-provider-dates' }, line: 'Dominique moves to the 26th; Yarn stays on the 25th. Each provider keeps their own day.' },
 
       { lead: 'Ready for what came next.', rest: 'An injury claim, a workflow still to come, in the same pattern.' },
       { moment: { replay: '/replays/bestpractice/injury-claim.json', ground: true, region: BP_DIALOG }, line: 'A row on the left, the work on the right: the claim lands in the row.' },

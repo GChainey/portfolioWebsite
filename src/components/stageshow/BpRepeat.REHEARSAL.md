@@ -1,0 +1,20 @@
+# Rehearsal: BpRepeat ("A repeat in one line")
+
+Gold: `close-up` frame (read from source; the playground isn't installed here to film it beside),
+with BpDetailsRow's pull-back to an even 50/50 two-panel view (380 + 380) and, at 390, the panel
+pushed in opaque over the left.
+
+Beats: Repeat on the segmented control → the setup opens beside the appointment already filled in
+(Recur every 2 Weeks, On Tuesday, End After, Total occurrences 3, and the dates it works out to)
+→ Set up repeat → the panel closes, the camera returns, then the line opens under the control:
+"Every 2 weeks, 3 times" / "Next 08/06/2021 · Final 22/06/2021", one line each (nowrap, checked
+at 390). Holds 3s. Plays once; poster = the folded line.
+
+Cursor: hand on the segments, Set up repeat and every picker; I-beam on number fields and the
+comment. Sampled every 30ms: both presses are on the hand.
+
+Filmed: `--gate` at 720 (0 candidates) and 390 (rehearsal passed; the candidates are the panel
+push crossing the window edge, and one `half-pixel glyph` on the note's clock icon).
+
+Not checked: dark theme, real devices and Safari, pause/resume and offscreen return by hand, the
+case-study page itself.

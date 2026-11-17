@@ -405,3 +405,47 @@
 
 /* Moving by layout (the day opening pushes them), so give them a layer: their text glides */
 .bp .bp-prov { will-change: transform; }
+
+/* The repeat panel's settings, two to a row (they fit the phone column too, which keeps the
+   button in view) */
+.bp .bp-pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.bp .bp-every { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 8px; }
+
+.bp .bp-note {
+  /* Hugs its two lines, so they sit one inset from both ends */
+  align-self: flex-start;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.bp .bp-note .bp-ico { margin-top: 2px; }
+
+.bp .bp-btn {
+  align-self: flex-start;
+  display: inline-grid;
+  place-items: center;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 4px;
+  background: var(--bp-brand);
+  color: #fff;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color 120ms ease;
+}
+
+.bp .bp-btn[data-hover] { background: #115ea3; }
+
+/* What a choice set up stays one line each, title and detail, even in the phone column */
+.bp .bp-slim .bp-lines span { white-space: nowrap; }
+.bp .ss-stage[data-layout='compact'] .bp-slim { gap: 8px; }
+
+/* A provider's times crossfading to another day: the grid keeps its width */
+.bp .bp-times-swap { display: grid; width: 100%; }
+.bp .bp-times-swap .ss-states__item,
+.bp .bp-times-swap .bp-times { width: 100%; }

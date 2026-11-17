@@ -6,6 +6,8 @@ import { RfpLetter } from '@/components/stageshow/RfpLetter'
 import { BpSegmented } from '@/components/stageshow/BpSegmented'
 import { BpDetailsRow } from '@/components/stageshow/BpDetailsRow'
 import { BpNextAvailable } from '@/components/stageshow/BpNextAvailable'
+import { BpRepeat } from '@/components/stageshow/BpRepeat'
+import { BpProviderDates } from '@/components/stageshow/BpProviderDates'
 import { SeekAllTab } from '@/components/stageshow/SeekAllTab'
 import { SeekCards } from '@/components/stageshow/SeekCards'
 import { SeekConnect } from '@/components/stageshow/SeekConnect'
@@ -29,6 +31,8 @@ const SCENES = {
   'bp-segmented': () => <BpSegmented />,
   'bp-details-row': () => <BpDetailsRow />,
   'bp-next-available': () => <BpNextAvailable />,
+  'bp-repeat': () => <BpRepeat />,
+  'bp-provider-dates': () => <BpProviderDates />,
 }
 
 type Region = { x: number; y: number; width: number; height: number }

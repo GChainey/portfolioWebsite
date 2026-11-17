@@ -4,12 +4,14 @@ import { notFound } from 'next/navigation'
 import { BpSegmented } from '@/components/stageshow/BpSegmented'
 import { BpDetailsRow } from '@/components/stageshow/BpDetailsRow'
 import { BpNextAvailable } from '@/components/stageshow/BpNextAvailable'
+import { BpRepeat } from '@/components/stageshow/BpRepeat'
+import { BpProviderDates } from '@/components/stageshow/BpProviderDates'
 import { COL, Shell, WIDE } from '@/components/site/style'
 
 // The three Best Practice Stageshow scenes in the case study's shells, for filming (dev only).
 export default function BpScenes() {
   if (process.env.NODE_ENV === 'production') notFound()
-  const scenes = [['seg', <BpSegmented key="a" />], ['row', <BpDetailsRow key="b" />], ['next', <BpNextAvailable key="c" />]] as const
+  const scenes = [['seg', <BpSegmented key="a" />], ['row', <BpDetailsRow key="b" />], ['next', <BpNextAvailable key="c" />], ['repeat', <BpRepeat key="d" />], ['dates', <BpProviderDates key="e" />]] as const
   return (
     <main className="mx-auto flex max-w-[588px] flex-col gap-24 px-6 py-16">
       {scenes.map(([id, el]) => (

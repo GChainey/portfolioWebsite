@@ -16,7 +16,7 @@ import './bp-scenes.css'
 // one stroke (1.5) throughout.
 
 const AV = '/case-studies/bestpractice-booking/avatars'
-export const PHOTO = { charlie: `${AV}/charlie-charmoose.jpg`, dominique: `${AV}/dominique-sat.jpg` }
+export const PHOTO = { charlie: `${AV}/charlie-charmoose.jpg`, dominique: `${AV}/dominique-sat.jpg`, yarn: `${AV}/yarn-oldrick.jpg` }
 
 // Design sizes per layout. Wide: the dialog whole across with a 40 gutter, off the bottom. With
 // one panel that's a close-up (380 drawn at 640, about 1.7x); when the right panel opens the camera
@@ -182,12 +182,12 @@ export function ProviderHead({ photo, name, link, up = false }: { photo?: string
   )
 }
 
-export function Stepper({ date }: { date: string }) {
+export function Stepper({ date, next }: { date: ReactNode; next?: string }) {
   return (
     <div className="bp-stepper">
       <span className="bp-ico bp-step" data-cursor="hand"><ChevronLeft {...I} /></span>
       <div className="bp-input bp-input--date" data-cursor="hand"><span className="bp-val">{date}</span><CalendarDays {...I} className="bp-ico" /></div>
-      <span className="bp-ico bp-step" data-cursor="hand"><ChevronRight {...I} /></span>
+      <span className="bp-ico bp-step" data-cursor="hand" data-target={next}><ChevronRight {...I} /></span>
     </div>
   )
 }
@@ -213,4 +213,24 @@ export function FillerProvider({ cols }: { cols: number }) {
       </div>
     </div>
   )
+}
+
+// A labelled picker or a short number field, for the repeat panel: what's set, ready to change
+export function Pick({ label, value, req = true, number = false }: { label: string; value: string; req?: boolean; number?: boolean }) {
+  return (
+    <div className="bp-field">
+      <Label req={req}>{label}</Label>
+      <div className="bp-input" data-cursor={number ? 'ibeam' : 'hand'}><span className="bp-val">{value}</span>{!number && <ChevronDown {...I} className="bp-ico" />}</div>
+    </div>
+  )
+}
+
+// A quiet line of what a setting works out to (Fluent's MessageBar, informative)
+export function Note({ children }: { children: ReactNode }) {
+  return <div className="bp-note"><Clock {...I} className="bp-ico" /><span className="bp-lines">{children}</span></div>
+}
+
+// A button: primary for the panel's one action
+export function Button({ children, target }: { children: ReactNode; target?: string }) {
+  return <span className="bp-btn" data-target={target} data-cursor="hand">{children}</span>
 }
