@@ -208,7 +208,7 @@ export const STUDIES: Study[] = [
       ['Role', 'Lead designer, in a team of five'],
     ],
     blocks: [
-      { moment: { replay: '/replays/bestpractice/final.json', ground: true }, line: 'Find the patient, pick three providers, jump to the next free day, book.' },
+      { moment: { replay: '/replays/bestpractice/final.json', ground: true }, line: 'Find the patient, pick three providers, jump to the next free day, book.', was: { media: { image: `${BP}/fluent-steps.png`, ratio: 2130 / 1694 }, line: 'Before: pick a provider first, and only then see their times.' } },
       {
         lead: 'Booking is what a receptionist does all day.',
         rest: 'Every feature had made the dialog longer.',
@@ -216,16 +216,16 @@ export const STUDIES: Study[] = [
       },
 
       { lead: 'One control, one choice.', rest: 'Urgent, Repeat and the waiting list were three switches that allowed combinations that made no sense.' },
-      { moment: { scene: 'bp-segmented' }, line: 'One choice at a time, and what it sets up opens right under it.' },
+      { moment: { scene: 'bp-segmented' }, line: 'One choice at a time, and what it sets up opens right under it.', was: { media: { image: `${BP}/fluent-toggles-before.png`, ratio: 835 / 483 }, line: 'Before: three switches, and combinations that made no sense.' } },
 
       { lead: 'Three answers, one row.', rest: 'Provider, date and time answer one question, so they became one row: the door to the right panel.' },
-      { moment: { scene: 'bp-details-row' }, line: 'The row opens the panel, a time is picked, the row fills in.' },
+      { moment: { scene: 'bp-details-row' }, line: 'The row opens the panel, a time is picked, the row fills in.', was: { media: { image: `${BP}/fluent-bundling-before.png`, ratio: 921 / 579 }, line: 'Before: provider, date and time as three fields, set in order.' } },
 
       { lead: 'A repeat in one line.', rest: 'Set up on the right, folded on the left.' },
-      { moment: { replay: '/replays/bestpractice/repeat.json', ground: true }, line: 'Every 2 weeks, 3 of 5 occurrences, with the next and final dates under it.' },
+      { moment: { replay: '/replays/bestpractice/repeat.json', ground: true }, line: 'Every 2 weeks, 3 of 5 occurrences, with the next and final dates under it.', was: { media: { replay: '/replays/bestpractice/before.json', ground: true }, line: 'Before: each switch added its fields inline, and the dialog kept growing.' } },
 
       { lead: 'Never a dead end.', rest: 'Found in testing: a provider with nothing free shows their next time, one click away.' },
-      { moment: { scene: 'bp-next-available' }, line: 'The next available time is a link; one click and it’s picked.' },
+      { moment: { scene: 'bp-next-available' }, line: 'The next available time is a link; one click and it’s picked.', was: { media: { image: `${BP}/fluent-iter-empty.png`, ratio: 1088 / 1010 }, line: 'Before: a provider with nothing free was an empty tab, and nowhere to go from it.' } },
 
       { lead: 'Each provider, their own day.', rest: 'Also from testing: receptionists compare providers across days.' },
       { moment: { replay: '/replays/bestpractice/provider-dates.json', ground: true }, line: 'Dominique moves to the next day; Yarn stays on the 25th.' },

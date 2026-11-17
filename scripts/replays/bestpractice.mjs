@@ -124,7 +124,7 @@ if (which === 'stills') {
   const browser = await pw.chromium.launch()
   const page = await browser.newPage({ viewport: { width: 1200, height: 900 }, deviceScaleFactor: 2 })
   const base = process.env.BASE_URL ?? 'http://localhost:8794'
-  for (const v of ['steps', 'iter-grid', 'iter-tabs', 'toggles', 'bundling']) {
+  for (const v of ['steps', 'iter-grid', 'iter-tabs', 'iter-empty', 'toggles', 'bundling']) {
     await page.goto(`${base}${go(v)}`)
     await page.waitForTimeout(400)
     await page.locator('#stage').screenshot({ path: `public/case-studies/bestpractice-booking/fluent-${v}.png` })

@@ -13,7 +13,7 @@ import { RecordingReplay } from '@/components/replay/RecordingReplay'
 import { Funnel, type FunnelData } from '@/components/site/funnel'
 import { Contents } from '@/components/site/contents'
 import { Phone } from '@/components/stageshow/kit/phone'
-import { COL, GREY, Headline, INK, Mat, Rows, SHELL, Shell, WIDE } from '@/components/site/style'
+import { COL, GREY, Headline, INK, LINE, Mat, Rows, SHELL, Shell, WIDE } from '@/components/site/style'
 
 // The short case study, in the draft's design: enough to get someone interested, built round three
 // things: the impact, the craft, and what AI let me do that I couldn't before (where it applies;
@@ -42,7 +42,7 @@ export type Media =
   | { before: string; after: string } // two phone recordings side by side: the original, then the fix
 
 export type Block =
-  | { moment: Media; line: string }
+  | { moment: Media; line: string; was?: { media: Media; line: string } } // was: the old design at this point, one click away (Now | Before)
   | { lead: string; rest?: string; body?: string; rows?: [string, string][]; list?: string[]; id?: string }
 
 export type Study = {
@@ -146,12 +146,37 @@ function Art({ media }: { media: Media }) {
   )
 }
 
-// A moment: the work, wider than the text, one grey line under it on the column
-function Moment({ media, line }: { media: Media; line: string }) {
+// A moment: the work, wider than the text, one grey line under it on the column. With `was`, a
+// small Now | Before switch sits on the work's top-left corner: the new design shows first and the
+// old one is a click away, so the page scans as the good work (Gareth, 2026-11-16)
+function Moment({ media, line, was }: { media: Media; line: string; was?: { media: Media; line: string } }) {
+  const [before, setBefore] = useState(false)
+  // The frame keeps the new design's height when it shows the old one, so the page doesn't jump
+  const frame = useRef<HTMLDivElement>(null)
+  const [height, setHeight] = useState<number>()
+  const pick = (b: boolean) => { if (b && frame.current && !before) setHeight(frame.current.offsetHeight); setBefore(b) }
+  const shown = before && was ? was : { media, line }
   return (
     <figure className="flex flex-col gap-3" style={{ marginInline: `calc((${COL} - ${WIDE}) / 2)` }}>
-      <Art media={media} />
-      <figcaption className="self-center text-[13px] leading-[20px]" style={{ width: COL, color: GREY }}>{line}</figcaption>
+      <div ref={frame} key={before ? 'before' : 'now'} className="flex animate-[moment-in_200ms_ease-out] flex-col justify-center rounded-[20px]"
+        style={before ? { minHeight: height, background: SHELL } : undefined}>
+        <Art media={shown.media} />
+      </div>
+      <figcaption className="flex items-start justify-between gap-4 self-center text-[13px] leading-[20px]" style={{ width: COL, color: GREY }}>
+        <span className="text-pretty">{shown.line}</span>
+        {was && (
+          <span role="tablist" aria-label="Now or before" className="grid shrink-0 grid-cols-2 rounded-full p-0.5" style={{ boxShadow: `0 0 0 1px ${LINE}` }}>
+            {(['Now', 'Before'] as const).map((t) => {
+              const on = (t === 'Before') === before
+              return (
+                <button key={t} role="tab" aria-selected={on} onClick={() => pick(t === 'Before')}
+                  className="rounded-full px-3 transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.97]"
+                  style={{ background: on ? INK : 'transparent', color: on ? '#fff' : GREY }}>{t}</button>
+              )
+            })}
+          </span>
+        )}
+      </figcaption>
     </figure>
   )
 }
@@ -162,7 +187,7 @@ const slug = (t: string) => t.toLowerCase().replace(/[’']/g, '').replace(/[^a-
 export function CaseStudy({ study }: { study: Study }) {
   const sections = study.blocks.flatMap((b) => 'lead' in b ? [{ id: b.id ?? slug(b.lead), label: b.lead.replace(/\.$/, '') }] : [])
   const blocks: ReactNode[] = study.blocks.map((b, i) => 'moment' in b
-    ? <Moment key={i} media={b.moment} line={b.line} />
+    ? <Moment key={i} media={b.moment} line={b.line} was={b.was} />
     : (
       <section key={i} id={b.id ?? slug(b.lead)} className="flex scroll-mt-16 flex-col gap-4">
         <Headline lead={b.lead} rest={b.rest} stacked />
@@ -188,7 +213,7 @@ export function CaseStudy({ study }: { study: Study }) {
       </main>
       <Contents sections={sections} after="study-top" />
       {/* The recordings carry their own status bar and safe area: the kit's would double them */}
-      <style>{'.case-phone .ss-phone__content{padding-top:0!important}.case-phone .ss-phone__home{display:none}'}</style>
+      <style>{'.case-phone .ss-phone__content{padding-top:0!important}.case-phone .ss-phone__home{display:none}@keyframes moment-in{from{opacity:0}to{opacity:1}}'}</style>
     </div>
   )
 }
