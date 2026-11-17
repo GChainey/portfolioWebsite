@@ -8,7 +8,8 @@
              pressed), strokes (field, divider), red for required, amber for conflicts.
              Avatars all take the brand tint: initials tell people apart.
      Shadow  2: a menu (pop) and the dialog. Cards and rows have none, just a hairline.
-     Space   4 inside a component, then 8, 12, 16, 24, 32, 40 (8pt, loosely). */
+     Space   4 inside a component, then 8, 12, 16, 24, 32, 40 (8pt, loosely).
+     Radius  4 for every UI element (fields, buttons, rows, cards, menus); 8 for the dialog only. */
   --brand: #0F6CBD; --brand-hover: #115EA3; --brand-pressed: #0C3B5E;
   --brand-bg2: #EBF3FC; --brand-bg2-hover: #CFE4FA; --brand-fg-link: var(--brand-hover);
   --fg1: #242424; --fg3: #616161; --fg2: var(--fg3); --fg4: var(--fg3); --fg-disabled: #BDBDBD;
@@ -120,7 +121,7 @@ textarea.area { width: 100%; min-height: 64px; resize: none; padding: 8px 12px; 
 
 /* Selectable row card: details, repeat, injury */
 .card { width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px; text-align: left; background: var(--bg1);
-  border: 1px solid var(--stroke1); border-radius: var(--r-xl);
+  border: 1px solid var(--stroke1); border-radius: var(--r-md); /* one radius for every UI element; only the dialog is 8 */
   transition: background-color 150ms var(--easy), border-color 150ms var(--easy); }
 .card:hover { background: var(--brand-bg2); border-color: var(--brand-bg2-hover); }
 .card:hover .chev { color: var(--brand); }
