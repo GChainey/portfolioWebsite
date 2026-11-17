@@ -16,29 +16,21 @@ const GLIDE = 520 // a calm cursor
 const go = (v) => `/bestpractice/?v=${v}`
 const want = (name) => !which || which === name
 
-// The hero: find the patient, open the details, pick three providers, jump to the next available
-// time for the one with nothing today, book it
+// The hero, short (about 10s): the patient's already in; open the details, pick a provider and a
+// time, and the row fills in. Then hold on the result. (The next-available jump and the per-provider
+// dates have their own scenes further down the study)
 if (want('bestpractice/final')) await record('bestpractice/final', async (r) => {
   const { page } = r
-  await r.goto(go('final'))
+  await r.goto(go('repeat'))
   await r.start()
-  await r.wait(900)
-  await r.click(page.getByLabel('Search patients'), { after: 200, duration: GLIDE })
-  await r.type(page.getByLabel('Search patients'), 'Bob', { delay: 120 })
-  await r.wait(500)
-  await r.click(page.getByRole('option', { name: /Bobby Smith/ }), { after: 700, duration: GLIDE })
-  await r.click(page.getByRole('button', { name: 'Appointment details' }), { after: 1000, duration: GLIDE })
-  await r.click(page.getByRole('combobox', { name: 'Provider' }), { after: 500, duration: GLIDE })
-  for (const n of ['Charlie Charmoose', 'Dominique Sat', 'Yarn Oldrick']) await r.click(page.getByRole('option', { name: n }), { after: 250, duration: 360 })
-  await r.click({ x: 700, y: 610 }, { after: 1200, duration: GLIDE })
-  await r.moveTo(page.locator('[data-key="DS"]').getByRole('button', { name: '9:30 am' }), { duration: GLIDE })
-  await r.wait(500)
-  await r.moveTo(page.locator('[data-key="YO"]').getByRole('button', { name: '11:00 am' }), { duration: GLIDE })
-  await r.wait(500)
-  await r.click(page.locator('[data-key="CC"]').getByRole('button', { name: /26\/05\/2021/ }), { after: 1300, duration: GLIDE })
-  await r.click(page.locator('[data-key="CC"]').getByRole('button', { name: '4:00 pm' }), { after: 1200, duration: GLIDE })
+  await r.wait(600)
+  await r.click(page.getByRole('button', { name: 'Appointment details' }), { after: 900, duration: GLIDE })
+  await r.click(page.getByRole('combobox', { name: 'Provider' }), { after: 450, duration: GLIDE })
+  await r.click(page.getByRole('option', { name: 'Dominique Sat' }), { after: 350, duration: 380 })
+  await r.click({ x: 700, y: 610 }, { after: 900, duration: GLIDE })
+  await r.click(page.locator('[data-key="DS"]').getByRole('button', { name: '10:00 am' }), { after: 1100, duration: GLIDE })
   await r.moveTo(page.getByRole('button', { name: 'Book appointment' }), { duration: GLIDE })
-  await r.wait(1800)
+  await r.wait(2800)
 }, { viewport: VIEWPORT })
 
 // Proof of concept: a repeat is one more row, set up in the same right panel
@@ -98,9 +90,10 @@ if (want('bestpractice/injury-claim')) await record('bestpractice/injury-claim',
   await r.click(page.getByRole('button', { name: 'Injury claim' }), { after: 900, duration: GLIDE })
   await r.click(page.getByRole('switch', { name: 'related' }), { after: 900, duration: GLIDE })
   await r.click(page.getByRole('radio', { name: /Fractured ankle/ }), { after: 700, duration: GLIDE })
-  await r.click(page.getByRole('button', { name: 'Done' }), { after: 400, duration: GLIDE })
-  await r.moveTo({ x: 640, y: 420 }, { duration: GLIDE })
-  await r.wait(2000)
+  await r.click(page.getByRole('button', { name: 'Done' }), { after: 600, duration: GLIDE })
+  // The payoff: rest on the row the claim landed in (its hover tint draws the eye), and hold
+  await r.moveTo(page.getByRole('button', { name: 'Injury claim' }), { duration: GLIDE })
+  await r.wait(3200)
 }, { viewport: VIEWPORT })
 
 // The problem: every feature made the old dialog longer

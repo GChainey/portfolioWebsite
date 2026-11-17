@@ -8,6 +8,9 @@ import type { Study } from '@/components/site/case-study'
 
 const BP = '/case-studies/bestpractice-booking'
 const SEEK = '/case-studies/seek-learning'
+// The Best Practice recordings, cropped to the dialog (it sits at 40,40 and opens to 880 × 624 in a
+// 960 × 704 recording), so its text renders as large as the column allows
+const BP_DIALOG = { x: 24, y: 24, width: 912, height: 656 }
 const SITE = '/case-studies/html-brand-website'
 
 export const STUDIES: Study[] = [
@@ -208,7 +211,7 @@ export const STUDIES: Study[] = [
       ['Role', 'Lead designer, in a team of five'],
     ],
     blocks: [
-      { moment: { replay: '/replays/bestpractice/final.json', ground: true }, line: 'Find the patient, pick three providers, jump to the next free day, book.', was: { media: { image: `${BP}/fluent-steps.png`, ratio: 2130 / 1694 }, line: 'Before: pick a provider first, and only then see their times.' } },
+      { moment: { replay: '/replays/bestpractice/final.json', ground: true, region: BP_DIALOG }, line: 'Open the details, pick a provider and a time, and the row fills in.', was: { media: { image: `${BP}/fluent-steps.png`, ratio: 2130 / 1694 }, line: 'Before: pick a provider first, and only then see their times.' } },
       {
         lead: 'Booking is what a receptionist does all day.',
         rest: 'Every feature had made the dialog longer.',
@@ -231,7 +234,7 @@ export const STUDIES: Study[] = [
       { moment: { replay: '/replays/bestpractice/provider-dates.json', ground: true }, line: 'Dominique moves to the next day; Yarn stays on the 25th.' },
 
       { lead: 'Ready for what came next.', rest: 'An injury claim, a workflow still to come, in the same pattern.' },
-      { moment: { replay: '/replays/bestpractice/injury-claim.json', ground: true }, line: 'A row on the left, the work on the right.' },
+      { moment: { replay: '/replays/bestpractice/injury-claim.json', ground: true, region: BP_DIALOG }, line: 'A row on the left, the work on the right: the claim lands in the row.' },
 
       {
         lead: 'Five people, the same booking tasks.',
