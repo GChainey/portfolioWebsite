@@ -24,3 +24,8 @@ case-study page itself.
 Loops continuously with a visible reset (Segmented: the waiting list clicked off; Repeat: Repeat
 clicked off, the line folds away). The comment is a fixed 96px field, never stretched; the left
 panel has white space below it. Re-gated at 720 and 390: rehearsal passed.
+
+## Round 5
+
+The panel's Next / Final appointment card fills the panel's full width (Fluent's MessageBar); its
+text fills the bar, so it keeps one inset at both ends. Re-gated at 720 and 390: rehearsal passed.

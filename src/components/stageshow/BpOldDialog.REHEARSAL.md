@@ -19,3 +19,13 @@ rehearsal passed. Candidates: `small text` at 390 at the longest (7–9px: the p
 gets), and layout checks deferred while it grows.
 
 Not checked: dark theme, real devices and Safari, the case-study page itself.
+
+## Round 2 (plain grey)
+
+The appointment book behind it is gone: the dialog sits on the shell's plain grey like every other
+scene. Framing: a whole window on a wide stage can't keep one gutter on its three open sides while
+the camera pulls back (equal side gutters would fix the scale), so it's pinned by its foot: the
+camera scales the dialog to the stage's height and anchors its bottom 28px past the stage's bottom
+edge, a real bleed, not a near miss; a deep 96px foot inside the dialog keeps Save and Cancel a full
+gutter clear of the edge at every scale. The whole length, buttons included, stays in view.
+Filmed: `--gate` at 720 (0 candidates) and 390 (rehearsal passed; `small text` at its longest).

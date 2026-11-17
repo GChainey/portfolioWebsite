@@ -89,12 +89,14 @@ export function Patient() {
 export type RowValue = 'empty' | 'partial' | 'filled'
 // snap: it takes over from MergeRow at identical geometry (checked pixel for pixel), so its arrival is an
 // instant handoff, not an entrance
-export function DetailsRow({ filled, value, open = false, target, snap = false }: { filled?: boolean; value?: RowValue; open?: boolean; target?: string; snap?: boolean }) {
+// clear: a ✕ to clear the assignment, shown once the row is assigned (its slot is always there, so
+// the row's geometry never changes)
+export function DetailsRow({ filled, value, open = false, target, snap = false, clear }: { filled?: boolean; value?: RowValue; open?: boolean; target?: string; snap?: boolean; clear?: string }) {
   const v: RowValue = value ?? (filled ? 'filled' : 'empty')
   return (
     <div className="bp-field" data-snap={snap || undefined}>
       <Label req>Appointment details</Label>
-      <div className="bp-card" data-on={open || undefined} data-target={target} data-cursor="hand">
+      <div className="bp-card" data-on={open || undefined} data-clear={clear ? '' : undefined} data-target={target} data-cursor="hand">
         <States
           value={v === 'empty' ? 'empty' : 'photo'}
           align="start"
@@ -114,6 +116,7 @@ export function DetailsRow({ filled, value, open = false, target, snap = false }
             filled: <span className="bp-lines"><b>Charlie Charmoose</b><span>26th May 2021</span><span>10:30 am – 10:45 am</span></span>,
           }}
         />
+        {clear && <span className="bp-clear" data-shown={v === 'filled' || undefined} data-target={clear} data-cursor="hand"><X {...I} /></span>}
         <States value={open ? 'back' : 'go'} className="bp-chev" states={{ go: <ChevronRight {...I} />, back: <ChevronLeft {...I} /> }} />
       </div>
     </div>
@@ -255,19 +258,20 @@ export function PanelWindow({ layout, children }: { layout: Layout; children: Re
   )
 }
 
-// The old way, then the merge: Provider, Date and Time as three fields that gather into the one
-// Appointment details row. One component, every part placed absolutely so it can travel: the three
-// field outlines dissolve as the row's outline arrives, the labels give way to one, and the face,
-// name, date and time each glide from their field to their line in the row. Once merged it hands
-// over to the real DetailsRow at the same geometry (an invisible swap at rest).
+// The old way, then the merge: Provider, Date and Time as three empty fields (nobody assigned yet)
+// that gather into the one Appointment details row. One component, every part placed absolutely so
+// it can travel: the three field outlines dissolve as the row's outline arrives, the labels give way
+// to one, the provider's placeholder becomes "No provider selected", the date and the time glide to
+// their lines, and the row's glyph arrives at its lead. Merged, it matches the empty DetailsRow
+// pixel for pixel, so the two hand over invisibly (both ways: the reset un-merges).
 export function MergeRow({ merged, width }: { merged: boolean; width: number }) {
   const W = width
   const half = (W - 12) / 2
-  const A = { photo: [7, 30], name: [35, 30], date: [13, 98], time: [half + 25, 98] }
-  const B = { photo: [13, 37], name: [65, 37], date: [65, 57], time: [65, 77] }
-  // delay: the parts leave one after another (name, date, then time), so the date is up and out of
-  // the time's path before the time sets off
-  const at = (p: number[], scale = 1, delay = 0) => ({ transform: `translate(${p[0]}px, ${p[1]}px) scale(${scale})`, transitionDelay: `${delay}ms` })
+  const A = { name: [13, 30], date: [13, 98], time: [half + 25, 98] }
+  const B = { name: [65, 37], date: [65, 57], time: [65, 77] }
+  // delay: the parts leave one after another, so no two cross paths: merging, name, date, then time
+  // (the date is up and out of the time's way); coming apart, the time first, then date, then name
+  const at = (p: number[], delay = 0) => ({ transform: `translate(${p[0]}px, ${p[1]}px)`, transitionDelay: `${delay}ms` })
   const m = merged
   return (
     <div className="bp-merge" data-merged={m || undefined} data-snap style={{ height: m ? 110 : 124 }}>
@@ -279,15 +283,14 @@ export function MergeRow({ merged, width }: { merged: boolean; width: number }) 
       <span className="bp-mbox bp-m--a" style={{ left: 0, top: 92, width: half, height: 32 }} />
       <span className="bp-mbox bp-m--a" style={{ left: half + 12, top: 92, width: half, height: 32 }} />
       <span className="bp-mcard bp-m--b" style={{ left: 0, top: 24, width: W, height: 86 }} />
-      <span className="bp-m bp-m--a bp-ico" style={at([half - 28, 100])}><CalendarDays {...I} /></span>
-      <span className="bp-m bp-m--a bp-ico" style={at([W - 28, 100])}><Clock {...I} /></span>
-      <span className="bp-m bp-m--a bp-ico" style={at([W - 28, 32])}><X {...I} /></span>
+      <span className="bp-m bp-m--a bp-ico" style={at([W - 29, 32])}><ChevronDown {...I} /></span>
+      <span className="bp-m bp-m--a bp-ico" style={at([half - 29, 100])}><CalendarDays {...I} /></span>
+      <span className="bp-m bp-m--a bp-ico" style={at([W - 29, 100])}><Clock {...I} /></span>
+      <span className="bp-m bp-m--b bp-glyph" style={at([13, 37])}><Stethoscope {...I} /></span>
       <span className="bp-m bp-m--b bp-chev" style={at([W - 29, 59])}><ChevronRight {...I} /></span>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img className="bp-m bp-mphoto" src={PHOTO.charlie} alt="" width={40} height={40} style={at(m ? B.photo : A.photo, m ? 1 : 0.5)} />
-      <span className="bp-m bp-mtext" style={at(m ? B.name : A.name)}><span className="bp-m--a">Charlie Charmoose</span><b className="bp-m--b">Charlie Charmoose</b></span>
-      <span className="bp-m bp-mtext" style={at(m ? B.date : A.date, 1, m ? 60 : 0)}><span className="bp-m--a">26/05/2021</span><span className="bp-m--b bp-ink2">26th May 2021</span></span>
-      <span className="bp-m bp-mtext" style={at(m ? B.time : A.time, 1, m ? 300 : 0)}><span className="bp-m--a bp-ink2">Select a time</span><span className="bp-m--b bp-ink2">No time selected</span></span>
+      <span className="bp-m bp-mtext" style={at(m ? B.name : A.name, m ? 0 : 200)}><span className="bp-m--a bp-ink2">Select a provider</span><b className="bp-m--b">No provider selected</b></span>
+      <span className="bp-m bp-mtext" style={at(m ? B.date : A.date, m ? 60 : 120)}><span className="bp-m--a">25/05/2021</span><span className="bp-m--b bp-ink2">25th May 2021</span></span>
+      <span className="bp-m bp-mtext" style={at(m ? B.time : A.time, m ? 300 : 0)}><span className="bp-m--a bp-ink2">Select a time</span><span className="bp-m--b bp-ink2">No time selected</span></span>
     </div>
   )
 }

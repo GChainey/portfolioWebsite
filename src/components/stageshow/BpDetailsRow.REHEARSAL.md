@@ -51,3 +51,18 @@ closes, the row fills, holds 2.5s, and the dialog fades out and the next run fad
 The Group is gone from this scene (not its story); the comment is a fixed 96px field.
 Filmed: `--gate` at 720 and 390, rehearsal passed. Candidates: the row-text crossfade as the camera
 settles; 200ms near-empty during the fade reset (deliberate); at 390 the panel push.
+
+## Round 4 (nobody assigned → assigned)
+
+Starts with nobody assigned: Provider "Select a provider", Date 25/05/2021, Time "Select a time".
+They merge into the empty row (glyph, "No provider selected", "25th May 2021", "No time selected"),
+the row opens the 50/50 panel (Charlie and Dominique on the 26th), Charlie's 10:30 am is picked in
+teal, the panel tucks away and the row ends assigned (Charlie's photo, 26th May 2021, 10:30 am –
+10:45 am, with a clear ✕). Holds 2.5s. Reset: the cursor presses the row's ✕, the row empties, the
+cursor leaves it, and the row comes apart into the three empty fields (staggered the other way:
+time, date, then name; the row's words leave before the fields' arrive). Both handoffs between
+MergeRow and the row are at identical geometry: the merge checked at 0 differing pixels; the return
+checked frame by frame on the contact sheet (the probe's own screenshot landed after the un-merge
+began). Poster = the assigned row. Cursor: hand on the row, the time and the ✕.
+Filmed: `--gate` at 720 and 390, rehearsal passed (candidates: the row-text crossfade as the camera
+settles; at 390 the panel push).

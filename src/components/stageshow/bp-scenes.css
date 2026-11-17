@@ -414,8 +414,8 @@
 .bp .bp-every { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 8px; }
 
 .bp .bp-note {
-  /* Hugs its two lines, so they sit one inset from both ends */
-  align-self: flex-start;
+  /* Full width of the panel, like Fluent's MessageBar */
+  align-self: stretch;
   display: flex;
   align-items: flex-start;
   gap: 8px;
@@ -485,7 +485,6 @@
 
 .bp .bp-mbox { border-radius: 4px; }
 .bp .bp-mcard { border-radius: 8px; }
-.bp .bp-mphoto { border-radius: 50%; object-fit: cover; }
 .bp .bp-mtext { display: grid; line-height: 20px; }
 .bp .bp-mtext > * { grid-area: 1 / 1; transition: opacity 420ms ease; }
 .bp .bp-mtext b { font-weight: 600; }
@@ -499,9 +498,12 @@
    moving line is never two strings on top of each other */
 .bp .bp-merge[data-merged] .bp-mtext > .bp-m--a { transition: opacity 140ms ease; }
 .bp .bp-merge[data-merged] .bp-mtext > .bp-m--b { transition: opacity 320ms ease 300ms; }
+/* Coming apart, the same the other way: the row's words leave fast, the fields' arrive late */
+.bp .bp-merge:not([data-merged]) .bp-mtext > .bp-m--b { transition: opacity 140ms ease; }
+.bp .bp-merge:not([data-merged]) .bp-mtext > .bp-m--a { transition: opacity 320ms ease 300ms; }
 
 /* The old one-column dialog (BpOldDialog) */
-.bp .bp-old { width: 480px; height: auto; display: flex; flex-direction: column; gap: 12px; padding: 24px; background: #fff; }
+.bp .bp-old { width: 480px; height: auto; display: flex; flex-direction: column; gap: 12px; padding: 24px 24px 96px; background: #fff; }
 .bp .bp-old .bp-pair { grid-template-columns: minmax(0, 1fr) 120px; }
 .bp .bp-old .bp-pair--even { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 
@@ -596,26 +598,16 @@
 /* Drawn small as it grows: a face or initials keep clear of the name */
 .bp .bp-old .bp-input:has(> .bp-initials, > .bp-photo) { gap: 12px; }
 
-/* The appointment book behind the old dialog: quiet filler under Fluent's modal scrim */
-.bp .bp-book {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  border-radius: 0;
-  background: #fff;
-  box-shadow: none;
-}
-
-.bp .bp-book__bar { display: flex; gap: 12px; align-items: center; height: 48px; padding: 0 24px; background: var(--bp-ground); border-bottom: 1px solid #e0e0e0; }
-.bp .bp-book__grid { flex: 1; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
-.bp .bp-book__day { display: flex; flex-direction: column; gap: 8px; padding: 16px 12px; border-right: 1px solid #e0e0e0; }
-.bp .bp-book__slot { height: 56px; border-radius: 4px; background: #fafafa; }
-.bp .bp-book__slot[data-on] { background: var(--bp-brand-tint); }
-.bp .bp-book__scrim { position: absolute; inset: 0; background: rgb(0 0 0 / 0.4); }
-
-/* The old dialog's messages hug their words */
-.bp .bp-old .bp-msg { align-self: flex-start; }
+/* Messages and notes fill their panel's width, their words filling the bar, so the bar keeps one
+   inset at both ends */
+.bp .bp-msg .bp-lines,
+.bp .bp-note .bp-lines { flex: 1; min-width: 0; }
 
 /* Moving by layout as the old dialog grows, inside a scaling camera: on a layer, so text glides */
-.bp .bp-old .bp-boxed { will-change: transform; }
+.bp .bp-old > * { will-change: transform; }
+
+/* A row with a clear ✕: its slot is always laid out; the ✕ shows once the row is assigned */
+.bp .bp-card[data-clear] { grid-template-columns: 40px minmax(0, 1fr) 16px 16px; }
+.bp .bp-clear { display: grid; color: var(--bp-ink-2); opacity: 0; transition: opacity 200ms ease; }
+.bp .bp-clear[data-shown] { opacity: 1; }
+.bp .bp-merge .bp-glyph { width: 40px; height: 40px; }
