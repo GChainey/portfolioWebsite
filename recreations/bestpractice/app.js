@@ -136,8 +136,9 @@ function repeatCard() {
 function injuryCard() {
   if (V !== 'injury') return ''
   const on = S.panel === 'injury', j = S.injurySet
-  const text = j ? `<span style="color:var(--fg1)">Injury</span> <span class="pill">${j[2]} · ${j[0]}</span>` : `<span style="color:var(--fg1)">Not related to an injury</span>`
-  return `<button class="card slim ${on ? 'on' : ''}" data-act="panel:injury" aria-label="Injury claim"><span class="glyph" style="color:var(--fg2)">${I.injury}</span><span class="lines" style="flex-direction:row;align-items:center;gap:8px;flex-wrap:wrap">${text}</span><span class="chev">${on ? I.left : I.right}</span></button>`
+  // Set: two tight lines like the repeat row, the injury then the claim (it wrapped as a tag before)
+  const text = j ? `<span style="color:var(--fg1)">${j[0]}</span><span style="font-size:12px;line-height:16px;color:var(--fg3)">Injury claim · ${j[2]}</span>` : `<span style="color:var(--fg1)">Not related to an injury</span>`
+  return `<button class="card slim ${on ? 'on' : ''}" data-act="panel:injury" aria-label="Injury claim"><span class="glyph" style="color:var(--fg2)">${I.injury}</span><span class="lines">${text}</span><span class="chev">${on ? I.left : I.right}</span></button>`
 }
 
 function leftPanel() {
