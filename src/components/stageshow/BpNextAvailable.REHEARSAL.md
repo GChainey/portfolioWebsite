@@ -39,3 +39,13 @@ appointment is 26/05/2021 at 10:30 am" in full ink, the date a bold underlined l
 date rolls to 26/05/2021 with a brand-tint flash that settles, the times drop in with 10:30 am in
 teal, "Less" fades in, Dominique moves down. Holds 2.5s, then Charlie's ‹ takes it back a day (the
 reset) and it loops. Filmed: `--gate` at 720 and 390, rehearsal passed, 0 candidates.
+
+## Round (icon jitter)
+
+Gareth saw the icon in the details row jump between two positions. Measured every icon's box on
+every animation frame through the loop at 720 and 390 (.context/ss-tools/scripts/icon-jitter.mjs):
+nothing moved at rest, but each time a state swapped in a fixed slot (the row's stethoscope ↔
+Charlie's photo, its › ↔ ‹, its lines; the provider link; the times) the kit's States glided the new
+state up 4px with a blur, so the icon landed in a second place. These scenes now swap with `Fade`
+(bp-dialog.tsx): opacity only, every state in one spot. Every icon now has exactly one rest position
+across the loop. Re-gated at 720 and 390: rehearsal passed (row at 720 now 0 candidates).

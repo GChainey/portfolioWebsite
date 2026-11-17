@@ -24,3 +24,13 @@ A close-up of the Appointment details panel alone (PanelWindow). Dominique's ›
 26/05/2021 with a brand-tint flash, her times crossfade to the 26th's; Yarn's 25/05/2021 sits
 directly below, unchanged. Holds 2.5s, then Dominique's ‹ takes her back (the reset) and it loops.
 Filmed: `--gate` at 720 and 390, rehearsal passed, 0 candidates.
+
+## Round (icon jitter)
+
+Gareth saw the icon in the details row jump between two positions. Measured every icon's box on
+every animation frame through the loop at 720 and 390 (.context/ss-tools/scripts/icon-jitter.mjs):
+nothing moved at rest, but each time a state swapped in a fixed slot (the row's stethoscope ↔
+Charlie's photo, its › ↔ ‹, its lines; the provider link; the times) the kit's States glided the new
+state up 4px with a blur, so the icon landed in a second place. These scenes now swap with `Fade`
+(bp-dialog.tsx): opacity only, every state in one spot. Every icon now has exactly one rest position
+across the loop. Re-gated at 720 and 390: rehearsal passed (row at 720 now 0 candidates).

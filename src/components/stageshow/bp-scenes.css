@@ -349,7 +349,7 @@
 }
 
 .bp .bp-prov__name { flex: 1; min-width: 0; }
-.bp .bp-prov__head .ss-states { flex: none; }
+.bp .bp-prov__head .bp-fade { flex: none; }
 
 .bp .bp-link {
   color: var(--bp-brand);
@@ -449,7 +449,6 @@
 
 /* A provider's times crossfading to another day: the grid keeps its width */
 .bp .bp-times-swap { display: grid; width: 100%; }
-.bp .bp-times-swap .ss-states__item,
 .bp .bp-times-swap .bp-times { width: 100%; }
 
 /* The right panel alone, as its own window */
@@ -611,3 +610,13 @@
 .bp .bp-clear { display: grid; color: var(--bp-ink-2); opacity: 0; transition: opacity 200ms ease; }
 .bp .bp-clear[data-shown] { opacity: 1; }
 .bp .bp-merge .bp-glyph { width: 40px; height: 40px; }
+
+/* Fade: states in one spot, by opacity alone */
+.bp .bp-fade { display: inline-grid; align-items: center; justify-items: start; }
+.bp .bp-fade[data-align='end'] { justify-items: end; }
+.bp .bp-fade[data-align='center'] { justify-items: center; }
+.bp .bp-fade__item { grid-area: 1 / 1; display: inline-flex; align-items: center; gap: 4px; opacity: 0; transition: opacity 140ms ease; }
+.bp .bp-fade__item[data-on] { opacity: 1; transition: opacity 240ms ease 100ms; }
+.bp .bp-card__lines { display: grid; }
+.bp .bp-times-swap { display: grid; width: 100%; }
+.bp .bp-times-swap .bp-fade__item { display: block; width: 100%; }

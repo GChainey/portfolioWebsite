@@ -3,7 +3,6 @@
 import type { ReactNode } from 'react'
 import { AlertTriangle, CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Clock, Info, Repeat, Stethoscope, X } from 'lucide-react'
 import { Bar, Text } from './kit/window'
-import { States } from './kit/motion/States'
 import './bp-scenes.css'
 
 // Best Practice's New appointment dialog in Fluent 2 (recreations/bestpractice/fluent.css), as the
@@ -38,6 +37,18 @@ export function zoomStyle(layout: Layout, two: boolean) {
 }
 
 const I = { size: 16, strokeWidth: 1.5 } as const
+
+// One spot, several states, swapped by opacity alone: no travel, no blur. The kit's States glides a
+// new state up 4px, which suits a label but makes an icon in a fixed slot (the row's face or glyph,
+// its chevron) hop between two positions. Here every state sits in one place; the old one leaves
+// fast, the new one arrives a beat later, so they never read as two at once
+export function Fade<K extends string>({ value, states, className = '', align = 'start' }: { value: K; states: Record<K, ReactNode>; className?: string; align?: 'start' | 'center' | 'end' }) {
+  return (
+    <span className={`bp-fade ${className}`} data-align={align}>
+      {(Object.keys(states) as K[]).map((k) => <span key={k} className="bp-fade__item" data-on={k === value || undefined} aria-hidden={k !== value || undefined}>{states[k]}</span>)}
+    </span>
+  )
+}
 
 export function Photo({ src, size }: { src: string; size: 20 | 24 | 40 }) {
   // eslint-disable-next-line @next/next/no-img-element
@@ -97,7 +108,7 @@ export function DetailsRow({ filled, value, open = false, target, snap = false, 
     <div className="bp-field" data-snap={snap || undefined}>
       <Label req>Appointment details</Label>
       <div className="bp-card" data-on={open || undefined} data-clear={clear ? '' : undefined} data-target={target} data-cursor="hand">
-        <States
+        <Fade
           value={v === 'empty' ? 'empty' : 'photo'}
           align="start"
           className="bp-card__lead"
@@ -106,7 +117,7 @@ export function DetailsRow({ filled, value, open = false, target, snap = false, 
             photo: <Photo src={PHOTO.charlie} size={40} />,
           }}
         />
-        <States
+        <Fade
           value={v}
           align="start"
           className="bp-card__lines"
@@ -117,7 +128,7 @@ export function DetailsRow({ filled, value, open = false, target, snap = false, 
           }}
         />
         {clear && <span className="bp-clear" data-shown={v === 'filled' || undefined} data-target={clear} data-cursor="hand"><X {...I} /></span>}
-        <States value={open ? 'back' : 'go'} className="bp-chev" states={{ go: <ChevronRight {...I} />, back: <ChevronLeft {...I} /> }} />
+        <Fade value={open ? 'back' : 'go'} className="bp-chev" states={{ go: <ChevronRight {...I} />, back: <ChevronLeft {...I} /> }} />
       </div>
     </div>
   )
@@ -185,7 +196,7 @@ export function ProviderHead({ photo, name, link, up = false }: { photo?: string
       {name ? <Text className="bp-strong bp-prov__name">{name}</Text> : <Bar w={96} h={8} r={4} tone={3} />}
       {link && (typeof link === 'string'
         ? <span className="bp-link bp-more" data-cursor="hand">{link}{up ? <ChevronUp {...I} /> : <ChevronDown {...I} />}</span>
-        : <States value={link.on} align="end" className="bp-more" states={Object.fromEntries(Object.entries(link.states).map(([k, [t, u]]) => [k, t ? <span key={k} className="bp-link bp-more" data-cursor="hand">{t}{u ? <ChevronUp {...I} /> : <ChevronDown {...I} />}</span> : <span key={k} />]))} />)}
+        : <Fade value={link.on} align="end" className="bp-more" states={Object.fromEntries(Object.entries(link.states).map(([k, [t, u]]) => [k, t ? <span key={k} className="bp-link bp-more" data-cursor="hand">{t}{u ? <ChevronUp {...I} /> : <ChevronDown {...I} />}</span> : <span key={k} />]))} />)}
     </div>
   )
 }

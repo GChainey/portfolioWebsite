@@ -66,3 +66,13 @@ checked frame by frame on the contact sheet (the probe's own screenshot landed a
 began). Poster = the assigned row. Cursor: hand on the row, the time and the ✕.
 Filmed: `--gate` at 720 and 390, rehearsal passed (candidates: the row-text crossfade as the camera
 settles; at 390 the panel push).
+
+## Round (icon jitter)
+
+Gareth saw the icon in the details row jump between two positions. Measured every icon's box on
+every animation frame through the loop at 720 and 390 (.context/ss-tools/scripts/icon-jitter.mjs):
+nothing moved at rest, but each time a state swapped in a fixed slot (the row's stethoscope ↔
+Charlie's photo, its › ↔ ‹, its lines; the provider link; the times) the kit's States glided the new
+state up 4px with a blur, so the icon landed in a second place. These scenes now swap with `Fade`
+(bp-dialog.tsx): opacity only, every state in one spot. Every icon now has exactly one rest position
+across the loop. Re-gated at 720 and 390: rehearsal passed (row at 720 now 0 candidates).

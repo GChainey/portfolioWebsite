@@ -3,8 +3,7 @@
 import { Stage } from './kit/stage'
 import type { Act } from './kit/act'
 import { Roll } from './kit/motion/Roll'
-import { States } from './kit/motion/States'
-import { FillerProvider, PHOTO, PanelWindow, ProviderHead, Stepper, Times } from './bp-dialog'
+import { Fade, FillerProvider, PHOTO, PanelWindow, ProviderHead, Stepper, Times } from './bp-dialog'
 
 // "Each provider, their own day": a close-up of the Appointment details panel. Receptionists
 // compare providers across days, so each one has their own date. Dominique steps forward to the
@@ -51,7 +50,7 @@ export function BpProviderDates() {
               <div className="bp-prov bp-prov--first">
                 <ProviderHead photo={PHOTO.dominique} name="Dominique Sat" link="Less" up />
                 <Stepper date={<Roll>{`${s.ds}/05/2021`}</Roll>} next="ds-next" back="ds-back" flash={s.ds === 26} />
-                <States value={String(s.ds)} align="start" className="bp-times-swap" states={{ 25: <Times times={DS[25].slice(0, n)} cols={n} />, 26: <Times times={DS[26].slice(0, n)} cols={n} /> }} />
+                <Fade value={String(s.ds) as '25' | '26'} className="bp-times-swap" states={{ 25: <Times times={DS[25].slice(0, n)} cols={n} />, 26: <Times times={DS[26].slice(0, n)} cols={n} /> }} />
               </div>
               <div className="bp-prov">
                 <ProviderHead photo={PHOTO.yarn} name="Yarn Oldrick" link="Less" up />
