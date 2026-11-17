@@ -29,3 +29,19 @@ panel has white space below it. Re-gated at 720 and 390: rehearsal passed.
 
 The panel's Next / Final appointment card fills the panel's full width (Fluent's MessageBar); its
 text fills the bar, so it keeps one inset at both ends. Re-gated at 720 and 390: rehearsal passed.
+
+## Round 6 (no camera move)
+
+Gareth: "still jumpy… we don't need to see it zoomed out." The camera never moves now: the
+close-up holds the whole loop. Choosing Repeat brings the setup in place inside the same window
+(at 720 it arrives where it sits: a 24px drift as it fades in, after the appointment has faded out,
+so the two never overlap; at 390 the full push stays). Every setting, the next/final card and Set up
+repeat fit the frame at the close-up scale. The close (Set up repeat → the setup leaves → one line)
+is unchanged. No slide-in state swaps left (no States in this scene). Re-gated: 720 rehearsal passed
+with 0 candidates; 390 passed (the push crossing the window edge).
+
+## One radius
+
+Every UI element is 4px (Fluent medium): fields, buttons, the segmented group, the details row and
+the repeat / waiting-list lines, message bars and notes, times, steppers, the checkbox. Only the
+dialog is 8px; the switch keeps its pill track. Checked on the posters; re-gated at 720 and 390.

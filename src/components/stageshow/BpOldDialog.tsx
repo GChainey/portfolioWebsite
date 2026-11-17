@@ -18,20 +18,21 @@ import { Button, Initials, Label, Message, PHOTO, Photo, Switch } from './bp-dia
 // on the stage's bottom edge however long it gets: the whole length stays in view.
 // Real strings: the title, the fields and switches, the settings each opens, the two messages.
 
-type S = { waiting: boolean; repeat: boolean; urgent: boolean }
+// waiting / repeat: the switches; wOpen / rOpen: the sections they open (with the switch)
+type S = { waiting: boolean; repeat: boolean; urgent: boolean; wOpen: boolean; rOpen: boolean }
 
-const initial: S = { waiting: false, repeat: false, urgent: false }
-const poster: S = { waiting: true, repeat: true, urgent: true }
+const initial: S = { waiting: false, repeat: false, urgent: false, wOpen: false, rOpen: false }
+const poster: S = { waiting: true, repeat: true, urgent: true, wOpen: true, rOpen: true }
 
 async function script(a: Act<S>) {
   await a.wait(1200)
   a.mark('waiting')
   await a.click({ at: 'sw-waiting', x: 0.5, y: 0.5 })
-  a.set({ waiting: true })
+  a.set({ waiting: true, wOpen: true })
   await a.wait(1600)
   a.mark('repeat')
   await a.click({ at: 'sw-repeat', x: 0.5, y: 0.5 })
-  a.set({ repeat: true })
+  a.set({ repeat: true, rOpen: true })
   await a.wait(1600)
   a.mark('urgent')
   await a.click({ at: 'sw-urgent', x: 0.5, y: 0.5 })
@@ -39,15 +40,16 @@ async function script(a: Act<S>) {
   await a.wait(2500)
   a.mark('cancel')
   await a.click({ at: 'cancel', x: 0.7, y: 0.7 })
-  a.set({ waiting: false, repeat: false, urgent: false })
-  await a.wait(1500)
+  a.set({ wOpen: false, rOpen: false, urgent: false, waiting: false, repeat: false })
+  await a.wait(1600)
 }
 
 const I = { size: 16, strokeWidth: 1.5 } as const
 const STAGE = { wide: { w: 720, h: 620, g: 40 }, compact: { w: 358, h: 640, g: 16 } } as const
-// The window runs well past the bottom edge (a bleed, not a near miss); the dialog's deep foot keeps
-// Save and Cancel a full gutter clear of the edge at every scale
-const BLEED = 28
+// The window runs well past the bottom edge (a bleed, not a near miss, with room for the one frame
+// the camera trails the growth); the dialog's deep foot keeps Save and Cancel a full gutter clear of
+// the edge at every scale
+const BLEED = 40
 
 function Field({ label, req = false, children }: { label: string; req?: boolean; children: React.ReactNode }) {
   return <div className="bp-field"><Label req={req}>{label}</Label>{children}</div>
@@ -56,32 +58,25 @@ const Input = ({ value, icon, select = false }: { value: string; icon?: 'cal' | 
   <div className="bp-input" data-cursor={select || icon ? 'hand' : 'ibeam'}><span className="bp-val">{value}</span>{icon === 'cal' ? <CalendarDays {...I} className="bp-ico" /> : icon === 'clock' ? <Clock {...I} className="bp-ico" /> : select ? <ChevronDown {...I} className="bp-ico" /> : null}</div>
 )
 
-// The dialog, scaled to keep its whole length in the stage as it grows. Its height is known ahead
-// of the animation (the closed dialog plus whichever sections are open, each measured once), so the
-// camera eases straight to where it will end up instead of chasing the growth
+// The dialog, scaled to keep its whole length in the stage as it grows. The camera follows the
+// dialog's measured height on every frame (no transition of its own), so as a section opens or
+// closes the foot stays exactly the same distance past the stage's bottom edge, never overshooting
+// and never leaving a gap
 function Old({ s, layout }: { s: S; layout: 'wide' | 'compact' }) {
   const base = useRef<HTMLDivElement>(null)
   const wait = useRef<HTMLDivElement>(null)
   const rep = useRef<HTMLDivElement>(null)
-  const [h, setH] = useState({ base: 0, wait: 0, rep: 0 })
+  const [full, setFull] = useState(0)
   useLayoutEffect(() => {
-    const measure = () => {
-      const d = base.current
-      if (!d) return
-      const wh = wait.current?.offsetHeight ?? 0
-      const rh = rep.current?.offsetHeight ?? 0
-      // The dialog's height with both sections closed: take off whatever is open right now
-      const open = d.querySelectorAll<HTMLElement>('.ss-collapse')
-      let cur = 0
-      open.forEach((c) => { cur += c.offsetHeight })
-      setH({ base: d.offsetHeight - cur, wait: wh, rep: rh })
-    }
+    const d = base.current
+    if (!d) return
+    const measure = () => setFull(d.offsetHeight)
     measure()
-    const t = setTimeout(measure, 300)
-    return () => clearTimeout(t)
+    const ro = new ResizeObserver(measure)
+    ro.observe(d)
+    return () => ro.disconnect()
   }, [layout])
   const st = STAGE[layout]
-  const full = h.base + (s.waiting ? h.wait : 0) + (s.repeat ? h.rep : 0)
   const width = layout === 'wide' ? 480 : 400
   // Pinned a gutter from the top; the camera pulls back so the dialog's foot always runs just past
   // the stage's bottom edge: the whole length in view, Save and Cancel included
@@ -91,7 +86,7 @@ function Old({ s, layout }: { s: S; layout: 'wide' | 'compact' }) {
   // limits the scale, the top sits lower than the gutter rather than the foot falling short)
   const y = full ? st.h + BLEED - full * scale : st.g
   return (
-    <div className="bp-zoom" style={{ transform: `translate(${x}px, ${y}px) scale(${scale})`, transitionDuration: '600ms' }}>
+    <div className="bp-zoom" style={{ transform: `translate(${x}px, ${y}px) scale(${scale})`, transition: 'none' }}>
       <div ref={base} className="ss-window bp-dialog bp-old" style={{ width }}>
         <div className="bp-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>New appointment<X {...I} data-cursor="hand" /></div>
         <Field label="Patient" req><div className="bp-input" data-cursor="ibeam"><Initials name="Bobby Smith" /><span className="bp-val">Bobby Smith</span><X {...I} className="bp-ico" /></div></Field>
@@ -108,7 +103,7 @@ function Old({ s, layout }: { s: S; layout: 'wide' | 'compact' }) {
           </div></div>
         </Field>
         <Field label="Add to waiting list"><Switch on={s.waiting} target="sw-waiting" /></Field>
-        <Collapse open={s.waiting}>
+        <Collapse open={s.wOpen}>
           <div ref={wait} className="bp-old__more">
             <div className="bp-boxed">
               <div className="bp-pair bp-pair--even">
@@ -120,7 +115,7 @@ function Old({ s, layout }: { s: S; layout: 'wide' | 'compact' }) {
           </div>
         </Collapse>
         <Field label="Repeat appointment"><Switch on={s.repeat} target="sw-repeat" /></Field>
-        <Collapse open={s.repeat}>
+        <Collapse open={s.rOpen}>
           <div ref={rep} className="bp-old__more">
             <div className="bp-boxed">
               <div className="bp-pair bp-pair--even">

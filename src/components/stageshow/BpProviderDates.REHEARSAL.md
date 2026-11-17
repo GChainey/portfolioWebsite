@@ -34,3 +34,9 @@ Charlie's photo, its › ↔ ‹, its lines; the provider link; the times) the k
 state up 4px with a blur, so the icon landed in a second place. These scenes now swap with `Fade`
 (bp-dialog.tsx): opacity only, every state in one spot. Every icon now has exactly one rest position
 across the loop. Re-gated at 720 and 390: rehearsal passed (row at 720 now 0 candidates).
+
+## One radius
+
+Every UI element is 4px (Fluent medium): fields, buttons, the segmented group, the details row and
+the repeat / waiting-list lines, message bars and notes, times, steppers, the checkbox. Only the
+dialog is 8px; the switch keeps its pill track. Checked on the posters; re-gated at 720 and 390.

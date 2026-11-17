@@ -29,3 +29,18 @@ camera scales the dialog to the stage's height and anchors its bottom 28px past 
 edge, a real bleed, not a near miss; a deep 96px foot inside the dialog keeps Save and Cancel a full
 gutter clear of the edge at every scale. The whole length, buttons included, stays in view.
 Filmed: `--gate` at 720 (0 candidates) and 390 (rehearsal passed; `small text` at its longest).
+
+## Round 3
+
+The camera now follows the dialog's measured height on every frame (no transition of its own), so
+as a section opens or closes the foot stays the same distance past the edge: no overshoot that
+slices Save, no gap that floats it. The bleed is 40px (room for the one frame the camera trails the
+growth) and the foot inside the dialog 120px, so Save and Cancel stay a full gutter clear at every
+scale. Each section opens with its switch (a delayed open made the switch's thumb hop when the
+camera then rescaled). Re-gated: 720 0 candidates; 390 rehearsal passed (`small text` only).
+
+## One radius
+
+Every UI element is 4px (Fluent medium): fields, buttons, the segmented group, the details row and
+the repeat / waiting-list lines, message bars and notes, times, steppers, the checkbox. Only the
+dialog is 8px; the switch keeps its pill track. Checked on the posters; re-gated at 720 and 390.

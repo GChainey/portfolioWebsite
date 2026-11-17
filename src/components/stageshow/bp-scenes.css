@@ -2,7 +2,9 @@
    three Stageshow scenes. Everything is scoped under .bp. Fluent's tokens, audited to the fewest:
    brand #0F6CBD with its tint #EBF3FC, ink #242424 and #616161, grey ground #F5F5F5, hairline
    #D1D1D1, the original design's teal #CCF0E8 for a picked time. Type 20 / 14 / 12, weights 400
-   and 600. Space 4 inside a part, then 8, 12, 16, 24. */
+   and 600. Space 4 inside a part, then 8, 12, 16, 24. Radius: one, 4px (Fluent medium), for every
+   UI element (fields, buttons, the segmented group, rows and cards, message bars, times, steppers);
+   only the dialog itself is 8px, and the switch keeps its pill track. */
 
 .bp .ss-stage {
   --bp-brand: #0f6cbd;
@@ -199,7 +201,7 @@
   width: 100%;
   padding: 12px;
   border: 1px solid var(--bp-line);
-  border-radius: 8px;
+  border-radius: 4px;
   background: #fff;
   transition: background-color 150ms ease, border-color 150ms ease;
 }
@@ -290,7 +292,7 @@
   width: 100%;
   padding: 8px 12px;
   border: 1px solid var(--bp-line);
-  border-radius: 8px;
+  border-radius: 4px;
   background: #fff;
 }
 
@@ -313,7 +315,7 @@
 /* Wide: the right panel is as wide as the left, room for the date and providers side by side */
 .bp .ss-stage[data-layout='wide'] .bp-row2 {
   display: grid;
-  grid-template-columns: 124px minmax(0, 1fr);
+  grid-template-columns: 136px minmax(0, 1fr);
 }
 
 .bp .bp-badge {
@@ -483,7 +485,7 @@
 }
 
 .bp .bp-mbox { border-radius: 4px; }
-.bp .bp-mcard { border-radius: 8px; }
+.bp .bp-mcard { border-radius: 4px; }
 .bp .bp-mtext { display: grid; line-height: 20px; }
 .bp .bp-mtext > * { grid-area: 1 / 1; transition: opacity 420ms ease; }
 .bp .bp-mtext b { font-weight: 600; }
@@ -502,7 +504,7 @@
 .bp .bp-merge:not([data-merged]) .bp-mtext > .bp-m--a { transition: opacity 320ms ease 300ms; }
 
 /* The old one-column dialog (BpOldDialog) */
-.bp .bp-old { width: 480px; height: auto; display: flex; flex-direction: column; gap: 12px; padding: 24px 24px 96px; background: #fff; }
+.bp .bp-old { width: 480px; height: auto; display: flex; flex-direction: column; gap: 12px; padding: 24px 24px 120px; background: #fff; }
 .bp .bp-old .bp-pair { grid-template-columns: minmax(0, 1fr) 120px; }
 .bp .bp-old .bp-pair--even { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 
@@ -568,7 +570,7 @@
   width: 16px;
   height: 16px;
   border: 1px solid var(--bp-ink-2);
-  border-radius: 2px;
+  border-radius: 4px;
   background: #fff;
 }
 
@@ -620,3 +622,22 @@
 .bp .bp-card__lines { display: grid; }
 .bp .bp-times-swap { display: grid; width: 100%; }
 .bp .bp-times-swap .bp-fade__item { display: block; width: 100%; }
+
+/* Wide, pushed in place (BpRepeat): the setup arrives where it will sit, a short drift as it fades
+   in, the appointment fading beneath it; no slide across the frame, no camera move */
+.bp .bp-dialog[data-push='arrive'] .bp-right {
+  opacity: 0;
+  transform: translateX(24px);
+  transition: opacity 260ms ease, transform 360ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.bp .bp-dialog[data-push='arrive'][data-two] .bp-right {
+  opacity: 1;
+  transform: none;
+  transition: opacity 320ms ease 80ms, transform 420ms cubic-bezier(0.23, 1, 0.32, 1) 80ms;
+}
+
+.bp .bp-dialog[data-push='arrive'] .bp-left { transition: opacity 160ms ease 200ms; }
+.bp .bp-dialog[data-push='arrive'][data-two] .bp-left { transition: opacity 140ms ease; }
+.bp .bp-dialog[data-push='arrive'][data-two] .bp-right { transition: opacity 280ms ease 160ms, transform 420ms cubic-bezier(0.23, 1, 0.32, 1) 160ms; }
+.bp .bp-dialog[data-push='arrive'] .bp-right { transition: opacity 160ms ease, transform 360ms cubic-bezier(0.23, 1, 0.32, 1); }

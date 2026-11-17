@@ -42,3 +42,9 @@ waiting list on, so it no longer matches BpRepeat's poster. Re-gated at 720 and 
 Loops continuously with a visible reset (Segmented: the waiting list clicked off; Repeat: Repeat
 clicked off, the line folds away). The comment is a fixed 96px field, never stretched; the left
 panel has white space below it. Re-gated at 720 and 390: rehearsal passed.
+
+## One radius
+
+Every UI element is 4px (Fluent medium): fields, buttons, the segmented group, the details row and
+the repeat / waiting-list lines, message bars and notes, times, steppers, the checkbox. Only the
+dialog is 8px; the switch keeps its pill track. Checked on the posters; re-gated at 720 and 390.
