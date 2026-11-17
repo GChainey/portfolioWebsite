@@ -54,7 +54,7 @@
   border-radius: 8px;
   background: #fff;
   box-shadow: 0 0 2px rgb(0 0 0 / 0.08), 0 8px 24px rgb(0 0 0 / 0.08);
-  transition: width 640ms cubic-bezier(0.77, 0, 0.175, 1);
+  transition: width 640ms cubic-bezier(0.77, 0, 0.175, 1), transform 640ms cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 .bp .bp-left {
@@ -460,48 +460,27 @@
 /* A date that just changed: a moment of the brand tint, then it settles */
 .bp .bp-input[data-flash] { animation: bp-flash 1600ms ease-out; }
 
-/* The merge: three fields gathering into one row (MergeRow) */
+/* The merge, in place (MergeRow): two layers in one spot, crossfaded; nothing travels */
 .bp .bp-merge {
   position: relative;
-  transition: height 700ms cubic-bezier(0.77, 0, 0.175, 1);
+  transition: height 520ms cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-.bp .bp-m {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform-origin: 0 0;
-  white-space: nowrap;
-  will-change: transform;
-  transition: transform 700ms cubic-bezier(0.77, 0, 0.175, 1), opacity 420ms ease;
-}
-
+.bp .bp-mlayer { position: absolute; inset: 0; }
+.bp .bp-m { position: absolute; top: 0; left: 0; white-space: nowrap; line-height: 20px; }
 .bp .bp-mbox,
-.bp .bp-mcard {
-  position: absolute;
-  border: 1px solid var(--bp-line);
-  background: #fff;
-  transition: opacity 420ms ease;
-}
-
+.bp .bp-mcard { position: absolute; border: 1px solid var(--bp-line); background: #fff; }
 .bp .bp-mbox { border-radius: 4px; }
 .bp .bp-mcard { border-radius: 4px; }
-.bp .bp-mtext { display: grid; line-height: 20px; }
-.bp .bp-mtext > * { grid-area: 1 / 1; transition: opacity 420ms ease; }
-.bp .bp-mtext b { font-weight: 600; }
+.bp .bp-m.bp-glyph { width: 40px; height: 40px; }
 .bp .bp-ink2 { color: var(--bp-ink-2); }
+.bp .bp-merge b { font-weight: 600; }
 
-/* Which half shows: the fields (a) or the row (b). The row's outline arrives as the fields' leave */
-.bp .bp-merge .bp-m--b { opacity: 0; }
-.bp .bp-merge[data-merged] .bp-m--a { opacity: 0; }
-.bp .bp-merge[data-merged] .bp-m--b { opacity: 1; transition-delay: 160ms; }
-/* The words themselves never overlap: the field's version leaves fast, the row's arrives late, so a
-   moving line is never two strings on top of each other */
-.bp .bp-merge[data-merged] .bp-mtext > .bp-m--a { transition: opacity 140ms ease; }
-.bp .bp-merge[data-merged] .bp-mtext > .bp-m--b { transition: opacity 320ms ease 300ms; }
-/* Coming apart, the same the other way: the row's words leave fast, the fields' arrive late */
-.bp .bp-merge:not([data-merged]) .bp-mtext > .bp-m--b { transition: opacity 140ms ease; }
-.bp .bp-merge:not([data-merged]) .bp-mtext > .bp-m--a { transition: opacity 320ms ease 300ms; }
+/* The fields leave first, the row arrives as they go: never two at once */
+.bp .bp-merge .bp-m--a { opacity: 1; transition: opacity 220ms ease 120ms; }
+.bp .bp-merge .bp-m--b { opacity: 0; transition: opacity 180ms ease; }
+.bp .bp-merge[data-merged] .bp-m--a { opacity: 0; transition: opacity 180ms ease; }
+.bp .bp-merge[data-merged] .bp-m--b { opacity: 1; transition: opacity 260ms ease 140ms; }
 
 /* The old one-column dialog (BpOldDialog) */
 .bp .bp-old { width: 480px; height: auto; display: flex; flex-direction: column; gap: 12px; padding: 24px 24px 120px; background: #fff; }
@@ -611,7 +590,6 @@
 .bp .bp-card[data-clear] { grid-template-columns: 40px minmax(0, 1fr) 16px 16px; }
 .bp .bp-clear { display: grid; color: var(--bp-ink-2); opacity: 0; transition: opacity 200ms ease; }
 .bp .bp-clear[data-shown] { opacity: 1; }
-.bp .bp-merge .bp-glyph { width: 40px; height: 40px; }
 
 /* Fade: states in one spot, by opacity alone */
 .bp .bp-fade { display: inline-grid; align-items: center; justify-items: start; }
@@ -664,3 +642,14 @@
 /* The appointment stays put behind a side panel: no fade */
 .bp .bp-dialog[data-push='side'] .bp-left,
 .bp .bp-dialog[data-push='side'][data-two] .bp-left { opacity: 1; }
+
+/* Fit to content (wide BpDetailsRow, BpFinal): as tall as what's in it, with a deep foot that runs
+   past the stage's bottom edge, so the actions sit a full gutter above it and nothing is empty */
+.bp .bp-dialog[data-fit] { height: auto; align-items: stretch; }
+.bp .bp-dialog[data-fit] .bp-left,
+.bp .bp-dialog[data-fit] .bp-right { padding-bottom: 72px; }
+.bp .bp-dialog[data-fit] .bp-actions { padding-top: 0; margin-top: auto; }
+
+/* On a lasting layer: the dialog slides as it widens; the actions move as the merge eases the height */
+.bp .bp-dialog,
+.bp .bp-actions { will-change: transform; }

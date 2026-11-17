@@ -22,3 +22,12 @@ across the loop. Re-gated at 720 and 390: rehearsal passed (row at 720 now 0 can
 Every UI element is 4px (Fluent medium): fields, buttons, the segmented group, the details row and
 the repeat / waiting-list lines, message bars and notes, times, steppers, the checkbox. Only the
 dialog is 8px; the switch keeps its pill track. Checked on the posters; re-gated at 720 and 390.
+
+## Round 2 (fitted, no empty lower half)
+
+The dialog is as tall as its content: the left panel ends with Book appointment / Cancel just below
+the comment; the right panel's providers each show three rows of times so it ends at the same foot
+(the grey placeholder provider is gone). The stage is cropped to the dialog: 521 tall, the dialog
+whole across with a 40 gutter, its deep foot running just past the bottom edge. Every other scene's
+poster was checked for an empty lower half: none (the close-ups crop through their content).
+Re-gated at 720 and 390: rehearsal passed, 0 candidates.

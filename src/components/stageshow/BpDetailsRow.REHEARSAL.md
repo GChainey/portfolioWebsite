@@ -92,3 +92,21 @@ the panel slides back out and the row fills. The unassigned start, the merge and
 unchanged. At 390 the full push stays. Re-gated at 720 and 390: rehearsal passed (candidates: the
 panel's content crossing the window edge as it slides). Frame sheet: .context/bp-stageshow/
 row-side-720.png.
+
+## Round 6 (a real two-panel dialog, fixed camera; a calm merge; fitted)
+
+- Two panels again, with no camera move: the camera holds, for the whole loop, the frame the full
+  50/50 dialog opens into (~0.84x). The dialog starts as the left panel, centred in that frame as a
+  modal is (left-aligned failed the framing gate: "runs off the bottom but sits off center"), and
+  widens outward into it to reveal Appointment details (date and providers, Charlie's and
+  Dominique's steppers and times); 10:30 am is picked in teal; it narrows back and the row fills.
+  At 390 the one-panel push stays.
+- The merge is in place now: the three fields' outlines and contents crossfade to the row's one
+  outline and contents where each will sit (opacity only, the fields leaving first), while the space
+  eases from 124 to 110. Nothing travels; the glyph never moves. The reverse on the ✕ reset is the
+  same. Handoff to the row still 0 differing pixels.
+- Fitted: the dialog is as tall as its content (Book appointment / Cancel at its foot, both panels
+  ending together) with a deep foot just past the bottom edge; the stage is 454 tall, so there's no
+  empty lower half.
+Re-gated: 720 rehearsal passed, 0 candidates; 390 passed (the push crossing the window edge).
+Sheets: .context/bp-stageshow/row-widen-720.png (open → pick → close → fill), row-merge-720.png.

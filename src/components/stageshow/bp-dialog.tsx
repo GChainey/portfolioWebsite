@@ -73,13 +73,17 @@ export function Label({ children, req = false }: { children: ReactNode; req?: bo
 // part of the appointment, its own edge and shadow showing, the appointment still there beside it
 // (BpRepeat, BpDetailsRow, wide). In the phone column both fall back to the full push
 export const SIDE = 320
-export function Dialog({ layout, two, left, right, hidden = false, push = false }: { layout: Layout; two: boolean; left: ReactNode; right?: ReactNode; hidden?: boolean; push?: boolean | 'side' }) {
+// framed: the camera holds the frame the full two-panel dialog opens into, for the whole loop; the
+// dialog starts as the left panel, centred in it as a modal is, and widens outward into it (wide only)
+// fit: the dialog is as tall as its content, with a deep foot that runs past the stage's edge (wide)
+export function Dialog({ layout, two, left, right, hidden = false, push = false, framed = false, fit = false }: { layout: Layout; two: boolean; left: ReactNode; right?: ReactNode; hidden?: boolean; push?: boolean | 'side'; framed?: boolean; fit?: boolean }) {
   const d = DIM[layout]
   const mode = d.push ? 'slide' : push === 'side' ? 'side' : push ? 'arrive' : undefined
   const still = !!mode
+  const zoom = framed && !d.push ? zoomStyle(layout, true, false) : zoomStyle(layout, two, still)
   return (
-    <div className="bp-zoom" data-hidden={hidden || undefined} style={zoomStyle(layout, two, still)}>
-      <div className="ss-window bp-dialog" data-two={two || undefined} data-push={mode} style={{ width: still || !two ? d.left : d.left + d.right }}>
+    <div className="bp-zoom" data-hidden={hidden || undefined} style={zoom}>
+      <div className="ss-window bp-dialog" data-two={two || undefined} data-push={mode} data-fit={fit && !d.push ? '' : undefined} style={{ width: still || !two ? d.left : d.left + d.right, ...(framed && !d.push ? { transform: `translateX(${two ? 0 : d.right / 2}px)` } : null) }}>
         <div className="bp-left" style={{ width: d.left }}>{left}</div>
         {right && <div className="bp-right" style={{ width: mode === 'side' ? SIDE : still ? d.left : d.right }}>{right}</div>}
         <span className="bp-close" aria-hidden data-cursor="hand"><X {...I} /></span>
@@ -276,39 +280,50 @@ export function PanelWindow({ layout, children }: { layout: Layout; children: Re
   )
 }
 
-// The old way, then the merge: Provider, Date and Time as three empty fields (nobody assigned yet)
-// that gather into the one Appointment details row. One component, every part placed absolutely so
-// it can travel: the three field outlines dissolve as the row's outline arrives, the labels give way
-// to one, the provider's placeholder becomes "No provider selected", the date and the time glide to
-// their lines, and the row's glyph arrives at its lead. Merged, it matches the empty DetailsRow
-// pixel for pixel, so the two hand over invisibly (both ways: the reset un-merges).
+// The old way, then the merge, in place: Provider, Date and Time as three empty fields that become
+// the one Appointment details row. Nothing travels: the three outlines give way to the row's one
+// outline as the space eases from three fields' height to the row's, and their contents crossfade to
+// the row's contents where each will sit (opacity only). The row's glyph never moves. Merged, it
+// matches the empty DetailsRow pixel for pixel, so the two hand over invisibly (both ways).
 export function MergeRow({ merged, width }: { merged: boolean; width: number }) {
   const W = width
   const half = (W - 12) / 2
-  const A = { name: [13, 30], date: [13, 98], time: [half + 25, 98] }
-  const B = { name: [65, 37], date: [65, 57], time: [65, 77] }
-  // delay: the parts leave one after another, so no two cross paths: merging, name, date, then time
-  // (the date is up and out of the time's way); coming apart, the time first, then date, then name
-  const at = (p: number[], delay = 0) => ({ transform: `translate(${p[0]}px, ${p[1]}px)`, transitionDelay: `${delay}ms` })
-  const m = merged
+  const pos = (x: number, y: number) => ({ transform: `translate(${x}px, ${y}px)` })
   return (
-    <div className="bp-merge" data-merged={m || undefined} data-snap style={{ height: m ? 110 : 124 }}>
-      <span className="bp-label bp-m bp-m--a" style={at([0, 0])}>Provider<span className="bp-req">*</span></span>
-      <span className="bp-label bp-m bp-m--a" style={at([0, 68])}>Date</span>
-      <span className="bp-label bp-m bp-m--a" style={at([half + 12, 68])}>Time</span>
-      <span className="bp-label bp-m bp-m--b" style={at([0, 0])}>Appointment details<span className="bp-req">*</span></span>
-      <span className="bp-mbox bp-m--a" style={{ left: 0, top: 24, width: W, height: 32 }} />
-      <span className="bp-mbox bp-m--a" style={{ left: 0, top: 92, width: half, height: 32 }} />
-      <span className="bp-mbox bp-m--a" style={{ left: half + 12, top: 92, width: half, height: 32 }} />
-      <span className="bp-mcard bp-m--b" style={{ left: 0, top: 24, width: W, height: 86 }} />
-      <span className="bp-m bp-m--a bp-ico" style={at([W - 29, 32])}><ChevronDown {...I} /></span>
-      <span className="bp-m bp-m--a bp-ico" style={at([half - 29, 100])}><CalendarDays {...I} /></span>
-      <span className="bp-m bp-m--a bp-ico" style={at([W - 29, 100])}><Clock {...I} /></span>
-      <span className="bp-m bp-m--b bp-glyph" style={at([13, 37])}><Stethoscope {...I} /></span>
-      <span className="bp-m bp-m--b bp-chev" style={at([W - 29, 59])}><ChevronRight {...I} /></span>
-      <span className="bp-m bp-mtext" style={at(m ? B.name : A.name, m ? 0 : 200)}><span className="bp-m--a bp-ink2">Select a provider</span><b className="bp-m--b">No provider selected</b></span>
-      <span className="bp-m bp-mtext" style={at(m ? B.date : A.date, m ? 60 : 120)}><span className="bp-m--a">25/05/2021</span><span className="bp-m--b bp-ink2">25th May 2021</span></span>
-      <span className="bp-m bp-mtext" style={at(m ? B.time : A.time, m ? 300 : 0)}><span className="bp-m--a bp-ink2">Select a time</span><span className="bp-m--b bp-ink2">No time selected</span></span>
+    <div className="bp-merge" data-merged={merged || undefined} data-snap style={{ height: merged ? 110 : 124 }}>
+      <span className="bp-mlayer bp-m--a">
+        <span className="bp-label bp-m" style={pos(0, 0)}>Provider<span className="bp-req">*</span></span>
+        <span className="bp-label bp-m" style={pos(0, 68)}>Date</span>
+        <span className="bp-label bp-m" style={pos(half + 12, 68)}>Time</span>
+        <span className="bp-mbox" style={{ left: 0, top: 24, width: W, height: 32 }} />
+        <span className="bp-mbox" style={{ left: 0, top: 92, width: half, height: 32 }} />
+        <span className="bp-mbox" style={{ left: half + 12, top: 92, width: half, height: 32 }} />
+        <span className="bp-m bp-ink2" style={pos(13, 30)}>Select a provider</span>
+        <span className="bp-m bp-ico" style={pos(W - 29, 32)}><ChevronDown {...I} /></span>
+        <span className="bp-m" style={pos(13, 98)}>25/05/2021</span>
+        <span className="bp-m bp-ico" style={pos(half - 29, 100)}><CalendarDays {...I} /></span>
+        <span className="bp-m bp-ink2" style={pos(half + 25, 98)}>Select a time</span>
+        <span className="bp-m bp-ico" style={pos(W - 29, 100)}><Clock {...I} /></span>
+      </span>
+      <span className="bp-mlayer bp-m--b">
+        <span className="bp-label bp-m" style={pos(0, 0)}>Appointment details<span className="bp-req">*</span></span>
+        <span className="bp-mcard" style={{ left: 0, top: 24, width: W, height: 86 }} />
+        <span className="bp-m bp-glyph" style={pos(13, 37)}><Stethoscope {...I} /></span>
+        <b className="bp-m" style={pos(65, 37)}>No provider selected</b>
+        <span className="bp-m bp-ink2" style={pos(65, 57)}>25th May 2021</span>
+        <span className="bp-m bp-ink2" style={pos(65, 77)}>No time selected</span>
+        <span className="bp-m bp-chev" style={pos(W - 29, 59)}><ChevronRight {...I} /></span>
+      </span>
+    </div>
+  )
+}
+
+// The dialog's foot: its one action and Cancel
+export function Actions({ primary = 'Book appointment', cancel }: { primary?: string; cancel?: string }) {
+  return (
+    <div className="bp-actions">
+      <span className="bp-btn" data-cursor="hand">{primary}</span>
+      <span className="bp-btn bp-btn--secondary" data-target={cancel} data-cursor="hand">Cancel</span>
     </div>
   )
 }
