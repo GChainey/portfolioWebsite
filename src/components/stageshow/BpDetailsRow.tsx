@@ -2,15 +2,16 @@
 
 import { Stage } from './kit/stage'
 import type { Act } from './kit/act'
-import { Comment, DetailsRow, Dialog, FillerProvider, MergeRow, PHOTO, Patient, ProviderHead, RightHead, Stepper, Times, Title, type RowValue } from './bp-dialog'
+import { Comment, DetailsRow, Dialog, FillerProvider, MergeRow, PHOTO, Patient, ProviderHead, Stepper, Times, Title, type RowValue } from './bp-dialog'
 
 // "Three answers, one row": the two-panel idea, from the start. Nobody is assigned yet. Provider,
 // date and time used to be three fields; they answer one question, so they gather into one row, and
 // the row is the door to the panel beside it. Open it, pick Charlie's 10:30 am (teal), the panel
 // tucks away and the row reads as the answer: a face, a day, a time.
 //
-// Beats: three empty fields → they merge into the empty row → open it (the dialog widens to an even
-// 50/50 as the camera pulls back) → pick 10:30 am → the panel closes, the row is assigned → hold →
+// Beats: three empty fields → they merge into the empty row → open it (the camera holds; the panel
+// slides in from the right over the right part of the dialog) → pick 10:30 am → the panel slides
+// back out, the row is assigned → hold →
 // the row's ✕ clears it and it comes apart into the three empty fields (the loop's start).
 // Poster = the assigned row.
 // Real strings: the title, the patient, the three fields and the row, the panel, the providers' times.
@@ -71,6 +72,7 @@ export function BpDetailsRow() {
           <Dialog
             layout={layout}
             two={s.open}
+            push="side"
             left={
               <>
                 <Title>New appointment</Title>
@@ -81,16 +83,18 @@ export function BpDetailsRow() {
             }
             right={
               <>
-                <RightHead date="26/05/2021" providers={<span className="bp-val">Charlie, Dominique</span>} />
+                {/* A side panel: the providers and their days (its Date and Provider fields stay out
+                    of the close-up so both providers sit whole in the frame) */}
+                <div className="bp-title"><span className="bp-title--sub">Appointment details</span></div>
                 <div className="bp-prov bp-prov--first">
                   <ProviderHead photo={PHOTO.charlie} name="Charlie Charmoose" link="Less" up />
                   <Stepper date="26/05/2021" />
-                  <Times times={CHARLIE} cols={3} picked={s.picked ? '10:30 am' : undefined} target="10:30 am" />
+                  <Times times={CHARLIE.slice(0, 3)} cols={3} picked={s.picked ? '10:30 am' : undefined} target="10:30 am" />
                 </div>
                 <div className="bp-prov">
                   <ProviderHead photo={PHOTO.dominique} name="Dominique Sat" link="Less" up />
                   <Stepper date="26/05/2021" />
-                  <Times times={DOMINIQUE} cols={3} />
+                  <Times times={DOMINIQUE.slice(0, 3)} cols={3} />
                 </div>
                 <FillerProvider cols={3} />
               </>

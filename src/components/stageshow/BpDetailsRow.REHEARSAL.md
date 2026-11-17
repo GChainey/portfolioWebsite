@@ -82,3 +82,13 @@ across the loop. Re-gated at 720 and 390: rehearsal passed (row at 720 now 0 can
 Every UI element is 4px (Fluent medium): fields, buttons, the segmented group, the details row and
 the repeat / waiting-list lines, message bars and notes, times, steppers, the checkbox. Only the
 dialog is 8px; the switch keeps its pill track. Checked on the posters; re-gated at 720 and 390.
+
+## Round 5 (a side panel, no zoom)
+
+No camera zoom-out: the close-up holds the whole loop. Opening the row slides the providers' panel
+in from the right over the right part of the dialog (opaque, its own edge and shadow): Charlie and
+Dominique on the 26th, each with their stepper and a row of times; 10:30 am is picked in teal there,
+the panel slides back out and the row fills. The unassigned start, the merge and the ✕ reset are
+unchanged. At 390 the full push stays. Re-gated at 720 and 390: rehearsal passed (candidates: the
+panel's content crossing the window edge as it slides). Frame sheet: .context/bp-stageshow/
+row-side-720.png.

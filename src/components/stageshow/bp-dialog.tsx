@@ -68,16 +68,20 @@ export function Label({ children, req = false }: { children: ReactNode; req?: bo
 // The dialog: the left panel always, the right panel opening beside it (the dialog widens as the
 // camera pulls back; the right panel's content is laid out at its own width throughout, so nothing
 // reflows) or, compact, pushed in over the left
-// push: the right panel slides in over the left inside the same window, at the same scale (the
-// phone column always does this; BpRepeat does it wide too, so the camera never moves)
-export function Dialog({ layout, two, left, right, hidden = false, push = false }: { layout: Layout; two: boolean; left: ReactNode; right?: ReactNode; hidden?: boolean; push?: boolean }) {
+// push: how the right panel arrives without the camera moving. 'push' covers the left panel (the
+// phone column always does this); 'side' slides a narrower panel in from the right over the right
+// part of the appointment, its own edge and shadow showing, the appointment still there beside it
+// (BpRepeat, BpDetailsRow, wide). In the phone column both fall back to the full push
+export const SIDE = 320
+export function Dialog({ layout, two, left, right, hidden = false, push = false }: { layout: Layout; two: boolean; left: ReactNode; right?: ReactNode; hidden?: boolean; push?: boolean | 'side' }) {
   const d = DIM[layout]
-  const pushed = d.push || push
+  const mode = d.push ? 'slide' : push === 'side' ? 'side' : push ? 'arrive' : undefined
+  const still = !!mode
   return (
-    <div className="bp-zoom" data-hidden={hidden || undefined} style={zoomStyle(layout, two, push)}>
-      <div className="ss-window bp-dialog" data-two={two || undefined} data-push={pushed ? (d.push ? 'slide' : 'arrive') : undefined} style={{ width: pushed || !two ? d.left : d.left + d.right }}>
+    <div className="bp-zoom" data-hidden={hidden || undefined} style={zoomStyle(layout, two, still)}>
+      <div className="ss-window bp-dialog" data-two={two || undefined} data-push={mode} style={{ width: still || !two ? d.left : d.left + d.right }}>
         <div className="bp-left" style={{ width: d.left }}>{left}</div>
-        {right && <div className="bp-right" style={{ width: pushed ? d.left : d.right }}>{right}</div>}
+        {right && <div className="bp-right" style={{ width: mode === 'side' ? SIDE : still ? d.left : d.right }}>{right}</div>}
         <span className="bp-close" aria-hidden data-cursor="hand"><X {...I} /></span>
       </div>
     </div>

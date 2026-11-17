@@ -413,7 +413,7 @@
 /* The repeat panel's settings, two to a row (they fit the phone column too, which keeps the
    button in view) */
 .bp .bp-pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
-.bp .bp-every { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 8px; }
+.bp .bp-every { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 8px; }
 
 .bp .bp-note {
   /* Full width of the panel, like Fluent's MessageBar */
@@ -641,3 +641,26 @@
 .bp .bp-dialog[data-push='arrive'][data-two] .bp-left { transition: opacity 140ms ease; }
 .bp .bp-dialog[data-push='arrive'][data-two] .bp-right { transition: opacity 280ms ease 160ms, transform 420ms cubic-bezier(0.23, 1, 0.32, 1) 160ms; }
 .bp .bp-dialog[data-push='arrive'] .bp-right { transition: opacity 160ms ease, transform 360ms cubic-bezier(0.23, 1, 0.32, 1); }
+
+/* A side panel (wide BpRepeat, BpDetailsRow): slides in from the right over the right part of the
+   appointment, opaque, its left edge and shadow showing; the appointment stays where it is */
+.bp .bp-dialog[data-push='side'] .bp-right {
+  position: absolute;
+  /* Over everything in the appointment, its picked segment included */
+  z-index: 2;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: auto;
+  opacity: 1;
+  transform: translateX(calc(100% + 32px));
+  will-change: transform;
+  box-shadow: -1px 0 0 #e0e0e0, -12px 0 32px rgb(0 0 0 / 0.10);
+  transition: transform 480ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.bp .bp-dialog[data-push='side'][data-two] .bp-right { transform: none; }
+
+/* The appointment stays put behind a side panel: no fade */
+.bp .bp-dialog[data-push='side'] .bp-left,
+.bp .bp-dialog[data-push='side'][data-two] .bp-left { opacity: 1; }

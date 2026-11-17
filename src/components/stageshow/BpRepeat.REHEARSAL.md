@@ -45,3 +45,13 @@ with 0 candidates; 390 passed (the push crossing the window edge).
 Every UI element is 4px (Fluent medium): fields, buttons, the segmented group, the details row and
 the repeat / waiting-list lines, message bars and notes, times, steppers, the checkbox. Only the
 dialog is 8px; the switch keeps its pill track. Checked on the posters; re-gated at 720 and 390.
+
+## Round 7 (a side panel)
+
+The camera still never moves, and the setup now reads as a side panel: a 320-wide panel slides in
+from the right over the right part of the appointment (opaque, its own left edge and shadow, over
+the picked segment too), already filled in; the appointment stays where it is beside it. While the
+setup reads, the cursor parks beside Set up repeat, then presses it; the panel slides back out and
+the one line opens. At 390 the full push stays. Re-gated at 720 and 390: rehearsal passed (the
+candidates are the panel's content crossing the window edge as it slides, inherent to a side panel).
+Frame sheet of the whole beat: .context/bp-stageshow/repeat-side-720.png.

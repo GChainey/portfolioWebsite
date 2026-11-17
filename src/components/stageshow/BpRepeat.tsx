@@ -6,10 +6,9 @@ import { Collapse } from './kit/motion/Collapse'
 import { Button, Comment, Dialog, Group, Note, Patient, Pick, SlimRow, Title, type Choice } from './bp-dialog'
 
 // "A repeat in one line": repeats took the most room in the old dialog. Choose Repeat and the setup
-// slides in over the appointment already filled in (every 2 weeks, on Tuesday, after 3), with what
-// it works out to; set it up and it slides away, the whole repeat folded into one line. The camera
-// never moves: the close-up holds, and the setup is pushed in inside the same window (no zoom out
-// to show both panels: only the relevant part is ever in frame).
+// slides in from the right as a side panel over the right part of the appointment, already filled
+// in (every 2 weeks, on Tuesday, after 3), with what it works out to; set it up and it slides back
+// out, the whole repeat folded into one line. The camera never moves: the close-up holds.
 //
 // Beats: Repeat (the panel opens, filled) → read it → Set up repeat → the panel closes and the line
 // opens under the control; it holds, then Repeat is clicked off and the line folds away (the loop's
@@ -26,7 +25,10 @@ async function script(a: Act<S>) {
   a.mark('repeat')
   await a.click({ at: 'seg-repeat', x: 0.84, y: 0.72 })
   a.set({ on: 'repeat', open: true })
-  await a.wait(1900)
+  await a.wait(500)
+  // Parked beside the button while the setup reads, then it presses it
+  await a.move({ at: 'setup', x: 1.35, y: 0.6 })
+  await a.wait(1300)
   a.mark('setup')
   await a.click({ at: 'setup', x: 0.8, y: 0.72 })
   a.set({ open: false })
@@ -54,7 +56,7 @@ export function BpRepeat() {
           <Dialog
             layout={layout}
             two={s.open}
-            push
+            push="side"
             left={
               <>
                 <Title>New appointment</Title>
