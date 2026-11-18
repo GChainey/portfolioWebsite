@@ -28,7 +28,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       'Fact rows keep their label on one line',
     ],
     aiTools: ['Claude Code'],
-    branch: 'GChainey/xqs01',
+    branch: 'GChainey/dxe-hiring-manager-bar-review',
   },
   {
     version: '3.13.5',
