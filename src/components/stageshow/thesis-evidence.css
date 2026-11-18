@@ -1,198 +1,163 @@
-/* Thesis is shadcn on zinc, set in Geist, dark: map its tokens onto the kit's dark theme */
+/* Thesis's mobile look: shadcn on zinc, set in Geist, light */
 .te .ss-stage {
   --ss-font: var(--font-geist-sans), Geist, system-ui, -apple-system, sans-serif;
+  --ss-text-strong: #09090b;
+  --ss-text: #71717a;
+  --ss-line: #e4e4e7;
   --te-untested: #f59e0b;
-  --te-supported: #22c55e;
-  --te-testing: #3b82f6;
+  --te-supported: #16a34a;
+  --te-testing: #2563eb;
   overflow: hidden;
   font-family: var(--ss-font);
-  background: var(--ss-canvas);
+  background: #fff;
 }
 
-/* Filled: the window is the picture, edge to edge in the homepage card's frame */
-.te--filled .te .te-window {
+/* Two phones at one height, side by side, running off the foot */
+.te .te-phones {
   position: absolute;
-  inset: 0;
-  border-radius: 0;
-  box-shadow: none;
+  top: 22px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 24px;
 }
 
-.te .te-body {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 224px;
+.te .te-phone {
+  flex: none;
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.1));
+}
+
+.te .te-screen {
+  display: flex;
+  flex-direction: column;
   height: 100%;
-}
-
-/* The plan: a document, its claims underlined by state */
-.te .te-doc {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  padding: 20px 22px;
-  min-width: 0;
-}
-
-.te .te-doc__title {
+  padding: 4px 20px 0;
+  background: #fff;
   color: var(--ss-text-strong);
-  font-size: 15px;
-  font-weight: 600;
+}
+
+.te .te-nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: -6px;
+  color: var(--ss-text);
+  font-size: 16px;
   line-height: 1.3;
-  margin-bottom: 2px;
 }
 
-.te .te-doc__section {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  margin-top: 14px;
-}
-
-.te .te-doc__para {
-  margin: 0;
-  color: var(--ss-text-strong);
-  font-size: 12.5px;
-  line-height: 1.6;
-}
-
-.te .te-claim {
-  border-radius: 3px;
-  padding: 1px 0;
-  text-decoration-line: underline;
-  text-decoration-thickness: 1.5px;
-  text-underline-offset: 4px;
-  text-decoration-color: var(--te-untested);
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-  transition: text-decoration-color 400ms ease, background-color 200ms ease;
-}
-
-.te .te-claim[data-tone='supported'] { text-decoration-color: var(--te-supported); }
-.te .te-claim[data-tone='testing'] { text-decoration-color: var(--te-testing); }
-.te .te-claim[data-sel] { background: rgba(255, 255, 255, 0.07); }
-
-/* The assumption in the side panel */
-.te .te-panel {
-  position: relative;
-  border-left: 1px solid var(--ss-line);
-  background: var(--ss-surface);
-  min-width: 0;
-  overflow: hidden;
-}
-
-.te .te-panel__slot {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transform: translateY(4px);
-  pointer-events: none;
-  transition: opacity 200ms ease, transform 300ms cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.te .te-panel__slot[data-on] {
-  opacity: 1;
-  transform: none;
-  transition: opacity 300ms ease 120ms, transform 400ms cubic-bezier(0.23, 1, 0.32, 1) 120ms;
-}
-
-.te .te-panel__inner {
-  display: flex;
-  flex-direction: column;
-  padding: 12px 14px;
-}
-
-.te .te-panel__head {
+.te .te-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+  margin-top: 20px;
 }
 
 .te .te-label {
   color: var(--ss-text);
-  font-size: 11px;
-  line-height: 1.4;
+  font-size: 14px;
+  line-height: 1.35;
 }
 
 .te .te-badge {
   display: inline-flex;
   align-items: center;
-  height: 20px;
-  padding: 0 8px;
+  height: 26px;
+  padding: 0 10px;
   border-radius: 999px;
-  background: var(--ss-ink-2);
-  color: var(--ss-text);
-  font-size: 11px;
+  background: #f4f4f5;
+  color: #52525b;
+  font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
 }
 
-.te .te-badge[data-tone='untested'] { background: var(--ss-warning-soft); color: var(--ss-warning-text); }
-.te .te-badge[data-tone='supported'] { background: var(--ss-success-soft); color: var(--ss-success-text); }
-.te .te-badge[data-tone='testing'] { background: rgba(59, 130, 246, 0.18); color: #93c5fd; }
+.te .te-badge[data-tone='untested'] { background: #fef3c7; color: #b45309; }
+.te .te-badge[data-tone='supported'] { background: #dcfce7; color: #15803d; }
+.te .te-badge[data-tone='testing'] { background: #dbeafe; color: #1d4ed8; }
 
-.te .te-panel__claim {
-  margin-top: 8px;
-  color: var(--ss-text-strong);
-  font-size: 12.5px;
-  font-weight: 500;
-  line-height: 1.4;
+/* The claim, underlined in the plan's colour for its state */
+.te .te-claim {
+  margin-top: 10px;
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  text-decoration-color: var(--te-untested);
+  transition: text-decoration-color 400ms ease;
 }
 
+.te .te-claim[data-tone='supported'] { text-decoration-color: var(--te-supported); }
+.te .te-claim[data-tone='testing'] { text-decoration-color: var(--te-testing); }
+
 .te .te-actions {
-  padding-top: 14px;
+  padding-top: 22px;
 }
 
 .te .te-button {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  height: 28px;
-  padding: 0 12px;
-  border-radius: 8px;
-  background: var(--ss-ink-3);
-  color: var(--ss-text-strong);
-  font-size: 12px;
+  height: 50px;
+  border-radius: 14px;
+  background: #18181b;
+  color: #fafafa;
+  font-size: 17px;
   font-weight: 500;
   white-space: nowrap;
-}
-
-.te .te-button--primary {
-  background: #fafafa;
-  color: #18181b;
   transition: background-color 200ms ease, color 200ms ease;
 }
 
-.te .te-button--primary[data-on] {
-  background: var(--ss-ink-3);
+.te .te-button--small {
+  height: 40px;
+  margin-top: 14px;
+  padding: 0 18px;
+  border-radius: 12px;
+  font-size: 16px;
+}
+
+.te .te-button[data-on] {
+  background: #f4f4f5;
   color: var(--ss-text-strong);
 }
 
 .te .te-running {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
-/* What each source found: name, then the line it came back with */
+/* What each source found: its mark, its name, then the line it came back with */
 .te .te-sources {
   display: flex;
   flex-direction: column;
-  margin-top: 10px;
+  margin-top: 20px;
   border-top: 1px solid var(--ss-line);
 }
 
 .te .te-source {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 16px;
-  gap: 8px;
+  grid-template-columns: 32px minmax(0, 1fr) 20px;
+  gap: 14px;
   align-items: center;
-  padding: 6px 0;
+  padding: 14px 0;
   border-bottom: 1px solid var(--ss-line);
 }
 
+.te .te-logo {
+  display: block;
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
 .te .te-source__name {
-  color: var(--ss-text-strong);
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 500;
   line-height: 1.35;
 }
@@ -200,7 +165,7 @@
 .te .te-source__line {
   margin-top: 2px;
   color: var(--ss-text);
-  font-size: 11px;
+  font-size: 14px;
   line-height: 1.35;
   white-space: nowrap;
   overflow: hidden;
@@ -211,7 +176,7 @@
 }
 
 .te .te-source__line[data-on] { opacity: 1; transform: none; }
-.te .te-source__line[data-on][data-found] { color: #d4d4d8; }
+.te .te-source__line[data-on][data-found] { color: #3f3f46; }
 
 .te .te-source__mark {
   display: flex;
@@ -219,42 +184,36 @@
   color: var(--ss-text);
 }
 
-.te .te-yes { color: var(--ss-success-text); }
-.te .te-no { color: var(--ss-text-faint); }
+.te .te-yes { color: var(--te-supported); }
+.te .te-no { color: #a1a1aa; }
 
 /* The test Thesis drafts when there's nothing to find */
 .te .te-test {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 8px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: var(--ss-ink-1);
+  margin-top: 18px;
+  padding: 16px 16px 18px;
+  border-radius: 18px;
+  background: #fafafa;
   box-shadow: inset 0 0 0 1px var(--ss-line);
 }
 
 .te .te-test__title {
-  color: var(--ss-text-strong);
-  font-size: 12.5px;
-  font-weight: 500;
+  font-size: 17px;
+  font-weight: 600;
   line-height: 1.35;
 }
 
 .te .te-test__meta {
-  margin-top: 2px;
+  margin-top: 3px;
   color: var(--ss-text);
-  font-size: 11px;
+  font-size: 14px;
   line-height: 1.35;
-}
-
-.te .te-test .te-button {
-  height: 26px;
-  margin-top: 8px;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .te .te-claim,
   .te .te-source__line,
-  .te .te-button--primary { transition: none; }
+  .te .te-button { transition: none; }
 }

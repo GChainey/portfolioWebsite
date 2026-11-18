@@ -1,35 +1,34 @@
 'use client'
 
-import { Check as Tick, Minus } from 'lucide-react'
+import { Check as Tick, ChevronLeft, Minus } from 'lucide-react'
 import { Stage } from './kit/stage'
 import type { Act } from './kit/act'
-import { Bar, Window } from './kit/window'
+import { Phone } from './kit/phone'
 import { Collapse } from './kit/motion/Collapse'
 import { States } from './kit/motion/States'
 import { Spinner } from './kit/parts/Spinner'
 import './thesis-evidence.css'
 
 // Thesis, bringing product thinking to the agentic era, as a Stageshow scene for its homepage card.
-// A plan is a set of claims; each claim is a bet. Pick one and Thesis checks it against the tools
-// the team already has (Dovetail for research, Amplitude for usage). Either the evidence is there
-// and the claim reads Supported, or there's nothing yet and Thesis drafts a test to run now.
+// Thesis started as a phone app, so it's shown on two iPhones, light, in its mobile look. Each is a
+// claim from the plan, a bet. Check its evidence and Thesis searches the tools the team already
+// has (Dovetail for research, Amplitude for usage):
+// - left, the evidence is there: both sources come back with a finding and the claim reads Supported
+// - right, there's nothing yet: Thesis drafts a test, and it starts running
 // The flow and the words follow the Thesis repo's evidence and test agents
-// (src/lib/declaration-evidence-agent-mock.ts, declaration-test-agent-mock.ts).
+// (src/lib/declaration-evidence-agent-mock.ts, declaration-test-agent-mock.ts) and its phone frames
+// (public/paper-frames/isolates/declaration-investigate.html, declaration-create-tests.html).
 //
-// - Thesis's own look: dark, Geist, claims underlined in the plan by their state (amber untested,
-//   green supported, blue being tested), the assumption in a side panel.
-// - Filled: the window is the whole picture, edge to edge in the homepage card's frame.
-// - Real words only on the story: the two claims, the two sources, what each found, the verdict and
-//   the drafted test. The rest of the plan is bars. Dovetail and Amplitude are plain wordmarks (no
-//   invented logos).
-// - Plays once in view and holds on the payoff: the first claim supported, a test running on the
-//   second. That's also the poster.
+// - Two phones at one height, running off the card's foot; the drafted test always stays in shot.
+// - Real logos: Dovetail's mark from dovetail.com, Amplitude's app icon from amplitude.com
+//   (public/brands/). No invented marks.
+// - Plays once in view and holds on the payoff, both outcomes side by side. That's the poster too.
 
-type Check = 'idle' | 'checking' | 'found' | 'done'
-type S = { sel: 'a' | 'b'; a: Check; b: Check | 'running' }
+type Check = 'idle' | 'checking' | 'found' | 'done' | 'running'
+type S = { a: Check; b: Check }
 
-const initial: S = { sel: 'a', a: 'idle', b: 'idle' }
-const poster: S = { sel: 'b', a: 'done', b: 'running' }
+const initial: S = { a: 'idle', b: 'idle' }
+const poster: S = { a: 'done', b: 'running' }
 
 async function script(a: Act<S>) {
   await a.wait(700)
@@ -39,11 +38,7 @@ async function script(a: Act<S>) {
   a.set({ a: 'found' })
   await a.wait(700)
   a.set({ a: 'done' })
-  await a.wait(1900)
-  // The second claim: nothing to find, so Thesis drafts a test
-  await a.click({ at: 'claim-b', x: 0.3, y: 0.5 })
-  a.set({ sel: 'b' })
-  await a.wait(900)
+  await a.wait(1600)
   await a.click({ at: 'check-b', x: 0.5, y: 0.5 })
   a.set({ b: 'checking' })
   await a.wait(1300)
@@ -53,9 +48,7 @@ async function script(a: Act<S>) {
   await a.wait(1500)
   await a.click({ at: 'start', x: 0.5, y: 0.5 })
   a.set({ b: 'running' })
-  await a.wait(600)
-  await a.move({ at: 'panel', x: 0.9, y: 0.95 })
-  await a.wait(2000)
+  await a.wait(2400)
 }
 
 const CLAIMS = {
@@ -63,8 +56,10 @@ const CLAIMS = {
   b: 'Teams will pay once three people edit the same thesis.',
 }
 
+const LOGO = { Dovetail: '/brands/dovetail.svg', Amplitude: '/brands/amplitude.png' } as const
+
 // What each source said, per claim. found: evidence (a tick); otherwise nothing yet (a dash)
-const SOURCES: Record<'a' | 'b', { name: string; line: string; found: boolean }[]> = {
+const SOURCES: Record<'a' | 'b', { name: keyof typeof LOGO; line: string; found: boolean }[]> = {
   a: [
     { name: 'Dovetail', line: '9 of 12 PMs named untested bets', found: true },
     { name: 'Amplitude', line: 'Deploys up 34%, planning flat', found: true },
@@ -75,21 +70,12 @@ const SOURCES: Record<'a' | 'b', { name: string; line: string; found: boolean }[
   ],
 }
 
-type Tone = 'untested' | 'supported' | 'testing'
-const tone = (c: Check | 'running', key: 'a' | 'b'): Tone => c === 'running' ? 'testing' : c === 'done' && key === 'a' ? 'supported' : 'untested'
-
-function Claim({ id, s }: { id: 'a' | 'b'; s: S }) {
-  return (
-    <span className="te-claim" data-tone={tone(s[id], id)} data-sel={s.sel === id || undefined} data-target={`claim-${id}`} data-cursor="pointer">
-      {CLAIMS[id]}
-    </span>
-  )
-}
-
-function Source({ name, line, found, state }: { name: string; line: string; found: boolean; state: Check | 'running' }) {
+function Source({ name, line, found, state }: { name: keyof typeof LOGO; line: string; found: boolean; state: Check }) {
   const shown = state !== 'idle' && state !== 'checking'
   return (
     <div className="te-source">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={LOGO[name]} alt="" className="te-logo" />
       <div className="te-source__text">
         <div className="te-source__name">{name}</div>
         <div className="te-source__line" data-on={shown || undefined} data-found={found || undefined}>{line}</div>
@@ -98,19 +84,19 @@ function Source({ name, line, found, state }: { name: string; line: string; foun
         <States
           value={shown ? (found ? 'yes' : 'no') : 'wait'}
           align="end"
-          states={{ wait: <Spinner size={14} />, yes: <Tick size={14} strokeWidth={2.5} className="te-yes" />, no: <Minus size={14} strokeWidth={2.5} className="te-no" /> }}
+          states={{ wait: <Spinner size={20} />, yes: <Tick size={20} strokeWidth={2.5} className="te-yes" />, no: <Minus size={20} strokeWidth={2.5} className="te-no" /> }}
         />
       </span>
     </div>
   )
 }
 
-function Panel({ id, s }: { id: 'a' | 'b'; s: S }) {
-  const state = s[id]
+function Screen({ id, state }: { id: 'a' | 'b'; state: Check }) {
   const badge = state === 'running' ? 'testing' : state === 'checking' ? 'checking' : state === 'done' ? (id === 'a' ? 'supported' : 'none') : 'untested'
   return (
-    <div className="te-panel__inner">
-      <div className="te-panel__head">
+    <div className="te-screen">
+      <div className="te-nav"><ChevronLeft size={22} strokeWidth={2.25} />Product vision</div>
+      <div className="te-head">
         <span className="te-label">Assumption</span>
         <States
           value={badge}
@@ -124,7 +110,7 @@ function Panel({ id, s }: { id: 'a' | 'b'; s: S }) {
           }}
         />
       </div>
-      <div className="te-panel__claim">{CLAIMS[id]}</div>
+      <div className="te-claim" data-tone={state === 'running' ? 'testing' : state === 'done' && id === 'a' ? 'supported' : 'untested'}>{CLAIMS[id]}</div>
 
       <Collapse open={state === 'idle'}>
         <div className="te-actions">
@@ -143,8 +129,8 @@ function Panel({ id, s }: { id: 'a' | 'b'; s: S }) {
           <div className="te-test">
             <div className="te-test__title">Paid pilot with 5 teams</div>
             <div className="te-test__meta">Drafted test · Prototype · 2 weeks</div>
-            <span className="te-button te-button--primary" data-target="start" data-cursor="pointer" data-on={state === 'running' || undefined}>
-              <States value={state === 'running' ? 'run' : 'start'} states={{ start: <span>Start test</span>, run: <span className="te-running"><Spinner size={12} />Running</span> }} />
+            <span className="te-button te-button--small" data-target="start" data-cursor="pointer" data-on={state === 'running' || undefined}>
+              <States value={state === 'running' ? 'run' : 'start'} states={{ start: <span>Start test</span>, run: <span className="te-running"><Spinner size={16} />Running</span> }} />
             </span>
           </div>
         </Collapse>
@@ -155,36 +141,13 @@ function Panel({ id, s }: { id: 'a' | 'b'; s: S }) {
 
 export function ThesisEvidence({ filled = false }: { filled?: boolean } = {}) {
   return (
-    <figure className={`not-prose te--bare${filled ? ' te--filled' : ''}`} role="img" aria-label="Thesis checks a claim against Dovetail and Amplitude and finds it supported, then finds nothing on a second claim and drafts a test to run">
-      <Stage width={512} height={320} initial={initial} poster={poster} script={script} play="once" theme="dark" cursor={{ at: { x: 470, y: 300 } }} className="te">
+    <figure className={`not-prose te--bare${filled ? ' te--filled' : ''}`} role="img" aria-label="Thesis on two phones: one claim checked against Dovetail and Amplitude comes back supported; another finds nothing, so Thesis drafts a test and starts it">
+      <Stage width={560} height={350} initial={initial} poster={poster} script={script} play="once" cursor={{ at: { x: 530, y: 330 }, style: 'touch' }} className="te">
         {(s) => (
-          <Window title="Thesis" className="te-window">
-            <div className="te-body">
-              <article className="te-doc">
-                <div className="te-doc__title">Product vision</div>
-                <Bar w={128} h={5} tone={4} />
-                <div className="te-doc__section">
-                  <Bar w={44} h={5} tone={3} />
-                  <p className="te-doc__para"><Claim id="a" s={s} /></p>
-                  <Bar w="86%" h={5} tone={4} />
-                  <Bar w="62%" h={5} tone={4} />
-                </div>
-                <div className="te-doc__section">
-                  <Bar w={28} h={5} tone={3} />
-                  <p className="te-doc__para"><Claim id="b" s={s} /></p>
-                  <Bar w="78%" h={5} tone={4} />
-                  <Bar w="54%" h={5} tone={4} />
-                </div>
-              </article>
-              <aside className="te-panel" data-target="panel">
-                {/* Both claims' panels stay mounted and crossfade, so picking the second claim
-                    never re-lays the panel out under the cursor */}
-                {(['a', 'b'] as const).map((id) => (
-                  <div key={id} className="te-panel__slot" data-on={s.sel === id || undefined} aria-hidden={s.sel !== id || undefined}><Panel id={id} s={s} /></div>
-                ))}
-              </aside>
-            </div>
-          </Window>
+          <div className="te-phones">
+            <Phone width={262} className="te-phone"><Screen id="a" state={s.a} /></Phone>
+            <Phone width={262} className="te-phone"><Screen id="b" state={s.b} /></Phone>
+          </div>
         )}
       </Stage>
     </figure>
