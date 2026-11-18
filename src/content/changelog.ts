@@ -14,6 +14,23 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.15.0',
+    date: '2026-11-18',
+    title: 'SEEK and Best Practice, Told as Full Stories',
+    description: 'The SEEK and Best Practice short case studies are rebuilt as whole stories in HTML recordings and Stageshow scenes, the good work first and the old design one click away. Still drafts while they settle.',
+    changes: [
+      'SEEK: impact a recruiter can read (sign-up conversion 9% to 20%), an interactive funnel, one assumption per drop-off with its fix, each fix a Stageshow scene on an iPhone in SEEK’s current look with real provider logos',
+      'Best Practice: crafting a better booking experience from a dialog that had grown unwieldy, recreated in Fluent 2; seven Stageshow scenes from the old dialog growing to where it landed',
+      'The patterns that made it robust, with Christopher Alexander’s pattern language as a hover reference',
+      'Case study template: stacked headlines, a contents list in the margin that opens on hover, Now | Before switches, phone recordings in an iPhone frame',
+      'One spacing and radius rule across the Best Practice dialog: 12 between side-by-side controls, 16 between fields, 4px corners',
+      'A short-case-study skill that writes down how these were made, for the next ones',
+    ],
+    aiTools: ['Claude Code', 'Paper'],
+    branch: 'GChainey/seek-full-story',
+    pr: '#173',
+  },
+  {
     version: '3.14.0',
     date: '2026-11-18',
     title: 'What the Work Is, My Role, and a Before/After Slider',

@@ -1,3 +1,5 @@
+/* Spacing (2026-11-18): side-by-side controls 12 (Date | Provider, Book | Cancel, Recur every); stacked
+   fields 16 in both panels; 4 or 8 inside a component */
 /* Best Practice's New appointment dialog in Fluent 2 (recreations/bestpractice/fluent.css), for the
    three Stageshow scenes. Everything is scoped under .bp. Fluent's tokens, audited to the fewest:
    brand #0F6CBD with its tint #EBF3FC, ink #242424 and #616161, grey ground #F5F5F5, hairline
@@ -61,7 +63,7 @@
   flex: none;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px; /* stacked fields: 16, as in the second panel */
   padding: 24px;
 }
 
@@ -309,7 +311,7 @@
 .bp .bp-row2 {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 /* Wide: the right panel is as wide as the left, room for the date and providers side by side */
@@ -413,7 +415,7 @@
 /* The repeat panel's settings, two to a row (they fit the phone column too, which keeps the
    button in view) */
 .bp .bp-pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
-.bp .bp-every { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 8px; }
+.bp .bp-every { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 12px; }
 
 .bp .bp-note {
   /* Full width of the panel, like Fluent's MessageBar */
@@ -535,7 +537,7 @@
 .bp .bp-msg[data-kind='warning'] { background: #fff9f5; border-color: #fdcfb4; }
 .bp .bp-msg[data-kind='warning'] .bp-msg__ico { color: #bc4b09; }
 
-.bp .bp-actions { display: flex; justify-content: flex-end; gap: 8px; padding-top: 4px; }
+.bp .bp-actions { display: flex; justify-content: flex-end; gap: 12px; padding-top: 4px; } /* side by side: 12, as Date | Provider */
 .bp .bp-btn--secondary { background: #fff; color: var(--bp-ink); border: 1px solid var(--bp-line); }
 .bp .bp-btn--secondary[data-hover] { background: var(--bp-ground); }
 

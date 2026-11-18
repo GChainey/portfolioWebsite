@@ -9,6 +9,7 @@
              Avatars all take the brand tint: initials tell people apart.
      Shadow  2: a menu (pop) and the dialog. Cards and rows have none, just a hairline.
      Space   4 inside a component, then 8, 12, 16, 24, 32, 40 (8pt, loosely).
+     Gaps    side-by-side controls 12 (Date | Provider, Book | Cancel); stacked fields 16; 4 or 8 inside
      Radius  4 for every UI element (fields, buttons, rows, cards, menus); 8 for the dialog only. */
   --brand: #0F6CBD; --brand-hover: #115EA3; --brand-pressed: #0C3B5E;
   --brand-bg2: #EBF3FC; --brand-bg2-hover: #CFE4FA; --brand-fg-link: var(--brand-hover);
@@ -45,7 +46,7 @@ svg { display: block; flex-shrink: 0; }
   box-shadow: var(--shadow-dialog); overflow: hidden; transition: width 280ms var(--decel); height: 624px; }
 .dialog.two { width: 880px; }
 .dialog.static { position: relative; left: auto; top: auto; height: auto; }
-.left { width: 420px; flex-shrink: 0; padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+.left { width: 420px; flex-shrink: 0; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
 .right { width: 460px; flex-shrink: 0; background: var(--bg2); border-left: 1px solid var(--stroke2); padding: 24px; display: flex; flex-direction: column; gap: 16px;
   overflow: hidden; }
 /* The default: the two panels told apart by tone alone, no line between them (?divider=1 for the line) */
@@ -58,7 +59,7 @@ svg { display: block; flex-shrink: 0; }
 
 .title { font-size: 20px; line-height: 28px; font-weight: 600; margin: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .title.sub { font-weight: 400; } /* a panel's title is secondary to the dialog's */
-.actions { margin-top: auto; display: flex; justify-content: flex-end; gap: 8px; padding-top: 8px; }
+.actions { margin-top: auto; display: flex; justify-content: flex-end; gap: 12px; padding-top: 8px; }
 .row2 { display: grid; grid-template-columns: 1fr 120px; gap: 12px; }
 .row2b { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
