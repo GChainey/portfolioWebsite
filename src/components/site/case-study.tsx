@@ -10,6 +10,8 @@ import { BpRepeat } from '@/components/stageshow/BpRepeat'
 import { BpProviderDates } from '@/components/stageshow/BpProviderDates'
 import { BpOldDialog } from '@/components/stageshow/BpOldDialog'
 import { BpFinal } from '@/components/stageshow/BpFinal'
+import { EaiSettingsLevels } from '@/components/stageshow/EaiSettingsLevels'
+import { EaiOnward } from '@/components/stageshow/EaiOnward'
 import { SeekAllTab } from '@/components/stageshow/SeekAllTab'
 import { SeekCards } from '@/components/stageshow/SeekCards'
 import { SeekConnect } from '@/components/stageshow/SeekConnect'
@@ -39,6 +41,8 @@ const SCENES = {
   'bp-provider-dates': () => <BpProviderDates />,
   'bp-old-dialog': () => <BpOldDialog />,
   'bp-final': () => <BpFinal />,
+  'eai-settings-levels': () => <EaiSettingsLevels />,
+  'eai-onward': () => <EaiOnward />,
 }
 
 type Region = { x: number; y: number; width: number; height: number }
