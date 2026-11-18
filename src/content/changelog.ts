@@ -26,6 +26,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       'The Apps table page opens with the first and latest tables in one slider',
       'Fix: the Testing on live models card was an empty grey box in production, because its clip was only defined on the dev server',
       'Fact rows keep their label on one line',
+      'Homepage review panel (dev only): spacing sliders for between sections, sentence to cards, between cards and card width. CSS variables, written to the URL (?sec= ?intro= ?cards= ?w=); defaults unchanged',
     ],
     aiTools: ['Claude Code'],
     branch: 'GChainey/dxe-hiring-manager-bar-review',
