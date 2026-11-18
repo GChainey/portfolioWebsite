@@ -21,7 +21,28 @@ type Detail = {
   shots: { node: ReactNode; line: ReactNode; scene?: boolean }[]
 }
 
+// A live HTML page (a shader running for real), square, in the shell's grey corners
+function LiveFrame({ src, title }: { src: string; title: string }) {
+  return <iframe src={src} title={title} loading="lazy" className="block aspect-square w-full border-0" />
+}
+
 const DETAILS: Detail[] = [
+  {
+    id: 'posters',
+    where: 'Poster studies, 2026',
+    lead: 'A poster for every night out.',
+    rest: 'Type, a shader, a tool to tune it, then a clip.',
+    body: (
+      <>
+        <p>After a gig or a talk I make the poster it should have had, to practise type and colour. Each one goes the same way: find the type or the image, put a shader and a colour on it, build a small tool to tune the shader, then export it as a clip to post.</p>
+        <p>The shaders are real: Paper&apos;s Lens Distortion and Halftone Dots, running live, here too.</p>
+      </>
+    ),
+    shots: [
+      { scene: true, node: <LiveFrame src="/posters/whyte/explainer/index.html?live&v=5" title="How the David Whyte poster was made, running live" />, line: <>David Whyte, New York: Irish letters, moodboards, a lens on stained-glass light, type on the lens, and the studio that makes it breathe. Live, not a video. <Link href="/creative/whyte" className="underline decoration-[#EBEBEB] underline-offset-4 hover:decoration-current">How it was made</Link></> },
+      { scene: true, node: <LiveFrame src="/posters/saetia/explainer/index.html?live&v=4" title="How the Saetia poster was made, running live" />, line: <>Saetia, Brooklyn: from a moodboard to 32 AI variations, an accident in the type, a style, a shader and the tool that moves it. Live, not a video. <Link href="/creative/saetia" className="underline decoration-[#EBEBEB] underline-offset-4 hover:decoration-current">How it was made</Link></> },
+    ],
+  },
   {
     id: 'app-icons',
     where: 'Enterprise AI workspace, 2026',

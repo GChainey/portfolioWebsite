@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>What to Remember When Waking · how the poster was made</title>
+<meta name="robots" content="noindex">
+<!--
+  A composed explainer (package-my-work method), 1080 × 1080 CSS. window.render(t) sets every style
+  from t alone, so render.mjs can step it one frame at a time for X, and ?live plays it on the site
+  on the real clock. The poster and the studio are the real ones (/posters/whyte), in iframes:
+  ?export=eyelids&embed is the blink loop, stepped with __whyteFrame; ?embed&control&look=eyelids is
+  the studio, its lens clock stepped with __whyteClock and its values set with __whyteStudio.
+-->
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #141110; }
+  #stage { position: relative; width: 1080px; height: 1080px; overflow: hidden; background: #141110; font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif; color: #efe9dd; }
+  .scene { position: absolute; inset: 0; display: none; }
+  .caption { position: absolute; left: 56px; top: 48px; font-size: 26px; line-height: 32px; letter-spacing: -0.01em; z-index: 5; }
+  .caption b { font-weight: 500; color: #8f877b; margin-right: 14px; font-variant-numeric: tabular-nums; }
+  .board { position: absolute; box-shadow: 0 1px 2px rgb(0 0 0 / .3), 0 24px 60px rgb(0 0 0 / .45); will-change: transform; display: block; }
+  .crop { position: absolute; overflow: hidden; }
+  iframe { border: 0; display: block; background: #141110; }
+  #cursor { position: absolute; left: 0; top: 0; width: 32px; height: 32px; z-index: 10; pointer-events: none; filter: drop-shadow(0 1px 1px rgb(0 0 0 / .35)); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="caption" id="caption"></div>
+
+  <!-- 0 and 6. The blink loop, the real poster -->
+  <div class="scene" id="sLoop">
+    <iframe id="loop" src="/posters/whyte?export=eyelids&embed" width="764" height="1080" style="position: absolute; left: 158px; top: 0;"></iframe>
+  </div>
+
+  <!-- 2. Irish letters -->
+  <div class="scene" id="s2">
+    <div class="crop" style="left: 90px; top: 130px; width: 900px; height: 880px;">
+      <img id="letters" src="boards/229-0.webp" style="position: absolute; left: 0; top: 0; width: 900px;">
+    </div>
+  </div>
+
+  <!-- 3. Moodboards and palettes -->
+  <div class="scene" id="s3">
+    <img class="board" id="mood" style="left: 60px; top: 150px; width: 960px;">
+  </div>
+
+  <!-- 4. The lens on morning light -->
+  <div class="scene" id="s4">
+    <div class="crop board" style="left: 290px; top: 130px; width: 500px; height: 708px;">
+      <img id="photo" src="/posters/whyte/morning-glass.webp" style="position: absolute; height: 100%; left: 50%; transform: translateX(-50%);">
+      <img id="lens" src="boards/29O-0.webp" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+    </div>
+  </div>
+
+  <!-- 5. Type on the lens -->
+  <div class="scene" id="s5">
+    <div class="crop" style="left: 0; top: 220px; width: 1080px; height: 760px;">
+      <img id="type" src="boards/2KN-0.webp" style="position: absolute; left: 0; top: 0; height: 760px;">
+    </div>
+  </div>
+
+  <!-- 6. The studio, the real one -->
+  <div class="scene" id="s6">
+    <div id="zoom" style="position: absolute; left: 0; top: 0; width: 1080px; height: 1080px; transform-origin: 1080px 900px; will-change: transform;">
+      <iframe id="studio" src="/posters/whyte?embed&control&look=eyelids" width="1080" height="1080"></iframe>
+    </div>
+  </div>
+
+  <img id="cursor" src="cursors/arrow.svg" alt="">
+</div>
+
+<script>
+  const MOODS = ['25M-0', '27L-0', '295-0', '2BU-0']
+  const preload = MOODS.map((id) => { const i = new Image(); i.src = `boards/${id}.webp`; return i })
+
+  // Opens on the type research (the brief and an opening loop were cut); ends on the loop
+  const SCENES = [
+    { id: 's2',    key: 's2',   at: 0,    caption: '<b>01</b>Irish letters: stone, scriptorium, the printed book' },
+    { id: 's3',    key: 's3',   at: 3,    caption: '<b>02</b>Moodboards, and colour from Ireland and New York' },
+    { id: 's4',    key: 's4',   at: 6.5,  caption: '<b>03</b>A lens on morning light through stained glass' },
+    { id: 's5',    key: 's5',   at: 9,    caption: '<b>04</b>Type on the lens, half awake' },
+    { id: 's6',    key: 's6',   at: 12,   caption: '' },
+    { id: 'sLoop', key: 'end',  at: 16.5, caption: '<b>05</b>The loop: the glass breathes, the eyes close' },
+  ]
+  window.DURATION = 19.5
+
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v))
+  const lerp = (a, b, k) => a + (b - a) * k
+  const inOut = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2)
+  const span = (t, a, b) => clamp((t - a) / (b - a))
+
+  // ─── The real poster and studio ─────────────────────────────────────────────
+  const frameOf = (id) => document.getElementById(id)
+  function loopAt(s) {
+    const f = frameOf('loop'), w = f.contentWindow
+    if (!w || !w.__whyteFrame) return
+    w.__whyteFrame(s)
+    for (const a of f.contentDocument.getAnimations()) { a.pause(); a.currentTime = s * 1000 }
+  }
+  let last = {}
+  function studioAt(clock, breathe) {
+    const f = frameOf('studio'), w = f.contentWindow
+    if (!w || !w.__whyteStudio) return
+    if (last.breathe !== breathe) { w.__whyteStudio.set({ motion: { breathe } }); last.breathe = breathe }
+    w.__whyteClock(clock)
+    for (const a of f.contentDocument.getAnimations()) a.finish()
+  }
+  // A studio slider, found by its label, and where its thumb sits for value v (stage px, 1:1)
+  function slider(label) {
+    const d = frameOf('studio').contentDocument
+    return [...d.querySelectorAll('aside label')].find((l) => l.textContent.trim().startsWith(label))?.querySelector('input')
+  }
+  function thumb(label, v) {
+    const el = slider(label)
+    const r = el.getBoundingClientRect()
+    const k = (v - +el.min) / (+el.max - +el.min)
+    const T = 12
+    return { x: r.left + T / 2 + k * (r.width - T), y: r.top + r.height / 2 }
+  }
+
+  function glide(a, b, k, bow = 0.1) {
+    const e = inOut(k), mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2, dx = b.x - a.x, dy = b.y - a.y
+    const cx = mx - dy * bow, cy = my + dx * bow, u = 1 - e
+    return { x: u * u * a.x + 2 * u * e * cx + e * e * b.x, y: u * u * a.y + 2 * u * e * cy + e * e * b.y }
+  }
+  const ZO = { x: 1080, y: 900 }
+  function cursorAt(p, z = 1) {
+    const c = document.getElementById('cursor')
+    if (!p) { c.style.display = 'none'; return }
+    c.style.display = 'block'
+    const x = ZO.x + (p.x - ZO.x) * z, y = ZO.y + (p.y - ZO.y) * z
+    c.style.width = c.style.height = `${32 * z}px`
+    c.style.transform = `translate(${x - 10 * z}px, ${y - 7.4 * z}px)`
+  }
+
+  window.render = function (t) {
+    t = ((t % DURATION) + DURATION) % DURATION
+    let i = SCENES.length - 1
+    while (i > 0 && t < SCENES[i].at) i--
+    const sc = SCENES[i]
+    const len = (SCENES[i + 1] ? SCENES[i + 1].at : DURATION) - sc.at
+    const local = t - sc.at
+    for (const s of new Set(SCENES.map((x) => x.id))) document.getElementById(s).style.display = s === sc.id ? 'block' : 'none'
+    document.getElementById('caption').innerHTML = sc.caption
+    cursorAt(null)
+
+    // the glass breathing, then the eyes close
+    if (sc.key === 'end') loopAt(11 + local)
+
+    if (sc.key === 's2') {
+      const img = document.getElementById('letters')
+      const travel = Math.max(0, img.offsetHeight - 880)
+      img.style.transform = `translateY(${-travel * inOut(span(local, 0.2, len - 0.1))}px)`
+    }
+    if (sc.key === 's3') {
+      const k = Math.min(MOODS.length - 1, Math.floor(local / (len / MOODS.length)))
+      const img = document.getElementById('mood')
+      const src = `boards/${MOODS[k]}.webp`
+      if (!img.src.endsWith(src)) img.src = src
+    }
+    if (sc.key === 's4') {
+      // the photo, then the lens over it
+      document.getElementById('lens').style.opacity = inOut(span(local, 0.9, 1.5))
+      document.getElementById('photo').style.transform = `translateX(-50%) scale(${1 + 0.04 * span(local, 0, 1.5)})`
+    }
+    if (sc.key === 's5') {
+      const img = document.getElementById('type')
+      const travel = Math.max(0, img.offsetWidth - 1080)
+      img.style.transform = `translateX(${-travel * inOut(span(local, 0.2, len - 0.1))}px)`
+    }
+    if (sc.key === 's6') {
+      // The real studio on the eyelids look: Breathe dragged from 0 to 0.6, and the glass starts to
+      // breathe in and out of focus
+      const B0 = 0, B1 = 0.6
+      const enter = [0.3, 0.95], drag = [1.1, 2.3], exit = [3.95, 4.4]
+      const b = Math.round(lerp(B0, B1, inOut(span(local, ...drag))) * 100) / 100
+      studioAt(4 + local * 1, b)
+      const z = lerp(1, 1.4, inOut(span(local, 0.2, 0.9)))
+      document.getElementById('zoom').style.transform = `scale(${z})`
+      const a = thumb('Breathe', B0), e = thumb('Breathe', B1)
+      let p = null
+      if (local >= enter[0] && local < enter[1]) p = glide({ x: 1130, y: 1160 }, a, span(local, ...enter), 0.08)
+      else if (local >= enter[1] && local < drag[0]) p = a
+      else if (local >= drag[0] && local < drag[1]) p = thumb('Breathe', b)
+      else if (local >= drag[1] && local < exit[0]) p = e
+      else if (local >= exit[0]) p = glide(e, { x: 1140, y: 1200 }, span(local, ...exit), 0.06)
+      cursorAt(p, z)
+    }
+  }
+
+  window.ready = async function () {
+    await document.fonts.ready
+    await Promise.all([...document.images, ...preload].map((i) => (i.complete ? null : i.decode().catch(() => null))))
+    const wait = (id, key) => new Promise((res) => { const go = () => { const w = frameOf(id).contentWindow; return w && w[key] ? res() : setTimeout(go, 60) }; go() })
+    await wait('loop', '__whyteFrame')
+    await wait('studio', '__whyteStudio')
+    await new Promise((r) => setTimeout(r, 600))
+    return true
+  }
+
+  // ?live: fit the frame and play on the real clock while it's on screen
+  if (new URLSearchParams(location.search).has('live')) {
+    document.documentElement.style.overflow = 'hidden'
+    const stage = document.getElementById('stage')
+    const fit = () => { stage.style.transformOrigin = '0 0'; stage.style.transform = `scale(${innerWidth / 1080})` }
+    fit()
+    addEventListener('resize', fit)
+    window.ready().then(() => {
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) { render(18); return }
+      let raf = 0, prev = 0, t = 0, on = false
+      const tick = (now) => { t += Math.min(now - prev, 64) / 1000; prev = now; render(t); raf = requestAnimationFrame(tick) }
+      render(0)
+      new IntersectionObserver(([e]) => {
+        if (e.isIntersecting && !on) { on = true; prev = performance.now(); raf = requestAnimationFrame(tick) }
+        if (!e.isIntersecting && on) { on = false; cancelAnimationFrame(raf) }
+      }).observe(document.body)
+    })
+  }
+</script>
+</body>
+</html>

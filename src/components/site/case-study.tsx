@@ -14,9 +14,11 @@ import { COL, GREY, Headline, INK, LINE, Mat, Rows, SHELL, Shell, WIDE } from '@
 type Region = { x: number; y: number; width: number; height: number }
 export type Media =
   | { replay: string; region?: Region } // an HTML replay, sharp at any size
-  | { video: string; ratio: number } // the pre-AI work, which only exists as video. Below 1, a phone
+  | { video: string; ratio: number; fill?: boolean } // the pre-AI work, which only exists as video. Below 1, a phone; fill: the clip itself edge to edge, no device (a posted clip)
   | { stills: string[] } // a few stills side by side, two to a row
   | { scene: 'rfp-letter' } // a Stageshow scene
+  | { live: string; ratio: number; title: string; mat?: boolean } // a live HTML page (a shader running for real), framed; mat for a tool on the grey
+  | { image: string; alt: string } // one still, in the shell
 
 export type Block =
   | { moment: Media; line: string }
@@ -36,14 +38,28 @@ function Video({ src }: { src: string }) {
   return <video src={src} autoPlay muted loop playsInline preload="metadata" className="block h-full w-full object-cover" />
 }
 
+// A live page in an iframe: the real thing, sharp at any size. Loads when near the screen.
+function Live({ src, ratio, title }: { src: string; ratio: number; title: string }) {
+  return <iframe src={src} title={title} loading="lazy" className="block w-full border-0" style={{ aspectRatio: ratio }} />
+}
+
 function Art({ media }: { media: Media }) {
+  if ('live' in media) {
+    if (media.mat) return <Mat><Live src={media.live} ratio={media.ratio} title={media.title} /></Mat>
+    return <div className="overflow-hidden rounded-[20px]" style={{ background: SHELL }}><Live src={media.live} ratio={media.ratio} title={media.title} /></div>
+  }
+  // eslint-disable-next-line @next/next/no-img-element
+  if ('image' in media) return <Shell><img src={media.image} alt={media.alt} className="block w-full" /></Shell>
   if ('replay' in media) return <Mat><RecordingReplay src={media.replay} region={media.region} bare /></Mat>
   if ('scene' in media) return <Shell scene><div data-ss-fill><RfpLetter bare /></div></Shell>
   if ('video' in media) {
+    if (media.fill) return <div className="overflow-hidden rounded-[20px]" style={{ aspectRatio: media.ratio, background: SHELL }}><Video src={media.video} /></div>
     // A phone recording stands on the grey, the height of a landscape clip
+    // (inset absolutely: a percentage height inside an aspect-ratio box isn't definite, so h-full let
+    // the clip grow to its own size)
     if (media.ratio < 1) return (
-      <div className="flex aspect-[16/10] items-center justify-center rounded-[20px] p-6" style={{ background: SHELL }}>
-        <div className="h-full overflow-hidden rounded-[16px] bg-white" style={{ aspectRatio: media.ratio, boxShadow: `0 0 0 1px ${LINE}` }}><Video src={media.video} /></div>
+      <div className="relative aspect-[16/10] rounded-[20px]" style={{ background: SHELL }}>
+        <div className="absolute inset-y-6 left-1/2 -translate-x-1/2 overflow-hidden rounded-[16px] bg-white" style={{ aspectRatio: media.ratio, boxShadow: `0 0 0 1px ${LINE}` }}><Video src={media.video} /></div>
       </div>
     )
     return <Mat><div style={{ aspectRatio: media.ratio }}><Video src={media.video} /></div></Mat>
