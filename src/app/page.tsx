@@ -7,6 +7,7 @@ import { GitHubContributions } from '@/components/GitHubContributions'
 import { Media, heroItem } from '@/components/HomeShowcase'
 import { ALL_PIECES } from '@/content/home-showcase'
 import { RfpLetter } from '@/components/stageshow/RfpLetter'
+import { ThesisEvidence } from '@/components/stageshow/ThesisEvidence'
 import { TESTIMONIALS } from '@/content/testimonials'
 import { CompanyPeek } from '@/components/site/companies'
 import { PARKED_LIVE } from '@/content/parked'
@@ -43,10 +44,11 @@ const ABOUT: { lead: string; rest: string }[] = [
 // real page as an HTML replay (or the real video), so it's sharp at any size. On the card it sits
 // inset on the grey, by the padding the controls set
 // desc: what the thing is, one line under its card, so the card says it without a hover or a click
-const PRODUCTS: { name: string; desc: string; href: string; landing: string; piece: string }[] = [
+// scene: a Stageshow scene in place of the recorded clip (Thesis: the product at work, not its site)
+const PRODUCTS: { name: string; desc: string; href: string; landing: string; piece: string; scene?: ReactNode }[] = [
   { name: 'Shader Wall', desc: 'A Mac app for shader wallpapers. Tune one with sliders, or ask your agent.', href: 'https://www.shaderwall.com', landing: '/draft/landing-shaderwall.jpg', piece: 'shader-wall' },
   { name: 'Dispatch', desc: 'Send articles to your Kindle in one click, from the browser, the Mac or a bot.', href: 'https://www.dispatchmac.com', landing: '/draft/landing-dispatch.jpg', piece: 'dispatch' },
-  { name: 'Thesis', desc: 'Every claim in a plan is a bet. AI drafts the tests and gathers the evidence.', href: 'https://thesis-phi-self.vercel.app', landing: '/draft/landing-thesis.jpg', piece: 'thesis' },
+  { name: 'Thesis', desc: 'Bringing product thinking to the agentic era: every claim checked against your research and data, or a test drafted to run.', href: 'https://thesis-phi-self.vercel.app', landing: '/draft/landing-thesis.jpg', piece: 'thesis', scene: <ThesisEvidence filled /> },
 ]
 
 // piece as the products; the RFP's is its Stageshow scene, which fills its card instead. A /draft/
@@ -417,7 +419,7 @@ export default function Home() {
             items={PRODUCTS}
             render={(p, focus, near) => (
               <a href={p.href} target="_blank" rel="noopener noreferrer" className="flex flex-col gap-4">
-                <Framed pad={PAD} ratio={RATIO}><Live id={p.piece} focus={focus} near={near} /></Framed>
+                <Framed pad={PAD} ratio={RATIO}>{p.scene ? <div className="absolute inset-0">{p.scene}</div> : <Live id={p.piece} focus={focus} near={near} />}</Framed>
                 <span className="flex flex-col"><span>{p.name}</span><span className="text-pretty" style={{ color: GREY }}>{p.desc}</span></span>
               </a>
             )}

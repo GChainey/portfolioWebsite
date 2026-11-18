@@ -28,6 +28,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       'Fact rows keep their label on one line',
       'Homepage review panel (dev only): spacing sliders for between sections, sentence to cards, between cards and card width. CSS variables, written to the URL (?sec= ?intro= ?cards= ?w=)',
       'More room for the work: 240px between sections (was 120), 80px from a sentence to its cards (was 64), 200px between cards (was 32)',
+      'Thesis card: a Stageshow scene in place of the recorded app. A claim checked against Dovetail and Amplitude comes back Supported; a second finds nothing, so Thesis drafts a test and it starts running',
     ],
     aiTools: ['Claude Code'],
     branch: 'GChainey/dxe-hiring-manager-bar-review',
