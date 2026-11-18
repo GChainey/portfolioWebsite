@@ -1,17 +1,31 @@
-# EaiOnward — rehearsal
+# Rehearsal: EaiOnward ('eai-onward')
 
-**Story (~18s loop):** Before: the app's AI Chatbot card reads "Not set up"; "Turn on in Workspace settings" opens
-the dialog, the switch goes on, "Saved" — and nothing next. Done; the cursor rests on the card's "Not set up":
-only step one happened. After the fix (the note crossfades): the same switch opens the onward step under the rows,
-"Next: set it up in the app" with "Set up in Vending issue form ›"; it leads to the card's setup steps (Turned on ✓,
-Choose its documents → "3 documents", Go live), and Go live turns the card to "Chatbot is live in Vending issue form"
-with a Live badge. Holds ~2.4s; the note going back to Before is the reset's cause.
+Replaces the first EaiOnward (invented app, bars everywhere). Gold: `hero-demo`, with SeekAllTab's note.
+Shared shell: `eai-shell.tsx` / `eai-shell.css`. Copied from the prototype: app-ai-features.html?app=
+parking-permit&feature=ai-chatbot (the "AI Chatbot" page: "Add to workflow", "Getting started", "Tutorial
+video coming soon", "Workflows with this feature · No workflows added yet"), its workflow-oriented version
+(?workflowOption=1 on Pro: "Turn on AI Chatbot", "Configure AI Chatbot in Parking permit", "Select a workflow
+for AI Chatbot.", Documents / Instructions), and the Parking permit application workflow's stages from
+admin-ut-parking-seed.js (Application 4 steps, Processing 2, Document review 5).
 
-**Copied from:** EaiSettingsLevels (parts in `eai-parts.tsx`, `eai-scenes.css`), SeekAllTab's note and loop.
-**Motion:** the card's height eases to each state (`FitFade`), the new contents fade in only after the height has
-settled, so the moving edge never cuts them; the onward step opens with the kit's Collapse.
+Beats (~17s loop): The problem: settings is open over the chatbot's page; AI Chatbot on → Done → the page is
+as it was; the cursor settles on the tutorial (stuck, 1.8s). The note turns to The fix and settings opens
+again (the seen cause; the switch reset while it was shut). On → Done → the dialog closes, then the card
+answers with the next step: the workflow picker and "Add to workflow" → pressed → "Live in Parking permit
+application", the stages, AI Chatbot on Application (payoff, held 2.6s); the note turns back. Card swaps
+are opacity-only with the card's height easing between them (`FitFade`). Poster: the payoff.
 
-**Gate:** `film.mjs --gate --states` passed at 1280 and 390. Advisory left: "near aligned" while the dialog fades
-in; "layout" for the deliberate bleed of the cards past the window's foot.
+Frame: stage 720×592, window 36/48, off the foot; Documents / Instructions run off it with bars inside.
+Compact 358×600: rail collapsed away, the header's button and the tutorial's subline dropped so the
+problem's "No workflows added yet" row stays whole.
 
-**Not checked:** a real phone, Safari, dark theme.
+Captured: 1280 and 390, loop and `--states`, all `rehearsal passed`; posters at both widths; the next-step
+beat at 60ms (onward-next-beat.png).
+
+Film lines left: `layout` advisories for the cards that run past the crop (intended bleed).
+
+Assumptions: "Live in Parking permit application" is the brief's wording; the prototype shows a status
+column ("Not configured" / "Draft" / "Ready") and a toast "AI Chatbot created on …". The tutorial
+placeholder is laid out left-aligned (the prototype centres it) so its padding is even at this size.
+
+Not checked: Safari, a real phone, dark theme, live rAF pacing.

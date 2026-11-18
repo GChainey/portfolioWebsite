@@ -1,14 +1,15 @@
 'use client'
 
 import { notFound } from 'next/navigation'
-import { EaiSettingsLevels } from '@/components/stageshow/EaiSettingsLevels'
+import { EaiNavigation } from '@/components/stageshow/EaiNavigation'
+import { EaiSettingsDialog } from '@/components/stageshow/EaiSettingsDialog'
 import { EaiOnward } from '@/components/stageshow/EaiOnward'
 import { COL, Shell, WIDE } from '@/components/site/style'
 
 // The Enterprise AI Stageshow scenes in the case study's shells, for filming (dev only)
 export default function EaiScenes() {
   if (process.env.NODE_ENV === 'production') notFound()
-  const scenes = [['levels', <EaiSettingsLevels key="l" />], ['onward', <EaiOnward key="o" />]] as const
+  const scenes = [['navigation', <EaiNavigation key="n" />], ['settings-dialog', <EaiSettingsDialog key="s" />], ['onward', <EaiOnward key="o" />]] as const
   return (
     <main className="mx-auto flex max-w-[588px] flex-col gap-24 px-6 py-16">
       {scenes.map(([id, el]) => (

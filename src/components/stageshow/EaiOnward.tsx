@@ -1,150 +1,166 @@
 'use client'
 
-import { Check, MessageSquare } from 'lucide-react'
 import { Stage } from './kit/stage'
 import type { Act } from './kit/act'
-import { Bar } from './kit/window'
-import { APP_NAV, Badge, Btn, Card, Fade, FeatureDialog, FitFade, Note, SideNav, TopBar, Win, type Layout } from './eai-parts'
+import { AppScreen, AppShell, Btn, Card, Fade, FitFade, Ico, Note, PageHead, Row, Rows, SettingsDialog, Win, type Layout } from './eai-shell'
 
-// An onward journey. Before: turning AI Chatbot on for an app ended at "Saved" and nothing next, so
-// people stopped there, sure they were done, while the chatbot was still not set up in the app (in
-// testing, 0 of 5 finished; every one said they had). After the fix: turning it on offers the next
-// step right there; it leads into the app's setup, two steps more, and a clear done: live.
+// After turning a feature on: what's next?
+// The problem: AI Chatbot is on, and its page in Parking permit still shows what it showed before,
+// "Getting started" and a tutorial, and under them "Workflows with this feature · No workflows added
+// yet". People stopped here, thinking they were done; the chatbot was on, but on no workflow.
+// The fix: turning it on leads straight to the next step. The page offers the app's workflow with
+// "Add to workflow" right away; one press and the chatbot is on Parking permit application, shown
+// on the workflow's stages.
 //
-// Both halves in the current workspace (the app a card, grey around). One fixed frame; the card's
-// contents swap by opacity in place, the dialog opens over the window, the onward step opens under
-// the dialog's rows. The note above the window names the version and is the seen cause of the reset.
+// Loop (~17s): workspace settings is open over the chatbot's page; switch on, Done; the page doesn't
+// change and the cursor settles on the tutorial (stuck). The note turns to The fix (the seen cause)
+// and settings is open again; switch on, Done; "Add to workflow" on Parking permit application; the
+// chatbot shows on the workflow (the payoff, held). The note turns back.
+// Poster: the fix's payoff.
 
-type Setup = 'none' | 'steps' | 'docs' | 'live'
-type S = { after: boolean; dlg: boolean; on: boolean; setup: Setup }
+// sw: the switch in the dialog; on: the feature, as the page shows it
+type S = { fix: boolean; dlg: boolean; sw: boolean; on: boolean; added: boolean }
 
-const initial: S = { after: false, dlg: false, on: false, setup: 'none' }
-const poster: S = { after: true, dlg: false, on: true, setup: 'live' }
-const REST = { wide: { x: 612, y: 440 }, compact: { x: 300, y: 440 } }
+const initial: S = { fix: false, dlg: true, sw: false, on: false, added: false }
+const poster: S = { fix: true, dlg: false, sw: true, on: true, added: true }
+const REST = { wide: { x: 630, y: 170 }, compact: { x: 296, y: 190 } }
+// Pressed beside the label, not on it
+const DONE = { at: 'done', x: 0.84, y: 0.66 }
 
 async function script(a: Act<S>) {
   await a.wait(1100)
   a.mark('before')
-  await a.click('btn-on')
-  await a.set({ dlg: true })
-  await a.wait(800)
-  await a.click('tog-vending')
-  await a.set({ on: true })
-  // "Saved", and nothing next
-  await a.wait(1300)
-  await a.click('dlg-done')
-  await a.set({ dlg: false })
+  await a.click('tog')
+  await a.set({ sw: true })
+  await a.wait(600)
+  await a.click(DONE)
+  await a.set({ dlg: false, on: true })
+  await a.wait(700)
+  // Nothing new on the page: the eye goes to the tutorial, and stops
+  await a.move({ at: 'video', x: 0.13, y: 0.42 }, { duration: 1000 })
   a.mark('stuck')
-  // Done, they think; the app's chatbot is still not set up
-  await a.move('status', { duration: 800 })
-  await a.wait(1600)
+  await a.wait(1800)
   a.mark('fix')
-  await a.set({ after: true, on: false, setup: 'none' })
-  await a.wait(1300)
-  await a.click('btn-on')
-  await a.set({ dlg: true })
-  await a.wait(800)
-  await a.click('tog-vending')
-  await a.set({ on: true })
-  a.mark('onward')
-  await a.wait(900)
-  await a.click('onward')
-  await a.set({ dlg: false, setup: 'steps' })
-  await a.wait(1100)
-  await a.click('choose')
-  await a.set({ setup: 'docs' })
-  await a.wait(800)
-  await a.click('golive')
-  await a.set({ setup: 'live' })
-  a.mark('payoff')
+  await a.set({ sw: false })
+  await a.set({ fix: true, dlg: true, on: false })
   await a.move(a.layout === 'compact' ? REST.compact : REST.wide, { duration: 700 })
-  await a.wait(2400)
+  await a.wait(500)
+  await a.click('tog')
+  await a.set({ sw: true })
+  await a.wait(600)
+  await a.click(DONE)
+  // Settings closes first; then the page answers with the next step
+  await a.set({ dlg: false })
+  await a.wait(240)
+  await a.set({ on: true })
+  a.mark('next')
+  await a.wait(1300)
+  await a.click('add-wf')
+  await a.set({ added: true })
+  await a.move(a.layout === 'compact' ? REST.compact : REST.wide, { duration: 800 })
+  a.mark('payoff')
+  await a.wait(2600)
   a.mark('reset')
-  await a.set({ after: false, on: false, setup: 'none' })
+  // The switch goes back while settings is shut, then the note turns and settings opens again
+  await a.set({ sw: false })
+  await a.set({ fix: false, dlg: true, on: false, added: false })
   await a.wait(900)
 }
 
-function Filler() {
+// The chatbot's page as it was: a tutorial, then a list of workflows with none in it
+function PageBefore({ layout }: { layout: Layout }) {
   return (
-    <Card>
-      <Bar w={168} h={10} r={5} tone={3} />
-      <Bar w={260} h={8} r={4} tone={2} />
-      <Bar w={220} h={8} r={4} tone={2} />
-    </Card>
+    <>
+      <PageHead title="AI Chatbot" action={<span className="eaw-wide-only"><Btn dark>Add to workflow</Btn></span>} />
+      <Card title="Getting started" desc={layout === 'wide' ? 'Watch a short walkthrough when it is available.' : undefined}>
+        <div className="eaw-video" data-target="video" data-cursor="hand">
+          <span className="eaw-video__play"><Ico n="play" /></span>
+          <span className="eaw-video__text">
+            <span className="eaw-video__title">Getting started with AI Chatbot</span>
+            <span className="eaw-video__sub">Tutorial video coming soon</span>
+          </span>
+        </div>
+      </Card>
+      <Card title="Workflows with this feature" desc="Configurations linked to workflows in this app.">
+        <Rows><Row label="No workflows added yet"><Btn>Add to workflow</Btn></Row></Rows>
+      </Card>
+    </>
   )
 }
 
-// The app's AI Chatbot card: not set up, the setup steps, or live
-function ChatbotCard({ s }: { s: S }) {
-  const v = s.setup === 'none' ? 'none' : s.setup === 'live' ? 'live' : 'steps'
+// The page's next cards, below the fold: their names, and what's in them drawn as bars
+function Filler() {
+  return <div className="eaw-filler">{[72, 88, 56, 80, 64].map((w, i) => <i key={i} style={{ width: `${w}%` }} />)}</div>
+}
+
+const STAGES: [string, string][] = [['Application', '4 steps'], ['Processing', '2 steps'], ['Document review', '5 steps']]
+
+// The chatbot's page now: off, it asks to be turned on; on, it offers the workflow; added, it shows
+// on the workflow's stages
+function PageAfter({ on, added, layout }: { on: boolean; added: boolean; layout: Layout }) {
+  const v = !on ? 'off' : added ? 'added' : 'next'
   return (
-    <Card>
-      <div className="eai-card__head">
-        <span className="eai-card__title">AI Chatbot</span>
-        <span data-target="status"><Fade className="eai-step__end" value={s.setup === 'live' ? 'live' : 'unset'} states={{ unset: <Badge tone="amber">Not set up</Badge>, live: <Badge tone="green">Live</Badge> }} /></span>
+    <>
+      <PageHead title="AI Chatbot" />
+      <section className="eaw-card">
+        <FitFade
+          value={v}
+          states={{
+            off: (
+              <div className="eaw-card__stack">
+                <div className="eaw-card__hd">
+                  <div className="eaw-card__title">Turn on AI Chatbot</div>
+                  <div className="eaw-card__desc">Answer questions using relevant information and instructions for each workflow stage.</div>
+                </div>
+                <div className="eaw-wide-only"><Btn dark>Turn on in Workspace settings</Btn></div>
+              </div>
+            ),
+            next: (
+              <div className="eaw-card__stack">
+                <div className="eaw-card__hd">
+                  <div className="eaw-card__title">Configure AI Chatbot in Parking permit</div>
+                  <div className="eaw-card__desc">Select a workflow for AI Chatbot.</div>
+                </div>
+                <span className="eaw-select eaw-select--full">Parking permit application<Ico n="down" /></span>
+                <div><Btn dark target="add-wf">Add to workflow</Btn></div>
+              </div>
+            ),
+            added: (
+              <div className="eaw-card__stack">
+                <div className="eaw-card__hd">
+                  <div className="eaw-card__title">Configure AI Chatbot in Parking permit</div>
+                  <div className="eaw-live"><Ico n="check" />Live in Parking permit application</div>
+                </div>
+                <Rows dense>
+                  {STAGES.map(([name, steps], i) => (
+                    <Row key={name} label={<span className="eaw-stagerow">{name}{i === 0 && <span className="eaw-feature"><Ico n="sparkle" />AI Chatbot</span>}</span>}>
+                      <span className="eaw-row__meta">{steps}</span>
+                    </Row>
+                  ))}
+                </Rows>
+              </div>
+            ),
+          }}
+        />
+      </section>
+      <div className="eaw-pair">
+        <Card title="Documents" desc="What it answers from."><Filler /></Card>
+        {layout === 'wide' && <Card title="Instructions" desc="Its role, tone and limits."><Filler /></Card>}
       </div>
-      <FitFade value={v} states={{
-        none: (
-          <div className="eai-card__body">
-            <div className="eai-card__text">Answers questions on this app’s form.</div>
-            <div className="eai-card__action"><Btn target="btn-on">Turn on in Workspace settings</Btn></div>
-          </div>
-        ),
-        steps: (
-          <div className="eai-steps">
-            <div className="eai-step" data-done><span className="eai-step__n"><Check size={14} strokeWidth={2} /></span><span className="eai-step__label">Turned on</span></div>
-            <div className="eai-step" data-done={s.setup === 'docs' || undefined}>
-              <span className="eai-step__n"><Fade value={s.setup === 'docs' ? 'd' : 'n'} states={{ n: <>2</>, d: <Check size={14} strokeWidth={2} /> }} /></span>
-              <span className="eai-step__label">Choose its documents</span>
-              <Fade className="eai-step__end" value={s.setup === 'docs' ? 'd' : 'n'} states={{ n: <Btn target="choose">Choose</Btn>, d: <span className="eai-step__meta">3 documents</span> }} />
-            </div>
-            <div className="eai-step"><span className="eai-step__n">3</span><span className="eai-step__label">Go live</span><Btn dark target="golive">Go live</Btn></div>
-          </div>
-        ),
-        live: (
-          <div className="eai-card__body">
-            <div className="eai-live">
-              <span className="eai-live__icon"><MessageSquare size={16} strokeWidth={1.5} /></span>
-              <div><div className="eai-step__label">Chatbot is live in Vending issue form</div><div className="eai-card__text">It answers from the 3 documents you chose.</div></div>
-            </div>
-                      </div>
-        ),
-      }} />
-    </Card>
+    </>
   )
 }
 
 function Scene({ s, layout }: { s: S; layout: Layout }) {
-  const dialog = (
-    <FeatureDialog
-          open={s.dlg}
-          on={s.on}
-          saved={!s.after}
-          next={s.after ? {
-            show: s.on,
-            node: (
-              <div className="eai-next__box">
-                <span className="eai-next__text"><b>Next: set it up in the app</b></span>
-                <Btn dark target="onward" icon="next">Set up in Vending issue form</Btn>
-              </div>
-            ),
-          } : undefined}
-        />
-  )
   return (
     <>
-      <Note after={s.after} before="Turned on, “Saved”, and nothing next; the chatbot isn’t set up" fix="Turning it on leads straight to the next step, then to live" />
-      <Win layout={layout} after top={<TopBar app="Vending issue form" />} overlay={dialog}>
-        <div className="eai-screen eai-screen--wash">
-          <div className="eai-appcard">
-            <SideNav title="App settings" items={APP_NAV} />
-            <div className="eai-page eai-page--wash">
-              <div className="eai-h1">AI Chatbot</div>
-              <ChatbotCard s={s} />
-              <Filler /><Filler /><Filler />
-            </div>
-          </div>
-        </div>
+      <Note fix={s.fix} problem="It’s on, and nothing says what’s next" solution="Turning it on leads straight to the next step" />
+      <Win overlay={<SettingsDialog layout={layout} open={s.dlg} chatbot={s.sw} toggle="tog" done="done" />}>
+        <AppScreen layout={layout}>
+          <AppShell layout={layout} title="AI Chatbot" active="chatbot" rail={layout === 'wide'}>
+            <Fade className="eaw-fade--stack" value={s.fix ? 'fix' : 'problem'} states={{ problem: <PageBefore layout={layout} />, fix: <PageAfter on={s.on} added={s.added} layout={layout} /> }} />
+          </AppShell>
+        </AppScreen>
       </Win>
     </>
   )
@@ -152,8 +168,8 @@ function Scene({ s, layout }: { s: S; layout: Layout }) {
 
 export function EaiOnward({ bare = true }: { bare?: boolean } = {}) {
   return (
-    <figure className={bare ? 'not-prose eai eai--bare' : 'not-prose eai my-8'} role="img" aria-label="Before: turning AI Chatbot on ends at Saved, with the app's chatbot still not set up. After: turning it on leads straight to the setup, and to live">
-      <Stage width={720} height={480} compact={{ below: 600, width: 358, height: 470 }} initial={initial} poster={poster} script={script} play="loop" fill={!bare} cursor={{ at: REST, style: 'large' }} className="eai">
+    <figure className={bare ? 'not-prose eaw eaw--onward eaw--bare' : 'not-prose eaw eaw--onward my-8'} role="img" aria-label="The problem: with AI Chatbot turned on, its page still showed Getting started and No workflows added yet, so people stopped there. The fix: turning it on offers Add to workflow straight away; pick Parking permit application and the chatbot shows on the workflow">
+      <Stage width={720} height={592} compact={{ below: 600, width: 358, height: 600 }} initial={initial} poster={poster} script={script} play="loop" fill={!bare} cursor={{ at: REST, style: 'large' }} className="eaw">
         {(s, _rect, layout) => <Scene s={s} layout={layout === 'compact' ? 'compact' : 'wide'} />}
       </Stage>
     </figure>

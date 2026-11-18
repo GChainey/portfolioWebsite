@@ -269,13 +269,13 @@ export const STUDIES: Study[] = [
     slug: 'eai-setup',
     label: 'Enterprise AI',
     meta: '2026',
-    // Two fixes to setting up AI in an app: workspace settings as a dialog (people got lost between two
-    // levels of settings that looked the same), and an onward journey (testers turned the chatbot on and
-    // stopped, sure they'd finished). Facts from the eai-settings write-up (projects.ts) and the
-    // user-testing essay: 0 of 5 → 5 of 5 setting up a chatbot; 5 of 5 found the feature and the app.
-    // Scenes in the current Enterprise AI design: EaiSettingsLevels, EaiOnward (components/stageshow)
+    // Three problems in setting up AI in an app, each with its fix: navigation (two levels that looked the
+    // same), workspace vs app settings (a page that moved you; now a dialog), and the onward journey (on,
+    // but not set up). Facts from the eai-settings write-up (projects.ts) and the user-testing essay:
+    // 0 of 5 → 5 of 5 setting up a chatbot; 5 of 5 found the feature and the right app. Scenes built from
+    // the real prototype (prototypes repo, workspace-ai-demo/build-web) with the workspace as NYC Council
     lead: 'People turned AI on and thought they were done.',
-    rest: 'Two fixes took setting up a chatbot from 0 of 5 people to 5 of 5.',
+    rest: 'Three fixes took setting up a chatbot from 0 of 5 people to 5 of 5.',
     rows: [
       ['Set up an AI chatbot', '0 of 5 → 5 of 5 people'],
       ['Found the right settings', '5 of 5 people'],
@@ -283,35 +283,21 @@ export const STUDIES: Study[] = [
       ['Role', 'Lead product designer'],
     ],
     blocks: [
-      {
-        lead: 'Lost between two kinds of settings.',
-        rest: 'So workspace settings became a dialog, and the two levels swapped colours.',
-        body: 'A feature is turned on in workspace settings and set up in the app. The two looked the same, and closing workspace settings left you on the workspace home, not back in the app. Now it opens over wherever you are, and closing it only closes it.',
-      },
-      { moment: { scene: 'eai-settings-levels' }, line: 'Before: two screens that look the same, and the wrong place to land. After: a dialog over the app, and you’re still where you were.' },
+      { lead: 'Where am I?', rest: 'The workspace and the app looked the same. Now they swap colours, and the app sits inside the workspace.' },
+      { moment: { scene: 'eai-navigation' }, line: 'Into Parking permit and back out: you can tell which level you’re on before you read a word.' },
 
-      {
-        lead: 'No clear next step.',
-        rest: 'So turning a feature on now leads straight into setting it up.',
-        body: 'Testers turned the chatbot on, saw it saved and stopped, sure they’d finished. They had done one step. Now each step offers the next, until the chatbot is live in the app.',
-      },
-      { moment: { scene: 'eai-onward' }, line: 'Before: saved, and nowhere to go. After: the next step is right there, through to a live chatbot.' },
+      { lead: 'Settings that moved you.', rest: 'Workspace settings was a separate page. Now it’s a dialog over the app, and closing it only closes it.' },
+      { moment: { scene: 'eai-settings-dialog' }, line: 'Turn the chatbot on from the app, close, and you’re still in the app.' },
+
+      { lead: 'On isn’t set up.', rest: 'People turned the chatbot on and stopped. Now turning it on leads straight to the next step.' },
+      { moment: { scene: 'eai-onward' }, line: 'On, then straight to adding it to the workflow, until it’s live.' },
 
       {
         lead: 'It works on any setup flow.',
-        rest: 'Two moves:',
         list: [
-          'Settings open over where you are, so closing them never moves you.',
-          'Every step ends by offering the next one, until the thing works.',
-        ],
-      },
-      {
-        lead: 'What AI made possible.',
-        rest: 'Working prototypes, not mock-ups.',
-        list: [
-          'Turn a feature on in workspace settings and it’s on in the app: the jump we were testing, which a mock-up can’t hold.',
-          'Each test’s workspace was seeded with the apps and documents its task needed.',
-          'A problem found in one test was back in front of people, fixed, three days later.',
+          'Make each level look like itself.',
+          'Open settings over where people are.',
+          'End every step by offering the next one.',
         ],
       },
     ],

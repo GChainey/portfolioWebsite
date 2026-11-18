@@ -10,7 +10,8 @@ import { BpRepeat } from '@/components/stageshow/BpRepeat'
 import { BpProviderDates } from '@/components/stageshow/BpProviderDates'
 import { BpOldDialog } from '@/components/stageshow/BpOldDialog'
 import { BpFinal } from '@/components/stageshow/BpFinal'
-import { EaiSettingsLevels } from '@/components/stageshow/EaiSettingsLevels'
+import { EaiNavigation } from '@/components/stageshow/EaiNavigation'
+import { EaiSettingsDialog } from '@/components/stageshow/EaiSettingsDialog'
 import { EaiOnward } from '@/components/stageshow/EaiOnward'
 import { SeekAllTab } from '@/components/stageshow/SeekAllTab'
 import { SeekCards } from '@/components/stageshow/SeekCards'
@@ -41,7 +42,8 @@ const SCENES = {
   'bp-provider-dates': () => <BpProviderDates />,
   'bp-old-dialog': () => <BpOldDialog />,
   'bp-final': () => <BpFinal />,
-  'eai-settings-levels': () => <EaiSettingsLevels />,
+  'eai-navigation': () => <EaiNavigation />,
+  'eai-settings-dialog': () => <EaiSettingsDialog />,
   'eai-onward': () => <EaiOnward />,
 }
 
