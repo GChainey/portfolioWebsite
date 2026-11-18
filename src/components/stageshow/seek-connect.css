@@ -1,0 +1,85 @@
+/* SeekConnect: the base (tokens, header, tabs, groups, rails, note) is seek-all-tab.css. The phone
+   is whole here: what opens (a page's buttons, a sheet) lives at the screen's foot */
+/* Whole and centred: 320 wide is 673 tall, 14 from the top and foot of a 700 stage */
+.scn .scn-phone { top: 14px; left: 200px; }
+.scn .scn-phone[data-layout="compact"] { top: 14px; left: 24px; } /* 310 wide, 652 tall, on a 680 stage */
+
+.scn .scn-screen { overflow: hidden; height: auto; bottom: 0; } /* the base's height: 100% would run 62pt past the foot */
+
+/* Pages, pushed and popped the iOS way: the new page slides in over the old, which drifts left */
+.scn .scn-page { position: absolute; inset: 0; display: flex; flex-direction: column; background: #fff; will-change: transform;
+  transition: transform 460ms cubic-bezier(0.32, 0.72, 0, 1); }
+.scn .scn-page[data-pos="ahead"] { transform: translateX(100%); }
+.scn .scn-page[data-pos="behind"] { transform: translateX(-28%); }
+.scn .scn-page[data-pos="here"] { transform: none; box-shadow: -8px 0 24px rgba(0, 0, 0, 0.06); }
+
+.scn .scn-list { padding: 0 16px 32px; }
+
+.scn .scn-logo { flex: none; display: grid; place-items: center; background: #fff; box-shadow: inset 0 0 0 1px var(--sat-line); overflow: hidden; }
+.scn .scn-logo img { display: block; max-width: 76%; max-height: 76%; object-fit: contain; }
+.scn .scn-logo--fill { box-shadow: none; }
+.scn .scn-logo--fill img { width: 100%; height: 100%; max-width: none; max-height: none; object-fit: cover; }
+
+.scn .scn-card { flex: none; width: 260px; padding: 16px; border: 1px solid var(--sat-card-line); border-radius: 16px; background: #fff; display: flex; flex-direction: column; }
+.scn .scn-card[data-pressed], .scn .scn-btn[data-pressed] { transform: scale(0.98); }
+.scn .scn-card, .scn .scn-btn { transition: transform 140ms ease-out; will-change: transform; }
+.scn .scn-card .scn-logo { margin-bottom: 14px; }
+.scn .scn-card__course { font: 600 15px/21px var(--ss-font); color: var(--sat-ink); min-height: 21px; display: flex; align-items: center; }
+.scn .scn-card__prov { margin-top: 4px; font: 400 14px/18px var(--ss-font); color: var(--sat-muted); min-height: 18px; display: flex; align-items: center; }
+
+/* The course page and the form page */
+.scn .scn-page__body { flex: 1; min-height: 0; padding: 16px 16px 0; display: flex; flex-direction: column; }
+.scn .scn-back { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.scn .scn-chev { width: 8px; height: 8px; border-left: 2px solid var(--sat-blue); border-bottom: 2px solid var(--sat-blue); transform: rotate(45deg); margin-left: 3px; }
+.scn .scn-page__title { margin-top: 16px; font: 600 22px/28px var(--ss-font); color: var(--sat-ink); letter-spacing: -0.01em; }
+.scn .scn-page__title--form { margin-top: 0; }
+.scn .scn-page__prov { margin-top: 4px; font: 400 15px/20px var(--ss-font); color: var(--sat-muted); }
+.scn .scn-facts { margin-top: 20px; padding: 16px; border-radius: 16px; background: #F3F5F7; display: grid; gap: 14px; }
+.scn .scn-facts__row { display: flex; justify-content: space-between; align-items: center; }
+.scn .scn-gap { margin-top: 24px; }
+.scn .scn-para { display: grid; gap: 9px; margin-top: 14px; }
+.scn .scn-para--tight { margin-top: 10px; }
+.scn .scn-dock { flex: none; display: flex; gap: 12px; padding: 16px 16px 34px; border-top: 1px solid var(--sat-line); background: #fff; }
+
+.scn .scn-btn { flex: 1; display: grid; place-items: center; height: 48px; border-radius: 10px; background: #E8EBEE; color: var(--sat-ink); font: 600 16px/20px var(--ss-font); white-space: nowrap; }
+.scn .scn-btn--primary { background: var(--sat-body); color: #fff; }
+.scn .scn-btn--wide { flex: 1; }
+
+.scn .scn-fields { display: grid; gap: 14px; margin-top: 20px; }
+.scn .scn-field { display: grid; gap: 6px; min-width: 0; }
+.scn .scn-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.scn .scn-label { font: 600 14px/18px var(--ss-font); color: var(--sat-ink); }
+.scn .scn-label-bar { margin: 5px 0 8px; }
+.scn .scn-input { display: block; height: 46px; border: 2px solid #838FA5; border-radius: 8px; background: #fff; }
+
+/* The sheet over the same page. The dimming covers the whole screen, the status bar too, as iOS
+   does: it sits above the kit's status bar (z 2, earlier in the screen) and under the island (z 3) */
+.scn .scn-scrim { position: absolute; inset: 0; z-index: 2; background: rgba(28, 35, 48, 0.48); opacity: 0; transition: opacity 320ms ease; pointer-events: none; }
+.scn .scn-scrim[data-open] { opacity: 1; }
+.scn .scn-sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 10px 20px 34px; border-radius: 28px 28px 0 0; background: #fff;
+  transform: translateY(102%); transition: transform 480ms cubic-bezier(0.32, 0.72, 0, 1); will-change: transform; }
+.scn .scn-sheet[data-open] { transform: none; }
+.scn .scn-grab { display: block; width: 36px; height: 5px; margin: 0 auto 14px; border-radius: 3px; background: #D3D7DE; }
+.scn .scn-sheet__head { display: grid; grid-template-columns: 44px 1fr 16px; gap: 12px; align-items: start; }
+.scn .scn-sheet__titles { display: flex; flex-direction: column; min-width: 0; }
+.scn .scn-sheet__title { font: 600 18px/23px var(--ss-font); color: var(--sat-ink); }
+.scn .scn-sheet__prov { margin-top: 2px; font: 400 14px/18px var(--ss-font); color: var(--sat-muted); }
+.scn .scn-x { position: relative; width: 14px; height: 14px; margin-top: 4px; }
+.scn .scn-x::before, .scn .scn-x::after { content: ''; position: absolute; left: 6px; top: -1px; width: 2px; height: 16px; border-radius: 1px; background: var(--sat-ink); transform: rotate(45deg); }
+.scn .scn-x::after { transform: rotate(-45deg); }
+.scn .scn-sheet__cell { display: grid; grid-template-columns: minmax(0, 1fr); margin-top: 8px; }
+.scn .scn-sheet__layer { grid-area: 1 / 1; will-change: transform; display: flex; flex-direction: column; opacity: 0; transform: translateY(8px); transition: opacity 220ms ease, transform 260ms var(--sat-ease); pointer-events: none; }
+.scn .scn-sheet__layer[data-show] { opacity: 1; transform: none; transition-delay: 90ms; }
+.scn .scn-checks { display: grid; gap: 12px; margin-top: 18px; }
+.scn .scn-check { display: flex; align-items: center; gap: 10px; }
+.scn .scn-tick { width: 10px; height: 6px; margin: 0 3px 3px; border-left: 2px solid var(--sat-ink); border-bottom: 2px solid var(--sat-ink); transform: rotate(-45deg); }
+.scn .scn-btns { display: flex; gap: 12px; margin-top: auto; padding-top: 24px; }
+
+/* The form page's remaining fields: a select, a message, consent */
+.scn .scn-field--gap { margin-top: 14px; }
+.scn .scn-input--select { display: flex; align-items: center; justify-content: space-between; padding: 0 14px; }
+.scn .scn-caret { width: 7px; height: 7px; border-right: 2px solid var(--sat-ink); border-bottom: 2px solid var(--sat-ink); transform: rotate(45deg) translateY(-2px); }
+.scn .scn-input--area { height: 96px; }
+.scn .scn-consent { display: flex; gap: 12px; align-items: flex-start; margin-top: 18px; }
+.scn .scn-box { flex: none; width: 20px; height: 20px; border: 2px solid #838FA5; border-radius: 4px; }
+.scn .scn-para--flush { flex: 1; margin-top: 3px; }
