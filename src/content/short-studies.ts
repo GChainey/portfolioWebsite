@@ -18,6 +18,7 @@ export const STUDIES: Study[] = [
     slug: 'daisy-assess',
     label: 'DAISY Assess',
     meta: 'Enterprise AI, 2025',
+    role: 'Sole designer, working with sales. I designed and built it',
     lead: 'Building with AI, I answered tenders with a working product, not a Figma prototype.',
     rest: 'It showed real functionality, and how we use the technology on real problems.',
     rows: [['Signed deals', '$2 million so far'], ['Tenders', 'More than one, from the same prototype'], ['Markets', '2, English and Polish'], ['Engineering', 'Still the design they build from']],
@@ -41,6 +42,7 @@ export const STUDIES: Study[] = [
     slug: 'website',
     label: 'An agent-built website',
     meta: 'Enterprise AI, 2026',
+    role: 'Wrote the brand files, designed the site with agents, ran the tests',
     lead: 'Our brand, written as files agents build from.',
     rest: 'Then a website explored with models, refined into the brand and tested.',
     rows: [['Status', 'Released'], ['Impact', 'Recently released, so still to come'], ['Got the message', '2 of 5, then 5 of 7']],
@@ -65,6 +67,7 @@ export const STUDIES: Study[] = [
     slug: 'configurator',
     label: 'Testing on live models',
     meta: 'Enterprise AI, 2025–26',
+    role: 'Designed and built it in code, ahead of engineering',
     lead: 'Ahead of development, I built the product, lite.',
     rest: 'An LLM product has to be designed past the happy path.',
     rows: [['Model speed', 'About 6s on GPT-4.1, 21s on GPT-5 mini'], ['Result', 'Changed the product’s direction']],
@@ -89,6 +92,7 @@ export const STUDIES: Study[] = [
     // For a recruiter: what moved, in words that travel. "Education conversion" is the share of people
     // who saw the courses and signed up with a provider; a paid connection is the premium lead SEEK
     // charges providers for
+    role: 'Lead designer, in a team of seven',
     lead: 'We more than doubled a sign-up funnel, from 9% to 20%.',
     rest: 'A launch that missed its goal, turned round in a week or two, one step of the funnel at a time.',
     rows: [
@@ -96,7 +100,6 @@ export const STUDIES: Study[] = [
       ['Premium connections', '+34%, against a goal of 10 to 15%'],
       ['Release to fixes', 'A week or two'],
       ['Rolled out to', 'All 3,000+ career pages'],
-      ['Role', 'Lead designer, in a team of seven'],
     ],
     blocks: [
       { moment: { replay: '/replays/seek/hero.json', phone: true }, line: 'Courses on a SEEK career page, as they shipped.' },
@@ -204,13 +207,13 @@ export const STUDIES: Study[] = [
     // a row that holds any kind of answer, one control for the choices. No numbers were measured in
     // testing, so none are claimed. Recreated in Fluent 2: recordings (recreations/bestpractice,
     // scripts/replays/bestpractice.mjs) and Stageshow scenes (components/stageshow/Bp*.tsx)
+    role: 'Lead designer, in a team of five',
     lead: 'Crafting a better booking experience from a dialog that had grown unwieldy.',
     rest: 'A few reusable patterns made it robust enough for features that didn’t exist yet.',
     rows: [
       ['Patterns', 'A second panel, a row that holds any answer, one control for the choices'],
       ['Tested with', '5 people: they understood it and could finish the workflows'],
       ['Used by', 'Australia’s largest practice management system'],
-      ['Role', 'Lead designer, in a team of five'],
     ],
     blocks: [
       { moment: { replay: '/replays/bestpractice/final.json', ground: true, region: BP_DIALOG }, line: 'Open the details, pick a provider and a time, and the row fills in.' },

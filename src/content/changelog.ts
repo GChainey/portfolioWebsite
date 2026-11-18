@@ -14,6 +14,26 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.14.0',
+    date: '2026-11-18',
+    title: 'What the Work Is, My Role, and a Before/After Slider',
+    description: 'Changes from a hiring-manager review of the site: every homepage card says what the work is, each case study opens with my role, and craft comparisons get a slider to drag between the old design and the new one.',
+    changes: [
+      'Homepage: one grey line under every card (products, Enterprise AI work, before AI, creative) saying what it is, without a hover or a click',
+      'Case studies: "My role" is the first row of the facts (Study.role); SEEK and Best Practice move their role up, the RFP study and the drafts get one',
+      'Compare (components/site/compare): the old design over the new, wiped with clip-path. Drag anywhere, or use the arrow keys on the handle (Shift for bigger steps, Home and End)',
+      'Case study moments with a before get a third option: Now | Before | Compare',
+      'The Apps table page opens with the first and latest tables in one slider',
+      'Fix: the Testing on live models card was an empty grey box in production, because its clip was only defined on the dev server',
+      'Fact rows keep their label on one line',
+      'Homepage review panel (dev only): spacing sliders for between sections, sentence to cards, between cards and card width. CSS variables, written to the URL (?sec= ?intro= ?cards= ?w=)',
+      'More room for the work: 240px between sections (was 120), 80px from a sentence to its cards (was 64), 200px between cards (was 32)',
+      'Thesis card: a Stageshow scene in place of the recorded app, on two iPhones in Thesis’s light mobile look. One claim checked against Dovetail and Amplitude comes back Supported; the other finds nothing, so Thesis drafts a test and it starts running. Real Dovetail and Amplitude marks (public/brands)',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/dxe-hiring-manager-bar-review',
+  },
+  {
     version: '3.13.5',
     date: '2026-11-16',
     title: 'One Frame for Every Card on the Homepage',

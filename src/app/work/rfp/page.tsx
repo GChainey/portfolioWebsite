@@ -22,7 +22,7 @@ export default function RfpCaseStudy() {
 
         <section className="flex flex-col gap-8">
           <Headline as="h1" lead="One designer answered a state government tender with a working product." rest="Up against vendors with whole teams." />
-          <Rows rows={[['Deals won since', '$2 million'], ['Designers', '1, where it took 3 to 5'], ['A major feature', 'Days, not weeks'], ['Markets', '2, English and Polish']]} />
+          <Rows rows={[['My role', 'Sole designer, working with sales. I designed and built it'], ['Deals won since', '$2 million'], ['Designers', '1, where it took 3 to 5'], ['A major feature', 'Days, not weeks'], ['Markets', '2, English and Polish']]} />
         </section>
 
         <Moment mat line="The working prototype we answered with: open an application and follow it through the council’s workflow.">

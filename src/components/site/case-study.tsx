@@ -18,6 +18,7 @@ import { Funnel, type FunnelData } from '@/components/site/funnel'
 import { Contents } from '@/components/site/contents'
 import { RichText } from '@/components/site/reference'
 import { Phone } from '@/components/stageshow/kit/phone'
+import { Compare } from '@/components/site/compare'
 import { COL, GREY, Headline, INK, LINE, Mat, Rows, SHELL, Shell, WIDE } from '@/components/site/style'
 
 // The short case study, in the draft's design: enough to get someone interested, built round three
@@ -60,6 +61,7 @@ export type Study = {
   meta: string // company, year
   lead: string // the claim, ink
   rest: string // the rest of it, grey
+  role?: string // what I did, first in the facts: a hiring manager's first question
   rows?: [string, string][] // the facts under the headline, the impact first: no big number
   blocks: Block[]
 }
@@ -156,29 +158,41 @@ function Art({ media }: { media: Media }) {
 }
 
 // A moment: the work, wider than the text, one grey line under it on the column. With `was`, a
-// small Now | Before switch sits on the work's top-left corner: the new design shows first and the
-// old one is a click away, so the page scans as the good work (Gareth, 2026-11-16)
+// small Now | Before | Compare switch sits under the work: the new design shows first and the old
+// one is a click away, so the page scans as the good work (Gareth, 2026-11-16). Compare lays the
+// old over the new with a wipe to drag across (components/site/compare)
+type View = 'Now' | 'Before' | 'Compare'
 function Moment({ media, line, was }: { media: Media; line: string; was?: { media: Media; line: string } }) {
-  const [before, setBefore] = useState(false)
+  const [view, setView] = useState<View>('Now')
   // The frame keeps the new design's height when it shows the old one, so the page doesn't jump
   const frame = useRef<HTMLDivElement>(null)
   const [height, setHeight] = useState<number>()
-  const pick = (b: boolean) => { if (b && frame.current && !before) setHeight(frame.current.offsetHeight); setBefore(b) }
-  const shown = before && was ? was : { media, line }
+  const pick = (v: View) => { if (v !== 'Now' && frame.current && view === 'Now') setHeight(frame.current.offsetHeight); setView(v) }
+  const before = view === 'Before' && was
+  const shown = before ? was : { media, line }
   return (
     <figure className="flex flex-col gap-3" style={{ marginInline: `calc((${COL} - ${WIDE}) / 2)` }}>
-      <div ref={frame} key={before ? 'before' : 'now'} className="flex animate-[moment-in_200ms_ease-out] flex-col justify-center rounded-[20px]"
+      <div ref={frame} key={view} className="flex animate-[moment-in_200ms_ease-out] flex-col justify-center rounded-[20px]"
         style={before ? { minHeight: height, background: SHELL } : undefined}>
-        <Art media={shown.media} />
+        {view === 'Compare' && was
+          ? (
+            <div className="overflow-hidden rounded-[20px]">
+              <Compare
+                after={<Art media={media} />}
+                before={<div className="flex h-full flex-col justify-center rounded-[20px]" style={{ background: SHELL }}><Art media={was.media} /></div>}
+              />
+            </div>
+          )
+          : <Art media={shown.media} />}
       </div>
       <figcaption className="flex items-start justify-between gap-4 self-center text-[13px] leading-[20px]" style={{ width: COL, color: GREY }}>
         <span className="text-pretty">{shown.line}</span>
         {was && (
-          <span role="tablist" aria-label="Now or before" className="grid shrink-0 grid-cols-2 rounded-full p-0.5" style={{ boxShadow: `0 0 0 1px ${LINE}` }}>
-            {(['Now', 'Before'] as const).map((t) => {
-              const on = (t === 'Before') === before
+          <span role="tablist" aria-label="Now, before, or compare the two" className="grid shrink-0 grid-cols-3 rounded-full p-0.5" style={{ boxShadow: `0 0 0 1px ${LINE}` }}>
+            {(['Now', 'Before', 'Compare'] as const).map((t) => {
+              const on = t === view
               return (
-                <button key={t} role="tab" aria-selected={on} onClick={() => pick(t === 'Before')}
+                <button key={t} role="tab" aria-selected={on} onClick={() => pick(t)}
                   className="rounded-full px-3 transition-[background-color,color,transform] duration-150 ease-out active:scale-[0.97]"
                   style={{ background: on ? INK : 'transparent', color: on ? '#fff' : GREY }}>{t}</button>
               )
@@ -215,7 +229,7 @@ export function CaseStudy({ study }: { study: Study }) {
 
         <section id="study-top" className="flex flex-col gap-8">
           <Headline as="h1" lead={study.lead} rest={study.rest} stacked />
-          {study.rows && <Rows rows={study.rows} />}
+          {(study.role || study.rows) && <Rows rows={[...(study.role ? [['My role', study.role] as [string, string]] : []), ...(study.rows ?? [])]} />}
         </section>
 
         {blocks}
