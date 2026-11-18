@@ -44,12 +44,14 @@ const SCENES = {
 type Region = { x: number; y: number; width: number; height: number }
 export type Media =
   | { replay: string; region?: Region; phone?: boolean; ground?: boolean } // an HTML replay, sharp at any size. phone: a phone-sized recording, shown in an iPhone on the grey (region crops off its own status bar). ground: the recording paints its own grey page, so it fills the shell with no white panel round it
-  | { video: string; ratio: number } // the pre-AI work, which only exists as video. Below 1, a phone
+  | { video: string; ratio: number; fill?: boolean } // the pre-AI work, which only exists as video. Below 1, a phone; fill: the clip itself edge to edge, no device (a posted clip)
   | { stills: string[] } // a few stills side by side, two to a row
   | { scene: keyof typeof SCENES } // a Stageshow scene
   | { image: string; ratio: number } // a cut-out still (phones on a transparent ground), standing on the grey
   | { funnel: FunnelData } // the interactive funnel: first release, or after the fixes
   | { before: string; after: string } // two phone recordings side by side: the original, then the fix
+  | { live: string; ratio: number; title: string; mat?: boolean } // a live HTML page (a shader running for real), framed; mat for a tool on the grey
+  | { board: string; alt: string } // one board or still (a design file's frame), in the shell
 
 export type Block =
   | { moment: Media; line: string; was?: { media: Media; line: string } } // was: the old design at this point, one click away (Now | Before)
@@ -125,7 +127,18 @@ function PhonePair({ before, after }: { before: string; after: string }) {
   )
 }
 
+// A live page in an iframe: the real thing, sharp at any size. Loads when near the screen.
+function Live({ src, ratio, title }: { src: string; ratio: number; title: string }) {
+  return <iframe src={src} title={title} loading="lazy" className="block w-full border-0" style={{ aspectRatio: ratio }} />
+}
+
 function Art({ media }: { media: Media }) {
+  if ('live' in media) {
+    if (media.mat) return <Mat><Live src={media.live} ratio={media.ratio} title={media.title} /></Mat>
+    return <div className="overflow-hidden rounded-[20px]" style={{ background: SHELL }}><Live src={media.live} ratio={media.ratio} title={media.title} /></div>
+  }
+  // eslint-disable-next-line @next/next/no-img-element
+  if ('board' in media) return <Shell><img src={media.board} alt={media.alt} className="block w-full" /></Shell>
   if ('funnel' in media) return <Funnel data={media.funnel} />
   if ('before' in media) return <PhonePair before={media.before} after={media.after} />
   if ('image' in media) return (
@@ -139,6 +152,7 @@ function Art({ media }: { media: Media }) {
   if ('replay' in media) return <Mat><RecordingReplay src={media.replay} region={media.region} bare /></Mat>
   if ('scene' in media) { const Scene = SCENES[media.scene]; return <Shell scene><div data-ss-fill><Scene /></div></Shell> }
   if ('video' in media) {
+    if (media.fill) return <div className="overflow-hidden rounded-[20px]" style={{ aspectRatio: media.ratio, background: SHELL }}><Video src={media.video} /></div>
     // A phone recording stands on the grey, the height of a landscape clip. The recording is the
     // phone, bezel and all, on black: round it to the bezel's corners so the black doesn't show
     if (media.ratio < 1) return (
