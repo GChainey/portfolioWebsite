@@ -271,11 +271,11 @@ let leftAt = 0
 
 // The page's spacing, as CSS variables on the page so the sliders can move them without a render:
 // between sections, from a section's sentence to its cards, between the cards in a row, and how
-// wide a card is (the text column stays 540). Defaults are what's live; ?sec= ?intro= ?cards= ?w=
+// wide a card is (the text column stays 540). Defaults are Gareth's pick (2026-11-18); ?sec= ?intro= ?cards= ?w=
 const SPACE = [
-  { key: 'sec', css: '--sec', label: 'Between sections', min: 80, max: 320, step: 8, value: 120 },
-  { key: 'intro', css: '--intro', label: 'Sentence to cards', min: 24, max: 160, step: 8, value: 64 },
-  { key: 'cards', css: '--cards', label: 'Between cards', min: 16, max: 200, step: 4, value: 32 },
+  { key: 'sec', css: '--sec', label: 'Between sections', min: 80, max: 400, step: 8, value: 240 },
+  { key: 'intro', css: '--intro', label: 'Sentence to cards', min: 24, max: 160, step: 8, value: 80 },
+  { key: 'cards', css: '--cards', label: 'Between cards', min: 16, max: 320, step: 4, value: 200 },
   { key: 'w', css: '--card-w', label: 'Card width', min: 540, max: 900, step: 10, value: 540 },
 ] as const
 type SpaceKey = (typeof SPACE)[number]['key']
