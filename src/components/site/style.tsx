@@ -77,7 +77,7 @@ export function Rows({ rows }: { rows: [label: string, value: ReactNode][] }) {
     <dl className="flex flex-col">
       {rows.map(([k, v]) => (
         <div key={k} className="flex justify-between gap-4 border-t py-3" style={{ borderColor: LINE }}>
-          <dt style={{ color: GREY }}>{k}</dt>
+          <dt className="shrink-0" style={{ color: GREY }}>{k}</dt>
           <dd className="text-right tabular-nums">{v}</dd>
         </div>
       ))}

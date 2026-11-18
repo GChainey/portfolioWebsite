@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { ChevronDown } from 'lucide-react'
 import { GitHubContributions } from '@/components/GitHubContributions'
 import { Media, heroItem } from '@/components/HomeShowcase'
-import { SHOWCASE_SECTIONS } from '@/content/home-showcase'
+import { ALL_PIECES } from '@/content/home-showcase'
 import { RfpLetter } from '@/components/stageshow/RfpLetter'
 import { TESTIMONIALS } from '@/content/testimonials'
 import { CompanyPeek } from '@/components/site/companies'
@@ -42,30 +42,31 @@ const ABOUT: { lead: string; rest: string }[] = [
 // piece: the homepage showcase's piece (content/home-showcase), whose hero clip plays here: the
 // real page as an HTML replay (or the real video), so it's sharp at any size. On the card it sits
 // inset on the grey, by the padding the controls set
-const PRODUCTS: { name: string; href: string; landing: string; piece: string }[] = [
-  { name: 'Shader Wall', href: 'https://www.shaderwall.com', landing: '/draft/landing-shaderwall.jpg', piece: 'shader-wall' },
-  { name: 'Dispatch', href: 'https://www.dispatchmac.com', landing: '/draft/landing-dispatch.jpg', piece: 'dispatch' },
-  { name: 'Thesis', href: 'https://thesis-phi-self.vercel.app', landing: '/draft/landing-thesis.jpg', piece: 'thesis' },
+// desc: what the thing is, one line under its card, so the card says it without a hover or a click
+const PRODUCTS: { name: string; desc: string; href: string; landing: string; piece: string }[] = [
+  { name: 'Shader Wall', desc: 'A Mac app for shader wallpapers. Tune one with sliders, or ask your agent.', href: 'https://www.shaderwall.com', landing: '/draft/landing-shaderwall.jpg', piece: 'shader-wall' },
+  { name: 'Dispatch', desc: 'Send articles to your Kindle in one click, from the browser, the Mac or a bot.', href: 'https://www.dispatchmac.com', landing: '/draft/landing-dispatch.jpg', piece: 'dispatch' },
+  { name: 'Thesis', desc: 'Every claim in a plan is a bet. AI drafts the tests and gathers the evidence.', href: 'https://thesis-phi-self.vercel.app', landing: '/draft/landing-thesis.jpg', piece: 'thesis' },
 ]
 
 // piece as the products; the RFP's is its Stageshow scene, which fills its card instead. A /draft/
 // href is a short case study still on the dev server only: off it, the name is plain text
-const PROJECTS: { name: string; year: string; href?: string; piece: string; scene?: ReactNode }[] = [
-  { name: 'Winning a tender', year: '2025', href: '/work/rfp', piece: 'rfp', scene: <RfpLetter filled /> },
-  { name: 'Testing on live models', year: '2025–26', href: '/draft/configurator', piece: 'configurator' },
-  { name: 'An agent-built website', year: '2026', href: '/draft/website', piece: 'html-brand-website' },
+const PROJECTS: { name: string; desc: string; year: string; href?: string; piece: string; scene?: ReactNode }[] = [
+  { name: 'Winning a tender', desc: 'A working product, not mock-ups, that answered a state government tender.', year: '2025', href: '/work/rfp', piece: 'rfp', scene: <RfpLetter filled /> },
+  { name: 'Testing on live models', desc: 'Built in code on real models, where a Figma prototype couldn’t answer the question.', year: '2025–26', href: '/draft/configurator', piece: 'configurator' },
+  { name: 'An agent-built website', desc: 'Our brand written as files agents build from, then the website built from them.', year: '2026', href: '/draft/website', piece: 'html-brand-website' },
 ]
 
 // Before AI: the earlier work, on its own rail
 const BEFORE_AI: typeof PROJECTS = [
-  { name: 'SEEK, fixing the funnel', year: '2024', href: '/draft/seek', piece: 'seek' },
-  { name: 'Booking in two panels', year: '2021', href: '/draft/bestpractice', piece: 'bestpractice' },
+  { name: 'SEEK, fixing the funnel', desc: 'A launch that missed its goal, then sign-ups from 9% to 20%, one step at a time.', year: '2024', href: '/draft/seek', piece: 'seek' },
+  { name: 'Booking in two panels', desc: 'A booking dialog that had grown unwieldy, rebuilt from a few reusable patterns.', year: '2021', href: '/draft/bestpractice', piece: 'bestpractice' },
 ]
 
 // Creative: the games, on their own rail
 const CREATIVE: typeof PROJECTS = [
-  { name: 'Opportunity sizing x Balatro', year: '2026', href: '/projects/balatro-opportunity-sizing', piece: 'balatro' },
-  { name: 'Wallbounce', year: '2026', href: '/projects/wallbounce-dev-tools', piece: 'wallbounce' },
+  { name: 'Opportunity sizing x Balatro', desc: 'Sizing a product bet, played like the card game: each number deals its card.', year: '2026', href: '/projects/balatro-opportunity-sizing', piece: 'balatro' },
+  { name: 'Wallbounce', desc: 'A small top-down game, made with the dev tools an agent built for it.', year: '2026', href: '/projects/wallbounce-dev-tools', piece: 'wallbounce' },
 ]
 
 
@@ -106,7 +107,7 @@ const CSS = `
 @media (prefers-reduced-motion: reduce) { .dr-word, .dr-fog, .dr-rise { animation: none; opacity: 1; } .dr-peek-card, .dr-peek:hover .dr-peek-card { transform: translateX(-50%); } }
 `
 
-const PIECES = Object.fromEntries(SHOWCASE_SECTIONS.flatMap((sec) => sec.pieces).map((p) => [p.id, p]))
+const PIECES = Object.fromEntries(ALL_PIECES.map((p) => [p.id, p]))
 // The clips are laid out on the showcase's 1600x1000 stage
 const RATIO = 1.6
 
@@ -214,7 +215,7 @@ function WorkCard({ p, focus, near, pad }: { p: (typeof PROJECTS)[number]; focus
   const card = (
     <div className="flex flex-col gap-4">
       {p.scene ? <Framed pad={pad} ratio={RATIO}><div className="absolute inset-0">{p.scene}</div></Framed> : <Framed pad={pad} ratio={RATIO}><Live id={p.piece} focus={focus} near={near} /></Framed>}
-      <div className="flex justify-between gap-4"><span>{p.name}</span><span className="tabular-nums" style={{ color: GREY }}>{p.year}</span></div>
+      <div className="flex flex-col"><div className="flex justify-between gap-4"><span>{p.name}</span><span className="tabular-nums" style={{ color: GREY }}>{p.year}</span></div><p className="text-pretty" style={{ color: GREY }}>{p.desc}</p></div>
     </div>
   )
   const href = liveHref(p.href)
@@ -366,7 +367,7 @@ export default function Home() {
             render={(p, focus, near) => (
               <a href={p.href} target="_blank" rel="noopener noreferrer" className="flex flex-col gap-4">
                 <Framed pad={PAD} ratio={RATIO}><Live id={p.piece} focus={focus} near={near} /></Framed>
-                <span>{p.name}</span>
+                <span className="flex flex-col"><span>{p.name}</span><span className="text-pretty" style={{ color: GREY }}>{p.desc}</span></span>
               </a>
             )}
           />

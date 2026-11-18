@@ -91,6 +91,16 @@ const onlyWindows = (...ids: string[]) => [
 const dispatchApp = (src: string, from: number, to: number, region: { x: number; y: number; width: number; height: number }, ...ids: string[]): ShowcaseScene =>
   ({ ...crop(src, from, to, region), scheme: 'dark', css: onlyWindows(...ids) })
 
+// Testing on live models. Out of the old showcase in production, but its clip still plays on the
+// homepage's card, so it's defined on its own and listed in ALL_PIECES either way
+const CONFIGURATOR: ShowcasePiece = {
+  id: 'configurator', tab: 'Testing on live models', title: 'Testing a thesis by building it', summary: 'Where a Figma prototype couldn’t answer the question, because it needed dynamic data.',
+  caseStudy: '/projects/configurator',
+  hero: scene('configurator-overview'), framed: true, tint: '#F6E5E3',
+  impact: [{ value: '6s vs 21s', label: ': GPT-4.1 against GPT-5 mini' }, { label: 'Changed the product’s direction' }],
+  details: [visual('configurator-models'), visual('configurator-jev'), visual('configurator-qr')],
+}
+
 export const SHOWCASE_SECTIONS: ShowcaseSection[] = [
   {
     id: 'products',
@@ -149,14 +159,8 @@ export const SHOWCASE_SECTIONS: ShowcaseSection[] = [
         impact: [{ value: '$2 million', label: 'in deals won since, from this design' }, { value: '1 designer', label: 'where it took 3 to 5, plus engineers' }, { value: 'Days', label: ', not weeks, for a major feature' }, { value: '2 markets', label: 'from one prototype, in English and in Polish' }],
         details: [visual('rfp-llm-chat'), visual('rfp-determination', 'The decision letter'), visual('rfp-ask')],
       },
-      // Not ready: on the dev server only for now
-      ...(DRAFTS_LIVE ? [{
-        id: 'configurator', tab: 'Testing on live models', title: 'Testing a thesis by building it', summary: 'Where a Figma prototype couldn’t answer the question, because it needed dynamic data.',
-        caseStudy: '/projects/configurator',
-        hero: scene('configurator-overview'), framed: true, tint: '#F6E5E3',
-        impact: [{ value: '6s vs 21s', label: ': GPT-4.1 against GPT-5 mini' }, { label: 'Changed the product’s direction' }],
-        details: [visual('configurator-models'), visual('configurator-jev'), visual('configurator-qr')],
-      }] : []),
+      // Not ready: on the dev server only for now (the new homepage still plays its clip: ALL_PIECES)
+      ...(DRAFTS_LIVE ? [CONFIGURATOR] : []),
       {
         id: 'html-brand-website', tab: 'An agent-built website', title: 'Build an app, brand it per client, share it to a phone', summary: 'A marketing site built from an HTML brand.',
         caseStudy: '/projects/html-brand-website',
@@ -231,3 +235,6 @@ export const SHOWCASE_SECTIONS: ShowcaseSection[] = [
     ],
   },
 ]
+
+// Every piece, drafts included: the homepage looks its cards' clips up here
+export const ALL_PIECES: ShowcasePiece[] = [...SHOWCASE_SECTIONS.flatMap((sec) => sec.pieces), ...(DRAFTS_LIVE ? [] : [CONFIGURATOR])]
