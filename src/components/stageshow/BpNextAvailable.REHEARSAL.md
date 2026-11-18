@@ -1,0 +1,57 @@
+# Rehearsal: BpNextAvailable ("Never a dead end")
+
+Gold copied: `close-up` frame, pulled back to show both panels (~0.89x, the window whole across
+with a 40 gutter, off the bottom, chrome top-left); the jump borrows `choreography`'s dependent
+timing (the line folds, the day drops in, the provider below moves with it). Not filmed beside the
+gold (playground dependencies not installed here; read from source).
+
+Beats: read the line → click "26/05/2021 at 10:30 am" → the line folds, Charlie's day drops in on
+the 26th with 10:30 am already picked (teal), "Less" fades in, Dominique moves down → cursor home.
+Plays once; poster = Charlie on the 26th with 10:30 am picked.
+
+Fixed along the way: "Change date" overlapping Charlie's name in the narrow panel (the header link
+now only appears after the jump, as "Less"); the provider field's ellipsis (now "Charlie Charmoose
++2"); times cut by the opening edge (the day's Collapse uses `drop`).
+
+Filmed: 720 and 390, plus the jump beat at 50ms, `--gate`: rehearsal passed, 0 candidates at both.
+
+Not checked: dark theme, real devices and Safari, pause/resume and offscreen return by hand, the
+case-study page itself.
+
+## Round 2 (Gareth's review)
+
+- Cursor: every control is marked `data-cursor="hand"` (in this kit `pointer` is the arrow): the
+  segments, the details row, every time, the links (Next available, Less, More), the close ✕, the
+  stepper chevrons, the date and provider pickers, the slim rows, the patient's ✕. The patient
+  field and the comment take the I-beam. Checked by sampling the cursor's kind every 30ms through
+  each scene (`.context/ss-tools/scripts/cursor-check.mjs`): every press is on the hand.
+- Patients are initials on the brand tint (#EBF3FC / #0F6CBD, 600); providers keep their photos.
+- The Urgent / Repeat / Waiting list group is full width (1 : 1 : 1.45), never narrower than a
+  label, so it fits the phone column too.
+- Wide stage is now 720 × 620 (the close-up and the pulled-back view both run off the bottom).
+- Re-filmed: `--gate` at 720 and 390, rehearsal passed at both.
+
+## Round 3 (right panel only)
+
+A close-up of the Appointment details panel alone (PanelWindow: the panel is the window, 420 drawn
+at 640). Charlie's stepper shows 25/05/2021 with nothing free and the line "Next available
+appointment is 26/05/2021 at 10:30 am" in full ink, the date a bold underlined link. Click: the
+date rolls to 26/05/2021 with a brand-tint flash that settles, the times drop in with 10:30 am in
+teal, "Less" fades in, Dominique moves down. Holds 2.5s, then Charlie's ‹ takes it back a day (the
+reset) and it loops. Filmed: `--gate` at 720 and 390, rehearsal passed, 0 candidates.
+
+## Round (icon jitter)
+
+Gareth saw the icon in the details row jump between two positions. Measured every icon's box on
+every animation frame through the loop at 720 and 390 (.context/ss-tools/scripts/icon-jitter.mjs):
+nothing moved at rest, but each time a state swapped in a fixed slot (the row's stethoscope ↔
+Charlie's photo, its › ↔ ‹, its lines; the provider link; the times) the kit's States glided the new
+state up 4px with a blur, so the icon landed in a second place. These scenes now swap with `Fade`
+(bp-dialog.tsx): opacity only, every state in one spot. Every icon now has exactly one rest position
+across the loop. Re-gated at 720 and 390: rehearsal passed (row at 720 now 0 candidates).
+
+## One radius
+
+Every UI element is 4px (Fluent medium): fields, buttons, the segmented group, the details row and
+the repeat / waiting-list lines, message bars and notes, times, steppers, the checkbox. Only the
+dialog is 8px; the switch keeps its pill track. Checked on the posters; re-gated at 720 and 390.

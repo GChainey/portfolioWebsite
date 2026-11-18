@@ -36,7 +36,9 @@ Thumbs.db
 next-env.d.ts
 
 # Misc
-.claude/
+# Claude Code: local settings stay out; project skills are shared
+.claude/*
+!.claude/skills/
 .vercel
 .env*
 !.env.example

@@ -1,0 +1,54 @@
+/* SeekCards: the base (tokens, phone, header, tabs, groups, rails, note) is seek-all-tab.css */
+
+.scd .scd-list { padding: 0 16px 32px; }
+.scd .scd-rail { align-items: flex-start; }
+
+.scd .scd-card { flex: none; width: 260px; padding: 16px; border: 1px solid var(--sat-card-line); border-radius: 16px; background: #fff; display: flex; flex-direction: column; }
+
+/* The logo row opens above the lines (grid rows 0fr → 1fr: the card grows, nothing stretches) */
+.scd .scd-logo-wrap { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 520ms var(--sat-ease); }
+.scd .scd-logo-in { min-height: 0; overflow: hidden; }
+.scd .scd-logo { display: grid; place-items: center; width: 40px; height: 40px; margin-bottom: 14px; border-radius: 8px; background: #fff; box-shadow: inset 0 0 0 1px var(--sat-line); overflow: hidden;
+  opacity: 0; transform: scale(0.92); transform-origin: 0 0; transition: opacity 260ms ease, transform 420ms var(--sat-ease); }
+.scd .scd-logo img { display: block; max-width: 76%; max-height: 76%; object-fit: contain; }
+.scd .scd-logo--fill { box-shadow: none; }
+.scd .scd-logo--fill img { width: 100%; height: 100%; max-width: none; max-height: none; object-fit: cover; }
+.scd .scd-card[data-fixed] .scd-logo-wrap { grid-template-rows: 1fr; }
+.scd .scd-card[data-fixed] .scd-logo { opacity: 1; transform: none; transition-delay: 160ms; }
+
+/* Two lines: a title (15/21, 600, ink) and a line under it (13/18, muted), 4 apart */
+.scd .scd-lines { position: relative; height: 44px; }
+.scd .scd-lines > span { position: absolute; left: 0; right: 0; display: flex; align-items: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; will-change: transform; }
+.scd .scd-course, .scd .scd-prov--top { top: 0; height: 21px; font: 600 15px/21px var(--ss-font); color: var(--sat-ink); }
+/* The second line's box is the first's height, 23 below it, so a name moving between them only translates */
+.scd .scd-prov--sub, .scd .scd-oldsub { top: 23px; height: 21px; font: 400 14px/21px var(--ss-font); color: var(--sat-muted); } /* 14, so it stays over 10px in the compact phone */
+
+/* Before: the provider on top, the old second line under it. Going back (the reset), the new lines
+   leave first and quickly, then the old ones return, so the two never sit on top of each other */
+.scd .scd-course { opacity: 0; transform: translateY(-8px); transition: opacity 140ms ease, transform 200ms var(--sat-ease); }
+.scd .scd-prov--top { transition: opacity 220ms ease 220ms, transform 360ms var(--sat-ease) 160ms; }
+.scd .scd-prov--sub { opacity: 0; transform: translateY(-23px); transition: opacity 140ms ease, transform 360ms var(--sat-ease) 160ms; }
+.scd .scd-oldsub { transition: opacity 220ms ease 260ms, transform 320ms var(--sat-ease) 260ms; }
+.scd .scd-logo { transition-delay: 0ms; }
+.scd .scd-card:not([data-fixed]) .scd-logo { transition-duration: 160ms, 200ms; }
+.scd .scd-card:not([data-fixed]) .scd-logo-wrap { transition: grid-template-rows 420ms var(--sat-ease) 160ms; }
+
+/* After: the provider moves down a line, the course name takes the top */
+.scd .scd-card[data-fixed] .scd-prov--top { opacity: 0; transform: translateY(23px); transition: opacity 260ms ease 260ms, transform 420ms var(--sat-ease) 260ms; }
+.scd .scd-card[data-fixed] .scd-prov--sub { opacity: 1; transform: none; transition: opacity 260ms ease 260ms, transform 420ms var(--sat-ease) 260ms; }
+.scd .scd-card[data-fixed] .scd-course { opacity: 1; transform: none; transition: opacity 260ms ease 380ms, transform 420ms var(--sat-ease) 380ms; }
+.scd .scd-card[data-fixed] .scd-oldsub { opacity: 0; transform: translateY(6px); transition: opacity 200ms ease 120ms, transform 320ms var(--sat-ease) 120ms; }
+
+.scd .scd-facts { margin-top: 16px; }
+
+/* Card by card: each later card starts a beat after the one before */
+.scd .scd-card[data-fixed]:nth-child(2) .scd-logo { transition-delay: 240ms; }
+.scd .scd-card[data-fixed]:nth-child(2) .scd-prov--top,
+.scd .scd-card[data-fixed]:nth-child(2) .scd-prov--sub { transition-delay: 340ms; }
+.scd .scd-card[data-fixed]:nth-child(2) .scd-course { transition-delay: 460ms; }
+.scd .scd-card[data-fixed]:nth-child(2) .scd-oldsub { transition-delay: 200ms; }
+.scd .sat-group + .sat-group .scd-card[data-fixed] .scd-logo-wrap { transition-delay: 160ms; }
+.scd .sat-group + .sat-group .scd-card[data-fixed] .scd-logo { transition-delay: 320ms; }
+.scd .sat-group + .sat-group .scd-card[data-fixed] .scd-prov--top,
+.scd .sat-group + .sat-group .scd-card[data-fixed] .scd-prov--sub { transition-delay: 420ms; }
+.scd .sat-group + .sat-group .scd-card[data-fixed] .scd-course { transition-delay: 540ms; }

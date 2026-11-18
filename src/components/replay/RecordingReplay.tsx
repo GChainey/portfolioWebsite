@@ -82,7 +82,8 @@ export function RecordingReplay({ src, region, aspectRatio, notes, bar = true, t
       if (player.current) { if (carding.current) fromTop(player.current); else player.current.play(); return }
       const [{ Replayer }, rec] = await Promise.all([
         import('@rrweb/replay'),
-        fetch(src).then((r) => r.json() as Promise<Recording>),
+        // In development, always the file on disk: re-recorded clips keep their names
+        fetch(src, { cache: process.env.NODE_ENV === 'development' ? 'no-store' : 'default' }).then((r) => r.json() as Promise<Recording>),
       ])
       if (cancelled || !root.current) return
       setSize({ width: rec.meta.width, height: rec.meta.height })

@@ -1,7 +1,9 @@
 'use client'
+/* eslint-disable @next/next/no-img-element -- the screenshots are already sized webps */
 
 import Link from 'next/link'
 import { MarkedUp } from '@/components/MarkedUp'
+import { Compare } from '@/components/site/compare'
 import { FIRST, FRAME, LAST } from '@/content/apps-table-notes'
 import { GREY, Headline, INK, Moment } from '@/components/site/style'
 
@@ -24,6 +26,16 @@ export default function DraftAppsTable() {
           <Headline as="h1" lead="The Apps table, first and last." rest="Nine weeks apart." />
           <p>The first version was the table every admin page has. Every number was true, and none of them told the person who owns the apps where to go next.</p>
         </section>
+
+        <Moment mat line="First and last, one over the other.">
+          <Compare
+            label="Compare the first Apps table with the latest"
+            beforeLabel="First, 8 Sep"
+            afterLabel="Last, 13 Nov"
+            before={<img src="/case-studies/apps-table/first.webp" alt="" className="block h-full w-full" draggable={false} />}
+            after={<img src="/case-studies/apps-table/last.webp" alt="" className="block w-full" style={{ aspectRatio: '4 / 3' }} draggable={false} />}
+          />
+        </Moment>
 
         <Moment mat line="First, 8 September: a list of apps with their status and counts.">
           <MarkedUp src="/case-studies/apps-table/first.webp" alt="The first Apps table: four totals, then each app with a Live or Draft badge, submissions, completion, when it was edited and a Settings button" frame={FRAME} notes={FIRST} />

@@ -8,6 +8,9 @@ import type { Study } from '@/components/site/case-study'
 
 const BP = '/case-studies/bestpractice-booking'
 const SEEK = '/case-studies/seek-learning'
+// The Best Practice recordings, cropped to the dialog (it sits at 40,40 and opens to 880 × 624 in a
+// 960 × 704 recording), so its text renders as large as the column allows
+const BP_DIALOG = { x: 24, y: 24, width: 912, height: 656 }
 const SITE = '/case-studies/html-brand-website'
 
 export const STUDIES: Study[] = [
@@ -15,6 +18,7 @@ export const STUDIES: Study[] = [
     slug: 'daisy-assess',
     label: 'DAISY Assess',
     meta: 'Enterprise AI, 2025',
+    role: 'Sole designer, working with sales. I designed and built it',
     lead: 'Building with AI, I answered tenders with a working product, not a Figma prototype.',
     rest: 'It showed real functionality, and how we use the technology on real problems.',
     rows: [['Signed deals', '$2 million so far'], ['Tenders', 'More than one, from the same prototype'], ['Markets', '2, English and Polish'], ['Engineering', 'Still the design they build from']],
@@ -38,6 +42,7 @@ export const STUDIES: Study[] = [
     slug: 'website',
     label: 'An agent-built website',
     meta: 'Enterprise AI, 2026',
+    role: 'Wrote the brand files, designed the site with agents, ran the tests',
     lead: 'Our brand, written as files agents build from.',
     rest: 'Then a website explored with models, refined into the brand and tested.',
     rows: [['Status', 'Released'], ['Impact', 'Recently released, so still to come'], ['Got the message', '2 of 5, then 5 of 7']],
@@ -62,6 +67,7 @@ export const STUDIES: Study[] = [
     slug: 'configurator',
     label: 'Testing on live models',
     meta: 'Enterprise AI, 2025–26',
+    role: 'Designed and built it in code, ahead of engineering',
     lead: 'Ahead of development, I built the product, lite.',
     rest: 'An LLM product has to be designed past the happy path.',
     rows: [['Model speed', 'About 6s on GPT-4.1, 21s on GPT-5 mini'], ['Result', 'Changed the product’s direction']],
@@ -83,30 +89,180 @@ export const STUDIES: Study[] = [
     slug: 'seek',
     label: 'SEEK',
     meta: '2024',
-    lead: 'The first release missed, so we followed the funnel.',
-    rest: 'Three leaks, fixed one assumption at a time.',
-    rows: [['Education conversion', '9% → 20%, against a goal of 12%'], ['Paid connections', '+34%, against a goal of 10 to 15%']],
+    // For a recruiter: what moved, in words that travel. "Education conversion" is the share of people
+    // who saw the courses and signed up with a provider; a paid connection is the premium lead SEEK
+    // charges providers for
+    role: 'Lead designer, in a team of seven',
+    lead: 'We more than doubled a sign-up funnel, from 9% to 20%.',
+    rest: 'A launch that missed its goal, turned round in a week or two, one step of the funnel at a time.',
+    rows: [
+      ['Sign-up conversion', '9% → 20%, against a goal of 12%'],
+      ['Premium connections', '+34%, against a goal of 10 to 15%'],
+      ['Release to fixes', 'A week or two'],
+      ['Rolled out to', 'All 3,000+ career pages'],
+    ],
     blocks: [
-      { moment: { video: `${SEEK}/final-desktop.mp4`, ratio: 1506 / 978 }, line: 'The course finder on a role page, as it shipped.' },
-      { lead: 'One leak at a time.', rest: 'A five-stage funnel, one assumption for each.' },
-      { moment: { video: `${SEEK}/all-tab.mp4`, ratio: 540 / 1114 }, line: 'An All tab, made the default. The tabs are still there as shortcuts.' },
-      { moment: { video: `${SEEK}/flyout.mp4`, ratio: 1600 / 1166 }, line: 'A course card opens a fly-out: a short summary, Enquire and Visit website.' },
-      { moment: { video: `${SEEK}/connection-mobile.mp4`, ratio: 540 / 1114 }, line: 'On mobile the same thing slides up as a sheet.' },
+      { moment: { replay: '/replays/seek/hero.json', phone: true }, line: 'Courses on a SEEK career page, as they shipped.' },
+
+      // 1. The release
+      {
+        lead: 'We shipped it bare, on purpose.',
+        rest: 'A fast release, and a baseline to measure every fix against.',
+        list: [
+          'The brief: get more job seekers signing up with a course provider from SEEK’s career pages, the pages that describe a job.',
+          'The first release: a list of courses on the page, one tab per qualification.',
+          'Pick a course, read about it, then enquire or visit the provider’s site. That last step is the premium connection providers pay for.',
+        ],
+      },
+      { moment: { replay: '/replays/seek/release.json', phone: true }, line: 'The first release: one qualification at a time.' },
+
+      // 2. The goals, and the miss
+      {
+        lead: 'We set the goals before it went live.',
+        rest: 'The first numbers came back short.',
+        rows: [['Sign-up conversion', '9% → 12%'], ['Premium connections', '+10 to 15%']],
+        body: 'The tempting move was a redesign. We went to the data instead.',
+      },
+
+      // 3. The funnel
+      { lead: 'We laid the journey out as a funnel.', rest: 'Five steps, and people were dropping out at three. One assumption for each, and within a week or two a fix out for each.' },
+      {
+        moment: {
+          funnel: {
+            stages: [
+              { label: 'Sees the courses' },
+              { label: 'Finds the right course', assumption: 'Too much friction to find a course', fix: 'An All tab, made the default', href: '#find' },
+              { label: 'Picks a course', assumption: 'Missing design details', fix: 'Logo and course name first', href: '#pick' },
+              { label: 'Reads about it' },
+              { label: 'Enquires or visits', assumption: 'Too long to make a connection', fix: 'Enquire in place, in a sheet', href: '#connect' },
+            ],
+            before: { label: 'First release', result: '9%', widths: [100, 78, 58, 52, 44] },
+            after: { label: 'After the fixes', result: '20%', widths: [100, 94, 88, 84, 78] },
+          },
+        },
+        line: 'Switch between the first release and the fixes. One assumption where people dropped out, one small fix for each, measured one at a time.',
+      },
+
+      // 4. Piece by piece
+      {
+        id: 'find',
+        lead: 'Too much friction to find a course.',
+        rest: 'So, an All tab, made the default.',
+        body: 'You had to work through the tabs one at a time to see what was on offer. Now every qualification is on one page, and the tabs are still there as shortcuts.',
+      },
+      { moment: { scene: 'seek-all-tab' }, line: 'The first release swapped the list a tab at a time. The fix: an All tab, first and selected, with every qualification on one scroll and the tabs kept as shortcuts.' },
+      {
+        id: 'pick',
+        lead: 'Missing design details.',
+        rest: 'So, the provider’s logo and the course name first.',
+        body: 'The first cards were mostly text, with the provider’s name where the course name should be. The new card leads with the logo and the course, then the provider, how long it takes, where and when.',
+      },
+      { moment: { scene: 'seek-cards' }, line: 'Before the fix, every card read the same: text only, the provider where the course goes. After it, each card leads with the provider’s logo and the course name, with the provider under it.' },
+      {
+        id: 'connect',
+        lead: 'Too long to make a connection.',
+        rest: 'So, it moved into a sheet on the same page.',
+        body: 'A course took you off the career page to a separate course page, and only there could you ask the provider for more.',
+      },
+      { moment: { scene: 'seek-connect' }, line: 'Before the fix, a course opened its own page and the form another. After it, the course opens in a sheet over the same page, and Enquire turns the sheet into the form.' },
+
+      // 5. The impact
+      {
+        lead: 'All three fixes together beat the goals.',
+        rest: 'So it went to every career page.',
+        rows: [
+          ['Sign-up conversion', '9% → 20%, goal 12%'],
+          ['Premium connections', '+34%, goal 10 to 15%'],
+          ['Whole-page conversion', '5% → 9%'],
+          ['Rolled out to', 'All 3,000+ career pages'],
+        ],
+      },
+
+      // Why it travels: the method, not the courses
+      {
+        lead: 'It works on any funnel.',
+        rest: 'Sign-up, checkout, onboarding: the same four moves.',
+        list: [
+          'Ship small and early, so you have a baseline to measure against.',
+          'Lay the journey out as steps, and find where people drop out.',
+          'Write down one assumption for each place people drop out.',
+          'Ship one small fix for each, and measure each on its own.',
+        ],
+      },
+      {
+        lead: 'What I took from it.',
+        list: [
+          'A usability test tells you whether people can use something, not whether they will. The tabs passed testing and still lost people.',
+          'A release is where the work starts, not where it ends.',
+        ],
+      },
     ],
   },
   {
     slug: 'bestpractice',
     label: 'Best Practice',
     meta: '2021',
-    lead: 'Booking an appointment, in two panels.',
-    rest: 'Repeats and injury claims fit in without the dialog getting any longer.',
-    rows: [['Tested with', '5 people, on a Figma prototype'], ['They', 'Understood it, and could tell an appointment’s state at a glance']],
+    // Crafting a better experience from a design that had grown unwieldy. What made it robust was a
+    // few reusable patterns (after Christopher Alexander's pattern language): a second panel for room,
+    // a row that holds any kind of answer, one control for the choices. No numbers were measured in
+    // testing, so none are claimed. Recreated in Fluent 2: recordings (recreations/bestpractice,
+    // scripts/replays/bestpractice.mjs) and Stageshow scenes (components/stageshow/Bp*.tsx)
+    role: 'Lead designer, in a team of five',
+    lead: 'Crafting a better booking experience from a dialog that had grown unwieldy.',
+    rest: 'A few reusable patterns made it robust enough for features that didn’t exist yet.',
+    rows: [
+      ['Patterns', 'A second panel, a row that holds any answer, one control for the choices'],
+      ['Tested with', '5 people: they understood it and could finish the workflows'],
+      ['Used by', 'Australia’s largest practice management system'],
+    ],
     blocks: [
-      { moment: { video: `${BP}/final.mp4`, ratio: 1600 / 986 }, line: 'Provider, date and time in one row, and the row is the door to the right panel.' },
-      { lead: 'Small decisions, all the way down.', rest: 'Three toggles became one segmented control.' },
-      { moment: { video: `${BP}/repeat.mp4`, ratio: 1600 / 1148 }, line: 'A repeat collapses into one line: every 2 weeks, 3 of 5 occurrences.' },
-      { moment: { video: `${BP}/provider-dates.mp4`, ratio: 1600 / 986 }, line: 'Each provider has their own date.' },
-      { moment: { video: `${BP}/unavailable.mp4`, ratio: 1600 / 986 }, line: 'An unavailable provider shows their next free time, one click from it.' },
+      { moment: { replay: '/replays/bestpractice/final.json', ground: true, region: BP_DIALOG }, line: 'Open the details, pick a provider and a time, and the row fills in.' },
+
+      {
+        lead: 'Every feature had made it longer.',
+        rest: 'Booking is what a receptionist does all day.',
+        body: 'Repeats, the waiting list and urgent appointments were each added inline, so the dialog grew down the screen and could be switched into combinations that made no sense.',
+      },
+      { moment: { scene: 'bp-old-dialog' }, line: 'The old dialog: every switch adds its fields, and it keeps growing.' },
+
+      {
+        lead: 'Three answers, one row.',
+        rest: 'Provider, date and time answer one question, so they became one component.',
+        body: 'The row reads at a glance and is the door to a second panel, where there’s room to do the work. When you’re done the panel gets out of the way and the row fills in.',
+      },
+      { moment: { scene: 'bp-details-row' }, line: 'Three fields merge into one row; the row opens the panel, a time is picked, the row fills in.' },
+
+      { lead: 'One control, one choice.', rest: 'Three switches allowed combinations that made no sense.' },
+      { moment: { scene: 'bp-segmented' }, line: 'One choice at a time: picking the waiting list lets go of Repeat, and what it sets up opens right under it.', was: { media: { scene: 'bp-old-dialog' }, line: 'Before: three switches, on in any combination, each adding its own fields.' } },
+
+      { lead: 'A repeat in one line.', rest: 'Set up in the second panel, folded into the row.' },
+      { moment: { scene: 'bp-repeat' }, line: 'Set up beside the appointment, then folded into one line: every 2 weeks, 3 times, the next and final dates under it.', was: { media: { scene: 'bp-old-dialog' }, line: 'Before: the repeat’s fields added inline, and the dialog kept growing.' } },
+
+      { lead: 'Never a dead end.', rest: 'Found in testing: a provider with nothing free shows their next time, one click away.' },
+      { moment: { scene: 'bp-next-available' }, line: 'The next available time is a link; one click and that day opens with the time picked.', was: { media: { image: `${BP}/fluent-iter-empty.png`, ratio: 1088 / 1010 }, line: 'Before: a provider with nothing free was an empty tab, and nowhere to go from it.' } },
+
+      { lead: 'Each provider, their own day.', rest: 'Also from testing: receptionists compare providers across days.' },
+      { moment: { scene: 'bp-provider-dates' }, line: 'Dominique moves to the 26th; Yarn stays on the 25th.' },
+
+      { lead: 'Ready for what came next.', rest: 'An injury claim, a workflow still to come, used the same patterns.' },
+      { moment: { replay: '/replays/bestpractice/injury-claim.json', ground: true, region: BP_DIALOG }, line: 'A row on the left, the work in the second panel: the claim lands in the row.' },
+
+      {
+        lead: 'Patterns made it robust.',
+        rest: 'New workflows reused them instead of adding to the dialog.',
+        body: 'A [pattern language](https://en.wikipedia.org/wiki/A_Pattern_Language), in Christopher Alexander’s sense. Three of them:',
+        list: [
+          'A second panel, for room to work.',
+          'A row that holds any answer and opens the panel.',
+          'One control for the choices.',
+        ],
+      },
+      { moment: { scene: 'bp-final' }, line: 'Where it landed: the appointment on the left, the work on the right.' },
+
+      {
+        lead: 'Five people, the same booking tasks.',
+        rest: 'They understood it, could finish the workflows and could read an appointment at a glance.',
+      },
     ],
   },
 ]

@@ -5,8 +5,9 @@ import Link from 'next/link'
 import { ChevronDown } from 'lucide-react'
 import { GitHubContributions } from '@/components/GitHubContributions'
 import { Media, heroItem } from '@/components/HomeShowcase'
-import { SHOWCASE_SECTIONS } from '@/content/home-showcase'
+import { ALL_PIECES } from '@/content/home-showcase'
 import { RfpLetter } from '@/components/stageshow/RfpLetter'
+import { ThesisEvidence } from '@/components/stageshow/ThesisEvidence'
 import { TESTIMONIALS } from '@/content/testimonials'
 import { CompanyPeek } from '@/components/site/companies'
 import { PARKED_LIVE } from '@/content/parked'
@@ -42,32 +43,37 @@ const ABOUT: { lead: string; rest: string }[] = [
 // piece: the homepage showcase's piece (content/home-showcase), whose hero clip plays here: the
 // real page as an HTML replay (or the real video), so it's sharp at any size. On the card it sits
 // inset on the grey, by the padding the controls set
-const PRODUCTS: { name: string; href: string; landing: string; piece: string }[] = [
-  { name: 'Shader Wall', href: 'https://www.shaderwall.com', landing: '/draft/landing-shaderwall.jpg', piece: 'shader-wall' },
-  { name: 'Dispatch', href: 'https://www.dispatchmac.com', landing: '/draft/landing-dispatch.jpg', piece: 'dispatch' },
-  { name: 'Thesis', href: 'https://thesis-phi-self.vercel.app', landing: '/draft/landing-thesis.jpg', piece: 'thesis' },
+// desc: what the thing is, one line under its card, so the card says it without a hover or a click
+// scene: a Stageshow scene in place of the recorded clip (Thesis: the product at work, not its site)
+const PRODUCTS: { name: string; desc: string; href: string; landing: string; piece: string; scene?: ReactNode }[] = [
+  { name: 'Shader Wall', desc: 'A Mac app for shader wallpapers. Tune one with sliders, or ask your agent.', href: 'https://www.shaderwall.com', landing: '/draft/landing-shaderwall.jpg', piece: 'shader-wall' },
+  { name: 'Dispatch', desc: 'Send articles to your Kindle in one click, from the browser, the Mac or a bot.', href: 'https://www.dispatchmac.com', landing: '/draft/landing-dispatch.jpg', piece: 'dispatch' },
+  { name: 'Thesis', desc: 'Bringing product thinking to the agentic era: every claim checked against your research and data, or a test drafted to run.', href: 'https://thesis-phi-self.vercel.app', landing: '/draft/landing-thesis.jpg', piece: 'thesis', scene: <ThesisEvidence filled /> },
 ]
 
 // piece as the products; the RFP's is its Stageshow scene, which fills its card instead. A /draft/
 // href is a short case study still on the dev server only: off it, the name is plain text
-const PROJECTS: { name: string; year: string; href?: string; piece: string; scene?: ReactNode }[] = [
-  { name: 'Winning a tender', year: '2025', href: '/work/rfp', piece: 'rfp', scene: <RfpLetter filled /> },
-  { name: 'Testing on live models', year: '2025–26', href: '/draft/configurator', piece: 'configurator' },
-  { name: 'An agent-built website', year: '2026', href: '/draft/website', piece: 'html-brand-website' },
+const PROJECTS: { name: string; desc: string; year: string; href?: string; piece: string; scene?: ReactNode }[] = [
+  { name: 'Winning a tender', desc: 'A working product, not mock-ups, that answered a state government tender.', year: '2025', href: '/work/rfp', piece: 'rfp', scene: <RfpLetter filled /> },
+  { name: 'Testing on live models', desc: 'Built in code on real models, where a Figma prototype couldn’t answer the question.', year: '2025–26', href: '/draft/configurator', piece: 'configurator' },
+  { name: 'An agent-built website', desc: 'Our brand written as files agents build from, then the website built from them.', year: '2026', href: '/draft/website', piece: 'html-brand-website' },
 ]
 
 // Before AI: the earlier work, on its own rail
 const BEFORE_AI: typeof PROJECTS = [
-  { name: 'SEEK, fixing the funnel', year: '2024', href: '/draft/seek', piece: 'seek' },
-  { name: 'Booking in two panels', year: '2021', href: '/draft/bestpractice', piece: 'bestpractice' },
+  { name: 'SEEK, fixing the funnel', desc: 'A launch that missed its goal, then sign-ups from 9% to 20%, one step at a time.', year: '2024', href: '/draft/seek', piece: 'seek' },
+  { name: 'Booking in two panels', desc: 'A booking dialog that had grown unwieldy, rebuilt from a few reusable patterns.', year: '2021', href: '/draft/bestpractice', piece: 'bestpractice' },
 ]
 
 // Creative: the games, on their own rail
 const CREATIVE: typeof PROJECTS = [
-  { name: 'Opportunity sizing x Balatro', year: '2026', href: '/projects/balatro-opportunity-sizing', piece: 'balatro' },
-  { name: 'Wallbounce', year: '2026', href: '/projects/wallbounce-dev-tools', piece: 'wallbounce' },
+  { name: 'Opportunity sizing x Balatro', desc: 'Sizing a product bet, played like the card game: each number deals its card.', year: '2026', href: '/projects/balatro-opportunity-sizing', piece: 'balatro' },
+  { name: 'Wallbounce', desc: 'A small top-down game, made with the dev tools an agent built for it.', year: '2026', href: '/projects/wallbounce-dev-tools', piece: 'wallbounce' },
 ]
 
+
+// The header, the statement and the graph sit 72px apart, whatever the gap between sections
+const INTRO_PULL = 'calc(72px - var(--sec))'
 
 const WORD_START = 0.3
 const WORD_STEP = 0.04
@@ -106,7 +112,7 @@ const CSS = `
 @media (prefers-reduced-motion: reduce) { .dr-word, .dr-fog, .dr-rise { animation: none; opacity: 1; } .dr-peek-card, .dr-peek:hover .dr-peek-card { transform: translateX(-50%); } }
 `
 
-const PIECES = Object.fromEntries(SHOWCASE_SECTIONS.flatMap((sec) => sec.pieces).map((p) => [p.id, p]))
+const PIECES = Object.fromEntries(ALL_PIECES.map((p) => [p.id, p]))
 // The clips are laid out on the showcase's 1600x1000 stage
 const RATIO = 1.6
 
@@ -163,7 +169,10 @@ function Rail<T>({ items, render, label, hideLabel = false }: { items: T[]; rend
     return () => io.disconnect()
   }, [])
   const [at, setAt] = useState(0)
-  const COL = 'min(540px, calc(100vw - 48px))'
+  // The row breaks out of the text column to the window's edges; the card in focus sits centred,
+  // as wide as --card-w (which can be wider than the text)
+  const TEXT = 'min(540px, calc(100vw - 48px))'
+  const COL = 'min(var(--card-w), calc(100vw - 48px))'
   const onScroll = () => {
     const el = row.current
     const s = el?.querySelectorAll<HTMLElement>('[data-slide]')
@@ -176,8 +185,8 @@ function Rail<T>({ items, render, label, hideLabel = false }: { items: T[]; rend
       <div
         ref={row}
         onScroll={onScroll}
-        className="scrollbar-hide flex snap-x snap-mandatory gap-8 overflow-x-auto overscroll-x-contain"
-        style={{ marginInline: `calc((${COL} - 100vw) / 2)`, paddingInline: `calc((100vw - ${COL}) / 2)`, scrollPaddingInline: `calc((100vw - ${COL}) / 2)` }}
+        className="scrollbar-hide flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain"
+        style={{ gap: 'var(--cards)', marginInline: `calc((${TEXT} - 100vw) / 2)`, paddingInline: `calc((100vw - ${COL}) / 2)`, scrollPaddingInline: `calc((100vw - ${COL}) / 2)` }}
       >
         {items.map((item, i) => (
           <div key={i} data-slide className="shrink-0 snap-center transition-[transform,opacity] duration-500 ease-[cubic-bezier(.23,1,.32,1)] motion-reduce:transition-none" style={{ width: COL, transform: i === at ? undefined : 'scale(0.8)', opacity: i === at ? 1 : 0.7 }}>
@@ -214,7 +223,7 @@ function WorkCard({ p, focus, near, pad }: { p: (typeof PROJECTS)[number]; focus
   const card = (
     <div className="flex flex-col gap-4">
       {p.scene ? <Framed pad={pad} ratio={RATIO}><div className="absolute inset-0">{p.scene}</div></Framed> : <Framed pad={pad} ratio={RATIO}><Live id={p.piece} focus={focus} near={near} /></Framed>}
-      <div className="flex justify-between gap-4"><span>{p.name}</span><span className="tabular-nums" style={{ color: GREY }}>{p.year}</span></div>
+      <div className="flex flex-col"><div className="flex justify-between gap-4"><span>{p.name}</span><span className="tabular-nums" style={{ color: GREY }}>{p.year}</span></div><p className="text-pretty" style={{ color: GREY }}>{p.desc}</p></div>
     </div>
   )
   const href = liveHref(p.href)
@@ -262,11 +271,43 @@ let introPlayed = false
 // Where the page was when you left it, so coming back puts you there again
 let leftAt = 0
 
-// Dev server only: one panel, bottom left, to flip between the versions under review (the EAI line).
-// Each change is written to the URL, so a version can be shared
+// The page's spacing, as CSS variables on the page so the sliders can move them without a render:
+// between sections, from a section's sentence to its cards, between the cards in a row, and how
+// wide a card is (the text column stays 540). Defaults are Gareth's pick (2026-11-18); ?sec= ?intro= ?cards= ?w=
+const SPACE = [
+  { key: 'sec', css: '--sec', label: 'Between sections', min: 80, max: 400, step: 8, value: 240 },
+  { key: 'intro', css: '--intro', label: 'Sentence to cards', min: 24, max: 160, step: 8, value: 80 },
+  { key: 'cards', css: '--cards', label: 'Between cards', min: 16, max: 320, step: 4, value: 200 },
+  { key: 'w', css: '--card-w', label: 'Card width', min: 540, max: 900, step: 10, value: 540 },
+] as const
+type SpaceKey = (typeof SPACE)[number]['key']
+type Space = Record<SpaceKey, number>
+const SPACE_DEFAULT = Object.fromEntries(SPACE.map((k) => [k.key, k.value])) as Space
+const spaceVars = (v: Space) => Object.fromEntries(SPACE.map((k) => [k.css, `${v[k.key]}px`]))
+function spaceFromUrl(): Space {
+  const q = new URLSearchParams(window.location.search)
+  return Object.fromEntries(SPACE.map((k) => {
+    const n = Number(q.get(k.key))
+    return [k.key, q.has(k.key) && n >= k.min && n <= k.max ? n : k.value]
+  })) as Space
+}
+
+// Dev server only: one panel, bottom left, to flip between the versions under review (the EAI line)
+// and tune the spacing. Each change is written to the URL, so a version can be shared
 type Review = { about: number }
-function ReviewPanel({ r, set }: { r: Review; set: (r: Review) => void }) {
+function ReviewPanel({ r, set, page }: { r: Review; set: (r: Review) => void; page: React.RefObject<HTMLDivElement> }) {
   const [open, setOpen] = useState(true)
+  const [space, setSpace] = useState<Space>(SPACE_DEFAULT)
+  useEffect(() => setSpace(spaceFromUrl()), [])
+  // Straight onto the page's style, then the URL: the page itself doesn't re-render while dragging
+  const move = (next: Space) => {
+    setSpace(next)
+    SPACE.forEach((k) => page.current?.style.setProperty(k.css, `${next[k.key]}px`))
+    const q = new URLSearchParams(window.location.search)
+    SPACE.forEach((k) => next[k.key] === k.value ? q.delete(k.key) : q.set(k.key, String(next[k.key])))
+    window.history.replaceState(null, '', `${window.location.pathname}${q.size ? `?${q}` : ''}`)
+  }
+  const changed = SPACE.some((k) => space[k.key] !== k.value)
   if (!PARKED_LIVE) return null
   const seg = <V extends string | number>(label: string, value: V, options: [V, string][], on: (v: V) => void, off = false) => (
     <div className="flex flex-col gap-1" style={{ opacity: off ? 0.4 : 1 }}>
@@ -285,6 +326,15 @@ function ReviewPanel({ r, set }: { r: Review; set: (r: Review) => void }) {
         <>
           {seg('EAI line', r.about, ABOUT.map((_, i) => [i, String(i + 1)] as [number, string]), (about) => set({ ...r, about }))}
           <p className="px-1 text-pretty" style={{ color: GREY }}>{ABOUT[r.about].lead} {ABOUT[r.about].rest}</p>
+          <div className="flex flex-col gap-2 border-t px-1 pt-3" style={{ borderColor: LINE }}>
+            <div className="flex justify-between"><span>Spacing</span>{changed && <button type="button" onClick={() => move(SPACE_DEFAULT)} style={{ color: GREY }} className="dr-link">Reset</button>}</div>
+            {SPACE.map((k) => (
+              <label key={k.key} className="flex flex-col gap-0.5">
+                <span className="flex justify-between" style={{ color: GREY }}><span>{k.label}</span><span className="tabular-nums" style={{ color: space[k.key] === k.value ? GREY : INK }}>{space[k.key]}</span></span>
+                <input type="range" min={k.min} max={k.max} step={k.step} value={space[k.key]} onChange={(e) => move({ ...space, [k.key]: Number(e.target.value) })} className="w-full" style={{ accentColor: INK }} />
+              </label>
+            ))}
+          </div>
         </>
       )}
     </nav>
@@ -305,6 +355,10 @@ export default function Home() {
     return () => window.removeEventListener('scroll', keep)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
   const [copied, setCopied] = useState(false)
+  // Spacing: the live defaults, or the URL's (?sec= ?intro= ?cards= ?w=), as CSS variables on the page
+  const page = useRef<HTMLDivElement>(null)
+  const [space, setSpace] = useState<Space>(SPACE_DEFAULT)
+  useEffect(() => setSpace(spaceFromUrl()), [])
   // The EAI line under review, set from the panel (dev server only) or the URL: ?about=1-5
   const [review, setReview] = useState<Review>({ about: 1 })
   const { about } = review
@@ -337,21 +391,21 @@ export default function Home() {
   const rise = (i: number) => ({ animationDelay: `${2.6 + i * 0.1}s` })
 
   return (
-    <div className={`min-h-screen overflow-x-clip bg-white text-[15px] leading-[22px] ${intro ? '' : 'dr-still'}`} style={{ color: INK }}>
+    <div ref={page} className={`min-h-screen overflow-x-clip bg-white text-[15px] leading-[22px] ${intro ? '' : 'dr-still'}`} style={{ color: INK, ...spaceVars(space) } as React.CSSProperties}>
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
-      <main className="mx-auto flex max-w-[588px] flex-col gap-[120px] px-6 pb-16 pt-16">
+      <main className="mx-auto flex max-w-[588px] flex-col px-6 pb-16 pt-16" style={{ gap: 'var(--sec)' }}>
         <header className="dr-fog flex items-start justify-between" style={fog}>
           <div className="flex flex-col"><Link href="/">Gareth Chainey</Link><span style={{ color: GREY }}>Product designer</span></div>
           <span style={{ color: GREY }}>New York</span>
         </header>
 
-        <h1 className="-mt-12 text-[24px] font-normal leading-[30px] tracking-[-0.02em] text-pretty">{statement}</h1>
+        <h1 className="text-[24px] font-normal leading-[30px] tracking-[-0.02em] text-pretty" style={{ marginTop: INTRO_PULL }}>{statement}</h1>
 
         {/* The contributions: the change in the role, from designing to building */}
-        <div className="dr-fog dr-gh -mt-12" style={fog}><GitHubContributions variant="full" animate={intro} /></div>
+        <div className="dr-fog dr-gh" style={{ ...fog, marginTop: INTRO_PULL }}><GitHubContributions variant="full" animate={intro} /></div>
 
         {/* The products I build alongside the day job, then the day job */}
-        <section className="dr-fog flex flex-col gap-16" style={fog}>
+        <section className="dr-fog flex flex-col" style={{ ...fog, gap: 'var(--intro)' }}>
           <Headline
             as="p"
             lead="Alongside the day job, I build my own products."
@@ -365,8 +419,8 @@ export default function Home() {
             items={PRODUCTS}
             render={(p, focus, near) => (
               <a href={p.href} target="_blank" rel="noopener noreferrer" className="flex flex-col gap-4">
-                <Framed pad={PAD} ratio={RATIO}><Live id={p.piece} focus={focus} near={near} /></Framed>
-                <span>{p.name}</span>
+                <Framed pad={PAD} ratio={RATIO}>{p.scene ? <div className="absolute inset-0">{p.scene}</div> : <Live id={p.piece} focus={focus} near={near} />}</Framed>
+                <span className="flex flex-col"><span>{p.name}</span><span className="text-pretty" style={{ color: GREY }}>{p.desc}</span></span>
               </a>
             )}
           />
@@ -375,7 +429,7 @@ export default function Home() {
 
         {/* What I do at EAI, then the projects it covers. The sentence introduces them, so the rail
             has no label */}
-        <section id="projects" className="dr-rise flex scroll-mt-10 flex-col gap-16" style={rise(1)}>
+        <section id="projects" className="dr-rise flex scroll-mt-10 flex-col" style={{ ...rise(1), gap: 'var(--intro)' }}>
           <Headline as="p" lead={withCompanies(ABOUT[about].lead)} rest={withCompanies(ABOUT[about].rest)} />
           <Rail label="Work at Enterprise AI" hideLabel items={PROJECTS} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={PAD} />} />
         </section>
@@ -384,16 +438,16 @@ export default function Home() {
         {/* Companies: hidden for now, they show on hover where their names come up (Co). The cards and
             their review options are in components/site/companies.tsx */}
 
-        <section className="dr-rise flex flex-col gap-16" style={rise(2)}>
+        <section className="dr-rise flex flex-col" style={{ ...rise(2), gap: 'var(--intro)' }}>
           <Headline
             as="p"
             lead="Before AI."
-            rest={<>At <Co name="SEEK" focusable={!liveHref('/draft/seek')}><StudyLink href="/draft/seek">SEEK</StudyLink></Co> I learned a release is where the work starts: follow the funnel, one leak at a time. At <Co name="Best Practice" focusable={!liveHref('/draft/bestpractice')}><StudyLink href="/draft/bestpractice">Best Practice</StudyLink></Co>, the craft was in small decisions, like three toggles becoming one control.</>}
+            rest={<>At <Co name="SEEK" focusable={!liveHref('/draft/seek')}><StudyLink href="/draft/seek">SEEK</StudyLink></Co> I learned a release is where the work starts: follow the funnel, one assumption at a time. At <Co name="Best Practice" focusable={!liveHref('/draft/bestpractice')}><StudyLink href="/draft/bestpractice">Best Practice</StudyLink></Co>, the craft was in small decisions, like three toggles becoming one control.</>}
           />
           <Rail label="Before AI" hideLabel items={BEFORE_AI} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={PAD} />} />
         </section>
 
-        <section className="dr-rise flex flex-col gap-16" style={rise(3)}>
+        <section className="dr-rise flex flex-col" style={{ ...rise(3), gap: 'var(--intro)' }}>
           <Headline as="p" lead="AI enables so much more." rest={<>Internal tools that help build the thing, scratching a curious itch, or dreaming big: {listed(CREATIVE)}</>} />
           <Rail label="Creative" hideLabel items={CREATIVE} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={PAD} />} />
         </section>
@@ -418,7 +472,7 @@ export default function Home() {
           <div className="flex gap-5"><Link href="/essays">Essays</Link><Link href="/cv">CV</Link><a href="https://x.com/garethchainey" target="_blank" rel="noopener noreferrer">X ↗</a><Link href="/changelog">Changelog</Link></div>
         </footer>
       </main>
-      <ReviewPanel r={review} set={changeReview} />
+      <ReviewPanel r={review} set={changeReview} page={page} />
     </div>
   )
 }

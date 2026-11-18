@@ -23,10 +23,11 @@ export const SHELL = '#F4F4F4'
 export const SHADOW = '0 1px 2px rgba(0,0,0,0.04), 0 16px 40px -16px rgba(0,0,0,0.16)'
 
 // A two-tone headline: the claim in ink, the rest in grey, one size
-export function Headline({ lead, rest, as: Tag = 'h2' }: { lead: ReactNode; rest?: ReactNode; as?: 'h1' | 'h2' | 'p' }) {
+// stacked: the claim on its own line and the rest under it, so a page of them scans (case studies)
+export function Headline({ lead, rest, as: Tag = 'h2', id, stacked = false }: { lead: ReactNode; rest?: ReactNode; as?: 'h1' | 'h2' | 'p'; id?: string; stacked?: boolean }) {
   return (
-    <Tag className="text-[24px] font-normal leading-[30px] tracking-[-0.02em] text-pretty">
-      {lead}{rest && <> <span style={{ color: GREY }}>{rest}</span></>}
+    <Tag id={id} className="scroll-mt-16 text-[24px] font-normal leading-[30px] tracking-[-0.02em] text-pretty">
+      {lead}{rest && (stacked ? <span className="block" style={{ color: GREY }}>{rest}</span> : <> <span style={{ color: GREY }}>{rest}</span></>)}
     </Tag>
   )
 }
@@ -76,7 +77,7 @@ export function Rows({ rows }: { rows: [label: string, value: ReactNode][] }) {
     <dl className="flex flex-col">
       {rows.map(([k, v]) => (
         <div key={k} className="flex justify-between gap-4 border-t py-3" style={{ borderColor: LINE }}>
-          <dt style={{ color: GREY }}>{k}</dt>
+          <dt className="shrink-0" style={{ color: GREY }}>{k}</dt>
           <dd className="text-right tabular-nums">{v}</dd>
         </div>
       ))}
