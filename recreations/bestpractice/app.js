@@ -199,7 +199,7 @@ function repeatPanel() {
   return `<h2 class="title sub">Repeat appointment</h2>
     <div class="body">
       <div class="row2b">
-        <div class="field">${label('Recur every', true)}<div style="display:flex;gap:8px">${spin('every', r.every, 80)}<div style="flex:1">${dropdown('unit', r.unit, 'Select', UNITS)}</div></div></div>
+        <div class="field">${label('Recur every', true)}<div style="display:flex;gap:12px">${spin('every', r.every, 80)}<div style="flex:1">${dropdown('unit', r.unit, 'Select', UNITS)}</div></div></div>
         ${`<div class="field">${label('On', true)}${dropdown('on', r.on, 'Select a day', WEEKDAYS)}</div>`}
       </div>
       <div class="row2b">
