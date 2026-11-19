@@ -53,7 +53,8 @@ async function problem(a: Act<S>) {
 }
 
 // The answer: from the app, the dialog, Done, straight to Configure, then onto the workflow
-async function answer(a: Act<S>) {
+// holds: how long Configure and the live payoff each stay (the answer mode dwells on Configure)
+async function answer(a: Act<S>, holds = { configure: 1100, live: 2600 }) {
   await a.click('turn-on')
   await a.set({ dlg: true })
   a.mark('dialog')
@@ -70,12 +71,12 @@ async function answer(a: Act<S>) {
   await a.wait(420)
   await a.set({ dlg: false })
   a.mark('next')
-  await a.wait(1100)
+  await a.wait(holds.configure)
   await a.click('add-wf')
   await a.set({ page: 'added' })
   await a.move(at(a, REST), { duration: 800 })
   a.mark('payoff')
-  await a.wait(2600)
+  await a.wait(holds.live)
 }
 
 const scripts = {
@@ -94,7 +95,8 @@ const scripts = {
   answer: async (a: Act<S>) => {
     await a.wait(1000)
     a.mark('before')
-    await answer(a)
+    // Landing on Configure is this moment's point: it holds longest, so it doesn't repeat the result's frame
+    await answer(a, { configure: 2400, live: 1400 })
     a.mark('reset')
     await a.click({ at: 'ws-crumb', x: 0.25, y: 0.5 })
     await a.set({ screen: 'home' })
@@ -236,7 +238,9 @@ const LABEL = {
 export function EaiOnward({ bare = true, mode = 'both' }: { bare?: boolean; mode?: Mode } = {}) {
   const fix = mode === 'answer'
   const initial: S = { fix, screen: fix ? 'app' : 'settings', dlg: false, sw: false, toast: false, page: 'off' }
-  const poster: S = mode === 'problem' ? { fix: false, screen: 'home', dlg: false, sw: true, toast: true, page: 'off' } : { fix: true, screen: 'app', dlg: false, sw: true, toast: false, page: 'added' }
+  const poster: S = mode === 'problem' ? { fix: false, screen: 'home', dlg: false, sw: true, toast: true, page: 'off' }
+    : mode === 'answer' ? { fix: true, screen: 'app', dlg: false, sw: true, toast: false, page: 'next' }
+    : { fix: true, screen: 'app', dlg: false, sw: true, toast: false, page: 'added' }
   return (
     <figure className={bare ? 'not-prose eaw eaw--onward eaw--bare' : 'not-prose eaw eaw--onward my-8'} role="img" aria-label={LABEL[mode]}>
       <Stage width={800} height={754} compact={{ below: 600, width: 358, height: 624 }} initial={initial} poster={poster} script={scripts[mode]} play="loop" fill={!bare} cursor={{ at: REST, style: 'large' }} className="eaw">

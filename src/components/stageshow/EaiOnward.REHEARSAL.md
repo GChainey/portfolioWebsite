@@ -39,4 +39,7 @@ through the workspace (the crumb to Home, the page reset off screen, Parking per
 payoff). Stage 800×754 (Documents whole, one gutter under it); compact 358×624, the crop on a row boundary
 of Home's recent apps.
 
+Round 3: the answer mode dwells on landing on Configure (2.4s; "Live" 1.4s) and its poster is that
+moment, so it doesn't repeat the result's "Live" frame. 'both' keeps Configure 1.1s / Live 2.6s.
+
 Not checked: Safari, a real phone, dark theme, live rAF pacing.
