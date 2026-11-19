@@ -10,7 +10,7 @@ stages (admin-ut-parking-seed.js).
 
 Beats (~20s): The problem, as testers did it: workspace settings → AI Chatbot on → toast "AI Chatbot turned
 on." → ✕ → workspace Home, where nothing points to Parking permit and AI Chatbot is still offered under
-"Things you can add" (held 1.5s). The note turns to The fix; the window hands off to Parking permit › AI
+"Things you can add" (held 1.5s). The note turns to The answer; the window hands off to Parking permit › AI
 Chatbot ("Turn on AI Chatbot") → "Turn on in Workspace settings" → the dialog over the pane → switch → Done:
 the page under the scrim is already Configure, then the dialog fades away → "Add to workflow" → in place:
 "Live in Parking permit application", the button "Added", the AI Chatbot chip on Application (payoff,
@@ -32,5 +32,11 @@ Assumptions: "Live in Parking permit application" is the brief's wording (the pr
 column and a toast "AI Chatbot created on …"). Instructions ("Answer in plain, friendly language…") is left
 out: its paragraph can't sit whole above any crop at this width without taking the scene past ~810 tall.
 The settings page that opens the loop is as empty below its card as the real page.
+
+Round 2: designed at 800, shown at 0.9. `mode`: 'problem' loops from Home back into Workspace settings
+(the switch and toast reset off screen; poster: Home with the toast, nothing next); 'answer' loops
+through the workspace (the crumb to Home, the page reset off screen, Parking permit again; poster: the
+payoff). Stage 800×754 (Documents whole, one gutter under it); compact 358×624, the crop on a row boundary
+of Home's recent apps.
 
 Not checked: Safari, a real phone, dark theme, live rAF pacing.

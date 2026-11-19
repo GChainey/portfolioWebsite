@@ -2,19 +2,22 @@
 
 import { Stage } from './kit/stage'
 import type { Act } from './kit/act'
-import { AppScreen, AppShell, Btn, Card, Fade, FeaturesCard, FitFade, Ico, Note, PageHead, Row, Rows, SettingsDialog, SettingsNav, Toast, Win, WsHome, WsScreen, WsSidebar, WsTop, type Layout } from './eai-shell'
+import { AppScreen, AppShell, Btn, Card, Fade, FeaturesCard, FitFade, Ico, Note, PageHead, Row, Rows, SettingsDialog, SettingsNav, Toast, Win, WsHome, WsScreen, WsSidebar, WsTop, type Layout, type Mode } from './eai-shell'
 
 // After turning a feature on: what's next?
 // The problem, as testers did it (every one said they'd finished, having done one step): workspace
 // settings, AI Chatbot on, the toast says so, close, and back on the workspace nothing points to
 // Parking permit, where the chatbot still has to be set up on a workflow. Home still offers AI
 // Chatbot among "Things you can add to your apps".
-// The fix: turned on from the app (the settings dialog over Parking permit's AI Chatbot page), it
+// The answer: turned on from the app (the settings dialog over Parking permit's AI Chatbot page), it
 // lands straight on the next step, "Configure AI Chatbot in Parking permit": the app's workflow and
 // "Add to workflow". One press and the same card says "Live in Parking permit application", the
 // button "Added", the chatbot on the Application stage. Documents below, with its real file.
 //
-// Loop (~20s): settings; the switch, the toast; close; Home (held). The note turns to The fix (the
+// mode: 'problem' loops from Home back into Workspace settings; 'answer' loops through the workspace
+// (the crumb to Home, the page reset out of sight, Parking permit again); 'both' plays the two with the
+// note turning between them. Designed at 800, shown in 720.
+// Both (~20s): settings; the switch, the toast; close; Home (held). The note turns to The answer (the
 // seen cause) and the window hands off to the app; "Turn on in Workspace settings" opens the dialog
 // over the pane (bar, title and rail in view); the switch; Done: the page under the scrim is already
 // Configure, then the dialog fades away; "Add to workflow"; the payoff, held. The note turns back
@@ -22,20 +25,19 @@ import { AppScreen, AppShell, Btn, Card, Fade, FeaturesCard, FitFade, Ico, Note,
 // Poster: the payoff.
 
 type Screen = 'settings' | 'home' | 'app'
-type Page = 'off' | 'next' | 'added'
+export type Page = 'off' | 'next' | 'added'
 // sw: the AI Chatbot switch (one switch, on the page or in the dialog)
 type S = { fix: boolean; screen: Screen; dlg: boolean; sw: boolean; toast: boolean; page: Page }
 
-const initial: S = { fix: false, screen: 'settings', dlg: false, sw: false, toast: false, page: 'off' }
-const poster: S = { fix: true, screen: 'app', dlg: false, sw: true, toast: false, page: 'added' }
-const REST = { wide: { x: 630, y: 128 }, compact: { x: 300, y: 128 } }
-// At rest on Home: right of its title
-const HOME_REST = { wide: { x: 640, y: 128 }, compact: { x: 300, y: 128 } }
+// At rest: right of the page's title (Home: right of its title)
+const REST = { wide: { x: 680, y: 180 }, compact: { x: 300, y: 128 } }
+const HOME_REST = { wide: { x: 700, y: 150 }, compact: { x: 300, y: 128 } }
+const at = (a: Act<S>, p: { wide: { x: number; y: number }; compact: { x: number; y: number } }) => (a.layout === 'compact' ? p.compact : p.wide)
 // Pressed beside the label, not on it
 const DONE = { at: 'done', x: 0.84, y: 0.66 }
 
-async function script(a: Act<S>) {
-  await a.wait(1000)
+// The problem, as testers did it: on in settings, the toast, close, and nothing next
+async function problem(a: Act<S>) {
   a.mark('before')
   await a.click('tog')
   await a.set({ sw: true })
@@ -43,18 +45,15 @@ async function script(a: Act<S>) {
   await a.set({ toast: true })
   a.mark('saved')
   await a.wait(900)
-  // Done, they think: close, and back on the workspace nothing points to Parking permit
   await a.click('close')
   await a.set({ screen: 'home' })
-  await a.move(a.layout === 'compact' ? HOME_REST.compact : HOME_REST.wide, { duration: 800 })
+  await a.move(at(a, HOME_REST), { duration: 800 })
   a.mark('stuck')
   await a.wait(1500)
-  a.mark('fix')
-  await a.set({ fix: true, screen: 'app', toast: false })
-  // The switch resets once the settings page has gone
-  await a.wait(220)
-  await a.set({ sw: false })
-  await a.wait(250)
+}
+
+// The answer: from the app, the dialog, Done, straight to Configure, then onto the workflow
+async function answer(a: Act<S>) {
   await a.click('turn-on')
   await a.set({ dlg: true })
   a.mark('dialog')
@@ -74,16 +73,56 @@ async function script(a: Act<S>) {
   await a.wait(1100)
   await a.click('add-wf')
   await a.set({ page: 'added' })
-  await a.move(a.layout === 'compact' ? REST.compact : REST.wide, { duration: 800 })
+  await a.move(at(a, REST), { duration: 800 })
   a.mark('payoff')
   await a.wait(2600)
-  // The switch resets while it is out of sight, then the window hands off to settings
-  a.mark('reset')
-  await a.set({ sw: false })
-  await a.set({ fix: false, screen: 'settings' })
-  await a.wait(400)
-  await a.set({ page: 'off' })
-  await a.wait(500)
+}
+
+const scripts = {
+  // Loops from Home: Workspace settings again (the switch and toast reset while away)
+  problem: async (a: Act<S>) => {
+    await a.wait(1000)
+    await problem(a)
+    a.mark('reset')
+    await a.set({ toast: false })
+    await a.set({ sw: false })
+    await a.click('ws-settings')
+    await a.set({ screen: 'settings' })
+    await a.wait(500)
+  },
+  // Loops through the workspace: the crumb to Home, the page reset out of sight, Parking permit again
+  answer: async (a: Act<S>) => {
+    await a.wait(1000)
+    a.mark('before')
+    await answer(a)
+    a.mark('reset')
+    await a.click({ at: 'ws-crumb', x: 0.25, y: 0.5 })
+    await a.set({ screen: 'home' })
+    await a.set({ sw: false, page: 'off' })
+    await a.wait(600)
+    await a.click('find-app')
+    await a.set({ screen: 'app' })
+    await a.move(at(a, REST), { duration: 700 })
+    await a.wait(400)
+  },
+  both: async (a: Act<S>) => {
+    await a.wait(1000)
+    await problem(a)
+    a.mark('fix')
+    await a.set({ fix: true, screen: 'app', toast: false })
+    // The switch resets once the settings page has gone
+    await a.wait(220)
+    await a.set({ sw: false })
+    await a.wait(250)
+    await answer(a)
+    // The switch resets while it is out of sight, then the window hands off to settings
+    a.mark('reset')
+    await a.set({ sw: false })
+    await a.set({ fix: false, screen: 'settings' })
+    await a.wait(400)
+    await a.set({ page: 'off' })
+    await a.wait(500)
+  },
 }
 
 // Workspace settings as its own page, where testers turned it on
@@ -106,7 +145,7 @@ const HOW = ['User asks a question', 'AI searches your documents', 'AI follows y
 // steps); on, it is the next step: the workflow and "Add to workflow", its stages under it. Added,
 // the same card changes in place: the line under the title, the button, the chatbot on Application.
 // The chatbot's Documents below, as the prototype has them
-function ChatbotPage({ page, layout }: { page: Page; layout: Layout }) {
+export function ChatbotPage({ page, layout }: { page: Page; layout: Layout }) {
   const added = page === 'added'
   const v = added ? 'added' : 'next'
   return (
@@ -169,12 +208,12 @@ function Scene({ s, layout }: { s: S; layout: Layout }) {
           states={{
             settings: <SettingsPage layout={layout} on={s.sw} />,
             home: (
-              <WsScreen layout={layout} sidebar={<WsSidebar layout={layout} />} top={<WsTop layout={layout} title="Home" />}>
-                <WsHome layout={layout} things />
+              <WsScreen layout={layout} sidebar={<WsSidebar layout={layout} recentTarget={layout === 'wide' ? 'find-app' : undefined} settingsTarget="ws-settings" />} top={<WsTop layout={layout} title="Home" />}>
+                <WsHome layout={layout} things recentTarget={layout === 'compact' ? 'find-app' : undefined} />
               </WsScreen>
             ),
             app: (
-              <AppScreen layout={layout}>
+              <AppScreen layout={layout} wsTarget="ws-crumb">
                 <AppShell layout={layout} title="AI Chatbot" active="chatbot" rail={layout === 'wide'}>
                   <ChatbotPage page={s.page} layout={layout} />
                 </AppShell>
@@ -188,10 +227,19 @@ function Scene({ s, layout }: { s: S; layout: Layout }) {
   )
 }
 
-export function EaiOnward({ bare = true }: { bare?: boolean } = {}) {
+const LABEL = {
+  problem: 'The problem: people turned AI Chatbot on in workspace settings, saw it saved, closed it, and stopped; nothing on the workspace pointed back to the app to set it up',
+  answer: 'The answer: turned on from the app, AI Chatbot lands straight on Configure AI Chatbot in Parking permit; add it to the workflow and it is live on Parking permit application',
+  both: 'The problem: people turned AI Chatbot on in workspace settings and stopped there. The answer: turned on from the app, it lands straight on Configure, and one press puts it live on the workflow',
+}
+
+export function EaiOnward({ bare = true, mode = 'both' }: { bare?: boolean; mode?: Mode } = {}) {
+  const fix = mode === 'answer'
+  const initial: S = { fix, screen: fix ? 'app' : 'settings', dlg: false, sw: false, toast: false, page: 'off' }
+  const poster: S = mode === 'problem' ? { fix: false, screen: 'home', dlg: false, sw: true, toast: true, page: 'off' } : { fix: true, screen: 'app', dlg: false, sw: true, toast: false, page: 'added' }
   return (
-    <figure className={bare ? 'not-prose eaw eaw--onward eaw--bare' : 'not-prose eaw eaw--onward my-8'} role="img" aria-label="The problem: people turned AI Chatbot on in workspace settings, saw it saved, and stopped; nothing pointed back to the app to set it up. The fix: turned on from the app, it lands straight on Configure AI Chatbot in Parking permit; add it to the workflow and it is live on Parking permit application">
-      <Stage width={720} height={750} compact={{ below: 600, width: 358, height: 600 }} initial={initial} poster={poster} script={script} play="loop" fill={!bare} cursor={{ at: REST, style: 'large' }} className="eaw">
+    <figure className={bare ? 'not-prose eaw eaw--onward eaw--bare' : 'not-prose eaw eaw--onward my-8'} role="img" aria-label={LABEL[mode]}>
+      <Stage width={800} height={754} compact={{ below: 600, width: 358, height: 624 }} initial={initial} poster={poster} script={scripts[mode]} play="loop" fill={!bare} cursor={{ at: REST, style: 'large' }} className="eaw">
         {(s, _rect, layout) => <Scene s={s} layout={layout === 'compact' ? 'compact' : 'wide'} />}
       </Stage>
     </figure>

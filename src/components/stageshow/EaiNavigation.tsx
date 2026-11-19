@@ -2,61 +2,69 @@
 
 import { Stage } from './kit/stage'
 import type { Act } from './kit/act'
-import { AppRail, AppShell, AppTop, Btn, Fade, Ico, MoreCard, Note, Win, WsHome, WsScreen, WsSidebar, WsTop, type Layout } from './eai-shell'
+import { AppRail, AppShell, AppTop, Btn, Fade, Ico, MoreCard, Note, Win, WsHome, WsScreen, WsSidebar, WsTop, type Layout, type Mode } from './eai-shell'
 
 // Where am I? Going from the workspace into an app and back.
 // The problem: the first release drew the app the way it drew the workspace: the same grey sidebar
 // beside the same white page, the page's name in the same place. Open Parking permit from Home and
 // the frame doesn't change; only the words in it do.
-// The fix (the prototype today): the levels swap colours. Workspace: grey sidebar, white page. App:
-// the page goes grey, the top bar says NYC Council / Parking permit, and the app is a white card
-// nested in it, white rail, grey pane. Back is the breadcrumb.
+// The answer (the prototype today): workspace = grey sidebar, white page; app = a white card inset on
+// the workspace grey, white rail, grey pane, and the top bar says NYC Council / Parking permit.
 //
-// Loop (~15s): Home → Parking permit → back, as it was; the note turns to The fix (the seen cause);
-// Home → Parking permit (the payoff, held) → NYC Council → Home, and the note turns back.
-// Home is the same in both halves (the workspace didn't change), so the seam is the note alone.
-// Poster: the fixed app screen, the note on The fix.
+// mode: 'problem' loops Home → Parking permit → Back to workspace; 'answer' loops Home → Parking
+// permit → the NYC Council crumb; 'both' plays the two with the note turning between them. Each
+// single mode ends where it began, by its own way back. Designed at 800 wide, shown in the 720 column.
 
 type Screen = 'home' | 'app'
 type S = { fix: boolean; screen: Screen }
 
-const initial: S = { fix: false, screen: 'home' }
-const poster: S = { fix: true, screen: 'app' }
-// At rest: the empty run beside the page's title
-const REST = { wide: { x: 620, y: 140 }, compact: { x: 300, y: 128 } }
+// At rest: right of Home's title; on the app, the top bar's empty run (compact: the rail's empty foot)
+const REST = { wide: { x: 700, y: 150 }, compact: { x: 300, y: 128 } }
+const BAR_REST = { wide: { x: 540, y: 76 }, compact: { x: 58, y: 470 } }
+const at = (a: Act<S>, p: { wide: { x: number; y: number }; compact: { x: number; y: number } }) => (a.layout === 'compact' ? p.compact : p.wide)
 
-async function script(a: Act<S>) {
-  const wide = a.layout !== 'compact'
-  await a.wait(1000)
-  a.mark('before')
+// Home → the app → back. The problem goes back with "Back to workspace", the answer with the crumb
+async function visit(a: Act<S>, back: 'back' | 'ws-crumb', hold: number, mark: string) {
   await a.click('open-app')
   await a.set({ screen: 'app' })
-  // Rests in the top bar's empty run, the same spot as the fix's payoff, so the two compare
-  await a.move(wide ? { x: 476, y: 72 } : { x: 58, y: 470 }, { duration: 900 })
-  a.mark('same')
-  await a.wait(1600)
-  await a.click('back')
+  await a.move(at(a, BAR_REST), { duration: 900 })
+  a.mark(mark)
+  await a.wait(hold)
+  // The crumb is pressed in the gap between the workspace's mark and its name
+  await a.click(back === 'back' ? 'back' : { at: 'ws-crumb', x: 0.25, y: 0.5 })
   await a.set({ screen: 'home' })
-  await a.move(a.layout === 'compact' ? REST.compact : REST.wide, { duration: 800 })
-  await a.wait(500)
-  // The fix starts on the click into the app
-  a.mark('fix')
-  await a.set({ fix: true })
-  await a.wait(250)
-  await a.click('open-app')
-  await a.set({ screen: 'app' })
-  // Rests in the top bar's empty run (compact: the rail's empty foot), near the way back
-  await a.move(wide ? { x: 476, y: 72 } : { x: 58, y: 470 }, { duration: 900 })
-  a.mark('payoff')
-  await a.wait(2600)
-  // Pressed in the gap between the workspace's mark and its name
-  await a.click({ at: 'ws-crumb', x: 0.25, y: 0.5 })
-  await a.set({ screen: 'home' })
-  await a.move(a.layout === 'compact' ? REST.compact : REST.wide, { duration: 800 })
-  await a.wait(600)
-  a.mark('reset')
-  await a.set({ fix: false })
-  await a.wait(500)
+  await a.move(at(a, REST), { duration: 800 })
+}
+
+const scripts = {
+  // Loops on its own: back to workspace is where it began
+  problem: async (a: Act<S>) => {
+    await a.wait(1000)
+    a.mark('before')
+    await visit(a, 'back', 1800, 'same')
+    await a.wait(700)
+  },
+  answer: async (a: Act<S>) => {
+    await a.wait(1000)
+    a.mark('before')
+    await visit(a, 'ws-crumb', 2600, 'payoff')
+    await a.wait(700)
+  },
+  both: async (a: Act<S>) => {
+    await a.wait(1000)
+    a.mark('before')
+    await visit(a, 'back', 1600, 'same')
+    await a.wait(500)
+    // The answer starts on the click into the app
+    a.mark('fix')
+    await a.set({ fix: true })
+    await a.wait(250)
+    await visit(a, 'ws-crumb', 2600, 'payoff')
+    await a.wait(600)
+    a.mark('reset')
+    await a.set({ fix: false })
+    await a.wait(500)
+  },
 }
 
 function Home({ layout }: { layout: Layout }) {
@@ -143,13 +151,21 @@ function Scene({ s, layout }: { s: S; layout: Layout }) {
   )
 }
 
-export function EaiNavigation({ bare = true }: { bare?: boolean } = {}) {
+const LABEL = {
+  problem: 'The problem: the workspace and an app inside it looked the same, so going from Home into Parking permit and back you could not tell which level you were on',
+  answer: 'The answer: the app sits inside the workspace as a white card on its grey, and the top bar reads NYC Council / Parking permit; the crumb goes back',
+  both: 'The problem: the workspace and an app inside it looked the same. The answer: the app sits inside the workspace as a card, the top bar reads NYC Council / Parking permit',
+}
+
+export function EaiNavigation({ bare = true, mode = 'both' }: { bare?: boolean; mode?: Mode } = {}) {
+  const fix = mode === 'answer'
+  const initial: S = { fix, screen: 'home' }
+  const poster: S = { fix: mode !== 'problem', screen: 'app' }
   return (
-    <figure className={bare ? 'not-prose eaw eaw--bare' : 'not-prose eaw my-8'} role="img" aria-label="The problem: the workspace and an app inside it looked the same, so going from Home into Parking permit and back you couldn't tell which level you were on. The fix: the app sits inside the workspace as a card with its colours swapped, and the top bar reads NYC Council / Parking permit">
-      <Stage width={720} height={544} compact={{ below: 600, width: 358, height: 532 }} initial={initial} poster={poster} script={script} play="loop" fill={!bare} cursor={{ at: REST, style: 'large' }} className="eaw">
+    <figure className={bare ? 'not-prose eaw eaw--bare' : 'not-prose eaw my-8'} role="img" aria-label={LABEL[mode]}>
+      <Stage width={800} height={604} compact={{ below: 600, width: 358, height: 532 }} initial={initial} poster={poster} script={scripts[mode]} play="loop" fill={!bare} cursor={{ at: REST, style: 'large' }} className="eaw">
         {(s, _rect, layout) => <Scene s={s} layout={layout === 'compact' ? 'compact' : 'wide'} />}
       </Stage>
     </figure>
   )
 }
-

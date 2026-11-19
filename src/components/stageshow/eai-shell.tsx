@@ -21,6 +21,8 @@ import './eai-shell.css'
 // cards, dialog). Gaps: 8 side by side, 16 between stacked blocks, 4/8 inside a component.
 
 export type Layout = 'wide' | 'compact'
+// Which part of a scene plays: the problem, the answer, or both in one loop
+export type Mode = 'problem' | 'answer' | 'both'
 
 // The prototype's own icon set (admin-shell.js, 24 grid, stroke 2), drawn at 16
 const PATHS = {
@@ -93,7 +95,7 @@ export function Note({ fix, problem, solution }: { fix: boolean; problem: [strin
   return (
     <div className="eaw-note">
       <span className="eaw-note__text" data-show={!fix || undefined}><b>The problem</b><span className="eaw-note__long">{problem[0]}</span><span className="eaw-note__short">{problem[1]}</span></span>
-      <span className="eaw-note__text" data-show={fix || undefined}><b>The fix</b><span className="eaw-note__long">{solution[0]}</span><span className="eaw-note__short">{solution[1]}</span></span>
+      <span className="eaw-note__text" data-show={fix || undefined}><b>The answer</b><span className="eaw-note__long">{solution[0]}</span><span className="eaw-note__short">{solution[1]}</span></span>
     </div>
   )
 }
@@ -151,7 +153,7 @@ export const RECENT = ['Parking permit', 'Building permit', 'Street vendor licen
 
 // The workspace sidebar: grey, the workspace switcher on top, its places, then recent apps.
 // Compact: the collapsed rail, icons only
-export function WsSidebar({ layout, active = 'home', recentTarget }: { layout: Layout; active?: string; recentTarget?: string }) {
+export function WsSidebar({ layout, active = 'home', recentTarget, settingsTarget }: { layout: Layout; active?: string; recentTarget?: string; settingsTarget?: string }) {
   const wide = layout === 'wide'
   return (
     <aside className="eaw-side">
@@ -161,7 +163,7 @@ export function WsSidebar({ layout, active = 'home', recentTarget }: { layout: L
       </div>
       <nav className="eaw-nav">
         {WS_NAV.map((it) => (
-          <span key={it.label} className="eaw-item" data-on={it.key === active || undefined}>
+          <span key={it.label} className="eaw-item" data-on={it.key === active || undefined} data-target={it.key === 'settings' ? settingsTarget : undefined} data-cursor={it.key === 'settings' && settingsTarget ? 'hand' : undefined}>
             <Ico n={it.icon} />
             {wide && <span className="eaw-item__label">{it.label}</span>}
             {wide && it.count != null && <span className="eaw-item__count">{it.count}</span>}

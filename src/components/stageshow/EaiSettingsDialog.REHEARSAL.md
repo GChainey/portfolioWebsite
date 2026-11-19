@@ -7,7 +7,7 @@ features cards, "Add in Workspace Settings ↗"), ws-settings.html and the in-pl
 
 Beats (~19s): The problem: Parking permit › AI features → "Add in Workspace Settings ↗" → a separate
 workspace settings page → AI Chatbot on → ✕ → workspace Home; the cursor looks at Recent apps' Parking
-permit, then settles on empty page. The note turns to The fix. "Add in Workspace Settings ↗" → a small
+permit, then settles on empty page. The note turns to The answer. "Add in Workspace Settings ↗" → a small
 dialog over the app's pane (scrim fades on its own; the dialog opaque within 80ms, scaling from 96%), the
 app's bar, title and rail in view round it → AI Chatbot on → Done → the dialog closes, then the row swaps
 in place to "● Turned on · Manage ↗" (payoff, 2.4s). The note turns back; the window hands off to the
@@ -29,5 +29,12 @@ against the dialog's rows above it, a cross-layer false positive cleared by plac
 Assumptions: the On state of the card is ours (the prototype's card only changes once a configuration
 exists). AI Chatbot's card is shown first, without "See preview". The separate settings page is as empty
 below its card as the real one.
+
+Round 2: designed at 800, shown at 0.9. `mode`: 'problem' loops by finding the way back (Parking permit
+from Home's recent apps; poster: the separate settings page with the switch on); 'answer' loops through
+the workspace (the crumb to Home, the card reset off screen, Parking permit again; poster: "Turned on").
+The far card under AI Chatbot is now the bars-only filler at both widths (at 800, "Add AI Document
+Checking" and its button no longer fit one row, and the row sat in view). Stage 800×560; compact 358×532,
+its dialog at 132.
 
 Not checked: Safari, a real phone, dark theme, live rAF pacing.

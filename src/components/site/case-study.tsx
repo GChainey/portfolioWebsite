@@ -11,6 +11,7 @@ import { BpProviderDates } from '@/components/stageshow/BpProviderDates'
 import { BpOldDialog } from '@/components/stageshow/BpOldDialog'
 import { BpFinal } from '@/components/stageshow/BpFinal'
 import { EaiNavigation } from '@/components/stageshow/EaiNavigation'
+import { EaiResult } from '@/components/stageshow/EaiResult'
 import { EaiSettingsDialog } from '@/components/stageshow/EaiSettingsDialog'
 import { EaiOnward } from '@/components/stageshow/EaiOnward'
 import { SeekAllTab } from '@/components/stageshow/SeekAllTab'
@@ -42,9 +43,13 @@ const SCENES = {
   'bp-provider-dates': () => <BpProviderDates />,
   'bp-old-dialog': () => <BpOldDialog />,
   'bp-final': () => <BpFinal />,
-  'eai-navigation': () => <EaiNavigation />,
-  'eai-settings-dialog': () => <EaiSettingsDialog />,
-  'eai-onward': () => <EaiOnward />,
+  'eai-result': () => <EaiResult />,
+  'eai-navigation-problem': () => <EaiNavigation mode="problem" />,
+  'eai-navigation-answer': () => <EaiNavigation mode="answer" />,
+  'eai-settings-problem': () => <EaiSettingsDialog mode="problem" />,
+  'eai-settings-answer': () => <EaiSettingsDialog mode="answer" />,
+  'eai-onward-problem': () => <EaiOnward mode="problem" />,
+  'eai-onward-answer': () => <EaiOnward mode="answer" />,
 }
 
 type Region = { x: number; y: number; width: number; height: number }
