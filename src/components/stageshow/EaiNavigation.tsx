@@ -32,24 +32,25 @@ async function script(a: Act<S>) {
   await a.click('open-app')
   await a.set({ screen: 'app' })
   // Rests in the top bar's empty run, the same spot as the fix's payoff, so the two compare
-  await a.move(wide ? { x: 420, y: 72 } : { x: 58, y: 470 }, { duration: 900 })
+  await a.move(wide ? { x: 476, y: 72 } : { x: 58, y: 470 }, { duration: 900 })
   a.mark('same')
   await a.wait(1600)
   await a.click('back')
   await a.set({ screen: 'home' })
   await a.move(a.layout === 'compact' ? REST.compact : REST.wide, { duration: 800 })
   await a.wait(500)
+  // The fix starts on the click into the app
   a.mark('fix')
   await a.set({ fix: true })
-  await a.wait(1100)
+  await a.wait(250)
   await a.click('open-app')
   await a.set({ screen: 'app' })
   // Rests in the top bar's empty run (compact: the rail's empty foot), near the way back
-  await a.move(wide ? { x: 420, y: 72 } : { x: 58, y: 470 }, { duration: 900 })
+  await a.move(wide ? { x: 476, y: 72 } : { x: 58, y: 470 }, { duration: 900 })
   a.mark('payoff')
   await a.wait(2600)
-  // Pressed on the workspace's mark, beside its name
-  await a.click({ at: 'ws-crumb', x: 0.1, y: 0.5 })
+  // Pressed in the gap between the workspace's mark and its name
+  await a.click({ at: 'ws-crumb', x: 0.25, y: 0.5 })
   await a.set({ screen: 'home' })
   await a.move(a.layout === 'compact' ? REST.compact : REST.wide, { duration: 800 })
   await a.wait(600)
@@ -111,7 +112,6 @@ function AppAfter({ layout }: { layout: Layout }) {
       <AppShell layout={layout} title="Overview" active="overview">
           <section className="eaw-card">
             <div className="eaw-stats">
-              {wide && <div className="eaw-stat"><span className="eaw-stat__k">Edited in</span><span className="eaw-stat__v">Your own AI</span></div>}
               <div className="eaw-stat"><span className="eaw-stat__k">Status</span><span className="eaw-stat__v">Live</span></div>
               <div className="eaw-stat"><span className="eaw-stat__k">Submissions</span><span className="eaw-stat__v">1,284</span></div>
             </div>
@@ -135,7 +135,7 @@ function Scene({ s, layout }: { s: S; layout: Layout }) {
   const view = s.screen === 'home' ? 'home' : s.fix ? 'after' : 'before'
   return (
     <>
-      <Note fix={s.fix} problem="Workspace and app look the same" solution="The app sits inside the workspace, its colours swapped" />
+      <Note fix={s.fix} problem={['Workspace and app look the same', 'Workspace and app look alike']} solution={['The app sits inside the workspace as a card', 'The app is a card in the workspace']} />
       <Win>
         <Fade value={view} states={{ home: <Home layout={layout} />, before: <AppBefore layout={layout} />, after: <AppAfter layout={layout} /> }} />
       </Win>

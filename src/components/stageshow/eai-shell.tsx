@@ -88,12 +88,12 @@ export function FitFade<K extends string>({ value, states }: { value: K; states:
 }
 
 // The note above the window: which half this is, and what it means. Both mounted in one cell,
-// crossfading. Compact keeps the label alone
-export function Note({ fix, problem, solution }: { fix: boolean; problem: string; solution: string }) {
+// crossfading. Compact carries a shorter sentence
+export function Note({ fix, problem, solution }: { fix: boolean; problem: [string, string]; solution: [string, string] }) {
   return (
     <div className="eaw-note">
-      <span className="eaw-note__text" data-show={!fix || undefined}><b>The problem</b><span>{problem}</span></span>
-      <span className="eaw-note__text" data-show={fix || undefined}><b>The fix</b><span>{solution}</span></span>
+      <span className="eaw-note__text" data-show={!fix || undefined}><b>The problem</b><span className="eaw-note__long">{problem[0]}</span><span className="eaw-note__short">{problem[1]}</span></span>
+      <span className="eaw-note__text" data-show={fix || undefined}><b>The fix</b><span className="eaw-note__long">{solution[0]}</span><span className="eaw-note__short">{solution[1]}</span></span>
     </div>
   )
 }
@@ -203,7 +203,8 @@ export function WsTop({ layout, title, back }: { layout: Layout; title: string; 
 }
 
 // Workspace Home: the prompt, then recent apps. Compact puts recent apps straight under the prompt
-export function WsHome({ layout, recentTarget }: { layout: Layout; recentTarget?: string }) {
+// things: the prototype's "Things you can add to your apps" cards, AI Chatbot among them
+export function WsHome({ layout, recentTarget, things = false }: { layout: Layout; recentTarget?: string; things?: boolean }) {
   const wide = layout === 'wide'
   const rows: [string, string][] = [['Parking permit', 'Just now'], ['Building permit', '1h ago'], ['Street vendor licence', '2h ago'], ['Noise complaint', 'Yesterday'], ['Pothole report', '2d ago'], ['Tree removal', '3d ago'], ['Business licence', 'Last week']]
   return (
@@ -217,6 +218,23 @@ export function WsHome({ layout, recentTarget }: { layout: Layout; recentTarget?
           <span className="eaw-prompt__go"><Ico n="arrowRight" /></span>
         </span>
       </div>
+      {things && (
+        <>
+          <div className="eaw-section">
+            <span className="eaw-section__title">Things you can add to your apps</span>
+            {wide && <span className="eaw-link">View all</span>}
+          </div>
+          <div className="eaw-things">
+            {([['AI Document Checking', 'Staff only review the exceptions'], ['AI Chatbot', 'Fewer calls and abandoned forms']] as const).map(([k, t]) => (
+              <div key={k} className="eaw-thing">
+                <span className="eaw-thing__art"><span className="eaw-doc"><i style={{ width: '70%' }} /><i style={{ width: '90%' }} /><i style={{ width: '55%' }} /></span></span>
+                <span className="eaw-thing__k">{k}</span>
+                <span className="eaw-thing__t">{t}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
       <div className="eaw-section">
         <span className="eaw-section__title">Recent apps</span>
         <span className="eaw-link">View all ›</span>
@@ -319,7 +337,7 @@ export function AppScreen({ layout, wsTarget, children }: { layout: Layout; wsTa
 // story isn't the rail)
 export function AppShell({ layout, title, active, children, rail = true }: { layout: Layout; title: string; active: RailKey; children: ReactNode; rail?: boolean }) {
   return (
-    <div className="eaw-shell">
+    <div className={`eaw-shell${rail ? '' : ' eaw-shell--norail'}`}>
       <div className="eaw-shell__bar"><span className="eaw-shell__kicker">App settings</span><span className="eaw-shell__title">{title}</span></div>
       <div className={`eaw-shell__body${rail ? '' : ' eaw-shell__body--norail'}`}>
         {rail && <AppRail layout={layout} active={active} />}
@@ -368,8 +386,8 @@ export function MoreCard() {
 }
 
 // The rows box inside a card: a label and its control
-export function Rows({ children, dense = false }: { children: ReactNode; dense?: boolean }) {
-  return <div className={`eaw-rows${dense ? ' eaw-rows--dense' : ''}`}>{children}</div>
+export function Rows({ children, dense = false, steps = false }: { children: ReactNode; dense?: boolean; steps?: boolean }) {
+  return <div className={`eaw-rows${dense ? ' eaw-rows--dense' : ''}${steps ? ' eaw-rows--steps' : ''}`}>{children}</div>
 }
 export function Row({ label, sub, children }: { label: ReactNode; sub?: ReactNode; children?: ReactNode }) {
   return (
@@ -430,19 +448,25 @@ export function FeaturesCard({ chatbot, target }: { chatbot: boolean; target?: s
   )
 }
 
-// Workspace settings as a dialog over whatever you're on (adDialog: a grey footer holds the CTA).
-// Wide keeps its settings nav; compact is the pane alone
-export function SettingsDialog({ layout, open, chatbot, toggle, done }: { layout: Layout; open: boolean; chatbot: boolean; toggle: string; done: string }) {
+// Workspace settings as a dialog over the app's pane (adDialog: a grey footer holds the CTA). Small,
+// so the app's bar, title and rail stay in view around it
+export function SettingsDialog({ open, chatbot, toggle, done }: { open: boolean; chatbot: boolean; toggle: string; done: string }) {
   return (
     <div className="eaw-dlg-wrap" data-open={open || undefined}>
       <div className="eaw-scrim" />
       <div className="eaw-dlg" role="dialog" aria-label="Workspace settings">
-        <div className="eaw-dlg__main">
-          <SettingsNav layout={layout} />
-          <div className="eaw-dlg__pane">
-            <div className="eaw-dlg__bar"><span>Enable AI features in apps</span><span className="eaw-x"><Ico n="x" /></span></div>
-            <div className="eaw-dlg__body"><FeaturesCard chatbot={chatbot} target={toggle} /></div>
-          </div>
+        <div className="eaw-dlg__bar">
+          <span className="eaw-dlg__head"><span className="eaw-dlg__kicker">Workspace settings</span><span className="eaw-dlg__title">Enable AI features in apps</span></span>
+          <span className="eaw-x"><Ico n="x" /></span>
+        </div>
+        <div className="eaw-dlg__hint">Turn on the AI features your apps can use.</div>
+        <div className="eaw-table">
+          {FEATURES.map((f) => (
+            <div key={f} className="eaw-table__row">
+              <span className="eaw-table__name">{f}</span>
+              <Toggle on={f === 'AI Chatbot' ? chatbot : false} target={f === 'AI Chatbot' ? toggle : undefined} />
+            </div>
+          ))}
         </div>
         <footer className="eaw-dlg__foot">
           <Btn>Cancel</Btn>
@@ -451,4 +475,8 @@ export function SettingsDialog({ layout, open, chatbot, toggle, done }: { layout
       </div>
     </div>
   )
+}
+
+export function Toast({ on, children }: { on: boolean; children: ReactNode }) {
+  return <div className="eaw-toast" data-on={on || undefined} role="status">{children}</div>
 }

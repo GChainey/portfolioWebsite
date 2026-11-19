@@ -1,31 +1,36 @@
 # Rehearsal: EaiOnward ('eai-onward')
 
 Replaces the first EaiOnward (invented app, bars everywhere). Gold: `hero-demo`, with SeekAllTab's note.
-Shared shell: `eai-shell.tsx` / `eai-shell.css`. Copied from the prototype: app-ai-features.html?app=
-parking-permit&feature=ai-chatbot (the "AI Chatbot" page: "Add to workflow", "Getting started", "Tutorial
-video coming soon", "Workflows with this feature · No workflows added yet"), its workflow-oriented version
-(?workflowOption=1 on Pro: "Turn on AI Chatbot", "Configure AI Chatbot in Parking permit", "Select a workflow
-for AI Chatbot.", Documents / Instructions), and the Parking permit application workflow's stages from
-admin-ut-parking-seed.js (Application 4 steps, Processing 2, Document review 5).
+Shell: `eai-shell.tsx` / `eai-shell.css`. From the prototype: ws-settings.html ("Enable AI features in
+apps"), ws-home.html ("Things you can add to your apps", Recent apps), the toast (admin.css .ad-toast),
+app-ai-features.html?app=parking-permit&feature=ai-chatbot with ?workflowOption=1 on Pro ("Turn on AI
+Chatbot", its four "how it works" steps, "Configure AI Chatbot in Parking permit", "Select a workflow for AI
+Chatbot.", Documents: "Guide for applicants ✓ Indexed"), and the Parking permit application workflow's
+stages (admin-ut-parking-seed.js).
 
-Beats (~17s loop): The problem: settings is open over the chatbot's page; AI Chatbot on → Done → the page is
-as it was; the cursor settles on the tutorial (stuck, 1.8s). The note turns to The fix and settings opens
-again (the seen cause; the switch reset while it was shut). On → Done → the dialog closes, then the card
-answers with the next step: the workflow picker and "Add to workflow" → pressed → "Live in Parking permit
-application", the stages, AI Chatbot on Application (payoff, held 2.6s); the note turns back. Card swaps
-are opacity-only with the card's height easing between them (`FitFade`). Poster: the payoff.
+Beats (~20s): The problem, as testers did it: workspace settings → AI Chatbot on → toast "AI Chatbot turned
+on." → ✕ → workspace Home, where nothing points to Parking permit and AI Chatbot is still offered under
+"Things you can add" (held 1.5s). The note turns to The fix; the window hands off to Parking permit › AI
+Chatbot ("Turn on AI Chatbot") → "Turn on in Workspace settings" → the dialog over the pane → switch → Done:
+the page under the scrim is already Configure, then the dialog fades away → "Add to workflow" → in place:
+"Live in Parking permit application", the button "Added", the AI Chatbot chip on Application (payoff,
+2.6s). The note turns back; the switch resets out of sight and the window hands off to settings.
+Poster: the payoff.
 
-Frame: stage 720×592, window 36/48, off the foot; Documents / Instructions run off it with bars inside.
-Compact 358×600: rail collapsed away, the header's button and the tutorial's subline dropped so the
-problem's "No workflows added yet" row stays whole.
+Review fixes (round 1): the problem reframed (no app page with "Add to workflow" in it); straight to
+Configure, no off state or empty card after Done; the dialog fades out; Documents in real words; hand-offs
+sequenced so dialog and page never overprint; the dialog below the bars at 390; the dialog's switch has its
+own target.
 
-Captured: 1280 and 390, loop and `--states`, all `rehearsal passed`; posters at both widths; the next-step
-beat at 60ms (onward-next-beat.png).
+Frame: 720×750 (the configure card and Documents whole, one gutter under them), window 36 / 48, off the
+foot. Off and Configure states are the same height, so Documents never moves. Compact 358×600: rail
+collapsed away, Documents left out (the configure card fills it).
 
-Film lines left: `layout` advisories for the cards that run past the crop (intended bleed).
+Captured: 1280 and 390, loop and `--states`, all `rehearsal passed`; posters.
 
-Assumptions: "Live in Parking permit application" is the brief's wording; the prototype shows a status
-column ("Not configured" / "Draft" / "Ready") and a toast "AI Chatbot created on …". The tutorial
-placeholder is laid out left-aligned (the prototype centres it) so its padding is even at this size.
+Assumptions: "Live in Parking permit application" is the brief's wording (the prototype shows a status
+column and a toast "AI Chatbot created on …"). Instructions ("Answer in plain, friendly language…") is left
+out: its paragraph can't sit whole above any crop at this width without taking the scene past ~810 tall.
+The settings page that opens the loop is as empty below its card as the real page.
 
 Not checked: Safari, a real phone, dark theme, live rAF pacing.

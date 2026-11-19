@@ -17,13 +17,17 @@ import { AppScreen, AppShell, Btn, Card, Fade, FeaturesCard, Ico, MoreCard, Note
 // Done, the card on (the payoff, held); the note turns back.
 // Poster: the fix's payoff, the AI Chatbot card on.
 
-type Screen = 'app' | 'settings' | 'home'
+// none: the window between two halves, so a reset happens out of sight
+// appP / appF: the app screen in each half, so a hand-off between halves is a crossfade and the
+// card resets out of sight
+type Screen = 'appP' | 'appF' | 'settings' | 'home'
 // on: the switch; card: the app's card showing it on (it answers once settings has closed)
 type S = { fix: boolean; screen: Screen; dlg: boolean; on: boolean; card: boolean }
 
-const initial: S = { fix: false, screen: 'app', dlg: false, on: false, card: false }
-const poster: S = { fix: true, screen: 'app', dlg: false, on: true, card: true }
-// At rest: the empty run right of the page's title
+const initial: S = { fix: false, screen: 'appP', dlg: false, on: false, card: false }
+const poster: S = { fix: true, screen: 'appF', dlg: false, on: true, card: true }
+// At rest: the empty run right of the page's title (Home: right of its title)
+const HOME_REST = { wide: { x: 640, y: 128 }, compact: { x: 300, y: 128 } }
 const REST = { wide: { x: 630, y: 170 }, compact: { x: 296, y: 190 } }
 
 async function script(a: Act<S>) {
@@ -40,18 +44,22 @@ async function script(a: Act<S>) {
   await a.set({ screen: 'home' })
   a.mark('home')
   await a.wait(500)
-  // Looking for the app it came from
+  // Looking for the app it came from, then giving up: the cursor settles on empty page
   await a.move('find-app', { duration: 900 })
-  await a.wait(1500)
+  await a.wait(700)
+  await a.move(a.layout === 'compact' ? HOME_REST.compact : HOME_REST.wide, { duration: 700 })
+  await a.wait(600)
   a.mark('fix')
-  await a.set({ fix: true, screen: 'app', on: false })
-  await a.move(a.layout === 'compact' ? REST.compact : REST.wide, { duration: 700 })
+  await a.set({ fix: true, screen: 'appF', on: false })
   await a.wait(500)
   await a.click('add-ws')
   await a.set({ dlg: true })
   a.mark('dialog')
-  await a.wait(800)
-  await a.click('tog')
+  // Once the dialog has settled: off its buttons, toward the switch
+  await a.wait(260)
+  await a.move({ at: 'dlg-tog', x: -1.2, y: 0.5 }, { duration: 600 })
+  await a.wait(200)
+  await a.click('dlg-tog')
   await a.set({ on: true })
   await a.wait(600)
   await a.click({ at: 'done', x: 0.84, y: 0.66 })
@@ -61,9 +69,12 @@ async function script(a: Act<S>) {
   a.mark('payoff')
   await a.move(a.layout === 'compact' ? REST.compact : REST.wide, { duration: 800 })
   await a.wait(2400)
+  // The note turns and the window hands off to the problem's app screen; the card resets out of sight
   a.mark('reset')
-  await a.set({ fix: false, on: false, card: false })
-  await a.wait(900)
+  await a.set({ fix: false, screen: 'appP' })
+  await a.wait(400)
+  await a.set({ on: false, card: false })
+  await a.wait(500)
 }
 
 // Parking permit › AI features: the chatbot's card, and the next card running off the foot
@@ -75,9 +86,10 @@ function AiFeatures({ layout, on }: { layout: Layout; on: boolean }) {
         <PageHead title="AI features" sub="Enable workspace AI capabilities for Parking permit." />
         <Card title="AI Chatbot" desc="Answer questions using relevant information and instructions for each workflow stage.">
           <Rows>
-            <Row label={<Fade value={v} states={{ off: <span>Add chatbot</span>, on: <Status>Turned on</Status> }} />}>
-              <Fade className="eaw-fade--end" value={v} states={{ off: <Btn target="add-ws" out>Add in Workspace Settings</Btn>, on: <Btn out>Manage</Btn> }} />
-            </Row>
+            <Fade className="eaw-fade--row" value={v} states={{
+              off: <Row label="Add chatbot"><Btn target="add-ws" out>Add in Workspace Settings</Btn></Row>,
+              on: <Row label={<Status>Turned on</Status>}><Btn out>Manage</Btn></Row>,
+            }} />
           </Rows>
         </Card>
         {layout === 'compact' && <MoreCard />}
@@ -102,7 +114,7 @@ function SettingsPage({ layout, on }: { layout: Layout; on: boolean }) {
       sidebar={<SettingsNav layout={layout} />}
       top={<div className="eaw-setbar"><span>Enable AI features in apps</span><span className="eaw-x" data-target="close" data-cursor="hand"><Ico n="x" /></span></div>}
     >
-      <div className="eaw-setbody eaw-stack"><FeaturesCard chatbot={on} target="tog" /><MoreCard /></div>
+      <div className="eaw-setbody"><FeaturesCard chatbot={on} target="tog" /></div>
     </WsScreen>
   )
 }
@@ -119,9 +131,9 @@ function Home({ layout }: { layout: Layout }) {
 function Scene({ s, layout }: { s: S; layout: Layout }) {
   return (
     <>
-      <Note fix={s.fix} problem="Workspace settings takes you out of the app" solution="Workspace settings opens over the app you’re in" />
-      <Win overlay={<SettingsDialog layout={layout} open={s.dlg} chatbot={s.on} toggle="tog" done="done" />}>
-        <Fade value={s.screen} states={{ app: <AiFeatures layout={layout} on={s.card} />, settings: <SettingsPage layout={layout} on={s.on} />, home: <Home layout={layout} /> }} />
+      <Note fix={s.fix} problem={['Workspace settings takes you out of the app', 'Settings leaves the app']} solution={['Workspace settings opens over the app you’re in', 'Settings opens over the app']} />
+      <Win overlay={<SettingsDialog open={s.dlg} chatbot={s.on} toggle="dlg-tog" done="done" />}>
+        <Fade value={s.screen} states={{ appP: <AiFeatures layout={layout} on={false} />, appF: <AiFeatures layout={layout} on={s.card} />, settings: <SettingsPage layout={layout} on={s.on} />, home: <Home layout={layout} /> }} />
       </Win>
     </>
   )
@@ -129,7 +141,7 @@ function Scene({ s, layout }: { s: S; layout: Layout }) {
 
 export function EaiSettingsDialog({ bare = true }: { bare?: boolean } = {}) {
   return (
-    <figure className={bare ? 'not-prose eaw eaw--bare' : 'not-prose eaw my-8'} role="img" aria-label="The problem: in Parking permit's AI features, Add in Workspace Settings took you to a separate page, and closing it after turning AI Chatbot on landed on the workspace Home. The fix: workspace settings opens as a dialog over the app; turn AI Chatbot on, Done, and you're still in Parking permit with the chatbot on">
+    <figure className={bare ? 'not-prose eaw eaw--dialog eaw--bare' : 'not-prose eaw eaw--dialog my-8'} role="img" aria-label="The problem: in Parking permit's AI features, Add in Workspace Settings took you to a separate page, and closing it after turning AI Chatbot on landed on the workspace Home. The fix: workspace settings opens as a dialog over the app; turn AI Chatbot on, Done, and you're still in Parking permit with the chatbot on">
       <Stage width={720} height={544} compact={{ below: 600, width: 358, height: 532 }} initial={initial} poster={poster} script={script} play="loop" fill={!bare} cursor={{ at: REST, style: 'large' }} className="eaw">
         {(s, _rect, layout) => <Scene s={s} layout={layout === 'compact' ? 'compact' : 'wide'} />}
       </Stage>

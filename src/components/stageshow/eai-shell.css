@@ -15,6 +15,7 @@
   --eaw-ring: 0 0 0 1px var(--eaw-line);
   --eaw-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
   --eaw-wash: #fafafa;
+  --eaw-ws: #f4f4f5;
   --eaw-fill: #f4f4f5;
   --eaw-on: rgba(9, 9, 11, 0.05);
   --eaw-green: #15803d;
@@ -41,18 +42,20 @@
 .eaw .eaw-note__text[data-show] { opacity: 1; transition: opacity 200ms ease 180ms; }
 .eaw .eaw-note__text b { font-weight: 600; color: #181818; }
 .eaw .eaw-note__text span { color: #666; }
-.eaw .ss-stage[data-layout='compact'] .eaw-note__text span { display: none; }
+.eaw .eaw-note__short { display: none; }
+.eaw .ss-stage[data-layout='compact'] .eaw-note__long { display: none; }
+.eaw .ss-stage[data-layout='compact'] .eaw-note__short { display: inline; }
 
 /* The window: inset at the gutter, under the note, running off the foot */
-.eaw .eaw-win { position: absolute; left: 36px; top: 48px; width: 648px; height: 640px; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: var(--eaw-ring), 0 24px 48px -24px rgba(0, 0, 0, 0.16); }
+.eaw .eaw-win { position: absolute; left: 36px; top: 48px; width: 648px; height: 760px; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: var(--eaw-ring), 0 24px 48px -24px rgba(0, 0, 0, 0.16); }
 .eaw .ss-stage[data-layout='compact'] .eaw-win { left: 32px; top: 40px; width: 294px; }
 .eaw .eaw-win__body { position: absolute; inset: 0; display: grid; }
 .eaw .eaw-win__body > .eaw-fade, .eaw .eaw-win__body > .eaw-fade > .eaw-fade__item { height: 100%; }
 
 /* Swaps: one cell, one state shown; the old out (150ms), then the new in (200ms) */
 .eaw .eaw-fade { display: grid; min-width: 0; min-height: 0; }
-.eaw .eaw-fade__item { grid-area: 1 / 1; min-width: 0; min-height: 0; opacity: 0; transition: opacity 150ms ease; }
-.eaw .eaw-fade__item[data-on] { opacity: 1; transition: opacity 200ms ease 180ms; }
+.eaw .eaw-fade__item { grid-area: 1 / 1; min-width: 0; min-height: 0; opacity: 0; transition: opacity 140ms ease-in; }
+.eaw .eaw-fade__item[data-on] { opacity: 1; transition: opacity 220ms ease-out 130ms; }
 .eaw .eaw-fit { overflow: hidden; margin: -2px; }
 .eaw .eaw-fit .eaw-fade__item { padding: 2px; }
 .eaw .eaw-fit[data-ready] { transition: height 260ms var(--eaw-ease) 120ms; }
@@ -64,7 +67,7 @@
 .eaw .eaw-screen[data-layout='compact'] { grid-template-columns: 48px minmax(0, 1fr); }
 
 /* Sidebars: grey, a hairline on the right */
-.eaw .eaw-side { background: var(--eaw-wash); box-shadow: inset -1px 0 0 var(--eaw-line2); padding: 8px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.eaw .eaw-side { background: var(--eaw-ws); box-shadow: inset -1px 0 0 var(--eaw-line2); padding: 8px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .eaw [data-layout='compact'] .eaw-side { padding: 8px 6px; align-items: center; }
 .eaw .eaw-switcher { display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 8px; margin-bottom: 4px; }
 .eaw [data-layout='compact'] .eaw-switcher { padding: 0; }
@@ -96,7 +99,7 @@
 .eaw .eaw-x { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; color: var(--eaw-mute); }
 
 /* Home */
-.eaw .eaw-home { max-width: 408px; margin: 0 auto; padding: 32px 0 0; display: flex; flex-direction: column; gap: 16px; }
+.eaw .eaw-home { max-width: 408px; margin: 0 auto; padding: 32px 24px 0; display: flex; flex-direction: column; gap: 16px; }
 .eaw [data-layout='compact'] .eaw-home { padding: 24px 16px 0; }
 .eaw .eaw-home__title { font-size: 24px; line-height: 32px; font-weight: 600; text-align: center; letter-spacing: -0.01em; }
 .eaw .eaw-prompt { display: flex; flex-direction: column; gap: 16px; padding: 12px; border-radius: 12px; box-shadow: var(--eaw-ring), var(--eaw-xs); }
@@ -121,25 +124,26 @@
 .eaw .eaw-status--grey i { background: var(--eaw-faint); }
 
 /* ---------------------------------------------------------------- the app level */
-.eaw .eaw-appscreen { display: flex; flex-direction: column; height: 100%; background: var(--eaw-wash); }
+.eaw .eaw-appscreen { display: flex; flex-direction: column; height: 100%; background: var(--eaw-ws); }
 .eaw .eaw-apptop { flex: none; display: flex; align-items: center; gap: 8px; height: 48px; padding: 0 16px; white-space: nowrap; }
 .eaw [data-layout='compact'] .eaw-apptop { padding: 0 12px; }
 .eaw .eaw-crumb { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: underline transparent; text-underline-offset: 4px; transition: text-decoration-color 150ms ease; }
 .eaw .eaw-crumb[data-hover] span { text-decoration: underline; text-decoration-color: var(--eaw-faint); text-underline-offset: 4px; }
 .eaw .eaw-crumb__sep { color: var(--eaw-faint); }
-.eaw .eaw-shell { flex: 1; min-height: 0; margin: 0 8px; display: flex; flex-direction: column; background: #fff; border-radius: 12px 12px 0 0; box-shadow: var(--eaw-ring); overflow: hidden; }
+.eaw .eaw-shell { flex: 1; min-height: 0; margin: 0 12px; display: flex; flex-direction: column; background: #fff; border-radius: 12px 12px 0 0; box-shadow: var(--eaw-ring); overflow: hidden; }
 .eaw [data-layout='compact'] .eaw-shell { margin: 0 8px; }
-.eaw .eaw-shell__bar { position: relative; flex: none; display: flex; align-items: center; height: 40px; padding: 0 12px; box-shadow: inset 0 -1px 0 var(--eaw-line2); white-space: nowrap; }
+.eaw .eaw-shell__bar { flex: none; display: grid; grid-template-columns: 204px minmax(0, 1fr); align-items: center; height: 40px; padding: 0 12px; box-shadow: inset 0 -1px 0 var(--eaw-line2); white-space: nowrap; }
+.eaw .eaw-shell--norail .eaw-shell__bar, .eaw [data-layout='compact'] .eaw-shell__bar { grid-template-columns: auto minmax(0, 1fr); }
 .eaw .eaw-shell__kicker { color: var(--eaw-ink3); }
-.eaw .eaw-shell__title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 600; }
-.eaw [data-layout='compact'] .eaw-shell__title { position: static; transform: none; margin-left: auto; }
+.eaw .eaw-shell__title { text-align: center; font-weight: 600; }
+.eaw .eaw-shell--norail .eaw-shell__title, .eaw [data-layout='compact'] .eaw-shell__title { text-align: right; }
 .eaw .eaw-shell__body { flex: 1; min-height: 0; display: grid; grid-template-columns: 216px minmax(0, 1fr); }
 .eaw [data-layout='compact'] .eaw-shell__body { grid-template-columns: 48px minmax(0, 1fr); }
 
 /* The app's rail: white */
 .eaw .eaw-rail { background: #fff; box-shadow: inset -1px 0 0 var(--eaw-line2); padding: 8px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .eaw [data-layout='compact'] .eaw-rail { padding: 8px 6px; align-items: center; }
-.eaw .eaw-rail.eaw-side { background: var(--eaw-wash); }
+.eaw .eaw-rail.eaw-side { background: var(--eaw-ws); }
 .eaw .eaw-rail__search { display: flex; align-items: center; gap: 8px; padding: 0 0 4px 8px; }
 .eaw .eaw-field { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 8px; border-radius: 8px; background: var(--eaw-fill); color: var(--eaw-mute); }
 .eaw .eaw-rail__label { padding: 12px 8px 4px; font-size: 12px; line-height: 16px; font-weight: 500; color: var(--eaw-mute); }
@@ -178,8 +182,7 @@
 .eaw .eaw-row__sub { font-size: 12px; line-height: 16px; color: var(--eaw-mute); white-space: nowrap; }
 
 /* Stats (Overview) */
-.eaw .eaw-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-.eaw [data-layout='compact'] .eaw-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.eaw .eaw-stats { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 8px; }
 .eaw .eaw-stat { display: flex; flex-direction: column; gap: 4px; padding: 12px; border-radius: 8px; box-shadow: var(--eaw-ring); }
 .eaw .eaw-stat__k { font-size: 12px; line-height: 16px; color: var(--eaw-mute); }
 .eaw .eaw-stat__v { font-size: 16px; line-height: 24px; font-weight: 600; white-space: nowrap; }
@@ -212,23 +215,25 @@
 .eaw [data-layout='compact'] .eaw-setbody { padding: 16px 12px; }
 .eaw .eaw-x[data-hover] { background: var(--eaw-on); color: var(--eaw-ink); }
 
-/* The dialog, over the window it opens in: the scrim, then the surface from 96% over 250ms */
+/* The settings dialog, over the app's pane: the app's bar, title and rail stay in view around it.
+   The scrim fades on its own; the dialog is opaque within 80ms and scales from 96% over 240ms */
 .eaw .eaw-dlg-wrap { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
-.eaw .eaw-scrim { position: absolute; inset: 0; background: rgba(9, 9, 11, 0.4); opacity: 0; transition: opacity 200ms ease; }
+.eaw .eaw-scrim { position: absolute; inset: 0; background: rgba(9, 9, 11, 0.32); opacity: 0; transition: opacity 220ms ease; }
 .eaw .eaw-dlg-wrap[data-open] .eaw-scrim { opacity: 1; }
-.eaw .eaw-dlg { position: absolute; left: 24px; right: 24px; top: 44px; display: flex; flex-direction: column; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 0 0 1px rgba(9, 9, 11, 0.08), 0 24px 48px -16px rgba(0, 0, 0, 0.3); opacity: 0; transform: scale(0.96); will-change: transform; transition: opacity 160ms ease, transform 200ms var(--eaw-ease); }
-.eaw .eaw-dlg-wrap[data-open] .eaw-dlg { opacity: 1; transform: none; transition: opacity 200ms ease, transform 250ms var(--eaw-ease); }
-.eaw .ss-stage[data-layout='compact'] .eaw-dlg { left: 12px; right: 12px; top: 24px; }
-.eaw--onward .ss-stage[data-layout='compact'] .eaw-dlg { top: 32px; }
-.eaw .eaw-dlg__main { display: grid; grid-template-columns: 232px minmax(0, 1fr); }
-.eaw .ss-stage[data-layout='compact'] .eaw-dlg__main { grid-template-columns: minmax(0, 1fr); }
-.eaw .ss-stage[data-layout='compact'] .eaw-dlg .eaw-setnav { display: none; }
-.eaw .eaw-dlg .eaw-setnav { box-shadow: inset -1px 0 0 var(--eaw-line2); }
-.eaw .eaw-dlg__pane { min-width: 0; display: flex; flex-direction: column; }
-.eaw .eaw-dlg__bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 48px; padding: 0 12px 0 16px; box-shadow: inset 0 -1px 0 var(--eaw-line2); font-weight: 600; white-space: nowrap; }
-.eaw .eaw-dlg__body { padding: 16px; }
-.eaw .ss-stage[data-layout='compact'] .eaw-dlg__body { padding: 12px; }
+.eaw .eaw-dlg { position: absolute; left: 258px; width: 360px; top: 156px; display: flex; flex-direction: column; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 0 0 1px rgba(9, 9, 11, 0.08), 0 24px 48px -16px rgba(0, 0, 0, 0.3); opacity: 0; transform: scale(0.96); will-change: transform; transition: opacity 120ms ease 80ms, transform 200ms var(--eaw-ease); }
+.eaw .eaw-dlg-wrap[data-open] .eaw-dlg { opacity: 1; transform: none; transition: opacity 80ms ease, transform 240ms var(--eaw-ease); }
+.eaw .ss-stage[data-layout='compact'] .eaw-dlg { left: 12px; width: auto; right: 12px; top: 100px; }
+.eaw .eaw-dlg__bar { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 12px 12px 12px 16px; box-shadow: inset 0 -1px 0 var(--eaw-line2); white-space: nowrap; }
+.eaw .eaw-dlg__head { display: flex; flex-direction: column; gap: 2px; }
+.eaw .eaw-dlg__kicker { font-size: 12px; line-height: 16px; color: var(--eaw-mute); }
+.eaw .eaw-dlg__title { font-weight: 600; }
+.eaw .eaw-dlg__hint { margin: 12px 16px 4px; color: var(--eaw-mute); }
+.eaw .eaw-dlg .eaw-table { box-shadow: none; }
 .eaw .eaw-dlg__foot { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 16px; background: var(--eaw-wash); box-shadow: inset 0 1px 0 var(--eaw-line2); }
+
+/* The prototype's toast: dark, at the foot of what's in view */
+.eaw .eaw-toast { position: absolute; left: 50%; bottom: 56px; transform: translate(-50%, 4px); padding: 8px 12px; border-radius: 8px; background: #27272a; color: #fff; white-space: nowrap; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18); opacity: 0; transition: opacity 160ms ease, transform 240ms var(--eaw-ease); z-index: 4; }
+.eaw .eaw-toast[data-on] { opacity: 1; transform: translate(-50%, 0); }
 
 /* A swapped control pinned to its row's end */
 .eaw .eaw-fade--end { justify-items: end; }
@@ -295,3 +300,37 @@
 .eaw [data-layout='compact'] .eaw-video { padding: 12px; }
 .eaw [data-layout='compact'] .eaw-list .eaw-status { gap: 0; }
 .eaw .eaw-stack { display: flex; flex-direction: column; gap: 16px; }
+
+/* A whole row swapped in place: quick, inside its own box */
+.eaw .eaw-fade--row > .eaw-fade__item { transition-duration: 100ms; }
+.eaw .eaw-fade--row > .eaw-fade__item[data-on] { transition: opacity 160ms ease-out 90ms; }
+
+/* The chatbot's Documents and Instructions (the prototype's configure page) */
+.eaw .eaw-doc-row { display: flex; flex-direction: column; gap: 2px; padding: 12px; border-radius: 8px; box-shadow: var(--eaw-ring); }
+.eaw .eaw-indexed { font-size: 12px; line-height: 16px; color: var(--eaw-green); }
+.eaw .eaw-instr { padding: 12px; border-radius: 8px; box-shadow: var(--eaw-ring); }
+
+/* Configure: the workflow and its button on one line; the chip arrives on Application in place */
+.eaw .eaw-pick { display: flex; flex-direction: column; align-items: stretch; gap: 12px; }
+.eaw .eaw-pick .eaw-fade--end { justify-items: start; }
+.eaw .eaw-pick .eaw-btn:not(.eaw-btn--dark) { width: 88px; justify-content: center; }
+.eaw [data-layout='compact'] .eaw-pick { flex-direction: column; align-items: stretch; }
+.eaw [data-layout='compact'] .eaw-pick .eaw-fade--end { justify-items: start; }
+.eaw .eaw-feature { opacity: 0; transition: opacity 200ms ease 120ms; }
+.eaw .eaw-feature[data-on] { opacity: 1; }
+.eaw .eaw-rows--steps .eaw-row { min-height: 44px; padding: 0 12px; }
+
+/* Home: things you can add (the prototype's feature cards: a light-blue picture, the feature, its line) */
+.eaw .eaw-things { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.eaw .eaw-thing { display: flex; flex-direction: column; gap: 4px; padding: 12px; border-radius: 12px; box-shadow: var(--eaw-ring); min-width: 0; }
+.eaw .eaw-thing__art { display: grid; place-items: center; height: 72px; margin-bottom: 4px; border-radius: 8px; background: #eef4ff; }
+.eaw .eaw-thing__art .eaw-doc { width: 64px; }
+.eaw .eaw-thing__k { font-size: 12px; line-height: 16px; color: var(--eaw-mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.eaw .eaw-thing__t { font-weight: 500; }
+
+/* Scene 3's dialog sits a step lower, clear of the steps under it */
+.eaw.eaw--onward .eaw-dlg { top: 168px; }
+.eaw.eaw--onward .ss-stage[data-layout='compact'] .eaw-dlg { top: 100px; }
+
+/* Scene 2's compact dialog a step lower, clear of the page's button under the scrim */
+.eaw.eaw--dialog .ss-stage[data-layout='compact'] .eaw-dlg { top: 118px; }
