@@ -2,7 +2,7 @@
 
 import { Stage } from './kit/stage'
 import type { Act } from './kit/act'
-import { AppRail, AppShell, AppTop, Btn, Fade, Ico, MoreCard, Note, Win, WsHome, WsScreen, WsSidebar, WsTop, type Layout, type Mode } from './eai-shell'
+import { AppRail, AppShell, AppTop, Btn, Card, Fade, Ico, MoreCard, Note, Win, WsHome, WsScreen, WsSidebar, WsTop, type Layout, type Mode } from './eai-shell'
 
 // Where am I? Going from the workspace into an app and back.
 // The problem: the first release drew the app the way it drew the workspace: the same grey sidebar
@@ -19,8 +19,8 @@ type Screen = 'home' | 'app'
 type S = { fix: boolean; screen: Screen }
 
 // At rest: right of Home's title; on the app, the top bar's empty run (compact: the rail's empty foot)
-const REST = { wide: { x: 700, y: 150 }, compact: { x: 300, y: 128 } }
-const BAR_REST = { wide: { x: 540, y: 76 }, compact: { x: 58, y: 470 } }
+const REST = { wide: { x: 1000, y: 212 }, compact: { x: 300, y: 128 } }
+const BAR_REST = { wide: { x: 700, y: 104 }, compact: { x: 58, y: 470 } }
 const at = (a: Act<S>, p: { wide: { x: number; y: number }; compact: { x: number; y: number } }) => (a.layout === 'compact' ? p.compact : p.wide)
 
 // Home → the app → back. The problem goes back with "Back to workspace", the answer with the crumb
@@ -92,10 +92,19 @@ function OverviewBefore({ layout }: { layout: Layout }) {
           {wide && <div className="eaw-stat"><span className="eaw-stat__k">Stages</span><span className="eaw-stat__v">4</span></div>}
         </div>
       </section>
-      <section className="eaw-card">
-        <div className="eaw-card__title">Who can access</div>
-        <span className="eaw-select">Anyone in workspace</span>
-      </section>
+      <div className="eaw-pair">
+        <section className="eaw-card">
+          <div className="eaw-card__title">Who can access</div>
+          <span className="eaw-select">Anyone in workspace</span>
+        </section>
+        {wide && (
+          <section className="eaw-card">
+            <div className="eaw-card__title">Share this app</div>
+            <span className="eaw-select">permits.nyccouncil.app</span>
+          </section>
+        )}
+      </div>
+      {wide && <section className="eaw-card eaw-card--row"><span className="eaw-row__label">“Built with EAI” badge</span><span className="eaw-switch" data-on aria-hidden><i /></span></section>}
       <MoreCard />
     </div>
   )
@@ -118,8 +127,14 @@ function AppAfter({ layout }: { layout: Layout }) {
     <div className="eaw-appscreen" data-layout={layout}>
       <AppTop layout={layout} wsTarget="ws-crumb" />
       <AppShell layout={layout} title="Overview" active="overview">
+          {wide && (
+            <Card title="Build more with EAI" desc="Connect your preferred AI coding tool to EAI to add custom logic, integrations and advanced features. Keep managing your app, access and deployment here.">
+              <div className="eaw-rows"><div className="eaw-row"><span className="eaw-row__label">Get started</span><Btn>Get started</Btn></div></div>
+            </Card>
+          )}
           <section className="eaw-card">
             <div className="eaw-stats">
+              {wide && <div className="eaw-stat"><span className="eaw-stat__k">Edited in</span><span className="eaw-stat__v">Your own AI</span></div>}
               <div className="eaw-stat"><span className="eaw-stat__k">Status</span><span className="eaw-stat__v">Live</span></div>
               <div className="eaw-stat"><span className="eaw-stat__k">Submissions</span><span className="eaw-stat__v">1,284</span></div>
             </div>
@@ -133,7 +148,11 @@ function AppAfter({ layout }: { layout: Layout }) {
               <div className="eaw-row"><span className="eaw-row__label">App access</span><span className="eaw-select">Anyone in workspace<Ico n="down" /></span></div>
             </div>
           </section>
-          <MoreCard />
+          {wide ? (
+            <Card title="Share this app" desc="Send a link to people who should access this app.">
+              <div className="eaw-rows"><div className="eaw-row"><span className="eaw-field eaw-field--mono">permits.nyccouncil.app</span><Btn>Copy link</Btn></div></div>
+            </Card>
+          ) : <MoreCard />}
       </AppShell>
     </div>
   )
@@ -163,7 +182,7 @@ export function EaiNavigation({ bare = true, mode = 'both' }: { bare?: boolean; 
   const poster: S = { fix: mode !== 'problem', screen: 'app' }
   return (
     <figure className={bare ? 'not-prose eaw eaw--bare' : 'not-prose eaw my-8'} role="img" aria-label={LABEL[mode]}>
-      <Stage width={800} height={604} compact={{ below: 600, width: 358, height: 532 }} initial={initial} poster={poster} script={scripts[mode]} play="loop" fill={!bare} cursor={{ at: REST, style: 'large' }} className="eaw">
+      <Stage width={1280} height={884} compact={{ below: 600, width: 358, height: 532 }} initial={initial} poster={poster} script={scripts[mode]} play="loop" fill={!bare} cursor={{ at: REST, style: 'large' }} className="eaw">
         {(s, _rect, layout) => <Scene s={s} layout={layout === 'compact' ? 'compact' : 'wide'} />}
       </Stage>
     </figure>

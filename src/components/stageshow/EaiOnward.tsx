@@ -30,8 +30,8 @@ export type Page = 'off' | 'next' | 'added'
 type S = { fix: boolean; screen: Screen; dlg: boolean; sw: boolean; toast: boolean; page: Page }
 
 // At rest: right of the page's title (Home: right of its title)
-const REST = { wide: { x: 680, y: 180 }, compact: { x: 300, y: 128 } }
-const HOME_REST = { wide: { x: 700, y: 150 }, compact: { x: 300, y: 128 } }
+const REST = { wide: { x: 1060, y: 240 }, compact: { x: 300, y: 128 } }
+const HOME_REST = { wide: { x: 1000, y: 212 }, compact: { x: 300, y: 128 } }
 const at = (a: Act<S>, p: { wide: { x: number; y: number }; compact: { x: number; y: number } }) => (a.layout === 'compact' ? p.compact : p.wide)
 // Pressed beside the label, not on it
 const DONE = { at: 'done', x: 0.84, y: 0.66 }
@@ -204,7 +204,7 @@ function Scene({ s, layout }: { s: S; layout: Layout }) {
   return (
     <>
       <Note fix={s.fix} problem={['Turned on in settings, then nothing says what’s next', 'Turned on, then nothing next']} solution={['Turning it on leads straight to the next step', 'On leads to the next step']} />
-      <Win overlay={<SettingsDialog open={s.dlg} chatbot={s.sw} toggle="dlg-tog" done="done" />}>
+      <Win vis={layout === 'wide' ? 808 : 584} overlay={<SettingsDialog open={s.dlg} chatbot={s.sw} toggle="dlg-tog" done="done" />}>
         <Fade
           value={s.screen}
           states={{
@@ -243,7 +243,7 @@ export function EaiOnward({ bare = true, mode = 'both' }: { bare?: boolean; mode
     : { fix: true, screen: 'app', dlg: false, sw: true, toast: false, page: 'added' }
   return (
     <figure className={bare ? 'not-prose eaw eaw--onward eaw--bare' : 'not-prose eaw eaw--onward my-8'} role="img" aria-label={LABEL[mode]}>
-      <Stage width={800} height={754} compact={{ below: 600, width: 358, height: 624 }} initial={initial} poster={poster} script={scripts[mode]} play="loop" fill={!bare} cursor={{ at: REST, style: 'large' }} className="eaw">
+      <Stage width={1280} height={884} compact={{ below: 600, width: 358, height: 624 }} initial={initial} poster={poster} script={scripts[mode]} play="loop" fill={!bare} cursor={{ at: REST, style: 'large' }} className="eaw">
         {(s, _rect, layout) => <Scene s={s} layout={layout === 'compact' ? 'compact' : 'wide'} />}
       </Stage>
     </figure>

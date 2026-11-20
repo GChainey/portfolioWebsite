@@ -53,6 +53,7 @@ const PATHS = {
   zap: '<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>',
   paperclip: '<path d="m21.4 11.1-9.2 9.2a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/>',
   arrowRight: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  plug: '<path d="M12 22v-5M9 8V2M15 8V2M7 8h10v4a4 4 0 0 1-8 0V8z"/>',
 } as const
 export type IcoName = keyof typeof PATHS
 
@@ -102,9 +103,10 @@ export function Note({ fix, problem, solution }: { fix: boolean; problem: [strin
 
 // The product window: one rounded surface, running off the stage's foot. `overlay` sits over it
 // all (a dialog and its scrim)
-export function Win({ children, overlay }: { children: ReactNode; overlay?: ReactNode }) {
+// vis: how much of the window shows above the crop, so a dialog centres in what's in view
+export function Win({ children, overlay, vis }: { children: ReactNode; overlay?: ReactNode; vis?: number }) {
   return (
-    <div className="eaw-win ss-window">
+    <div className="eaw-win ss-window" style={vis ? ({ ['--eaw-vis' as string]: `${vis}px` }) : undefined}>
       <div className="eaw-win__body">{children}</div>
       {overlay}
     </div>
@@ -194,8 +196,8 @@ export function WsTop({ layout, title, back }: { layout: Layout; title: string; 
     <header className="eaw-top">
       <Ico n="panel" className="eaw-faint" />
       <span className="eaw-top__title">{title}</span>
+      {wide && !back && <span className="eaw-search"><Ico n="search" /><span>Search apps…</span><kbd>⌘K</kbd></span>}
       <span className="eaw-top__end">
-        {wide && <span className="eaw-bell"><Ico n="search" /></span>}
         <span className="eaw-bell"><Ico n="bell" /></span>
         {wide && !back && <Btn>+ Create new app</Btn>}
         {back && <Me />}
@@ -205,7 +207,10 @@ export function WsTop({ layout, title, back }: { layout: Layout; title: string; 
 }
 
 // Workspace Home: the prompt, then recent apps. Compact puts recent apps straight under the prompt
-// things: the prototype's "Things you can add to your apps" cards, AI Chatbot among them
+// The prototype's "Things you can add to your apps" cards
+const THINGS = [['AI Document Checking', 'Staff only review the exceptions'], ['Document Checklist', 'No more chasing missing documents'], ['AI Chatbot', 'Fewer calls and abandoned forms'], ['AI Document Creation', 'Consistent letters in minutes']] as const
+
+// things: show them in compact too (wide always has them, as the real Home does)
 export function WsHome({ layout, recentTarget, things = false }: { layout: Layout; recentTarget?: string; things?: boolean }) {
   const wide = layout === 'wide'
   const rows: [string, string][] = [['Parking permit', 'Just now'], ['Building permit', '1h ago'], ['Street vendor licence', '2h ago'], ['Noise complaint', 'Yesterday'], ['Pothole report', '2d ago'], ['Tree removal', '3d ago'], ['Business licence', 'Last week']]
@@ -220,14 +225,15 @@ export function WsHome({ layout, recentTarget, things = false }: { layout: Layou
           <span className="eaw-prompt__go"><Ico n="arrowRight" /></span>
         </span>
       </div>
-      {things && (
+      {wide && <div className="eaw-disclosure"><span>Building something more complex? Use your own AI coding tool</span><Ico n="down" /></div>}
+      {(things || wide) && (
         <>
           <div className="eaw-section">
             <span className="eaw-section__title">Things you can add to your apps</span>
             {wide && <span className="eaw-link">View all</span>}
           </div>
           <div className="eaw-things">
-            {([['AI Document Checking', 'Staff only review the exceptions'], ['AI Chatbot', 'Fewer calls and abandoned forms']] as const).map(([k, t]) => (
+            {(wide ? THINGS : THINGS.filter((_, i) => i === 0 || i === 2)).map(([k, t]) => (
               <div key={k} className="eaw-thing">
                 <span className="eaw-thing__art"><span className="eaw-doc"><i style={{ width: '70%' }} /><i style={{ width: '90%' }} /><i style={{ width: '55%' }} /></span></span>
                 <span className="eaw-thing__k">{k}</span>
@@ -410,6 +416,13 @@ const SETTINGS_NAV: { icon: IcoName; label: string; key?: string }[] = [
   { icon: 'sparkle', label: 'Enable AI features in apps', key: 'ai' },
 ]
 export const FEATURES = ['AI Document Checking', 'AI Chatbot', 'AI Document Creation'] as const
+// The settings nav's Advanced Settings group, opened (its items as the prototype lists them)
+const SETTINGS_ADVANCED: { icon: IcoName; label: string }[] = [
+  { icon: 'plug', label: 'Integrations' },
+  { icon: 'grid', label: 'Services' },
+  { icon: 'file', label: 'Audit log' },
+  { icon: 'sliders', label: 'Model Profiles' },
+]
 
 export function SettingsNav({ layout }: { layout: Layout }) {
   const wide = layout === 'wide'
@@ -425,6 +438,14 @@ export function SettingsNav({ layout }: { layout: Layout }) {
           </span>
         ))}
       </nav>
+      {wide && (
+        <>
+          <div className="eaw-side__label eaw-side__label--group">Advanced Settings<Ico n="up" /></div>
+          <nav className="eaw-nav">
+            {SETTINGS_ADVANCED.map((it) => <span key={it.label} className="eaw-item"><Ico n={it.icon} /><span className="eaw-item__label">{it.label}</span></span>)}
+          </nav>
+        </>
+      )}
     </aside>
   )
 }

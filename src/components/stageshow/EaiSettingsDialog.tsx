@@ -23,8 +23,8 @@ type Screen = 'appP' | 'appF' | 'settings' | 'home'
 type S = { fix: boolean; screen: Screen; dlg: boolean; on: boolean; card: boolean }
 
 // At rest: right of the page's title (Home: right of its title)
-const HOME_REST = { wide: { x: 700, y: 150 }, compact: { x: 300, y: 128 } }
-const REST = { wide: { x: 680, y: 180 }, compact: { x: 296, y: 190 } }
+const HOME_REST = { wide: { x: 1000, y: 212 }, compact: { x: 300, y: 128 } }
+const REST = { wide: { x: 1060, y: 240 }, compact: { x: 296, y: 190 } }
 const at = (a: Act<S>, p: { wide: { x: number; y: number }; compact: { x: number; y: number } }) => (a.layout === 'compact' ? p.compact : p.wide)
 
 // The problem: a page of its own, then the workspace Home
@@ -127,7 +127,22 @@ export function AiFeatures({ layout, on }: { layout: Layout; on: boolean }) {
             }} />
           </Rows>
         </Card>
-        <MoreCard />
+        {layout === 'wide' ? (
+          <>
+            <Card title="AI Document Checking" desc="Extract information from submitted documents and check it against your rules.">
+              <Rows>
+                <Row label="Add AI Document Checking"><Btn out>Add in Workspace Settings</Btn></Row>
+                <Row label="See preview"><Btn>Preview</Btn></Row>
+              </Rows>
+            </Card>
+            <Card title="Document Checklist" desc="Define which documents applicants must provide for each application type.">
+              <Rows>
+                <Row label="Add Document Checklist"><Btn out>Add in Workspace Settings</Btn></Row>
+                <Row label="See preview"><Btn>Preview</Btn></Row>
+              </Rows>
+            </Card>
+          </>
+        ) : <MoreCard />}
       </AppShell>
     </AppScreen>
   )
@@ -159,7 +174,7 @@ function Scene({ s, layout }: { s: S; layout: Layout }) {
   return (
     <>
       <Note fix={s.fix} problem={['Workspace settings takes you out of the app', 'Settings leaves the app']} solution={['Workspace settings opens over the app you’re in', 'Settings opens over the app']} />
-      <Win overlay={<SettingsDialog open={s.dlg} chatbot={s.on} toggle="dlg-tog" done="done" />}>
+      <Win vis={layout === 'wide' ? 808 : 492} overlay={<SettingsDialog open={s.dlg} chatbot={s.on} toggle="dlg-tog" done="done" />}>
         <Fade value={s.screen} states={{ appP: <AiFeatures layout={layout} on={false} />, appF: <AiFeatures layout={layout} on={s.card} />, settings: <SettingsPage layout={layout} on={s.on} />, home: <Home layout={layout} /> }} />
       </Win>
     </>
@@ -178,7 +193,7 @@ export function EaiSettingsDialog({ bare = true, mode = 'both' }: { bare?: boole
   const poster: S = mode === 'problem' ? { fix: false, screen: 'settings', dlg: false, on: true, card: false } : { fix: true, screen: 'appF', dlg: false, on: true, card: true }
   return (
     <figure className={bare ? 'not-prose eaw eaw--dialog eaw--bare' : 'not-prose eaw eaw--dialog my-8'} role="img" aria-label={LABEL[mode]}>
-      <Stage width={800} height={560} compact={{ below: 600, width: 358, height: 532 }} initial={initial} poster={poster} script={scripts[mode]} play="loop" fill={!bare} cursor={{ at: REST, style: 'large' }} className="eaw">
+      <Stage width={1280} height={884} compact={{ below: 600, width: 358, height: 532 }} initial={initial} poster={poster} script={scripts[mode]} play="loop" fill={!bare} cursor={{ at: REST, style: 'large' }} className="eaw">
         {(s, _rect, layout) => <Scene s={s} layout={layout === 'compact' ? 'compact' : 'wide'} />}
       </Stage>
     </figure>

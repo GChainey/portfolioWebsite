@@ -22,8 +22,8 @@ type S = { screen: Screen; dlg: boolean; sw: boolean; page: Page }
 const initial: S = { screen: 'home', dlg: false, sw: false, page: 'next' }
 const poster: S = { screen: 'chatbot', dlg: false, sw: true, page: 'added' }
 // At rest: right of the page's title (Home: right of its title)
-const REST = { wide: { x: 680, y: 168 }, compact: { x: 300, y: 120 } }
-const HOME_REST = { wide: { x: 700, y: 138 }, compact: { x: 300, y: 120 } }
+const REST = { wide: { x: 1060, y: 164 }, compact: { x: 300, y: 120 } }
+const HOME_REST = { wide: { x: 1000, y: 136 }, compact: { x: 300, y: 120 } }
 const at = (a: Act<S>, p: { wide: { x: number; y: number }; compact: { x: number; y: number } }) => (a.layout === 'compact' ? p.compact : p.wide)
 
 async function script(a: Act<S>) {
@@ -66,7 +66,7 @@ async function script(a: Act<S>) {
 
 function Scene({ s, layout }: { s: S; layout: Layout }) {
   return (
-    <Win overlay={<SettingsDialog open={s.dlg} chatbot={s.sw} toggle="dlg-tog" done="done" />}>
+    <Win vis={layout === 'wide' ? 808 : 584} overlay={<SettingsDialog open={s.dlg} chatbot={s.sw} toggle="dlg-tog" done="done" />}>
       <Fade
         value={s.screen}
         states={{
@@ -92,7 +92,7 @@ function Scene({ s, layout }: { s: S; layout: Layout }) {
 export function EaiResult({ bare = true }: { bare?: boolean } = {}) {
   return (
     <figure className={bare ? 'not-prose eaw eaw--result eaw--bare' : 'not-prose eaw eaw--result my-8'} role="img" aria-label="Enterprise AI today: from the NYC Council workspace into Parking permit, an app nested in the workspace; workspace settings opens over the app, AI Chatbot goes on, and Done lands straight on Configure AI Chatbot in Parking permit; one press puts it live on the Parking permit application workflow">
-      <Stage width={800} height={742} compact={{ below: 600, width: 358, height: 616 }} initial={initial} poster={poster} script={script} play="loop" fill={!bare} cursor={{ at: REST, style: 'large' }} className="eaw">
+      <Stage width={1280} height={808} compact={{ below: 600, width: 358, height: 616 }} initial={initial} poster={poster} script={script} play="loop" fill={!bare} cursor={{ at: REST, style: 'large' }} className="eaw">
         {(s, _rect, layout) => <Scene s={s} layout={layout === 'compact' ? 'compact' : 'wide'} />}
       </Stage>
     </figure>
