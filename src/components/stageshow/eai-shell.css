@@ -387,7 +387,7 @@
 .eaw .eaw-ftable__head, .eaw .eaw-ftable__row { display: grid; grid-template-columns: minmax(0, 1fr) 64px 80px; align-items: center; gap: 12px; padding: 0 16px; }
 .eaw .ss-stage[data-layout='compact'] .eaw-ftable__head, .eaw .ss-stage[data-layout='compact'] .eaw-ftable__row { grid-template-columns: minmax(0, 1fr) 40px 72px; padding: 0 12px; gap: 8px; }
 .eaw .eaw-ftable__head { height: 36px; background: var(--eaw-wash); font-size: 12px; line-height: 16px; font-weight: 500; color: var(--eaw-mute); }
-.eaw .eaw-ftable__head span:not(:first-child), .eaw .eaw-ftable__row > :not(:first-child) { justify-self: end; }
+.eaw .eaw-ftable__head span:not(:first-child), .eaw .eaw-ftable__row > :not(:first-child) { justify-self: center; } /* each control centred under its column heading */
 .eaw .eaw-ftable__row { height: 56px; box-shadow: inset 0 1px 0 var(--eaw-line2); }
 .eaw .eaw-ftable__row .eaw-table__name { overflow: hidden; text-overflow: ellipsis; }
 .eaw .eaw-setup { display: inline-flex; align-items: center; justify-content: center; width: 72px; height: 32px; border-radius: 8px; background: var(--eaw-fill); color: var(--eaw-faint); font-weight: 500; white-space: nowrap; will-change: transform; transition: background-color 200ms ease, color 200ms ease, transform 120ms ease-out; }
