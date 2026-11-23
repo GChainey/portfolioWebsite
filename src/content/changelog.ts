@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.17.2',
+    date: '2026-11-23',
+    title: 'DAISY: one product, three clients',
+    description: 'The DAISY case study opens on a short video of the same Caseload changing client: Cumberland Council, NSW Planning, then Poland, each with its own seed data.',
+    changes: [
+      'Each change is chosen from a command popup, the cards go to placeholders, then a glimm band rises through each card and reveals the next client',
+      'Built as a prototype with three popup variants (prototypes/client-sweep); Command was picked and exported to video',
+      'Video moments can be framed as an app window and carry a poster: they play only while on screen, and reduced motion keeps the poster',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/daisy-client-sweep',
+  },
+  {
     version: '3.17.1',
     date: '2026-11-23',
     title: 'Posters on the Homepage',
