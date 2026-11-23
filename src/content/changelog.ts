@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.17.1',
+    date: '2026-11-23',
+    title: 'Posters on the Homepage',
+    description: 'The Saetia and David Whyte poster studies join Balatro and Wallbounce under “AI enables so much more”, each playing its own loop on the card.',
+    changes: [
+      'Two poster cards on the creative rail, each poster standing on one grey, and their names in the section’s sentence',
+      'The Saetia card plays the poster itself: cropped from the social clip, no black canvas, no end card',
+      'Their study pages are dev-only for now, so on the live site the names and cards aren’t links yet',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/posters-on-home',
+  },
+  {
     version: '3.17.0',
     date: '2026-11-23',
     title: 'Enterprise AI: Navigation and Onward Journeys',
