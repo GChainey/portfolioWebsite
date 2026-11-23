@@ -148,7 +148,14 @@ function Art({ media }: { media: Media }) {
   if ('replay' in media && media.phone) return <PhoneReplay src={media.replay} region={media.region} />
   if ('replay' in media && media.ground) return <div className="overflow-hidden rounded-[24px]" style={{ background: SHELL }}><RecordingReplay src={media.replay} region={media.region} bare /></div>
   if ('replay' in media) return <Mat><RecordingReplay src={media.replay} region={media.region} bare /></Mat>
-  if ('scene' in media) { const Scene = SCENES[media.scene]; return <Shell scene><div data-ss-fill><Scene /></div></Shell> }
+  if ('scene' in media) {
+    const Scene = SCENES[media.scene]
+    // A whole product window (the Enterprise AI scenes) sits on the mat like any product screenshot: 32px of
+    // grey round it and a small radius, so the big rounded shell doesn't clip its corners. Phones keep the
+    // scene's own compact framing
+    if (media.scene.startsWith('eai-')) return <div className="case-mat"><div data-ss-fill><Scene /></div></div>
+    return <Shell scene><div data-ss-fill><Scene /></div></Shell>
+  }
   if ('video' in media) {
     // A phone recording stands on the grey, the height of a landscape clip. The recording is the
     // phone, bezel and all, on black: round it to the bezel's corners so the black doesn't show
@@ -247,7 +254,7 @@ export function CaseStudy({ study }: { study: Study }) {
       </main>
       <Contents sections={sections} after="study-top" />
       {/* The recordings carry their own status bar and safe area: the kit's would double them */}
-      <style>{'.case-phone .ss-phone__content{padding-top:0!important}.case-phone .ss-phone__home{display:none}@keyframes moment-in{from{opacity:0}to{opacity:1}}'}</style>
+      <style dangerouslySetInnerHTML={{ __html: '.case-phone .ss-phone__content{padding-top:0!important}.case-phone .ss-phone__home{display:none}@keyframes moment-in{from{opacity:0}to{opacity:1}}.case-mat{background:#F4F4F4;border-radius:20px;overflow:hidden;--frame-ground:#F4F4F4}@media (min-width:600px){.case-mat{padding:32px;border-radius:24px}.case-mat>div{overflow:hidden;border-radius:10px;box-shadow:0 0 0 1px #EBEBEB}.case-mat .eaw-win{border-radius:0!important;box-shadow:none!important}}' }} />
     </div>
   )
 }
