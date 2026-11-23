@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DAISY client sweep · prototype</title>
+    <link rel="icon" href="data:," />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <!-- A case-study page round the clip, as it would sit on the portfolio -->
+    <main class="page">
+      <header class="page-head">
+        <span>← Gareth Chainey</span>
+        <span class="muted">DAISY Assess, Enterprise AI 2025</span>
+      </header>
+      <h1 class="lead">Building with AI, I answered tenders with a working product, not a Figma prototype. <span class="muted">It showed real functionality, and how we use the technology on real problems.</span></h1>
+      <figure class="moment">
+        <div class="mat">
+          <div class="frame" id="frame">
+            <div class="stage" id="stage"></div>
+          </div>
+        </div>
+        <figcaption class="caption"><span id="caption-line">One product, three scenarios: a council, the state and Poland, each with its own seed data.</span><span class="client" id="client"></span></figcaption>
+      </figure>
+    </main>
+
+    <nav class="proto-picker" aria-label="Prototype variants">
+      <span class="proto-picker-highlight" aria-hidden="true"></span>
+      <button class="proto-picker-item" data-active aria-current="true">Centre card</button>
+      <button class="proto-picker-item">Toast</button>
+      <button class="proto-picker-item">Command</button>
+      <span class="proto-picker-divider" aria-hidden="true"></span>
+      <button class="proto-picker-item proto-picker-replay" aria-label="Replay animation (R)">↻</button>
+    </nav>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

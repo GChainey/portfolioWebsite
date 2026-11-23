@@ -1,0 +1,188 @@
+/* The surround: the portfolio's short case study (white page, 15/22 ink, a grey mat round the work) */
+* { box-sizing: border-box; }
+html, body { margin: 0; background: #fff; color: #181818; font: 15px/22px Geist, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+.page { width: 928px; margin: 0 auto; padding: 32px 0 120px; display: flex; flex-direction: column; gap: 24px; }
+.page-head { display: flex; justify-content: space-between; gap: 16px; }
+.muted { color: #666; font-weight: 400; }
+.lead { margin: 0; max-width: 540px; font-size: 15px; line-height: 22px; font-weight: 500; text-wrap: pretty; }
+.moment { margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.mat { background: #F4F4F4; border-radius: 24px; padding: 24px; }
+/* The app at 16:10, 880 wide: the recordings are 1440 × 900, scaled to fit */
+.frame { position: relative; width: 880px; height: 550px; overflow: hidden; border-radius: 8px; background: #fff; box-shadow: 0 0 0 1px rgba(0,0,0,0.06); }
+.stage { position: absolute; inset: 0; }
+/* Under the work, on the page: never over the app */
+.caption { display: flex; justify-content: space-between; gap: 16px; font-size: 13px; line-height: 20px; color: #666; }
+.client { color: #181818; font-weight: 500; white-space: nowrap; }
+
+/* Recordings: a 1440 × 900 page, scaled into the frame */
+.rec { position: absolute; left: 0; top: 0; width: 1440px; height: 900px; transform-origin: 0 0; }
+.rec .replayer-wrapper { position: relative; }
+.rec .replayer-wrapper > iframe { border: none; display: block; pointer-events: none; }
+.rec .replayer-mouse-tail { display: none; }
+.rec .replayer-mouse {
+  position: absolute; z-index: 10; width: 22px; height: 22px; margin: -3px 0 0 -4px; pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 3l14 8.5-6.2 1.4L16.5 20l-2.8 1.3-3.6-7.1L5 18z' fill='%23111' stroke='%23fff' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center / contain;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.35)); transition: left .05s linear, top .05s linear;
+}
+.rec .replayer-mouse::after { content: ''; position: absolute; left: 4px; top: 3px; width: 28px; height: 28px; border-radius: 50%; background: rgba(17,17,17,.2); opacity: 0; transform: translate(-50%, -50%) scale(.4); }
+.rec .replayer-mouse.active::after { animation: rr-click .35s ease-out; }
+@keyframes rr-click { from { opacity: 1; transform: translate(-50%, -50%) scale(.4) } to { opacity: 0; transform: translate(-50%, -50%) scale(1.5) } }
+
+/* glimm's canvas, one per changing card, clipped to that card's rounded rect */
+.band-box { position: absolute; overflow: hidden; pointer-events: none; z-index: 5; }
+.band { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* The popups: the product's look (white, zinc, Geist, the dialog shadow), drawn at the app's own
+   scale in a 1440 × 900 layer scaled with the recording. Enter: scale 0.96 + fade, 200 ms
+   ease-out, from the popup's own origin; exit 150 ms. */
+.pop-layer { position: absolute; left: 0; top: 0; width: 1440px; height: 900px; transform-origin: 0 0; z-index: 6; pointer-events: none; font-family: Geist, -apple-system, BlinkMacSystemFont, sans-serif; color: #09090B; -webkit-font-smoothing: antialiased; }
+.pop { position: absolute; display: flex; background: #fff; box-shadow: 0 0 0 1px rgba(9, 9, 11, 0.08), 0 16px 32px -8px rgba(9, 9, 11, 0.16), 0 4px 8px -4px rgba(9, 9, 11, 0.08); opacity: 0; transform: scale(0.96); transition: opacity 200ms cubic-bezier(0.23, 1, 0.32, 1), transform 200ms cubic-bezier(0.23, 1, 0.32, 1); }
+.pop[data-open] { opacity: 1; transform: none; }
+.pop[data-closing] { opacity: 0; transform: scale(0.98); transition-duration: 150ms; }
+.pop img { display: block; object-fit: contain; flex-shrink: 0; }
+.pop-arrow { width: 24px; height: 24px; flex-shrink: 0; color: #A1A1AA; }
+.pop-dim { position: absolute; inset: 0; background: rgba(9, 9, 11, 0.16); opacity: 0; transition: opacity 200ms cubic-bezier(0.23, 1, 0.32, 1); }
+.pop-dim[data-open] { opacity: 1; }
+.pop-dim[data-closing] { transition-duration: 150ms; }
+
+/* 1. Centre card */
+.pop-centre { left: 50%; top: 50%; width: 704px; margin: -112px 0 0 -352px; flex-direction: column; gap: 24px; padding: 32px; border-radius: 16px; transform-origin: 50% 50%; }
+.pop-eyebrow { font-size: 18px; line-height: 24px; font-weight: 500; color: #71717A; }
+.pop-change { display: flex; align-items: center; gap: 24px; }
+.pop-scn { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 0; }
+.pop-scn img { width: 48px; height: 48px; }
+.pop-scn-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.pop-name { font-size: 24px; line-height: 32px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; }
+.pop-level { font-size: 18px; line-height: 24px; color: #71717A; }
+.pop-scn.is-from { opacity: 0.56; }
+.pop-progress { height: 4px; border-radius: 2px; background: #F4F4F5; overflow: hidden; }
+.pop-progress > span { display: block; height: 100%; background: #18181B; transform: scaleX(0); transform-origin: 0 50%; transition: transform 900ms linear; }
+
+/* 2. Toast, top centre over the top bar */
+.pop-toast { left: 50%; top: 8px; translate: -50% 0; align-items: center; gap: 12px; height: 56px; padding: 0 20px 0 16px; border-radius: 12px; font-size: 20px; line-height: 24px; font-weight: 500; white-space: nowrap; transform-origin: 50% 0; }
+.pop-toast img { width: 28px; height: 28px; }
+.pop-toast-from { color: #71717A; }
+
+/* 3. Command palette */
+.pop-command { left: 50%; top: 152px; width: 704px; margin-left: -352px; flex-direction: column; border-radius: 16px; overflow: hidden; transform-origin: 50% 0; }
+.pop-input { display: flex; align-items: center; gap: 12px; height: 72px; padding: 0 24px; border-bottom: 1px solid #E4E4E7; font-size: 24px; line-height: 32px; }
+.pop-input svg { width: 24px; height: 24px; color: #A1A1AA; flex-shrink: 0; }
+.pop-caret { width: 2px; height: 28px; margin-left: -11px; background: #09090B; animation: caret 1s steps(1) infinite; }
+.pop-query:empty + .pop-caret { margin-left: -12px; }
+.pop-placeholder { display: none; margin-left: -12px; color: #A1A1AA; }
+.pop-query:empty ~ .pop-placeholder { display: inline; }
+@keyframes caret { 50% { opacity: 0; } }
+.pop-group { padding: 16px 24px 8px; font-size: 16px; line-height: 24px; font-weight: 500; color: #71717A; }
+.pop-rows { display: flex; flex-direction: column; padding: 0 8px 8px; }
+.pop-row { display: flex; align-items: center; gap: 16px; height: 56px; padding: 0 16px; border-radius: 8px; font-size: 20px; line-height: 28px; }
+.pop-row img { width: 32px; height: 32px; }
+.pop-row-name { flex: 1; font-weight: 500; }
+.pop-row-meta { font-size: 16px; color: #71717A; }
+.pop-row[data-active] { background: #F4F4F5; }
+.pop-row[data-pressed] { background: #E4E4E7; transform: scale(0.99); transition: transform 120ms ease-out, background-color 120ms ease-out; }
+.pop-foot { display: flex; align-items: center; justify-content: flex-end; gap: 8px; height: 48px; padding: 0 24px; border-top: 1px solid #E4E4E7; font-size: 16px; color: #71717A; }
+.pop-kbd { display: grid; place-items: center; min-width: 28px; height: 28px; padding: 0 6px; border-radius: 6px; background: #F4F4F5; box-shadow: inset 0 -1px 0 #E4E4E7; color: #09090B; font-size: 16px; transition: transform 120ms ease-out, background-color 120ms ease-out; }
+.pop-kbd[data-pressed] { background: #E4E4E7; transform: scale(0.94); }
+
+@media (prefers-reduced-motion: reduce) {
+  .pop, .pop[data-closing] { transform: none; transition: opacity 150ms ease-out; }
+  .pop-progress > span { transition: none; }
+  .pop-caret { animation: none; }
+}
+
+/* ===== The picker (PICKER.md, verbatim) ===== */
+.proto-picker {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(10, 10, 10, 0.82);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  backdrop-filter: blur(12px) saturate(1.4);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+    0 8px 24px rgba(0, 0, 0, 0.24),
+    0 2px 6px rgba(0, 0, 0, 0.12);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 13px;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.proto-picker-highlight {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  height: 28px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  will-change: transform;
+}
+
+/* The slide is enabled only after first paint (data-ready), so load doesn't animate. */
+.proto-picker[data-ready] .proto-picker-highlight {
+  transition:
+    transform 250ms cubic-bezier(0.23, 1, 0.32, 1),
+    width 250ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proto-picker[data-ready] .proto-picker-highlight { transition: none; }
+}
+
+.proto-picker-item {
+  position: relative; /* sits above the highlight */
+  display: flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.55);
+  font: inherit;
+  cursor: pointer;
+  transition: color 150ms ease-out;
+}
+
+.proto-picker-item:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.proto-picker-item:active {
+  transform: scale(0.97);
+}
+
+.proto-picker-item:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.4);
+  outline-offset: 2px;
+}
+
+.proto-picker-item[data-active] {
+  color: #fff;
+}
+
+.proto-picker-divider {
+  width: 1px;
+  height: 16px;
+  margin: 0 4px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.proto-picker-replay {
+  padding: 0 10px;
+  font-size: 14px;
+}
+
+.proto-picker[data-position="top"] {
+  bottom: auto;
+  top: 24px;
+}
