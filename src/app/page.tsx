@@ -79,7 +79,7 @@ function PosterLoop({ src }: { src: string }) {
 const CREATIVE: typeof PROJECTS = [
   { name: 'Opportunity sizing x Balatro', desc: 'Sizing a product bet, played like the card game: each number deals its card.', year: '2026', href: '/projects/balatro-opportunity-sizing', piece: 'balatro' },
   { name: 'Wallbounce', desc: 'A small top-down game, made with the dev tools an agent built for it.', year: '2026', href: '/projects/wallbounce-dev-tools', piece: 'wallbounce' },
-  { name: 'Saetia at Saint Vitus', desc: 'A poster for a gig, and a tool to move it: type, colour and a shader.', year: '2026', href: '/creative/saetia', piece: 'saetia', bare: true, scene: <PosterLoop src="/posters/saetia/saetia-variations-flick-4x5.mp4" /> },
+  { name: 'Saetia at Saint Vitus', desc: 'A poster for a gig, and a tool to move it: type, colour and a shader.', year: '2026', href: '/creative/saetia', piece: 'saetia', bare: true, scene: <PosterLoop src="/posters/saetia/saetia-card-loop.mp4" /> },
   { name: 'What to Remember When Waking', desc: 'A poster for a morning of poetry, made to look half awake.', year: '2026', href: '/creative/whyte', piece: 'whyte', bare: true, scene: <PosterLoop src="/posters/whyte/whyte-eyelids-loop.mp4" /> },
 ]
 
