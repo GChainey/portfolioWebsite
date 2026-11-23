@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.17.0',
+    date: '2026-11-23',
+    title: 'Enterprise AI: Navigation and Onward Journeys',
+    description: 'A new short case study, still a draft: people turned AI on and thought they were done. Workspace settings opening over the app, and a Set up button into the first step, took setting up a chatbot from 0 of 5 people to 5 of 5.',
+    changes: [
+      'Two stories, each a problem then an answer: lost between two kinds of settings, and assuming people knew what was next',
+      'Seven Stageshow scenes built from the real prototype (NYC Council, Parking permit) at laptop proportions, each in a window with its own title bar',
+      'Set up in the workspace settings dialog leads into the real setup stepper: Workflow, then Documents',
+      'The short-case-study skill learns when a moment needs a full window and when a cropped detail',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/eai-setup-study',
+  },
+  {
     version: '3.16.0',
     date: '2026-11-18',
     title: 'Poster Studies: Saetia and David Whyte, Running Live',

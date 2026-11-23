@@ -10,6 +10,10 @@ import { BpRepeat } from '@/components/stageshow/BpRepeat'
 import { BpProviderDates } from '@/components/stageshow/BpProviderDates'
 import { BpOldDialog } from '@/components/stageshow/BpOldDialog'
 import { BpFinal } from '@/components/stageshow/BpFinal'
+import { EaiNavigation } from '@/components/stageshow/EaiNavigation'
+import { EaiResult } from '@/components/stageshow/EaiResult'
+import { EaiSettingsDialog } from '@/components/stageshow/EaiSettingsDialog'
+import { EaiOnward } from '@/components/stageshow/EaiOnward'
 import { SeekAllTab } from '@/components/stageshow/SeekAllTab'
 import { SeekCards } from '@/components/stageshow/SeekCards'
 import { SeekConnect } from '@/components/stageshow/SeekConnect'
@@ -39,6 +43,13 @@ const SCENES = {
   'bp-provider-dates': () => <BpProviderDates />,
   'bp-old-dialog': () => <BpOldDialog />,
   'bp-final': () => <BpFinal />,
+  'eai-result': () => <EaiResult />,
+  'eai-navigation-problem': () => <EaiNavigation mode="problem" />,
+  'eai-navigation-answer': () => <EaiNavigation mode="answer" />,
+  'eai-settings-problem': () => <EaiSettingsDialog mode="problem" />,
+  'eai-settings-answer': () => <EaiSettingsDialog mode="answer" />,
+  'eai-onward-problem': () => <EaiOnward mode="problem" />,
+  'eai-onward-answer': () => <EaiOnward mode="answer" />,
 }
 
 type Region = { x: number; y: number; width: number; height: number }
@@ -127,6 +138,22 @@ function PhonePair({ before, after }: { before: string; after: string }) {
   )
 }
 
+// A whole app as a window on the grey: its own title bar, a small radius, a soft shadow, an even gutter
+function AppWindow({ children }: { children: ReactNode }) {
+  return (
+    // On a phone the scene's compact design is already a small window on grey, so the outer window steps
+    // aside (no window inside a window)
+    <div className="case-window overflow-hidden rounded-[20px] min-[600px]:p-10" style={{ background: SHELL }}>
+      <div className="min-[600px]:overflow-hidden min-[600px]:rounded-[12px] min-[600px]:bg-white min-[600px]:[box-shadow:0_0_0_1px_#EBEBEB,0_1px_2px_rgba(0,0,0,0.04),0_16px_40px_-20px_rgba(0,0,0,0.18)]">
+        <div className="hidden h-7 items-center gap-1.5 px-3 min-[600px]:flex" style={{ background: '#FAFAFA', borderBottom: `1px solid ${LINE}` }}>
+          {[0, 1, 2].map((i) => <span key={i} className="size-2 rounded-full" style={{ background: '#DADADA' }} />)}
+        </div>
+        <div data-ss-fill>{children}</div>
+      </div>
+    </div>
+  )
+}
+
 // A live page in an iframe: the real thing, sharp at any size. Loads when near the screen.
 function Live({ src, ratio, title }: { src: string; ratio: number; title: string }) {
   return <iframe src={src} title={title} loading="lazy" className="block w-full border-0" style={{ aspectRatio: ratio }} />
@@ -150,7 +177,14 @@ function Art({ media }: { media: Media }) {
   if ('replay' in media && media.phone) return <PhoneReplay src={media.replay} region={media.region} />
   if ('replay' in media && media.ground) return <div className="overflow-hidden rounded-[24px]" style={{ background: SHELL }}><RecordingReplay src={media.replay} region={media.region} bare /></div>
   if ('replay' in media) return <Mat><RecordingReplay src={media.replay} region={media.region} bare /></Mat>
-  if ('scene' in media) { const Scene = SCENES[media.scene]; return <Shell scene><div data-ss-fill><Scene /></div></Shell> }
+  if ('scene' in media) {
+    const Scene = SCENES[media.scene]
+    // A whole app (the Enterprise AI scenes) is a window with its own title bar, floating on the grey with an
+    // even gutter: nothing is cropped and its corners are its own (Gareth picked "Window" from /draft/eai-frames,
+    // 2026-11-23: a full app needs the context; a bleed crop is for small details). Phones keep their framing
+    if (media.scene.startsWith('eai-')) return <AppWindow><Scene /></AppWindow>
+    return <Shell scene><div data-ss-fill><Scene /></div></Shell>
+  }
   if ('video' in media) {
     if (media.fill) return <div className="overflow-hidden rounded-[20px]" style={{ aspectRatio: media.ratio, background: SHELL }}><Video src={media.video} /></div>
     // A phone recording stands on the grey, the height of a landscape clip. The recording is the
@@ -250,7 +284,7 @@ export function CaseStudy({ study }: { study: Study }) {
       </main>
       <Contents sections={sections} after="study-top" />
       {/* The recordings carry their own status bar and safe area: the kit's would double them */}
-      <style>{'.case-phone .ss-phone__content{padding-top:0!important}.case-phone .ss-phone__home{display:none}@keyframes moment-in{from{opacity:0}to{opacity:1}}'}</style>
+      <style dangerouslySetInnerHTML={{ __html: '.case-phone .ss-phone__content{padding-top:0!important}.case-phone .ss-phone__home{display:none}@keyframes moment-in{from{opacity:0}to{opacity:1}}@media (min-width:600px){.case-window .eaw-win{border-radius:0!important;box-shadow:none!important}}' }} />
     </div>
   )
 }

@@ -265,6 +265,46 @@ export const STUDIES: Study[] = [
       },
     ],
   },
+  {
+    slug: 'eai-setup',
+    label: 'Enterprise AI',
+    meta: '2026',
+    // A story of navigation and onward journeys (Gareth, 2026-11-23). Navigation: workspace settings and app
+    // settings looked the same and moving between them lost you; now workspace settings is a dialog over the
+    // app. Onward journey: turning AI on didn't say what's next, so people assumed they were done; now a
+    // button takes them on. Facts from the eai-settings write-up (projects.ts) and the user-testing essay:
+    // 0 of 5 → 5 of 5 setting up a chatbot; 5 of 5 found the right settings. Scenes from the real prototype
+    // (prototypes repo, workspace-ai-demo/build-web) with the workspace as NYC Council
+    lead: 'People turned AI on and thought they were done.',
+    rest: 'Clearer navigation and an onward journey took setting up a chatbot from 0 of 5 people to 5 of 5.',
+    rows: [
+      ['Set up an AI chatbot', '0 of 5 → 5 of 5 people'],
+      ['Found the right settings', '5 of 5 people'],
+      ['Built as', 'Working HTML prototypes, generated with AI'],
+      ['Role', 'Lead product designer'],
+    ],
+    blocks: [
+      { moment: { scene: 'eai-result' }, line: 'Workspace settings opens over the app; turn the chatbot on for Parking permit, and Set up takes you straight into its first setup step.' },
+
+      { lead: 'Problem: lost between two kinds of settings.', rest: 'Workspace settings and app settings looked the same, and workspace settings took you out of the app.' },
+      { moment: { scene: 'eai-settings-problem' }, line: 'Add in Workspace Settings takes you to a separate page; turn the chatbot on, close, and you land on Home, not back in the app.' },
+      { lead: 'Answer: workspace settings opens over the app.', rest: 'A dialog, so closing it leaves you where you were.' },
+      { moment: { scene: 'eai-settings-answer' }, line: 'Workspace settings opens as a dialog over the app; turn the chatbot on, Done, and you’re still in the app.' },
+
+      { lead: 'Problem: we assumed people knew what was next.', rest: 'They turned the chatbot on, saw it saved and stopped, sure they’d finished.' },
+      { moment: { scene: 'eai-onward-problem' }, line: 'The chatbot is turned on and saved, but nothing says what’s next, so people stop here.' },
+      { lead: 'Answer: a button to the next step.', rest: 'Turn it on for an app, and a Set up button takes you straight there.' },
+      { moment: { scene: 'eai-onward-answer' }, line: 'Turn the chatbot on for Parking permit and its Set up button lights up; Set up closes settings and opens the first step of setting it up.' },
+
+      {
+        lead: 'It works on any setup flow.',
+        list: [
+          'Open settings over where people are.',
+          'Never assume people know the next step: give them a button to it.',
+        ],
+      },
+    ],
+  },
 ]
 
 export const studyBySlug = (slug: string) => STUDIES.find((s) => s.slug === slug)
