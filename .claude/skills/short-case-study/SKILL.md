@@ -66,6 +66,15 @@ a dev preview page (`src/app/draft/<study>-scenes/page.tsx`) and rehearse with t
 - **Frame the work, not the window.** No empty lower half; the component is as tall as its content and the
   stage crops to it with an even gutter. Crop recordings to the dialog (`region`) so text renders large.
 - **Plain grey ground** (the shell grey) behind scenes; no decorative backdrops or tiles.
+- **Frame by how much context the moment needs** (Gareth, 2026-11-23, picked from a four-way prototype):
+  - **A full app or a bigger interaction → Window**: the app as a window with its own title bar, floating on
+    the grey with an even 40px gutter, nothing cropped (`AppWindow` in `case-study.tsx`). On phones the
+    scene's own compact framing is enough; no window inside a window.
+  - **A small detail → Bleed**: the window starts well inside the grey and runs off the right and bottom
+    edges on purpose, so the crop reads as a choice.
+  - Never a scene edge-to-edge inside a heavily rounded shell (the corner clips the window, the top-left logo
+    looks cut), and never a separate grey title bar inside the frame (it reads as part of the design): the
+    headline sits above the figure, the caption below.
 - **One design system, applied consistently**: one radius for every UI element (only the container differs),
   one spacing rule (side-by-side controls one gap, stacked fields another, 4/8 inside components), cards and
   rows fill their width, no stretched empty fields, few type sizes and colours (audit them; minimise).
