@@ -1809,9 +1809,10 @@ export const projects: Project[] = [
         type: 'video',
         src: '/case-studies/rfp/scale.mp4',
         aspectRatio: '16/10',
-        alt: 'One council, then the whole state',
-        caption: 'The same product restructured for a state',
+        alt: 'One council, then the state, then Poland',
+        caption: 'One product, three clients: a council, the state and Poland, each with its own seed data',
         brief: 'Start on a single council, switch to the state view, and show regions, roles and reporting rolling up.',
+        // The client sweep (prototypes/client-sweep): kept pending, so it shows on the dev server only
         pending: true,
       },
       {
