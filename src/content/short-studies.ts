@@ -23,7 +23,6 @@ export const STUDIES: Study[] = [
     rest: 'It showed real functionality, and how we use the technology on real problems.',
     rows: [['Signed deals', '$2 million so far'], ['Tenders', 'More than one, from the same prototype'], ['Markets', '2, English and Polish'], ['Engineering', 'Still the design they build from']],
     blocks: [
-      { moment: { video: '/case-studies/daisy-assess/client-sweep.mp4', poster: '/case-studies/daisy-assess/client-sweep-poster.png', ratio: 16 / 10, window: true }, line: 'One product, three clients: a council, the state and Poland, each with its own seed data.' },
       { lead: 'Deep enough to tell a real story.', rest: 'One case, followed all the way through.' },
       { moment: { replay: '/replays/rfp/seed-data.json' }, line: 'One case from the dashboard to its assessment and its request for information. Every screen follows it.' },
       { moment: { scene: 'rfp-letter' }, line: 'Issues flagged by different officers, ticked into one request for information.' },

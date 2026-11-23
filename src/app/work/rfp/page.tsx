@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { RfpLetter } from '@/components/stageshow/RfpLetter'
 import { RecordingReplay } from '@/components/replay/RecordingReplay'
@@ -34,6 +35,13 @@ export default function RfpCaseStudy() {
           <p>Before AI, I would have answered with Figma mock-ups and a lot of help. This time I built the product with Claude Code, connected to real models and one set of seed data, so the people judging the tender could try it for themselves.</p>
         </section>
 
+        {/* The client sweep (prototypes/client-sweep): on the dev server only until it's signed off */}
+        {process.env.NODE_ENV === 'development' && (
+          <Moment mat line="One product, three clients: a council, the state and Poland, each with its own seed data.">
+            <InViewVideo src="/case-studies/rfp/scale.mp4" poster="/case-studies/rfp/scale-poster.png" />
+          </Moment>
+        )}
+
         <Moment scene line="Tick a reviewer’s issue in, and it’s written into the request for information.">
           <RfpLetter bare />
         </Moment>
@@ -55,4 +63,17 @@ export default function RfpCaseStudy() {
       <CompareTab />
     </div>
   )
+}
+
+// Plays only while on screen; reduced motion keeps the poster
+function InViewVideo({ src, poster }: { src: string; poster: string }) {
+  const ref = useRef<HTMLVideoElement>(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el || matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) el.play().catch(() => {}); else el.pause() }, { threshold: 0.25 })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+  return <video ref={ref} src={src} poster={poster} muted loop playsInline preload="metadata" className="block aspect-[16/10] w-full object-cover" />
 }
