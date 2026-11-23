@@ -286,19 +286,19 @@ export const STUDIES: Study[] = [
       { moment: { scene: 'eai-result' }, line: 'Settings open over the app, and turning the chatbot on leads straight to setting it up, until it’s live.' },
 
       { lead: 'Problem: where am I?', rest: 'The workspace and the app looked the same.' },
-      { moment: { scene: 'eai-navigation-problem' }, line: 'Home, then Parking permit: the same sidebar, the same page.' },
+      { moment: { scene: 'eai-navigation-problem' }, line: 'From the workspace into Parking permit: the same sidebar and the same kind of page, so nothing tells you which level you’re on.' },
       { lead: 'Answer: the app sits inside the workspace.', rest: 'Their colours swap, so you know the level before you read a word.' },
-      { moment: { scene: 'eai-navigation-answer' }, line: 'Into Parking permit: a white card inside the grey workspace.' },
+      { moment: { scene: 'eai-navigation-answer' }, line: 'Into Parking permit: the app is a white card inside the grey workspace, so the level is obvious before you read a word.' },
 
       { lead: 'Problem: settings that moved you.', rest: 'Workspace settings was a separate page, and closing it left you on Home.' },
-      { moment: { scene: 'eai-settings-problem' }, line: 'Add in Workspace Settings, turn it on, close: you’re on Home, not in the app.' },
+      { moment: { scene: 'eai-settings-problem' }, line: 'Add in Workspace Settings takes you to a separate page; turn the chatbot on, close, and you land on Home, not back in the app.' },
       { lead: 'Answer: a dialog over the app.', rest: 'Closing it only closes it.' },
-      { moment: { scene: 'eai-settings-answer' }, line: 'Turn the chatbot on from the app, Done, and you’re still in the app.' },
+      { moment: { scene: 'eai-settings-answer' }, line: 'Workspace settings opens as a dialog over the app; turn the chatbot on, Done, and you’re exactly where you were.' },
 
       { lead: 'Problem: on isn’t set up.', rest: 'People turned the chatbot on, saw it saved and stopped. Nothing pointed back to the app.' },
-      { moment: { scene: 'eai-onward-problem' }, line: 'Turned on, closed, and back on Home with nothing next.' },
+      { moment: { scene: 'eai-onward-problem' }, line: 'The chatbot is turned on and saved, but nothing points back to the app to set it up, so people stop here.' },
       { lead: 'Answer: every step offers the next.', rest: 'Turning it on leads straight to setting it up.' },
-      { moment: { scene: 'eai-onward-answer' }, line: 'Done, then straight to Configure, then live in the workflow.' },
+      { moment: { scene: 'eai-onward-answer' }, line: 'Turning it on leads straight to setting it up in Parking permit, then adding it to the workflow until it’s live.' },
 
       {
         lead: 'It works on any setup flow.',

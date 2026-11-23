@@ -2,7 +2,7 @@
 
 import { Stage } from './kit/stage'
 import type { Act } from './kit/act'
-import { AppRail, AppShell, AppTop, Btn, Card, Fade, Ico, MoreCard, Note, Win, WsHome, WsScreen, WsSidebar, WsTop, type Layout, type Mode } from './eai-shell'
+import { AppRail, AppShell, AppTop, Btn, Card, Fade, Ico, MoreCard, Win, WsHome, WsScreen, WsSidebar, WsTop, type Layout, type Mode } from './eai-shell'
 
 // Where am I? Going from the workspace into an app and back.
 // The problem: the first release drew the app the way it drew the workspace: the same grey sidebar
@@ -162,7 +162,7 @@ function Scene({ s, layout }: { s: S; layout: Layout }) {
   const view = s.screen === 'home' ? 'home' : s.fix ? 'after' : 'before'
   return (
     <>
-      <Note fix={s.fix} problem={['Workspace and app look the same', 'Workspace and app look alike']} solution={['The app sits inside the workspace as a card', 'The app is a card in the workspace']} />
+      {/* No note in the scene: the study's headline above says problem or answer, the caption below says what happens (Gareth, 2026-11-22) */}
       <Win>
         <Fade value={view} states={{ home: <Home layout={layout} />, before: <AppBefore layout={layout} />, after: <AppAfter layout={layout} /> }} />
       </Win>

@@ -2,7 +2,7 @@
 
 import { Stage } from './kit/stage'
 import type { Act } from './kit/act'
-import { AppScreen, AppShell, Btn, Card, Fade, FeaturesCard, Ico, MoreCard, Note, PageHead, Row, Rows, SettingsDialog, SettingsNav, Status, Win, WsHome, WsScreen, WsSidebar, WsTop, type Layout, type Mode } from './eai-shell'
+import { AppScreen, AppShell, Btn, Card, Fade, FeaturesCard, Ico, MoreCard, PageHead, Row, Rows, SettingsDialog, SettingsNav, Status, Win, WsHome, WsScreen, WsSidebar, WsTop, type Layout, type Mode } from './eai-shell'
 
 // Workspace settings and app settings, and the way between them.
 // The problem: on Parking permit's AI features, "Add in Workspace Settings ↗" left the app for a
@@ -173,7 +173,7 @@ function Home({ layout }: { layout: Layout }) {
 function Scene({ s, layout }: { s: S; layout: Layout }) {
   return (
     <>
-      <Note fix={s.fix} problem={['Workspace settings takes you out of the app', 'Settings leaves the app']} solution={['Workspace settings opens over the app you’re in', 'Settings opens over the app']} />
+      {/* No note in the scene: the study's headline above says problem or answer, the caption below says what happens (Gareth, 2026-11-22) */}
       <Win vis={layout === 'wide' ? 808 : 492} overlay={<SettingsDialog open={s.dlg} chatbot={s.on} toggle="dlg-tog" done="done" />}>
         <Fade value={s.screen} states={{ appP: <AiFeatures layout={layout} on={false} />, appF: <AiFeatures layout={layout} on={s.card} />, settings: <SettingsPage layout={layout} on={s.on} />, home: <Home layout={layout} /> }} />
       </Win>

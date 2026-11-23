@@ -2,7 +2,7 @@
 
 import { Stage } from './kit/stage'
 import type { Act } from './kit/act'
-import { AppScreen, AppShell, Btn, Card, Fade, FeaturesCard, FitFade, Ico, Note, PageHead, Row, Rows, SettingsDialog, SettingsNav, Toast, Win, WsHome, WsScreen, WsSidebar, WsTop, type Layout, type Mode } from './eai-shell'
+import { AppScreen, AppShell, Btn, Card, Fade, FeaturesCard, FitFade, Ico, PageHead, Row, Rows, SettingsDialog, SettingsNav, Toast, Win, WsHome, WsScreen, WsSidebar, WsTop, type Layout, type Mode } from './eai-shell'
 
 // After turning a feature on: what's next?
 // The problem, as testers did it (every one said they'd finished, having done one step): workspace
@@ -203,7 +203,7 @@ export function ChatbotPage({ page, layout }: { page: Page; layout: Layout }) {
 function Scene({ s, layout }: { s: S; layout: Layout }) {
   return (
     <>
-      <Note fix={s.fix} problem={['Turned on in settings, then nothing says what’s next', 'Turned on, then nothing next']} solution={['Turning it on leads straight to the next step', 'On leads to the next step']} />
+      {/* No note in the scene: the study's headline above says problem or answer, the caption below says what happens (Gareth, 2026-11-22) */}
       <Win vis={layout === 'wide' ? 808 : 584} overlay={<SettingsDialog open={s.dlg} chatbot={s.sw} toggle="dlg-tog" done="done" />}>
         <Fade
           value={s.screen}

@@ -48,7 +48,7 @@
 
 /* The window: inset at the gutter, under the note, running off the foot */
 .eaw .eaw-win { position: absolute; left: 40px; top: 52px; width: 720px; height: 860px; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: var(--eaw-ring), 0 24px 48px -24px rgba(0, 0, 0, 0.16); }
-.eaw .ss-stage[data-layout='compact'] .eaw-win { left: 32px; top: 40px; width: 294px; }
+.eaw .ss-stage[data-layout='compact'] .eaw-win { left: 32px; top: 32px; width: 294px; } /* no note above: the window takes the gutter */
 .eaw .eaw-win__body { position: absolute; inset: 0; display: grid; }
 .eaw .eaw-win__body > .eaw-fade, .eaw .eaw-win__body > .eaw-fade > .eaw-fade__item { height: 100%; }
 
@@ -343,7 +343,7 @@
    the 720 column. Compact keeps its own design above. */
 .eaw .ss-stage:not([data-layout='compact']) .eaw-note { left: 32px; top: 22px; }
 .eaw .ss-stage:not([data-layout='compact']) .eaw-note__text { font-size: 24px; line-height: 32px; gap: 12px; }
-.eaw .ss-stage:not([data-layout='compact']) .eaw-win { left: 0; top: 76px; width: 1280px; height: 1000px; }
+.eaw .ss-stage:not([data-layout='compact']) .eaw-win { left: 0; top: 0; width: 1280px; height: 1000px; }
 .eaw.eaw--result .ss-stage:not([data-layout='compact']) .eaw-win { top: 0; }
 .eaw .ss-stage:not([data-layout='compact']) .eaw-screen { grid-template-columns: 264px minmax(0, 1fr); }
 .eaw .ss-stage:not([data-layout='compact']) .eaw-top { height: 56px; padding: 0 24px; gap: 16px; }
