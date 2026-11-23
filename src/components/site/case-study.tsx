@@ -55,7 +55,7 @@ const SCENES = {
 type Region = { x: number; y: number; width: number; height: number }
 export type Media =
   | { replay: string; region?: Region; phone?: boolean; ground?: boolean } // an HTML replay, sharp at any size. phone: a phone-sized recording, shown in an iPhone on the grey (region crops off its own status bar). ground: the recording paints its own grey page, so it fills the shell with no white panel round it
-  | { video: string; ratio: number; fill?: boolean } // the pre-AI work, which only exists as video. Below 1, a phone; fill: the clip itself edge to edge, no device (a posted clip)
+  | { video: string; ratio: number; fill?: boolean; window?: boolean; poster?: string } // the pre-AI work, which only exists as video. Below 1, a phone; fill: the clip itself edge to edge, no device (a posted clip); window: a whole app, framed as a window on the grey (AppWindow). poster: shown until it plays, and instead of it for reduced motion; with a poster it plays only while on screen
   | { stills: string[] } // a few stills side by side, two to a row
   | { scene: keyof typeof SCENES } // a Stageshow scene
   | { image: string; ratio: number } // a cut-out still (phones on a transparent ground), standing on the grey
@@ -79,8 +79,19 @@ export type Study = {
   blocks: Block[]
 }
 
-function Video({ src }: { src: string }) {
-  return <video src={src} autoPlay muted loop playsInline preload="metadata" className="block h-full w-full object-cover" />
+function Video({ src, poster }: { src: string; poster?: string }) {
+  const ref = useRef<HTMLVideoElement>(null)
+  // With a poster: play only while on screen, and never for reduced motion (the poster stands in)
+  useEffect(() => {
+    const el = ref.current
+    if (!el || !poster) return
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) el.play().catch(() => {}); else el.pause() }, { threshold: 0.25 })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [poster])
+  if (!poster) return <video src={src} autoPlay muted loop playsInline preload="metadata" className="block h-full w-full object-cover" />
+  return <video ref={ref} src={src} poster={poster} muted loop playsInline preload="metadata" className="block h-full w-full object-cover" />
 }
 
 // The iPhone 18 Pro from the Stageshow kit (Apple's geometry: titanium band, Dynamic Island, its own
@@ -186,6 +197,7 @@ function Art({ media }: { media: Media }) {
     return <Shell scene><div data-ss-fill><Scene /></div></Shell>
   }
   if ('video' in media) {
+    if (media.window) return <AppWindow><div style={{ aspectRatio: media.ratio }}><Video src={media.video} poster={media.poster} /></div></AppWindow>
     if (media.fill) return <div className="overflow-hidden rounded-[20px]" style={{ aspectRatio: media.ratio, background: SHELL }}><Video src={media.video} /></div>
     // A phone recording stands on the grey, the height of a landscape clip. The recording is the
     // phone, bezel and all, on black: round it to the bezel's corners so the black doesn't show
