@@ -186,3 +186,9 @@ html, body { margin: 0; background: #fff; color: #181818; font: 15px/22px Geist,
   bottom: auto;
   top: 24px;
 }
+
+/* ?capture=1: only the frame, at the top left, for recording the video */
+.capture .page-head, .capture .lead, .capture .caption, .capture .proto-picker { display: none !important; }
+.capture .page { width: auto; margin: 0; padding: 0; gap: 0; }
+.capture .mat { background: none; padding: 0; border-radius: 0; }
+.capture .frame { border-radius: 0; box-shadow: none; }

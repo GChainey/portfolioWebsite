@@ -202,6 +202,7 @@ async function sequence(popup: Popup, k: Kit) {
   layer.style.transform = `scale(${SCALE})`
   frame.appendChild(layer)
   let i = 0
+  const marks = ((window as unknown as { __marks?: number[] }).__marks = [performance.now()])
   cs[0].el.style.visibility = 'visible'
   client.textContent = SCENES[0].name
   for (;;) {
@@ -239,6 +240,8 @@ async function sequence(popup: Popup, k: Kit) {
     }, (p) => sk.revealBelow(p))
     sk.revealAll()
     i = j
+    // Capture (?capture=1) reads these: one entry per change, a loop is 3 changes
+    marks.push(performance.now())
   }
 }
 
@@ -420,6 +423,8 @@ document.addEventListener('keydown', (e) => {
   else if (e.key === 'r' || e.key === 'R') mount(current)
 })
 
+// ?capture=1: just the frame, for recording the video (no picker, no surround)
+if (new URLSearchParams(location.search).has('capture')) document.documentElement.classList.add('capture')
 setActive((parseInt(new URLSearchParams(location.search).get('v') ?? '', 10) || 1) - 1)
 // Enable the slide only after first paint, so load doesn't animate.
 requestAnimationFrame(() => requestAnimationFrame(() => picker.setAttribute('data-ready', '')))

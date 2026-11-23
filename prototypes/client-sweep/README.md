@@ -57,3 +57,19 @@ and returns to where it started (so cuts between clips don't move it).
 - `public/logos`: the three scenario marks, as used by DAISY's tenancy switcher
 
 Nothing here is imported by DesignConfigurator.
+
+## Export the video (variant 3, Command, chosen)
+
+```sh
+npm run dev                                   # one terminal
+node scripts/capture.mjs 3                    # another: one loop into exports/raw/*.webm
+# content appears ~0.9 s into the raw file; the loop is ~20.6 s
+ffmpeg -ss 0.95 -i exports/raw/<file>.webm -t 20.6 -vf "scale=1600:-2:flags=lanczos" -r 60 \
+  -c:v libx264 -pix_fmt yuv420p -crf 18 -movflags +faststart exports/client-sweep-command.mp4
+ffmpeg -i exports/client-sweep-command.mp4 -c:v libx264 -pix_fmt yuv420p -crf 24 -preset slow \
+  -movflags +faststart -an ../../public/case-studies/daisy-assess/client-sweep.mp4
+```
+
+`?capture=1` shows only the frame (no picker, no surround). The poster is the Command popup with
+"Polska" chosen, 10.4 s in. The band renders through WebGL; headless Chromium needs
+`--use-gl=angle --use-angle=swiftshader --enable-unsafe-swiftshader --ignore-gpu-blocklist`.
