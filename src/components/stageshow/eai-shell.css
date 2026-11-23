@@ -379,3 +379,22 @@
 .eaw .eaw-card--row { flex-direction: row; align-items: center; justify-content: space-between; }
 .eaw .eaw-side__label--group { display: flex; align-items: center; justify-content: space-between; padding-right: 8px; }
 .eaw .eaw-side__label--group .eaw-ico { width: 12px; height: 12px; color: var(--eaw-mute); }
+
+/* Workspace settings › a feature: apps, each with its switch and Set up (disabled grey → dark) */
+.eaw .eaw-dlg--feature { width: 600px; }
+.eaw .ss-stage[data-layout='compact'] .eaw-dlg--feature { width: calc(100% - 24px); }
+.eaw .eaw-ftable { margin-top: 8px; box-shadow: inset 0 1px 0 var(--eaw-line2); }
+.eaw .eaw-ftable__head, .eaw .eaw-ftable__row { display: grid; grid-template-columns: minmax(0, 1fr) 64px 80px; align-items: center; gap: 12px; padding: 0 16px; }
+.eaw .ss-stage[data-layout='compact'] .eaw-ftable__head, .eaw .ss-stage[data-layout='compact'] .eaw-ftable__row { grid-template-columns: minmax(0, 1fr) 40px 72px; padding: 0 12px; gap: 8px; }
+.eaw .eaw-ftable__head { height: 36px; background: var(--eaw-wash); font-size: 12px; line-height: 16px; font-weight: 500; color: var(--eaw-mute); }
+.eaw .eaw-ftable__head span:not(:first-child), .eaw .eaw-ftable__row > :not(:first-child) { justify-self: end; }
+.eaw .eaw-ftable__row { height: 56px; box-shadow: inset 0 1px 0 var(--eaw-line2); }
+.eaw .eaw-ftable__row .eaw-table__name { overflow: hidden; text-overflow: ellipsis; }
+.eaw .eaw-setup { display: inline-flex; align-items: center; justify-content: center; width: 72px; height: 32px; border-radius: 8px; background: var(--eaw-fill); color: var(--eaw-faint); font-weight: 500; white-space: nowrap; will-change: transform; transition: background-color 200ms ease, color 200ms ease, transform 120ms ease-out; }
+.eaw .eaw-setup[data-on] { background: var(--eaw-ink); color: #fff; }
+.eaw .eaw-setup[data-on][data-hover] { background: #27272a; }
+.eaw .eaw-setup[data-pressed] { transform: scale(0.97); }
+.eaw .eaw-ftable__row .eaw-table__name { display: block; min-width: 0; white-space: nowrap; }
+/* The result's dialog a step above centre, clear of the page's own buttons under the scrim */
+.eaw.eaw--result .eaw-dlg { margin-top: -20px; }
+.eaw.eaw--result .ss-stage[data-layout='compact'] .eaw-dlg { margin-top: -16px; }

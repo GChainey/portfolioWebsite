@@ -293,8 +293,8 @@ export const STUDIES: Study[] = [
 
       { lead: 'Problem: we assumed people knew what was next.', rest: 'They turned the chatbot on, saw it saved and stopped, sure they’d finished.' },
       { moment: { scene: 'eai-onward-problem' }, line: 'The chatbot is turned on and saved, but nothing says what’s next, so people stop here.' },
-      { lead: 'Answer: a button to the next step.', rest: 'Turning it on takes you straight to setting it up.' },
-      { moment: { scene: 'eai-onward-answer' }, line: 'Turning it on lands on setting it up in Parking permit, with a button to add it to the workflow.' },
+      { lead: 'Answer: a button to the next step.', rest: 'Turn it on for an app, and a Set up button takes you straight there.' },
+      { moment: { scene: 'eai-onward-answer' }, line: 'Turn the chatbot on for Parking permit and its Set up button lights up; Set up closes settings and lands on configuring it in the app.' },
 
       {
         lead: 'It works on any setup flow.',

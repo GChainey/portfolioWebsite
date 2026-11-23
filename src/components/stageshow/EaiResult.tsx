@@ -2,7 +2,7 @@
 
 import { Stage } from './kit/stage'
 import type { Act } from './kit/act'
-import { AppScreen, AppShell, Fade, SettingsDialog, Win, WsHome, WsScreen, WsSidebar, WsTop, type Layout } from './eai-shell'
+import { AppScreen, AppShell, FeatureDialog, Fade, Win, WsHome, WsScreen, WsSidebar, WsTop, type Layout } from './eai-shell'
 import { AiFeatures } from './EaiSettingsDialog'
 import { ChatbotPage, type Page } from './EaiOnward'
 
@@ -11,8 +11,8 @@ import { ChatbotPage, type Page } from './EaiOnward'
 // chatbot page).
 // The workspace Home (grey sidebar, white page) → Parking permit, a white card inset on the workspace
 // grey, at its AI features → "Add in Workspace Settings ↗" opens workspace settings as a small dialog
-// over the app → AI Chatbot on → Done: the page under it is already "Configure AI Chatbot in Parking
-// permit", and the dialog fades onto it → "Add to workflow" → "Live in Parking permit application",
+// over the app, AI Chatbot's pane listing the apps → Parking permit's switch on → its Set up lights → Set
+// up: settings closes onto "Configure AI Chatbot in Parking permit" → "Add to workflow" → "Live in Parking permit application",
 // the chatbot on the Application stage (payoff, held) → the NYC Council crumb back to Home, where it
 // began. No note: the scenes after it name the problems.
 
@@ -42,9 +42,14 @@ async function script(a: Act<S>) {
   await a.wait(200)
   await a.click('dlg-tog')
   await a.set({ sw: true })
-  await a.wait(500)
-  await a.click({ at: 'done', x: 0.84, y: 0.66 })
-  // The page under the dialog moves on to Configure first; then the dialog fades away onto it
+  // Its Set up lights up (grey to dark): the onward step, in the dialog. The cursor goes to it and
+  // rests there a beat before pressing
+  await a.wait(450)
+  a.mark('setup')
+  await a.move({ at: 'setup', x: 0.8, y: 0.7 }, { duration: 700 })
+  await a.wait(900)
+  await a.click({ at: 'setup', x: 0.8, y: 0.7 })
+  // Settings closes onto the app, which has moved on to Configure underneath
   await a.set({ screen: 'chatbot' })
   await a.wait(420)
   await a.set({ dlg: false })
@@ -66,7 +71,7 @@ async function script(a: Act<S>) {
 
 function Scene({ s, layout }: { s: S; layout: Layout }) {
   return (
-    <Win vis={layout === 'wide' ? 808 : 584} overlay={<SettingsDialog open={s.dlg} chatbot={s.sw} toggle="dlg-tog" done="done" />}>
+    <Win vis={layout === 'wide' ? 808 : 584} overlay={<FeatureDialog layout={layout} open={s.dlg} on={s.sw} toggle="dlg-tog" setup="setup" />}>
       <Fade
         value={s.screen}
         states={{
@@ -91,7 +96,7 @@ function Scene({ s, layout }: { s: S; layout: Layout }) {
 
 export function EaiResult({ bare = true }: { bare?: boolean } = {}) {
   return (
-    <figure className={bare ? 'not-prose eaw eaw--result eaw--bare' : 'not-prose eaw eaw--result my-8'} role="img" aria-label="Enterprise AI today: from the NYC Council workspace into Parking permit, an app nested in the workspace; workspace settings opens over the app, AI Chatbot goes on, and Done lands straight on Configure AI Chatbot in Parking permit; one press puts it live on the Parking permit application workflow">
+    <figure className={bare ? 'not-prose eaw eaw--result eaw--bare' : 'not-prose eaw eaw--result my-8'} role="img" aria-label="Enterprise AI today: from the NYC Council workspace into Parking permit, an app nested in the workspace; workspace settings opens over the app at AI Chatbot; Parking permit is switched on and its Set up button, right in the dialog, lands straight on Configure AI Chatbot in Parking permit; one press puts it live on the Parking permit application workflow">
       <Stage width={1280} height={808} compact={{ below: 600, width: 358, height: 616 }} initial={initial} poster={poster} script={script} play="loop" fill={!bare} cursor={{ at: REST, style: 'large' }} className="eaw">
         {(s, _rect, layout) => <Scene s={s} layout={layout === 'compact' ? 'compact' : 'wide'} />}
       </Stage>

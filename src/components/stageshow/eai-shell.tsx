@@ -503,3 +503,37 @@ export function SettingsDialog({ open, chatbot, toggle, done }: { open: boolean;
 export function Toast({ on, children }: { on: boolean; children: ReactNode }) {
   return <div className="eaw-toast" data-on={on || undefined} role="status">{children}</div>
 }
+
+// Workspace settings › AI Chatbot, as a dialog over the app (admin-ai-feature-setup.js): each app with
+// its switch and a "Set up" button, disabled until that app's switch is on, then dark. Set up closes
+// settings and goes to the feature's setup in that app: the onward step, in the dialog itself
+const FEATURE_APPS = ['Parking permit', 'Building permit', 'Street vendor licence', 'Noise complaint']
+export function FeatureDialog({ open, on, toggle, setup, layout = 'wide' }: { open: boolean; on: boolean; toggle: string; setup: string; layout?: Layout }) {
+  // Compact lists the apps whose names fit beside their controls
+  const apps = layout === 'wide' ? FEATURE_APPS : FEATURE_APPS.filter((n) => n.length < 18)
+  return (
+    <div className="eaw-dlg-wrap" data-open={open || undefined}>
+      <div className="eaw-scrim" />
+      <div className="eaw-dlg eaw-dlg--feature" role="dialog" aria-label="Workspace settings: AI Chatbot">
+        <div className="eaw-dlg__bar">
+          <span className="eaw-dlg__head"><span className="eaw-dlg__kicker">Workspace settings</span><span className="eaw-dlg__title">AI Chatbot</span></span>
+          <span className="eaw-x"><Ico n="x" /></span>
+        </div>
+        <div className="eaw-dlg__hint">Enable this feature for an app, then choose Set up to add it to one of the app’s workflows.</div>
+        <div className="eaw-ftable">
+          <div className="eaw-ftable__head"><span>App</span><span>Enabled</span><span>Setup</span></div>
+          {apps.map((name, i) => {
+            const lit = i === 0 && on
+            return (
+              <div key={name} className="eaw-ftable__row">
+                <span className="eaw-table__name">{name}</span>
+                <Toggle on={lit} target={i === 0 ? toggle : undefined} />
+                <span className="eaw-setup" data-on={lit || undefined} data-target={i === 0 ? setup : undefined} data-cursor={i === 0 ? 'hand' : undefined}>Set up</span>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </div>
+  )
+}

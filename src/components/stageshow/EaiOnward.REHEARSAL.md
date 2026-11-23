@@ -55,4 +55,13 @@ Tooling: film-checks.mjs (the working copy in .context/ss-tools) measured flex g
 distance in screen pixels against CSS pixels, so every gap tripped at 0.5625; it now divides by the stage
 root's scale. The skill's own copy is untouched.
 
+Round 4 (Gareth: "the Set up button was actually in the dialog"): the answer goes through workspace
+settings' AI Chatbot pane as the prototype has it (admin-ai-feature-setup.js): a dialog centred over the
+app listing each app with its switch and a "Set up" button, disabled until that app is on, then dark, under
+"Enable this feature for an app, then choose Set up to add it to one of the app’s workflows." Parking
+permit's switch → Set up lights (grey to dark) → the cursor goes to it and rests a beat (the focal moment,
+mark 'setup') → Set up closes settings onto "Configure AI Chatbot in Parking permit". No Done in this
+dialog (the real pane has none; Set up is the way on). Compact lists the three apps whose names fit.
+The answer mode's poster is now the dialog with Set up lit.
+
 Not checked: Safari, a real phone, dark theme, live rAF pacing.
