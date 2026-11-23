@@ -397,4 +397,65 @@
 .eaw .eaw-ftable__row .eaw-table__name { display: block; min-width: 0; white-space: nowrap; }
 /* The result's dialog a step above centre, clear of the page's own buttons under the scrim */
 .eaw.eaw--result .eaw-dlg { margin-top: -20px; }
-.eaw.eaw--result .ss-stage[data-layout='compact'] .eaw-dlg { margin-top: -16px; }
+.eaw.eaw--result .ss-stage[data-layout='compact'] .eaw-dlg { margin-top: -30px; }
+
+/* Set up a feature (the prototype's setup stepper): back link, a card titled "Set up AI Chatbot", four
+   pills (the current one dark; done ones a check), the step's card with a grey footer */
+.eaw .eaw-backlink { color: var(--eaw-ink3); white-space: nowrap; }
+.eaw .eaw-setup__hd { padding: 16px; font-size: 16px; line-height: 24px; font-weight: 600; box-shadow: inset 0 -1px 0 var(--eaw-line2); }
+.eaw .eaw-setup__body { padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+.eaw .eaw-stepper { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 8px; }
+.eaw [data-layout='compact'] .eaw-stepper { grid-auto-columns: auto; justify-content: start; }
+.eaw .eaw-pill { display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px; border-radius: 8px; background: var(--eaw-wash); box-shadow: var(--eaw-ring); color: var(--eaw-faint); font-weight: 500; white-space: nowrap; min-width: 0; transition: background-color 200ms ease, color 200ms ease; }
+.eaw .eaw-pill[data-short] { width: 32px; padding: 0; justify-content: center; }
+.eaw .eaw-pill[data-done] { background: #fff; color: var(--eaw-ink); }
+.eaw .eaw-pill[data-on] { background: var(--eaw-ink); color: #fff; box-shadow: none; }
+.eaw .eaw-pill__ring { flex: none; display: grid; place-items: center; width: 16px; height: 16px; border-radius: 999px; box-shadow: inset 0 0 0 1.25px currentColor; }
+.eaw .eaw-pill__ring .eaw-fade { place-items: center; }
+.eaw .eaw-pill__ring .eaw-ico { width: 12px; height: 12px; }
+.eaw .eaw-pill__n { font-size: 10px; line-height: 12px; font-weight: 600; }
+.eaw .eaw-pill__label { overflow: hidden; text-overflow: ellipsis; }
+.eaw .eaw-scard { border-radius: 12px; box-shadow: var(--eaw-ring); }
+.eaw .eaw-scard .eaw-fit { margin: 0; overflow: visible; }
+.eaw .eaw-scard .eaw-fit .eaw-fade__item { padding: 0; }
+.eaw .eaw-scard .eaw-fade__item { display: flex; flex-direction: column; }
+.eaw .eaw-scard__main { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.eaw .eaw-flabel { font-weight: 500; margin-bottom: -4px; }
+.eaw .eaw-wfpick { position: relative; display: block; max-width: 360px; }
+.eaw .eaw-select[data-open] { box-shadow: 0 0 0 1px var(--eaw-ink); }
+.eaw .eaw-menu { position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 3; display: flex; flex-direction: column; padding: 4px; border-radius: 8px; background: #fff; box-shadow: 0 0 0 1px var(--eaw-line), 0 12px 24px -8px rgba(0, 0, 0, 0.18); opacity: 0; transform: translateY(-4px); transition: opacity 120ms ease, transform 160ms var(--eaw-ease); }
+.eaw .eaw-menu[data-open] { opacity: 1; transform: none; }
+.eaw .eaw-menu__item { height: 32px; display: flex; align-items: center; padding: 0 8px; border-radius: 6px; white-space: nowrap; }
+.eaw .eaw-menu__item[data-hover] { background: var(--eaw-fill); }
+.eaw .eaw-newwf { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-radius: 8px; background: #eef4ff; }
+.eaw .eaw-newwf__tx { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.eaw .eaw-newwf__tx span { font-size: 12px; line-height: 16px; color: var(--eaw-ink3); }
+.eaw .eaw-stepfoot { display: flex; justify-content: space-between; padding: 12px 16px; background: var(--eaw-wash); box-shadow: inset 0 1px 0 var(--eaw-line2); border-radius: 0 0 12px 12px; }
+.eaw .eaw-btn[data-off] { color: var(--eaw-faint); background: var(--eaw-fill); box-shadow: none; }
+.eaw .eaw-doctable { border-radius: 8px; box-shadow: var(--eaw-ring); overflow: hidden; }
+.eaw .eaw-doctable__head { display: grid; grid-auto-flow: column; grid-template-columns: 2fr; grid-auto-columns: 1fr; gap: 12px; align-items: center; height: 40px; padding: 0 16px; font-size: 12px; line-height: 16px; font-weight: 500; color: var(--eaw-mute); box-shadow: inset 0 -1px 0 var(--eaw-line2); white-space: nowrap; }
+.eaw .eaw-doctable__empty { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 32px 16px; background: var(--eaw-wash); color: var(--eaw-mute); }
+.eaw .ss-stage:not([data-layout='compact']) .eaw-setup__hd { padding: 20px 24px; }
+.eaw .ss-stage:not([data-layout='compact']) .eaw-setup__body { padding: 24px; gap: 32px; }
+.eaw .ss-stage:not([data-layout='compact']) .eaw-scard__main { padding: 24px; }
+.eaw .ss-stage:not([data-layout='compact']) .eaw-stepfoot { padding: 16px 24px; }
+.eaw .ss-stage:not([data-layout='compact']) .eaw-pane .eaw-fade--stack > .eaw-fade__item { gap: 16px; }
+
+.eaw [data-layout='compact'] .eaw-stepper { display: flex; }
+.eaw [data-layout='compact'] .eaw-pill[data-on] { flex: 1; }
+.eaw [data-layout='compact'] .eaw-scard__main { min-height: 0; }
+.eaw [data-layout='compact'] .eaw-doctable__empty { padding: 20px 12px; }
+.eaw .eaw-doctable__empty { gap: 8px; }
+.eaw [data-layout='compact'] .eaw-stepper { gap: 6px; }
+.eaw [data-layout='compact'] .eaw-pill:not([data-short]) { padding: 0 8px; gap: 6px; }
+.eaw [data-layout='compact'] .eaw-doctable__head { display: flex; justify-content: space-between; }
+.eaw .ss-stage:not([data-layout='compact']) .eaw-doctable__head { grid-template-columns: 2fr repeat(4, minmax(0, 1fr)); grid-auto-flow: row; }
+.eaw [data-layout='compact'] .eaw-pill[data-short] { width: 28px; }
+.eaw .ss-stage:not([data-layout='compact']) .eaw-stepfoot { padding: 24px; }
+.eaw [data-layout='compact'] .eaw-select--full { padding: 10px 12px; }
+.eaw .ss-stage[data-layout='compact'] .eaw-ftable__head, .eaw .ss-stage[data-layout='compact'] .eaw-ftable__row { grid-template-columns: minmax(0, 1fr) 48px 72px; }
+.eaw .eaw-doctable__empty { gap: 2px; }
+.eaw .eaw-doctable__empty .eaw-btn { margin-top: 0; }
+.eaw .eaw-dlg .eaw-ftable__head > span:not(:first-child) { justify-self: stretch; text-align: center; } /* centred over its control (as line ~390), the box filling the column */
+.eaw.eaw--onward .ss-stage:not([data-layout='compact']) .eaw-dlg { margin-top: -20px; }
+.eaw [data-layout='compact'] .eaw-newwf { flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px; }

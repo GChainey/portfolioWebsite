@@ -53,6 +53,7 @@ const PATHS = {
   zap: '<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>',
   paperclip: '<path d="m21.4 11.1-9.2 9.2a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/>',
   arrowRight: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  tick: '<path d="M20 6 9 17l-5-5"/>',
   plug: '<path d="M12 22v-5M9 8V2M15 8V2M7 8h10v4a4 4 0 0 1-8 0V8z"/>',
 } as const
 export type IcoName = keyof typeof PATHS

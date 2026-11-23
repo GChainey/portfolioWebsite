@@ -64,4 +64,18 @@ mark 'setup') → Set up closes settings onto "Configure AI Chatbot in Parking p
 dialog (the real pane has none; Set up is the way on). Compact lists the three apps whose names fit.
 The answer mode's poster is now the dialog with Set up lit.
 
+Round 5 (Gareth: "Set up should take them to the first step of that flow"): traced in the prototype
+(admin-ai-feature-setup.js goToSetup → featureSetupHref …&setup=new; admin-ai-feature-workflow-step.js;
+admin-app-chatbot.js; admin-chatbot-documents.js; real screens in .context/eai-real-step1.png and
+eai-stageshow-v2/ref/eai-real-step2.png). Set up closes settings onto "← Back to AI Chatbot" and the card
+"Set up AI Chatbot": a stepper (1 Workflow · 2 Documents · 3 Instructions · 4 Summary, step 1 dark), the
+Workflow step ("Select a workflow for AI Chatbot.", a Workflow select, the blue "Need a new workflow?"
+note), Back (disabled) / Continue. The cursor opens the select (the real options: Simple parking permit,
+Parking permit application), picks Parking permit application, Continue: Workflow takes its check and
+Documents is the dark step, its real fresh state ("Add the documents your chatbot should reference when
+providing answers", the document table, "No documents yet.", Upload Documents). Payoff: step 2, held 2.6s.
+The "Configure … / Add to workflow / Live" ending is gone (it isn't what Set up leads to). Compact: the
+current pill shows its label, the others their number; the doc table keeps Document Name.
+Answer poster: the dialog with Set up lit. Compact stage 358×668.
+
 Not checked: Safari, a real phone, dark theme, live rAF pacing.

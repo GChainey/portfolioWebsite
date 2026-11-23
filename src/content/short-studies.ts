@@ -284,7 +284,7 @@ export const STUDIES: Study[] = [
       ['Role', 'Lead product designer'],
     ],
     blocks: [
-      { moment: { scene: 'eai-result' }, line: 'Workspace settings opens over the app, and turning the chatbot on takes you straight to setting it up, until it’s live.' },
+      { moment: { scene: 'eai-result' }, line: 'Workspace settings opens over the app; turn the chatbot on for Parking permit, and Set up takes you straight into its first setup step.' },
 
       { lead: 'Problem: lost between two kinds of settings.', rest: 'Workspace settings and app settings looked the same, and workspace settings took you out of the app.' },
       { moment: { scene: 'eai-settings-problem' }, line: 'Add in Workspace Settings takes you to a separate page; turn the chatbot on, close, and you land on Home, not back in the app.' },
@@ -294,7 +294,7 @@ export const STUDIES: Study[] = [
       { lead: 'Problem: we assumed people knew what was next.', rest: 'They turned the chatbot on, saw it saved and stopped, sure they’d finished.' },
       { moment: { scene: 'eai-onward-problem' }, line: 'The chatbot is turned on and saved, but nothing says what’s next, so people stop here.' },
       { lead: 'Answer: a button to the next step.', rest: 'Turn it on for an app, and a Set up button takes you straight there.' },
-      { moment: { scene: 'eai-onward-answer' }, line: 'Turn the chatbot on for Parking permit and its Set up button lights up; Set up closes settings and lands on configuring it in the app.' },
+      { moment: { scene: 'eai-onward-answer' }, line: 'Turn the chatbot on for Parking permit and its Set up button lights up; Set up closes settings and opens the first step of setting it up.' },
 
       {
         lead: 'It works on any setup flow.',
