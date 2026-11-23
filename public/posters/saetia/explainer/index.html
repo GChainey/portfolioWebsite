@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Saetia · how the poster was made</title>
+<meta name="robots" content="noindex">
+<!--
+  A composed explainer for X (package-my-work method): 1080 × 1080 CSS, rendered at 2x, one frame
+  at a time by render.mjs. window.render(t) sets every style from t alone: no transitions,
+  animations or timers. The tool is the real one (recovered from the prototypes repo), in an
+  iframe, its shader clock stepped with setFrame and its sliders set from t.
+-->
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #161514; }
+  #stage {
+    position: relative;
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #161514;
+    font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif;
+    color: #efe9dd;
+  }
+  .scene { position: absolute; inset: 0; display: none; }
+  .caption {
+    position: absolute;
+    left: 56px;
+    top: 48px;
+    font-size: 26px;
+    line-height: 32px;
+    letter-spacing: -0.01em;
+    z-index: 5;
+  }
+  .caption b { font-weight: 500; color: #8f877b; margin-right: 14px; font-variant-numeric: tabular-nums; }
+  .poster {
+    position: absolute;
+    box-shadow: 0 1px 2px rgb(0 0 0 / .3), 0 24px 60px rgb(0 0 0 / .45);
+    will-change: transform;
+  }
+  .poster img, img.fill { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .wall { position: absolute; left: 50%; top: 50%; display: grid; grid-template-columns: repeat(8, 128px); gap: 14px; will-change: transform; }
+  .wall img { width: 128px; height: 181px; display: block; box-shadow: 0 8px 24px rgb(0 0 0 / .4); }
+  .finals { position: absolute; left: 50%; top: 50%; display: grid; grid-template-columns: repeat(5, 176px); gap: 18px; will-change: transform; }
+  .finals img { width: 176px; height: 249px; display: block; box-shadow: 0 12px 32px rgb(0 0 0 / .45); }
+  .crop { position: absolute; overflow: hidden; }
+  iframe { border: 0; display: block; background: #2a2827; }
+  #cursor { position: absolute; width: 32px; height: 32px; z-index: 10; pointer-events: none; filter: drop-shadow(0 1px 1px rgb(0 0 0 / .35)); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="caption" id="caption"></div>
+
+  <!-- 0. Hook: the finished poster, live in its tool -->
+  <div class="scene" id="s0">
+    <div class="crop poster" id="hookCrop" style="left: 200px; top: 59px; width: 680px; height: 962px;">
+      <iframe id="toolHook" src="/posters/saetia/tool/index.html?v=4" width="1080" height="1080" style="position: absolute; left: -24px; top: -59px;"></iframe>
+    </div>
+  </div>
+
+  <!-- 1. Paper v1: references, then the first frames -->
+  <div class="scene" id="s1">
+    <div class="poster" id="ref" style="left: 140px; top: 170px; width: 800px;"><img class="fill" src="boards/IC-0.webp" style="height: auto;"></div>
+    <div class="poster" id="v1" style="left: 304px; top: 170px; width: 472px; height: 668px;"><img id="v1img"></div>
+  </div>
+
+  <!-- 2. AI makes many more -->
+  <div class="scene" id="s2"><div class="wall" id="wall"></div></div>
+
+  <!-- 3. The artefact -->
+  <div class="scene" id="s3">
+    <div class="poster" id="art" style="left: 40px; top: 442px; width: 1000px; height: 196px;"><img class="fill" src="boards/JE-0-word.webp"></div>
+  </div>
+
+  <!-- 4. Picking a style -->
+  <div class="scene" id="s4">
+    <div class="crop" style="left: 90px; top: 130px; width: 900px; height: 880px;">
+      <img id="kit" src="boards/KY-0.webp" style="position: absolute; left: 0; top: 0; width: 900px;">
+    </div>
+  </div>
+
+  <!-- 5. More variations -->
+  <div class="scene" id="s5">
+    <div class="poster" style="left: 304px; top: 170px; width: 472px; height: 668px;"><img id="v5img"></div>
+  </div>
+
+  <!-- 6. The shader and the tool, the real one -->
+  <div class="scene" id="s6">
+    <div id="zoom" style="position: absolute; left: 0; top: 0; width: 1080px; height: 1080px; transform-origin: 1080px 330px; will-change: transform;">
+      <iframe id="toolFull" src="/posters/saetia/tool/index.html?v=4" width="1080" height="1080" style="position: absolute; left: 0; top: 0;"></iframe>
+    </div>
+  </div>
+
+  <!-- 7. Finals -->
+  <div class="scene" id="s7"><div class="finals" id="finals"></div></div>
+
+  <img id="cursor" src="cursors/arrow.svg" alt="">
+</div>
+
+<script>
+  // ─── Material ───────────────────────────────────────────────────────────────
+  const V1 = ['1-0', '14-0', '1C-0', '1I-0', '2C-0', '17-0', '1M-0', '1KQ-0']
+  const WALL = ['54-0','5G-0','5S-0','64-0','6G-0','6S-0','74-0','7G-0','7S-0','84-0','8G-0','8S-0','94-0','9G-0','QN-0','A4-0','AG-0','AS-0','4C-0','B4-0','BO-0','C8-0','CS-0','Q3-0','DW-0','EG-0','F0-0','FK-0','G4-0','GO-0','H8-0','HS-0']
+  const LAYOUTS = ['10I-0', '113-0', '11O-0', '167-0', '17D-0', '18L-0', '1JK-0']
+  const GROUNDS = ['1OU-0','1P6-0','1PI-0','1PU-0','1Q6-0','1QI-0','1QU-0','1R6-0','1RI-0','1RU-0','1SI-0','1SU-0','1T6-0','1TI-0','1VI-0','1VU-0','1W6-0','1UU-0','1WJ-0']
+  const FINALS = ['v2-1YW-0','v2-1ZG-0','v2-200-0','v2-20Q-0','v2-1WV-0','v2-1YK-0','v2-1X7-0','v2-1XJ-0','v2-1XV-0','v2-1Y8-0']
+  const src = (id) => `boards/${id}.webp`
+  for (const id of WALL) { const i = new Image(); i.src = src(id); document.getElementById('wall').append(i) }
+  for (const id of FINALS) { const i = new Image(); i.src = src(id); document.getElementById('finals').append(i) }
+  const preload = [...V1, ...LAYOUTS, ...GROUNDS].map((id) => { const i = new Image(); i.src = src(id); return i })
+
+  // ─── Timing ────────────────────────────────────────────────────────────────
+  const SCENES = [
+    { id: 's0', at: 0,    caption: '' },
+    { id: 's1', at: 2,    caption: '<b>01</b>References, colour and layout in Paper' },
+    { id: 's2', at: 5,    caption: '<b>02</b>AI makes 32 more' },
+    { id: 's3', at: 8,    caption: '<b>03</b>An accident: the redrawn font printed over the original' },
+    { id: 's4', at: 11,   caption: '<b>04</b>Pick a style and write it down' },
+    { id: 's5', at: 13.5, caption: '<b>05</b>Layouts, then 20 grounds' },
+    { id: 's6', at: 16.5, caption: '' },
+    { id: 's7', at: 21,   caption: '<b>06</b>Posters and posts' },
+  ]
+  window.DURATION = 24
+
+  // ─── Easing ────────────────────────────────────────────────────────────────
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v))
+  const lerp = (a, b, k) => a + (b - a) * k
+  const inOut = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2) // ease-in-out cubic
+  const outQuart = (k) => 1 - Math.pow(1 - k, 4)
+  const span = (t, a, b) => clamp((t - a) / (b - a))
+
+  // ─── The tool ──────────────────────────────────────────────────────────────
+  // Both iframes run the real tool. The shader clock comes from t; sliders are set from t.
+  const SPEED = 0.25 // the site's calmer clock (the shipped clip ran at 0.68)
+  function tool(frame) { return frame.contentWindow && frame.contentWindow.saetiaPoster ? frame : null }
+  function setSlider(frame, id, v) {
+    const el = frame.contentDocument.getElementById(id)
+    const s = String(v)
+    if (el.value === s) return
+    el.value = s
+    el.dispatchEvent(new Event('input'))
+  }
+  function stepShader(frame, seconds) {
+    const p = frame.contentWindow.saetiaPoster
+    p.mount.setSpeed(0)
+    p.mount.setFrame(seconds * SPEED * 1000)
+  }
+  // Where a range input's thumb sits for value v, in stage px (the iframe is at 0,0 and 1:1)
+  function thumb(frame, id, v) {
+    const el = frame.contentDocument.getElementById(id)
+    const r = el.getBoundingClientRect()
+    const min = +el.min, max = +el.max
+    const k = (v - min) / (max - min)
+    const T = 16 // thumb width
+    return { x: r.left + T / 2 + k * (r.width - T), y: r.top + r.height / 2 }
+  }
+
+  // The cursor glides on a bowed quadratic curve, ease-in-out, and stops dead while things change
+  function glide(a, b, k, bow = 0.1) {
+    const e = inOut(k)
+    const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2
+    const dx = b.x - a.x, dy = b.y - a.y
+    const cx = mx - dy * bow, cy = my + dx * bow
+    const u = 1 - e
+    return { x: u * u * a.x + 2 * u * e * cx + e * e * b.x, y: u * u * a.y + 2 * u * e * cy + e * e * b.y }
+  }
+  // p is in the tool's own px; z is the push-in (scale about ZO), so the cursor grows with the UI
+  const ZO = { x: 1080, y: 330 }
+  function cursorAt(p, z = 1) {
+    const c = document.getElementById('cursor')
+    if (!p) { c.style.display = 'none'; return }
+    c.style.display = 'block'
+    const x = ZO.x + (p.x - ZO.x) * z, y = ZO.y + (p.y - ZO.y) * z
+    // arrow hotspot: (10, 7.4) of 32
+    c.style.width = c.style.height = `${32 * z}px`
+    c.style.transform = `translate(${x - 10 * z}px, ${y - 7.4 * z}px)`
+  }
+
+  // ─── Render ────────────────────────────────────────────────────────────────
+  window.render = function (t) {
+    t = ((t % DURATION) + DURATION) % DURATION
+    let i = SCENES.length - 1
+    while (i > 0 && t < SCENES[i].at) i--
+    const sc = SCENES[i]
+    const next = SCENES[i + 1] ? SCENES[i + 1].at : DURATION
+    const local = t - sc.at
+    const len = next - sc.at
+    for (const s of SCENES) document.getElementById(s.id).style.display = s === sc ? 'block' : 'none'
+    document.getElementById('caption').innerHTML = sc.caption
+    cursorAt(null)
+
+    const hook = tool(document.getElementById('toolHook'))
+    const full = tool(document.getElementById('toolFull'))
+
+    if (sc.id === 's0' && hook) {
+      // the shipped look; the loop ends where it began
+      setSlider(hook, 'speed', SPEED); setSlider(hook, 'radius', 1.97); setSlider(hook, 'size', 0.56); setSlider(hook, 'flow', 0.109); setSlider(hook, 'sizeSwing', 0.04); setSlider(hook, 'sizeSpeed', 0.15)
+      stepShader(hook, 30 + t)
+      const s = 1.04 - 0.04 * outQuart(span(local, 0, len))
+      document.getElementById('hookCrop').style.transform = `scale(${s})`
+    }
+
+    if (sc.id === 's1') {
+      // the moodboard, then the first frames flipping
+      const ref = document.getElementById('ref'), v1 = document.getElementById('v1')
+      if (local < 1.1) {
+        ref.style.display = 'block'; v1.style.display = 'none'
+        ref.style.transform = `scale(${1 + 0.03 * span(local, 0, 1.1)})`
+      } else {
+        ref.style.display = 'none'; v1.style.display = 'block'
+        const k = Math.min(V1.length - 1, Math.floor((local - 1.1) / ((len - 1.1) / V1.length)))
+        document.getElementById('v1img').src = src(V1[k])
+      }
+    }
+
+    if (sc.id === 's2') {
+      // the wall of 32, pushing in slowly
+      const s = lerp(0.98, 1.12, inOut(span(local, 0, len)))
+      document.getElementById('wall').style.transform = `translate(-50%, -46%) scale(${s})`
+    }
+
+    if (sc.id === 's3') {
+      const s = lerp(1, 1.08, inOut(span(local, 0, len)))
+      document.getElementById('art').style.transform = `scale(${s})`
+    }
+
+    if (sc.id === 's4') {
+      // pan down the kit
+      const img = document.getElementById('kit')
+      const travel = Math.max(0, img.offsetHeight - 880)
+      img.style.transform = `translateY(${-travel * inOut(span(local, 0.3, len - 0.2))}px)`
+    }
+
+    if (sc.id === 's5') {
+      // layouts, then a flip-book of the grounds
+      const img = document.getElementById('v5img')
+      if (local < 1.3) img.src = src(LAYOUTS[Math.min(LAYOUTS.length - 1, Math.floor(local / (1.3 / LAYOUTS.length)))])
+      else img.src = src(GROUNDS[Math.min(GROUNDS.length - 1, Math.floor((local - 1.3) / ((len - 1.3) / GROUNDS.length)))])
+    }
+
+    if (sc.id === 's6' && full) {
+      // The real tool. Start from Paper's settings (radius .72, size .88) with nothing flowing,
+      // drag Radius to 1.97 so the dots merge into blobs, then Flow up so the blobs travel.
+      document.getElementById('caption').innerHTML = ''
+      const R0 = 0.72, R1 = 1.97, W0 = 0, W1 = 0.109
+      const off = { x: 1130, y: 1160 }
+      // beats (local seconds)
+      const enter = [0.3, 0.95], drag1 = [1.1, 2.2], move2 = [2.8, 3.35], drag2 = [3.5, 4.1], exit = [4.25, 4.5]
+      const r = lerp(R0, R1, inOut(span(local, ...drag1)))
+      const w = lerp(W0, W1, inOut(span(local, ...drag2)))
+      setSlider(full, 'radius', r.toFixed(2)); setSlider(full, 'size', local < drag1[0] ? 0.88 : lerp(0.88, 0.56, inOut(span(local, ...drag1))).toFixed(2))
+      setSlider(full, 'speed', SPEED); setSlider(full, 'flow', w.toFixed(3)); setSlider(full, 'sizeSwing', 0.04); setSlider(full, 'sizeSpeed', 0.15)
+      stepShader(full, 30 + t)
+      const a = thumb(full, 'radius', R0), b = thumb(full, 'radius', R1)
+      const c = thumb(full, 'flow', W0), d = thumb(full, 'flow', W1)
+      let p
+      if (local < enter[0]) p = null
+      else if (local < enter[1]) p = glide(off, a, span(local, ...enter), 0.08)
+      else if (local < drag1[0]) p = a
+      else if (local < drag1[1]) p = thumb(full, 'radius', r)
+      else if (local < move2[0]) p = b
+      else if (local < move2[1]) p = glide(b, c, span(local, ...move2), 0.12)
+      else if (local < drag2[0]) p = c
+      else if (local < drag2[1]) p = thumb(full, 'flow', w)
+      else if (local < exit[0]) p = d
+      else p = glide(d, { x: 1140, y: 1200 }, span(local, ...exit), 0.06)
+      // push in on the sliders once the cursor arrives, so the panel reads on a phone
+      const z = lerp(1, 1.45, inOut(span(local, 0.25, 0.95)))
+      document.getElementById('zoom').style.transform = `scale(${z})`
+      cursorAt(p, z)
+    }
+
+    if (sc.id === 's7') {
+      const s = lerp(1, 1.04, inOut(span(local, 0, len)))
+      document.getElementById('finals').style.transform = `translate(-50%, -46%) scale(${s})`
+    }
+  }
+
+  window.ready = async function () {
+    await document.fonts.ready
+    await Promise.all([...document.images, ...preload].map((i) => (i.complete ? null : i.decode().catch(() => null))))
+    const wait = (f) => new Promise((res) => { const go = () => (f.contentWindow && f.contentWindow.saetiaPoster ? res() : setTimeout(go, 50)); go() })
+    await wait(document.getElementById('toolHook'))
+    await wait(document.getElementById('toolFull'))
+    return true
+  }
+
+  // ─── Live on the site (?live): fit the frame, play on the real clock while it's on screen ───
+  if (new URLSearchParams(location.search).has('live')) {
+    document.documentElement.style.overflow = 'hidden'
+    const stage = document.getElementById('stage')
+    const fit = () => { stage.style.transformOrigin = '0 0'; stage.style.transform = `scale(${innerWidth / 1080})` }
+    fit()
+    addEventListener('resize', fit)
+    window.ready().then(() => {
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) { render(0.5); return }
+      let raf = 0, last = 0, t = 0, on = false
+      const tick = (now) => {
+        t += Math.min(now - last, 64) / 1000
+        last = now
+        render(t)
+        raf = requestAnimationFrame(tick)
+      }
+      render(0)
+      new IntersectionObserver(([e]) => {
+        if (e.isIntersecting && !on) { on = true; last = performance.now(); raf = requestAnimationFrame(tick) }
+        if (!e.isIntersecting && on) { on = false; cancelAnimationFrame(raf) }
+      }).observe(document.body)
+    })
+  }
+</script>
+</body>
+</html>
