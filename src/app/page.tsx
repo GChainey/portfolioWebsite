@@ -53,7 +53,7 @@ const PRODUCTS: { name: string; desc: string; href: string; landing: string; pie
 
 // piece as the products; the RFP's is its Stageshow scene, which fills its card instead. A /draft/
 // href is a short case study still on the dev server only: off it, the name is plain text
-const PROJECTS: { name: string; desc: string; year: string; href?: string; piece: string; scene?: ReactNode }[] = [
+const PROJECTS: { name: string; desc: string; year: string; href?: string; piece: string; scene?: ReactNode; bare?: boolean }[] = [
   { name: 'Winning a tender', desc: 'A working product, not mock-ups, that answered a state government tender.', year: '2025', href: '/work/rfp', piece: 'rfp', scene: <RfpLetter filled /> },
   { name: 'Testing on live models', desc: 'Built in code on real models, where a Figma prototype couldn’t answer the question.', year: '2025–26', href: '/draft/configurator', piece: 'configurator' },
   { name: 'An agent-built website', desc: 'Our brand written as files agents build from, then the website built from them.', year: '2026', href: '/draft/website', piece: 'html-brand-website' },
@@ -65,10 +65,22 @@ const BEFORE_AI: typeof PROJECTS = [
   { name: 'Booking in two panels', desc: 'A booking dialog that had grown unwieldy, rebuilt from a few reusable patterns.', year: '2021', href: '/draft/bestpractice', piece: 'bestpractice' },
 ]
 
-// Creative: the games, on their own rail
+// A poster's own loop, standing on the card's grey at full height (the posters are portrait). Its card
+// is bare: no inner hairline, so it's one grey with the poster on it
+function PosterLoop({ src }: { src: string }) {
+  return (
+    <div className="absolute inset-0 flex items-center justify-center py-[6%]" style={{ background: SHELL }}>
+      <video src={src} autoPlay muted loop playsInline preload="metadata" className="block h-full w-auto rounded-[4px] object-contain" style={{ boxShadow: `0 0 0 1px ${LINE}, 0 12px 24px -12px rgba(0,0,0,0.25)` }} />
+    </div>
+  )
+}
+
+// Creative: the games and the poster studies, on their own rail
 const CREATIVE: typeof PROJECTS = [
   { name: 'Opportunity sizing x Balatro', desc: 'Sizing a product bet, played like the card game: each number deals its card.', year: '2026', href: '/projects/balatro-opportunity-sizing', piece: 'balatro' },
   { name: 'Wallbounce', desc: 'A small top-down game, made with the dev tools an agent built for it.', year: '2026', href: '/projects/wallbounce-dev-tools', piece: 'wallbounce' },
+  { name: 'Saetia at Saint Vitus', desc: 'A poster for a gig, and a tool to move it: type, colour and a shader.', year: '2026', href: '/creative/saetia', piece: 'saetia', bare: true, scene: <PosterLoop src="/posters/saetia/saetia-variations-flick-4x5.mp4" /> },
+  { name: 'What to Remember When Waking', desc: 'A poster for a morning of poetry, made to look half awake.', year: '2026', href: '/creative/whyte', piece: 'whyte', bare: true, scene: <PosterLoop src="/posters/whyte/whyte-eyelids-loop.mp4" /> },
 ]
 
 
@@ -199,7 +211,8 @@ function Rail<T>({ items, render, label, hideLabel = false }: { items: T[]; rend
 }
 
 // A company's mark on its tile: ink on the shell grey, a hairline round it
-const liveHref = (href?: string) => href && (!href.startsWith('/draft/') || PARKED_LIVE) ? href : undefined
+// /draft/ and /creative/ are dev-only for now (PARKED_LIVE): off the dev server their names and cards aren't links
+const liveHref = (href?: string) => href && (!/^\/(draft|creative)\//.test(href) || PARKED_LIVE) ? href : undefined
 function StudyLink({ href, children }: { href?: string; children: ReactNode }) {
   const live = liveHref(href)
   return live ? <Link href={live} className="dr-link">{children}</Link> : <>{children}</>
@@ -222,7 +235,7 @@ const listed = (items: { name: string; href?: string }[], name = (n: string) => 
 function WorkCard({ p, focus, near, pad }: { p: (typeof PROJECTS)[number]; focus: boolean; near: boolean; pad: number }) {
   const card = (
     <div className="flex flex-col gap-4">
-      {p.scene ? <Framed pad={pad} ratio={RATIO}><div className="absolute inset-0">{p.scene}</div></Framed> : <Framed pad={pad} ratio={RATIO}><Live id={p.piece} focus={focus} near={near} /></Framed>}
+      {p.scene ? <Framed pad={pad} ratio={RATIO} bare={p.bare}><div className="absolute inset-0">{p.scene}</div></Framed> : <Framed pad={pad} ratio={RATIO}><Live id={p.piece} focus={focus} near={near} /></Framed>}
       <div className="flex flex-col"><div className="flex justify-between gap-4"><span>{p.name}</span><span className="tabular-nums" style={{ color: GREY }}>{p.year}</span></div><p className="text-pretty" style={{ color: GREY }}>{p.desc}</p></div>
     </div>
   )
