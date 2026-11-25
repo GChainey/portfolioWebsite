@@ -61,8 +61,8 @@ const PROJECTS: { name: string; desc: string; year: string; href?: string; piece
 
 // Before AI: the earlier work, on its own rail
 const BEFORE_AI: typeof PROJECTS = [
-  { name: 'SEEK, fixing the funnel', desc: 'A launch that missed its goal, then sign-ups from 9% to 20%, one step at a time.', year: '2024', href: '/draft/seek', piece: 'seek' },
-  { name: 'Booking in two panels', desc: 'A booking dialog that had grown unwieldy, rebuilt from a few reusable patterns.', year: '2021', href: '/draft/bestpractice', piece: 'bestpractice' },
+  { name: 'SEEK, fixing the funnel', desc: 'A launch that missed its goal, then sign-ups from 9% to 20%, one step at a time.', year: '2024', href: '/work/seek', piece: 'seek' },
+  { name: 'Booking in two panels', desc: 'A booking dialog that had grown unwieldy, rebuilt from a few reusable patterns.', year: '2021', href: '/work/bestpractice', piece: 'bestpractice' },
 ]
 
 // A poster's own loop, standing on the card's grey at full height (the posters are portrait). Its card
@@ -455,7 +455,7 @@ export default function Home() {
           <Headline
             as="p"
             lead="Before AI."
-            rest={<>At <Co name="SEEK" focusable={!liveHref('/draft/seek')}><StudyLink href="/draft/seek">SEEK</StudyLink></Co> I learned a release is where the work starts: follow the funnel, one assumption at a time. At <Co name="Best Practice" focusable={!liveHref('/draft/bestpractice')}><StudyLink href="/draft/bestpractice">Best Practice</StudyLink></Co>, the craft was in small decisions, like three toggles becoming one control.</>}
+            rest={<>At <Co name="SEEK" focusable={!liveHref('/work/seek')}><StudyLink href="/work/seek">SEEK</StudyLink></Co> I learned a release is where the work starts: follow the funnel, one assumption at a time. At <Co name="Best Practice" focusable={!liveHref('/work/bestpractice')}><StudyLink href="/work/bestpractice">Best Practice</StudyLink></Co>, the craft was in small decisions, like three toggles becoming one control.</>}
           />
           <Rail label="Before AI" hideLabel items={BEFORE_AI} render={(p, focus, near) => <WorkCard p={p} focus={focus} near={near} pad={PAD} />} />
         </section>
