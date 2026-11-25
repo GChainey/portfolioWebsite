@@ -35,10 +35,12 @@ export default function RfpCaseStudy() {
           <p>Before AI, I would have answered with Figma mock-ups and a lot of help. This time I built the product with Claude Code, connected to real models and one set of seed data, so the people judging the tender could try it for themselves.</p>
         </section>
 
-        {/* The client sweep (prototypes/client-sweep) */}
-        <Moment mat line="One product, three clients: a council, the state and Poland, each with its own seed data.">
-          <InViewVideo src="/case-studies/rfp/scale.mp4" poster="/case-studies/rfp/scale-poster.png" />
-        </Moment>
+        {/* The client sweep (prototypes/client-sweep): dev server only until it's improved (parked: rfp-client-sweep) */}
+        {process.env.NODE_ENV === 'development' && (
+          <Moment mat line="One product, three clients: a council, the state and Poland, each with its own seed data.">
+            <InViewVideo src="/case-studies/rfp/scale.mp4" poster="/case-studies/rfp/scale-poster.png" />
+          </Moment>
+        )}
 
         <Moment scene line="Tick a reviewer’s issue in, and it’s written into the request for information.">
           <RfpLetter bare />
