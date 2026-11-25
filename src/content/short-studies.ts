@@ -315,4 +315,6 @@ export const PUBLISHED: Record<string, string> = {
   seek: 'SEEK, fixing the funnel',
   bestpractice: 'Booking in two panels',
   'eai-setup': 'Setting up AI, start to finish',
+  configurator: 'Testing on live models',
+  website: 'An agent-built website',
 }

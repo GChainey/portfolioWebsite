@@ -31,6 +31,16 @@ export interface ParkedItem {
 
 export const PARKED: ParkedItem[] = [
   {
+    id: 'rfp-client-sweep',
+    name: 'RFP: the client sweep video',
+    status: 'local',
+    since: '2026-11-25',
+    summary: 'One product, three clients: the Caseload switching from Cumberland Council to NSW Planning to Poland (prototypes/client-sweep, public/case-studies/rfp/scale.mp4). In /work/rfp after "Why it worked", but not ready for the live site yet.',
+    links: [{ label: 'RFP case study', href: '/work/rfp' }],
+    gate: "NODE_ENV === 'development' in app/work/rfp/page.tsx; pending in the long RFP write-up (content/projects.ts)",
+    todo: ['Improve the video (Gareth: not quite ready)', 'Remove the NODE_ENV gate in app/work/rfp/page.tsx to release it'],
+  },
+  {
     id: 'classic-homepage',
     name: 'The old homepage (showcase)',
     status: 'unlisted',
@@ -45,8 +55,8 @@ export const PARKED: ParkedItem[] = [
     name: 'Short case studies on one template',
     status: 'local',
     since: '2026-11-15',
-    summary: 'Five short case studies on one template (content/short-studies.ts, components/site/case-study.tsx): DAISY Assess, the website, Testing on live models, SEEK and Best Practice. SEEK, Best Practice and Enterprise AI setup are live at /work/seek, /work/bestpractice and /work/eai-setup (PUBLISHED in short-studies.ts); the homepage links the rest on the dev server only. DAISY Assess is the template take on the live RFP study; compare them with the tab bottom left.',
-    links: [{ label: 'DAISY Assess', href: '/draft/daisy-assess' }, { label: 'Website', href: '/draft/website' }, { label: 'Testing on live models', href: '/draft/configurator' }, { label: 'RFP, side by side', href: '/draft/compare' }],
+    summary: 'Five short case studies on one template (content/short-studies.ts, components/site/case-study.tsx): DAISY Assess, the website, Testing on live models, SEEK and Best Practice. SEEK, Best Practice, Enterprise AI setup, Testing on live models and the website are live at /work/<slug> (PUBLISHED in short-studies.ts); DAISY Assess stays dev-only. DAISY Assess is the template take on the live RFP study; compare them with the tab bottom left.',
+    links: [{ label: 'DAISY Assess', href: '/draft/daisy-assess' }, { label: 'RFP, side by side', href: '/draft/compare' }],
     gate: 'PARKED_LIVE: app/draft/layout.tsx returns 404 off the dev server; homepage liveHref() drops /draft links off it',
     todo: ['Gareth to review each one', 'Polished HTML replays or Stageshow scenes for each moment', 'Move the ones he keeps to /work/<slug> (add them to PUBLISHED)', 'Pick one RFP version and delete the other'],
   },

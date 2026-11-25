@@ -14,6 +14,18 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.18.1',
+    date: '2026-11-25',
+    title: 'Testing on live models and the agent-built website, live',
+    description: 'The last two short studies on the homepage go live at /work/configurator and /work/website. The RFP client sweep goes back to the dev server until it is improved.',
+    changes: [
+      'Testing on live models and An agent-built website added to PUBLISHED; their homepage cards link to them',
+      'The RFP client sweep video is dev-only again, with a parked entry to improve and release it',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/publish-eai-drafts',
+  },
+  {
     version: '3.18.0',
     date: '2026-11-25',
     title: 'More Enterprise AI work, live',
