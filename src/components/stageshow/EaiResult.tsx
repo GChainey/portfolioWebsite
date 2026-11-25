@@ -101,10 +101,11 @@ function Scene({ s, layout }: { s: S; layout: Layout }) {
   )
 }
 
-export function EaiResult({ bare = true }: { bare?: boolean } = {}) {
+// filled: a homepage card, always the wide (laptop) scene scaled to the card, never the compact crop
+export function EaiResult({ bare = true, filled = false }: { bare?: boolean; filled?: boolean } = {}) {
   return (
     <figure className={bare ? 'not-prose eaw eaw--result eaw--bare' : 'not-prose eaw eaw--result my-8'} role="img" aria-label="Enterprise AI today: from the NYC Council workspace into Parking permit, an app nested in the workspace; workspace settings opens over the app at AI Chatbot; Parking permit is switched on and its Set up button, right in the dialog, lands on the first step of setting it up; choose the workflow, Continue, and the stepper moves on to Documents">
-      <Stage width={1280} height={808} compact={{ below: 600, width: 358, height: 660 }} initial={initial} poster={poster} script={script} play="loop" fill={!bare} cursor={{ at: REST, style: 'large' }} className="eaw">
+      <Stage width={1280} height={808} compact={filled ? undefined : { below: 600, width: 358, height: 660 }} initial={initial} poster={poster} script={script} play="loop" fill={!bare} cursor={{ at: REST, style: 'large' }} className="eaw">
         {(s, _rect, layout) => <Scene s={s} layout={layout === 'compact' ? 'compact' : 'wide'} />}
       </Stage>
     </figure>

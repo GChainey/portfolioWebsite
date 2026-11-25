@@ -7,6 +7,7 @@ import { GitHubContributions } from '@/components/GitHubContributions'
 import { Media, heroItem } from '@/components/HomeShowcase'
 import { ALL_PIECES } from '@/content/home-showcase'
 import { RfpLetter } from '@/components/stageshow/RfpLetter'
+import { EaiResult } from '@/components/stageshow/EaiResult'
 import { ThesisEvidence } from '@/components/stageshow/ThesisEvidence'
 import { TESTIMONIALS } from '@/content/testimonials'
 import { CompanyPeek } from '@/components/site/companies'
@@ -55,6 +56,7 @@ const PRODUCTS: { name: string; desc: string; href: string; landing: string; pie
 // href is a short case study still on the dev server only: off it, the name is plain text
 const PROJECTS: { name: string; desc: string; year: string; href?: string; piece: string; scene?: ReactNode; bare?: boolean }[] = [
   { name: 'Winning a tender', desc: 'A working product, not mock-ups, that answered a state government tender.', year: '2025', href: '/work/rfp', piece: 'rfp', scene: <RfpLetter filled /> },
+  { name: 'Setting up AI, start to finish', desc: 'People turned AI on and thought they were done. Now 5 of 5 finish setting it up.', year: '2026', href: '/work/eai-setup', piece: 'eai-setup', scene: <EaiResult filled /> },
   { name: 'Testing on live models', desc: 'Built in code on real models, where a Figma prototype couldn’t answer the question.', year: '2025–26', href: '/draft/configurator', piece: 'configurator' },
   { name: 'An agent-built website', desc: 'Our brand written as files agents build from, then the website built from them.', year: '2026', href: '/draft/website', piece: 'html-brand-website' },
 ]

@@ -314,4 +314,5 @@ export const studyBySlug = (slug: string) => STUDIES.find((s) => s.slug === slug
 export const PUBLISHED: Record<string, string> = {
   seek: 'SEEK, fixing the funnel',
   bestpractice: 'Booking in two panels',
+  'eai-setup': 'Setting up AI, start to finish',
 }
