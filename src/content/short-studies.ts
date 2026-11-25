@@ -308,3 +308,10 @@ export const STUDIES: Study[] = [
 ]
 
 export const studyBySlug = (slug: string) => STUDIES.find((s) => s.slug === slug)
+
+// The short studies that are public, at /work/<slug> (app/work/[study]), with their page titles. The
+// rest stay on the dev server at /draft/<slug>. The RFP has its own page at /work/rfp.
+export const PUBLISHED: Record<string, string> = {
+  seek: 'SEEK, fixing the funnel',
+  bestpractice: 'Booking in two panels',
+}

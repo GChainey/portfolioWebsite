@@ -45,10 +45,10 @@ export const PARKED: ParkedItem[] = [
     name: 'Short case studies on one template',
     status: 'local',
     since: '2026-11-15',
-    summary: 'Five short case studies on one template (content/short-studies.ts, components/site/case-study.tsx): DAISY Assess, the website, Testing on live models, SEEK and Best Practice. The homepage links them on the dev server only. DAISY Assess is the template take on the live RFP study; compare them with the tab bottom left.',
-    links: [{ label: 'DAISY Assess', href: '/draft/daisy-assess' }, { label: 'Website', href: '/draft/website' }, { label: 'Testing on live models', href: '/draft/configurator' }, { label: 'SEEK', href: '/draft/seek' }, { label: 'Best Practice', href: '/draft/bestpractice' }, { label: 'RFP, side by side', href: '/draft/compare' }],
+    summary: 'Five short case studies on one template (content/short-studies.ts, components/site/case-study.tsx): DAISY Assess, the website, Testing on live models, SEEK and Best Practice. SEEK and Best Practice are live at /work/seek and /work/bestpractice (PUBLISHED in short-studies.ts); the homepage links the rest on the dev server only. DAISY Assess is the template take on the live RFP study; compare them with the tab bottom left.',
+    links: [{ label: 'DAISY Assess', href: '/draft/daisy-assess' }, { label: 'Website', href: '/draft/website' }, { label: 'Testing on live models', href: '/draft/configurator' }, { label: 'RFP, side by side', href: '/draft/compare' }],
     gate: 'PARKED_LIVE: app/draft/layout.tsx returns 404 off the dev server; homepage liveHref() drops /draft links off it',
-    todo: ['Gareth to review each one', 'Polished HTML replays or Stageshow scenes for each moment', 'Move the ones he keeps to /work/<slug>', 'Pick one RFP version and delete the other'],
+    todo: ['Gareth to review each one', 'Polished HTML replays or Stageshow scenes for each moment', 'Move the ones he keeps to /work/<slug> (add them to PUBLISHED)', 'Pick one RFP version and delete the other'],
   },
   {
     id: 'details',

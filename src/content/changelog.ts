@@ -14,6 +14,19 @@ export interface ChangelogEntry {
 // Changelog entries - newest first
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '3.17.3',
+    date: '2026-11-24',
+    title: 'SEEK and Best Practice case studies, live',
+    description: 'The SEEK and Best Practice short studies were dev-only at /draft/, so the live site 404ed them and the homepage dropped their links. They now publish at /work/seek and /work/bestpractice.',
+    changes: [
+      'New /work/[study] route builds only the slugs in PUBLISHED (content/short-studies.ts), with page titles and descriptions',
+      'Homepage cards and the "Before AI." line link to /work/seek and /work/bestpractice',
+      'The other short studies stay dev-only at /draft/<slug>',
+    ],
+    aiTools: ['Claude Code'],
+    branch: 'GChainey/mn5o4',
+  },
+  {
     version: '3.17.2',
     date: '2026-11-23',
     title: 'DAISY: one product, three clients',
